@@ -1,0 +1,1 @@
+Các lệnh cơ bản trong SQL sever
