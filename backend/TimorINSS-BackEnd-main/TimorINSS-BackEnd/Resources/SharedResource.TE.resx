@@ -1,0 +1,465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="autorizada" xml:space="preserve">
+    <value>Autorizada</value>
+  </data>
+  <data name="cabimentada" xml:space="preserve">
+    <value>Cabimentada</value>
+  </data>
+  <data name="centroCusto" xml:space="preserve">
+    <value>Centro de custo</value>
+  </data>
+  <data name="compromisso" xml:space="preserve">
+    <value>Compromisso</value>
+  </data>
+  <data name="contaOSS" xml:space="preserve">
+    <value>Conta OSS</value>
+  </data>
+  <data name="data" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="departamentosINSS" xml:space="preserve">
+    <value>Departamento INSS</value>
+  </data>
+  <data name="departamento" xml:space="preserve">
+    <value>Departamento</value>
+  </data>
+  <data name="descricao" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="despesas" xml:space="preserve">
+    <value>Despesas</value>
+  </data>
+  <data name="estadoDespesa" xml:space="preserve">
+    <value>Estado de Despesa</value>
+  </data>
+  <data name="executada" xml:space="preserve">
+    <value>Executada</value>
+  </data>
+  <data name="numeroProcesso" xml:space="preserve">
+    <value>N.º processo</value>
+  </data>
+  <data name="obrigacao" xml:space="preserve">
+    <value>Obrigação</value>
+  </data>
+  <data name="tipoConta" xml:space="preserve">
+    <value>Tipo de conta</value>
+  </data>
+  <data name="total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="utilizador" xml:space="preserve">
+    <value>Utilizador</value>
+  </data>
+  <data name="valor" xml:space="preserve">
+    <value>Valor</value>
+  </data>
+  <data name="agrupamento" xml:space="preserve">
+    <value>Agrupamento</value>
+  </data>
+  <data name="alinea" xml:space="preserve">
+    <value>Alínea</value>
+  </data>
+  <data name="designacao" xml:space="preserve">
+    <value>Designação</value>
+  </data>
+  <data name="filtro" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="ocamentoAprovadoPeriodo" xml:space="preserve">
+    <value>Orçamento Aprovado para o período de {0} a {1}</value>
+  </data>
+  <data name="orcamentoGeralINSS" xml:space="preserve">
+    <value>Orçamento geral do INSS</value>
+  </data>
+  <data name="propostaOrcamentoPeriodo" xml:space="preserve">
+    <value>Proposta de Orçamento para o período de {0} a {1}</value>
+  </data>
+  <data name="rubrica" xml:space="preserve">
+    <value>Rúbrica</value>
+  </data>
+  <data name="subAgrupamento" xml:space="preserve">
+    <value>SubAgrupamento</value>
+  </data>
+  <data name="subAlinea" xml:space="preserve">
+    <value>SubAlínea</value>
+  </data>
+  <data name="a" xml:space="preserve">
+    <value>a</value>
+  </data>
+  <data name="abril" xml:space="preserve">
+    <value>Abril</value>
+  </data>
+  <data name="agosto" xml:space="preserve">
+    <value>Agosto</value>
+  </data>
+  <data name="agrupamentoMin" xml:space="preserve">
+    <value>Agru.</value>
+  </data>
+  <data name="alineaMin" xml:space="preserve">
+    <value>Alí.</value>
+  </data>
+  <data name="ano" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="centroCustos" xml:space="preserve">
+    <value>Centro de Custos</value>
+  </data>
+  <data name="classificacaoContabilistica" xml:space="preserve">
+    <value>Classificação contabilística</value>
+  </data>
+  <data name="compararAnoAnterior" xml:space="preserve">
+    <value>Comparar com período anterior</value>
+  </data>
+  <data name="conciliado" xml:space="preserve">
+    <value>Conciliado</value>
+  </data>
+  <data name="consultaBalanco" xml:space="preserve">
+    <value>Consulta de balanço</value>
+  </data>
+  <data name="consultaFornecedores" xml:space="preserve">
+    <value>Consulta de fornecedores</value>
+  </data>
+  <data name="consultaOrdensPagamento" xml:space="preserve">
+    <value>Consulta de Ordens de Pagamento</value>
+  </data>
+  <data name="consultaProcessos" xml:space="preserve">
+    <value>Consulta de Processos</value>
+  </data>
+  <data name="consultaSituacaoContributiva" xml:space="preserve">
+    <value>Consulta de Situação Contributiva</value>
+  </data>
+  <data name="conta" xml:space="preserve">
+    <value>Conta</value>
+  </data>
+  <data name="contaOGE" xml:space="preserve">
+    <value>Conta OGE</value>
+  </data>
+  <data name="credito" xml:space="preserve">
+    <value>Crédito</value>
+  </data>
+  <data name="dataEmissao" xml:space="preserve">
+    <value>Data de emissão</value>
+  </data>
+  <data name="dataObrigacao" xml:space="preserve">
+    <value>Data Obrigação</value>
+  </data>
+  <data name="debito" xml:space="preserve">
+    <value>Débito</value>
+  </data>
+  <data name="despesa" xml:space="preserve">
+    <value>Despesa</value>
+  </data>
+  <data name="destinatario" xml:space="preserve">
+    <value>Destinatário</value>
+  </data>
+  <data name="dezembro" xml:space="preserve">
+    <value>Dezembro</value>
+  </data>
+  <data name="empregador" xml:space="preserve">
+    <value>Empregador</value>
+  </data>
+  <data name="entidadeBancaria" xml:space="preserve">
+    <value>Entidade bancária</value>
+  </data>
+  <data name="estado" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="estadoPagamento" xml:space="preserve">
+    <value>Estado Pagamento</value>
+  </data>
+  <data name="execucaoAnoAnterior" xml:space="preserve">
+    <value>Execução ano anterior</value>
+  </data>
+  <data name="execucaoOrcamental" xml:space="preserve">
+    <value>Execução Orçamental</value>
+  </data>
+  <data name="extratosBancarios" xml:space="preserve">
+    <value>Extratos bancários</value>
+  </data>
+  <data name="fase" xml:space="preserve">
+    <value>Fase</value>
+  </data>
+  <data name="fevereiro" xml:space="preserve">
+    <value>Fevereiro</value>
+  </data>
+  <data name="iban" xml:space="preserve">
+    <value>IBAN</value>
+  </data>
+  <data name="janeiro" xml:space="preserve">
+    <value>Janeiro</value>
+  </data>
+  <data name="janeiroDezembro" xml:space="preserve">
+    <value>Janeiro a Dezembro</value>
+  </data>
+  <data name="janeiroJaneiro" xml:space="preserve">
+    <value>Janeiro a Janeiro</value>
+  </data>
+  <data name="julho" xml:space="preserve">
+    <value>Julho</value>
+  </data>
+  <data name="junho" xml:space="preserve">
+    <value>Junho</value>
+  </data>
+  <data name="listaPagamentosDestinatario" xml:space="preserve">
+    <value>Lista de Pagamentos Executados pelo Destinatário</value>
+  </data>
+  <data name="listaPagamentosProcesso" xml:space="preserve">
+    <value>Lista de todos os Pagamentos Executados no Processo</value>
+  </data>
+  <data name="maio" xml:space="preserve">
+    <value>Maio</value>
+  </data>
+  <data name="marco" xml:space="preserve">
+    <value>Março</value>
+  </data>
+  <data name="mesReferencia" xml:space="preserve">
+    <value>Mês de referência</value>
+  </data>
+  <data name="nao" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="nDocumento" xml:space="preserve">
+    <value>Nº documento</value>
+  </data>
+  <data name="niss" xml:space="preserve">
+    <value>NISS</value>
+  </data>
+  <data name="nivel" xml:space="preserve">
+    <value>Nível</value>
+  </data>
+  <data name="nome" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="nOrdemPagamento" xml:space="preserve">
+    <value>Nº Ordem de Pagamento</value>
+  </data>
+  <data name="novembro" xml:space="preserve">
+    <value>Novembro</value>
+  </data>
+  <data name="nProcesso" xml:space="preserve">
+    <value>N.º processo</value>
+  </data>
+  <data name="numeroConta" xml:space="preserve">
+    <value>Número de conta</value>
+  </data>
+  <data name="numeroPagamento" xml:space="preserve">
+    <value>Número Pagamento</value>
+  </data>
+  <data name="ordensPagamento" xml:space="preserve">
+    <value>Ordens de Pagamento</value>
+  </data>
+  <data name="outubro" xml:space="preserve">
+    <value>Outubro</value>
+  </data>
+  <data name="pagamentos" xml:space="preserve">
+    <value>Pagamentos</value>
+  </data>
+  <data name="perfisResponsaveisFinalPeriodo" xml:space="preserve">
+    <value>Perfis responsáveis no final do período</value>
+  </data>
+  <data name="processos" xml:space="preserve">
+    <value>Processos</value>
+  </data>
+  <data name="receita" xml:space="preserve">
+    <value>Receita</value>
+  </data>
+  <data name="receitas" xml:space="preserve">
+    <value>Receitas</value>
+  </data>
+  <data name="relatorioExecucaoOrcamental" xml:space="preserve">
+    <value>Relatório de Execução Orçamental</value>
+  </data>
+  <data name="rubricaClassificacaoEconomica" xml:space="preserve">
+    <value>Rubrica de Classificação Económica</value>
+  </data>
+  <data name="rubricaMin" xml:space="preserve">
+    <value>R.</value>
+  </data>
+  <data name="saldo" xml:space="preserve">
+    <value>Saldo</value>
+  </data>
+  <data name="setembro" xml:space="preserve">
+    <value>Setembro</value>
+  </data>
+  <data name="sim" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="situacaoContributiva" xml:space="preserve">
+    <value>Situação Contributiva</value>
+  </data>
+  <data name="subAgrupamentoMin" xml:space="preserve">
+    <value>S.Agru.</value>
+  </data>
+  <data name="subAlineaMin" xml:space="preserve">
+    <value>S.Alí.</value>
+  </data>
+  <data name="swift" xml:space="preserve">
+    <value>SWIFT</value>
+  </data>
+  <data name="taxaExecucao" xml:space="preserve">
+    <value>Taxa Execução</value>
+  </data>
+  <data name="tin" xml:space="preserve">
+    <value>TIN</value>
+  </data>
+  <data name="tipoProcesso" xml:space="preserve">
+    <value>Tipo de processo</value>
+  </data>
+  <data name="totalExecucao" xml:space="preserve">
+    <value>Total Execução</value>
+  </data>
+  <data name="ultimaTarefaPeriodo" xml:space="preserve">
+    <value>Última tarefa no período</value>
+  </data>
+  <data name="valorContribuicoes" xml:space="preserve">
+    <value>Valor de contribuições</value>
+  </data>
+  <data name="valorDivida" xml:space="preserve">
+    <value>Valor em dívida</value>
+  </data>
+  <data name="valorExecutado" xml:space="preserve">
+    <value>Valor Executado</value>
+  </data>
+  <data name="valorOrcamentadoTotalAno" xml:space="preserve">
+    <value>Valor Orçamentado (Total para o ano)</value>
+  </data>
+  <data name="valorOrcamentoInicial" xml:space="preserve">
+    <value>Valor Orçamento Inicial</value>
+  </data>
+  <data name="valorPago" xml:space="preserve">
+    <value>Valor pago</value>
+  </data>
+  <data name="valorRenumeracoesEmpregadorTrabalhador" xml:space="preserve">
+    <value>Valor de remunerações do Empregador/Trabalhador</value>
+  </data>
+  <data name="variacaoExecucaoPeriodoHomologo" xml:space="preserve">
+    <value>Variação Execução em relação ao período homólogo ano anterior</value>
+  </data>
+  <data name="arquivado" xml:space="preserve">
+    <value>Arquivado</value>
+  </data>
+  <data name="emTramitacao" xml:space="preserve">
+    <value>Em tramitação</value>
+  </data>
+  <data name="notaCredito" xml:space="preserve">
+    <value>Nota de Crédito</value>
+  </data>
+</root>

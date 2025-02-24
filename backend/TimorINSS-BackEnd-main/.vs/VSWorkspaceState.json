@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\TimorINSS-BackEnd",
+    "\\TimorINSS-BackEnd\\TimorINSS-BackEnd",
+    "\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd",
+    "\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd",
+    "\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\DataContracts",
+    "\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\DataContracts\\ModelDataContract",
+    "\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\Models"
+  ],
+  "SelectedNode": "\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\TrabalhadorDataContract.cs",
+  "PreviewInSolutionExplorer": false
+}
