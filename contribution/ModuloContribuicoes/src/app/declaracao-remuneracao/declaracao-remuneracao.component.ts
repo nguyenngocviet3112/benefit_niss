@@ -310,7 +310,7 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
     {
       let warn = this.showWarning('declaracaoremunerao.abaixoSalarioMinimo', false);
       warn?.afterClosed().subscribe(result => {
-        if (!result) {
+        if (result) {
           input.declaracao.remunDeclarada = this.salarioMinimo;
         }
       });
@@ -343,6 +343,7 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
         data: this.date ?? getCurrentDateUTC(),
         entidadeId: this.entidade.idEntidadeEmpreg
       };
+      // alert("show date: " + requestSave.data.getDate);
       this.declaracaoService.saveDeclaracao(requestSave)
       .subscribe( res => {
         this.hideLoader();

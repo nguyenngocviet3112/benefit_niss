@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
@@ -522,7 +523,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 contaDto = _utils.SetDetailsToEntity(contaDto);
 
             Contacorrente conta = Utils.MappClassFromDto<ContacorrenteDto, Contacorrente>(contaDto);
-
+            
             if (contaCriada)
                 _unitOfWork.ContaCorrenteRepository.Update(conta);
             else
@@ -546,6 +547,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
+
         private ContacorrenteDto CalculateInterestForContaCorrent(ContacorrenteDto contaDto, DateTime data, int diaVencimento)
         {
             DateTime now = DateTime.Now;
@@ -560,18 +562,18 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Dominio contribuicoesJuroDominio = _unitOfWork.DominioRepository.getDominioByDescricao(TiposDominio.TIPODIVIDA, "Contribuições e Juros");
                 contaDto.TipoDivida = contribuicoesJuroDominio.IdDominio;
 
-                //decimal juroapurado = 0;
+                //decimal valorJuros = 0;
                 //Taxajuromensal taxaJuro;
                 //Dominio contribuicoesJuroDominio = _unitOfWork.DominioRepository.getDominioByDescricao(TiposDominio.TIPODIVIDA, "Contribuições e Juros");
                 //while (iterator <= now)
                 //{
                 //    taxaJuro = _unitOfWork.TaxaJuroMensalRepository.GetTaxaJuroMensalByData(iterator);
-                //    juroapurado += (contaDto.ValorEntidade + contaDto.ValorTrabalhador) * taxaJuro.Percentagem * 0.01M;
+                //    valorJuros += (contaDto.ValorEntidade + contaDto.ValorTrabalhador) * taxaJuro.Percentagem * 0.01M;
                 //    iterator = iterator.AddMonths(1);
                 //}
 
                 //contaDto.TipoDivida = contribuicoesJuroDominio.IdDominio;
-                //contaDto.Juroapurado = juroapurado;
+                //contaDto.ValorJuros = valorJuros;
                 //contaDto.ValorTotal = contaDto.ValorEntidade + contaDto.ValorTrabalhador + juroapurado;
             }
             return contaDto;
@@ -589,8 +591,15 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 else
                     _unitOfWork.Commit();
+                // update CONTACORRENTE again
+                Contacorrente contaExistenteBD = _unitOfWork.ContaCorrenteRepository.GetContaCorrenteByMesAnoAndEntidadeId(request.data, request.entidadeId);
+                if (contaExistenteBD != null)
+                {
+                    _unitOfWork.ContaCorrenteRepository.UpdateCorrente(contaExistenteBD.IdContaCorrente);
+                    //_unitOfWork.Commit();
+                }
 
-                response = AutoGenerateNextDeclarations(request.entidadeId, request.data);
+                // response = AutoGenerateNextDeclarations(request.entidadeId, request.data);
             }
             catch (Exception e)
             {
@@ -599,6 +608,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
             return response;
         }
+
 
         public ResponseBaseDataContract AutoGenerateNextDeclarations(int entidadeId, DateTime beginDate)
         {

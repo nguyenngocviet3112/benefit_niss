@@ -1,1 +1,15 @@
 Các lệnh cơ bản trong SQL sever
+
+Các lệnh cơ bản trong VS code c#
+
+Chạy app	dotnet run
+Build project	dotnet build
+Debug (VSCode)	F5
+Chạy không debug	Ctrl + F5
+Chạy với port custom	dotnet run --urls "http://localhost:5050"
+
+
+taskkill /F /IM TimorINSSBackEnd.exe
+dotnet publish -c Release -o C:\PublishedApp
+
+dotnet TimorINSSBackEnd.dll

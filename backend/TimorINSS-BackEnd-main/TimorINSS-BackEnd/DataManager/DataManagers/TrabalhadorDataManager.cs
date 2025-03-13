@@ -213,6 +213,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             if (string.IsNullOrWhiteSpace(trabalhador.Niss))
             {
                 trabalhador.NumInscProvisoria = _unitOfWork.TrabalhadoresRepository.GetNextNumInscProvisoria();
+                trabalhador.Niss = _unitOfWork.TrabalhadoresRepository.GetNextNISS();
             }
             else
             {

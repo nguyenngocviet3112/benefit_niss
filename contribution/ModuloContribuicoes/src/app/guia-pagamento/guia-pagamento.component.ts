@@ -42,7 +42,7 @@ export class GuiaPagamentoComponent implements OnInit {
     public dataSourceGuiaPagamento: GuiaListagem[] = [];
     public displayedColumnsGuiaPagamento: string[] = ['numDocumento', 'mesAno', 'descricao', 'valor', 'juros', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
     public totalRows: number = 0;
-    public pageSize = 5;
+    public pageSize = 10;
     public pageIndex = 0;
     public guiaTipoOptions: DominioDescricaoString[] = [];
     public pagamentoTipoOptions: DominioDescricaoString[] = [];
@@ -185,7 +185,7 @@ export class GuiaPagamentoComponent implements OnInit {
     public applyTipoFilter(filter: string) {
         this.filterField = 'Tipo';
         this.filterBy = filter;
-        this.pageSize = 5;
+        this.pageSize = 10;
         this.pageIndex = 0;
         this.getTableGuiaPagamento('Tipo');
     }
@@ -193,7 +193,7 @@ export class GuiaPagamentoComponent implements OnInit {
     public applyPagamentoFilter(filter: string) {
         this.filterField = 'Estado';
         this.filterBy = filter;
-        this.pageSize = 5;
+        this.pageSize = 10;
         this.pageIndex = 0;
         this.getTableGuiaPagamento('Estado');
     }
@@ -202,7 +202,7 @@ export class GuiaPagamentoComponent implements OnInit {
         this.filter = {};
         this.filterBy = '';
         this.filterField = undefined;
-        this.pageSize = 5;
+        this.pageSize = 10;
         this.pageIndex = 0;
         this.tipoOption = undefined;
         this.situacaoOption = undefined;
@@ -216,56 +216,162 @@ export class GuiaPagamentoComponent implements OnInit {
         pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
 
         //title
-        pdf.text(this.translate.instant('general.guiaDePagamento'), 83, 35);
-        pdf.setFontSize(12);
-        pdf.setTextColor(99);
-
+        pdf.setFontSize(13);
+        pdf.setTextColor(80);
+        pdf.text(this.translate.instant('general.invoiceTitleDoc'), 60, 35);
+        pdf.setFontSize(11);
+        pdf.setTextColor(10);
         //Número do Documento
-        pdf.text(this.translate.instant('guiaPagamentoListagem.numDocumento') + ': ' + element.numDocumento, 75, 45);
+        pdf.text(this.translate.instant('general.invoicePaymentRef') + ': ' + element.numDocumento, 20, 45);
+        pdf.text(this.translate.instant('general.invoiceEm'), 20, 52);
+        pdf.text(this.translate.instant('general.invoiceName') + ': josesoares', 20, 59);
+        pdf.text(this.translate.instant('general.invoiceDate') + ': ' + this.formatDatePT(element.mesAno), 120, 59);
+        pdf.text(this.translate.instant('general.invoiceNISS') + ': ' + element.niss, 20, 66);
+        pdf.text(this.translate.instant('general.invoiceTIN') + ': ', 20, 73);
+        pdf.text(this.translate.instant('general.invoicePM') + ':', 20, 80);
+        pdf.addImage(environment.checkBoxIcon, 'JPEG', 20, 83, 5, 5);
+        pdf.text(this.translate.instant('general.invoiceCash'), 30, 87);
+        pdf.addImage(environment.checkBoxIcon, 'JPEG', 20, 90, 5, 5);
+        pdf.text(this.translate.instant('general.invoiceBT'), 30, 94);
 
-        //datas
-        pdf.text(this.translate.instant('responsavel_legal.emitDate') + ': ' + this.formatDatePT(element.mesAno), 20, 55);
-        pdf.text(this.translate.instant('conta_corrente.dataLimitePagamento') + ': ' + this.formatDatePT(element.dtValidade), 120, 55);
+        pdf.text(this.translate.instant('general.invoiceIP'), 20, 101);
+        pdf.text(this.translate.instant('general.invoiceBank') + ':', 20, 108);
+        pdf.text(this.translate.instant('general.invoiceNOT'), 20, 115);
+        pdf.text(this.translate.instant('general.invoiceCCATP'), 20, 122);
+        pdf.text(this.translate.instant('general.invoiceCFT'), 50, 129);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 129);
 
-        var body = [[this.formatDatePT(element.mesAno), element.descricao, element.valor, element.juros, element.total, this.formatDatePT(element.dtValidade), this.guiaTipoOptions.find(x => x.value == element.tipo)?.descricao, element.valorPago],
-        [{
-            content: `TOTAL: ${this.formatDecimal(element.total)}`, colSpan: 8,
-            styles: { fillColor: [42, 129, 204] }
-        }]]
+        pdf.text(this.translate.instant('general.invoiceEEC') + ': ', 60, 136);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 136);
 
-        {
-            (pdf as any).autoTable({
-                startY: 60,
-                columnStyles: { europe: { halign: 'center' } },
-                head: [[this.translate.instant('guiaPagamentoListagem.mesAno'), this.translate.instant('guiaPagamentoListagem.descricao'), this.translate.instant('guiaPagamentoListagem.valor'), this.translate.instant('guiaPagamentoListagem.juros'), this.translate.instant('guiaPagamentoListagem.total'), this.translate.instant('general.dtValidade'), this.translate.instant('guiaPagamentoListagem.type'), this.translate.instant('conta_corrente.valorPago')]],
-                body: body,
-                theme: 'grid',
-                headStyles: {
-                    fillColor: [42, 129, 204],
-                    textColor: [0, 0, 0],
-                    fontSize: 8,
-                    padding: 0,
-                    valign: 'middle',
-                    halign: 'center',
-                },
+        pdf.text(this.translate.instant('general.invoiceTCO') + ': ', 60, 143);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 143);
 
-                bodyStyles: {
-                    textColor: [0, 0, 0],
-                    fontSize: 10,
-                    padding: 0,
-                    valign: 'middle',
-                    halign: 'center',
-                },
-                didDrawCell: (data: { column: { index: any; }; }) => {
-                }
+        pdf.text(this.translate.instant('general.invoiceOPA') + ': ', 50, 150);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 150);
 
-            })
-        }
+        pdf.text(this.translate.instant('general.invoiceINCLUDING'), 50, 157);
+
+        pdf.text(this.translate.instant('general.invoiceLPI') + ': ' + element.juros, 50, 164);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 164);
+
+        pdf.text(this.translate.instant('general.invoiceFines') + ': ' + element.juros, 50, 171);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 171);
+
+        pdf.text(this.translate.instant('general.invoiceOthers') + ': ', 50, 178);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 178);
+
+        pdf.text(this.translate.instant('general.invoiceTotal') + ': ', 50, 185);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 185);
+
+        pdf.text(this.translate.instant('general.invoiceROP') + ': ', 50, 192);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 192);
+
+        pdf.text(this.translate.instant('general.invoiceCCON') + ': ' + element.valor, 50, 199);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 199);
+
+        pdf.text(this.translate.instant('general.invoiceTTA') + ': ' + element.valorPago, 50, 206);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 206);
+
+        pdf.text(this.translate.instant('general.invoiceAPEE') + ': ', 50, 213);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 213);
+
+        pdf.text(this.translate.instant('general.invoiceATCO') + ': ', 50, 220);
+        pdf.text(this.translate.instant('general.invoiceUSD'), 160, 220);
+
+        pdf.text(this.translate.instant('general.invoiceSSS'), 83, 230);
+
+        pdf.text(this.translate.instant('general.invoiceDate'), 30, 270);
+
+        pdf.text(this.translate.instant('general.invoiceSAS'), 160, 270);
 
         // Download PDF doc
-        pdf.save('table.pdf');
+        // pdf.save(this.formatDatePT(new Date) + '_invoice.pdf');
+
+        // Download PDF doc
+        // const fileName = this.formatDatePT(new Date()) + '_invoice.pdf';
+        // pdf.save(fileName);
+
+        // // Mở file PDF sau khi lưu
+        // setTimeout(() => {
+        //     window.open(fileName, '_blank');
+        // }, 1000);
+
+        pdf.save(this.formatDatePT(new Date()) + '_invoice.pdf');
+
+        setTimeout(() => {
+            // Xuất file PDF dưới dạng Blob
+            const blob = pdf.output('blob');
+          
+            // Tạo URL từ Blob
+            const url = URL.createObjectURL(blob);
+          
+            // Mở PDF trong tab mới
+            window.open(url, '_blank');
+          }, 1000);
+          
+        
+
+
+
     }
 
+
+    // public gerarPDF(element: any) {
+    //     var pdf = new jsPDF();
+    //     // INSS logo
+    //     pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
+
+    //     //title
+    //     pdf.text(this.translate.instant('general.guiaDePagamento'), 83, 35);
+    //     pdf.setFontSize(12);
+    //     pdf.setTextColor(99);
+
+    //     //Número do Documento
+    //     pdf.text(this.translate.instant('guiaPagamentoListagem.numDocumento') + ': ' + element.numDocumento, 75, 45);
+
+    //     //datas
+    //     pdf.text(this.translate.instant('responsavel_legal.emitDate') + ': ' + this.formatDatePT(element.mesAno), 20, 55);
+    //     pdf.text(this.translate.instant('conta_corrente.dataLimitePagamento') + ': ' + this.formatDatePT(element.dtValidade), 120, 55);
+
+    //     var body = [[this.formatDatePT(element.mesAno), element.descricao, element.valor, element.juros, element.total, this.formatDatePT(element.dtValidade), this.guiaTipoOptions.find(x => x.value == element.tipo)?.descricao, element.valorPago],
+    //     [{
+    //         content: `TOTAL: ${this.formatDecimal(element.total)}`, colSpan: 8,
+    //         styles: { fillColor: [42, 129, 204] }
+    //     }]]
+
+    //     {
+    //         (pdf as any).autoTable({
+    //             startY: 60,
+    //             columnStyles: { europe: { halign: 'center' } },
+    //             head: [[this.translate.instant('guiaPagamentoListagem.mesAno'), this.translate.instant('guiaPagamentoListagem.descricao'), this.translate.instant('guiaPagamentoListagem.valor'), this.translate.instant('guiaPagamentoListagem.juros'), this.translate.instant('guiaPagamentoListagem.total'), this.translate.instant('general.dtValidade'), this.translate.instant('guiaPagamentoListagem.type'), this.translate.instant('conta_corrente.valorPago')]],
+    //             body: body,
+    //             theme: 'grid',
+    //             headStyles: {
+    //                 fillColor: [42, 129, 204],
+    //                 textColor: [0, 0, 0],
+    //                 fontSize: 8,
+    //                 padding: 0,
+    //                 valign: 'middle',
+    //                 halign: 'center',
+    //             },
+
+    //             bodyStyles: {
+    //                 textColor: [0, 0, 0],
+    //                 fontSize: 10,
+    //                 padding: 0,
+    //                 valign: 'middle',
+    //                 halign: 'center',
+    //             },
+    //             didDrawCell: (data: { column: { index: any; }; }) => {
+    //             }
+
+    //         })
+    //     }
+
+    //     // Download PDF doc
+    //     pdf.save('invoice.pdf');
+    // }
     public openPaymentPopup(guia: GuiaListagem, viewMode: boolean = false): void {
         this.spinner.show();
 

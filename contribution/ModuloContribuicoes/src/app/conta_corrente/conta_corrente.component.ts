@@ -38,10 +38,10 @@ export class ContaCorrenteComponent {
 
   //Region Conta Corrente table
   public dataSourceContaCorrente: ContaCorrenteListagem[] = [];
-  public displayedColumnsContaCorrente: string[] = ['select', 'tipoDivida', 'mesAno', 'dataVencimento', 'valorEntidade', 'valorTrabalhador', 'totalJuros', 'valorTotal', 'situacaoPagamento', 'valorPago', 'pagoEm', 'totalDivida'];
+  public displayedColumnsContaCorrente: string[] = ['select', 'tipoDivida', 'mesAno', 'dataCriacao', 'dataVencimento', 'valorEntidade', 'valorTrabalhador', 'totalJuros', 'valorTotal', 'situacaoPagamento', 'valorPago', 'pagoEm', 'totalDivida'];
   public selected: number = 0;
   public totalRowsContaCorrenteTable: number = 0;
-  public pageSizeContaCorrenteTable = 5;
+  public pageSizeContaCorrenteTable = 10;
   public pageIndexContaCorrenteTable = 0;
 
 
@@ -259,22 +259,22 @@ export class ContaCorrenteComponent {
     var valorTotalsemJuros = 0;
     var valorPago = 0;
 
-    if(this.dataSourceGuiaPagamento[0].valorPago != null){
+    if (this.dataSourceGuiaPagamento[0].valorPago != null) {
       valorPago = this.dataSourceGuiaPagamento[0].valorPago;
     }
     this.total = this.dataSourceGuiaPagamento[0].valorTotal - valorPago;
     this.dataLimitePagamento = this.dataSourceGuiaPagamento[0].dataVencimento;
 
     var temp = [this.dataSourceGuiaPagamento[0].tipoDivida, this.formatDate(this.dataSourceGuiaPagamento[0].mesAno),
-     this.formatDatePT(this.dataSourceGuiaPagamento[0].dataVencimento),
+    this.formatDatePT(this.dataSourceGuiaPagamento[0].dataVencimento),
     '$' + this.formatDecimal(this.dataSourceGuiaPagamento[0].valorEntidade),
-    '$' +this.formatDecimal(this.dataSourceGuiaPagamento[0].valorTrabalhador),
+    '$' + this.formatDecimal(this.dataSourceGuiaPagamento[0].valorTrabalhador),
     '$' + this.dataSourceGuiaPagamento[0].juroApurado != null ?
-    this.formatDecimal(this.dataSourceGuiaPagamento[0].juroApurado) : this.formatDecimal(0),
+      this.formatDecimal(this.dataSourceGuiaPagamento[0].juroApurado) : this.formatDecimal(0),
     '$' + this.formatDecimal(this.dataSourceGuiaPagamento[0].valorTotal - valorPago)];
     this.rows.push(temp);
     valorTotalsemJuros = this.dataSourceGuiaPagamento[0].valorEntidade +
-    this.dataSourceGuiaPagamento[0].valorTrabalhador;
+      this.dataSourceGuiaPagamento[0].valorTrabalhador;
     descricao = this.dataSourceGuiaPagamento[0].tipoDivida;
 
     if (this.dataSourceGuiaPagamento[0].juroApurado) {
@@ -361,65 +361,157 @@ export class ContaCorrenteComponent {
     this.dataSourceResumoConta = [resumoConta];
   }
 
-
   public gerarPDF() {
     var pdf = new jsPDF();
     // INSS logo
     pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
 
     //title
-    pdf.text(this.translate.instant('general.guiaDePagamento'), 83, 35);
-    pdf.setFontSize(12);
-    pdf.setTextColor(99);
-
+    pdf.setFontSize(13);
+    pdf.setTextColor(80);
+    pdf.text(this.translate.instant('general.invoiceTitleDoc'), 60, 35);
+    pdf.setFontSize(11);
+    pdf.setTextColor(10);
     //Número do Documento
-    pdf.text(this.translate.instant('guiaPagamentoListagem.numDocumento') + ': ' + this.numDocumento, 75, 45);
+    pdf.text(this.translate.instant('general.invoicePaymentRef'), 20, 45);
+    pdf.text(this.translate.instant('general.invoiceEm'), 20, 52);
+    pdf.text(this.translate.instant('general.invoiceName') + ': josesoares', 20, 59);
+    pdf.text(this.translate.instant('general.invoiceDate') + ': ' + this.formatDatePT(new Date), 120, 59);
+    pdf.text(this.translate.instant('general.invoiceNISS') + ': ', 20, 66);
+    pdf.text(this.translate.instant('general.invoiceTIN') + ': ', 20, 73);
+    pdf.text(this.translate.instant('general.invoicePM') + ':', 20, 80);
+    pdf.addImage(environment.checkBoxIcon, 'JPEG', 20, 83, 5, 5);
+    pdf.text(this.translate.instant('general.invoiceCash'), 30, 87);
+    pdf.addImage(environment.checkBoxIcon, 'JPEG', 20, 90, 5, 5);
+    pdf.text(this.translate.instant('general.invoiceBT'), 30, 94);
 
-    //datas
-    pdf.text(this.translate.instant('responsavel_legal.emitDate') + ': ' + this.formatDatePT(new Date), 20, 55);
-    pdf.text(this.translate.instant('conta_corrente.dataLimitePagamento') + ': ' + this.formatDatePT(this.dataLimitePagamento), 120, 55);
+    pdf.text(this.translate.instant('general.invoiceIP'), 20, 101);
+    pdf.text(this.translate.instant('general.invoiceBank') + ':', 20, 108);
+    pdf.text(this.translate.instant('general.invoiceNOT'), 20, 115);
+    pdf.text(this.translate.instant('general.invoiceCCATP'), 20, 122);
+    pdf.text(this.translate.instant('general.invoiceCFT'), 50, 129);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 129);
 
-    var body = [...this.rows,
-    [{
-      content: `TOTAL: ${this.formatDecimal(this.total)}`, colSpan: 8,
-      styles: { fillColor: [42, 129, 204] }
-    }]]
+    pdf.text(this.translate.instant('general.invoiceEEC') + ': ', 60, 136);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 136);
 
-    {
-      (pdf as any).autoTable({
-        startY: 60,
-        columnStyles: { europe: { halign: 'center' } },
-        head: [[this.translate.instant('conta_corrente.tipoDivida'), this.translate.instant('conta_corrente.mesAno'), this.translate.instant('conta_corrente.dtVencimento'), this.translate.instant('conta_corrente.valorEntidade'), this.translate.instant('conta_corrente.valorTrabalhador'), this.translate.instant('conta_corrente.juros'), this.translate.instant('conta_corrente.valorTotal')]],
-        body: body,
-        theme: 'grid',
-        headStyles: {
-          fillColor: [42, 129, 204],
-          textColor: [0, 0, 0],
-          fontSize: 8,
-          padding: 0,
-          valign: 'middle',
-          halign: 'center',
-        },
+    pdf.text(this.translate.instant('general.invoiceTCO') + ': ', 60, 143);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 143);
 
-        bodyStyles: {
-          textColor: [0, 0, 0],
-          fontSize: 10,
-          padding: 0,
-          valign: 'middle',
-          halign: 'center',
-        },
-        didDrawCell: (data: { column: { index: any; }; }) => {
-          console.log(data.column.index)
-        }
+    pdf.text(this.translate.instant('general.invoiceOPA') + ': ', 50, 150);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 150);
 
-      })
-    }
+    pdf.text(this.translate.instant('general.invoiceINCLUDING'), 50, 157);
+
+    pdf.text(this.translate.instant('general.invoiceLPI') + ': ', 50, 164);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 164);
+
+    pdf.text(this.translate.instant('general.invoiceFines') + ': ', 50, 171);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 171);
+
+    pdf.text(this.translate.instant('general.invoiceOthers') + ': ', 50, 178);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 178);
+
+    pdf.text(this.translate.instant('general.invoiceTotal') + ': ', 50, 185);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 185);
+
+    pdf.text(this.translate.instant('general.invoiceROP') + ': ', 50, 192);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 192);
+
+    pdf.text(this.translate.instant('general.invoiceCCON') + ': ', 50, 199);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 199);
+
+    pdf.text(this.translate.instant('general.invoiceTTA') + ': ', 50, 206);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 206);
+
+    pdf.text(this.translate.instant('general.invoiceAPEE') + ': ', 50, 213);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 213);
+
+    pdf.text(this.translate.instant('general.invoiceATCO') + ': ', 50, 220);
+    pdf.text(this.translate.instant('general.invoiceUSD'), 160, 220);
+
+    pdf.text(this.translate.instant('general.invoiceSSS'), 83, 230);
+
+    pdf.text(this.translate.instant('general.invoiceDate'), 30, 270);
+
+    pdf.text(this.translate.instant('general.invoiceSAS'), 160, 270);
     // Open PDF document in browser's new tab
-    pdf.output('dataurlnewwindow')
+    // pdf.output('dataurlnewwindow')
+    // // Download PDF doc
+    // pdf.save(this.formatDatePT(new Date) + '_invoice.pdf');
 
-    // Download PDF doc
-    //pdf.save('table.pdf');
+    pdf.save(this.formatDatePT(new Date()) + '_invoice.pdf');
+
+        setTimeout(() => {
+            // Xuất file PDF dưới dạng Blob
+            const blob = pdf.output('blob');
+          
+            // Tạo URL từ Blob
+            const url = URL.createObjectURL(blob);
+          
+            // Mở PDF trong tab mới
+            window.open(url, '_blank');
+          }, 1000);
   }
+
+  // public gerarPDF() {
+  //   var pdf = new jsPDF();
+  //   // INSS logo
+  //   pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
+
+  //   //title
+  //   pdf.text(this.translate.instant('general.guiaDePagamento'), 83, 35);
+  //   pdf.setFontSize(12);
+  //   pdf.setTextColor(99);
+
+  //   //Número do Documento
+  //   pdf.text(this.translate.instant('guiaPagamentoListagem.numDocumento') + ': ' + this.numDocumento, 75, 45);
+
+  //   //datas
+  //   pdf.text(this.translate.instant('responsavel_legal.emitDate') + ': ' + this.formatDatePT(new Date), 20, 55);
+  //   pdf.text(this.translate.instant('conta_corrente.dataLimitePagamento') + ': ' + this.formatDatePT(this.dataLimitePagamento), 120, 55);
+
+  //   var body = [...this.rows,
+  //   [{
+  //     content: `TOTAL: ${this.formatDecimal(this.total)}`, colSpan: 8,
+  //     styles: { fillColor: [42, 129, 204] }
+  //   }]]
+
+  //   {
+  //     (pdf as any).autoTable({
+  //       startY: 60,
+  //       columnStyles: { europe: { halign: 'center' } },
+  //       head: [[this.translate.instant('conta_corrente.tipoDivida'), this.translate.instant('conta_corrente.mesAno'), this.translate.instant('conta_corrente.dtVencimento'),this.translate.instant('conta_corrente.dataCriacao'), this.translate.instant('conta_corrente.valorEntidade'), this.translate.instant('conta_corrente.valorTrabalhador'), this.translate.instant('conta_corrente.juros'), this.translate.instant('conta_corrente.valorTotal')]],
+  //       body: body,
+  //       theme: 'grid',
+  //       headStyles: {
+  //         fillColor: [42, 129, 204],
+  //         textColor: [0, 0, 0],
+  //         fontSize: 8,
+  //         padding: 0,
+  //         valign: 'middle',
+  //         halign: 'center',
+  //       },
+
+  //       bodyStyles: {
+  //         textColor: [0, 0, 0],
+  //         fontSize: 10,
+  //         padding: 0,
+  //         valign: 'middle',
+  //         halign: 'center',
+  //       },
+  //       didDrawCell: (data: { column: { index: any; }; }) => {
+  //         console.log(data.column.index)
+  //       }
+
+  //     })
+  //   }
+  //   // Open PDF document in browser's new tab
+  //   pdf.output('dataurlnewwindow')
+
+  //   // Download PDF doc
+  //   //pdf.save('table.pdf');
+  // }
 
   public formatDecimal(number?: number) {
     return formatDecimal(this.decimalPipe, number);

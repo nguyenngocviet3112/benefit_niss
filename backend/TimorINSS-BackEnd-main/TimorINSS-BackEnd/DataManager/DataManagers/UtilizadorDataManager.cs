@@ -177,7 +177,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 response.Errors.Add(new Error
                 {
-                    ErrorMessage = "Entidade doesn't exist"
+                    ErrorCode = "-1",ErrorMessage = "Entidade doesn't exist"
                 });
                 return response;
             }
@@ -188,6 +188,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 response.Errors.Add(new Error
                 {
+                    ErrorCode = "-1",
                     ErrorMessage = "Email doesn't exist"
                 });
                 return response;
@@ -199,6 +200,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 response.Errors.Add(new Error
                 {
+                    ErrorCode = "-1",
                     ErrorMessage = "User doesn't exist for this entidade empregadora"
                 });
                 return response;
@@ -235,6 +237,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 response.Errors.Add(new Error
                 {
+                    ErrorCode = "-1",
                     ErrorMessage = ex.Message
                 });
             }
@@ -252,6 +255,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 response.Errors.Add(new Error
                 {
+                    ErrorCode = "-1",
                     ErrorMessage = "Entidade doesn't exist"
                 });
                 return response;
@@ -263,6 +267,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 response.Errors.Add(new Error
                 {
+                    ErrorCode = "-1",
                     ErrorMessage = "Email doesn't exist"
                 });
                 return response;
@@ -274,6 +279,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 response.Errors.Add(new Error
                 {
+                    ErrorCode = "-1",
                     ErrorMessage = "User already exists for this entidade empregadora"
                 });
                 return response;

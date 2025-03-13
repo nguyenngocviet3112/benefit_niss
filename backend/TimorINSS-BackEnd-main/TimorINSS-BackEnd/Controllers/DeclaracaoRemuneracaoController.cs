@@ -74,7 +74,7 @@ namespace TimorINSSBackEnd.Controllers
         {
             var culture = CultureInfo.CurrentCulture.Name;
             CultureInfo cultureinfo = new CultureInfo(culture);
-            request.data = DateTime.Parse(request.data.ToString("dd MM yyyy"), cultureinfo);
+            //request.data = DateTime.Parse(request.data.ToString("dd MM yyyy"), cultureinfo);
 
             ResponseBaseDataContract response = new ResponseBaseDataContract();
             try

@@ -19,6 +19,9 @@ namespace TimorINSSBackEnd.DTO
         public int TipoDivida { get; set; }
 
         [Mapper]
+        public decimal ValorJuros { get; set; }
+
+        [Mapper]
         public DateTime MesAno { get; set; }
 
         [Mapper]

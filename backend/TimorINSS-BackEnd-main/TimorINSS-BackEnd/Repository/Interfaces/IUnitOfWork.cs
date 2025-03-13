@@ -1,4 +1,6 @@
-﻿namespace TimorINSSBackEnd.Repository.Interfaces
+﻿using TimorINSSBackEnd.DataManager.Interfaces;
+
+namespace TimorINSSBackEnd.Repository.Interfaces
 {
     public interface IUnitOfWork
     {
@@ -82,6 +84,9 @@
         IComponenteReceitaRegistoRepository ComponenteReceitaRegistoRepository { get; }
         IUtilizadorTokenRepository UtilizadorTokenRepository { get; }
         ICompromissoRepository CompromissoRepository { get; }
+
+
+        IKhachHangRepository KhachHangRepository { get; }
 
         void Commit();
 

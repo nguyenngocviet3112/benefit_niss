@@ -29,11 +29,7 @@
 
       <div class="VincularTrabalhadorSearchDiv" *ngIf="showSearchButton">
 
-        <div class="VincularTrabalhadorSearchDivButtonDiv">
-          <button disabled="{{!filter.filterBy}}" class="VincularTrabalhadorSearchDivButton" mat-fab color="green" aria-label="Search" (click)="pesquisarPessoa()">
-            <mat-icon class="VincularTrabalhadorSearchDivIcon">person_search</mat-icon>
-          </button>
-        </div>
+        
 
           <div *ngIf="isSearchByString" class="inputContainer">
             <mat-form-field appearance="outline" class="VincularTrabalhadorSearchField">
@@ -49,6 +45,11 @@
               <input matInput type="number" [(ngModel)]="filter.filterBy" name="stringFilterInput" (keydown.enter)="pesquisarPessoa()"/>
               <fa-icon *ngIf="filter.filterBy" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="clearPesquisarPessoa()"></fa-icon>
             </mat-form-field>
+          </div>
+          <div class="VincularTrabalhadorSearchDivButtonDiv">
+            <button disabled="{{!filter.filterBy}}" class="VincularTrabalhadorSearchDivButton" mat-fab color="green" aria-label="Search" (click)="pesquisarPessoa()">
+              <mat-icon class="VincularTrabalhadorSearchDivIcon">person_search</mat-icon>
+            </button>
           </div>
       </div>
     </div>

@@ -18,6 +18,9 @@ namespace TimorINSSBackEnd.Models
         }
 
         public virtual DbSet<Actividadeeconomica> Actividadeeconomica { get; set; }
+
+        public virtual DbSet<KhachHang> KhachHang { get; set; }
+
         public virtual DbSet<Agrupamentoconfig> Agrupamentoconfig { get; set; }
         public virtual DbSet<Aldeia> Aldeia { get; set; }
         public virtual DbSet<Camposeditaveis> Camposeditaveis { get; set; }

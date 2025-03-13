@@ -1,0 +1,25 @@
+1. Lỗi đổi ngôn ngữ không xuyên suốt khi chuyển màn hình chức năng
+2. Check lại file đa ngôn ngữ xem có chưa
+3. Chức năng gửi email không hoạt động (Forgot pass và first access)
+4. Hiển thị thừa tháng
+5. Hiển thị double tháng
+6. Sửa lại hóa đơn
+7. Double bản ghi current account
+Contribuições e Juros
+Contribuições
+
+8. Thêm correction function (Thêm sau): Cho phép sửa
+9. Không submit được tháng 2
+10. Lỗi digit 9 số validate
+
+
+
+
+
+KIAN_CORE: không cần tải vì đã cài đặt xong
+F2DR_business: đưa lên server: 10.226.232.138
+Integration: đưa lên 10.226.232.140
+SOAR: đưa lên 10.226.232.139
+tool_linux: lên cả 3 node server
+
+67075147628

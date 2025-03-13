@@ -11,14 +11,14 @@ import { TokenStorageService } from "./services/token-storage.service";
 
 //format Dates
 export function formatDate(pipe: DatePipe, date?: Date): string {
-  let transformed = pipe.transform(date, 'yyyy-MM');
+  let transformed = pipe.transform(date, 'MM/yyyy');
   if (transformed)
     return transformed;
   return '';
 }
 
 export function formatDatePT(pipe: DatePipe, date?: Date): string {
-  let transformed = pipe.transform(date, 'dd-MM-yyyy');
+  let transformed = pipe.transform(date, 'dd/MM/yyyy');
   if (transformed)
     return transformed;
   return '';

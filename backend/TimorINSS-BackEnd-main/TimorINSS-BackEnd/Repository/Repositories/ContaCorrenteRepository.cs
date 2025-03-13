@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -154,6 +155,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                    IdTrabalhador = contaCorrente.ContaCorrenteTrabalhadorFk,
                    TipoDivida = contaCorrente.TipoDividaNavigation.Descricao,
                    DataVencimento = contaCorrente.DataVencimento,
+                   DataCriacao = contaCorrente.DataCriacao,
                    ValorEntidade = contaCorrente.ValorEntidade,
                    ValorTrabalhador = contaCorrente.ValorTrabalhador,
                    ValorTotal = contaCorrente.ValorTotal + (contaCorrente.ValorJuros ?? 0),
@@ -274,7 +276,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
             var contas = _moduloContribuicoesContext.Contacorrente
                         .Include(c => c.SituacaoPagamentoNavigation)
                         //.Include(c => c.GuiaPagamentoFkNavigation.IndPagoNavigation)
-                        .Where(c => c.ContaCorrenteEntidadeFk == idEntidade && c.MesAno.Year == dateInicial.Year && c.IndActivo)
+                        .Where(c => c.ContaCorrenteEntidadeFk == idEntidade 
+                        && c.MesAno.Year == dateInicial.Year && c.IndActivo
+                        && c.MesAno.Month <= dateFinal.Month)
                         .Select(c => new ContasState
                         {
                             id = c.IdContaCorrente,
@@ -296,6 +300,17 @@ namespace TimorINSSBackEnd.Repository.Repositories
                   && d.MesAno == mesAno && d.IndActivo)
                   .Select(d => d.ContaCorrenteFkNavigation).FirstOrDefault();
         }
+
+       
+        public void UpdateCorrente(int contaCorrenteId)
+        {
+            var contaCorrente = _moduloContribuicoesContext.Contacorrente.FirstOrDefault(e => e.IdContaCorrente == contaCorrenteId);
+
+            if (contaCorrente == null) return;
+            contaCorrente.DataCriacao = DateTime.Now.Date;
+            _moduloContribuicoesContext.SaveChanges();
+        }
+
 
         public void UpdateSituacaoPagamento(int contaCorrenteId)
         {

@@ -68,7 +68,7 @@ namespace TimorINSSBackEnd.Controllers
 
             // Guardar log no ficheiro de logs
             response.ManageErrors("RecoverPassword", Log, request);
-            return Ok();
+            return Ok(response);
         }
 
         [AllowAnonymous]
@@ -89,7 +89,7 @@ namespace TimorINSSBackEnd.Controllers
 
             // Guardar log no ficheiro de logs
             response.ManageErrors("FirstAcess", Log, request);
-            return Ok();
+            return Ok(response);
         }
 
         [AllowAnonymous]

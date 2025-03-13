@@ -72,6 +72,9 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         public DateTime DataVencimento { get; set; }
 
         [DataMember]
+        public DateTime DataCriacao { get; set; }
+
+        [DataMember]
         public decimal ValorEntidade { get; set; }
 
         [DataMember]

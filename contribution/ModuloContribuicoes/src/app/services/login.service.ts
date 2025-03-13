@@ -11,23 +11,23 @@ import { RecoverPasswordRequest, RecoverSetPasswordRequest } from '../request-mo
 
 @Injectable({
     providedIn: 'root'
-  })
+})
 export class LoginService {
 
     constructor(
         private router: Router,
         private http: HttpClient
-    ) {}
+    ) { }
 
-    public login(request: LoginRequest) : Observable<{user: Utilizador, token: string, totalCount: number}> {
+    public login(request: LoginRequest): Observable<{ user: Utilizador, token: string, totalCount: number }> {
 
         return this.http.post(`${environment.apiUrl}/login/Authenticate`, request)
-            .pipe(map((response : any) => {
+            .pipe(map((response: any) => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 // sessionStorage.setItem('user', JSON.stringify(user));
                 // return user;
                 return {
-                    user : 
+                    user:
                     {
                         id: response.user.id,
                         username: response.user.username,
@@ -36,25 +36,36 @@ export class LoginService {
                         indActivo: response.user.indActivo,
                         idEntidade: response.user.idEntidade,
                     },
-                    token : response.token,
-                    totalCount : response.totalCount
+                    token: response.token,
+                    totalCount: response.totalCount
                 }
             }));
     }
 
-    public recoverPassword(request: RecoverPasswordRequest){
-        return this.http.post(`${environment.apiUrl}/login/RecoverPassword`, request);
+    public recoverPassword(request: RecoverPasswordRequest) {
+        return this.http.post(`${environment.apiUrl}/login/RecoverPassword`, request)
+        .pipe(map((response: any) => {
+            return {
+                errorCode:response.errors[0]?.errorCode,
+                errorMessage:response.errors[0]?.errorMessage
+            }
+        }));
     }
 
-    public firstAcess(request: RecoverPasswordRequest){
-        return this.http.post(`${environment.apiUrl}/login/FirstAcess`, request);
+    public firstAcess(request: RecoverPasswordRequest) {
+        return this.http.post(`${environment.apiUrl}/login/FirstAcess`, request).pipe(map((response: any) => {
+            return {
+                errorCode:response.errors[0]?.errorCode,
+                errorMessage:response.errors[0]?.errorMessage
+            }
+        }));
     }
 
-    public setUpPassword(request: RecoverSetPasswordRequest){
+    public setUpPassword(request: RecoverSetPasswordRequest) {
         return this.http.post(`${environment.apiUrl}/login/SetUpPassword`, request);
     }
 
-    public createUser(request: RecoverSetPasswordRequest){
+    public createUser(request: RecoverSetPasswordRequest) {
         return this.http.post(`${environment.apiUrl}/login/CreateUser`, request);
     }
 
@@ -68,7 +79,7 @@ export class LoginService {
         return this.http.post(`${environment.apiUrl}/users/register`, user);
     }
 
-    public validToken(request:{token: string, isRecover: boolean}) {
+    public validToken(request: { token: string, isRecover: boolean }) {
         return this.http.post(`${environment.apiUrl}/login/ValidToken`, request);
     }
 }

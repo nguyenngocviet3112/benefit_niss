@@ -365,6 +365,26 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return numInsc.ToString();
         }
 
+        public string GetNextNISS()
+        {
+            long numINSS = 0;
+            _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
+            Trabalhador trabalhador = _moduloContribuicoesContext.Trabalhador
+                .Where(t => !string.IsNullOrWhiteSpace(t.Niss))
+                .OrderByDescending(o => o.IdTrabalhador)
+                .FirstOrDefault();
+
+            if (trabalhador == null)
+            {
+                numINSS = 111111111;
+            }
+            else
+            {
+                numINSS = long.Parse(trabalhador.Niss) + 1;
+            }
+            return numINSS.ToString();
+        }
+
         public Trabalhador GetInternalByNiss(string niss)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;

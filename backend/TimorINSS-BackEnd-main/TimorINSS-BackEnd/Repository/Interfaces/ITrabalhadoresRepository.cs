@@ -22,6 +22,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public string GetNextNumInscProvisoria();
 
+        public string GetNextNISS();
+
         bool NissExists(string niss, int idTrabalhador = 0);
 
         bool TinExists(string tin, int idTrabalhador = 0);

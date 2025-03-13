@@ -39,6 +39,7 @@ export class AppComponent {
 
   public setTransLanguage() {
     this.translate.use(this.selectLang);
+    localStorage.setItem('selectedLanguage', this.selectLang);
   }
   public getTransLanguage() {
     this.TransLang = [...this.translate.getLangs()];
@@ -49,7 +50,17 @@ export class AppComponent {
     this.isLoginRoute = window.location.pathname == '/login';
 
     this.getTransLanguage();
-    this.selectLang = this.translate.getDefaultLang();
+    
+    const savedLanguage = localStorage.getItem('selectedLanguage');
+    if (savedLanguage && this.translate.getLangs().includes(savedLanguage)) {
+      // Sử dụng ngôn ngữ đã lưu
+      this.selectLang = savedLanguage;
+      this.translate.use(savedLanguage);
+    } else {
+      // Nếu không có hoặc không hợp lệ, sử dụng ngôn ngữ mặc định
+      this.selectLang = this.translate.getDefaultLang();
+    }
+    
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.menuItems = CreateMenuPermissions(user);
@@ -62,8 +73,16 @@ export class AppComponent {
   }
 
   public logout(): void {
-    this.isLoggedIn = false;
-    this.router.navigate(['/login'], { skipLocationChange: true });
-    this.tokenStorageService.signOut();
-  }
+  // Lưu ngôn ngữ hiện tại trước khi đăng xuất
+  const currentLanguage = this.selectLang;
+  
+  // Đăng xuất và xóa token
+  this.tokenStorageService.signOut();
+  
+  // Đặt lại ngôn ngữ đã lưu (để đảm bảo nó không bị xóa trong quá trình signOut)
+  localStorage.setItem('selectedLanguage', currentLanguage);
+  
+  // Làm mới trang
+  window.location.reload();
+}
 }

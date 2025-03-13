@@ -33,6 +33,7 @@ namespace TimorINSSBackEnd.Models
         public bool IndActivo { get; set; }
         public decimal? ValorJuros { get; set; }
 
+
         public virtual Entidadeempregadora ContaCorrenteEntidadeFkNavigation { get; set; }
         public virtual Taxajuromensal ContaCorrenteTaxaJuroFkNavigation { get; set; }
         public virtual Trabalhador ContaCorrenteTrabalhadorFkNavigation { get; set; }

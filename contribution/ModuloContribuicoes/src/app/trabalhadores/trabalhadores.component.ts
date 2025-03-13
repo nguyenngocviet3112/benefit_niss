@@ -29,7 +29,7 @@ export class TrabalhadoresComponent implements OnInit {
   private entidadeId: number = 0;
   public totalRows : number = 0;
   public filterBy = '';
-  public pageSize = 5;
+  public pageSize = 10;
   public pageIndex = 0;
   public faTimesCircle = faTimesCircle;
 

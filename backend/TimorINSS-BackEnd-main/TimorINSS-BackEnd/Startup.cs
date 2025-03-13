@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Globalization;
 using System.IO;
@@ -63,6 +64,13 @@ namespace TimorINSSBackEnd
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            //services.AddControllers()
+            //.AddNewtonsoftJson(options =>
+            //{
+            //    options.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ss"; // Định dạng datetime chung
+            //    options.SerializerSettings.Converters.Add(new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-ddTHH:mm:ss" });
+            //});
+
 
             services.AddCors();
 
@@ -86,6 +94,7 @@ namespace TimorINSSBackEnd
                         var dataBaseService = context.HttpContext.RequestServices.GetRequiredService<IUtilizadoresRepository>();
                         context.HttpContext.Request.Headers.TryGetValue("User-Id", out var requestUserId);
                         var userId = int.Parse(context.Principal.Identity.Name);
+
                         var user = dataBaseService.Get(userId);
                         var tokenStr = context.Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
                         var validToken = ConfirmToken(internalTokenSalt, context, tokenStr, userId);

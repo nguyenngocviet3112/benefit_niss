@@ -4,7 +4,7 @@ import { TokenStorageService } from '../services/token-storage.service';
 import { LoginRequest } from '../request-models/login-request';
 import { LoginService } from '../services/login.service';
 import { TranslateService } from '@ngx-translate/core';
-import {Router} from "@angular/router"
+import { Router } from "@angular/router"
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../componentes/dialog/dialog.component';
 import { openSnackBar, RegexPatterns } from "../utils";
@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
           if (err.statusText == 'Unknown Error') {
             this.showError(['-1']);
           }
-          else if (err.error?.errors?.find((x : any) => x.errorCode == '-57')) {
+          else if (err.error?.errors?.find((x: any) => x.errorCode == '-57')) {
             this.errorMessage = this.translate.instant('error.-57');
           }
           else {
@@ -96,8 +96,7 @@ export class LoginComponent implements OnInit {
       );
   }
 
-  showError(error: string[])
-  {
+  showError(error: string[]) {
     error.map(x => this.errors.push(x));
     this.errorDialog.closeAll();
     const dialogRef = this.errorDialog.open(DialogComponent, {
@@ -105,7 +104,7 @@ export class LoginComponent implements OnInit {
       minHeight: '300px',
       width: '50%',
       height: '50%',
-      data: {errors: this.errors}
+      data: { errors: this.errors }
     });
 
 
@@ -154,55 +153,66 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.disabledButton = true;
-    if (this.isFirstAccess){
+    if (this.isFirstAccess) {
       this.loginService.firstAcess(this.recoverRequest)
-      .subscribe(
-        () => {
-          let msg = this.translate.instant('login_form.emailSent');
-          openSnackBar(msg, this._snackBar);
-          this.counter += 1;
-          this.disabledButton = false;
-        },
-        () => {
-          this.translate.get('error.temporary').subscribe((translated: string) => {
-            const dialogRef = this.errorDialog.open(PopUpWarningComponent, {
-              id: 'desvincularDialog',
-              minHeight: '300px',
-              width: '40%',
-              height: '30%',
-              panelClass: 'warningModal',
-              data: {msg: translated, noGenericMsg: true}
+        .subscribe(
+          (response) => {
+            let msg;
+            if (response.errorMessage == null) {
+              msg = this.translate.instant('login_form.emailSent');
+            } else {
+              msg = response.errorMessage;
+            }
+            openSnackBar(msg, this._snackBar);
+            this.counter += 1;
+            this.disabledButton = false;
+          },
+          () => {
+            this.translate.get('error.temporary').subscribe((translated: string) => {
+              const dialogRef = this.errorDialog.open(PopUpWarningComponent, {
+                id: 'desvincularDialog',
+                minHeight: '300px',
+                width: '40%',
+                height: '30%',
+                panelClass: 'warningModal',
+                data: { msg: translated, noGenericMsg: true }
               });
-              dialogRef.afterClosed().subscribe(() => {});
-          });
-          this.disabledButton = false;      
-        }
-      );
+              dialogRef.afterClosed().subscribe(() => { });
+            });
+            this.disabledButton = false;
+          }
+        );
     }
     else {
       this.loginService.recoverPassword(this.recoverRequest)
-      .subscribe(
-        () => {
-          let msg = this.translate.instant('login_form.emailSent');
-          openSnackBar(msg, this._snackBar);
-          this.counter += 1;
-          this.disabledButton = false;
-        },
-        () => {
-          this.translate.get('error.temporary').subscribe((translated: string) => {
-            const dialogRef = this.errorDialog.open(PopUpWarningComponent, {
-              id: 'desvincularDialog',
-              minHeight: '300px',
-              width: '40%',
-              height: '30%',
-              panelClass: 'warningModal',
-              data: {msg: translated, noGenericMsg: true}
+        .subscribe(
+          response => {
+            let msg;
+            if (response.errorMessage == null) {
+              msg = this.translate.instant('login_form.emailSent');
+            } else {
+              msg = response.errorMessage;
+            }
+
+            openSnackBar(msg, this._snackBar);
+            this.counter += 1;
+            this.disabledButton = false;
+          },
+          () => {
+            this.translate.get('error.temporary').subscribe((translated: string) => {
+              const dialogRef = this.errorDialog.open(PopUpWarningComponent, {
+                id: 'desvincularDialog',
+                minHeight: '300px',
+                width: '40%',
+                height: '30%',
+                panelClass: 'warningModal',
+                data: { msg: translated, noGenericMsg: true }
               });
-              dialogRef.afterClosed().subscribe(() => {});
-          });
-          this.disabledButton = false;      
-        }
-      );
+              dialogRef.afterClosed().subscribe(() => { });
+            });
+            this.disabledButton = false;
+          }
+        );
     }
   }
 

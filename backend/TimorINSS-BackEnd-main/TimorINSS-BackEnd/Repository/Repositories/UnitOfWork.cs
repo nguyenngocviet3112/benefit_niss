@@ -93,6 +93,10 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IComponenteReceitaRegistoRepository _componenteReceitaRegistoRepository;
         private IUtilizadorTokenRepository _utilizadorTokenRepository;
         private ICompromissoRepository _compromissoRepository;
+        private IKhachHangRepository _khachHangRepository;
+
+
+        
 
         public UnitOfWork(TimorINSSModuloContribuicoesContext moduloContribuicoesContext, IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResource> localizer)
         {
@@ -269,6 +273,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
         public ICompromissoRepository CompromissoRepository
         { get { return _compromissoRepository ??= new CompromissoRepository(_moduloContribuicoesContext); } }
 
+        public IKhachHangRepository KhachHangRepository
+        { get { return _khachHangRepository ??= new KhachHangRepository(_moduloContribuicoesContext); } }
         //General functions to save changes or rollback
         public void Commit()
         { _moduloContribuicoesContext.SaveChanges(); }

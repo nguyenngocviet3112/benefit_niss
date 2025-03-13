@@ -34,7 +34,7 @@ export class RegistoSuspensaoComponent {
   public matcherDate: MyErrorDateStateMatcher = new MyErrorDateStateMatcher();
   public matcherDataSusperior: MyErrorDataSuperiorStateMatcher = new MyErrorDataSuperiorStateMatcher(undefined);
   public totalRows: number = 0;
-  public pageSize = 5;
+  public pageSize = 10;
   public pageIndex = 0;
   public selected: number = 0;
   public searchField: string = '';

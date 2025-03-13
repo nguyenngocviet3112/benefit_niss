@@ -4,14 +4,15 @@
       <app-date-picker [(date)]="date" (dateSetEvent)="dateUpdated()"></app-date-picker>
     </div>
     <div class="searchContainer">
-      <button class="personSearchButton" mat-fab color="green" aria-label="Search" (click)="pesquisarPessoa()">
-        <mat-icon class="personSearchIcon">person_search</mat-icon>
-      </button>
+      
       <mat-form-field class="pesquisar" appearance="outline">
         <mat-label>{{'trabalhadores.searchTrab' | translate}}</mat-label>
         <input matInput maxlength="100" type="text" [(ngModel)]="filterBy" name="stringFilterInput" (keydown.enter)="pesquisarPessoa()"/>
         <fa-icon *ngIf="filterBy" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="clearPesquisarPessoa()"></fa-icon>
       </mat-form-field>
+      <button class="personSearchButton" mat-fab color="green" aria-label="Search" (click)="pesquisarPessoa()">
+        <mat-icon class="personSearchIcon">person_search</mat-icon>
+      </button>
     </div>
     <div class="adicionarTrabalhador">
       <a routerLink="../vincularTrabalhador" class="adicionarTrabalhadorButton" [skipLocationChange]="true" mat-raised-button>

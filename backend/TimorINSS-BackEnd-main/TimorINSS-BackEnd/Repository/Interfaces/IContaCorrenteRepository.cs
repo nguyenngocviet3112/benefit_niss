@@ -20,6 +20,10 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public Contacorrente GetContaCorrenteByMesAnoAndEntidadeId(DateTime mesAno, int entidadeEmpregadoraID);
 
+        public void UpdateCorrente(int contraId);
+
         public void UpdateSituacaoPagamento(int contaCorrenteId);
+
+
     }
 }

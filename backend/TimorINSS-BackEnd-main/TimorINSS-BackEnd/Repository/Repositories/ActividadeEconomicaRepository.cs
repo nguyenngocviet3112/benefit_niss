@@ -61,6 +61,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             _moduloContribuicoesContext.Remove(entity);
         }
 
+
         public List<SelectDescription> GetAllActividadeEconomica()
         {
             return _moduloContribuicoesContext.Actividadeeconomica

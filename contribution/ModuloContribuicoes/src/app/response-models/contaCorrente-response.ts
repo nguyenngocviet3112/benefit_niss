@@ -12,6 +12,7 @@ export interface ContaCorrenteListagem {
   idTrabalhador?: number;
   tipoDivida: string;
   dataVencimento: Date;
+  dataCriacao: Date;
   valorEntidade: number;
   valorTrabalhador: number;
   valorTotal: number;

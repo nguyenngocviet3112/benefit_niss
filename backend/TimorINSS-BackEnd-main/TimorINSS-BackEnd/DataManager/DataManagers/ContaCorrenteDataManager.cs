@@ -82,50 +82,6 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                         request.filter.filterField = "ENTIDADEEMPREGADORA";
                         response = _unitOfWork.ContaCorrenteRepository.GetContaCorrenteByFilter(request);
 
-                        //if (response != null && response.contaCorrente.Count > 0)
-                        //{
-                        //    for (int i = 0; i < response.contaCorrente.Count; i++)
-                        //    {
-                        //        // Calculo do Valor Pago
-                        //        if (response.contaCorrente[i].GuiaPagamentoFK != null && response.contaCorrente[i].TipoGuia != null
-                        //            && response.contaCorrente[i].TipoGuia == _unitOfWork.DominioRepository.getIdDominio("TIPOGUIA", 1)
-                        //            && response.contaCorrente[i].ValorPago != null)
-                        //        {
-                        //            valorPago = _unitOfWork.GuiaPagamentoRepository.SumValorPago(response.contaCorrente[i].IdContaCorrente);
-                        //            response.contaCorrente[i].ValorPago = response.contaCorrente[i].ValorPago + valorPago;
-                        //        }
-
-                        //        //Situações em que é permitido gerar a Guia de Pagamento
-
-                        //        //Sem Guia Gerada - Deixa gerar sempre
-                        //        if (response.contaCorrente[i].SituacaoPagamento == 4)
-                        //        {
-                        //            response.contaCorrente[i].GerarGuia = true;
-                        //        }
-                        //        else if (response.contaCorrente[i].SituacaoPagamento == 2 ||
-                        //          response.contaCorrente[i].SituacaoPagamento == 5 || response.contaCorrente[i].SituacaoPagamento == 6)
-                        //        {
-                        //            GuiaUltimoGuiaPagamento = _unitOfWork.GuiaPagamentoRepository.GetUltimoGuiaFilho(response.contaCorrente[i].GuiaPagamentoFK);
-
-                        //            // Em caso de ter guias filhas-  só deixa gerar se a guia filha mais recente estiver inativo
-                        //            if (GuiaUltimoGuiaPagamento != null && (!GuiaUltimoGuiaPagamento.IndActivo || GuiaUltimoGuiaPagamento.ComprovativoPag != null))
-                        //            {
-                        //                response.contaCorrente[i].GerarGuia = true;
-                        //            }
-                        //            // caso de não tenha guias filhas, só deixa gerar caso o guia pai for inativo
-                        //            else if (GuiaUltimoGuiaPagamento == null && response.contaCorrente[i].IndActivoGuiaPagamento != null
-                        //                && ((bool)!response.contaCorrente[i].IndActivoGuiaPagamento ||
-                        //                response.contaCorrente[i].ValorTotal > response.contaCorrente[i].ValorPago))
-                        //            {
-                        //                response.contaCorrente[i].GerarGuia = true;
-                        //            }
-                        //            else
-                        //            {
-                        //                response.contaCorrente[i].GerarGuia = false;
-                        //            }
-                        //        }
-                        //    }
-                        //}
                     }
                     else
                     {
@@ -244,6 +200,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 else
                 {
                     List<ContasState> res = _unitOfWork.ContaCorrenteRepository.GetAllContasStatesFromYearByIdEntidade(request.idEntidade, dateInicial, dateFinal);
+
+                    //List<ContasState> res = new List<ContasState>();
 
                     //fill blanks (for current and error state)
                     ContasState contaIterator;
