@@ -70,6 +70,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     id = u.IdDominio,
                     value = u.Valor,
                     descricao = u.Descricao,
+                    descricaoEn = u.DescricaoEn,
                     indActivo = u.IndActivo
                 })
                 .ToList();
@@ -84,6 +85,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     id = u.IdDominio,
                     value = u.Valor,
                     descricao = u.Descricao,
+                    descricaoEn = u.DescricaoEn,
                     indActivo = u.IndActivo
                 })
                 .FirstOrDefault();

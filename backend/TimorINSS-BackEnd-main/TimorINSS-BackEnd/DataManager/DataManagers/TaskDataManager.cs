@@ -205,7 +205,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 Errors = new List<Error>()
             };
             //check day
-            SingleDominioDescricaoStringResponse diaDeclaracao = _dominioManager.GetDeclarationDay();
+            SingleDominioDescricaoStringResponse diaDeclaracao = _dominioManager.GetDeclarationDay("TE");
             DateTime now = DateTime.Now;
             DateTime checkDate = new DateTime(now.Year, now.Month, 1);
             if (now.Day < diaDeclaracao.dominio.value)

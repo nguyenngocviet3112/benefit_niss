@@ -106,11 +106,11 @@
             <td mat-cell *matCellDef="let element"> {{element.taxaEntidade}}<label *ngIf="element.taxaEntidade">%</label></td>
           </ng-container>
           <ng-container matColumnDef="quotizacoes">
-            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.quotizacoes' | translate}} </th>
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.contribuicoes' | translate}} </th>
             <td mat-cell *matCellDef="let element">{{element.quotizacoes | currency: 'USD':'symbol-narrow':'.2-2':'pt-BR'}}</td>
           </ng-container>
           <ng-container matColumnDef="contribuicoes">
-            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.contribuicoes' | translate}} </th>
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.quotizacoes' | translate}} </th>
             <td mat-cell *matCellDef="let element">{{element.contribuicoes | currency: 'USD':'symbol-narrow':'.2-2':'pt-BR'}}</td>
           </ng-container>
           <ng-container matColumnDef="total">

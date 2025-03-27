@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DataManager.Interfaces;
 using TimorINSSBackEnd.DTO;
+using TimorINSSBackEnd.ExcelReaderService.Models;
 using TimorINSSBackEnd.Models;
 using TimorINSSBackEnd.Repository.Interfaces;
 
@@ -235,6 +237,18 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     ErrorMessage = ErrorsDataContract.TinAlreadyExists.ToString()
                 });
             }
+            
+
+            if (trabalhador.DataNasc.Year - DateTime.Today.Year  <= 18 )
+            {
+                response.Errors.Add(new Error
+                {
+                    ErrorCode = ((int)ErrorsDataContract.AgeLessThan18).ToString(),
+                    ErrorMessage = ErrorsDataContract.AgeLessThan18.ToString()
+                });
+            }
+
+
 
             Relentidadetrabalhador relacao = new Relentidadetrabalhador();
             if (request.RelEntidadeTrabalhador != null)
@@ -320,6 +334,26 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     {
                         ErrorCode = ((int)ErrorsDataContract.ErroDataValidade).ToString(),
                         ErrorMessage = ErrorsDataContract.ErroDataValidade.ToString()
+                    });
+                    return response;
+                }
+
+                if (documento.TpDocIdentificacao == 1 && Regex.Match(documento.Numero, "^d{17}$").Success)
+                {
+                    response.Errors.Add(new Error
+                    {
+                        ErrorCode = ((int)ErrorsDataContract.ValidIdCard).ToString(),
+                        ErrorMessage = ErrorsDataContract.ValidIdCard.ToString()
+                    });
+                    return response;
+                }
+
+                if (documento.TpDocIdentificacao == 22 && Regex.Match(documento.Numero, "^d{9}$").Success)
+                {
+                    response.Errors.Add(new Error
+                    {
+                        ErrorCode = ((int)ErrorsDataContract.ValidEletoraCard).ToString(),
+                        ErrorMessage = ErrorsDataContract.ValidEletoraCard.ToString()
                     });
                     return response;
                 }

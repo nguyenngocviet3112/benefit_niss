@@ -48,6 +48,7 @@ namespace TimorINSSBackEnd.Models
         public string Dominio1 { get; set; }
         public int Valor { get; set; }
         public string Descricao { get; set; }
+        public string DescricaoEn { get; set; }
         public bool IndActivo { get; set; }
         public int UtilizadorCriacao { get; set; }
         public DateTime DataCriacao { get; set; }

@@ -20,52 +20,52 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
 
         public void Delete(Dominio entity);
 
-        public DominioDescricaoStringResponse getAllTiposDeContracto();
+        public DominioDescricaoStringResponse getAllTiposDeContracto(string language);
 
-        public DominioDescricaoStringResponse getAllNaturezasDeContracto();
+        public DominioDescricaoStringResponse getAllNaturezasDeContracto(string language);
 
-        public DominioDescricaoStringResponse getAllLeisLaboraisAplicaveis();
+        public DominioDescricaoStringResponse getAllLeisLaboraisAplicaveis(string language);
 
-        public DominioDescricaoStringResponse GetAllTiposDeDocumento();
+        public DominioDescricaoStringResponse GetAllTiposDeDocumento(string language);
 
-        public DominioDescricaoStringResponse GetAllSexos();
+        public DominioDescricaoStringResponse GetAllSexos(string language);
 
-        public DominioDescricaoStringResponse getAllEstadosCivis();
+        public DominioDescricaoStringResponse getAllEstadosCivis(string language);
 
-        public DominioDescricaoStringResponse GetAllNacionalidades();
+        public DominioDescricaoStringResponse GetAllNacionalidades(string language);
 
-        public DominioDescricaoStringResponse GetAllTipoDivida();
+        public DominioDescricaoStringResponse GetAllTipoDivida(string language);
 
-        public DominioDescricaoStringResponse GetAllSituacaoPagamento();
+        public DominioDescricaoStringResponse GetAllSituacaoPagamento(string language);
 
-        public ListagemRegimesResponse GetAllRegimes();
+        public ListagemRegimesResponse GetAllRegimes(string language);
 
-        public SingleDominioDescricaoStringResponse getSalarioMinimo();
+        public SingleDominioDescricaoStringResponse getSalarioMinimo(string language);
 
-        public DominioDescricaoStringResponse getTipoPago();
+        public DominioDescricaoStringResponse getTipoPago(string language);
 
-        public DominioDescricaoStringResponse getTipoGuia();
+        public DominioDescricaoStringResponse getTipoGuia(string language);
 
-        public SingleDominioDescricaoStringResponse GetDeclarationDay();
+        public SingleDominioDescricaoStringResponse GetDeclarationDay(string language);
 
-        public DominioDescricaoStringResponse GetAllProfissoes();
+        public DominioDescricaoStringResponse GetAllProfissoes(string language);
 
-        public DominioDescricaoStringResponse GetAllFuncoes();
+        public DominioDescricaoStringResponse GetAllFuncoes(string language);
 
-        public DominioDescricaoStringResponse GetAllGruposCamposEditaveis();
+        public DominioDescricaoStringResponse GetAllGruposCamposEditaveis(string language);
 
-        public DominioDescricaoStringResponse GetAllTiposDeRegime();
+        public DominioDescricaoStringResponse GetAllTiposDeRegime(string language);
 
-        public DominioDescricaoStringResponse GetAllTiposDeDocumentoTarefa();
+        public DominioDescricaoStringResponse GetAllTiposDeDocumentoTarefa(string language);
 
         public DominiosComGruposResponse GetTiposDocumentoPorTarefaAtiva(GetTiposDocumentoPorTarefaAtivaRequest request);
 
-        public DominioDescricaoStringResponse getAllCaixas();
+        public DominioDescricaoStringResponse getAllCaixas(string language);
 
-        public DominioDescricaoStringResponse getAllMovimentosTypes();
+        public DominioDescricaoStringResponse getAllMovimentosTypes(string language);
 
-        public DominioDescricaoStringResponse GetAllTiposConta();
+        public DominioDescricaoStringResponse GetAllTiposConta(string language);
 
-        public DominioDescricaoStringResponse GetAllEstadosPagamento();
+        public DominioDescricaoStringResponse GetAllEstadosPagamento(string language);
     }
 }

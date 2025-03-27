@@ -49,7 +49,8 @@
     "save": "^2.4.0",
     "tslib": "^2.0.0",
     "xlsx": "^0.16.9",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+	"qrcode": "^1.4.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1100.5",

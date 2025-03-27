@@ -263,7 +263,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>{{'general.docNumber' | translate}}</mat-label>
                 <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry" matInput
-                  [pattern]="availableRegex.intPattern" type="text" [pattern]="availableRegex.intPattern" maxLength="20"
+                  [pattern]="availableRegex.idNoPattern" type="text" [pattern]="availableRegex.idNoPattern" maxLength="20"
                   [(ngModel)]="documento.numero" name="documentNumber" />
                 <fa-icon *ngIf="documento.numero" matSuffix aria-label="Clear" [icon]="faTimesCircle"
                   (click)="clearDocumentNumber()"></fa-icon>

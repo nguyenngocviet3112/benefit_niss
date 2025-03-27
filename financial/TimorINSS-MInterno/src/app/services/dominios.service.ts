@@ -18,60 +18,60 @@ export class DominiosService {
   ) {}
 
   public GetAllGruposCamposEditaveis() : Observable<ListagemDominios> {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllGruposCamposEditaveis`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllGruposCamposEditaveis/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public GetAllTiposDeRegime(): Observable<ListagemDominios>
   {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllTiposDeRegime`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllTiposDeRegime/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public GetAllTiposDeDocumentoTarefa(): Observable<ListagemDominios>
   {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/dominios/GetAllTiposDeDocumentoTarefa`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/dominios/GetAllTiposDeDocumentoTarefa/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public getAllTiposDeContracto(): Observable<ListagemDominios>
   {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllTiposDeContracto`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllTiposDeContracto/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public getAllNaturezasDeContracto(): Observable<ListagemDominios>
   {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllNaturezasDeContracto`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllNaturezasDeContracto/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public getAllLeisLaboraisAplicaveis(): Observable<ListagemDominios>
   {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllLeisLaboraisAplicaveis`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllLeisLaboraisAplicaveis/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public getAllTiposDeDocumento(): Observable<ListagemDominios>
   {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllTiposDeDocumento`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllTiposDeDocumento/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public GetAllRegimes() : Observable<ListagemRegimesResponse>  {
-    return this.http.get<ListagemRegimesResponse>(`${environment.apiUrl}/Dominios/GetAllRegimes`);
+    return this.http.get<ListagemRegimesResponse>(`${environment.apiUrl}/Dominios/GetAllRegimes/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public getAllProfissoes() : Observable<ListagemDominios> {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllProfissoes`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllProfissoes/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public getAllEstadosCivis(): Observable<ListagemDominios>
   {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllEstadosCivis`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllEstadosCivis/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public getAllSexos(): Observable<ListagemDominios>
   {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllSexos`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllSexos/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public getAllNacionalidades(): Observable<ListagemDominios>
   {
-    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllNacionalidades`);
+    return this.http.get<ListagemDominios>(`${environment.apiUrl}/Dominios/GetAllNacionalidades/`+ localStorage.getItem('selectedLanguage'));
   }
 
   public getAllDominiosForNovoTrabalhador(): Observable<ListagemDominios[]> {

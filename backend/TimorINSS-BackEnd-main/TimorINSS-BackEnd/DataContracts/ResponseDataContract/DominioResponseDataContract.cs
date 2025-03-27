@@ -44,6 +44,9 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         public string descricao { get; set; }
 
         [DataMember]
+        public string descricaoEn { get; set; }
+
+        [DataMember]
         public bool? indActivo { get; set; }
     }
 

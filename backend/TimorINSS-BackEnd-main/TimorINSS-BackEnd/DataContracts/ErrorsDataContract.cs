@@ -77,6 +77,9 @@
         ExcelNotValidOrMissingColumns = -73,
         ErroDataFimPeriodoVigenciaOrcamentos = -74,
         MaxDataVencimento = -75,
+        AgeLessThan18 = -76,
+        ValidIdCard = -77,
+        ValidEletoraCard = -78
 
     }
 }

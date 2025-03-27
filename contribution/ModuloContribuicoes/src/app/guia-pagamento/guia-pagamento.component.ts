@@ -21,6 +21,11 @@ import { environment } from "src/environments/environment";
 import { ReservaCreditoListagemRequest } from "../request-models/reservaCredito-request";
 import { ReservaCreditoService } from "../services/reservaCredito.service";
 import { PopUpComprovativoPagamentoComponent } from "../pop-up-comprovativo-pagamento/pop-up-comprovativo-pagamento.component";
+import * as QRCode from 'qrcode';
+
+
+
+
 
 @Component({
     selector: 'guiaPagamento',
@@ -222,12 +227,12 @@ export class GuiaPagamentoComponent implements OnInit {
         pdf.setFontSize(11);
         pdf.setTextColor(10);
         //Número do Documento
-        pdf.text(this.translate.instant('general.invoicePaymentRef') + ': ' + element.numDocumento, 20, 45);
+        pdf.text(this.translate.instant('general.invoicePaymentRef') + ': ' + element.paymentRef, 20, 45);
         pdf.text(this.translate.instant('general.invoiceEm'), 20, 52);
-        pdf.text(this.translate.instant('general.invoiceName') + ': josesoares', 20, 59);
+        pdf.text(this.translate.instant('general.invoiceName') + ': ' + element.userName, 20, 59);
         pdf.text(this.translate.instant('general.invoiceDate') + ': ' + this.formatDatePT(element.mesAno), 120, 59);
         pdf.text(this.translate.instant('general.invoiceNISS') + ': ' + element.niss, 20, 66);
-        pdf.text(this.translate.instant('general.invoiceTIN') + ': ', 20, 73);
+        pdf.text(this.translate.instant('general.invoiceTIN') + ': ' + element.tin, 20, 73);
         pdf.text(this.translate.instant('general.invoicePM') + ':', 20, 80);
         pdf.addImage(environment.checkBoxIcon, 'JPEG', 20, 83, 5, 5);
         pdf.text(this.translate.instant('general.invoiceCash'), 30, 87);
@@ -238,45 +243,45 @@ export class GuiaPagamentoComponent implements OnInit {
         pdf.text(this.translate.instant('general.invoiceBank') + ':', 20, 108);
         pdf.text(this.translate.instant('general.invoiceNOT'), 20, 115);
         pdf.text(this.translate.instant('general.invoiceCCATP'), 20, 122);
-        pdf.text(this.translate.instant('general.invoiceCFT'), 50, 129);
+        pdf.text(this.translate.instant('general.invoiceCFT') + ':' + + (element.total * 0.1).toFixed(2), 50, 129);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 129);
 
-        pdf.text(this.translate.instant('general.invoiceEEC') + ': ', 60, 136);
+        pdf.text(this.translate.instant('general.invoiceEEC') + ': ' + (element.total * 0.06).toFixed(2), 60, 136);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 136);
 
-        pdf.text(this.translate.instant('general.invoiceTCO') + ': ', 60, 143);
+        pdf.text(this.translate.instant('general.invoiceTCO') + ': ' + (element.total * 0.04).toFixed(2), 60, 143);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 143);
 
-        pdf.text(this.translate.instant('general.invoiceOPA') + ': ', 50, 150);
+        pdf.text(this.translate.instant('general.invoiceOPA') + ': 0', 50, 150);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 150);
 
         pdf.text(this.translate.instant('general.invoiceINCLUDING'), 50, 157);
 
-        pdf.text(this.translate.instant('general.invoiceLPI') + ': ' + element.juros, 50, 164);
+        pdf.text(this.translate.instant('general.invoiceLPI') + ': 0', 50, 164);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 164);
 
-        pdf.text(this.translate.instant('general.invoiceFines') + ': ' + element.juros, 50, 171);
+        pdf.text(this.translate.instant('general.invoiceFines') + ': 0', 50, 171);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 171);
 
-        pdf.text(this.translate.instant('general.invoiceOthers') + ': ', 50, 178);
+        pdf.text(this.translate.instant('general.invoiceOthers') + ': 0', 50, 178);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 178);
 
-        pdf.text(this.translate.instant('general.invoiceTotal') + ': ', 50, 185);
+        pdf.text(this.translate.instant('general.invoiceTotal') + ': ' + (element.total * 0.1).toFixed(2), 50, 185);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 185);
 
-        pdf.text(this.translate.instant('general.invoiceROP') + ': ', 50, 192);
+        pdf.text(this.translate.instant('general.invoiceROP') + ': 0', 50, 192);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 192);
 
-        pdf.text(this.translate.instant('general.invoiceCCON') + ': ' + element.valor, 50, 199);
+        pdf.text(this.translate.instant('general.invoiceCCON') + ': 0', 50, 199);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 199);
 
-        pdf.text(this.translate.instant('general.invoiceTTA') + ': ' + element.valorPago, 50, 206);
+        pdf.text(this.translate.instant('general.invoiceTTA') + ': 0', 50, 206);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 206);
 
-        pdf.text(this.translate.instant('general.invoiceAPEE') + ': ', 50, 213);
+        pdf.text(this.translate.instant('general.invoiceAPEE') + ': ' + (element.total * 0.06).toFixed(2), 50, 213);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 213);
 
-        pdf.text(this.translate.instant('general.invoiceATCO') + ': ', 50, 220);
+        pdf.text(this.translate.instant('general.invoiceATCO') + ': ' + (element.total * 0.04).toFixed(2), 50, 220);
         pdf.text(this.translate.instant('general.invoiceUSD'), 160, 220);
 
         pdf.text(this.translate.instant('general.invoiceSSS'), 83, 230);
@@ -284,6 +289,17 @@ export class GuiaPagamentoComponent implements OnInit {
         pdf.text(this.translate.instant('general.invoiceDate'), 30, 270);
 
         pdf.text(this.translate.instant('general.invoiceSAS'), 160, 270);
+
+        QRCode.toDataURL(element.qrInvoice)
+            .then(url => {
+                // Chèn mã QR vào file PDF
+
+                pdf.addImage(url, 'JPEG', 95, 275, 20, 20);
+
+            })
+            .catch(err => {
+                console.error(err);
+            });
 
         // Download PDF doc
         // pdf.save(this.formatDatePT(new Date) + '_invoice.pdf');
@@ -302,15 +318,15 @@ export class GuiaPagamentoComponent implements OnInit {
         setTimeout(() => {
             // Xuất file PDF dưới dạng Blob
             const blob = pdf.output('blob');
-          
+
             // Tạo URL từ Blob
             const url = URL.createObjectURL(blob);
-          
+
             // Mở PDF trong tab mới
             window.open(url, '_blank');
-          }, 1000);
-          
-        
+        }, 1000);
+
+
 
 
 

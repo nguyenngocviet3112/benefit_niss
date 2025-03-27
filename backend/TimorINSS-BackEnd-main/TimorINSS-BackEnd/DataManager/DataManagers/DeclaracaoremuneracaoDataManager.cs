@@ -618,7 +618,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             DateTime currentMonth = new DateTime(now.Year, now.Month, 1);
 
             //check day
-            SingleDominioDescricaoStringResponse diaDeclaracao = _dominioManager.GetDeclarationDay();
+            SingleDominioDescricaoStringResponse diaDeclaracao = _dominioManager.GetDeclarationDay("TE");
             if (now.Day < diaDeclaracao.dominio.value)
                 currentMonth = currentMonth.AddMonths(-1);
 

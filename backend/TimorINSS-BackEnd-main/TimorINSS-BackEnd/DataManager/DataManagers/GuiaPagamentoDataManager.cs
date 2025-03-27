@@ -66,10 +66,25 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                                                                 _unitOfWork.DominioRepository.getIdDominio("TIPOGUIA", 1),
                 ContaCorrenteId = request.IdContaCorrente,
                 MesAno = request.GuiaPagamento.MesAno,
-                IndActivo = true
+                IndActivo = true,
+                QrInvoice = GenerateRandomString(25)
             };
             guiaPagamento = _utils.SetDetailsToEntity(guiaPagamento);
             return Utils.MappClassFromDto<GuiapagamentoDto, Guiapagamento>(guiaPagamento);
+        }
+
+        private string GenerateRandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            Random random = new Random();
+            char[] stringChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(stringChars);
         }
 
         //private Contacorrente BuildContaCorrenteObject(Contacorrente contaCorrente)
@@ -109,6 +124,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             else
             {
                 response = _unitOfWork.GuiaPagamentoRepository.getGuiasByFilter(request);
+                
             }
 
             return response;

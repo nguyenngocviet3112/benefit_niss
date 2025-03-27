@@ -55,12 +55,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             _unitOfWork.Commit();
         }
 
-        private SingleDominioDescricaoStringResponse getSingleTipoDeDominio(TiposDominio tipo)
+        private SingleDominioDescricaoStringResponse getSingleTipoDeDominio(TiposDominio tipo, string language)
         {
             SingleDominioDescricaoStringResponse response = new SingleDominioDescricaoStringResponse();
 
             DominioDescricaoString dominio = _unitOfWork.DominioRepository.getTipoDeDominio(tipo);
-            response.dominio = dominio;
+            if (language.ToUpper().Contains("EN"))
+            {
+                dominio.descricao = dominio.descricaoEn;
+            }
+                response.dominio = dominio;
 
             if (dominio == null)
             {
@@ -74,91 +78,119 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
-        private DominioDescricaoStringResponse getAllTiposDeDominio(TiposDominio tipo)
+        private DominioDescricaoStringResponse getAllTiposDeDominio(TiposDominio tipo, string language)
         {
             DominioDescricaoStringResponse response = new DominioDescricaoStringResponse();
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(tipo);
-            response.dominios = dominios;
+            List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
+            if (language.ToUpper().Contains("EN"))
+            {
+                foreach (DominioDescricaoString dominio in dominios)
+                {
+                    dominio.descricao = dominio.descricaoEn;
+                    dominiosOut.Add(dominio);
+                }
+            }
+            response.dominios = dominiosOut;
 
             return response;
         }
 
-        private DominioDescricaoStringResponse getAllMovimentosTypesFiltered()
+        private DominioDescricaoStringResponse getAllMovimentosTypesFiltered(string language)
         {
             DominioDescricaoStringResponse response = new DominioDescricaoStringResponse();
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA).Where(x => x.descricao != "Neutro Receita" && x.descricao != "Neutro Despesa" && x.indActivo == true).ToList();
-            response.dominios = dominios;
+            List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
+            if (language.ToUpper().Contains("EN"))
+            {
+                foreach (DominioDescricaoString dominio in dominios)
+                {
+                    dominio.descricao = dominio.descricaoEn;
+                    dominiosOut.Add(dominio);
+                }
+            }
+            response.dominios = dominiosOut;
 
             return response;
         }
 
-        private DominioDescricaoStringResponse getAlCaixasFiltered()
+        private DominioDescricaoStringResponse getAlCaixasFiltered(string language)
         {
             DominioDescricaoStringResponse response = new DominioDescricaoStringResponse();
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.CAIXAS).Where(x => x.indActivo == true).ToList();
-            response.dominios = dominios;
+            List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
+            if (language.ToUpper().Contains("EN"))
+            {
+                foreach (DominioDescricaoString dominio in dominios)
+                {
+                    dominio.descricao = dominio.descricaoEn;
+                    dominiosOut.Add(dominio);
+                }
+            }
+            response.dominios = dominiosOut;
+            
 
             return response;
         }
 
-        public DominioDescricaoStringResponse getAllTiposDeContracto()
+        public DominioDescricaoStringResponse getAllTiposDeContracto(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.TIPOCONTRACTO);
+            return getAllTiposDeDominio(TiposDominio.TIPOCONTRACTO, language);
         }
 
-        public DominioDescricaoStringResponse getAllNaturezasDeContracto()
+        public DominioDescricaoStringResponse getAllNaturezasDeContracto(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.NATUREZACONTRACTO);
+            return getAllTiposDeDominio(TiposDominio.NATUREZACONTRACTO, language);
         }
 
-        public DominioDescricaoStringResponse getAllLeisLaboraisAplicaveis()
+        public DominioDescricaoStringResponse getAllLeisLaboraisAplicaveis(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.LEILABORALAPLICAVEL);
+            return getAllTiposDeDominio(TiposDominio.LEILABORALAPLICAVEL, language);
         }
 
-        public DominioDescricaoStringResponse GetAllTiposDeDocumento()
+        public DominioDescricaoStringResponse GetAllTiposDeDocumento(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.TIPODOCUMENTO);
+            return getAllTiposDeDominio(TiposDominio.TIPODOCUMENTO, language);
         }
 
-        public DominioDescricaoStringResponse GetAllSexos()
+        public DominioDescricaoStringResponse GetAllSexos(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.SEXO);
+            return getAllTiposDeDominio(TiposDominio.SEXO, language);
         }
 
-        public DominioDescricaoStringResponse getAllEstadosCivis()
+        public DominioDescricaoStringResponse getAllEstadosCivis(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.ESTADOCIVIL);
+            return getAllTiposDeDominio(TiposDominio.ESTADOCIVIL, language);
         }
 
-        public DominioDescricaoStringResponse GetAllNacionalidades()
+        public DominioDescricaoStringResponse GetAllNacionalidades(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.NACIONALIDADE);
+            return getAllTiposDeDominio(TiposDominio.NACIONALIDADE, language);
         }
 
-        public DominioDescricaoStringResponse GetAllTipoDivida()
+        public DominioDescricaoStringResponse GetAllTipoDivida(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.TIPODIVIDA);
+            return getAllTiposDeDominio(TiposDominio.TIPODIVIDA, language);
         }
 
-        public DominioDescricaoStringResponse GetAllSituacaoPagamento()
+        public DominioDescricaoStringResponse GetAllSituacaoPagamento(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.SITUACAOPAGAMENTO);
+            return getAllTiposDeDominio(TiposDominio.SITUACAOPAGAMENTO, language);
         }
 
-        public DominioDescricaoStringResponse GetAllGruposCamposEditaveis()
+        public DominioDescricaoStringResponse GetAllGruposCamposEditaveis(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.GRUPOCAMPOSEDITAVEIS);
+            return getAllTiposDeDominio(TiposDominio.GRUPOCAMPOSEDITAVEIS, language);
         }
 
-        public ListagemRegimesResponse GetAllRegimes()
+        public ListagemRegimesResponse GetAllRegimes(string language)
         {
             ListagemRegimesResponse response = new ListagemRegimesResponse();
             response.regimes = new List<RegimeDescricaoString>();
-            DominioDescricaoStringResponse regimesDominio = getAllTiposDeDominio(TiposDominio.REGIME);
+            DominioDescricaoStringResponse regimesDominio = getAllTiposDeDominio(TiposDominio.REGIME, language);
             Dominio tipoRegime;
             string tipoRegimeDesc = "";
             foreach (DominioDescricaoString dominio in regimesDominio.dominios)
@@ -180,44 +212,44 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
-        public SingleDominioDescricaoStringResponse getSalarioMinimo()
+        public SingleDominioDescricaoStringResponse getSalarioMinimo(string language)
         {
-            return getSingleTipoDeDominio(TiposDominio.SALARIOMINIMO);
+            return getSingleTipoDeDominio(TiposDominio.SALARIOMINIMO,language);
         }
 
-        public DominioDescricaoStringResponse getTipoPago()
+        public DominioDescricaoStringResponse getTipoPago(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.INDPAGO);
+            return getAllTiposDeDominio(TiposDominio.INDPAGO, language);
         }
 
-        public DominioDescricaoStringResponse getTipoGuia()
+        public DominioDescricaoStringResponse getTipoGuia(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.TIPOGUIA);
+            return getAllTiposDeDominio(TiposDominio.TIPOGUIA, language);
         }
 
-        public SingleDominioDescricaoStringResponse GetDeclarationDay()
+        public SingleDominioDescricaoStringResponse GetDeclarationDay(string language)
         {
-            return getSingleTipoDeDominio(TiposDominio.DIADECLRACAO);
+            return getSingleTipoDeDominio(TiposDominio.DIADECLRACAO, language);
         }
 
-        public DominioDescricaoStringResponse GetAllProfissoes()
+        public DominioDescricaoStringResponse GetAllProfissoes(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.PROFISSAO);
+            return getAllTiposDeDominio(TiposDominio.PROFISSAO, language);
         }
 
-        public DominioDescricaoStringResponse GetAllFuncoes()
+        public DominioDescricaoStringResponse GetAllFuncoes(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.FUNCAO);
+            return getAllTiposDeDominio(TiposDominio.FUNCAO, language);
         }
 
-        public DominioDescricaoStringResponse GetAllTiposDeRegime()
+        public DominioDescricaoStringResponse GetAllTiposDeRegime(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.TIPOREGIME);
+            return getAllTiposDeDominio(TiposDominio.TIPOREGIME, language);
         }
 
-        public DominioDescricaoStringResponse GetAllTiposDeDocumentoTarefa()
+        public DominioDescricaoStringResponse GetAllTiposDeDocumentoTarefa(string language)
         {
-            return getAllTiposDeDominio(TiposDominio.TIPODOCUMENTOTAREFA);
+            return getAllTiposDeDominio(TiposDominio.TIPODOCUMENTOTAREFA, language);
         }
 
         public DominiosComGruposResponse GetTiposDocumentoPorTarefaAtiva(GetTiposDocumentoPorTarefaAtivaRequest request)
@@ -278,32 +310,50 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
-        public DominioDescricaoStringResponse getAllCaixas()
+        public DominioDescricaoStringResponse getAllCaixas(string language)
         {
-            return getAlCaixasFiltered();
+            return getAlCaixasFiltered(language);
         }
 
-        public DominioDescricaoStringResponse getAllMovimentosTypes()
+        public DominioDescricaoStringResponse getAllMovimentosTypes(string language)
         {
-            return getAllMovimentosTypesFiltered();
+            return getAllMovimentosTypesFiltered(language);
         }
 
-        public DominioDescricaoStringResponse GetAllTiposConta()
+        public DominioDescricaoStringResponse GetAllTiposConta(string language)
         {
             DominioDescricaoStringResponse response = new DominioDescricaoStringResponse();
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA).Where(x => x.indActivo == true).ToList();
-            response.dominios = dominios;
+            List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
+            if (language.ToUpper().Contains("EN"))
+            {
+                foreach (DominioDescricaoString dominio in dominios)
+                {
+                    dominio.descricao = dominio.descricaoEn;
+                    dominiosOut.Add(dominio);
+                }
+            }
+            response.dominios = dominiosOut;
 
             return response;
         }
 
-        public DominioDescricaoStringResponse GetAllEstadosPagamento()
+        public DominioDescricaoStringResponse GetAllEstadosPagamento(string language)
         {
             DominioDescricaoStringResponse response = new DominioDescricaoStringResponse();
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.ESTADOPAGAMENTO).Where(x => x.indActivo == true).ToList();
-            response.dominios = dominios;
+            List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
+            if (language.ToUpper().Contains("EN"))
+            {
+                foreach (DominioDescricaoString dominio in dominios)
+                {
+                    dominio.descricao = dominio.descricaoEn;
+                    dominiosOut.Add(dominio);
+                }
+            }
+            response.dominios = dominiosOut;
 
             return response;
         }

@@ -37,6 +37,8 @@ namespace TimorINSSBackEnd.Models
         public decimal? ValorJurosFixo { get; set; }
         public decimal? ValorJuros { get; set; }
 
+        public string QrInvoice { get; set; }
+
         public virtual Contacorrente ContaCorrente { get; set; }
         public virtual Entidadeempregadora GuiaEntidadeFkNavigation { get; set; }
         public virtual Dominio IndPagoNavigation { get; set; }

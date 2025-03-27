@@ -92,9 +92,20 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasByFilter(GetAllGuiasStatesFromYearByFilterRequest request)
         {
+            var utilizador = _moduloContribuicoesContext.Utilizador
+                .SingleOrDefault(u => u.UtilizadorEntidadeFk == request.idEntidade);
+            if (utilizador == null)
+                throw new Exception(ErrorsDataContract.EntityDoesNotExist.ToString());
+
+            var trabalhador = _moduloContribuicoesContext.Trabalhador
+                .SingleOrDefault(u => u.IdTrabalhador == utilizador.TrabalhadorFk);
+            if (trabalhador == null)
+                throw new Exception(ErrorsDataContract.TrabalhadorDoesNotExist.ToString());
+
             var filter = request.filter;
             if (filter == null || string.IsNullOrWhiteSpace(filter.filterBy) && filter.filterField != null)
                 throw new Exception(ErrorsDataContract.FilterDoesNotExist.ToString());
+
 
             int index = 0;
             if (filter.index.HasValue)
@@ -164,6 +175,10 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         comprovativoPagamento = e.ComprovativoPag,
                         niss = e.GuiaEntidadeFkNavigation.Niss,
                         estadoPagamento = e.IndPagoNavigation.Valor,
+                        userName = utilizador.Username,
+                        tin = trabalhador.Tin,
+                        qrInvoice = e.QrInvoice,
+                        paymentRef = e.GuiaEntidadeFkNavigation.Niss + DateTime.Now.ToString("MMyyyy") + "01"
                     })
                     .OrderBy("idGuia", OrderDirectionEnum.descending)
                     .OrderBy("mesAno", OrderDirectionEnum.descending)

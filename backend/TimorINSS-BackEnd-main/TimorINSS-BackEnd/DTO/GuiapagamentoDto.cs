@@ -22,6 +22,9 @@ namespace TimorINSSBackEnd.DTO
         public string Descricao { get; set; }
 
         [Mapper]
+        public string QrInvoice { get; set; }
+
+        [Mapper]
         public decimal Valor { get; set; }
 
         [Mapper]

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
+using TimorINSSBackEnd.Models;
 
 namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
 {
@@ -13,6 +14,9 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
 
         [DataMember]
         public List<GuiaListagem> guias { get; set; }
+
+        //[DataMember]
+        //public Utilizador utilizador { get; set; }
     }
 
     [DataContract]
@@ -58,6 +62,24 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         public int estadoPagamento { get; set; }
         [DataMember]
         public string niss { get; set; }
+        [DataMember]
+        public string userName { get; set; }
+
+        [DataMember]
+        public string tin { get; set; }
+
+        [DataMember]
+        public string paymentRef { get; set; }
+
+        [DataMember]
+        public string qrInvoice { get; set; }
+
+
+        //[DataMember]
+        //public decimal quotizacoes { get; set; }
+
+        //[DataMember]
+        //public decimal contribuicoes { get; set; }
     }
 
     [DataContract]

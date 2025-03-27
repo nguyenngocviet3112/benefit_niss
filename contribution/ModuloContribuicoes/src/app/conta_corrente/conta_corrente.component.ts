@@ -440,18 +440,18 @@ export class ContaCorrenteComponent {
     // // Download PDF doc
     // pdf.save(this.formatDatePT(new Date) + '_invoice.pdf');
 
-    pdf.save(this.formatDatePT(new Date()) + '_invoice.pdf');
+    // pdf.save(this.formatDatePT(new Date()) + '_invoice.pdf');
 
-        setTimeout(() => {
-            // Xuất file PDF dưới dạng Blob
-            const blob = pdf.output('blob');
+    //     setTimeout(() => {
+    //         // Xuất file PDF dưới dạng Blob
+    //         const blob = pdf.output('blob');
           
-            // Tạo URL từ Blob
-            const url = URL.createObjectURL(blob);
+    //         // Tạo URL từ Blob
+    //         const url = URL.createObjectURL(blob);
           
-            // Mở PDF trong tab mới
-            window.open(url, '_blank');
-          }, 1000);
+    //         // Mở PDF trong tab mới
+    //         window.open(url, '_blank');
+    //       }, 1000);
   }
 
   // public gerarPDF() {

@@ -26,15 +26,15 @@ namespace TimorINSSBackEnd.Controllers
             _cache = memoryCache;
         }
 
-        [HttpGet("GetAllTiposDeContracto")]
-        public IActionResult GetAllTiposDeContracto()
+        [HttpGet("GetAllTiposDeContracto/{language}")]
+        public IActionResult GetAllTiposDeContracto(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllTiposDeContracto");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.getAllTiposDeContracto();
+                    response = _dataManager.getAllTiposDeContracto(language);
                 }
                 catch (Exception e)
                 {
@@ -53,15 +53,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllNaturezasDeContracto")]
-        public IActionResult GetAllNaturezasDeContracto()
+        [HttpGet("GetAllNaturezasDeContracto/{language}")]
+        public IActionResult GetAllNaturezasDeContracto(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllNaturezasDeContracto");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.getAllNaturezasDeContracto();
+                    response = _dataManager.getAllNaturezasDeContracto(language);
                 }
                 catch (Exception e)
                 {
@@ -80,15 +80,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllLeisLaboraisAplicaveis")]
-        public IActionResult GetAllLeisLaboraisAplicaveis()
+        [HttpGet("GetAllLeisLaboraisAplicaveis/{language}")]
+        public IActionResult GetAllLeisLaboraisAplicaveis(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllLeisLaboraisAplicaveis");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.getAllLeisLaboraisAplicaveis();
+                    response = _dataManager.getAllLeisLaboraisAplicaveis(language);
                 }
                 catch (Exception e)
                 {
@@ -107,15 +107,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllTiposDeDocumento")]
-        public IActionResult GetAllTiposDeDocumento()
+        [HttpGet("GetAllTiposDeDocumento/{language}")]
+        public IActionResult GetAllTiposDeDocumento(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllTiposDeDocumento");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllTiposDeDocumento();
+                    response = _dataManager.GetAllTiposDeDocumento(language);
                 }
                 catch (Exception e)
                 {
@@ -134,15 +134,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllSexos")]
-        public IActionResult GetAllSexos()
+        [HttpGet("GetAllSexos/{language}")]
+        public IActionResult GetAllSexos(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllSexos");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllSexos();
+                    response = _dataManager.GetAllSexos(language);
                 }
                 catch (Exception e)
                 {
@@ -161,15 +161,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllEstadosCivis")]
-        public IActionResult getAllEstadosCivis()
+        [HttpGet("GetAllEstadosCivis/{language}")]
+        public IActionResult getAllEstadosCivis(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllEstadosCivis");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.getAllEstadosCivis();
+                    response = _dataManager.getAllEstadosCivis(language);
                 }
                 catch (Exception e)
                 {
@@ -188,15 +188,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllNacionalidades")]
-        public IActionResult GetAllNacionalidades()
+        [HttpGet("GetAllNacionalidades/{language}")]
+        public IActionResult GetAllNacionalidades(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllNacionalidades");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllNacionalidades();
+                    response = _dataManager.GetAllNacionalidades(language);
                 }
                 catch (Exception e)
                 {
@@ -215,15 +215,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllTipoDivida")]
-        public IActionResult GetAllTipoDivida()
+        [HttpGet("GetAllTipoDivida/{language}")]
+        public IActionResult GetAllTipoDivida(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllTipoDivida");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllTipoDivida();
+                    response = _dataManager.GetAllTipoDivida(language);
                 }
                 catch (Exception e)
                 {
@@ -242,15 +242,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllSituacaoPagamento")]
-        public IActionResult GetAllSituacaoPagamento()
+        [HttpGet("GetAllSituacaoPagamento/{language}")]
+        public IActionResult GetAllSituacaoPagamento(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllSituacaoPagamento");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllSituacaoPagamento();
+                    response = _dataManager.GetAllSituacaoPagamento(language);
                 }
                 catch (Exception e)
                 {
@@ -269,15 +269,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllRegimes")]
-        public IActionResult GetAllRegimes()
+        [HttpGet("GetAllRegimes/{language}")]
+        public IActionResult GetAllRegimes(string language)
         {
             ListagemRegimesResponse response = _cache.GetFromCache<ListagemRegimesResponse>("GetAllRegimes");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllRegimes();
+                    response = _dataManager.GetAllRegimes(language);
                 }
                 catch (Exception e)
                 {
@@ -296,15 +296,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetSalarioMinimo")]
-        public IActionResult GetSalarioMinimo()
+        [HttpGet("GetSalarioMinimo/{language}")]
+        public IActionResult GetSalarioMinimo(string language)
         {
             SingleDominioDescricaoStringResponse response = _cache.GetFromCache<SingleDominioDescricaoStringResponse>("GetSalarioMinimo");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.getSalarioMinimo();
+                    response = _dataManager.getSalarioMinimo(language);
                 }
                 catch (Exception e)
                 {
@@ -323,15 +323,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetDeclarationDay")]
-        public IActionResult GetDeclarationDay()
+        [HttpGet("GetDeclarationDay/{language}")]
+        public IActionResult GetDeclarationDay(string language)
         {
             SingleDominioDescricaoStringResponse response = _cache.GetFromCache<SingleDominioDescricaoStringResponse>("GetDeclarationDay");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetDeclarationDay();
+                    response = _dataManager.GetDeclarationDay(language);
                 }
                 catch (Exception e)
                 {
@@ -350,15 +350,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllTiposPagamento")]
-        public IActionResult GetAllTiposPagamento()
+        [HttpGet("GetAllTiposPagamento/{language}")]
+        public IActionResult GetAllTiposPagamento(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllTiposPagamento");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.getTipoPago();
+                    response = _dataManager.getTipoPago(language);
                 }
                 catch (Exception e)
                 {
@@ -377,15 +377,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllTiposGuia")]
-        public IActionResult GetAllTiposGuia()
+        [HttpGet("GetAllTiposGuia/{language}")]
+        public IActionResult GetAllTiposGuia(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllTiposGuia");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.getTipoGuia();
+                    response = _dataManager.getTipoGuia(language);
                 }
                 catch (Exception e)
                 {
@@ -404,15 +404,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllProfissoes")]
-        public IActionResult GetAllProfissoes()
+        [HttpGet("GetAllProfissoes/{language}")]
+        public IActionResult GetAllProfissoes(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllProfissoes");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllProfissoes();
+                    response = _dataManager.GetAllProfissoes(language);
                 }
                 catch (Exception e)
                 {
@@ -431,15 +431,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllFuncoes")]
-        public IActionResult GetAllFuncoes()
+        [HttpGet("GetAllFuncoes/{language}")]
+        public IActionResult GetAllFuncoes(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllFuncoes");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllFuncoes();
+                    response = _dataManager.GetAllFuncoes(language);
                 }
                 catch (Exception e)
                 {
@@ -458,15 +458,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllGruposCamposEditaveis")]
-        public IActionResult GetAllGruposCamposEditaveis()
+        [HttpGet("GetAllGruposCamposEditaveis/{language}")]
+        public IActionResult GetAllGruposCamposEditaveis(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllGruposCamposEditaveis");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllGruposCamposEditaveis();
+                    response = _dataManager.GetAllGruposCamposEditaveis(language);
                 }
                 catch (Exception e)
                 {
@@ -485,15 +485,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllTiposDeRegime")]
-        public IActionResult GetAllTiposDeRegime()
+        [HttpGet("GetAllTiposDeRegime/{language}")]
+        public IActionResult GetAllTiposDeRegime(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllTiposDeRegime");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllTiposDeRegime();
+                    response = _dataManager.GetAllTiposDeRegime(language);
                 }
                 catch (Exception e)
                 {
@@ -512,15 +512,15 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllTiposDeDocumentoTarefa")]
-        public IActionResult GetAllTiposDeDocumentoTarefa()
+        [HttpGet("GetAllTiposDeDocumentoTarefa/{language}")]
+        public IActionResult GetAllTiposDeDocumentoTarefa(string language)
         {
             DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllTiposDeDocumentoTarefa");
             if (response == null)
             {
                 try
                 {
-                    response = _dataManager.GetAllTiposDeDocumentoTarefa();
+                    response = _dataManager.GetAllTiposDeDocumentoTarefa(language);
                     response.dominios = response.dominios.OrderBy(x => x.descricao).ToList();
                 }
                 catch (Exception e)
@@ -563,14 +563,14 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("getAllCaixas")]
-        public IActionResult getAllCaixas()
+        [HttpGet("getAllCaixas/{language}")]
+        public IActionResult getAllCaixas(string language)
         {
             DominioDescricaoStringResponse response = new DominioDescricaoStringResponse();
 
             try
             {
-                response = _dataManager.getAllCaixas();
+                response = _dataManager.getAllCaixas(language);
             }
             catch (Exception e)
             {
@@ -584,14 +584,14 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("getAllMovimentosTypes")]
-        public IActionResult getAllMovimentosTypes()
+        [HttpGet("getAllMovimentosTypes/{language}")]
+        public IActionResult getAllMovimentosTypes(string language)
         {
             DominioDescricaoStringResponse response = new DominioDescricaoStringResponse();
 
             try
             {
-                response = _dataManager.getAllMovimentosTypes();
+                response = _dataManager.getAllMovimentosTypes(language);
             }
             catch (Exception e)
             {
@@ -605,14 +605,14 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllTiposConta")]
-        public IActionResult GetAllTiposConta()
+        [HttpGet("GetAllTiposConta/{language}")]
+        public IActionResult GetAllTiposConta(string language)
         {
             DominioDescricaoStringResponse response = new DominioDescricaoStringResponse();
 
             try
             {
-                response = _dataManager.GetAllTiposConta();
+                response = _dataManager.GetAllTiposConta(language);
             }
             catch (Exception e)
             {
@@ -626,14 +626,14 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetAllEstadosPagamento")]
-        public IActionResult GetAllEstadosPagamento()
+        [HttpGet("GetAllEstadosPagamento/{language}")]
+        public IActionResult GetAllEstadosPagamento(string language)
         {
             DominioDescricaoStringResponse response = new DominioDescricaoStringResponse();
 
             try
             {
-                response = _dataManager.GetAllEstadosPagamento();
+                response = _dataManager.GetAllEstadosPagamento(language);
             }
             catch (Exception e)
             {

@@ -4,6 +4,8 @@ export interface GuiaListagemResponse
   guias: GuiaListagem[];
 }
 
+
+
 export interface GuiaListagem
 {
   idGuia: number;
@@ -19,4 +21,5 @@ export interface GuiaListagem
   dtValorPago?: Date;
   comprovativoPagamento?: string;
   estadoPagamento: number;
+  userName: string;
 }
