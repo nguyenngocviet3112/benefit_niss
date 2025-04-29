@@ -167,7 +167,7 @@
     "total": "Total"
   },
   "conta_corrente": {
-    "juros": "Fees",
+    "juros": "Fine",
     "title": "CURRENT ACCOUNT",
     "selecao": "Selection",
     "tipoDivida": "Debt Type",
@@ -190,7 +190,7 @@
     "totalContribuicoes": "Total Contributions",
     "totalQuotizacoes": "Total Quotizações",
     "totalPagar": "Total to Pay",
-    "totalJuros": "Total Fees",
+    "totalJuros": "Total Fines",
     "totalPago": "Total Paid",
     "totalDivida": "Total Balance",
     "titleReservaCredito": "CREDIT RESERVE",
@@ -280,7 +280,7 @@
     "mesAno": "Month/Year",
     "descricao": "Description",
     "valor": "Values",
-    "juros": "Fees",
+    "juros": "Fine",
     "total": "Total Value",
     "estadoPagamento": "Situation",
     "actions": "Actions",

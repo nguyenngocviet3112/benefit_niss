@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faFilePdf, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { triggerAsyncId } from 'node:async_hooks';
+// import { triggerAsyncId } from 'node:async_hooks';
 import { forkJoin, Observable } from 'rxjs';
 import { MyErrorDataSuperiorStateMatcher, MyErrorStateDependentMatcher, MyErrorStateMatcher, NotRequiredErrorStateMatcher } from '../matcher';
 import { Documento } from '../models/documento';

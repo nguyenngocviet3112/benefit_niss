@@ -95,12 +95,29 @@ namespace TimorINSSBackEnd.Repository.Repositories
             var utilizador = _moduloContribuicoesContext.Utilizador
                 .SingleOrDefault(u => u.UtilizadorEntidadeFk == request.idEntidade);
             if (utilizador == null)
-                throw new Exception(ErrorsDataContract.EntityDoesNotExist.ToString());
+            {
+                GuiaListagemResponse result1 = new GuiaListagemResponse
+                {
+                    guias = null,
+                    rows = 0
+                };
+                return result1;
+            }    
+                //throw new Exception(ErrorsDataContract.EntityDoesNotExist.ToString());
 
             var trabalhador = _moduloContribuicoesContext.Trabalhador
                 .SingleOrDefault(u => u.IdTrabalhador == utilizador.TrabalhadorFk);
-            if (trabalhador == null)
-                throw new Exception(ErrorsDataContract.TrabalhadorDoesNotExist.ToString());
+            //if (trabalhador == null)
+                if (trabalhador == null)
+                {
+                    GuiaListagemResponse result1 = new GuiaListagemResponse
+                    {
+                        guias = null,
+                        rows = 0
+                    };
+                    return result1;
+                }
+            //throw new Exception(ErrorsDataContract.TrabalhadorDoesNotExist.ToString());
 
             var filter = request.filter;
             if (filter == null || string.IsNullOrWhiteSpace(filter.filterBy) && filter.filterField != null)
