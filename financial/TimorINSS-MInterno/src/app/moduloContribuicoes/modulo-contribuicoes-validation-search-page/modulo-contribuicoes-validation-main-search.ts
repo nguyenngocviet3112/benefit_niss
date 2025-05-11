@@ -21,7 +21,7 @@ import { environment } from "src/environments/environment";
 import { ReservaCreditoListagemRequest } from "../../request-models/reservaCredito-request";
 import { ReservaCreditoService } from "../../services/reservaCredito.service";
 import { PopUpComprovativoPagamentoComponent } from "../pop-up-comprovativo-pagamento/pop-up-comprovativo-pagamento.component";
-import * as QRCode from 'qrcode';
+// import * as QRCode from 'qrcode';
 import {MatSelectChange} from "@angular/material/select";
 import {PopUpHandleInvoiceComponent} from "../pop-up-handle-invoice/pop-up-handle-invoice.component";
 
@@ -497,16 +497,16 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
 
     pdf.text(this.translate.instant('general.invoiceSAS'), 160, 270);
 
-    QRCode.toDataURL(element.qrInvoice)
-      .then(url => {
-        // Chèn mã QR vào file PDF
-
-        pdf.addImage(url, 'JPEG', 95, 275, 20, 20);
-
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    // QRCode.toDataURL(element.qrInvoice)
+    //   .then(url => {
+    //     // Chèn mã QR vào file PDF
+    //
+    //     pdf.addImage(url, 'JPEG', 95, 275, 20, 20);
+    //
+    //   })
+    //   .catch(err => {
+    //     console.error(err);
+    //   });
 
     // Download PDF doc
     // pdf.save(this.formatDatePT(new Date) + '_invoice.pdf');

@@ -1,0 +1,16 @@
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.invoice-table th,
+.invoice-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.invoice-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
