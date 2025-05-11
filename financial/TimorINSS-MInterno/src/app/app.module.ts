@@ -41,6 +41,7 @@ import { MenuPanelComponent } from './menu-panel/menu-panel.component';
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { HttpInterceptorService } from './services/httpInterceptor.service';
 import { ContribHomeSearchComponent } from './moduloContribuicoes/modulo-contribuicoes-search-page/modulo-contribuicoes-main-search';
+import { ContribValidationHomeSearchComponent } from './moduloContribuicoes/modulo-contribuicoes-validation-search-page/modulo-contribuicoes-validation-main-search';
 import { ConfigurarTarefasComponent } from './moduloGestao/configurar-tarefas/configurar-tarefas.component';
 import { EntidadeEmpregadoraComponent } from './moduloContribuicoes/entidadeEmpregadora/entidadeEmpregadora.component';
 import { PopUpAdicionarEditarMoradaComponent } from './moduloContribuicoes/pop-up-adicionar-editar-morada/pop-up-adicionar-editar-morada.component';
@@ -118,6 +119,8 @@ import { ConsultasBalancoComponent } from './moduloRelatorios/consultas/balanco/
 import { PopUpClassificacaoContabilisticaComponent } from './moduloGestao/preencher-tarefa/componentes/componente-concilicacao/pop-up-classificacao-contabilistica/pop-up-classificacao-contabilistica.component';
 import { PopUpCompromissosComponent } from './moduloGestao/preencher-tarefa/componentes/componente-despesa/pop-up-compromissos/pop-up-compromissos.component';
 import { PopUpEditDespesaCabimentadaComponent } from './moduloGestao/preencher-tarefa/componentes/componente-despesa/pop-up-edit-despesa-cabimentada/pop-up-edit-despesa-cabimentada.component';
+import { DatePickerFullComponent } from './componentes/date-picker-full/date-picker-full.component';
+import { PopUpHandleInvoiceComponent } from './moduloContribuicoes/pop-up-handle-invoice/pop-up-handle-invoice.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -153,6 +156,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MenuPanelComponent,
     RecoverPasswordComponent,
     ContribHomeSearchComponent,
+    ContribValidationHomeSearchComponent,
     ConfigurarTarefasComponent,
     EntidadeEmpregadoraComponent,
     PopUpAdicionarEditarMoradaComponent,
@@ -212,6 +216,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PopUpClassificacaoContabilisticaComponent,
     PopUpCompromissosComponent,
     PopUpEditDespesaCabimentadaComponent,
+    DatePickerFullComponent,
+    PopUpHandleInvoiceComponent,
   ],
   imports: [
     BrowserModule,

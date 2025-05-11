@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Payment receipt validation</h2>
+<mat-dialog-content>
+  <table class="invoice-table">
+    <thead>
+    <tr>
+      <th>INV No</th>
+      <th>Submission date</th>
+      <th>Payment Receipt Amount</th>
+      <th>Actual receive</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>{{ invoice.invNo }}</td>
+      <td>{{ invoice.submissionDate }}</td>
+      <td>{{ invoice.paymentAmount }}</td>
+      <td>
+        <input matInput [(ngModel)]="invoice.actualReceived" />
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <mat-form-field appearance="outline" class="w-100 mt-3">
+    <mat-label>Reason (if

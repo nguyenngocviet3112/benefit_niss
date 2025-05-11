@@ -5,9 +5,12 @@ export class FilterRequest {
   dateFilterEnd?: Date;
   filterField?: string;
   filterBy?: string;
-  orderBy? : string;
-  orderDirection? : OrderDirectionEnum;
-  filter? : FilterRequest;
+  orderBy?: string;
+  orderDirection?: OrderDirectionEnum;
+  paymentRef?: string;
+  niss?: string;
+  bankCode?: string;
+  filter?: FilterRequest;
 }
 
 export enum OrderDirectionEnum {

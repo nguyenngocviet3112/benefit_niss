@@ -124,6 +124,7 @@ export function CreateMenuPermissions(user: Utilizador | null) : MenuItem[]
 {
   const gestaoTitle = 'general.moduloGestao';
   const contribTitle = 'general.moduloContrib';
+  const contribValidationTitle = 'general.moduloContribValidation';
   const financeiroTitle = 'general.moduloFinanceiro';
   const relatoriosTitle = 'general.relatorios';
 
@@ -206,6 +207,14 @@ export function CreateMenuPermissions(user: Utilizador | null) : MenuItem[]
             icon: 'account_balance',
             link: '/contribHomePage',
             order: 3
+          });
+        }
+        if (response.find(x => x.name == contribValidationTitle) == null){
+          response.push({
+            name: contribValidationTitle,
+            icon: 'account_balance',
+            link: '/contribValidationHomePage',
+            order: 4
           });
         }
       }

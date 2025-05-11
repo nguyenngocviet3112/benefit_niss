@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ContribHomeSearchComponent } from './moduloContribuicoes/modulo-contribuicoes-search-page/modulo-contribuicoes-main-search';
+import { ContribValidationHomeSearchComponent } from './moduloContribuicoes/modulo-contribuicoes-validation-search-page/modulo-contribuicoes-validation-main-search';
 import { ConfigurarTarefasComponent } from './moduloGestao/configurar-tarefas/configurar-tarefas.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { EntidadeEmpregadoraComponent } from './moduloContribuicoes/entidadeEmpregadora/entidadeEmpregadora.component';
@@ -76,6 +77,7 @@ const routes: Routes = [
   { path: 'recover/:token/:username', component: RecoverPasswordComponent},
   { path: 'firstAcess/:token', component: RecoverPasswordComponent},
   { path: 'contribHomePage', component: ContribHomeSearchComponent },
+  { path: 'contribValidationHomePage', component: ContribValidationHomeSearchComponent },
   { path: 'configurarTarefas', component: ConfigurarTarefasComponent },
   { path: 'entidadeEmpregadora', component: EntidadeEmpregadoraComponent},
   { path: 'trabalhadores', component: TrabalhadoresComponent},

@@ -28,6 +28,10 @@ export class GuiaPagamentoService {
     return this.http.post<GuiaListagemResponse>(`${environment.apiUrl}/guiaPagamento/listGuiasByEntidade`, entity);
   }
 
+  public getAllGuiasByEntidadeApprove(entity: GetAllGuiasStatesFromYearByFilterRequest) {
+    return this.http.post<GuiaListagemResponse>(`${environment.apiUrl}/guiaPagamento/listGuiasByEntidadeApprove`, entity);
+  }
+
   public useCreditInGuiaPagamento(request: useCreditInGuiaPagamentoRequest) {
     return this.http.post(`${environment.apiUrl}/guiaPagamento/useCreditInGuiaPagamento`, request);
   }

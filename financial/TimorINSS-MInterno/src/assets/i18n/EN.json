@@ -71,6 +71,7 @@
     "downloadLogs": "Download Logs",
     "moduloGestao": "Management Module",
     "moduloContrib": "Contributions Module",
+    "moduloContribValidation": "Contribution Validation",
     "moduloFinanceiro": "Financial Module",
     "relatorios": "Reports",
     "auditoria": "Audit",
@@ -721,7 +722,20 @@
     "download": "Download Invoice",
     "uploadPagamento": "Upload Payment Receipt",
     "visualizarPagamento": "View Payment Receipt",
-    "clearFilter": "Clear filters"
+    "handle": "Handle",
+    "clearFilter": "Clear filters",
+    "fromDate" : "From date",
+    "toDate" : "To date",
+    "banco" : "Bank Code",
+    "niss" : "NISS Number",
+    "invNo" : "INV No",
+    "bankAcc" : "Bank Acc",
+    "bankCode": {
+      "BNU": "BNU Bank",
+      "MANDIRI": "Mandiri Bank",
+      "BNCTL": "BNCTL Bank",
+      "BNTL": "BNTL Bank"
+    }
   },
   "comprovativoPagamento": {
     "titleInsert": "Upload Payment Receipt",
