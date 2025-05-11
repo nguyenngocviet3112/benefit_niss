@@ -197,10 +197,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         qrInvoice = e.QrInvoice,
                         //paymentRef = e.GuiaEntidadeFkNavigation.Niss + DateTime.Now.ToString("MMyyyy") + "01",
                         paymentRef = e.PaymentRef,
-                        bankCode = e.BankCode
+                        bankCode = e.BankCode,
+                        dataCriacao = e.DataCriacao
                     })
                     .OrderBy("idGuia", OrderDirectionEnum.descending)
-                    .OrderBy("mesAno", OrderDirectionEnum.descending)
+                    //.OrderBy("mesAno", OrderDirectionEnum.descending)
                     .Skip(index * rows)
                     .Take(rows)
                     .ToList();
@@ -307,7 +308,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         bankCode = e.BankCode
                     })
                     .OrderBy("idGuia", OrderDirectionEnum.descending)
-                    .OrderBy("mesAno", OrderDirectionEnum.descending)
+                    //.OrderBy("mesAno", OrderDirectionEnum.descending)
                     .Skip(index * rows)
                     .Take(rows)
                     .ToList();

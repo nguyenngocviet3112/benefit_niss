@@ -77,6 +77,9 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         [DataMember]
         public string bankCode { get; set; }
 
+        [DataMember]
+        public DateTime? dataCriacao { get; set; }
+
 
         //[DataMember]
         //public decimal quotizacoes { get; set; }

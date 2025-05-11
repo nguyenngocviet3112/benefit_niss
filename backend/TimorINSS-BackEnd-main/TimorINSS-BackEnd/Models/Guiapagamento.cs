@@ -30,6 +30,7 @@ namespace TimorINSSBackEnd.Models
         public DateTime? DataAlteracao { get; set; }
         public string Ipv6 { get; set; }
         public DateTime DtValidade { get; set; }
+
         public int TipoGuia { get; set; }
         public bool IndActivo { get; set; }
         public DateTime MesAno { get; set; }

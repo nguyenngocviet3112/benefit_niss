@@ -45,7 +45,7 @@ export class GuiaPagamentoComponent implements OnInit {
     private filter: FilterRequest = {};
     //Region Guia Pagamento table
     public dataSourceGuiaPagamento: GuiaListagem[] = [];
-    public displayedColumnsGuiaPagamento: string[] = ['numDocumento', 'mesAno', 'descricao', 'valor', 'juros', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
+    public displayedColumnsGuiaPagamento: string[] = ['paymentRef', 'mesAno','descricao','bankCode','dataCriacao',  'valor', 'juros', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
     public totalRows: number = 0;
     public pageSize = 10;
     public pageIndex = 0;
