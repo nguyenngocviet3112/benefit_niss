@@ -25,6 +25,12 @@ namespace TimorINSSBackEnd.DTO
         public string QrInvoice { get; set; }
 
         [Mapper]
+        public string PaymentRef { get; set; }
+
+        [Mapper]
+        public string BankCode { get; set; }
+
+        [Mapper]
         public decimal Valor { get; set; }
 
         [Mapper]

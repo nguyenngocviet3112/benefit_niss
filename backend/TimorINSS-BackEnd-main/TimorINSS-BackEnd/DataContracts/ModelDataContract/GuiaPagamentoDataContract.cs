@@ -47,5 +47,8 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public DateTime MesAno { get; set; }
+
+        [DataMember]
+        public string BankCode { get; set; }
     }
 }

@@ -12,9 +12,14 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
 
         public GuiaListagemResponse listGuiasByEntidade(GetAllGuiasStatesFromYearByFilterRequest request);
 
+        public GuiaListagemResponse listGuiasByEntidadeApprove(GetAllGuiasStatesFromDateByFilterRequest request);
+
+
         public ResponseBaseDataContract useCreditInGuiaPagamento(UseCreditInGuiaPagamentoRequest request);
 
         public ResponseBaseDataContract insertComprovativoPagamento(insertComprovativoPagamentoRequest request);
+
+        public ResponseBaseDataContract approveComprovativoPagamento(insertComprovativoPagamentoRequest request);
 
         public RelatorioGuiaPagamentoListagemResponse GetGuiasPagamentoRelatorios(RelatorioGuiaPagamentoListagemRequest request);
     }

@@ -3,25 +3,25 @@ import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { TranslateService } from "@ngx-translate/core";
+import jsPDF from "jspdf";
 import { NgxSpinnerService } from "ngx-spinner";
+import * as QRCode from 'qrcode';
 import { forkJoin } from "rxjs";
+import { environment } from "src/environments/environment";
 import { PopUpWarningComponent } from "../componentes/pop-up-warning/pop-up-warning.component";
+import { PopUpComprovativoPagamentoComponent } from "../pop-up-comprovativo-pagamento/pop-up-comprovativo-pagamento.component";
 import { GetAllGuiasStatesFromYearByFilterRequest } from "../request-models/guiaPagamento-request";
+import { ReservaCreditoListagemRequest } from "../request-models/reservaCredito-request";
 import { FilterRequest } from "../request-models/utils-request";
 import { DominioDescricaoString } from "../response-models/dominios-response";
 import { GuiaListagem } from "../response-models/guiaPagamento-response";
 import { DominiosService } from "../services/dominios.service";
 import { GuiaPagamentoService } from "../services/guiaPagamento.service";
+import { ReservaCreditoService } from "../services/reservaCredito.service";
 import { TokenStorageService } from "../services/token-storage.service";
 import { formatDate, formatDatePT, formatDecimal, openErrorsDialog } from "../utils";
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
-import jsPDF from "jspdf";
-import { environment } from "src/environments/environment";
-import { ReservaCreditoListagemRequest } from "../request-models/reservaCredito-request";
-import { ReservaCreditoService } from "../services/reservaCredito.service";
-import { PopUpComprovativoPagamentoComponent } from "../pop-up-comprovativo-pagamento/pop-up-comprovativo-pagamento.component";
-import * as QRCode from 'qrcode';
 
 
 
@@ -467,13 +467,13 @@ export class GuiaPagamentoComponent implements OnInit {
         pdf.text(this.translate.instant('general.invoiceSAS'), 160, 270);
 
         QRCode.toDataURL(element.qrInvoice)
-            .then(url => {
+            .then((url:string) => {
                 // Chèn mã QR vào file PDF
 
                 pdf.addImage(url, 'JPEG', 95, 275, 20, 20);
 
             })
-            .catch(err => {
+            .catch((err:any) => {
                 console.error(err);
             });
 

@@ -19,6 +19,16 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public int idEntidade { get; set; }
     }
 
+    public class GetAllGuiasStatesFromDateByFilterRequest : SearchFilterRequest
+    {
+        [DataMember]
+        public string niss { get; set; }
+        [DataMember]
+        public string paymentRef { get; set; }
+        [DataMember]
+        public string bankCode { get; set; }
+    }
+
     public class UseCreditInGuiaPagamentoRequest : RequestBaseDataContract
     {
         [DataMember(IsRequired = true)]

@@ -74,6 +74,9 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         [DataMember]
         public string qrInvoice { get; set; }
 
+        [DataMember]
+        public string bankCode { get; set; }
+
 
         //[DataMember]
         //public decimal quotizacoes { get; set; }

@@ -49,8 +49,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
         private Guiapagamento BuildGuiaPagamentoObject(GuiaPagamentoRequest request)
         {
+            EntidadeEmpregadoraConsultaResponse entidade = _unitOfWork.EntidadeEmpregadoraRepository.GetByIdEntidade(request.GuiaPagamento.GuiaEntidadeFk);
             GuiapagamentoDto guiaPagamento = new GuiapagamentoDto
             {
+
                 GuiaEntidadeFk = request.GuiaPagamento.GuiaEntidadeFk,
                 NumDocumento = _unitOfWork.GuiaPagamentoRepository.GetNextNumDocumento(),
                 DtEmissao = DateTime.Now,
@@ -67,7 +69,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 ContaCorrenteId = request.IdContaCorrente,
                 MesAno = request.GuiaPagamento.MesAno,
                 IndActivo = true,
-                QrInvoice = GenerateRandomString(25)
+                QrInvoice = GenerateRandomString(25),
+
+                PaymentRef = entidade.Niss + DateTime.Now.ToString("MMyyyy") + "01",
+                BankCode = request.GuiaPagamento.BankCode
             };
             guiaPagamento = _utils.SetDetailsToEntity(guiaPagamento);
             return Utils.MappClassFromDto<GuiapagamentoDto, Guiapagamento>(guiaPagamento);
@@ -128,6 +133,25 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
 
             return response;
+        }
+
+        public GuiaListagemResponse listGuiasByEntidadeApprove(GetAllGuiasStatesFromDateByFilterRequest request)
+        {
+            GuiaListagemResponse response = new GuiaListagemResponse();
+            if (request.filter == null)
+                response.Errors.Add(new Error
+                {
+                    ErrorCode = ((int)ErrorsDataContract.FilterDoesNotExist).ToString(),
+                    ErrorMessage = ErrorsDataContract.FilterDoesNotExist.ToString()
+                });
+            else
+            {
+                response = _unitOfWork.GuiaPagamentoRepository.getGuiasAporoveByFilter(request);
+
+            }
+
+            return response;
+
         }
 
         public ResponseBaseDataContract useCreditInGuiaPagamento(UseCreditInGuiaPagamentoRequest request)
@@ -279,6 +303,84 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             //    };
             //    newReservaCredito = _utils.SetDetailsToEntity(newReservaCredito);
             //}
+
+            try
+            {
+                guiaPagamento.ValorComprovPag = Math.Min(guiaPagamento.Valor, request.valorComprovativoPag);
+                guiaPagamento.DataComprovPag = request.dataComprovativoPag;
+                guiaPagamento.ComprovativoPag = doc;
+
+                _unitOfWork.Commit();
+
+                var contaCorrente = _unitOfWork.ContaCorrenteRepository.Get(guiaPagamento.ContaCorrenteId);
+
+                var valorAPagar = guiaPagamento.Valor + contaCorrente.ValorJuros - request.valorComprovativoPag;
+
+                if (valorAPagar == 0)
+                {
+                    guiaPagamento.IndPago = indValidacao;
+                }
+                else if (valorAPagar > 0)
+                {
+                    guiaPagamento.IndPago = indValidacaoParcial;
+                }
+                else if (valorAPagar < 0)
+                {
+                    guiaPagamento.IndPago = indValidacao;
+                    newReservaCredito = new Reservacredito
+                    {
+                        ReservaEntidadeFk = request.idEntidade,
+                        Valor = -valorAPagar,
+                        IndActivo = false,
+                        ReservaGuiaPagamentoFk = guiaPagamento.IdGuia
+                    };
+                    newReservaCredito = _utils.SetDetailsToEntity(newReservaCredito);
+                }
+                guiaPagamento = _utils.UpdateDetailsToEntity(guiaPagamento);
+                guiaPagamento.ValorComprovPag = Math.Min(guiaPagamento.Valor + (contaCorrente.ValorJuros ?? 0), request.valorComprovativoPag);
+                guiaPagamento.ValorJurosFixo = contaCorrente.ValorJuros;
+
+
+                _unitOfWork.GuiaPagamentoRepository.Update(guiaPagamento);
+
+                contaCorrente.PagoEm = request.dataComprovativoPag;
+
+                if (newReservaCredito != null)
+                    _unitOfWork.ReservaCreditoRepository.Add(newReservaCredito);
+                _unitOfWork.Commit();
+
+                _unitOfWork.ContaCorrenteRepository.UpdateSituacaoPagamento(guiaPagamento.ContaCorrenteId);
+            }
+            catch (Exception e)
+            {
+                response.Errors = new List<Error> { new Error { ErrorCode = "-1", ErrorMessage = e.Message } };
+                _unitOfWork.Rollback();
+            }
+
+            return response;
+        }
+
+        public ResponseBaseDataContract approveComprovativoPagamento(insertComprovativoPagamentoRequest request)
+        {
+            ResponseBaseDataContract response = new ResponseBaseDataContract();
+
+            var guiaPagamento = _unitOfWork.GuiaPagamentoRepository.Get(request.idGuia);
+            Reservacredito newReservaCredito = null;
+
+            if (guiaPagamento == null)
+                response.Errors.Add(new Error
+                {
+                    ErrorCode = ((int)ErrorsDataContract.EntityDoesNotExist).ToString(),
+                    ErrorMessage = ErrorsDataContract.EntityDoesNotExist.ToString()
+                });
+
+            var pagamentoTypes = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.INDPAGO);
+            var contaCorrentePagamentoTypes = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.SITUACAOPAGAMENTO);
+
+            byte[] doc = Convert.FromBase64String(request.comprovativoPag);
+
+            var indValidacao = (int)pagamentoTypes.Find(x => x.value == 1).id;
+            var indValidacaoParcial = (int)pagamentoTypes.Find(x => x.value == 5).id;
 
             try
             {

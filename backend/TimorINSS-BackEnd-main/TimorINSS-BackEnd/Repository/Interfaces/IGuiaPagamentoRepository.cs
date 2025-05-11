@@ -12,6 +12,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public GuiaListagemResponse getGuiasByFilter(GetAllGuiasStatesFromYearByFilterRequest request);
 
+        public GuiaListagemResponse getGuiasAporoveByFilter(GetAllGuiasStatesFromDateByFilterRequest request);
+
         public decimal SumValorPago(int idContaCorrente);
 
         public List<Guiapagamento> GetAllGuiasAtrasadas(long geradaStateId);

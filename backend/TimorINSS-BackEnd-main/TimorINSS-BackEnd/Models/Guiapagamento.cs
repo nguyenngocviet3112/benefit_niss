@@ -39,6 +39,11 @@ namespace TimorINSSBackEnd.Models
 
         public string QrInvoice { get; set; }
 
+
+        public string PaymentRef { get; set; }
+
+        public string BankCode { get; set; }
+
         public virtual Contacorrente ContaCorrente { get; set; }
         public virtual Entidadeempregadora GuiaEntidadeFkNavigation { get; set; }
         public virtual Dominio IndPagoNavigation { get; set; }

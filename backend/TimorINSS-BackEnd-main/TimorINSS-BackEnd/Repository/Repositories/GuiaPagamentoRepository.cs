@@ -195,7 +195,116 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         userName = utilizador.Username,
                         tin = trabalhador.Tin,
                         qrInvoice = e.QrInvoice,
-                        paymentRef = e.GuiaEntidadeFkNavigation.Niss + DateTime.Now.ToString("MMyyyy") + "01"
+                        //paymentRef = e.GuiaEntidadeFkNavigation.Niss + DateTime.Now.ToString("MMyyyy") + "01",
+                        paymentRef = e.PaymentRef,
+                        bankCode = e.BankCode
+                    })
+                    .OrderBy("idGuia", OrderDirectionEnum.descending)
+                    .OrderBy("mesAno", OrderDirectionEnum.descending)
+                    .Skip(index * rows)
+                    .Take(rows)
+                    .ToList();
+            }
+            GuiaListagemResponse result = new GuiaListagemResponse
+            {
+                guias = guias,
+                rows = totalNumber
+            };
+            return result;
+        }
+
+        public GuiaListagemResponse getGuiasAporoveByFilter(GetAllGuiasStatesFromDateByFilterRequest request)
+        {
+            
+
+            var filter = request.filter;
+            if (filter == null || string.IsNullOrWhiteSpace(filter.filterBy) && filter.filterField != null)
+                throw new Exception(ErrorsDataContract.FilterDoesNotExist.ToString());
+
+
+            int index = 0;
+            if (filter.index.HasValue)
+                index = filter.index.Value;
+
+            int rows = 5;
+            if (filter.rows.HasValue)
+                rows = filter.rows.Value;
+
+            IQueryable<Guiapagamento> query = _moduloContribuicoesContext.Guiapagamento
+                .Include(e => e.GuiaEntidadeFkNavigation)
+                .Where(u => u.IndActivo == true);
+            //.Where(u => u.GuiaEntidadeFk == request.idEntidade && u.IndActivo == true);
+
+            // Filtrar por data
+            if (filter.dateFilterBegin != null)
+            {
+                query = query.Where(u => u.MesAno.Month == filter.dateFilterBegin.Value.Month && u.MesAno.Year == filter.dateFilterBegin.Value.Year);
+            }
+            if (request.niss != null)
+            {
+                query = query.Where(u => u.GuiaEntidadeFkNavigation.Niss == request.niss);
+            }
+            if (request.bankCode != null)
+            {
+                query = query.Where(u => u.BankCode == request.bankCode);
+            }
+            //else
+            //{
+            //    query = query.Where(u => u.MesAno.Year == DateTime.Now.Year);
+            //}
+
+            if (filter.filterField != null)
+            {
+                query = filter.filterField switch
+                {
+                    // Filtrar por estado
+                    "Estado" => query.Where(u => u.IndPagoNavigation.Valor.Equals(int.Parse(filter.filterBy))),
+                    // Filtrar por tipo
+                    "Tipo" => query.Where(u => u.TipoGuiaNavigation.Valor.Equals(int.Parse(filter.filterBy))),
+                    _ => throw new Exception(ErrorsDataContract.FilterDoesNotExist.ToString()),
+                };
+            }
+
+            if (filter.filter != null && (filter.filter?.filterField != null))
+            {
+                query = filter.filter.filterField switch
+                {
+                    // Filtrar por estado
+                    "Estado" => query.Where(u => u.IndPagoNavigation.Valor.Equals(int.Parse(filter.filter.filterBy))),
+                    // Filtrar por tipo
+                    "Tipo" => query.Where(u => u.TipoGuiaNavigation.Valor.Equals(int.Parse(filter.filter.filterBy))),
+                    _ => throw new Exception(ErrorsDataContract.FilterDoesNotExist.ToString()),
+                };
+            }
+
+            var guias = new List<GuiaListagem>();
+            var totalNumber = 0;
+            if (query != null)
+            {
+                totalNumber = query.Count();
+                guias = query
+                    .Select(e => new GuiaListagem
+                    {
+                        idGuia = e.IdGuia,
+                        numDocumento = e.NumDocumento,
+                        mesAno = e.MesAno,
+                        descricao = e.Descricao,
+                        valor = e.Valor,
+                        juros = (decimal)(e.ValorJurosFixo != null ? e.ValorJurosFixo : (e.ValorJuros ?? 0)),
+                        total = e.Valor + (decimal)(e.ValorJurosFixo != null ? e.ValorJurosFixo : (e.ValorJuros ?? 0)),
+                        dtValidade = e.DtValidade,
+                        tipo = e.TipoGuiaNavigation.Valor,
+                        valorPago = e.ValorComprovPag ?? 0,
+                        dtValorPago = e.DataComprovPag,
+                        comprovativoPagamento = e.ComprovativoPag,
+                        niss = e.GuiaEntidadeFkNavigation.Niss,
+                        estadoPagamento = e.IndPagoNavigation.Valor,
+                        //userName = utilizador.Username,
+                        //tin = trabalhador.Tin,
+                        qrInvoice = e.QrInvoice,
+                        //paymentRef = e.GuiaEntidadeFkNavigation.Niss + DateTime.Now.ToString("MMyyyy") + "01",
+                        paymentRef = e.PaymentRef,
+                        bankCode = e.BankCode
                     })
                     .OrderBy("idGuia", OrderDirectionEnum.descending)
                     .OrderBy("mesAno", OrderDirectionEnum.descending)

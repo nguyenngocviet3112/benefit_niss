@@ -76,6 +76,31 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         // POST: api/guiaPagamento
+        [HttpPost("listGuiasByEntidadeApprove")]
+        public IActionResult listGuiasByEntidadeApprove(GetAllGuiasStatesFromDateByFilterRequest request)
+        {
+            GuiaListagemResponse response = new GuiaListagemResponse();
+
+            try
+            {
+                // Parse dos valores do header para o request
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.listGuiasByEntidadeApprove(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            // Guardar log do erro no ficheiro de logs
+            if (response.ManageErrors("listGuiasByEntidade", Log, request))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        // POST: api/guiaPagamento
         [HttpPost("useCreditInGuiaPagamento")]
         public IActionResult useCreditInGuiaPagamento(UseCreditInGuiaPagamentoRequest request)
         {
@@ -119,6 +144,32 @@ namespace TimorINSSBackEnd.Controllers
 
             // Guardar log do erro no ficheiro de logs
             if (response.ManageErrors("insertComprovativoPagamento", Log, request))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+
+        // POST: api/guiaPagamento
+        [HttpPost("approveComprovativoPagamento")]
+        public IActionResult approveComprovativoPagamento(insertComprovativoPagamentoRequest request)
+        {
+            ResponseBaseDataContract response = new ResponseBaseDataContract();
+
+            try
+            {
+                // Parse dos valores do header para o request
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.approveComprovativoPagamento(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            // Guardar log do erro no ficheiro de logs
+            if (response.ManageErrors("approveComprovativoPagamento", Log, request))
             {
                 return BadRequest(response);
             }
