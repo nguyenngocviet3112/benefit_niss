@@ -161,6 +161,29 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
+        [HttpPost("ListIniciarProcessosApprove")]
+        public IActionResult ListIniciarProcessosApprove(RequestBaseDataContract request)
+        {
+            SelectDescriptionResponse response = new SelectDescriptionResponse();
+
+            try
+            {
+                // Parse dos valores do header para o request
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.ListIniciarProcessApprove(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            // Guardar log do erro no ficheiro de logs
+            if (response.ManageErrors("ListIniciarProcessos", Log, request))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
         [HttpPost("GetAllProcessosArquivados")]
         public IActionResult GetAllProcessosArquivados(SearchFilterRequest request)
         {

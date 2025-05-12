@@ -17,6 +17,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         public ResponseBaseDataContract UpdateProcessoConfig(ProcessoConfigRequest request);
 
         public SelectDescriptionResponse ListIniciarProcessos(RequestBaseDataContract request);
+        public SelectDescriptionResponse ListIniciarProcessApprove(RequestBaseDataContract request);
 
         public ProcessosArquivadosListagemResponse GetAllProcessosArquivados(SearchFilterRequest request);
 

@@ -13,5 +13,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public Processoconfig GetWithActiveRelations(long id);
 
         public SelectDescriptionResponse ListIniciarProcessos(List<int> allowedProcessConfigs, bool isAdmin = false);
+
+        public SelectDescriptionResponse ListIniciarApprove(List<int> allowedProcessConfigs, bool isAdmin = false);
     }
 }

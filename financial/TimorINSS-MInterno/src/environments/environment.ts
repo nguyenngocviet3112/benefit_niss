@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://chungnv.info:5000/api',
-  apiImportsUrl: 'http://chungnv.info:5000/imports',
+  apiUrl: 'http://localhost:5000/api',
+  apiImportsUrl: 'http://localhost:5000/imports',
   ssIcon: 'assets/image/inss_logo.png',
   stampImage: 'assets/image/stamp_signature.png'
 };

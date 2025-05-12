@@ -38,8 +38,9 @@ export class ProcessoService {
         return this.http.post(`${environment.apiUrl}/processos/UpdateProcessoConfig`, request);
     }
 
+    
     public ListIniciarProcessos(request: any): Observable<SelectDescriptionResponse> {
-        return this.http.post<SelectDescriptionResponse>(`${environment.apiUrl}/processos/ListIniciarProcessos`, request);
+        return this.http.post<SelectDescriptionResponse>(`${environment.apiUrl}/processos/ListIniciarProcessosApprove`, request);
     }
 
     public GetAllProcessosArquivados(request: any): Observable<ProcessosArquivadosListagemResponse> {

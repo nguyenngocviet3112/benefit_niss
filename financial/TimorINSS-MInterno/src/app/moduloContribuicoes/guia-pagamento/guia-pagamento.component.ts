@@ -139,7 +139,7 @@ export class GuiaPagamentoComponent implements OnInit {
 
         request = { "idEntidade": this.entidadeId, "filter": this.filter };
 
-        this.guiaPagamentoService.getAllGuiasByEntidade(request).subscribe(x => {
+        this.guiaPagamentoService.getAllGuiasByEntidadeApprove(request).subscribe(x => {
             x.rows == null ? this.totalRows = 0 : this.totalRows = x.rows;
             x.guias == null ? this.dataSourceGuiaPagamento = [] : this.dataSourceGuiaPagamento = x.guias;
             this.spinner.hide();

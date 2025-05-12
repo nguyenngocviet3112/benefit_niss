@@ -216,7 +216,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasAporoveByFilter(GetAllGuiasStatesFromDateByFilterRequest request)
         {
-            
+
 
             var filter = request.filter;
             if (filter == null || string.IsNullOrWhiteSpace(filter.filterBy) && filter.filterField != null)
@@ -264,6 +264,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     "Tipo" => query.Where(u => u.TipoGuiaNavigation.Valor.Equals(int.Parse(filter.filterBy))),
                     _ => throw new Exception(ErrorsDataContract.FilterDoesNotExist.ToString()),
                 };
+            }  else {
+                query = query.Where(u => !u.IndPagoNavigation.Valor.Equals(2));
             }
 
             if (filter.filter != null && (filter.filter?.filterField != null))
@@ -276,8 +278,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     "Tipo" => query.Where(u => u.TipoGuiaNavigation.Valor.Equals(int.Parse(filter.filter.filterBy))),
                     _ => throw new Exception(ErrorsDataContract.FilterDoesNotExist.ToString()),
                 };
+            } else {
+                query = query.Where(u => !u.IndPagoNavigation.Valor.Equals(2));
             }
-
             var guias = new List<GuiaListagem>();
             var totalNumber = 0;
             if (query != null)

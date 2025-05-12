@@ -361,6 +361,35 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
+        public SelectDescriptionResponse ListIniciarProcessApprove(RequestBaseDataContract request)
+        {
+            SelectDescriptionResponse response = new SelectDescriptionResponse();
+
+            // Validar se o utilizador tem as permissões necessárias
+            bool permission = _utils.ValidatePermission((int)request.UserId, (int)ModuleGestao.ConfigurarProcessos, _unitOfWork);
+
+            if (!permission)
+            {
+                response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
+                return response;
+            }
+
+            try
+            {
+                var perfilIds = _unitOfWork.RelUtilizadorPerfilRepository.GetPerfisIdsByUtilizador((int)request.UserId);
+                var allowedProcessConfigs = _unitOfWork.RelProcessoConfigPerfilRepository.GetProcessoIdsByPerfis(perfilIds);
+                var isAdmin = request.UserId == _unitOfWork.UtilizadoresRepository.GetAdminUser().IdUtilizador;
+                response = _unitOfWork.ProcessoConfigRepository.ListIniciarApprove(allowedProcessConfigs, isAdmin);
+                
+            }
+            catch (Exception e)
+            {
+                response.Errors = new List<Error> { new Error { ErrorCode = "-1", ErrorMessage = e.Message } };
+            }
+
+            return response;
+        }
+
         public ProcessosArquivadosListagemResponse GetAllProcessosArquivados(SearchFilterRequest request)
         {
             ProcessosArquivadosListagemResponse response = new ProcessosArquivadosListagemResponse();

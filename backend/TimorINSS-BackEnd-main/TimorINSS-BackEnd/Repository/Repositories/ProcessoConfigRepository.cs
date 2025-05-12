@@ -130,5 +130,26 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             return response;
         }
+
+        public SelectDescriptionResponse ListIniciarApprove(List<int> allowedProcessConfigs, bool isAdmin = false)
+        {
+            SelectDescriptionResponse response = new SelectDescriptionResponse
+            {
+                selects = _moduloContribuicoesContext.Processoconfig
+                            .Where(u => !isAdmin ? allowedProcessConfigs.Contains(u.Id) && u.IndActivo :
+                                                   u.IndActivo && u.Id != 2
+               )
+               .Select(u => new SelectDescription
+               {
+                   id = u.Id,
+                   nome = u.Nome,
+                   indActivo = true,
+                   parentId = 0
+               })
+               .ToList()
+            };
+
+            return response;
+        }
     }
 }
