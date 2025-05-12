@@ -1,25 +1,34 @@
-<h2 mat-dialog-title>Payment receipt validation</h2>
-<mat-dialog-content>
-  <table class="invoice-table">
-    <thead>
-    <tr>
-      <th>INV No</th>
-      <th>Submission date</th>
-      <th>Payment Receipt Amount</th>
-      <th>Actual receive</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td>{{ invoice.invNo }}</td>
-      <td>{{ invoice.submissionDate }}</td>
-      <td>{{ invoice.paymentAmount }}</td>
-      <td>
-        <input matInput [(ngModel)]="invoice.actualReceived" />
-      </td>
-    </tr>
-    </tbody>
-  </table>
-
-  <mat-form-field appearance="outline" class="w-100 mt-3">
-    <mat-label>Reason (if
+<div class="popup-header">
+  <h2>Payment receipt validation</h2>
+</div>
+<table>
+  <tr>
+    <th>INV NO</th>
+    <th>Submission date</th>
+    <th>Payment Receipt Amount</th>
+    <th>Actual receive</th>
+  </tr>
+  <tr>
+    <td>{{ invoice.invNo }}</td>
+    <td>{{ invoice.submissionDate }}</td>
+    <td>{{ invoice.paymentAmount }}</td>
+    <td>{{ invoice.actualReceive }}</td>
+  </tr>
+</table>
+<div class="reason-section">
+  <label>Reason [if rejected]</label>
+  <select [(ngModel)]="selectedReason" (change)="onReasonChange($event)">
+    <option *ngFor="let reason of reasons" [value]="reason">{{ reason }}</option>
+  </select>
+</div>
+<div class="info-text">
+  YOU ARE APPROVING AMOUNT OF <span>{{ invoice.paymentAmount }}</span> COMING TO NSS BANK ACCOUNT. BE SURE ALL THE INFORMATION IS CORRECT.
+</div>
+<div class="status-message" *ngIf="statusMessage">
+  {{ statusMessage }}
+</div>
+<div class="action-buttons">
+  <button class="approve-btn" (click)="onApprove()">Approve</button>
+  <button class="reject-btn" (click)="onReject()">Reject</button>
+  <button class="cancel-btn" (click)="onCancel()">Cancel</button>
+</div>

@@ -1,33 +1,60 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-pop-up-handle-invoice',
   templateUrl: './pop-up-handle-invoice.component.html',
+  styleUrls: ['./pop-up-handle-invoice.component.css']
 })
 export class PopUpHandleInvoiceComponent {
   invoice = {
-    invNo: '90000320250301',
+    invNo: '900003205030301',
     submissionDate: '20/02/2025',
-    paymentAmount: '221,20',
-    actualReceived: '221,20',
-    reason: ''
+    paymentAmount: '$221.20',
+    actualReceive: '$221.20'
   };
 
-  reasons = ['Duplicate', 'Incorrect amount', 'Missing data'];
+  reasons = ['Choose a reason', 'Invalid Receipt', 'Amount Mismatch', 'Duplicate Submission'];
+  selectedReason: string = this.reasons[0];
+  statusMessage: string = '';
 
-  constructor(
-    public dialogRef: MatDialogRef<PopUpHandleInvoiceComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  @Output() approve = new EventEmitter<void>();
+  @Output() reject = new EventEmitter<string>();
+  @Output() cancel = new EventEmitter<void>();
+  @Output() close = new EventEmitter<void>();
 
-  approve() {
-    console.log('Approved with amount:', this.invoice.actualReceived);
-    this.dialogRef.close({ status: 'approved', data: this.invoice });
+  onApprove(): void {
+    this.statusMessage = 'Payment approved successfully!';
+    this.approve.emit();
+    setTimeout(() => this.closePopup(), 1500); // Close after 1.5 seconds
   }
 
-  reject() {
-    console.log('Rejected with reason:', this.invoice.reason);
-    this.dialogRef.close({ status: 'rejected', data: this.invoice });
+  onReject(): void {
+    if (this.selectedReason === 'Choose a reason') {
+      this.statusMessage = 'Please select a reason for rejection.';
+      return;
+    }
+    this.statusMessage = `Payment rejected: ${this.selectedReason}`;
+    this.reject.emit(this.selectedReason);
+    setTimeout(() => this.closePopup(), 1500);
+  }
+
+  onCancel(): void {
+    this.statusMessage = 'Action canceled.';
+    this.cancel.emit();
+    setTimeout(() => this.closePopup(), 1500);
+  }
+
+  onClose(): void {
+    this.statusMessage = 'Popup closed.';
+    this.close.emit();
+  }
+
+  onReasonChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    this.selectedReason = target.value;
+  }
+
+  private closePopup(): void {
+    this.close.emit();
   }
 }
