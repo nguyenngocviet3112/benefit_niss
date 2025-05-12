@@ -12,13 +12,17 @@
     <td>{{ invoice.invNo }}</td>
     <td>{{ invoice.submissionDate }}</td>
     <td>{{ invoice.paymentAmount }}</td>
-    <td>{{ invoice.actualReceive }}</td>
+    <td><input
+      type="text"
+      [(ngModel)]="invoice.actualReceive"
+      class="editable-input"
+    /></td>
   </tr>
 </table>
 <div class="reason-section">
   <label>Reason [if rejected]</label>
   <select [(ngModel)]="selectedReason" (change)="onReasonChange($event)">
-    <option *ngFor="let reason of reasons" [value]="reason">{{ reason }}</option>
+    <option *ngFor="let reason of invoice.reasonOptions" [value]="reason.value">{{ reason.label }}</option>
   </select>
 </div>
 <div class="info-text">

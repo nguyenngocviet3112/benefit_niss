@@ -722,8 +722,8 @@
     "download": "Download Invoice",
     "uploadPagamento": "Upload Payment Receipt",
     "visualizarPagamento": "View Payment Receipt",
-    "handle": "Handle",
     "clearFilter": "Clear filters",
+    "handle": "Handle",
     "fromDate" : "From date",
     "toDate" : "To date",
     "banco" : "Bank Code",
@@ -735,6 +735,12 @@
       "MANDIRI": "Mandiri Bank",
       "BNCTL": "BNCTL Bank",
       "BNTL": "BNTL Bank"
+    },
+    "reason": {
+      "0": "Choose a reason",
+      "1": "Invalid Receipt",
+      "2": "Amount Mismatch",
+      "3": "Duplicate Submission"
     }
   },
   "comprovativoPagamento": {

@@ -1,5 +1,11 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import {Component, Output, EventEmitter, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {PopUpWarningComponent} from "../../componentes/pop-up-warning/pop-up-warning.component";
 
+interface ReasonOption {
+  value: string;
+  label: string;
+}
 @Component({
   selector: 'app-pop-up-handle-invoice',
   templateUrl: './pop-up-handle-invoice.component.html',
@@ -7,14 +13,15 @@ import { Component, Output, EventEmitter } from '@angular/core';
 })
 export class PopUpHandleInvoiceComponent {
   invoice = {
-    invNo: '900003205030301',
-    submissionDate: '20/02/2025',
-    paymentAmount: '$221.20',
-    actualReceive: '$221.20'
+    invNo: '',
+    submissionDate: '',
+    paymentAmount: '',
+    actualReceive: '',
+    reasonOptions: [] as ReasonOption[]
   };
 
-  reasons = ['Choose a reason', 'Invalid Receipt', 'Amount Mismatch', 'Duplicate Submission'];
-  selectedReason: string = this.reasons[0];
+
+  selectedReason: string = '';
   statusMessage: string = '';
 
   @Output() approve = new EventEmitter<void>();
@@ -22,10 +29,28 @@ export class PopUpHandleInvoiceComponent {
   @Output() cancel = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+              private dialogRef: MatDialogRef<PopUpHandleInvoiceComponent>) {
+    // Map the incoming data to the invoice object
+    console.log(data);
+    this.invoice = {
+      invNo: data.paymentRef , // Default value if not provided
+      submissionDate: (data.dataCriacao instanceof Date) ? data.dataCriacao.toLocaleDateString() : new Date().toLocaleDateString(), // Default value
+      paymentAmount: data.total, // Format as currency
+      actualReceive: data.total, // Assuming actual receive matches payment amount
+      reasonOptions: data.reasonOptions
+    };
+    this.selectedReason =  this.invoice.reasonOptions[0].value;
+  }
+
+
   onApprove(): void {
     this.statusMessage = 'Payment approved successfully!';
     this.approve.emit();
-    setTimeout(() => this.closePopup(), 1500); // Close after 1.5 seconds
+    setTimeout(() => {
+      this.closePopup();
+      this.dialogRef.close(true);
+    }, 1500); // Close after 1.5 seconds
   }
 
   onReject(): void {
@@ -35,13 +60,16 @@ export class PopUpHandleInvoiceComponent {
     }
     this.statusMessage = `Payment rejected: ${this.selectedReason}`;
     this.reject.emit(this.selectedReason);
-    setTimeout(() => this.closePopup(), 1500);
+    setTimeout(() => {
+      this.closePopup();
+      this.dialogRef.close(true);
+    }, 1500); // Close after 1.5 seconds
   }
 
   onCancel(): void {
     this.statusMessage = 'Action canceled.';
     this.cancel.emit();
-    setTimeout(() => this.closePopup(), 1500);
+    this.dialogRef.close(true);
   }
 
   onClose(): void {
@@ -57,4 +85,5 @@ export class PopUpHandleInvoiceComponent {
   private closePopup(): void {
     this.close.emit();
   }
+
 }

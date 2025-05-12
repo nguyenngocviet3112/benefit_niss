@@ -58,6 +58,7 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
   public guiaTipoOptions: DominioDescricaoString[] = [];
   public pagamentoTipoOptions: { key: string; label: string }[] = [];
   public bankOptions: { key: string; label: string }[] = [];
+  public reasonOptions: { key: string; label: string }[] = [];
   public tipoOption?: number = undefined;
   public situacaoOption?: number = undefined;
   public credit?: number;
@@ -116,10 +117,12 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
         }));
       });
 
-
-
-
-
+      this.translate.get('guiaPagamentoListagem.reason').subscribe((res: any) => {
+        this.reasonOptions = Object.keys(res).map((key) => ({
+          key,
+          label: res[key],
+        }));
+      });
 
       if (idEntidade != null) {
         this.entidadeId = idEntidade;
@@ -618,14 +621,14 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
           data: {
             adicionar: !viewMode,
             view: viewMode,
-            data: {
-              guiaId: guia.idGuia,
-              entidadeId: this.entidadeId,
-              valor: guia.estadoPagamento == 2 ? guia.total : guia.valorPago,
-              data: guia.dtValorPago == null ? new Date() : guia.dtValorPago,
-              file: guia.comprovativoPagamento
-            },
+            guiaId: guia.idGuia,
+            entidadeId: this.entidadeId,
+            total: guia.total,
+            paymentRef: guia.paymentRef,
+            dataCriacao: guia.dataCriacao == null ? new Date() : guia.dataCriacao,
+            file: guia.comprovativoPagamento,
             avaliableCredit: viewMode ? undefined : this.credit,
+            reasonOptions: this.reasonOptions
           }
         });
 
