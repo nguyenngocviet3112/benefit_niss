@@ -1,33 +1,89 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {Component, Output, EventEmitter, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {PopUpWarningComponent} from "../../componentes/pop-up-warning/pop-up-warning.component";
 
+interface ReasonOption {
+  value: string;
+  label: string;
+}
 @Component({
   selector: 'app-pop-up-handle-invoice',
   templateUrl: './pop-up-handle-invoice.component.html',
+  styleUrls: ['./pop-up-handle-invoice.component.css']
 })
 export class PopUpHandleInvoiceComponent {
   invoice = {
-    invNo: '90000320250301',
-    submissionDate: '20/02/2025',
-    paymentAmount: '221,20',
-    actualReceived: '221,20',
-    reason: ''
+    invNo: '',
+    submissionDate: '',
+    paymentAmount: '',
+    actualReceive: '',
+    reasonOptions: [] as ReasonOption[]
   };
 
-  reasons = ['Duplicate', 'Incorrect amount', 'Missing data'];
 
-  constructor(
-    public dialogRef: MatDialogRef<PopUpHandleInvoiceComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  selectedReason: string = '';
+  statusMessage: string = '';
 
-  approve() {
-    console.log('Approved with amount:', this.invoice.actualReceived);
-    this.dialogRef.close({ status: 'approved', data: this.invoice });
+  @Output() approve = new EventEmitter<void>();
+  @Output() reject = new EventEmitter<string>();
+  @Output() cancel = new EventEmitter<void>();
+  @Output() close = new EventEmitter<void>();
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+              private dialogRef: MatDialogRef<PopUpHandleInvoiceComponent>) {
+    // Map the incoming data to the invoice object
+    console.log(data);
+    this.invoice = {
+      invNo: data.paymentRef , // Default value if not provided
+      submissionDate: (data.dataCriacao instanceof Date) ? data.dataCriacao.toLocaleDateString() : new Date().toLocaleDateString(), // Default value
+      paymentAmount: data.total, // Format as currency
+      actualReceive: data.total, // Assuming actual receive matches payment amount
+      reasonOptions: data.reasonOptions
+    };
+    this.selectedReason =  this.invoice.reasonOptions[0].value;
   }
 
-  reject() {
-    console.log('Rejected with reason:', this.invoice.reason);
-    this.dialogRef.close({ status: 'rejected', data: this.invoice });
+
+  onApprove(): void {
+    this.statusMessage = 'Payment approved successfully!';
+    this.approve.emit();
+    setTimeout(() => {
+      this.closePopup();
+      this.dialogRef.close(true);
+    }, 1500); // Close after 1.5 seconds
   }
+
+  onReject(): void {
+    if (this.selectedReason === 'Choose a reason') {
+      this.statusMessage = 'Please select a reason for rejection.';
+      return;
+    }
+    this.statusMessage = `Payment rejected: ${this.selectedReason}`;
+    this.reject.emit(this.selectedReason);
+    setTimeout(() => {
+      this.closePopup();
+      this.dialogRef.close(true);
+    }, 1500); // Close after 1.5 seconds
+  }
+
+  onCancel(): void {
+    this.statusMessage = 'Action canceled.';
+    this.cancel.emit();
+    this.dialogRef.close(true);
+  }
+
+  onClose(): void {
+    this.statusMessage = 'Popup closed.';
+    this.close.emit();
+  }
+
+  onReasonChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    this.selectedReason = target.value;
+  }
+
+  private closePopup(): void {
+    this.close.emit();
+  }
+
 }

@@ -14,11 +14,16 @@ export interface GuiaListagem
   juros: number;
   total: number;
   dtValidade: Date;
+  dataCriacao: Date;
   tipo: number;
   valorPago: number;
   dtValorPago?: Date;
   comprovativoPagamento?: string;
   estadoPagamento: number;
+  niss: string;
+  paymentRef: string;
+  qrInvoice: string;
+  bankCode: string;
 }
 
 export interface RelatoriosGuiasListagemResponse {
@@ -34,5 +39,5 @@ export interface RelatoriosGuiasListagem {
   valorGuia: number;
   valorComprovativo: number;
   pdf: number[];
-  valorDivida: number;  
+  valorDivida: number;
 }

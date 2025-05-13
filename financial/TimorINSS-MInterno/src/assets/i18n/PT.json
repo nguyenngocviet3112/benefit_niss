@@ -71,6 +71,7 @@
     "downloadLogs": "Descarregar Registos",
     "moduloGestao": "Módulo de Gestao",
     "moduloContrib": "Módulo de Contribuições",
+    "moduloContribValidation": "Validação de Contribuições",
     "moduloFinanceiro": "Módulo Financeiro",
     "relatorios": "Relatórios",
     "auditoria": "Auditoria",
@@ -720,7 +721,26 @@
     "download": "Descarregar Guia",
     "uploadPagamento": "Inserir Comprovativo de Pagamento",
     "visualizarPagamento": "Visualizar Comprovativo de Pagamento",
-    "clearFilter": "Limpar filtros"
+    "clearFilter": "Limpar filtros",
+    "handle": "Handle",
+    "fromDate": "Data de início",
+    "toDate": "Data de fim",
+    "banco": "Código do banco",
+    "niss": "Número do NISS",
+    "invNo": "Número da fatura (INV)",
+    "bankAcc": "Conta bancária",
+    "bankCode": {
+      "BNU": "Banco BNU",
+      "MANDIRI": "Banco Mandiri",
+      "BNCTL": "Banco BNCTL",
+      "BNTL": "Banco BNTL"
+    },
+    "reason": {
+      "0": "Escolha um motivo",
+      "1": "Recibo inválido",
+      "2": "Incompatibilidade de valor",
+      "3": "Envio duplicado"
+    }
   },
   "comprovativoPagamento": {
     "titleInsert": "Inserir Comprovativo de Pagamento",
