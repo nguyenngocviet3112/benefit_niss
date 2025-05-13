@@ -144,7 +144,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
             };
 
             var contaCorrentes = queryContaCorrenteConditional
-               .OrderBy("MesAno", OrderDirectionEnum.descending)
+               .OrderBy("IdContaCorrente", OrderDirectionEnum.descending)
+               //.OrderBy("MesAno", OrderDirectionEnum.descending)
                .Skip(index * rows)
                .Take(rows)
                .ToList()

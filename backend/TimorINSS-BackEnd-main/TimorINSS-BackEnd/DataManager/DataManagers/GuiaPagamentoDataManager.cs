@@ -50,12 +50,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         private Guiapagamento BuildGuiaPagamentoObject(GuiaPagamentoRequest request)
         {
             EntidadeEmpregadoraConsultaResponse entidade = _unitOfWork.EntidadeEmpregadoraRepository.GetByIdEntidade(request.GuiaPagamento.GuiaEntidadeFk);
-            int numDocumento = int.Parse(request.GuiaPagamento.NumDocumento[0..^5]);
+            string numDoc = _unitOfWork.GuiaPagamentoRepository.GetNextNumDocumento();
             GuiapagamentoDto guiaPagamento = new GuiapagamentoDto
             {
 
                 GuiaEntidadeFk = request.GuiaPagamento.GuiaEntidadeFk,
-                NumDocumento = _unitOfWork.GuiaPagamentoRepository.GetNextNumDocumento(),
+                NumDocumento = numDoc,
                 DtEmissao = DateTime.Now,
                 Descricao = request.GuiaPagamento.Descricao,
                 Valor = request.GuiaPagamento.Valor - request.GuiaPagamento.Juros,
@@ -72,7 +72,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 IndActivo = true,
                 QrInvoice = GenerateRandomString(25),
                 
-                PaymentRef = entidade.Niss + request.GuiaPagamento.MesAno.ToString("MMyyyy") + numDocumento.ToString(),
+                PaymentRef = entidade.Niss + request.GuiaPagamento.MesAno.ToString("MMyyyy") +
+                int.Parse(numDoc[0..^5]).ToString(),
                 BankCode = request.GuiaPagamento.BankCode
             };
             guiaPagamento = _utils.SetDetailsToEntity(guiaPagamento);

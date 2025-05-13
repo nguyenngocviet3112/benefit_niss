@@ -414,7 +414,8 @@ export class GuiaPagamentoComponent implements OnInit {
 
 
         text1 = this.translate.instant('general.invoiceTTA') + ':';
-        text2 = '0';
+        
+        text2 = (element.total).toFixed(2);
 
         // Tính toán chiều rộng của văn bản
         textWidth1 = pdf.getTextWidth(text1);
@@ -425,7 +426,8 @@ export class GuiaPagamentoComponent implements OnInit {
         rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
 
         pdf.text(this.translate.instant('general.invoiceTTA') + ':', rightAlignX1 - 7.5, 206);
-        pdf.text('0', rightAlignX2, 206);
+        // pdf.text('0', rightAlignX2, 206);
+        pdf.text((element.total ).toFixed(2), rightAlignX2, 206);
         pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 206);
 
         text1 = this.translate.instant('general.invoiceAPEE') + ':';
