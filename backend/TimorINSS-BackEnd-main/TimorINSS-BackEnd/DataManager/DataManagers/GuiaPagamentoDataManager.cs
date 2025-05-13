@@ -50,6 +50,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         private Guiapagamento BuildGuiaPagamentoObject(GuiaPagamentoRequest request)
         {
             EntidadeEmpregadoraConsultaResponse entidade = _unitOfWork.EntidadeEmpregadoraRepository.GetByIdEntidade(request.GuiaPagamento.GuiaEntidadeFk);
+            int numDocumento = int.Parse(request.GuiaPagamento.NumDocumento[0..^5]);
             GuiapagamentoDto guiaPagamento = new GuiapagamentoDto
             {
 
@@ -70,13 +71,15 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 MesAno = request.GuiaPagamento.MesAno,
                 IndActivo = true,
                 QrInvoice = GenerateRandomString(25),
-
-                PaymentRef = entidade.Niss + DateTime.Now.ToString("MMyyyy") + "01",
+                
+                PaymentRef = entidade.Niss + request.GuiaPagamento.MesAno.ToString("MMyyyy") + numDocumento.ToString(),
                 BankCode = request.GuiaPagamento.BankCode
             };
             guiaPagamento = _utils.SetDetailsToEntity(guiaPagamento);
             return Utils.MappClassFromDto<GuiapagamentoDto, Guiapagamento>(guiaPagamento);
         }
+
+        
 
         private string GenerateRandomString(int length)
         {
@@ -130,6 +133,24 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 response = _unitOfWork.GuiaPagamentoRepository.getGuiasByFilter(request);
                 
+            }
+
+            return response;
+        }
+
+        public GuiaListagemResponse guiaPagamentoDetail(GetGuiaPagamentoRequest request)
+        {
+            GuiaListagemResponse response = new GuiaListagemResponse();
+            if (request.filter == null)
+                response.Errors.Add(new Error
+                {
+                    ErrorCode = ((int)ErrorsDataContract.FilterDoesNotExist).ToString(),
+                    ErrorMessage = ErrorsDataContract.FilterDoesNotExist.ToString()
+                });
+            else
+            {
+                response = _unitOfWork.GuiaPagamentoRepository.getGuiasPagamentoByFilter(request);
+
             }
 
             return response;

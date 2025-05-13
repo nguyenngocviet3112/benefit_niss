@@ -90,6 +90,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return numDocumentoFinal;
         }
 
+       
+
         public GuiaListagemResponse getGuiasByFilter(GetAllGuiasStatesFromYearByFilterRequest request)
         {
             var utilizador = _moduloContribuicoesContext.Utilizador
@@ -189,7 +191,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         tipo = e.TipoGuiaNavigation.Valor,
                         valorPago = e.ValorComprovPag ?? 0,
                         dtValorPago = e.DataComprovPag,
-                        comprovativoPagamento = e.ComprovativoPag,
+                        //comprovativoPagamento = e.ComprovativoPag,
                         niss = e.GuiaEntidadeFkNavigation.Niss,
                         estadoPagamento = e.IndPagoNavigation.Valor,
                         userName = utilizador.Username,
@@ -204,6 +206,55 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     //.OrderBy("mesAno", OrderDirectionEnum.descending)
                     .Skip(index * rows)
                     .Take(rows)
+                    .ToList();
+            }
+            GuiaListagemResponse result = new GuiaListagemResponse
+            {
+                guias = guias,
+                rows = totalNumber
+            };
+            return result;
+        }
+
+        public GuiaListagemResponse getGuiasPagamentoByFilter(GetGuiaPagamentoRequest request)
+        {
+            
+
+         
+
+            IQueryable<Guiapagamento> query = _moduloContribuicoesContext.Guiapagamento
+                .Include(e => e.GuiaEntidadeFkNavigation)
+                .Where(u => u.IdGuia == request.idGuiaPagamento);
+
+
+            var guias = new List<GuiaListagem>();
+            var totalNumber = 0;
+            if (query != null)
+            {
+                totalNumber = query.Count();
+                guias = query
+                    .Select(e => new GuiaListagem
+                    {
+                        idGuia = e.IdGuia,
+                        numDocumento = e.NumDocumento,
+                        mesAno = e.MesAno,
+                        descricao = e.Descricao,
+                        valor = e.Valor,
+                        juros = (decimal)(e.ValorJurosFixo != null ? e.ValorJurosFixo : (e.ValorJuros ?? 0)),
+                        total = e.Valor + (decimal)(e.ValorJurosFixo != null ? e.ValorJurosFixo : (e.ValorJuros ?? 0)),
+                        dtValidade = e.DtValidade,
+                        tipo = e.TipoGuiaNavigation.Valor,
+                        valorPago = e.ValorComprovPag ?? 0,
+                        dtValorPago = e.DataComprovPag,
+                        niss = e.GuiaEntidadeFkNavigation.Niss,
+                        estadoPagamento = e.IndPagoNavigation.Valor,
+                        comprovativoPagamento = e.ComprovativoPag,
+                        qrInvoice = e.QrInvoice,
+                        paymentRef = e.PaymentRef,
+                        bankCode = e.BankCode,
+                        dataCriacao = e.DataCriacao
+                    })
+                    .OrderBy("idGuia", OrderDirectionEnum.descending)
                     .ToList();
             }
             GuiaListagemResponse result = new GuiaListagemResponse
@@ -300,7 +351,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         tipo = e.TipoGuiaNavigation.Valor,
                         valorPago = e.ValorComprovPag ?? 0,
                         dtValorPago = e.DataComprovPag,
-                        comprovativoPagamento = e.ComprovativoPag,
+                        //comprovativoPagamento = e.ComprovativoPag,
                         niss = e.GuiaEntidadeFkNavigation.Niss,
                         estadoPagamento = e.IndPagoNavigation.Valor,
                         //userName = utilizador.Username,

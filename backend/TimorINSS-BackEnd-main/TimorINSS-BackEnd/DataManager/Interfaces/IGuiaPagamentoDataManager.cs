@@ -12,6 +12,8 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
 
         public GuiaListagemResponse listGuiasByEntidade(GetAllGuiasStatesFromYearByFilterRequest request);
 
+        public GuiaListagemResponse guiaPagamentoDetail(GetGuiaPagamentoRequest request);
+
         public GuiaListagemResponse listGuiasByEntidadeApprove(GetAllGuiasStatesFromDateByFilterRequest request);
 
 
