@@ -1,32 +1,27 @@
-import { DatePipe, DecimalPipe } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { Router } from "@angular/router";
-import { TranslateService } from "@ngx-translate/core";
-import { NgxSpinnerService } from "ngx-spinner";
-import { forkJoin } from "rxjs";
-import { PopUpWarningComponent } from "../../componentes/pop-up-warning/pop-up-warning.component";
-import { GetAllGuiasStatesFromYearByFilterRequest } from "../../request-models/guiaPagamento-request";
-import { FilterRequest } from "../../request-models/utils-request";
-import { DominioDescricaoString } from "../../response-models/dominios-response";
-import { GuiaListagem } from "../../response-models/guiaPagamento-response";
-import { DominiosService } from "../../services/dominios.service";
-import { GuiaPagamentoService } from "../../services/guiaPagamento.service";
-import { TokenStorageService } from "../../services/token-storage.service";
-import { formatDate, formatDatePT, formatDecimal, openErrorsDialog } from "../../utils";
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import {DatePipe, DecimalPipe} from "@angular/common";
+import {Component, OnInit} from "@angular/core";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Router} from "@angular/router";
+import {TranslateService} from "@ngx-translate/core";
+import {NgxSpinnerService} from "ngx-spinner";
+import {PopUpWarningComponent} from "../../componentes/pop-up-warning/pop-up-warning.component";
+import {GetAllGuiasStatesFromYearByFilterRequest} from "../../request-models/guiaPagamento-request";
+import {FilterRequest} from "../../request-models/utils-request";
+import {DominioDescricaoString} from "../../response-models/dominios-response";
+import {GuiaListagem} from "../../response-models/guiaPagamento-response";
+import {DominiosService} from "../../services/dominios.service";
+import {GuiaPagamentoService} from "../../services/guiaPagamento.service";
+import {TokenStorageService} from "../../services/token-storage.service";
+import {formatDate, formatDatePT, formatDecimal, openErrorsDialog} from "../../utils";
+import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import jsPDF from "jspdf";
-import { environment } from "src/environments/environment";
-import { ReservaCreditoListagemRequest } from "../../request-models/reservaCredito-request";
-import { ReservaCreditoService } from "../../services/reservaCredito.service";
-import { PopUpComprovativoPagamentoComponent } from "../pop-up-comprovativo-pagamento/pop-up-comprovativo-pagamento.component";
+import {environment} from "src/environments/environment";
+import {ReservaCreditoListagemRequest} from "../../request-models/reservaCredito-request";
+import {ReservaCreditoService} from "../../services/reservaCredito.service";
 // import * as QRCode from 'qrcode';
 import {MatSelectChange} from "@angular/material/select";
 import {PopUpHandleInvoiceComponent} from "../pop-up-handle-invoice/pop-up-handle-invoice.component";
-
-
-
 
 
 @Component({
@@ -34,7 +29,7 @@ import {PopUpHandleInvoiceComponent} from "../pop-up-handle-invoice/pop-up-handl
   templateUrl: './modulo-contribuicoes-validation-main-search.html',
   styleUrls: ['./modulo-contribuicoes-validation-main-search.css']
 })
-export class ContribValidationHomeSearchComponent  implements OnInit {
+export class ContribValidationHomeSearchComponent implements OnInit {
 
   public isLoggedIn = false;
   public faTimesCircle = faTimesCircle;
@@ -51,7 +46,7 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
   private filter: FilterRequest = {};
   //Region Guia Pagamento table
   public dataSourceGuiaPagamento: GuiaListagem[] = [];
-  public displayedColumnsGuiaPagamento: string[] = ['niss', 'invNo', 'bankCode' ,'numDocumento', 'mesAno', 'descricao', 'valor', 'juros', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
+  public displayedColumnsGuiaPagamento: string[] = ['niss', 'invNo', 'bankCode', 'numDocumento', 'mesAno', 'descricao', 'valor', 'juros', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
   public totalRows: number = 0;
   public pageSize = 10;
   public pageIndex = 0;
@@ -83,8 +78,7 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
 
     if (!this.tokenStorageService.getToken()) {
       this.router.navigate(['']);
-    }
-    else if (this.tokenStorageService.getToken() && this.tokenStorageService.tokenExpired()) {
+    } else if (this.tokenStorageService.getToken() && this.tokenStorageService.tokenExpired()) {
       this.translate.get('error.expired').subscribe((translated: string) => {
         const dialogRef = this.errorDialog.open(PopUpWarningComponent, {
           id: 'desvincularDialog',
@@ -92,15 +86,14 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
           width: '40%',
           height: '30%',
           panelClass: 'warningModal',
-          data: { msg: translated, noGenericMsg: true }
+          data: {msg: translated, noGenericMsg: true}
         });
         dialogRef.afterClosed().subscribe(() => {
           this.tokenStorageService.signOut();
           window.location.reload();
         });
       });
-    }
-    else {
+    } else {
       this.spinner.show();
       this.isLoggedIn = true;
       let idEntidade = this.tokenStorageService.getUser()?.idEntidade;
@@ -168,7 +161,7 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
 
     let request: GetAllGuiasStatesFromYearByFilterRequest;
 
-    request = { "idEntidade": this.entidadeId, "filter": this.filter };
+    request = {"idEntidade": this.entidadeId, "filter": this.filter};
 
     this.guiaPagamentoService.getAllGuiasByEntidadeApprove(request).subscribe(x => {
         x.rows == null ? this.totalRows = 0 : this.totalRows = x.rows;
@@ -214,6 +207,7 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
     this.selectedBanco = event.value;
     this.getTableGuiaPagamento();
   }
+
   public updateTable(event: any) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
@@ -379,7 +373,6 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
     rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
 
 
-
     pdf.text(this.translate.instant('general.invoiceFines') + ':', rightAlignX1 - 7.5, 171);
     pdf.text('0', rightAlignX2, 171);
     pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 171);
@@ -537,9 +530,6 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
     }, 1000);
 
 
-
-
-
   }
 
 
@@ -602,11 +592,11 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
     this.spinner.show();
 
     let filter: FilterRequest;
-    filter = { filterBy: 'indActivo' };
+    filter = {filterBy: 'indActivo'};
 
     let request: ReservaCreditoListagemRequest;
 
-    request = { "idEntidade": this.entidadeId, "filter": filter };
+    request = {"idEntidade": this.entidadeId, "filter": filter};
 
     this.reservaCreditoService.getReservaCreditoByIdEntidade(request).subscribe(x => {
         this.credit = x.reservaCredito[0]?.valor;
@@ -621,14 +611,14 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
           data: {
             adicionar: !viewMode,
             view: viewMode,
-            guiaId: guia.idGuia,
-            entidadeId: this.entidadeId,
-            total: guia.total,
-            paymentRef: guia.paymentRef,
-            dataCriacao: guia.dataCriacao == null ? new Date() : guia.dataCriacao,
-            file: guia.comprovativoPagamento,
             avaliableCredit: viewMode ? undefined : this.credit,
-            reasonOptions: this.reasonOptions
+            data: {
+              guiaId: guia.idGuia,
+              entidadeId: this.entidadeId,
+              valor: guia.valorPago,
+              data: guia.dtValorPago,
+              file: guia.comprovativoPagamento
+            },
           }
         });
 
@@ -651,6 +641,7 @@ export class ContribValidationHomeSearchComponent  implements OnInit {
     this.paymentRef = '';
     this.getTableGuiaPagamento();
   }
+
   clearPesquisarNiss() {
     this.niss = '';
     this.getTableGuiaPagamento();

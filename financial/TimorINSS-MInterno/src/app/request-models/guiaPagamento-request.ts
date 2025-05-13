@@ -26,6 +26,11 @@ export interface GetAllGuiasStatesFromYearByFilterRequest
   idEntidade: number;
   filter: FilterRequest;
 }
+export interface GetGuiasDetailsRequest
+{
+  idGuiaPagamento: number;
+  filter: FilterRequest;
+}
 
 export interface useCreditInGuiaPagamentoRequest{
   idEntidade: number;
@@ -38,6 +43,20 @@ export interface insertComprovativoPagamentoRequest{
   valorComprovativoPag: number;
   dataComprovativoPag: Date;
   comprovativoPag: string;
+}
+
+export interface approveComprovativoPagamentoRequest{
+  idEntidade: number;
+  idGuia: number;
+  valorComprovativoPag: number;
+  dataComprovativoPag: Date;
+  comprovativoPag: string;
+
+}
+
+export interface ReasonOption {
+  value: string;
+  label: string;
 }
 
 export interface GetGuiasRelatoriosRequest extends FilterRequest {

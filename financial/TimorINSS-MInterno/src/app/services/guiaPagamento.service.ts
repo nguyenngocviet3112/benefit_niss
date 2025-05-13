@@ -3,7 +3,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { GetAllGuiasStatesFromYearByFilterRequest, GetGuiasRelatoriosRequest, GuiaPagamentoRequest, insertComprovativoPagamentoRequest, useCreditInGuiaPagamentoRequest } from '../request-models/guiaPagamento-request';
+import {
+  approveComprovativoPagamentoRequest,
+  GetAllGuiasStatesFromYearByFilterRequest, GetGuiasDetailsRequest,
+  GetGuiasRelatoriosRequest,
+  GuiaPagamentoRequest,
+  insertComprovativoPagamentoRequest,
+  useCreditInGuiaPagamentoRequest
+} from '../request-models/guiaPagamento-request';
 import { GuiaListagemResponse, RelatoriosGuiasListagemResponse } from '../response-models/guiaPagamento-response';
 
 
@@ -28,6 +35,10 @@ export class GuiaPagamentoService {
     return this.http.post<GuiaListagemResponse>(`${environment.apiUrl}/guiaPagamento/listGuiasByEntidade`, entity);
   }
 
+  public getGuiasDetailByEntidade(entity: GetGuiasDetailsRequest) {
+    return this.http.post<GuiaListagemResponse>(`${environment.apiUrl}/guiaPagamento/guiaPagamentoDetail`, entity);
+  }
+
   public getAllGuiasByEntidadeApprove(entity: GetAllGuiasStatesFromYearByFilterRequest) {
     return this.http.post<GuiaListagemResponse>(`${environment.apiUrl}/guiaPagamento/listGuiasByEntidadeApprove`, entity);
   }
@@ -38,6 +49,10 @@ export class GuiaPagamentoService {
 
   public insertComprovativoPagamento(request: insertComprovativoPagamentoRequest) {
     return this.http.post(`${environment.apiUrl}/guiaPagamento/insertComprovativoPagamento`, request);
+  }
+
+  public approveComprovativoPagamento(request: approveComprovativoPagamentoRequest) {
+    return this.http.post(`${environment.apiUrl}/guiaPagamento/approveComprovativoPagamento`, request);
   }
 
   public GetGuiasRelatorios(request: GetGuiasRelatoriosRequest): Observable<RelatoriosGuiasListagemResponse> {
