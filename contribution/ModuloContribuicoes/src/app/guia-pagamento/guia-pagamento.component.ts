@@ -230,9 +230,10 @@ export class GuiaPagamentoComponent implements OnInit {
         pdf.setTextColor(10);
         //Número do Documento
         pdf.text(this.translate.instant('general.invoicePaymentRef') + ': ' + element.paymentRef, 20, 45);
+        pdf.text(this.translate.instant('general.period') + ': ' + this.formatDate(element.mesAno), 120, 45);
         pdf.text(this.translate.instant('general.invoiceEm'), 20, 52);
         pdf.text(this.translate.instant('general.invoiceName') + ': ' + element.userName, 20, 59);
-        pdf.text(this.translate.instant('general.invoiceDate') + ': ' + this.formatDatePT(element.mesAno), 120, 59);
+        pdf.text(this.translate.instant('general.invoiceDate') + ': ' + this.formatDatePT(element.dataCriacao), 120, 59);
         pdf.text(this.translate.instant('general.invoiceNISS') + ': ' + element.niss, 20, 66);
         pdf.text(this.translate.instant('general.invoiceTIN') + ': ' + element.tin, 20, 73);
         pdf.text(this.translate.instant('general.invoicePM') + ':', 20, 80);
@@ -261,11 +262,11 @@ export class GuiaPagamentoComponent implements OnInit {
         var rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
 
         pdf.text(this.translate.instant('general.invoiceCFT') + ':', rightAlignX1, 129);
-        pdf.text((element.total).toFixed(2), rightAlignX2, 129);
+        pdf.text((element.valor).toFixed(2), rightAlignX2, 129);
         pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 129);
 
         text1 = this.translate.instant('general.invoiceEEC') + ':';
-        text2 = (element.total * 0.6).toFixed(2);
+        text2 = (element.valor - (element.total * 0.4)).toFixed(2);
 
         // Tính toán chiều rộng của văn bản
         textWidth1 = pdf.getTextWidth(text1);
@@ -276,7 +277,7 @@ export class GuiaPagamentoComponent implements OnInit {
         rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
 
         pdf.text(this.translate.instant('general.invoiceEEC') + ':', rightAlignX1, 136);
-        pdf.text((element.total * 0.6).toFixed(2), rightAlignX2, 136);
+        pdf.text((element.valor - (element.total * 0.4)).toFixed(2), rightAlignX2, 136);
         pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 136);
 
 
@@ -334,7 +335,7 @@ export class GuiaPagamentoComponent implements OnInit {
 
 
         text1 = this.translate.instant('general.invoiceFines') + ':';
-        text2 = '0';
+        text2 = (element.juros).toFixed(2);
 
         // Tính toán chiều rộng của văn bản
         textWidth1 = pdf.getTextWidth(text1);
@@ -342,12 +343,13 @@ export class GuiaPagamentoComponent implements OnInit {
         // Tính toán vị trí căn lề phải
         rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
         rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        
         rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
 
 
 
         pdf.text(this.translate.instant('general.invoiceFines') + ':', rightAlignX1 - 7.5, 171);
-        pdf.text('0', rightAlignX2, 171);
+        pdf.text((element.juros).toFixed(2), rightAlignX2, 171);
         pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 171);
 
 

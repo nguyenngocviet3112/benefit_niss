@@ -121,6 +121,18 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 }
             //throw new Exception(ErrorsDataContract.TrabalhadorDoesNotExist.ToString());
 
+            var entidadeempregadora = _moduloContribuicoesContext.Entidadeempregadora
+            .SingleOrDefault(u => u.IdEntidadeEmpreg == request.idEntidade);
+            if (entidadeempregadora == null)
+            {
+                GuiaListagemResponse result1 = new GuiaListagemResponse
+                {
+                    guias = null,
+                    rows = 0
+                };
+                return result1;
+            }
+
             var filter = request.filter;
             if (filter == null || string.IsNullOrWhiteSpace(filter.filterBy) && filter.filterField != null)
                 throw new Exception(ErrorsDataContract.FilterDoesNotExist.ToString());
@@ -194,7 +206,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         //comprovativoPagamento = e.ComprovativoPag,
                         niss = e.GuiaEntidadeFkNavigation.Niss,
                         estadoPagamento = e.IndPagoNavigation.Valor,
-                        userName = utilizador.Username,
+                        userName = entidadeempregadora.Nome,
                         tin = trabalhador.Tin,
                         qrInvoice = e.QrInvoice,
                         //paymentRef = e.GuiaEntidadeFkNavigation.Niss + DateTime.Now.ToString("MMyyyy") + "01",
@@ -357,6 +369,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         //userName = utilizador.Username,
                         //tin = trabalhador.Tin,
                         qrInvoice = e.QrInvoice,
+                        dataCriacao = e.DataCriacao,
                         //paymentRef = e.GuiaEntidadeFkNavigation.Niss + DateTime.Now.ToString("MMyyyy") + "01",
                         paymentRef = e.PaymentRef,
                         bankCode = e.BankCode

@@ -89,7 +89,8 @@
     "invoiceAPEE": "Amount payable by EE",
     "invoiceATCO": "Amount payable by TCO",
     "invoiceSSS": "Social Security Services",
-    "invoiceSAS": "Signature and stamp"
+    "invoiceSAS": "Signature and stamp",
+    "period":"Period"
   },
   "login_form": {
     "title": "Authentication",
