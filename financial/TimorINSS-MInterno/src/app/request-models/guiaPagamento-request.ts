@@ -26,6 +26,15 @@ export interface GetAllGuiasStatesFromYearByFilterRequest
   idEntidade: number;
   filter: FilterRequest;
 }
+
+export interface GetAllGuiasStatesApproveRequest
+{
+  idEntidade: number;
+  niss: string;
+  paymentRef: string;
+  bankCode: string ;
+  filter: FilterRequest;
+}
 export interface GetGuiasDetailsRequest
 {
   idGuiaPagamento: number;

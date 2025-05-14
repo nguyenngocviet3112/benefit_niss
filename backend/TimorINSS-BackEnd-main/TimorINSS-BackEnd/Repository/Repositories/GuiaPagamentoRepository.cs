@@ -304,13 +304,17 @@ namespace TimorINSSBackEnd.Repository.Repositories
             {
                 query = query.Where(u => u.MesAno.Month == filter.dateFilterBegin.Value.Month && u.MesAno.Year == filter.dateFilterBegin.Value.Year);
             }
-            if (request.niss != null)
+            if (request.niss != null && !string.IsNullOrEmpty(request.niss))
             {
                 query = query.Where(u => u.GuiaEntidadeFkNavigation.Niss == request.niss);
             }
-            if (request.bankCode != null)
+            if (request.bankCode != null && !string.IsNullOrEmpty(request.bankCode))
             {
                 query = query.Where(u => u.BankCode == request.bankCode);
+            }
+            if (request.paymentRef != null && !string.IsNullOrEmpty(request.paymentRef))
+            {
+                query = query.Where(u => u.PaymentRef == request.paymentRef);
             }
             //else
             //{

@@ -9,7 +9,7 @@
       <div class="thirdLineContainers">
         <mat-form-field appearance="outline" class="comboBox">
           <mat-label>{{ 'guiaPagamentoListagem.banco' | translate }}</mat-label>
-          <mat-select [(ngModel)]="selectedBanco" (selectionChange)="onBancoSelected($event)">
+          <mat-select [(ngModel)]="bankCode" (selectionChange)="onBancoSelected($event)">
             <mat-option *ngFor="let option of bankOptions" [value]="option.key">
               {{option.label | translate}}
             </mat-option>

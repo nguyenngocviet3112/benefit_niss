@@ -1,27 +1,27 @@
-import {DatePipe, DecimalPipe} from "@angular/common";
-import {Component, OnInit} from "@angular/core";
-import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Router} from "@angular/router";
-import {TranslateService} from "@ngx-translate/core";
-import {NgxSpinnerService} from "ngx-spinner";
-import {PopUpWarningComponent} from "../../componentes/pop-up-warning/pop-up-warning.component";
-import {GetAllGuiasStatesFromYearByFilterRequest} from "../../request-models/guiaPagamento-request";
-import {FilterRequest} from "../../request-models/utils-request";
-import {DominioDescricaoString} from "../../response-models/dominios-response";
-import {GuiaListagem} from "../../response-models/guiaPagamento-response";
-import {DominiosService} from "../../services/dominios.service";
-import {GuiaPagamentoService} from "../../services/guiaPagamento.service";
-import {TokenStorageService} from "../../services/token-storage.service";
-import {formatDate, formatDatePT, formatDecimal, openErrorsDialog} from "../../utils";
-import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
+import { DatePipe, DecimalPipe } from "@angular/common";
+import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { TranslateService } from "@ngx-translate/core";
+import { NgxSpinnerService } from "ngx-spinner";
+import { PopUpWarningComponent } from "../../componentes/pop-up-warning/pop-up-warning.component";
+import { GetAllGuiasStatesApproveRequest } from "../../request-models/guiaPagamento-request";
+import { FilterRequest } from "../../request-models/utils-request";
+import { DominioDescricaoString } from "../../response-models/dominios-response";
+import { GuiaListagem } from "../../response-models/guiaPagamento-response";
+import { DominiosService } from "../../services/dominios.service";
+import { GuiaPagamentoService } from "../../services/guiaPagamento.service";
+import { TokenStorageService } from "../../services/token-storage.service";
+import { formatDate, formatDatePT, formatDecimal, openErrorsDialog } from "../../utils";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import jsPDF from "jspdf";
-import {environment} from "src/environments/environment";
-import {ReservaCreditoListagemRequest} from "../../request-models/reservaCredito-request";
-import {ReservaCreditoService} from "../../services/reservaCredito.service";
+import { environment } from "src/environments/environment";
+import { ReservaCreditoListagemRequest } from "../../request-models/reservaCredito-request";
+import { ReservaCreditoService } from "../../services/reservaCredito.service";
 // import * as QRCode from 'qrcode';
-import {MatSelectChange} from "@angular/material/select";
-import {PopUpHandleInvoiceComponent} from "../pop-up-handle-invoice/pop-up-handle-invoice.component";
+import { MatSelectChange } from "@angular/material/select";
+import { PopUpHandleInvoiceComponent } from "../pop-up-handle-invoice/pop-up-handle-invoice.component";
 
 
 @Component({
@@ -36,7 +36,7 @@ export class ContribValidationHomeSearchComponent implements OnInit {
   public entidadeId: number = 0;
   public fromDate?: Date;
   public toDate?: Date;
-  public selectedBanco?: string;
+  public bankCode?: string = '';
   public filterBy = '';
   public niss = '';
   public paymentRef = '';
@@ -46,7 +46,7 @@ export class ContribValidationHomeSearchComponent implements OnInit {
   private filter: FilterRequest = {};
   //Region Guia Pagamento table
   public dataSourceGuiaPagamento: GuiaListagem[] = [];
-  public displayedColumnsGuiaPagamento: string[] = ['niss', 'invNo', 'bankCode',  'mesAno', 'descricao',  'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
+  public displayedColumnsGuiaPagamento: string[] = ['niss', 'invNo', 'bankCode', 'mesAno', 'descricao', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
   public totalRows: number = 0;
   public pageSize = 10;
   public pageIndex = 0;
@@ -86,7 +86,7 @@ export class ContribValidationHomeSearchComponent implements OnInit {
           width: '40%',
           height: '30%',
           panelClass: 'warningModal',
-          data: {msg: translated, noGenericMsg: true}
+          data: { msg: translated, noGenericMsg: true }
         });
         dialogRef.afterClosed().subscribe(() => {
           this.tokenStorageService.signOut();
@@ -134,12 +134,15 @@ export class ContribValidationHomeSearchComponent implements OnInit {
     if (this.toDate != null) {
       this.filter.dateFilterEnd = this.toDate;
     }
-    if (this.selectedBanco != null) {
-      this.filter.bankCode = this.selectedBanco;
+    if (this.bankCode != null) {
+      this.filter.bankCode = this.bankCode;
     }
+    alert("this.bankCode:"+ this.bankCode);
+
     if (this.niss != null) {
       this.filter.niss = this.niss;
     }
+
     if (this.paymentRef != null) {
       this.filter.paymentRef = this.paymentRef;
     }
@@ -159,15 +162,19 @@ export class ContribValidationHomeSearchComponent implements OnInit {
     this.filter.index = this.pageIndex;
     this.filter.rows = this.pageSize;
 
-    let request: GetAllGuiasStatesFromYearByFilterRequest;
+    let request: GetAllGuiasStatesApproveRequest;
 
-    request = {"idEntidade": this.entidadeId, "filter": this.filter};
+    request = {
+      "idEntidade": this.entidadeId,
+      "niss": this.niss, "paymentRef": this.paymentRef, "bankCode": this.bankCode?? '', "filter": this.filter,
+
+    };
 
     this.guiaPagamentoService.getAllGuiasByEntidadeApprove(request).subscribe(x => {
-        x.rows == null ? this.totalRows = 0 : this.totalRows = x.rows;
-        x.guias == null ? this.dataSourceGuiaPagamento = [] : this.dataSourceGuiaPagamento = x.guias;
-        this.spinner.hide();
-      },
+      x.rows == null ? this.totalRows = 0 : this.totalRows = x.rows;
+      x.guias == null ? this.dataSourceGuiaPagamento = [] : this.dataSourceGuiaPagamento = x.guias;
+      this.spinner.hide();
+    },
       err => {
         this.dataSourceGuiaPagamento = [];
         this.spinner.hide();
@@ -203,8 +210,8 @@ export class ContribValidationHomeSearchComponent implements OnInit {
 
   public onBancoSelected(event: MatSelectChange) {
     //filter by bankcode
-    console.log("bank selected:", event.value);
-    this.selectedBanco = event.value;
+    alert("bank selected:"+ event.value);
+    this.bankCode = event.value;
     this.getTableGuiaPagamento();
   }
 
@@ -592,41 +599,41 @@ export class ContribValidationHomeSearchComponent implements OnInit {
     this.spinner.show();
 
     let filter: FilterRequest;
-    filter = {filterBy: 'indActivo'};
+    filter = { filterBy: 'indActivo' };
 
     let request: ReservaCreditoListagemRequest;
 
-    request = {"idEntidade": this.entidadeId, "filter": filter};
+    request = { "idEntidade": this.entidadeId, "filter": filter };
 
     this.reservaCreditoService.getReservaCreditoByIdEntidade(request).subscribe(x => {
-        this.credit = x.reservaCredito[0]?.valor;
-        this.spinner.hide();
-        //open pup with or without valor
-        const dialogRef = this.comprovativoDialog.open(PopUpHandleInvoiceComponent, {
-          id: 'editarDocumento',
-          minHeight: '100px',
-          width: '70%',
-          height: '50%',
-          panelClass: 'modalWithBorder',
+      this.credit = x.reservaCredito[0]?.valor;
+      this.spinner.hide();
+      //open pup with or without valor
+      const dialogRef = this.comprovativoDialog.open(PopUpHandleInvoiceComponent, {
+        id: 'editarDocumento',
+        minHeight: '100px',
+        width: '70%',
+        height: '50%',
+        panelClass: 'modalWithBorder',
+        data: {
+          adicionar: !viewMode,
+          view: viewMode,
+          avaliableCredit: viewMode ? undefined : this.credit,
           data: {
-            adicionar: !viewMode,
-            view: viewMode,
-            avaliableCredit: viewMode ? undefined : this.credit,
-            data: {
-              guiaId: guia.idGuia,
-              entidadeId: this.entidadeId,
-              valor: guia.valorPago,
-              data: guia.dtValorPago,
-              file: guia.comprovativoPagamento
-            },
-          }
-        });
+            guiaId: guia.idGuia,
+            entidadeId: this.entidadeId,
+            valor: guia.valorPago,
+            data: guia.dtValorPago,
+            file: guia.comprovativoPagamento
+          },
+        }
+      });
 
-        dialogRef.afterClosed().subscribe(result => {
-          if (result)
-            this.getTableGuiaPagamento();
-        });
-      },
+      dialogRef.afterClosed().subscribe(result => {
+        if (result)
+          this.getTableGuiaPagamento();
+      });
+    },
       err => {
         this.credit = undefined;
         this.spinner.hide();
