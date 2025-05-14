@@ -205,7 +205,7 @@ export class PopUpHandleInvoiceComponent {
   }
 
   public downloadDocument(): void {
-    blobToSaveAs(this.data.data.file, this.downloadFileName);
+    blobToSaveAs(this.approvePaymentRequest.comprovativoPag, this.downloadFileName);
   }
 
   public focusCurrency(event: any) {
