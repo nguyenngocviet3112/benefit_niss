@@ -137,7 +137,7 @@ export class ContribValidationHomeSearchComponent implements OnInit {
     if (this.bankCode != null) {
       this.filter.bankCode = this.bankCode;
     }
-    alert("this.bankCode:"+ this.bankCode);
+
 
     if (this.niss != null) {
       this.filter.niss = this.niss;
