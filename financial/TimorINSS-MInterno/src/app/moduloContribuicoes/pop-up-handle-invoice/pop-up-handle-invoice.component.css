@@ -68,8 +68,16 @@
   margin-left: 5%;
 }
 
-.buttonCancelar {
+.buttonReject {
   background:darkred;
+  color:white;
+
+  font-size: 10px;
+  margin-left: 5%;
+}
+
+.buttonCancelar {
+  background:darkslateblue;
   color:white;
 
   font-size: 10px;

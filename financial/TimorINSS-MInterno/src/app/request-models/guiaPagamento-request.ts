@@ -60,6 +60,8 @@ export interface approveComprovativoPagamentoRequest{
   valorComprovativoPag: number;
   dataComprovativoPag: Date;
   comprovativoPag: string;
+  rejectReason: string;
+  rejectStatus: string;
 
 }
 

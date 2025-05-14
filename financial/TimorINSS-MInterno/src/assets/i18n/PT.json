@@ -735,8 +735,8 @@
       "BNCTL": "Banco BNCTL",
       "BNTL": "Banco BNTL"
     },
+    "chooseReason": "Escolha um motivo",
     "reason": {
-      "0": "Escolha um motivo",
       "1": "Recibo inválido",
       "2": "Incompatibilidade de valor",
       "3": "Envio duplicado"

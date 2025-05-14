@@ -61,6 +61,8 @@ export class PopUpHandleInvoiceComponent {
     dataComprovativoPag: this.data.data.data,
     valorComprovativoPag: this.data.data.valor,
     comprovativoPag: <string>{},
+    rejectReason: <string>{},
+    rejectStatus: <string>{},
   }
   public guiaDetail?: GuiaListagem;
   public pdfSrc?: any;
@@ -68,6 +70,9 @@ export class PopUpHandleInvoiceComponent {
   private downloadFileName = '';
   public currencyOptions = customCurrencyMaskConfig;
   public now: Date = new Date();
+  public reason: string = '';
+
+  public reasonOptions: { key: string; label: string }[] = [];
 
   constructor(
     public spinner: NgxSpinnerService,
@@ -89,7 +94,7 @@ export class PopUpHandleInvoiceComponent {
         console.log(x);
         this.approvePaymentRequest.comprovativoPag = x.guias[0].comprovativoPagamento ?? '';
         this.guiaDetail = x.guias[0];
-        this.pdfSrc = base64ToArrayBuffer(this.approvePaymentRequest.comprovativoPag );
+        this.pdfSrc = base64ToArrayBuffer(this.approvePaymentRequest.comprovativoPag);
         this.hideLoader();
       },
       err => {
@@ -100,6 +105,13 @@ export class PopUpHandleInvoiceComponent {
 
     this.translate.get('comprovativoPagamento.comprovativo').subscribe((translated: string) => {
       this.downloadFileName = translated;
+    });
+    this.translate.get('guiaPagamentoListagem.reason').subscribe((res: any) => {
+      this.reasonOptions = Object.keys(res).map((key) => ({
+        key,
+        label: res[key],
+      }));
+      this.reason = this.reasonOptions[0].key;
     });
     if (this.data.data.file)
       this.pdfSrc = base64ToArrayBuffer(this.data.data.file);
@@ -210,6 +222,26 @@ export class PopUpHandleInvoiceComponent {
 
   public focusCurrency(event: any) {
     focusCurrency(event);
+  }
+
+  approve() {
+    // Logic để xử lý khi nhấn Approve
+    console.log("Payment Approved");
+    this.approvePaymentRequest.rejectStatus = "0";
+    // Ví dụ gọi API hoặc xử lý dữ liệu sau khi người dùng approve
+    this.saveComprovativo();  // Nếu cần lưu dữ liệu khi approve
+    // Logic thực tế của bạn để xác nhận thanh toán, duyệt v.v...
+  }
+
+  // Hàm xử lý khi người dùng nhấn "Reject"
+  reject() {
+    // Logic để xử lý khi nhấn Reject
+    this.approvePaymentRequest.rejectStatus = "1";
+    this.approvePaymentRequest.rejectReason = this.reason;
+    this.saveComprovativo()
+    console.log("Payment Rejected");
+
+    // Ví dụ gửi yêu cầu từ chối thanh toán hoặc thay đổi trạng thái v.v...
   }
 
 }

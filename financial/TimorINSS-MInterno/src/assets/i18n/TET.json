@@ -733,8 +733,8 @@
       "BNCTL": "Banku BNCTL",
       "BNTL": "Banku BNTL"
     },
+    "chooseReason": "Hili rázon ida",
     "reason": {
-      "0": "Hili rázon ida",
       "1": "Receitu la válidu",
       "2": "Valor la hanesan",
       "3": "Submisaun repetidu"

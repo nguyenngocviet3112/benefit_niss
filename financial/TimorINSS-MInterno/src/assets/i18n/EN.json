@@ -195,7 +195,7 @@
     "EntidadeBancaria": "Bank Entity",
     "SWIFT": "SWIFT",
     "confirmDelete": "Are you sure you want to delete the field?",
-    "DataValorInicial" : "Inicial Value Date",
+    "DataValorInicial": "Inicial Value Date",
     "ValorInicial": "Inicial Value"
   },
   "error": {
@@ -253,7 +253,7 @@
     "-47": "Task is blocked by another user.",
     "-48": "The limit day to submit the declaration must be between 1 and 28!",
     "-49": "The Employer initial date of activity must be equal or lower than the employee Initial date of contract ",
-    "-50" : "The initial date of contract of the employee must be equal or higher than the date of the Employer initial date of activity",
+    "-50": "The initial date of contract of the employee must be equal or higher than the date of the Employer initial date of activity",
     "-51": "The Email inserted already exists in the system for this Employer",
     "-52": "The Phone Number inserted already exists in the system for this Employer",
     "-53": "the  initial date of activity must be equal or lower than the initial date with the employees",
@@ -261,8 +261,8 @@
     "-55": "The Experation Date of the document must be equal or higher than the current Date",
     "-56": "A Address inserted already exists in the system",
     "-57": "User is locked, please contact the INSS through the email inss@inss.tl or the cellphone number 222222222 during working hours.",
-    "-58":"The Email inserted already exists in the system for this Employee",
-    "-59":"The Phone Number inserted already exists in the system for this Employee",
+    "-58": "The Email inserted already exists in the system for this Employee",
+    "-59": "The Phone Number inserted already exists in the system for this Employee",
     "-60": "Required documents were not added",
     "-61": "Required text was not filled",
     "-62": "Classification/Sub-Classification is required",
@@ -434,7 +434,7 @@
     "movimentoValor": "Value",
     "movimentoTipoDocumento": "Document Type",
     "movimentoNumeroDocumento": "Document Number",
-    "componenteReceita":"Revenue",
+    "componenteReceita": "Revenue",
     "classificarMovSelecionados": "Sort selected moviments",
     "selecionarMovRecebidosParaRegisto": "Select Received Values ​​for Registration",
     "verificarExecucaoOrcamentoEditarSelecao": "Check budget execution and edit selection",
@@ -448,7 +448,7 @@
     "comprovativoPagamento": "Payment Receipt",
     "numeroPagamento_guia": "Payment Number",
     "desfazerConciliacoes": "Undo Reconciliations",
-    "emitirOrdemPagaamento":"Issue Payment Order",
+    "emitirOrdemPagaamento": "Issue Payment Order",
     "apenasMovimentosProcesso": "Process transactions only",
     "visualizarDespesasCompromisso": "View Commitment Expenses"
   },
@@ -484,7 +484,7 @@
     "moradaDestinatario": "Address",
     "ibanDestinatario": "IBAN",
     "pagamento": "Payment",
-    "executarPagamentos":"Execute Payments",
+    "executarPagamentos": "Execute Payments",
     "listaPagamentosExcel": "List of Payments(Excel)",
     "novoDestinatario": "New Destinatario",
     "associarDespesa": "Associate Expense",
@@ -506,7 +506,6 @@
     "nomeCompromisso": "Commitment Name",
     "valorCompromisso": "Commitment amount"
   },
-
   "componente_receita": {
     "descricao": "Reconciled Revenue Movements (Description)",
     "documentoAssociado": "Associated Documents",
@@ -520,7 +519,6 @@
     "oBrigatorioSelecionarMovimento": "To proceed with the registration, you must select at least one movement",
     "verificarExecucaoOrcamento": "Check Budget Execution",
     "naoExisteOrcamentoAprovado": "There is no Approved Budget for the period – It is not possible to record revenue"
-
   },
   "responsavel_legal": {
     "title": "ADD NEW LEGAL RESPONSIBLE",
@@ -724,20 +722,20 @@
     "visualizarPagamento": "View Payment Receipt",
     "clearFilter": "Clear filters",
     "handle": "Handle",
-    "fromDate" : "From date",
-    "toDate" : "To date",
-    "banco" : "Bank Code",
-    "niss" : "NISS Number",
-    "invNo" : "INV No",
-    "bankAcc" : "Bank Acc",
+    "fromDate": "From date",
+    "toDate": "To date",
+    "banco": "Bank Code",
+    "niss": "NISS Number",
+    "invNo": "INV No",
+    "bankAcc": "Bank Acc",
     "bankCode": {
       "BNU": "BNU Bank",
       "MANDIRI": "Mandiri Bank",
       "BNCTL": "BNCTL Bank",
       "BNTL": "BNTL Bank"
     },
+    "chooseReason": "Choose a reason",
     "reason": {
-      "0": "Choose a reason",
       "1": "Invalid Receipt",
       "2": "Amount Mismatch",
       "3": "Duplicate Submission"
@@ -1368,7 +1366,6 @@
     "amountsSelectedInTransactions": "Amount from selected transactions",
     "difference": "Difference"
   },
-
   "pagamentosExecutados": {
     "tin_nome_niss": "TIN / Name / NISS",
     "estado": "Status",
@@ -1386,7 +1383,6 @@
     "pagamentosExecutados": "Executed payments",
     "valorNaoSuperiorError": "The amount to be executed must not be greater than the amount to be executed of the selected expense"
   },
-
   "guiasPagamento": {
     "numeroGuia": "Invoice Number",
     "niss": "NISS",
@@ -1398,7 +1394,6 @@
     "valorComprovativo": "Receipt Amount",
     "valorDivida": "Amount in Debt"
   },
-
   "execucaoOrcamental": {
     "contaOGE": "OGE Account",
     "centroCusto": "Cost Center",
@@ -1426,7 +1421,6 @@
     "relatoriosExecucaoOrcamental": "Reports - Budget Execution",
     "tipoConta": "Account Type"
   },
-
   "extratosbancarios": {
     "conta": "Bank account",
     "consultasExtratos": "Consultation - Bank Statements",
@@ -1441,7 +1435,6 @@
     "numeroConta": "Account number",
     "ordenacaoData": "Sort by date"
   },
-
   "despesas": {
     "consultasDespesas": "Consultation - Expenses",
     "estado": "Expense status",
@@ -1467,7 +1460,6 @@
     "utilizador-5": "User who executed",
     "registarCompromisso": "Register Commitment"
   },
-
   "receitas": {
     "consultasReceitas": "Consultation - Revenues",
     "departamento": "INSS Departament",
@@ -1480,7 +1472,6 @@
     "numeroProcesso": "Process number",
     "utilizador": "User"
   },
-
   "receitasNaoConciliadas": {
     "consultasReceitasNaoConciliadas": "Consultation - Unreconciled revenues",
     "tin": "TIN",
@@ -1489,7 +1480,6 @@
     "valor": "Amount",
     "data": "Date"
   },
-
   "classificacaoContabilistica": {
     "consultasClassificacaoContabilistica": "Consultation - Accounting classification",
     "data": "Obligation date",
@@ -1507,7 +1497,6 @@
     "execucao": "Execute",
     "fase": "Fase"
   },
-
   "fornecedores": {
     "consultasFornecedores": "Consultation - Providers",
     "niss": "NISS",
@@ -1519,7 +1508,6 @@
     "data": "Obligation date",
     "conciliado": "Reconciled"
   },
-
   "balanca": {
     "consultasFornecedores": "Consultation - Balance",
     "nivel": "Level",
@@ -1530,7 +1518,6 @@
     "sim": "Yes",
     "nao": "No"
   },
-
   "excelImports": {
     "downloadExcel": "Download excel with columns",
     "selectedDestinatarios": "Selected recipients",

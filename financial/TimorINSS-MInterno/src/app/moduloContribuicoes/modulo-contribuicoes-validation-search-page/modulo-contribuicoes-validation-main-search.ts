@@ -53,7 +53,6 @@ export class ContribValidationHomeSearchComponent implements OnInit {
   public guiaTipoOptions: DominioDescricaoString[] = [];
   public pagamentoTipoOptions: { key: string; label: string }[] = [];
   public bankOptions: { key: string; label: string }[] = [];
-  public reasonOptions: { key: string; label: string }[] = [];
   public tipoOption?: number = undefined;
   public situacaoOption?: number = undefined;
   public credit?: number;
@@ -105,13 +104,6 @@ export class ContribValidationHomeSearchComponent implements OnInit {
       });
       this.translate.get('guiaPagamentoListagem.bankCode').subscribe((res: any) => {
         this.bankOptions = Object.keys(res).map((key) => ({
-          key,
-          label: res[key],
-        }));
-      });
-
-      this.translate.get('guiaPagamentoListagem.reason').subscribe((res: any) => {
-        this.reasonOptions = Object.keys(res).map((key) => ({
           key,
           label: res[key],
         }));
