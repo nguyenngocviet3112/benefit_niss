@@ -28,7 +28,7 @@ export interface PopUpComprovativoPagamentoData {
 export class PopUpComprovativoPagamentoComponent {
   public fileControl: FormControl;
   public faTimesCircle = faTimesCircle;
-  public selectedBanco?: string;  
+  public selectedBanco: string = '';
   public errors: string[] = [];
   public matcher: MyErrorStateMatcher = new MyErrorStateMatcher();
   public bankOptions: { key: string; label: string }[] = [];
@@ -41,6 +41,7 @@ export class PopUpComprovativoPagamentoComponent {
     idEntidade: this.data.data.entidadeId,
     idGuia: this.data.data.guiaId
   };
+  
   public insertPaymentRequest: insertComprovativoPagamentoRequest = {
     idEntidade: this.data.data.entidadeId,
     idGuia: this.data.data.guiaId,
@@ -66,11 +67,20 @@ export class PopUpComprovativoPagamentoComponent {
     this.fileControl = new FormControl(this.data.data.file, []);
   }
 
+  onBancoChange(event: any) {
+  // alert('Bank selected:'+ this.selectedBanco);
+  alert('Bank selected:'+ event);
+  this.data.data.bankCode = event;
+  this.selectedBanco = event;
+  this.insertPaymentRequest.bankCode = event;
+}
+
   ngOnInit(): void {
 
     this.translate.get('comprovativoPagamento.comprovativo').subscribe((translated: string) => {
       this.downloadFileName = translated;
     });
+    this.selectedBanco = this.data?.data?.bankCode ?? null;
     this.translate.get('guiaPagamentoListagem.lstBankCode').subscribe((res: any) => {
         this.bankOptions = Object.keys(res).map((key) => ({
           key,

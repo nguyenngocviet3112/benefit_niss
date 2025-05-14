@@ -22,7 +22,7 @@ export interface GuiaListagem
   dtValorPago?: Date;
   comprovativoPagamento?: string;
   paymentRef?: string;
-  bankCode?: string;
+  bankCode: string;
   estadoPagamento: number;
   userName: string;
 }

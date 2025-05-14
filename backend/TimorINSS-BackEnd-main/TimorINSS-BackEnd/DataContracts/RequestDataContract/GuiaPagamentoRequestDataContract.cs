@@ -61,5 +61,7 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         [DataMember(IsRequired = true)]
         [Document]
         public string comprovativoPag { get; set; }
+        [DataMember(IsRequired = true)]
+        public string bankCode { get; set; }
     }
 }

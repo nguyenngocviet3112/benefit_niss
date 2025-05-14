@@ -49,13 +49,26 @@
                             </mat-form-field>
                         </div>
 
-                        <div class="secondLineContainers" *ngIf="data.data.bankCode">
+                        <!-- <div class="secondLineContainers">
                             <mat-form-field appearance="outline" class="comboBox">
                                 <mat-label>{{ 'guiaPagamentoListagem.banco' | translate }}</mat-label>
-                                <mat-select [(ngModel)]="selectedBanco">
-                                    <mat-option *ngFor="let option of bankOptions" [value]="option.key">
+                                <mat-select [(ngModel)]="data.data.bankCode">
+                                    <mat-option *ngFor="let option of bankOptions" [value]="option.value">
                                         {{option.label | translate}}
                                     </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div> -->
+
+                        <div class="secondLineContainers" *ngIf="!selectedBanco">
+                            <mat-form-field appearance="outline" class="comboBox">
+                                <mat-label>{{ 'guiaPagamentoListagem.banco' | translate }}</mat-label>
+                                <mat-select [(ngModel)]="selectedBanco" (selectionChange)="onBancoChange($event.value)">
+
+                                    <mat-option *ngFor="let option of bankOptions" [value]="option.key">
+                                        {{ option.label | translate }}
+                                    </mat-option>
+
                                 </mat-select>
                             </mat-form-field>
                         </div>

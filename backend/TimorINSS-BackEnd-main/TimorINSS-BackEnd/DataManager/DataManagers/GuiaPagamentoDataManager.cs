@@ -361,6 +361,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 guiaPagamento = _utils.UpdateDetailsToEntity(guiaPagamento);
                 guiaPagamento.ValorComprovPag = Math.Min(guiaPagamento.Valor + (contaCorrente.ValorJuros ?? 0), request.valorComprovativoPag);
                 guiaPagamento.ValorJurosFixo = contaCorrente.ValorJuros;
+                guiaPagamento.BankCode = request.bankCode;
 
 
                 _unitOfWork.GuiaPagamentoRepository.Update(guiaPagamento);
