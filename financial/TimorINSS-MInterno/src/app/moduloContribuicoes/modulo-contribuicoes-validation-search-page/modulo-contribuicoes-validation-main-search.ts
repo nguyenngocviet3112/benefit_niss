@@ -46,7 +46,7 @@ export class ContribValidationHomeSearchComponent implements OnInit {
   private filter: FilterRequest = {};
   //Region Guia Pagamento table
   public dataSourceGuiaPagamento: GuiaListagem[] = [];
-  public displayedColumnsGuiaPagamento: string[] = ['niss', 'invNo', 'bankCode', 'numDocumento', 'mesAno', 'descricao', 'valor', 'juros', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
+  public displayedColumnsGuiaPagamento: string[] = ['niss', 'invNo', 'bankCode',  'mesAno', 'descricao',  'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
   public totalRows: number = 0;
   public pageSize = 10;
   public pageIndex = 0;

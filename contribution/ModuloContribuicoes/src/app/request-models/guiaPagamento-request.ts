@@ -38,4 +38,5 @@ export interface insertComprovativoPagamentoRequest{
   valorComprovativoPag: number;
   dataComprovativoPag: Date;
   comprovativoPag: string;
+  bankCode: string;
 }

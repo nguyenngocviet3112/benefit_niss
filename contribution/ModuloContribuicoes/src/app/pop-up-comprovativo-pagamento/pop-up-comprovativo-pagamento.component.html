@@ -15,16 +15,12 @@
                         <div class="secondLineContainers inputContainer">
                             <mat-form-field appearance="outline">
                                 <mat-label>{{'comprovativoPagamento.value' | translate}}</mat-label>
-                                    <input [disabled]="data.view"
-                                    [errorStateMatcher]="matcher" [required]="submittedTry"
-                                    (click)="focusCurrency($event)"
-                                    matInput currencyMask
-                                    [options]="currencyOptions"
-                                    [(ngModel)]="insertPaymentRequest.valorComprovativoPag"
-                                    name="comprovativo value"
-                                    matTooltip="{{'comprovativoPagamento.value' | translate}}"/>
-                                <fa-icon *ngIf="data.data.valor && data.adicionar" matSuffix aria-label="Clear" [icon]="faTimesCircle"
-                                    (click)="clearValor()"></fa-icon>
+                                <input [disabled]="data.view" [errorStateMatcher]="matcher" [required]="submittedTry"
+                                    (click)="focusCurrency($event)" matInput currencyMask [options]="currencyOptions"
+                                    [(ngModel)]="insertPaymentRequest.valorComprovativoPag" name="comprovativo value"
+                                    matTooltip="{{'comprovativoPagamento.value' | translate}}" />
+                                <fa-icon *ngIf="data.data.valor && data.adicionar" matSuffix aria-label="Clear"
+                                    [icon]="faTimesCircle" (click)="clearValor()"></fa-icon>
                                 <mat-error *ngIf="!data.data.valor">{{'general.required' | translate}}</mat-error>
                             </mat-form-field>
                         </div>
@@ -32,10 +28,8 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>{{'comprovativoPagamento.date' | translate}}</mat-label>
                                 <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry"
-                                    [(ngModel)]="insertPaymentRequest.dataComprovativoPag" name="DataComprovativo" matInput
-                                    [matDatepicker]="pickerDocument"
-                                    [disabled]="data.view"
-                                    [max]="now"
+                                    [(ngModel)]="insertPaymentRequest.dataComprovativoPag" name="DataComprovativo"
+                                    matInput [matDatepicker]="pickerDocument" [disabled]="data.view" [max]="now"
                                     matTooltip="{{'comprovativoPagamento.date' | translate}}">
                                 <mat-datepicker-toggle matSuffix [for]="pickerDocument"></mat-datepicker-toggle>
                                 <mat-datepicker #pickerDocument></mat-datepicker>
@@ -46,29 +40,37 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>{{'comprovativoPagamento.file' | translate}}</mat-label>
                                 <ngx-mat-file-input [placeholder]="documentPlaceholder | translate"
-                                    [errorStateMatcher]="matcher" [required]="submittedTry || wrongFormat" [formControl]="fileControl"
-                                    [accept]="accept" name="ComprovativoPagamento"
+                                    [errorStateMatcher]="matcher" [required]="submittedTry || wrongFormat"
+                                    [formControl]="fileControl" [accept]="accept" name="ComprovativoPagamento"
                                     matTooltip="{{'comprovativoPagamento.file' | translate}}">
                                     <mat-icon ngxMatFileInputIcon>upload</mat-icon>
                                 </ngx-mat-file-input>
                                 <mat-error>{{'general.requiredAndWrongFormat' | translate}} {{accept}}</mat-error>
                             </mat-form-field>
                         </div>
+
+                        <div class="secondLineContainers" *ngIf="data.data.bankCode">
+                            <mat-form-field appearance="outline" class="comboBox">
+                                <mat-label>{{ 'guiaPagamentoListagem.banco' | translate }}</mat-label>
+                                <mat-select [(ngModel)]="selectedBanco">
+                                    <mat-option *ngFor="let option of bankOptions" [value]="option.key">
+                                        {{option.label | translate}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
                     </div>
                 </div>
                 <div *ngIf="pdfSrc" class="PdfContainer">
-                    <div class="pdfLineContainers" >
-                        <pdf-viewer [src]="pdfSrc" [page]="1"
-                        [show-all]="false"
-                        [render-text]="false"
-                        [original-size]="false"
-                        [zoom-scale]="'page-fit'"
-                        [zoom]="1"
-                        [matTooltip]="fileName"></pdf-viewer>
+                    <div class="pdfLineContainers">
+                        <pdf-viewer [src]="pdfSrc" [page]="1" [show-all]="false" [render-text]="false"
+                            [original-size]="false" [zoom-scale]="'page-fit'" [zoom]="1"
+                            [matTooltip]="fileName"></pdf-viewer>
                     </div>
                 </div>
                 <mat-icon *ngIf="data.view && pdfSrc" (click)="downloadDocument()" class="downloadIcon"
-                                matTooltip="{{'general.download' | translate}}">file_download</mat-icon>
+                    matTooltip="{{'general.download' | translate}}">file_download</mat-icon>
             </div>
             <div class="buttons" *ngIf="data.adicionar">
                 <button class="gravarButton" mat-raised-button [disabled]="!documentoForm.valid" type="submit"
@@ -92,7 +94,8 @@
         <div class="creditBodyDialog" mat-dialog-content>
             <div class="warningBox">
                 <div class="warningText" mat-dialog-content>
-                    {{'comprovativoPagamento.warningMsg1' | translate}}${{data.avaliableCredit}}{{'comprovativoPagamento.warningMsg2' | translate}}
+                    {{'comprovativoPagamento.warningMsg1' |
+                    translate}}${{data.avaliableCredit}}{{'comprovativoPagamento.warningMsg2' | translate}}
                 </div>
             </div>
         </div>

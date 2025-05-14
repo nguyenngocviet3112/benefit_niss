@@ -297,7 +297,14 @@
     "download": "Descarregar Guia",
     "uploadPagamento": "Inserir Comprovativo de Pagamento",
     "visualizarPagamento": "Visualizar Comprovativo de Pagamento",
-    "clearFilter": "Limpar filtros"
+    "clearFilter": "Limpar filtros",
+    "banco": "Bank",
+    "lstBankCode": {
+      "BNU": "BNU",
+      "MANDIRI": "Mandiri",
+      "BNCTL": "BNCTL",
+      "BNTL": "BNTL"
+    }
   },
   "comprovativoPagamento": {
     "titleInsert": "Inserir Comprovativo de Pagamento",

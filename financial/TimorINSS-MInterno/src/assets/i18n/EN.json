@@ -701,7 +701,7 @@
     "adiconarResponsavel": "ADD LEGAL RESPONSIBLE"
   },
   "guiaPagamentoListagem": {
-    "title": "INVOICES",
+    "title": "Contribution Validation",
     "type": "Invoice Type",
     "numDocumento": "Document Number",
     "mesAno": "Month/Year",
@@ -718,7 +718,7 @@
     "simples": "Simple",
     "composta": "Composed",
     "tiposGuia": "Invoices Type",
-    "situacaoGuia": "Invoice Situation",
+    "situacaoGuia": "Situation",
     "download": "Download Invoice",
     "uploadPagamento": "Upload Payment Receipt",
     "visualizarPagamento": "View Payment Receipt",

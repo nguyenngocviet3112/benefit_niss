@@ -14,8 +14,8 @@
   
   .tableTitleIcon {
     font-size: 1.7em;
-    padding-right: 10px;
-    top: -5px;
+    padding-right: 5px;
+    top: -2px;
     position: relative;
   }
   
@@ -27,12 +27,16 @@
   }
   
   .secondLineContainers {
-    display: inline-flex;
+
     position: relative;
+    width: 20px;
+    min-height: 20px;
+    padding-left: 2px;
+    
   }
 
   .thirdLineContainers {
-    margin-left: 20px;
+    padding-right: 5px;
     display: inline-flex;
     position: relative;
   }

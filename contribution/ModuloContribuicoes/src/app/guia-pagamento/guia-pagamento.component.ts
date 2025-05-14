@@ -596,6 +596,7 @@ export class GuiaPagamentoComponent implements OnInit {
                         entidadeId: this.entidadeId,
                         valor: guia.estadoPagamento == 2 ? guia.total : guia.valorPago,
                         data: guia.dtValorPago == null ? new Date() : guia.dtValorPago,
+                        bankCode: guia.bankCode,
                         file: guia.comprovativoPagamento
                     },
                     avaliableCredit: viewMode ? undefined : this.credit,

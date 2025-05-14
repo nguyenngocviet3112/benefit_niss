@@ -14,7 +14,7 @@ import { GuiaPagamentoService } from "../services/guiaPagamento.service";
 import { insertComprovativoPagamentoRequest, useCreditInGuiaPagamentoRequest } from "../request-models/guiaPagamento-request";
 
 export interface PopUpComprovativoPagamentoData {
-  data: { valor: number, data: Date, file: string, guiaId: number, entidadeId: number };
+  data: { valor: number, data: Date, file: string, guiaId: number, entidadeId: number, bankCode: string };
   view: boolean;
   adicionar: boolean;
   avaliableCredit?: number;
@@ -28,8 +28,10 @@ export interface PopUpComprovativoPagamentoData {
 export class PopUpComprovativoPagamentoComponent {
   public fileControl: FormControl;
   public faTimesCircle = faTimesCircle;
+  public selectedBanco?: string;  
   public errors: string[] = [];
   public matcher: MyErrorStateMatcher = new MyErrorStateMatcher();
+  public bankOptions: { key: string; label: string }[] = [];
   public submittedTry: boolean = false;
   public wrongFormat: boolean = false;
   public accept = ".pdf";
@@ -44,7 +46,8 @@ export class PopUpComprovativoPagamentoComponent {
     idGuia: this.data.data.guiaId,
     dataComprovativoPag: this.data.data.data,
     valorComprovativoPag: this.data.data.valor,
-    comprovativoPag: <string>{}
+    comprovativoPag: <string>{},
+    bankCode: this.data.data.bankCode
   }
   public pdfSrc?: any;
   public fileName = '';
@@ -68,6 +71,13 @@ export class PopUpComprovativoPagamentoComponent {
     this.translate.get('comprovativoPagamento.comprovativo').subscribe((translated: string) => {
       this.downloadFileName = translated;
     });
+    this.translate.get('guiaPagamentoListagem.lstBankCode').subscribe((res: any) => {
+        this.bankOptions = Object.keys(res).map((key) => ({
+          key,
+          label: res[key],
+        }));
+      });
+      
     if (this.data.data.file)
       this.pdfSrc = base64ToArrayBuffer(this.data.data.file);
 
@@ -179,4 +189,11 @@ export class PopUpComprovativoPagamentoComponent {
   {
     focusCurrency(event);
   }
+  // public onBancoSelected(event: MatSelectChange) {
+  //   //filter by bankcode
+  //   console.log("bank selected:", event.value);
+  //   this.selectedBanco = event.value;
+  //   this.getTableGuiaPagamento();
+  // }
+
 }

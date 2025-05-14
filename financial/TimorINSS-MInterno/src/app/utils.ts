@@ -12,7 +12,7 @@ import { ChartOptions } from "chart.js";
 
 //format Dates
 export function formatDate(pipe: DatePipe, date?: Date): string {
-  let transformed = pipe.transform(date, 'yyyy-MM');
+  let transformed = pipe.transform(date, 'MM/yyyy');
   if (transformed)
     return transformed;
   return '';

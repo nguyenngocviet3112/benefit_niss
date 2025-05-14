@@ -298,7 +298,13 @@
     "download": "Download Invoice",
     "uploadPagamento": "Upload Payment Receipt",
     "visualizarPagamento": "View Payment Receipt",
-    "clearFilter": "Clear filters"
+    "clearFilter": "Clear filters",
+    "lstBankCode": {
+      "BNU": "BNU",
+      "MANDIRI": "Mandiri",
+      "BNCTL": "BNCTL",
+      "BNTL": "BNTL"
+    }
   },
   "comprovativoPagamento": {
     "titleInsert": "Upload Payment Receipt",
