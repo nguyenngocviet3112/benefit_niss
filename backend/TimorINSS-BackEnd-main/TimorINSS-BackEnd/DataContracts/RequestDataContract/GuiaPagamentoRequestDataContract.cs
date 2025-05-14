@@ -63,5 +63,32 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public string comprovativoPag { get; set; }
         [DataMember(IsRequired = true)]
         public string bankCode { get; set; }
+
+
+    }
+
+    public class approveComprovativoPagamentoRequest : RequestBaseDataContract
+    {
+        [DataMember(IsRequired = true)]
+        public int idEntidade { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public int idGuia { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public decimal valorComprovativoPag { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public DateTime dataComprovativoPag { get; set; }
+
+        [DataMember(IsRequired = true)]
+        [Document]
+        public string comprovativoPag { get; set; }
+        [DataMember(IsRequired = true)]
+        public string rejectReason { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public int rejectStatus { get; set; }
+
     }
 }

@@ -202,7 +202,7 @@ export class ContribValidationHomeSearchComponent implements OnInit {
 
   public onBancoSelected(event: MatSelectChange) {
     //filter by bankcode
-    alert("bank selected:"+ event.value);
+    // alert("bank selected:"+ event.value);
     this.bankCode = event.value;
     this.getTableGuiaPagamento();
   }
