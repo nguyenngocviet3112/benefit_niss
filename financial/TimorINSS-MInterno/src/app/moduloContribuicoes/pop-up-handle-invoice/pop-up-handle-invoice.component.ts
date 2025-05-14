@@ -84,10 +84,13 @@ export class PopUpHandleInvoiceComponent {
     let request: GetGuiasDetailsRequest;
 
     request = {"idGuiaPagamento": this.data.data.guiaId, filter: this.filter};
+    this.showLoader();
     this.guiaPagamentoService.getGuiasDetailByEntidade(request).subscribe(x => {
         console.log(x);
         this.approvePaymentRequest.comprovativoPag = x.guias[0].comprovativoPagamento ?? '';
         this.guiaDetail = x.guias[0];
+        this.pdfSrc = base64ToArrayBuffer(this.approvePaymentRequest.comprovativoPag );
+        this.hideLoader();
       },
       err => {
         this.spinner.hide();
