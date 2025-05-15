@@ -916,7 +916,8 @@
       "2": "Guia Gerada",
       "3": "Comprovativo em Validação",
       "4": "Comprovativo Parcial em Validação",
-      "5": "Guia Parcialmente Paga"
+      "5": "Guia Parcialmente Paga",
+      "6": "Rejeita"
     },
     "SALARIOMINIMO": "Valor do Salário Mínimo Nacional",
     "TIPOGUIA": {

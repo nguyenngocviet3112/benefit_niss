@@ -19,6 +19,11 @@
     position: relative;
   }
 
+  .estadoPagoRed{
+    color: rgb(255, 0, 0);
+    padding-left: 5%;
+  }
+
   .subHeader {
     min-height: 50px;
     background: rgba(207, 207, 207, 0.966);

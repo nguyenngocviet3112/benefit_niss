@@ -124,6 +124,9 @@
                         <mat-icon class="estadoPagoParcial" *ngIf="element.estadoPagamento == 5"
                             matTooltip="{{'dropdownDominio.INDPAGO.5' | translate}}">
                             fiber_manual_record</mat-icon>
+                        <mat-icon class="estadoPagoRed" *ngIf="element.estadoPagamento == 6"
+                            matTooltip="{{'dropdownDominio.INDPAGO.6' | translate}}">
+                            fiber_manual_record</mat-icon>
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="actions">
@@ -170,6 +173,8 @@
                     {{'dropdownDominio.INDPAGO.5' | translate}}
                     <mat-icon class="estadoPago">fiber_manual_record</mat-icon>
                     {{'dropdownDominio.INDPAGO.1' | translate}}
+                    <mat-icon class="estadoPagoRed">fiber_manual_record</mat-icon>
+                    {{'dropdownDominio.INDPAGO.6' | translate}}
                 </div>
             </div>
         </div>
