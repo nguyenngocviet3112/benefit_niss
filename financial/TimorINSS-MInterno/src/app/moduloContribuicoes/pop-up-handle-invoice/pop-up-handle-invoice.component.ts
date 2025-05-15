@@ -227,7 +227,7 @@ export class PopUpHandleInvoiceComponent {
   approve() {
     // Logic để xử lý khi nhấn Approve
     console.log("Payment Approved");
-    this.approvePaymentRequest.rejectStatus = "0";
+    this.approvePaymentRequest.rejectStatus = "1";
     // Ví dụ gọi API hoặc xử lý dữ liệu sau khi người dùng approve
     this.saveComprovativo();  // Nếu cần lưu dữ liệu khi approve
     // Logic thực tế của bạn để xác nhận thanh toán, duyệt v.v...
@@ -236,7 +236,7 @@ export class PopUpHandleInvoiceComponent {
   // Hàm xử lý khi người dùng nhấn "Reject"
   reject() {
     // Logic để xử lý khi nhấn Reject
-    this.approvePaymentRequest.rejectStatus = "1";
+    this.approvePaymentRequest.rejectStatus = "0";
     this.approvePaymentRequest.rejectReason = this.reason;
     this.saveComprovativo()
     console.log("Payment Rejected");
