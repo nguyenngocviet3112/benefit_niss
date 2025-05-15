@@ -24,6 +24,7 @@ export interface GuiaListagem
   paymentRef: string;
   qrInvoice: string;
   bankCode: string;
+  approveFile: string;
 }
 
 export interface RelatoriosGuiasListagemResponse {

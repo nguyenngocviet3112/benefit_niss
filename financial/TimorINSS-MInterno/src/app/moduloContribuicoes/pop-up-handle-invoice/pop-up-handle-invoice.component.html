@@ -78,7 +78,18 @@
         <mat-icon *ngIf="pdfSrc" (click)="downloadDocument()" class="downloadIcon"
                   matTooltip="{{'general.download' | translate}}">file_download
         </mat-icon>
+        <div *ngIf="pdfSrc2" class="PdfContainer">
+          <div class="pdfLineContainers">
+            <pdf-viewer [src]="pdfSrc2" [page]="1" [show-all]="false" [render-text]="false" [original-size]="false"
+                        [zoom-scale]="'page-fit'" [zoom]="1" [matTooltip]="fileName"></pdf-viewer>
+          </div>
+        </div>
+        <mat-icon *ngIf="pdfSrc2" (click)="downloadDocument2()" class="downloadIcon"
+                  matTooltip="{{'general.download' | translate}}">file_download
+        </mat-icon>
       </div>
+
+
       <div class="buttons">
         <button class="gravarButton" mat-raised-button [disabled]="!documentoForm.valid"
                 (click)="approve()">

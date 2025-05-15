@@ -60,12 +60,15 @@ export class PopUpHandleInvoiceComponent {
     idGuia: this.data.data.guiaId,
     dataComprovativoPag: this.data.data.data,
     valorComprovativoPag: this.data.data.valor,
-    comprovativoPag: <string>{},
+    total: this.data.data.valor,
+    approveFile: <string>{},
     rejectReason: <string>{},
     rejectStatus: <string>{},
   }
+  public comprovativoPag: string = '';
   public guiaDetail?: GuiaListagem;
   public pdfSrc?: any;
+  public pdfSrc2?: any;
   public fileName = '';
   private downloadFileName = '';
   public currencyOptions = customCurrencyMaskConfig;
@@ -92,9 +95,11 @@ export class PopUpHandleInvoiceComponent {
     this.showLoader();
     this.guiaPagamentoService.getGuiasDetailByEntidade(request).subscribe(x => {
         console.log(x);
-        this.approvePaymentRequest.comprovativoPag = x.guias[0].comprovativoPagamento ?? '';
+        this.comprovativoPag = x.guias[0].comprovativoPagamento ?? '';
+        this.approvePaymentRequest.approveFile = x.guias[0].approveFile ?? '';
         this.guiaDetail = x.guias[0];
-        this.pdfSrc = base64ToArrayBuffer(this.approvePaymentRequest.comprovativoPag);
+        this.pdfSrc = base64ToArrayBuffer(this.comprovativoPag);
+        this.pdfSrc2 = base64ToArrayBuffer(this.approvePaymentRequest.approveFile);
         this.hideLoader();
       },
       err => {
@@ -113,14 +118,12 @@ export class PopUpHandleInvoiceComponent {
       }));
       this.reason = this.reasonOptions[0].key;
     });
-    if (this.data.data.file)
-      this.pdfSrc = base64ToArrayBuffer(this.data.data.file);
 
     this.fileControl.valueChanges.subscribe((file: any) => {
       if (file) {
         if (file.type != 'application/pdf') {
           this.wrongFormat = true;
-          this.pdfSrc = undefined;
+          this.pdfSrc2 = undefined;
           this.fileControl.setValue(undefined);
         } else if (this.maxSize >= file.size) {
           var reader = new FileReader();
@@ -131,9 +134,9 @@ export class PopUpHandleInvoiceComponent {
             if (evt.target)
               if (evt.target.readyState == FileReader.DONE) {
                 var arrayBuffer = evt.target.result;
-                this.pdfSrc = arrayBuffer;
+                this.pdfSrc2 = arrayBuffer;
                 if (arrayBuffer instanceof ArrayBuffer)
-                  this.approvePaymentRequest.comprovativoPag = base64ArrayBuffer(arrayBuffer);
+                  this.approvePaymentRequest.approveFile = base64ArrayBuffer(arrayBuffer);
               }
           }
         }
@@ -217,7 +220,10 @@ export class PopUpHandleInvoiceComponent {
   }
 
   public downloadDocument(): void {
-    blobToSaveAs(this.approvePaymentRequest.comprovativoPag, this.downloadFileName);
+    blobToSaveAs(this.comprovativoPag, this.downloadFileName);
+  }
+  public downloadDocument2(): void {
+    blobToSaveAs(this.approvePaymentRequest.approveFile, this.downloadFileName);
   }
 
   public focusCurrency(event: any) {
@@ -228,6 +234,7 @@ export class PopUpHandleInvoiceComponent {
     // Logic để xử lý khi nhấn Approve
     console.log("Payment Approved");
     this.approvePaymentRequest.rejectStatus = "1";
+    this.approvePaymentRequest.rejectReason = this.reason;
     // Ví dụ gọi API hoặc xử lý dữ liệu sau khi người dùng approve
     this.saveComprovativo();  // Nếu cần lưu dữ liệu khi approve
     // Logic thực tế của bạn để xác nhận thanh toán, duyệt v.v...
