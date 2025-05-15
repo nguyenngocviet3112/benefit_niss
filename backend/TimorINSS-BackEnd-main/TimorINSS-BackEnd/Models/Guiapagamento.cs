@@ -22,6 +22,8 @@ namespace TimorINSSBackEnd.Models
         public decimal Valor { get; set; }
         public int IndPago { get; set; }
         public byte[] ComprovativoPag { get; set; }
+
+        public byte[] ApproveFile { get; set; }
         public DateTime? DataComprovPag { get; set; }
         public decimal? ValorComprovPag { get; set; }
         public int UtilizadorCriacao { get; set; }

@@ -405,16 +405,18 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             var indValidacao = (int)pagamentoTypes.Find(x => x.value == 1).id;
             var indValidacaoParcial = (int)pagamentoTypes.Find(x => x.value == 5).id;
 
-            if (request.rejectStatus == 1)
+            if (request.rejectStatus == 0)
             {
                 guiaPagamento.RejectReason = request.rejectReason;
+                indValidacao = (int)pagamentoTypes.Find(x => x.value == 6).id;
+                indValidacaoParcial = (int)pagamentoTypes.Find(x => x.value == 6).id;
             }
 
             try
             {
                 guiaPagamento.ValorComprovPag = Math.Min(guiaPagamento.Valor, request.valorComprovativoPag);
                 guiaPagamento.DataComprovPag = request.dataComprovativoPag;
-                guiaPagamento.ComprovativoPag = doc;
+                guiaPagamento.ApproveFile = doc;
 
                 _unitOfWork.Commit();
 

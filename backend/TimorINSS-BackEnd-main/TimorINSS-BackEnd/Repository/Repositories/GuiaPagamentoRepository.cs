@@ -261,6 +261,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         niss = e.GuiaEntidadeFkNavigation.Niss,
                         estadoPagamento = e.IndPagoNavigation.Valor,
                         comprovativoPagamento = e.ComprovativoPag,
+                        aprpoveFile = e.ApproveFile,
                         qrInvoice = e.QrInvoice,
                         paymentRef = e.PaymentRef,
                         bankCode = e.BankCode,

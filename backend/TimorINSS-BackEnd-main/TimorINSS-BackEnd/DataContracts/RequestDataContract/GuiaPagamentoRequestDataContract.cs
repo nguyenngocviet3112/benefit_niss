@@ -84,10 +84,10 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         [DataMember(IsRequired = true)]
         [Document]
         public string comprovativoPag { get; set; }
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public string rejectReason { get; set; }
 
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public int rejectStatus { get; set; }
 
     }

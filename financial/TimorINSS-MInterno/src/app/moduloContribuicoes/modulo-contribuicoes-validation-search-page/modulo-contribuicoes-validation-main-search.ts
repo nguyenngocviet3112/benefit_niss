@@ -239,6 +239,7 @@ export class ContribValidationHomeSearchComponent implements OnInit {
     this.situacaoOption = undefined;
     this.fromDate = undefined;
     this.toDate = undefined;
+    this.bankCode = undefined;
     this.getTableGuiaPagamento();
   }
 
