@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { GetAllGuiasStatesFromYearByFilterRequest, GuiaPagamentoRequest, insertComprovativoPagamentoRequest, useCreditInGuiaPagamentoRequest } from '../request-models/guiaPagamento-request';
+import { GetAllGuiasStatesFromYearByFilterRequest,GetGuiasDetailsRequest, GuiaPagamentoRequest, insertComprovativoPagamentoRequest, useCreditInGuiaPagamentoRequest } from '../request-models/guiaPagamento-request';
 import { GuiaListagemResponse } from '../response-models/guiaPagamento-response';
 
 
@@ -27,6 +27,10 @@ export class GuiaPagamentoService {
     return this.http.post<GuiaListagemResponse>(`${environment.apiUrl}/guiaPagamento/listGuiasByEntidade`, entity);
   }
 
+  public getGuiasDetailByEntidade(entity: GetGuiasDetailsRequest) {
+    return this.http.post<GuiaListagemResponse>(`${environment.apiUrl}/guiaPagamento/guiaPagamentoDetail`, entity);
+  }
+  
   public useCreditInGuiaPagamento(request: useCreditInGuiaPagamentoRequest) {
     return this.http.post(`${environment.apiUrl}/guiaPagamento/useCreditInGuiaPagamento`, request);
   }

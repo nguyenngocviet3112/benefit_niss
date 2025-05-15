@@ -19,7 +19,7 @@ export function formatDate(pipe: DatePipe, date?: Date): string {
 }
 
 export function formatDatePT(pipe: DatePipe, date?: Date): string {
-  let transformed = pipe.transform(date, 'dd-MM-yyyy');
+  let transformed = pipe.transform(date, 'dd/MM/yyyy');
   if (transformed)
     return transformed;
   return '';
