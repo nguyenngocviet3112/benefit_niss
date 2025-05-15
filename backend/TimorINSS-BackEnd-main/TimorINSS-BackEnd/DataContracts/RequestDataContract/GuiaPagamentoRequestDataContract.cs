@@ -89,6 +89,8 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
 
         [DataMember]
         public int rejectStatus { get; set; }
+        [Document]
+        public string approveFile { get; set; }
 
     }
 }

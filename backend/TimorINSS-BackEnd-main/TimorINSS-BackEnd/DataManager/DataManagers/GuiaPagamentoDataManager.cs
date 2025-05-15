@@ -400,7 +400,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             var pagamentoTypes = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.INDPAGO);
             var contaCorrentePagamentoTypes = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.SITUACAOPAGAMENTO);
 
-            byte[] doc = Convert.FromBase64String(request.comprovativoPag);
+            byte[] doc = Convert.FromBase64String(request.approveFile);
 
             var indValidacao = (int)pagamentoTypes.Find(x => x.value == 1).id;
             var indValidacaoParcial = (int)pagamentoTypes.Find(x => x.value == 5).id;

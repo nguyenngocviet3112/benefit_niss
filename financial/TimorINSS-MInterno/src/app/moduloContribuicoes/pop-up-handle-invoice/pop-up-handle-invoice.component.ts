@@ -232,7 +232,7 @@ export class PopUpHandleInvoiceComponent {
 
   approve() {
     // Logic để xử lý khi nhấn Approve
-    console.log("Payment Approved");
+    // alert("Payment Approved");
     this.approvePaymentRequest.rejectStatus = "1";
     this.approvePaymentRequest.rejectReason = this.reason;
     // Ví dụ gọi API hoặc xử lý dữ liệu sau khi người dùng approve

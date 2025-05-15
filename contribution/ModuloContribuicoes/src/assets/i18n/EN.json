@@ -454,7 +454,8 @@
       "2": "Generated",
       "3": "In Validation",
       "4": "Parcial Payment in Validation",
-      "5": "Partially Paid"
+      "5": "Partially Paid",
+      "6": "Reject"
     },
     "SALARIOMINIMO": "National Minimum Wage Value",
     "TIPOGUIA": {

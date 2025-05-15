@@ -59,7 +59,7 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         public byte[]? comprovativoPagamento { get; set; }
 
         [DataMember]
-        public byte[]? aprpoveFile { get; set; }
+        public byte[]? approveFile { get; set; }
 
         [DataMember]
         public int estadoPagamento { get; set; }
