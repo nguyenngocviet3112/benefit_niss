@@ -729,6 +729,7 @@
     "niss": "Número do NISS",
     "invNo": "Número da fatura (INV)",
     "bankAcc": "Conta bancária",
+    "dataCriacao": "Data Submete",
     "bankCode": {
       "BNU": "Banco BNU",
       "MANDIRI": "Banco Mandiri",

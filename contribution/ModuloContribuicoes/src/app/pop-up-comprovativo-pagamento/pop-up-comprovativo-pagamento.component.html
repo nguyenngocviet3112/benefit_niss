@@ -60,7 +60,7 @@
                             </mat-form-field>
                         </div> -->
 
-                        <div class="secondLineContainers" *ngIf="!selectedBanco">
+                        <div class="secondLineContainers" >
                             <mat-form-field appearance="outline" class="comboBox">
                                 <mat-label>{{ 'guiaPagamentoListagem.banco' | translate }}</mat-label>
                                 <mat-select [(ngModel)]="selectedBanco" (selectionChange)="onBancoChange($event.value)">
@@ -82,6 +82,8 @@
                             [matTooltip]="fileName"></pdf-viewer>
                     </div>
                 </div>
+
+                
                 <mat-icon *ngIf="data.view && pdfSrc" (click)="downloadDocument()" class="downloadIcon"
                     matTooltip="{{'general.download' | translate}}">file_download</mat-icon>
             </div>

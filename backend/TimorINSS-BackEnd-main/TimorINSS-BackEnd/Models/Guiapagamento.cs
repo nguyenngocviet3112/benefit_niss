@@ -40,6 +40,8 @@ namespace TimorINSSBackEnd.Models
 
         public string QrInvoice { get; set; }
 
+        public string RejectReason { get; set; }
+
 
         public string PaymentRef { get; set; }
 

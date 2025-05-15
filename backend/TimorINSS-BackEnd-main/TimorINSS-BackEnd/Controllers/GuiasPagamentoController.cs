@@ -178,7 +178,7 @@ namespace TimorINSSBackEnd.Controllers
 
         // POST: api/guiaPagamento
         [HttpPost("approveComprovativoPagamento")]
-        public IActionResult approveComprovativoPagamento(insertComprovativoPagamentoRequest request)
+        public IActionResult approveComprovativoPagamento(approveComprovativoPagamentoRequest request)
         {
             ResponseBaseDataContract response = new ResponseBaseDataContract();
 

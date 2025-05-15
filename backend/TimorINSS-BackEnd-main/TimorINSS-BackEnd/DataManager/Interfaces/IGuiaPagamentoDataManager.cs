@@ -21,7 +21,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
 
         public ResponseBaseDataContract insertComprovativoPagamento(insertComprovativoPagamentoRequest request);
 
-        public ResponseBaseDataContract approveComprovativoPagamento(insertComprovativoPagamentoRequest request);
+        public ResponseBaseDataContract approveComprovativoPagamento(approveComprovativoPagamentoRequest request);
 
         public RelatorioGuiaPagamentoListagemResponse GetGuiasPagamentoRelatorios(RelatorioGuiaPagamentoListagemRequest request);
     }

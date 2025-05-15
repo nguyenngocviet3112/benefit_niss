@@ -383,7 +383,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
-        public ResponseBaseDataContract approveComprovativoPagamento(insertComprovativoPagamentoRequest request)
+        public ResponseBaseDataContract approveComprovativoPagamento(approveComprovativoPagamentoRequest request)
         {
             ResponseBaseDataContract response = new ResponseBaseDataContract();
 
@@ -404,6 +404,11 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             var indValidacao = (int)pagamentoTypes.Find(x => x.value == 1).id;
             var indValidacaoParcial = (int)pagamentoTypes.Find(x => x.value == 5).id;
+
+            if (request.rejectStatus == 1)
+            {
+                guiaPagamento.RejectReason = request.rejectReason;
+            }
 
             try
             {

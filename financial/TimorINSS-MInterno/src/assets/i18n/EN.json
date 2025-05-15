@@ -728,6 +728,7 @@
     "niss": "NISS Number",
     "invNo": "INV No",
     "bankAcc": "Bank Acc",
+    "dataCriacao": "Submitted Date",
     "bankCode": {
       "BNU": "BNU Bank",
       "MANDIRI": "Mandiri Bank",

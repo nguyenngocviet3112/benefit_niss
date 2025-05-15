@@ -46,7 +46,7 @@ export class ContribValidationHomeSearchComponent implements OnInit {
   private filter: FilterRequest = {};
   //Region Guia Pagamento table
   public dataSourceGuiaPagamento: GuiaListagem[] = [];
-  public displayedColumnsGuiaPagamento: string[] = ['niss', 'invNo', 'bankCode', 'mesAno', 'descricao', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
+  public displayedColumnsGuiaPagamento: string[] = ['niss', 'invNo', 'bankCode', 'mesAno', 'dataCriacao','descricao', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
   public totalRows: number = 0;
   public pageSize = 10;
   public pageIndex = 0;
@@ -202,7 +202,7 @@ export class ContribValidationHomeSearchComponent implements OnInit {
 
   public onBancoSelected(event: MatSelectChange) {
     //filter by bankcode
-    alert("bank selected:"+ event.value);
+    // alert("bank selected:"+ event.value);
     this.bankCode = event.value;
     this.getTableGuiaPagamento();
   }
