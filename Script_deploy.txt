@@ -1,3 +1,42 @@
+juroApurado
+
+
+chạy nodejs
+npm install
+npx ng serve --open
+netstat -ano | findstr :4200
+taskkill /PID 12345 /F
+
+npx ng serve --port 4300
+npx ng serve --open  ==> default 4200
+
+npx ng serve --host 0.0.0.0 --port 4200 --disable-host-check
+
+npm install --legacy-peer-deps
+
+
+Các lệnh cơ bản trong SQL sever
+
+Các lệnh cơ bản trong VS code c#
+
+Chạy app	dotnet run
+Build project	dotnet build
+Debug (VSCode)	F5
+Chạy không debug	Ctrl + F5
+Chạy với port custom	dotnet run --urls "http://localhost:5050"
+
+
+taskkill /F /IM TimorINSSBackEnd.exe
+dotnet publish -c Release -o C:\PublishedApp
+
+ Clear-DnsClientCache
+
+dotnet TimorINSSBackEnd.dll
+
+dotnet TimorINSSBackEnd.dll --urls "http://0.0.0.0:5000"
+
+
+
 INSERT INTO dbo.TRABALHADOR (
     nome,
     NISS,
