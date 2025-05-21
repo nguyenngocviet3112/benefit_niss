@@ -1,0 +1,371 @@
+INSERT INTO dbo.TRABALHADOR (
+    nome,
+    NISS,
+    TIN,
+    numInscProvisoria,
+    dataNasc,
+    nomeMae,
+    indDescNomeMae,
+    nomePai,
+    indDescNomePai,
+    estadoCivil,
+    naturalidade,
+    flagImportado,
+    utilizadorCriacao,
+    dataCriacao,
+    utilizadorAlteracao,
+    dataAlteracao,
+    ipv6,
+    sexoTrabalhador,
+    nacionalidadeTrabalhador,
+    interno
+)
+VALUES (
+    'Agus Berek',       -- nome
+    '100001723',             -- NISS
+    '99016',                 -- TIN
+    NULL,                    -- numInscProvisoria
+    '1982-11-19',            -- dataNasc
+    NULL,                    -- nomeMae
+    1,                       -- indDescNomeMae (True)
+    NULL,                    -- nomePai
+    1,                       -- indDescNomePai (True)
+    1,                       -- estadoCivil
+    'Dili',                  -- naturalidade
+    1,                       -- flagImportado (True)
+    7056,                      -- utilizadorCriacao
+    '2024-07-01',            -- dataCriacao
+    NULL,                    -- utilizadorAlteracao
+    NULL,                    -- dataAlteracao
+    NULL,                    -- ipv6
+    9,                       -- sexoTrabalhador
+    11,                      -- nacionalidade
+    1                        -- interno (False)
+);
+
+INSERT INTO CONTACTO (
+    contacto_trabalhador_fk,
+    contacto_entidade_fk,
+    telemovel,
+    email,
+    indActivo,
+    flagImportado,
+    utilizadorCriacao,
+    dataCriacao,
+    utilizadorAlteracao,
+    dataAlteracao,
+    ipv6
+)
+VALUES (
+    11856,               -- contacto_trabalhador
+    null,                -- contacto_entidade
+    '76666656',          -- telemovel
+    'agusberek1984@gmail.com',-- email (ghi đầy đủ nếu cần)
+    1,                   -- indActivo (True)
+    0,                   -- flagImportado (False)
+    7056,                -- utilizadorCriacao
+    '2025-03-18 15:11:00',-- dataCriacao
+    NULL,                -- utilizadorAlteracao
+    NULL,                -- dataAlteracao
+    '::1'                -- ipv6
+);
+
+
+DELETE FROM GUIAPAGAMENTO;
+delete from RESERVACREDITO;
+
+delete from Contacorrente;
+delete from DECLARACAOREMUNERACAO;
+--delete task
+DELETE FROM PROCESSOCONFIG;
+DELETE FROM GUIAPAGAMENTO;
+DELETE FROM PROCESSOATIVO;
+DELETE FROM TAREFAATIVO;
+DELETE FROM COMPONENTEDOCUMENTO_REGISTO;
+delete from COMPONENTEORCAMENTO_REGISTO;
+delete from COMPONENTEORCAMENTOVALOR;
+delete from COMPONENTETEXTO_REGISTO;
+delete from RESERVACREDITO;
+delete from RELPROCESSOCONFIGPERFIL;
+
+select * from Tarefa;
+delete from Tarefa;
+delete from RELTAREFACOMPONENTE;
+delete from COMPONENTEACCOESTAREFA;
+delete from COMPONENTECARREGARDOCUMENTO;
+delete from COMPONENTECONTROLEACESSO;
+delete from COMPONENTEDESPESA;
+delete from COMPONENTEORCAMENTO;
+delete from COMPONENTERECEITA;
+delete from COMPONENTETEXTO;
+delete from COMPONENTECLASSIFICACAOSUBCLASSIFIC;
+delete from COMPONENTECONCILIACAOMOVIMENTOS;
+
+select * from Dominio where dominio = 'INDPAGO';
+select * from GUIAPAGAMENTO;
+
+
+
+SELECT * FROM Contacorrente c WHERE     c.ContaCorrente_Entidade_Fk = 2132    AND YEAR(c.MesAno) = YEAR('01-01-2024')    AND c.IndActivo = 1;
+select * from Contacorrente;
+select * from Contacto;
+select *from Trabalhador where idTrabalhador = 11843;
+select * from UTILIZADOR;
+select * from DocumentoIdentificacao;
+
+select * from Guiapagamento;
+select * from Dispensacontributiva;
+select * from Regime;
+select * from Processoconfig;
+select * from Tarefa;
+
+SELECT TABLE_NAME 
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_TYPE = 'BASE TABLE' 
+  AND TABLE_NAME LIKE '%tare%';
+
+select * from Orcamentoconfig;
+
+ALTER TABLE Guiapagamento 
+ADD bankCode VARCHAR(25)  NULL;
+
+ALTER TABLE Guiapagamento 
+ADD paymentRef VARCHAR(50)  NULL;
+
+ALTER TABLE Guiapagamento 
+ADD rejectReason VARCHAR(500)  NULL;
+
+ALTER TABLE Guiapagamento
+ADD approveFile varbinary(max) NULL;
+
+
+
+select * from Dominio where dominio = 'SEXO';
+select * from Dominio where descricao = 'Solteiro';
+
+select * from Dominio where dominio = 'INDPAGO';
+
+select * from Contact;
+
+ALTER TABLE Dominio
+DROP COLUMN descricao_en;
+
+INSERT INTO Dominio (
+    dominio, valor, descricao, indActivo, utilizadorCriacao, dataCriacao,
+    utilizadorAlteracao, dataAlteracao, ipv6, descricaoEn
+)
+VALUES (
+    'INDPAGO', 1, 'Reject', 1, 1, GETDATE(), NULL, NULL, NULL, 'Rejeita'
+);
+
+
+
+
+ALTER TABLE Dominio 
+ADD descricaoEn VARCHAR(30)  NULL;
+
+
+select * from GUIAPAGAMENTO where contaCorrenteId = 22455;
+select * from DECLARACAOREMUNERACAO  where conta_corrente_fk = 22361;
+
+select * from Contacorrente order by idContaCorrente desc ;
+select * from DECLARACAOREMUNERACAO order by idDeclaracao desc ;
+
+ALTER TABLE dbo.CONTACORRENTE 
+ALTER COLUMN valorJuros DECIMAL(30,2)  NULL;
+
+ALTER TABLE dbo.CONTACORRENTE 
+ADD valorJuros DECIMAL(30,2)  NULL;
+
+
+ALTER TABLE dbo.CONTACORRENTE DROP COLUMN valorJuros;
+
+select * from RESERVACREDITO where reserva_guiaPagamento_fk;
+
+    UPDATE ContaCorrente
+    SET valorTotal = 1
+    WHERE  situacaoPagamento = 20;
+
+DELETE FROM RESERVACREDITO Where reserva_guiaPagamento_fk != 1013;
+
+DELETE FROM GUIAPAGAMENTO Where contaCorrenteId != 22361;
+
+DELETE FROM DECLARACAOREMUNERACAO WHERE conta_corrente_fk != 22361;
+
+DELETE FROM Contacorrente WHERE idContaCorrente not in (22361);
+
+
+	select * from Contacorrente;
+
+	select * from Dominio;
+	select * from Guiapagamento;
+
+	select * from Trabalhador;
+	select * from UTILIZADOR;
+
+
+
+--CREATE PROCEDURE UPDATE_CONTACORRENTE_JUROS
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    UPDATE ContaCorrente
+--    SET valorJuros = 0
+--    WHERE dataCriacao >= DATEADD(MINUTE, -1, GETDATE()) 
+--      AND situacaoPagamento = 20;
+--END;
+
+
+--ALTER TRIGGER [dbo].[trg_UpdateValorJuros]
+--ON [dbo].[CONTACORRENTE]
+--AFTER INSERT, UPDATE
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    UPDATE C
+--    SET C.valorJuros = dbo.calcularJurosContaCorrente(C.idContaCorrente)
+--    FROM CONTACORRENTE C
+--    INNER JOIN inserted I ON C.idContaCorrente = I.idContaCorrente;
+--END;
+
+
+--USE [TimorINSSModuloContribuicoes]
+--GO
+--/****** Object:  Trigger [dbo].[trg_UpdateValorJuros]    Script Date: 3/10/2025 8:27:26 PM ******/
+--SET ANSI_NULLS ON
+--GO
+--SET QUOTED_IDENTIFIER ON
+--GO
+--ALTER TRIGGER [dbo].[trg_UpdateValorJuros]
+--ON [dbo].[CONTACORRENTE]
+--AFTER INSERT, UPDATE
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+--    UPDATE C
+--    SET C.valorJuros = dbo.calcularJurosContaCorrente(C.idContaCorrente)
+--    FROM CONTACORRENTE C
+--    INNER JOIN inserted I ON C.idContaCorrente = I.idContaCorrente;
+--END;
+
+
+
+
+UPDATE DOMINIO
+SET descricaoEN = CASE
+    WHEN idDominio = 1 THEN 'Identity Card'
+    WHEN idDominio = 2 THEN 'Passport'
+    WHEN idDominio = 3 THEN 'Indefinite period (no term)'
+    WHEN idDominio = 4 THEN 'Fixed term'
+    WHEN idDominio = 5 THEN 'Civil'
+    WHEN idDominio = 6 THEN 'Appointment (Administrative)'
+    WHEN idDominio = 7 THEN 'Labour Code'
+    WHEN idDominio = 8 THEN 'Law No. 34/2019 (example)'
+    WHEN idDominio = 9 THEN 'Male'
+    WHEN idDominio = 10 THEN 'Female'
+    WHEN idDominio = 11 THEN 'Timor-Leste'
+    WHEN idDominio = 12 THEN 'Foreign (contributes in TL)'
+    WHEN idDominio = 13 THEN 'Single'
+    WHEN idDominio = 14 THEN 'Married'
+    WHEN idDominio = 15 THEN 'Contributions'
+    WHEN idDominio = 16 THEN 'Contributions and Interest'
+    WHEN idDominio = 17 THEN 'Paid Guide'
+    WHEN idDominio = 18 THEN 'Generated Guide'
+    WHEN idDominio = 19 THEN 'Proof in Validation'
+    WHEN idDominio = 20 THEN 'No Guide Generated'
+    WHEN idDominio = 21 THEN 'Certificate'
+    WHEN idDominio = 22 THEN 'Voter Card'
+    WHEN idDominio = 23 THEN 'General Regime'
+    WHEN idDominio = 24 THEN 'Voluntary Registration in General Regime'
+    WHEN idDominio = 29 THEN 'Paid Guide'
+    WHEN idDominio = 30 THEN 'Generated Guide'
+    WHEN idDominio = 31 THEN 'Proof in Validation'
+    WHEN idDominio = 32 THEN 'National Minimum Wage Value'
+    WHEN idDominio = 33 THEN 'Simple'
+    WHEN idDominio = 34 THEN 'Composite'
+    WHEN idDominio = 35 THEN 'And'
+    WHEN idDominio = 36 THEN 'R'
+    WHEN idDominio = 37 THEN 'Partial Proof in Validation'
+    WHEN idDominio = 38 THEN 'Partially Paid Guide'
+    WHEN idDominio = 39 THEN 'Partial Proof in Validation'
+    WHEN idDominio = 40 THEN 'Partially Paid Guide'
+    WHEN idDominio = 41 THEN 'Foreign (does not contribute in TL)'
+    WHEN idDominio = 42 THEN 'Deadline for submitting salary declaration'
+    WHEN idDominio = 43 THEN 'Manager'
+    WHEN idDominio = 44 THEN 'HR Department Head'
+    WHEN idDominio = 45 THEN 'Administrator'
+    WHEN idDominio = 46 THEN 'Accountant'
+    WHEN idDominio = 47 THEN 'Other'
+    WHEN idDominio = 48 THEN 'But'
+    WHEN idDominio = 49 THEN 'If'
+    WHEN idDominio = 50 THEN 'Value'
+    WHEN idDominio = 51 THEN 'Certificate'
+    WHEN idDominio = 52 THEN 'Test'
+    WHEN idDominio = 53 THEN 'Verification'
+    WHEN idDominio = 54 THEN 'Temporary'
+    WHEN idDominio = 55 THEN 'Permanent'
+    WHEN idDominio = 56 THEN 'Service'
+    WHEN idDominio = 57 THEN 'Term'
+    WHEN idDominio = 58 THEN 'Date'
+    WHEN idDominio = 59 THEN 'Contract'
+    WHEN idDominio = 60 THEN 'Option'
+    WHEN idDominio = 62 THEN 'Processed'
+    WHEN idDominio = 63 THEN 'Confirmed'
+    WHEN idDominio = 64 THEN 'Canceled'
+    WHEN idDominio = 65 THEN 'Accepted'
+    WHEN idDominio = 66 THEN 'Rejected'
+    WHEN idDominio = 67 THEN 'Pending'
+    WHEN idDominio = 68 THEN 'Approval'
+    WHEN idDominio = 69 THEN 'Notification'
+    WHEN idDominio = 70 THEN 'Created'
+    WHEN idDominio = 71 THEN 'Completed'
+    WHEN idDominio = 72 THEN 'In Progress'
+    WHEN idDominio = 73 THEN 'Archived'
+    WHEN idDominio = 74 THEN 'Finalized'
+    WHEN idDominio = 75 THEN 'Tested'
+    WHEN idDominio = 76 THEN 'Reviewed'
+    WHEN idDominio = 77 THEN 'Finished'
+    WHEN idDominio = 78 THEN 'Closed'
+    WHEN idDominio = 79 THEN 'Uncertain Term'
+    WHEN idDominio = 80 THEN 'Public Service Contract (Administrative)'
+    WHEN idDominio = 81 THEN 'Public Service Labour Law'
+    WHEN idDominio = 82 THEN 'Senior Technician'
+    WHEN idDominio = 83 THEN 'Teacher'
+    WHEN idDominio = 84 THEN 'Law 45/2021 (example)'
+    WHEN idDominio = 85 THEN 'Test ID 900000001'
+    WHEN idDominio = 86 THEN 'Cash Register (test)'
+    WHEN idDominio = 87 THEN 'R'
+    WHEN idDominio = 88 THEN 'A'
+    WHEN idDominio = 89 THEN 'C'
+    WHEN idDominio = 90 THEN 'And'
+    WHEN idDominio = 91 THEN 'Voluntary Insurance'
+    WHEN idDominio = 92 THEN 'Test'
+    WHEN idDominio = 93 THEN 'In Progress'
+    WHEN idDominio = 94 THEN 'Payment Order Issued'
+    WHEN idDominio = 95 THEN 'Reconciled'
+    WHEN idDominio = 96 THEN 'Budget Proposal'
+    WHEN idDominio = 97 THEN 'Signed Contract'
+    WHEN idDominio = 98 THEN 'Pro-Forma Invoice'
+    WHEN idDominio = 99 THEN 'Invoice'
+    WHEN idDominio = 100 THEN 'Opinion'
+    WHEN idDominio = 101 THEN 'Budget Approval Dispatch'
+    WHEN idDominio = 102 THEN 'Official Letter'
+    WHEN idDominio = 103 THEN 'Taxpayer Letter'
+    WHEN idDominio = 104 THEN 'Supervision Office Letter'
+    WHEN idDominio = 105 THEN 'Reconciled'
+    WHEN idDominio = 106 THEN 'Selected for registration'
+    WHEN idDominio = 107 THEN 'IT Technician'
+    WHEN idDominio = 108 THEN 'IT Technician'
+    WHEN idDominio = 109 THEN 'IT Technician'
+    WHEN idDominio = 110 THEN 'Civil'
+    WHEN idDominio = 1107 THEN 'Lists'
+    WHEN idDominio = 1108 THEN 'Others-Miscellaneous'
+    ELSE descricaoEN 
+END
+WHERE idDominio IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 1107, 1108);
+
+
+ALTER TABLE DOMINIO
+ALTER COLUMN descricaoEN NVARCHAR(255);  -- Hoặc độ dài lớn hơn tùy vào yêu cầu

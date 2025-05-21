@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -15,11 +17,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUtilsDataManager _utils;
+        private readonly IEmailSenderDataManager _emailSenderDataManager;
 
-        public GuiaPagamentoDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils)
+        public GuiaPagamentoDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils, IEmailSenderDataManager emailSenderDataManager)
         {
             _unitOfWork = unitOfWork;
             _utils = utils;
+            _emailSenderDataManager = emailSenderDataManager;
         }
 
         public GuiapagamentoDto GetDto(int id)
@@ -458,6 +462,76 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 _unitOfWork.Commit();
 
                 _unitOfWork.ContaCorrenteRepository.UpdateSituacaoPagamento(guiaPagamento.ContaCorrenteId);
+                // send mail
+                //Destinatario entidade = _unitOfWork.EntidadeEmpregadoraRepository.GetDestinatarioByIdEntidade(guiaPagamento.GuiaEntidadeFk);
+
+                //List<Contacto> lstContacto = _unitOfWork.ContactoRepository.GetByTrabalhadorFkEntidadeFk(entidade.TrabalhadorFk, guiaPagamento.GuiaEntidadeFk);
+                //if (lstContacto != null && lstContacto.Count > 0)
+                //{
+                //    Contacto contacto = lstContacto[0];
+                //    if (request.rejectStatus == 0)
+                //    {
+                //        _emailSenderDataManager.SendEmailNotify(contacto.Email, "Reject mail", "Your request has been rejected. Please try again").GetAwaiter();
+
+                //    }
+                //    else
+                //    {
+                //        _emailSenderDataManager.SendEmailNotify(contacto.Email, "Approve mail", "Your request has been approved. Please try again").GetAwaiter();
+                //    }
+                //}
+                // CreateMovimentoPorConciliar 
+
+             
+
+                //var tarefaConfig = _unitOfWork.TarefaAtivoRepository.GetTarefaAtivoById(8287).TarefaconfigFkNavigation;
+
+                // Validar se a tarefa tem permissões para o componente
+                //if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo)?.PermissaoMovimentosConciliar != 2)
+                //{
+                //    response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
+                //    return response;
+                //}
+
+                //// Se for receita, o comprovativo é obrigatório
+                //var formIsValid = !request.IsReceita || (request.Comprovativo != null && request.Comprovativo.Length > 0);
+
+                //if (!formIsValid)
+                //{
+                //    response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.ExcepcaoGenerica).ToString(), ErrorMessage = ErrorsDataContract.ExcepcaoGenerica.ToString() });
+                //    return response;
+                //}
+
+                //var movimentoPorConciliar = new Movimentosporconciliar()
+                //{
+                //    TarefaAtivoFk = 8287,
+                //    MovimentoBancarioFk = 6,
+                //    IsReceita = false,
+                //    Valor = guiaPagamento.Valor,
+                //    TipoDocumento = "TIPODOCUMENTO",
+                //    NumeroDocumento = guiaPagamento.NumDocumento,
+                //    //Comprovativo = requguiaPagamentoest.Comprovativo != null ? Convert.FromBase64String(guiaPagamento.Comprovativo) : null,
+                //    NomeComprovativo = "a",
+                //    CodigoContaDebitoFk = 1,
+                //    CodigoContaCreditoFk = 1,
+                //    DepartamentoFk = 1,
+                //    CentroCustoFk = 5,
+                //    TipoContaFk = 1,
+                //    AgrupamentoConfigFk = 1
+                //};
+
+                //_utils.SetDetailsToEntity(movimentoPorConciliar);
+
+                ////DB
+                //try
+                //{
+                //    _unitOfWork.MovimentosPorConciliarRepository.Add(movimentoPorConciliar);
+                //    _unitOfWork.Commit();
+                //}
+                //catch (Exception e)
+                //{
+                //    response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+                //    _unitOfWork.Rollback();
+                //}
             }
             catch (Exception e)
             {

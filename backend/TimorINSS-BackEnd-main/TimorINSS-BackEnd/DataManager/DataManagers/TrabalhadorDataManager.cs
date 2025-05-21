@@ -239,14 +239,14 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
             
 
-            if (trabalhador.DataNasc.Year - DateTime.Today.Year  <= 18 )
-            {
-                response.Errors.Add(new Error
-                {
-                    ErrorCode = ((int)ErrorsDataContract.AgeLessThan18).ToString(),
-                    ErrorMessage = ErrorsDataContract.AgeLessThan18.ToString()
-                });
-            }
+            //if (trabalhador.DataNasc.Year - DateTime.Today.Year  <= 18 )
+            //{
+            //    response.Errors.Add(new Error
+            //    {
+            //        ErrorCode = ((int)ErrorsDataContract.AgeLessThan18).ToString(),
+            //        ErrorMessage = ErrorsDataContract.AgeLessThan18.ToString()
+            //    });
+            //}
 
 
 
