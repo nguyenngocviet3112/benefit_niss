@@ -29,6 +29,16 @@ Chạy với port custom	dotnet run --urls "http://localhost:5050"
 taskkill /F /IM TimorINSSBackEnd.exe
 dotnet publish -c Release -o C:\PublishedApp
 
+
+admin	N4QH0KiCEvu8I73YlCS8eXVMRTKW7oVtEOYz0fr6Ixo=
+maria.cepeda	N4QH0KiCEvu8I73YlCS8eXVMRTKW7oVtEOYz0fr6Ixo=
+ana.ly	N4QH0KiCEvu8I73YlCS8eXVMRTKW7oVtEOYz0fr6Ixo=
+josesoares	hesYYEvfn+lOnAcgNzCbc24priPqqYMpiBV1k/Iumiw=
+vietnn3	t4hJE6Kbei1NVVoOJQLgvVKu/++H6MFaEqzu3DVuM6Q=
+hoan.admin	N4QH0KiCEvu8I73YlCS8eXVMRTKW7oVtEOYz0fr6Ixo=
+
+
+
  Clear-DnsClientCache
 
 dotnet TimorINSSBackEnd.dll
