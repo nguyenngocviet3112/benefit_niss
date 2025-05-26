@@ -41,7 +41,7 @@ import { formatDate, formatDatePT, openErrorsDialog, openSnackBar, showExpiredEr
     public processosList: ProcessoListagem[] = [];
     public displayedColumnsProcesso: string[] = ['data', 'nome', 'acoes'];
     public totalRowsProcessoTable: number = 0;
-    public pageSizeProcessoTable = 5;
+    public pageSizeProcessoTable = 20;
     public pageIndexProcessoTable = 0;
 
     constructor(

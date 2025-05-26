@@ -148,16 +148,16 @@ export class NovoTrabalhadorComponent implements OnInit {
   public contratoRegimeOriginal: RelEntidadeTrabalhadorRegime = <RelEntidadeTrabalhadorRegime>{};
 
   //listagem de tabelas
-  public pageSizeDocumentosTable: number = 5;
+  public pageSizeDocumentosTable: number = 20;
   public totalRowsDocumentosTable: number = 0;
   public pageIndexDocumentosTable: number = 0;
-  public pageSizeMoradasTable: number = 5;
+  public pageSizeMoradasTable: number = 20;
   public totalRowsMoradasTable: number = 0;
   public pageIndexMoradasTable: number = 0;
-  public pageSizeContactosTable: number = 5;
+  public pageSizeContactosTable: number = 20;
   public totalRowsContactosTable: number = 0;
   public pageIndexContactosTable: number = 0;
-  public pageSizeSuspensoesTable: number = 5;
+  public pageSizeSuspensoesTable: number = 20;
   public totalRowsSuspensoesTable: number = 0;
   public pageIndexSuspensoesTable: number = 0;
   public displayedColumnsDocumento: string[] = ['tipo', 'numero', 'dataValidade', 'verDocumento','verEditar'];

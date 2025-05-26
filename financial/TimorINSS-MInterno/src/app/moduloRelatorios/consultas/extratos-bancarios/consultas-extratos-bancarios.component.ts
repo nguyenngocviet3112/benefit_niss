@@ -57,7 +57,7 @@ export class ConsultasExtratosBancariosComponent implements OnInit {
   public extratosList: MovimentosBancariosData[] = [];
   public displayedColumns: string[] = ['descricao', 'data', 'credito', 'debito', 'saldo'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

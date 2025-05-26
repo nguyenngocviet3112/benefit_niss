@@ -32,7 +32,7 @@ export class PerfilComponent implements OnInit {
   public dataSourcePerfis: PerfisListagem[] = [];
   public displayedColumnsPerfis: string[] = ['dataCriacao', 'descricao', 'acoes'];
   public totalRowsPerfisTable: number = 0;
-  public pageSizePerfisTable = 5;
+  public pageSizePerfisTable = 20;
   public pageIndexPerfisTable = 0;
 
   private perfilWarningMsgInativar = this.translate.instant('warnings.perfilWarningMsgInativar');

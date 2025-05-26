@@ -47,7 +47,7 @@ export class RelatoriosPagamentosEmiditosComponent implements OnInit {
   public pagamentosList: RelatoriosOrdensPagamentoListagem[] = [];
   public displayedColumns: string[] = ['numeroPagamento', 'conta', 'destinatario', 'iban', 'valor'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

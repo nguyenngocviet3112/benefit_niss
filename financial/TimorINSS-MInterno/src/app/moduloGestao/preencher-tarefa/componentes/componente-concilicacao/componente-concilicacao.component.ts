@@ -68,7 +68,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   public movimentosBancariosListOld: MovimentosBancariosData[] = [];
   public movimentosBancariosdisplayedColumns: string[] = ['descricao', 'dataValor', 'credito', 'debito', 'acoes', 'select'];
   public movimentosBancariostotalRowsTable: number = 0;
-  public movimentosBancariospageSizeTable = 5;
+  public movimentosBancariospageSizeTable = 20;
   public movimentosBancariospageIndexTable = 0;
   public disabledSearchBank = true;
   public movimentosBancariosFilter: FilterRequest = {};
@@ -97,7 +97,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   public movimentosListOld: MovimentosDespesaReceita[] = [];
   public movimentosdisplayedColumns: string[] = ['descricao', 'comprovativo', 'documento', 'numPagamentoGuia', 'valor', 'acoes', 'select'];
   public movimentosTotalRowsTable: number = 0;
-  public movimentosPageSizeTable = 5;
+  public movimentosPageSizeTable = 20;
   public movimentosPageIndexTable = 0;
   public movimentosFilter: FilterRequest = {};
   public movimentosfilterBy = '';
@@ -191,7 +191,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       this.totalSum = this.sumTotalValue();
     }
     this.movimentosBancariospageIndexTable = 0;
-    this.movimentosBancariospageSizeTable = 5;
+    this.movimentosBancariospageSizeTable = 20;
     this.getMovimentosBancariosTable();
   }
 
@@ -218,7 +218,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     }
     this.isReceita = this.movimentosTypeList.find(x => x.id == this.movimentosTypeSelected)?.descricao == 'Receita';
     this.movimentosPageIndexTable = 0;
-    this.movimentosPageSizeTable = 5;
+    this.movimentosPageSizeTable = 20;
     this.getMovimentosTable();
   }
 
@@ -783,7 +783,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
 
   public clearFilter(): void {
     this.movimentosBancariosfilterBy = '';
-    this.movimentosBancariospageSizeTable = 5;
+    this.movimentosBancariospageSizeTable = 20;
     this.movimentosBancariospageIndexTable = 0;
     this.movimentosBancariosFilter = {};
     this.getMovimentosBancariosTable();
@@ -791,7 +791,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
 
   public clearFilterMovimentos(): void {
     this.movimentosfilterBy = '';
-    this.movimentosPageSizeTable = 5;
+    this.movimentosPageSizeTable = 20;
     this.movimentosPageIndexTable = 0;
     this.movimentosFilter = {};
     this.getMovimentosTable();

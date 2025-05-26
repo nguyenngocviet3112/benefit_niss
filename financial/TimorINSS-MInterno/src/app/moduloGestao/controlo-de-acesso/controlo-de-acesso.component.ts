@@ -38,7 +38,7 @@ export class ControloDeAcessoComponent implements OnInit {
   public utilizadoresList: UtilizadoresAcessoListagem[] = [];
   public displayedColumns: string[] = ['username', 'nome', 'interno', 'acoes'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
   public filterInternoOptions: DominioDescricaoString[] = [
     {
@@ -191,7 +191,7 @@ export class ControloDeAcessoComponent implements OnInit {
       };
     }
 
-    this.pageSizeTable = 5;
+    this.pageSizeTable = 20;
     this.pageIndexTable = 0;
     this.getUsersTable();
   }
@@ -212,7 +212,7 @@ export class ControloDeAcessoComponent implements OnInit {
         filterBy: filter
       };
     }
-    this.pageSizeTable = 5;
+    this.pageSizeTable = 20;
     this.pageIndexTable = 0;
     this.getUsersTable();
   }
@@ -222,7 +222,7 @@ export class ControloDeAcessoComponent implements OnInit {
     this.filterField = undefined;
     this.selectedInternoOption = undefined;
     this.selectedLockOption = undefined;
-    this.pageSizeTable = 5;
+    this.pageSizeTable = 20;
     this.pageIndexTable = 0;
     this.filter = {};
     this.getUsersTable();

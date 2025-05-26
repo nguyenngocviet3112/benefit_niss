@@ -41,7 +41,7 @@ export class ConsultasGuiasComponent implements OnInit {
   public guiasList: RelatoriosGuiasListagem[] = [];
   public displayedColumns: string[] = ['numeroGuia', 'empregador', 'periodo', 'estado', 'valorGuia', 'valorCompromisso', 'pdf', 'valorDivida'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

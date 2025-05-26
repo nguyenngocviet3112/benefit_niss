@@ -43,7 +43,7 @@ export class ContaCorrenteComponent {
   public displayedColumnsContaCorrente: string[] = ['select', 'tipoDivida', 'mesAno', 'dataVencimento', 'valorEntidade', 'valorTrabalhador', 'totalJuros', 'valorTotal', 'situacaoPagamento', 'valorPago', 'pagoEm', 'totalDivida'];
   public selected: number = 0;
   public totalRowsContaCorrenteTable: number = 0;
-  public pageSizeContaCorrenteTable = 5;
+  public pageSizeContaCorrenteTable = 20;
   public pageIndexContaCorrenteTable = 0;
 
 

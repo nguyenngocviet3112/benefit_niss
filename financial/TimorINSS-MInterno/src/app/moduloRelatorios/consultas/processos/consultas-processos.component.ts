@@ -47,7 +47,7 @@ export class ConsultasProcessosComponent implements OnInit {
   public processosList: RelatoriosProcessosListagem[] = [];
   public displayedColumns: string[] = ['tipoProcesso', 'estado', 'ultimaTarefa', 'perfis', 'acoes'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

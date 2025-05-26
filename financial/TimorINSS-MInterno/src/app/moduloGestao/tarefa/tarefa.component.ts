@@ -30,7 +30,7 @@ export class TarefaComponent implements OnInit {
   public dataSourceTarefa: TarefaListagem[] = [];
   public displayedColumnsTarefa: string[] = ['numero', 'nome', 'acoes'];
   public totalRowsTarefaTable: number = 0;
-  public pageSizeTarefaTable = 5;
+  public pageSizeTarefaTable = 20;
   public pageIndexTarefaTable = 0;
 
 

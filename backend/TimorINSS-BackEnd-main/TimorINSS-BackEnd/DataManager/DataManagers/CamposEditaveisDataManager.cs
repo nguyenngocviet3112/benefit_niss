@@ -1543,6 +1543,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             entity.Dominio1 = dominio;
             entity.Valor = value;
             entity.Descricao = valorCampo.Nome;
+            entity.DescricaoEn = valorCampo.Nome;
             entity.IndActivo = true;
 
             if (entity.IdDominio > 0)

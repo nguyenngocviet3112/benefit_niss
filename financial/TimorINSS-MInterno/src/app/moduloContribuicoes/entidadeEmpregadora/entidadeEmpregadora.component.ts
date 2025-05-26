@@ -75,10 +75,10 @@ export class EntidadeEmpregadoraComponent implements OnInit {
   public totalRowsRespLegalTable: number = 0;
 
   //region Page Size
-  public pageSizeMoradaTable = 5;
-  public pageSizeContatoTable = 5;
-  public pageSizeSuspensaoTable = 5;
-  public pageSizeRespLegalTable = 5;
+  public pageSizeMoradaTable = 20;
+  public pageSizeContatoTable = 20;
+  public pageSizeSuspensaoTable = 20;
+  public pageSizeRespLegalTable = 20;
 
 
   //region Display Columns

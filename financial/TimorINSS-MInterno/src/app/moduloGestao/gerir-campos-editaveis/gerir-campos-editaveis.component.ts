@@ -44,7 +44,7 @@ export class GerirCamposEditaveisComponent implements OnInit {
   public displayedColumns: string[] = []
 
   public totalRows: number = 0;
-  public pageSize: number = 5;
+  public pageSize: number = 20;
   public pageIndex: number = 0;
   public filterByTemp: string = '';
   public filterBy: string = '';

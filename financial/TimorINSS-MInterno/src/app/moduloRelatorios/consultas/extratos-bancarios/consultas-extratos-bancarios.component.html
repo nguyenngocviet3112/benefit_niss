@@ -109,7 +109,7 @@
             </table>
             <mat-paginator class="paginator" [length]="this.totalRowsTable"
                 [pageSize]="this.pageSizeTable" (page)="updateExtratosBancariosTable($event)"
-                [pageIndex]="pageIndexTable" [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons *ngIf="resultsShown && contaIdFiltrado == contaId">
+                [pageIndex]="pageIndexTable" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons *ngIf="resultsShown && contaIdFiltrado == contaId">
             </mat-paginator>
 
 

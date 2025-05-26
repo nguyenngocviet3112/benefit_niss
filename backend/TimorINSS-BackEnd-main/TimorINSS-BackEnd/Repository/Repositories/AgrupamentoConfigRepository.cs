@@ -271,10 +271,16 @@ namespace TimorINSSBackEnd.Repository.Repositories
         }
 
         public bool IsCodeValid(Agrupamentoconfig agrupamento)
+
         {
-            int countSameCode = _moduloContribuicoesContext.Agrupamentoconfig
-                 .Where(a => a.ParentFk == agrupamento.ParentFk && a.Codigo == agrupamento.Codigo && a.Id != agrupamento.Id && a.IndActivo)
-                 .Count();
+            int countSameCode = 0;
+            if (agrupamento.ParentFk != null) {
+                 countSameCode = _moduloContribuicoesContext.Agrupamentoconfig
+                     .Where(a => a.ParentFk == agrupamento.ParentFk && a.Codigo == agrupamento.Codigo && a.Id != agrupamento.Id && a.IndActivo)
+                     .Count();
+            }
+        
+            
 
             return countSameCode == 0;
         }
@@ -288,6 +294,16 @@ namespace TimorINSSBackEnd.Repository.Repositories
             .Include(a => a.InverseParentFkNavigation)
             .Where(a => a.ReltipoDeContaOrcamentoConfigFkNavigation.OrcamentoConfigFk == orcamentoId)
             .ToDictionary(a => a.Id);
+
+            if (objectDictionary.Count == 0) {
+                objectDictionary = _moduloContribuicoesContext.Agrupamentoconfig
+            .Where(a => a.IndActivo)
+            .Include(a => a.ParentFkNavigation)
+            .Include(a => a.ReltipoDeContaOrcamentoConfigFkNavigation)
+            .Include(a => a.InverseParentFkNavigation)
+            .Where(a => a.ReltipoDeContaOrcamentoConfigFkNavigation.OrcamentoConfigFk == 2006)
+            .ToDictionary(a => a.Id);
+            }
 
             List<AgrupamentoConfigDataContract> result = new List<AgrupamentoConfigDataContract>();
             Agrupamentoconfig a;

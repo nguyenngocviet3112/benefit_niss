@@ -31,7 +31,7 @@ export class UtilizadorComponent implements OnInit {
   public dataSourceUtilizadores: UtilizadoresListagem[] = [];
   public displayedColumnsUtilizadores: string[] = ['utilizador', 'departamento', 'perfil', 'acoes'];
   public totalRowsUtilizadoresTable: number = 0;
-  public pageSizeUtilizadoresTable = 5;
+  public pageSizeUtilizadoresTable = 20;
   public pageIndexUtilizadoresTable = 0;
 
   //user permissions

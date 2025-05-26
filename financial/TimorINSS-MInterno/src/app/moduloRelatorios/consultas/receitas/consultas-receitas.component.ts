@@ -43,7 +43,7 @@ export class ConsultasReceitasComponent implements OnInit {
   public receitasList: ReceitaRelatorio[] = [];
   public displayedColumns: string[] = ['departamento', 'centroCusto', 'tipoConta', 'contaOSS', 'descricao', 'valor', 'data', 'numeroProcesso', 'utilizador'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

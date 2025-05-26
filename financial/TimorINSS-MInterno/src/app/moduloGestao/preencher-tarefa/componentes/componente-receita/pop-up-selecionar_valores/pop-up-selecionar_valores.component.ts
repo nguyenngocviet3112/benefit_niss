@@ -37,7 +37,7 @@ export class PopUpSelecionarValoresParaRegistoComponent {
     public dataSourceMovimentos: MovimentosConciliados[] = [];
     public displayedColumnsMovimentos: string[] = ['descricao', 'documentoAssociado', 'comprovativo', 'valor', 'selecao'];
     public totalRows: number = 0;
-    public pageSize = 5;
+    public pageSize = 20;
     public pageIndex = 0;
 
     public selection = new SelectionModel<MovimentosConciliados>(true, []);

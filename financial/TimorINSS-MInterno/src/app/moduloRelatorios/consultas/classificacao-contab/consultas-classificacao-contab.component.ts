@@ -50,7 +50,7 @@ export class ConsultasClassificacaoContabilisticaComponent implements OnInit {
   public movimentosList: ClassificacaoContabilistica[] = [];
   public displayedColumns: string[] = ['data', 'fase', 'credito', 'debito', 'valor', 'numeroPagamento', 'nomeDestinatario', 'niss', 'tin'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

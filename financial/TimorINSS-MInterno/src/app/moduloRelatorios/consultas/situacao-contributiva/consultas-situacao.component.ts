@@ -48,7 +48,7 @@ export class ConsultasSituacoesContributivasComponent implements OnInit {
   public declaracoesList: RelatoriosDeclaracaoListagem[] = [];
   public displayedColumns: string[] = ['mesReferencia', 'empregador', 'valorRenumeracoes', 'valorContribuicoes', 'valorPago', 'valorDivida'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

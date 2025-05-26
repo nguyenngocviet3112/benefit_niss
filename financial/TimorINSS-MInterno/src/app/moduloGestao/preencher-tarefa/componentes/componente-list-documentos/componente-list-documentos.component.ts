@@ -33,7 +33,7 @@ export class ComponenteListDocumentosComponent implements OnInit {
 
   public documentos: TarefaDocumentoListagem[] = [];
   public displayedColumnsDocumento: string[] = ['tipo', 'dataInsert', 'tarefa', 'user', 'pdf'];
-  public pageSizeDocumentosTable: number = 5;
+  public pageSizeDocumentosTable: number = 20;
   public totalRowsDocumentosTable: number = 0;
   public pageIndexDocumentosTable: number = 0;
   private documentoWarningMsg = 'warnings.warningDeleteDocument';

@@ -77,7 +77,7 @@ export class HomePageComponent implements OnInit {
   public tarefasList: TarefaAtivoListagem[] = [];
   public displayedColumns: string[] = ['numeroProcesso', 'processo', 'tarefas', 'estado', 'lastUpdate', 'acoes'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   //Region processes

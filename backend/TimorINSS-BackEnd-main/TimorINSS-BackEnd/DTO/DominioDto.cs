@@ -18,6 +18,9 @@ namespace TimorINSSBackEnd.DTO
         public string Descricao { get; set; }
 
         [Mapper]
+        public string DescricaoEn { get; set; }
+
+        [Mapper]
         public bool IndActivo { get; set; }
 
         public virtual ICollection<ContacorrenteDto> ContacorrenteSituacaoPagamentoNavigation { get; set; }

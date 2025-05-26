@@ -47,7 +47,7 @@ export class ConsultasReceitasNaoConciliadasComponent implements OnInit {
   public receitasList: ReceitaNaoConciliadaRelatorio[] = [];
   public displayedColumns: string[] = ['descricao', 'numeroDocumento', 'valor', 'tin', 'data'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

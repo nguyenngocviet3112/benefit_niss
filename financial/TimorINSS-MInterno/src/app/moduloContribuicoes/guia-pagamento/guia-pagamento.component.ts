@@ -42,7 +42,7 @@ export class GuiaPagamentoComponent implements OnInit {
     public dataSourceGuiaPagamento: GuiaListagem[] = [];
     public displayedColumnsGuiaPagamento: string[] = ['numDocumento', 'mesAno', 'descricao', 'valor', 'juros', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
     public totalRows: number = 0;
-    public pageSize = 5;
+    public pageSize = 20;
     public pageIndex = 0;
     public guiaTipoOptions: DominioDescricaoString[] = [];
     public pagamentoTipoOptions: DominioDescricaoString[] = [];
@@ -185,7 +185,7 @@ export class GuiaPagamentoComponent implements OnInit {
     public applyTipoFilter(filter: string) {
         this.filterField = 'Tipo';
         this.filterBy = filter;
-        this.pageSize = 5;
+        this.pageSize = 20;
         this.pageIndex = 0;
         this.getTableGuiaPagamento('Tipo');
     }
@@ -193,7 +193,7 @@ export class GuiaPagamentoComponent implements OnInit {
     public applyPagamentoFilter(filter: string) {
         this.filterField = 'Estado';
         this.filterBy = filter;
-        this.pageSize = 5;
+        this.pageSize = 20;
         this.pageIndex = 0;
         this.getTableGuiaPagamento('Estado');
     }
@@ -202,7 +202,7 @@ export class GuiaPagamentoComponent implements OnInit {
         this.filter = {};
         this.filterBy = '';
         this.filterField = undefined;
-        this.pageSize = 5;
+        this.pageSize = 20;
         this.pageIndex = 0;
         this.tipoOption = undefined;
         this.situacaoOption = undefined;

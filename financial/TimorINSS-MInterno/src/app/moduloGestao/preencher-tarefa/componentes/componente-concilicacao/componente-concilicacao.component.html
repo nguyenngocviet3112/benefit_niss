@@ -152,7 +152,7 @@
                     </table>
                     <mat-paginator class="paginator" [length]="this.movimentosBancariostotalRowsTable"
                         [pageSize]="this.movimentosBancariospageSizeTable" (page)="updateTableMovimentosBancarios($event)"
-                        [pageIndex]="movimentosBancariospageIndexTable" [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons>
+                        [pageIndex]="movimentosBancariospageIndexTable" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons>
                     </mat-paginator>
                     <div class="inputs-grid__cell--full-width">
                         <button class="buttonfilter {{activeVerConciliadosBancarios ? 'active' : ''}}" mat-raised-button>
@@ -276,7 +276,7 @@
                     </table>
                     <mat-paginator class="paginator" [length]="this.movimentosTotalRowsTable"
                         [pageSize]="this.movimentosPageSizeTable" (page)="updateTableMovimentos($event)"
-                        [pageIndex]="movimentosPageIndexTable" [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons>
+                        [pageIndex]="movimentosPageIndexTable" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons>
                     </mat-paginator>
                     <div class="inputs-grid__cell--full-width">
                         <button class="buttonfilter {{activeVerConciliados ? 'active' : ''}}" mat-raised-button>

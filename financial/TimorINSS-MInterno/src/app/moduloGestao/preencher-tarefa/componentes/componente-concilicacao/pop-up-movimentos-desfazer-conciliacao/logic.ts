@@ -99,7 +99,7 @@ export class PopUpMovimentosDesfazerConciliacaoComponent {
   public movimentosBancarios: any[] = [];
   public displayedColumnsMB: string[] = ['descricao', 'dataValor', 'credito', 'debito', 'acoes'];
   public totalRowsTableMB: number = 0;
-  public pageSizeTableMB = 5;
+  public pageSizeTableMB = 20;
   public pageIndexTableMB = 0;
 
   // tabela movimentos a conciliar
@@ -107,7 +107,7 @@ export class PopUpMovimentosDesfazerConciliacaoComponent {
   public movimentosPorConciliar: any[] = [];
   public displayedColumnsMC: string[] = ['descricao', 'documento', 'comprovativo', 'numeroPagamento', 'valor', 'acoes'];
   public totalRowsTableMC: number = 0;
-  public pageSizeTableMC = 5;
+  public pageSizeTableMC = 20;
   public pageIndexTableMC = 0;
 
 
@@ -310,11 +310,11 @@ export class PopUpMovimentosDesfazerConciliacaoComponent {
 
   public clearFilter(): void {
     if (this.fromTable == 1) {
-      this.pageSizeTableMC = 5;
+      this.pageSizeTableMC = 20;
       this.pageIndexTableMC = 0;
     }
     else {
-      this.pageSizeTableMB = 5;
+      this.pageSizeTableMB = 20;
       this.pageIndexTableMB = 0;
     }
     this.filter = {};

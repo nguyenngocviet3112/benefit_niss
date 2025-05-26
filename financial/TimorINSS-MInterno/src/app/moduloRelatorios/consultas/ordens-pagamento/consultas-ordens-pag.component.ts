@@ -46,7 +46,7 @@ export class ConsultasOrdensPagamentoComponent implements OnInit {
   public pagamentosList: RelatoriosOrdensPagamentoListagem[] = [];
   public displayedColumns: string[] = ['numeroPagamento', 'destinatario', 'conta', 'dataEmissao', 'estado', 'valor', 'pdf'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

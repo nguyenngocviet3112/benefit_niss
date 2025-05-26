@@ -29,7 +29,7 @@ export class TrabalhadoresComponent implements OnInit {
   public entidadeId: number = 0;
   public totalRows: number = 0;
   public filterBy = '';
-  public pageSize = 5;
+  public pageSize = 20;
   public pageIndex = 0;
   public faTimesCircle = faTimesCircle;
   public orderBy = 'nome';
@@ -86,7 +86,7 @@ export class TrabalhadoresComponent implements OnInit {
   public dateUpdated() {
     this.filterBy = '';
     this.pageIndex = 0;
-    this.pageSize = 5;
+    this.pageSize = 20;
     this.getTable();
   }
 
@@ -128,7 +128,7 @@ export class TrabalhadoresComponent implements OnInit {
   public pesquisarPessoa() {
     this.date = undefined;
     this.pageIndex = 0;
-    this.pageSize = 5;
+    this.pageSize = 20;
     this.getTable();
   }
 

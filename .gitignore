@@ -24,3 +24,6 @@ backend/TimorINSS-BackEnd-main/.vs/TimorINSS-BackEnd-main/FileContentIndex/71241
 /backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug
 /backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug
 /backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug/netcoreapp3.1
+db_backup/TimorINSSModuloContribuicoes.ldf
+db_backup/TimorINSSModuloContribuicoes.mdf
+db_backup/TimorINSSModuloContribuicoes_FullBackup_25052025_2222.bak
