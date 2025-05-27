@@ -28,7 +28,7 @@ export class ProcessosArquivadosComponent implements OnInit {
   public processosList: ProcessosArquivadosListagem[] = [];
   public displayedColumns: string[] = ['numero', 'nome', 'date', 'acoes'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

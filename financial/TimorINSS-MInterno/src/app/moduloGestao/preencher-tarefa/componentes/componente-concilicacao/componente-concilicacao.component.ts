@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { forkJoin } from 'rxjs';
+
 import { ContaBancaria } from 'src/app/models/contaBancaria';
 import { MovimentosBancariosData } from 'src/app/models/movimentosBancarios';
 import { MovimentosDespesaReceita, MovimentosPorConciliarListagemType } from 'src/app/models/movimentosDespesaReceita';
@@ -27,6 +27,8 @@ import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PopUpClassificacaoContabilisticaComponent } from './pop-up-classificacao-contabilistica/pop-up-classificacao-contabilistica.component';
 import { ExcelImporterPopupMovimentosComponent } from "src/app/componentes/excel-importer/excel-importer-popups/excel-importer-popup-movimentos/excel-importer-popup-movimentos.component";
+import { catchError } from 'rxjs/operators';
+import { forkJoin, of } from 'rxjs';
 
 
 @Component({
@@ -78,7 +80,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   public saldoTotal?: SaldoMovimentosResponse;
   public hasConciliados = false;
   public disableCheckAllMovimentosBancarios = false;
-  public selectedMovimentosBancarios: {id: number; value?: number}[] = [];
+  public selectedMovimentosBancarios: { id: number; value?: number }[] = [];
   public totalselectedBancarios: number = 0;
   public activeVerConciliadosBancarios = false;
   public activeVerNaoConciliadosBancarios = false;
@@ -103,7 +105,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   public movimentosfilterBy = '';
   public hasMovimentosConciliados = false;
   public disableCheckAllMovimentos = false;
-  public selectedMovimentos: {id: number; value?: number; type?: number}[] = [];
+  public selectedMovimentos: { id: number; value?: number; type?: number }[] = [];
   public totalselectedMovimentos: number = 0;
   public activeVerConciliados = false;
   public activeVerNaoConciliados = false;
@@ -134,23 +136,79 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       this.router.navigate([''], { skipLocationChange: true });
     }
     else {
-        this.spinner.show();
-        let permissinonsRequest: ConciliarMovimentosPermissionsListRequest = <ConciliarMovimentosPermissionsListRequest>{tarefaAtivoId: this.tarefaActivoId};
-        let dominioCaixas = this.dominiosService.getAllCaixas();
-        let contasBancarias = this.movimentosService.ListContasBancarias();
-        let dominioMovimentosTypes = this.dominiosService.getAllMovimentosTypes();
-        // let saldoMovimentos = this.movimentosService.ListSaldoMovimentos();
-        let permissions = this.movimentosService.ListPermissions(permissinonsRequest);
+      this.spinner.show();
+      let permissinonsRequest: ConciliarMovimentosPermissionsListRequest = <ConciliarMovimentosPermissionsListRequest>{ tarefaAtivoId: this.tarefaActivoId };
+      // let dominioCaixas = this.dominiosService.getAllCaixas();
+      // let contasBancarias = this.movimentosService.ListContasBancarias();
+      // let dominioMovimentosTypes = this.dominiosService.getAllMovimentosTypes();
+      // let permissions = this.movimentosService.ListPermissions(permissinonsRequest);
 
-        forkJoin([dominioCaixas, contasBancarias, dominioMovimentosTypes, permissions])
-            .subscribe(([dominioCaixas, contasBancarias, dominioMovimentosTypes, permissions]) => {
-                this.caixasList = dominioCaixas.dominios;
-                this.contasList = contasBancarias.contas;
-                this.movimentosTypeList = dominioMovimentosTypes.dominios;
-                this.buildPermissions(permissions);
-                this.spinner.hide();
-            });
+
+
+      forkJoin({
+        dominioCaixas: this.dominiosService.getAllCaixas().pipe(
+          catchError(err => {
+            console.error("Lỗi getAllCaixas", err);
+            return of(null); // Cho phép tiếp tục forkJoin
+          })
+        ),
+        contasBancarias: this.movimentosService.ListContasBancarias().pipe(
+          catchError(err => {
+            console.error("Lỗi ListContasBancarias", err);
+            return of(null);
+          })
+        ),
+        dominioMovimentosTypes: this.dominiosService.getAllMovimentosTypes().pipe(
+          catchError(err => {
+            console.error("Lỗi getAllMovimentosTypes", err);
+            return of(null);
+          })
+        ),
+        permissions: this.movimentosService.ListPermissions(permissinonsRequest).pipe(
+          catchError(err => {
+            console.error("Lỗi ListPermissions", err);
+            return of(null);
+          })
+        )
+      }).subscribe(({ dominioCaixas, contasBancarias, dominioMovimentosTypes, permissions }) => {
+
+        // ✅ Gán chỉ khi có dữ liệu
+        if (dominioCaixas?.dominios) {
+          this.caixasList = dominioCaixas.dominios;
         }
+
+        if (contasBancarias?.contas) {
+          this.contasList = contasBancarias.contas;
+        }
+
+        if (dominioMovimentosTypes?.dominios) {
+          this.movimentosTypeList = dominioMovimentosTypes.dominios;
+        }
+
+        if (permissions) {
+          this.buildPermissions(permissions);
+        }
+
+        this.spinner.hide();
+      });
+      // forkJoin({
+      //   contasBancarias: this.movimentosService.ListContasBancarias(),
+      //   permissions: this.movimentosService.ListPermissions(permissinonsRequest)
+      // }).subscribe(({  contasBancarias,  permissions }) => {
+      //   this.contasList = contasBancarias.contas;
+      //   this.buildPermissions(permissions);
+      //   this.spinner.hide();
+      // });
+
+      // forkJoin([dominioCaixas, contasBancarias, dominioMovimentosTypes, permissions])
+      //     .subscribe(([dominioCaixas, contasBancarias, dominioMovimentosTypes, permissions]) => {
+      //         this.caixasList = dominioCaixas.dominios;
+      //         this.contasList = contasBancarias.contas;
+      //         this.movimentosTypeList = dominioMovimentosTypes.dominios;
+      //         this.buildPermissions(permissions);
+      //         this.spinner.hide();
+      //     });
+    }
   }
 
   public resetCaixa(): void {
@@ -235,7 +293,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       filter: this.movimentosBancariosFilter
     };
 
-    if (filterByConciliados){
+    if (filterByConciliados) {
       request.filter.filterField = 'concilados';
     } else if (filterByTodos)
       request.filter.filterField = undefined;
@@ -297,15 +355,15 @@ export class ComponenteConcilicacaoComponent implements OnInit {
         this.noResultsMovimentos = false;
         this.resultsMovimentos = true;
         this.hasMovimentosConciliados = this.movimentosList.filter(x => x.conciliado == true).length > 0;
-        if(!this.isReceita)
+        if (!this.isReceita)
           this.movimentosList.filter(x => x.isClassificada == true).length > 0 ? this.disableCheckAllMovimentos = false : this.disableCheckAllMovimentos = true;
       }
 
       this.hideLoader();
     },
-    err => {
-      this.showError();
-    });
+      err => {
+        this.showError();
+      });
   }
 
   public getSaldoTotalTable() {
@@ -322,15 +380,15 @@ export class ComponenteConcilicacaoComponent implements OnInit {
 
   public editMovimentosBancariosPopUp(selectedMovimento: MovimentosBancariosData): void {
     let data: MovimentosUpsertDataRequest = <MovimentosUpsertDataRequest>
-    {
-      id: selectedMovimento.id,
-      bancoId: this.contaSelectedId,
-      caixaId: this.caixaSelectedId,
-      descricao: selectedMovimento.descricao,
-      data: selectedMovimento.dataValor,
-      tarefaAtivoId: this.tarefaActivoId,
-      valor: selectedMovimento.credito != null ? selectedMovimento.credito : selectedMovimento.debito != null ? selectedMovimento.debito : <number>{}
-    };
+      {
+        id: selectedMovimento.id,
+        bancoId: this.contaSelectedId,
+        caixaId: this.caixaSelectedId,
+        descricao: selectedMovimento.descricao,
+        data: selectedMovimento.dataValor,
+        tarefaAtivoId: this.tarefaActivoId,
+        valor: selectedMovimento.credito != null ? selectedMovimento.credito : selectedMovimento.debito != null ? selectedMovimento.debito : <number>{}
+      };
 
     const dialogRef = this.MovimentosBancariosDialog.open(PopUpMovimentosUpsertComponent, {
       id: 'gravarCampo',
@@ -342,8 +400,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result)
-      {
+      if (result) {
         this.showLoader();
         this.getMovimentosBancariosTable();
         this.getSaldoTotalTable();
@@ -364,8 +421,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result)
-      {
+      if (result) {
         this.showLoader();
         this.getMovimentosBancariosTable();
         this.getSaldoTotalTable();
@@ -376,11 +432,11 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   public openMovimentosPopUp(): void {
 
     let data: MovimentosDespesaReceitaUpsertRequest = <MovimentosDespesaReceitaUpsertRequest>
-    {
-      tarefaAtivoId: this.tarefaActivoId,
-      tipoMovimento: this.movimentosTypeSelected,
-      isReceita: this.movimentosTypeList.find(x => x.id == this.movimentosTypeSelected)?.descricao == 'Receita'
-    };
+      {
+        tarefaAtivoId: this.tarefaActivoId,
+        tipoMovimento: this.movimentosTypeSelected,
+        isReceita: this.movimentosTypeList.find(x => x.id == this.movimentosTypeSelected)?.descricao == 'Receita'
+      };
 
     const dialogRef = this.MovimentosDialog.open(PopUpMovimentosDespesaReceitaUpsertComponent, {
       id: 'gravarCampo',
@@ -392,8 +448,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result)
-      {
+      if (result) {
         this.showLoader();
         this.getMovimentosTable();
       }
@@ -401,7 +456,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   }
 
   public openDesfazerConciliacoesPopUp(): void {
-    let data: PopUpMovimentosDesfazerConciliacaoComponentData = <PopUpMovimentosDesfazerConciliacaoComponentData>{tarefaAtivoId: this.tarefaActivoId};
+    let data: PopUpMovimentosDesfazerConciliacaoComponentData = <PopUpMovimentosDesfazerConciliacaoComponentData>{ tarefaAtivoId: this.tarefaActivoId };
 
     const dialogRef = this.DesfazerConciliacoesDialog.open(PopUpMovimentosDesfazerConciliacaoComponent, {
       id: 'gravarCampo',
@@ -413,8 +468,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result)
-      {
+      if (result) {
         this.showLoader();
         this.getMovimentosBancariosTable();
         this.getSaldoTotalTable();
@@ -425,28 +479,28 @@ export class ComponenteConcilicacaoComponent implements OnInit {
 
   public editMovimentosPopUp(selectedMovimento: MovimentosDespesaReceita): void {
     let data: MovimentosDespesaReceitaUpsertRequest = <MovimentosDespesaReceitaUpsertRequest>
-    {
-      id: selectedMovimento.id,
-      tarefaAtivoId: this.tarefaActivoId,
-      tipoMovimento: this.movimentosTypeSelected,
-      isReceita: this.isReceita,
-      movimentoBancarioId: selectedMovimento.movimentoBancarioId,
-      valor: selectedMovimento.valor,
-      tipoDocumento: selectedMovimento.tipoDocumento,
-      numeroDocumento: selectedMovimento.numeroDocumento,
-      comprovativo: selectedMovimento.comprovativo,
-      nomeComprovativo: selectedMovimento.nomeComprovativo,
-      contabilidadeCredito: selectedMovimento.contabilidadeCredito,
-      contabilidadeDebito: selectedMovimento.contabilidadeDebito,
-      departamentoINSS: selectedMovimento.departamentoINSS,
-      centroCusto: selectedMovimento.centroCusto,
-      tipoConta: selectedMovimento.tipoConta,
-      contaOSS: selectedMovimento.contaOSS,
-      guiaOrReserva: !selectedMovimento.editavel,
-      type: selectedMovimento.type,
-      isGuia: selectedMovimento.type == MovimentosPorConciliarListagemType.GuiaPagamento,
-      isReserva: selectedMovimento.type == MovimentosPorConciliarListagemType.ReservaCredito,
-    };
+      {
+        id: selectedMovimento.id,
+        tarefaAtivoId: this.tarefaActivoId,
+        tipoMovimento: this.movimentosTypeSelected,
+        isReceita: this.isReceita,
+        movimentoBancarioId: selectedMovimento.movimentoBancarioId,
+        valor: selectedMovimento.valor,
+        tipoDocumento: selectedMovimento.tipoDocumento,
+        numeroDocumento: selectedMovimento.numeroDocumento,
+        comprovativo: selectedMovimento.comprovativo,
+        nomeComprovativo: selectedMovimento.nomeComprovativo,
+        contabilidadeCredito: selectedMovimento.contabilidadeCredito,
+        contabilidadeDebito: selectedMovimento.contabilidadeDebito,
+        departamentoINSS: selectedMovimento.departamentoINSS,
+        centroCusto: selectedMovimento.centroCusto,
+        tipoConta: selectedMovimento.tipoConta,
+        contaOSS: selectedMovimento.contaOSS,
+        guiaOrReserva: !selectedMovimento.editavel,
+        type: selectedMovimento.type,
+        isGuia: selectedMovimento.type == MovimentosPorConciliarListagemType.GuiaPagamento,
+        isReserva: selectedMovimento.type == MovimentosPorConciliarListagemType.ReservaCredito,
+      };
 
     const dialogRef = this.MovimentosBancariosDialog.open(PopUpMovimentosDespesaReceitaUpsertComponent, {
       id: 'gravarCampo',
@@ -458,8 +512,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result)
-      {
+      if (result) {
         this.showLoader();
         this.getMovimentosTable();
       }
@@ -483,7 +536,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     this.movimentosBancariosSelection.toggle(selected);
     if (this.movimentosBancariosSelection.isSelected(selected)) {
       if (this.movimentosBancariosDisplayType == SelectType.single)
-      this.selectedMovimentosBancarios = [];
+        this.selectedMovimentosBancarios = [];
       this.selectedMovimentosBancarios.push({
         id: selected,
         value: this.movimentosBancariosList.find(x => x.id == selected)?.credito ?? this.movimentosBancariosList.find(x => x.id == selected)?.debito
@@ -518,7 +571,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     this.movimentosSelection.toggle(selected);
     if (this.movimentosSelection.isSelected(selected)) {
       if (this.movimentosDisplayType == SelectType.single)
-      this.selectedMovimentos = [];
+        this.selectedMovimentos = [];
 
       this.selectedMovimentos.push({
         id: selected,
@@ -536,7 +589,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     this.totalselectedMovimentos = totalValue;
     this.totalSum = this.sumTotalValue();
 
-    if (this.movimentosSelection.selected.length > 1){
+    if (this.movimentosSelection.selected.length > 1) {
       this.movimentosBancariosDisplayType = SelectType.single;
       this.disableCheckAllMovimentosBancarios = true;
     }
@@ -555,89 +608,87 @@ export class ComponenteConcilicacaoComponent implements OnInit {
 
   public isMovimentosAllSelected() {
     const numSelected = this.movimentosSelection.selected.filter(x => this.movimentosList.find(y => y.id == x)).length;
-    const numRows = this.isReceita ? this.movimentosList.filter(y => !y.conciliado).length : this.movimentosList.filter(y => !y.conciliado &&  y.isClassificada).length;
+    const numRows = this.isReceita ? this.movimentosList.filter(y => !y.conciliado).length : this.movimentosList.filter(y => !y.conciliado && y.isClassificada).length;
     return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   public masterToggle() {
-    if (this.isAllSelected())
-        {
-          this.movimentosBancariosSelection.clear();
-          this.totalselectedBancarios = 0;
-          this.totalSum = this.sumTotalValue();
-          this.selectedMovimentosBancarios = [];
-          this.movimentosDisplayType = SelectType.multiple;
-          this.disableCheckAllMovimentos = false;
-        }
-        else {
-          const filteredMovimentos = this.movimentosBancariosList.filter(x => this.isReceita ? x.credito : x.debito);
-          filteredMovimentos.filter(x => !x.conciliado).forEach(row => {
-            this.movimentosBancariosSelection.select(row.id);
-            if (!this.selectedMovimentosBancarios.find(x => x.id == row.id)){
-              this.selectedMovimentosBancarios.push({
-                id: row.id,
-                value: row.credito ?? row.debito
-              });
-            }
+    if (this.isAllSelected()) {
+      this.movimentosBancariosSelection.clear();
+      this.totalselectedBancarios = 0;
+      this.totalSum = this.sumTotalValue();
+      this.selectedMovimentosBancarios = [];
+      this.movimentosDisplayType = SelectType.multiple;
+      this.disableCheckAllMovimentos = false;
+    }
+    else {
+      const filteredMovimentos = this.movimentosBancariosList.filter(x => this.isReceita ? x.credito : x.debito);
+      filteredMovimentos.filter(x => !x.conciliado).forEach(row => {
+        this.movimentosBancariosSelection.select(row.id);
+        if (!this.selectedMovimentosBancarios.find(x => x.id == row.id)) {
+          this.selectedMovimentosBancarios.push({
+            id: row.id,
+            value: row.credito ?? row.debito
           });
-          let totalValue = 0;
-          this.selectedMovimentosBancarios.forEach(element => {
-            totalValue += element.value ?? 0
-          });
-          this.totalselectedBancarios = totalValue;
-          this.totalSum = this.sumTotalValue();
-          this.movimentosDisplayType = SelectType.single;
-          this.disableCheckAllMovimentos = true;
         }
+      });
+      let totalValue = 0;
+      this.selectedMovimentosBancarios.forEach(element => {
+        totalValue += element.value ?? 0
+      });
+      this.totalselectedBancarios = totalValue;
+      this.totalSum = this.sumTotalValue();
+      this.movimentosDisplayType = SelectType.single;
+      this.disableCheckAllMovimentos = true;
+    }
 
   }
 
   public masterMovimentosToggle() {
-    if (this.isMovimentosAllSelected())
-        {
-          this.movimentosSelection.clear();
-          this.totalselectedMovimentos = 0;
-          this.totalSum = this.sumTotalValue();
-          this.selectedMovimentos = [];
-          this.movimentosBancariosDisplayType = SelectType.multiple;
-          this.disableCheckAllMovimentosBancarios = false;
-        }
-        else {
-          if (this.isReceita){
-            this.movimentosList.filter(x => !x.conciliado).forEach(row => {
-              this.movimentosSelection.select(row.id);
-              if (!this.selectedMovimentos.find(x => x.id == row.id)){
-                this.selectedMovimentos.push({
-                  id: row.id,
-                  value: row.valor,
-                  type: row.type
-                });
-              }
+    if (this.isMovimentosAllSelected()) {
+      this.movimentosSelection.clear();
+      this.totalselectedMovimentos = 0;
+      this.totalSum = this.sumTotalValue();
+      this.selectedMovimentos = [];
+      this.movimentosBancariosDisplayType = SelectType.multiple;
+      this.disableCheckAllMovimentosBancarios = false;
+    }
+    else {
+      if (this.isReceita) {
+        this.movimentosList.filter(x => !x.conciliado).forEach(row => {
+          this.movimentosSelection.select(row.id);
+          if (!this.selectedMovimentos.find(x => x.id == row.id)) {
+            this.selectedMovimentos.push({
+              id: row.id,
+              value: row.valor,
+              type: row.type
             });
           }
-          else{
-            this.movimentosList.filter(x => !x.conciliado && x.isClassificada).forEach(row => {
-              this.movimentosSelection.select(row.id);
-              if (!this.selectedMovimentos.find(x => x.id == row.id) && row.isClassificada == true){
-                this.selectedMovimentos.push({
-                  id: row.id,
-                  value: row.valor,
-                  type: row.type
-                });
-              }
+        });
+      }
+      else {
+        this.movimentosList.filter(x => !x.conciliado && x.isClassificada).forEach(row => {
+          this.movimentosSelection.select(row.id);
+          if (!this.selectedMovimentos.find(x => x.id == row.id) && row.isClassificada == true) {
+            this.selectedMovimentos.push({
+              id: row.id,
+              value: row.valor,
+              type: row.type
             });
           }
+        });
+      }
 
-          let totalValue = 0;
-          this.selectedMovimentos.forEach(element => {
-            totalValue += element.value ?? 0
-          });
-          this.totalselectedMovimentos = totalValue;
-          this.totalSum = this.sumTotalValue();
-          this.movimentosBancariosDisplayType = SelectType.single;
-          this.disableCheckAllMovimentosBancarios = true;
-        }
+      let totalValue = 0;
+      this.selectedMovimentos.forEach(element => {
+        totalValue += element.value ?? 0
+      });
+      this.totalselectedMovimentos = totalValue;
+      this.totalSum = this.sumTotalValue();
+      this.movimentosBancariosDisplayType = SelectType.single;
+      this.disableCheckAllMovimentosBancarios = true;
+    }
 
   }
 
@@ -668,7 +719,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   }
 
   public conciliarMovimentos(): void {
-    let request: ConciliarMovimentosRequest = <ConciliarMovimentosRequest>{tarefaAtivoId: this.tarefaActivoId};
+    let request: ConciliarMovimentosRequest = <ConciliarMovimentosRequest>{ tarefaAtivoId: this.tarefaActivoId };
 
     request.movimentosBancarios = this.selectedMovimentosBancarios.map(x => x.id);
     request.movimentosAConciliar = this.selectedMovimentos.map(x => {
@@ -702,7 +753,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     this.activeVerNaoConciliadosBancarios = false;
     this.activeVerTodosBancarios = false;
     this.activeVerSeleccionadosBancarios = true;
-    this.movimentosBancariosList = this.movimentosBancariosList.filter(x => this.movimentosBancariosSelection.selected.find( y => y == x.id));
+    this.movimentosBancariosList = this.movimentosBancariosList.filter(x => this.movimentosBancariosSelection.selected.find(y => y == x.id));
   }
 
   public filterByMovimentosSelecionados(): void {
@@ -710,7 +761,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     this.activeVerNaoConciliados = false;
     this.activeVerTodos = false;
     this.activeVerSeleccionados = true;
-    this.movimentosList = this.movimentosList.filter(x => this.movimentosSelection.selected.find( y => y == x.id));
+    this.movimentosList = this.movimentosList.filter(x => this.movimentosSelection.selected.find(y => y == x.id));
   }
 
   public filterByVerTodos(): void {
@@ -830,12 +881,10 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   }
 
   public sumTotalValue(): number {
-    if (this.totalselectedBancarios == 0 && this.totalselectedMovimentos < 0)
-    {
+    if (this.totalselectedBancarios == 0 && this.totalselectedMovimentos < 0) {
       return Math.round(this.totalselectedMovimentos * 100) / 100;
     }
-    else if (this.totalselectedBancarios == 0 && this.totalselectedMovimentos > 0)
-    {
+    else if (this.totalselectedBancarios == 0 && this.totalselectedMovimentos > 0) {
       return -(Math.round(this.totalselectedMovimentos * 100) / 100);
     }
     else
@@ -870,16 +919,15 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       this.undoConciliationPermission = false;
   }
 
-  public scroll(e: any)
-  {
-    e._body.nativeElement.scrollIntoView({behavior: "smooth", block: "start"});
+  public scroll(e: any) {
+    e._body.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   public selectHandlerDespesasAConciliar(selected: number) {
     this.despesasClassificacaoSelection.toggle(selected);
     if (this.despesasClassificacaoSelection.isSelected(selected)) {
       if (this.movimentosDisplayType == SelectType.single)
-      this.selectedDespesas = [];
+        this.selectedDespesas = [];
 
       this.selectedDespesas.push(selected);
     } else {
@@ -901,7 +949,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result){
+      if (result) {
         openSnackBar(this.translate.instant('snackBar.registoContabilistico'), this.snackBar);
         this.showLoader();
         this.selectedDespesas = [];

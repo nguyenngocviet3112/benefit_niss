@@ -43,7 +43,7 @@ export class ConsultasFornecedoresComponent implements OnInit {
   public movimentosList: Fornecedores[] = [];
   public displayedColumns: string[] = ['niss', 'tin', 'nome', 'pagamento', 'descricao', 'valor', 'data', 'conciliado'];
   public totalRowsTable: number = 0;
-  public pageSizeTable = 5;
+  public pageSizeTable = 20;
   public pageIndexTable = 0;
 
   constructor(

@@ -112,7 +112,7 @@ export class ComponenteReceitaComponent implements OnInit {
     public totalMovimentosRegistados: number = 0;
     public displayedColumnsMovimentos: string[] = ['descricao', 'documentoAssociado', 'comprovativo', 'valor', 'acoes'];
     public totalRows: number = 0;
-    public pageSize = 5;
+    public pageSize = 20;
     public pageIndex = 0;
     public receitasMovimentos: MovimentoReceita[] = [];
 

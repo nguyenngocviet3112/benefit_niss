@@ -60,7 +60,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             SingleDominioDescricaoStringResponse response = new SingleDominioDescricaoStringResponse();
 
             DominioDescricaoString dominio = _unitOfWork.DominioRepository.getTipoDeDominio(tipo);
-            if (language.ToUpper().Contains("EN"))
+            if (language != null && language.ToUpper().Contains("EN"))
             {
                 dominio.descricao = dominio.descricaoEn;
             }
@@ -84,15 +84,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(tipo);
             List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
-            if (language.ToUpper().Contains("EN"))
+            if (language != null && language.ToUpper().Contains("EN"))
             {
                 foreach (DominioDescricaoString dominio in dominios)
                 {
                     dominio.descricao = dominio.descricaoEn;
                     dominiosOut.Add(dominio);
                 }
+                response.dominios = dominiosOut;
             }
-            response.dominios = dominiosOut;
+            
 
             return response;
         }
@@ -103,17 +104,19 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA).Where(x => x.descricao != "Neutro Receita" && x.descricao != "Neutro Despesa" && x.indActivo == true).ToList();
             List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
-            if (language.ToUpper().Contains("EN"))
+            if (language != null && language.ToUpper().Contains("EN"))
             {
                 foreach (DominioDescricaoString dominio in dominios)
                 {
                     dominio.descricao = dominio.descricaoEn;
                     dominiosOut.Add(dominio);
                 }
+                response.dominios = dominiosOut;
+            } else 
+            { 
+                response.dominios = dominios;
             }
-            response.dominios = dominiosOut;
-
-            return response;
+                return response;
         }
 
         private DominioDescricaoStringResponse getAlCaixasFiltered(string language)
@@ -122,16 +125,20 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.CAIXAS).Where(x => x.indActivo == true).ToList();
             List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
-            if (language.ToUpper().Contains("EN"))
+            if (language != null && language.ToUpper().Contains("EN"))
             {
                 foreach (DominioDescricaoString dominio in dominios)
                 {
                     dominio.descricao = dominio.descricaoEn;
                     dominiosOut.Add(dominio);
                 }
+                response.dominios = dominiosOut;
             }
-            response.dominios = dominiosOut;
-            
+            else
+            {
+                response.dominios = dominios;
+            }
+
 
             return response;
         }
@@ -326,15 +333,19 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA).Where(x => x.indActivo == true).ToList();
             List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
-            if (language.ToUpper().Contains("EN"))
+            if (language != null && language.ToUpper().Contains("EN"))
             {
                 foreach (DominioDescricaoString dominio in dominios)
                 {
                     dominio.descricao = dominio.descricaoEn;
                     dominiosOut.Add(dominio);
                 }
+                response.dominios = dominiosOut;
             }
-            response.dominios = dominiosOut;
+            else
+            {
+                response.dominios = dominios;
+            }
 
             return response;
         }
@@ -345,15 +356,19 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.ESTADOPAGAMENTO).Where(x => x.indActivo == true).ToList();
             List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
-            if (language.ToUpper().Contains("EN"))
+            if (language != null && language.ToUpper().Contains("EN"))
             {
                 foreach (DominioDescricaoString dominio in dominios)
                 {
                     dominio.descricao = dominio.descricaoEn;
                     dominiosOut.Add(dominio);
                 }
+                response.dominios = dominiosOut;
             }
-            response.dominios = dominiosOut;
+            else
+            {
+                response.dominios = dominios;
+            }
 
             return response;
         }
