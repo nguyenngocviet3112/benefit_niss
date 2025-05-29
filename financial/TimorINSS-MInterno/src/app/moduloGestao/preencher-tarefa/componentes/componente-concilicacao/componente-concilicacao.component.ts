@@ -235,7 +235,9 @@ export class ComponenteConcilicacaoComponent implements OnInit {
 
   public selectMovimentoType(): void {
     this.disabledSearchMov = false;
-    this.isReceitaSelected = this.movimentosTypeList.find(x => x.id == this.movimentosTypeSelected)?.descricao == 'Receita';
+    this.isReceitaSelected = this.movimentosTypeList.find(x => x.id == 
+      this.movimentosTypeSelected)?.descricao == 'Receita' || this.movimentosTypeList.find(x => x.id == 
+      this.movimentosTypeSelected)?.descricao == 'Revenue';
   }
 
   public searchMovimentosBancarios(resetSelect: boolean = false): void {
@@ -274,7 +276,9 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       this.selectedMovimentosBancarios = [];
       this.totalSum = this.sumTotalValue();
     }
-    this.isReceita = this.movimentosTypeList.find(x => x.id == this.movimentosTypeSelected)?.descricao == 'Receita';
+    this.isReceita = this.movimentosTypeList.find(x => x.id == this.movimentosTypeSelected)?.descricao == 'Receita'
+    || this.movimentosTypeList.find(x => x.id == 
+      this.movimentosTypeSelected)?.descricao == 'Revenue';
     this.movimentosPageIndexTable = 0;
     this.movimentosPageSizeTable = 20;
     this.getMovimentosTable();
@@ -436,6 +440,8 @@ export class ComponenteConcilicacaoComponent implements OnInit {
         tarefaAtivoId: this.tarefaActivoId,
         tipoMovimento: this.movimentosTypeSelected,
         isReceita: this.movimentosTypeList.find(x => x.id == this.movimentosTypeSelected)?.descricao == 'Receita'
+        || this.movimentosTypeList.find(x => x.id == 
+      this.movimentosTypeSelected)?.descricao == 'Revenue'
       };
 
     const dialogRef = this.MovimentosDialog.open(PopUpMovimentosDespesaReceitaUpsertComponent, {

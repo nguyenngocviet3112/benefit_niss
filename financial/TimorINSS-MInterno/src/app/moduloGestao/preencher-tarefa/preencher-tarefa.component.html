@@ -12,13 +12,13 @@
       <app-componente-historico-texto *ngIf="rel.descricao === 'Histórico de Texto'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId"></app-componente-historico-texto>
       <app-componente-orcamento *ngIf="rel.descricao === 'Orçamento'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId"></app-componente-orcamento>
       <app-componente-texto *ngIf="rel.descricao === 'Texto'" [(request)]="tarefaObject.textos"></app-componente-texto>
-      <app-componente-despesa *ngIf="rel.descricao === 'Despesa'" [tarefaActivoId]="tarefaActivoId" [isExpanded]="rel.expandir"></app-componente-despesa>
+      <app-componente-despesa *ngIf="rel.descricao === 'Despesa' || rel.descricao === 'Expense' " [tarefaActivoId]="tarefaActivoId" [isExpanded]="rel.expandir"></app-componente-despesa>
       <app-componente-prazo *ngIf="rel.descricao === 'Prazo da Tarefa'" [limit]="tarefaObject.prazoTarefa.deadline" [expireDate]="tarefaObject.prazoTarefa.limitDate"></app-componente-prazo>
       <app-componente-documentos *ngIf="rel.descricao === 'Carregar Documentos'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId" (refreshDocTable)="refreshDocTableEvent($event)"></app-componente-documentos>
       <app-componente-list-documentos *ngIf="rel.descricao === 'Listagem de Documentos Associados'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId" [refreshTable]="refreshDocTable" (tableIsRefreshed)= "tableRefreshed($event)"></app-componente-list-documentos>
       <app-componente-classificacao-sub *ngIf="rel.descricao === 'Classificação / Sub-Classificação'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId" [(subClassificacaoId)]="tarefaObject.classificacaoSubClass"></app-componente-classificacao-sub>
       <app-componente-tarefa-a-seguir *ngIf="rel.descricao === 'Acções da Tarefa'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId" [(nextTarefaId)]="tarefaObject.nextTarefaNumber"></app-componente-tarefa-a-seguir>
-      <app-componente-receita *ngIf="rel.descricao === 'Receita'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId"></app-componente-receita>
+      <app-componente-receita *ngIf="rel.descricao === 'Receita' || rel.descricao === 'Revenue'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId"></app-componente-receita>
       <componente-concilicacao *ngIf="rel.descricao === 'Conciliação de Movimentos'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId"></componente-concilicacao>
     </div>
   </mat-accordion>

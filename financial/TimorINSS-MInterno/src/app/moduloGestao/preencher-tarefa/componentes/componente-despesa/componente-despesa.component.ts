@@ -237,7 +237,8 @@ export class ComponenteDespesaComponent implements OnInit {
         this.idOrcamentoRegisto = x.idOrcamentoRegisto;
         this.centroCustoListagem = x.centrosCusto;
         this.tipoContaListagem = x.tiposDeConta;
-        this.tipoContaFiltered = this.tipoContaListagem.filter(tipoConta => tipoConta.descricao == 'Despesa' || tipoConta.descricao == 'Neutro Despesa');
+        this.tipoContaFiltered = this.tipoContaListagem.filter(tipoConta => tipoConta.descricao == 'Despesa' 
+          || tipoConta.descricao == 'Neutro Despesa' || tipoConta.descricao == 'Expense' );
         this.tipoConta.id = this.tipoContaFiltered[0].id;
         this.contabilidadeListagem = x.codigoConta;
         this.filtersContabilidadeFiltered = x.codigoConta;

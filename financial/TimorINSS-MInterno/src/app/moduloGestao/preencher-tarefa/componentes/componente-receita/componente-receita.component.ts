@@ -202,7 +202,9 @@ export class ComponenteReceitaComponent implements OnInit {
                 this.idOrcamentoRegisto = x.idOrcamentoRegisto;
                 this.centroCustoListagem = x.centrosCusto;
                 this.tipoContaListagem = x.tiposDeConta;
-                this.tipoContaFiltered = this.tipoContaListagem.filter(tipoConta => tipoConta.descricao == 'Receita' || tipoConta.descricao == 'Neutro Receita');
+                this.tipoContaFiltered = this.tipoContaListagem.filter(tipoConta => tipoConta.descricao == 'Receita' || tipoConta.descricao == 'Neutro Receita'
+                    ||  tipoConta.descricao == 'Revenue' 
+                );
                 this.tipoConta.id = this.tipoContaFiltered[0].id;
                 this.contabilidadeListagem = x.codigoConta;
                 this.filtersContabilidadeFilteredCredito = x.codigoConta;

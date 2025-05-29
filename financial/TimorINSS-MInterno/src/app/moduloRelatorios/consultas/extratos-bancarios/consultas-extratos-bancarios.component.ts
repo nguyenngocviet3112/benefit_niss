@@ -137,7 +137,6 @@ export class ConsultasExtratosBancariosComponent implements OnInit {
     this.movimentosBancariosService.listMovimentosBancarios(request).subscribe((extratos) => {
       this.extratosList = extratos.movimentos || [];
       this.totalRowsTable = extratos.rows;
-
       this.totais.credito = extratos.movimentos.reduce((inc: number, extrato: MovimentosBancariosData) => inc + (extrato.credito || 0), 0);
       this.totais.debito = extratos.movimentos.reduce((inc: number, extrato: MovimentosBancariosData) => inc + (extrato.debito || 0), 0);
       // this.totais.saldo = extratos.movimentos.reduce((inc: number, extrato: MovimentosBancariosData) => inc + extrato.saldo, 0);
