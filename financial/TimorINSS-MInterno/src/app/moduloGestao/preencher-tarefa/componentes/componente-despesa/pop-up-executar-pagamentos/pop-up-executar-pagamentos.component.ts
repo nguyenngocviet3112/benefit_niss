@@ -545,12 +545,12 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
       this.filtersContabilidadeFilteredCredito = this.contabilidadeListagem.filter(p => p.id != contabilidadeId);
   }
 
-  public changeIban(): void {
-    if (this.isIban)
-      this.pagamento.numeroConta = undefined;
-    else {
-      this.pagamento.iban = undefined;
-      this.pagamento.swift = undefined;
-    }
-  }
+  // public changeIban(): void {
+  //   if (this.isIban)
+  //     this.pagamento.numeroConta = undefined;
+  //   else {
+  //     this.pagamento.iban = undefined;
+  //     this.pagamento.swift = undefined;
+  //   }
+  // }
 }

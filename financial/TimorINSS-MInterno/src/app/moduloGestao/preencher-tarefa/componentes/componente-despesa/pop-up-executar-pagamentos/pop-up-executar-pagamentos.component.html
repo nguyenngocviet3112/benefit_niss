@@ -41,58 +41,65 @@
       <div>
 
 
-          <div id="telaDestinatario" class="containerLine">
-            <div class="destinatarios-importer-section">
-              <app-excel-importer type="2" text="{{'componenteDespesa.executarPagamentos' | translate}}" [columns]="['Niss', 'Tin', 'Name', 'Address', 'IBAN', 'Swift', 'Account Number', 'Amount']" url="/destinatario/ImportDestinatarios" (onComplete)="onImporterComplete($event)">{{ 'excelImports.importDestinatarios' | translate }}</app-excel-importer>
-              <div class="selected-dests" *ngIf="this.importerId">{{ 'excelImports.selectedDestinatarios' | translate }}: {{ this.selectedDests }}</div>
-              <mat-icon (click)="removeSelectedImported()" *ngIf="this.importerId" class="remove-selected-dests">close</mat-icon>
-            </div>
-            <mat-form-field class="nissTinContainer" appearance="outline">
-              <mat-label>{{'componenteDespesa.nissDestinatario' | translate}}</mat-label>
-              <input [disabled]="!!this.importerId" matInput maxlength="100" type="text" [pattern]="availableRegex.intPattern" (keypress)="keyPressNumbers($event)"
-              [(ngModel)]="destinatario.niss" name="niss" />
-              <mat-error>{{'general.wrongFormat' | translate}}</mat-error>
-            </mat-form-field>
-            <mat-form-field class="nissTinContainer" appearance="outline">
-              <mat-label>{{'componenteDespesa.tinDestinatario' | translate}}</mat-label>
-              <input [disabled]="!!this.importerId" matInput maxlength="100" type="text" [pattern]="availableRegex.intPattern" (keypress)="keyPressNumbers($event)"  [(ngModel)]="destinatario.tin" name="tin"
-                [errorStateMatcher]="matcher" [required]="submittedTry" />
-              <mat-error *ngIf="!destinatario.tin">{{'general.required' | translate}}</mat-error>
-              <mat-error *ngIf="!!destinatario.tin">{{'general.wrongFormat' | translate}}</mat-error>
-            </mat-form-field>
-            <button class="pesquisarDestinatarioButton"
-              [disabled]="(destinatario.niss == null || destinatario.niss == '')  && (destinatario.tin == null || destinatario.tin == '')"
-              mat-fab color="green" aria-label="Search" type="button" (click)="pesquisarDestinatario()">
-              <mat-icon class="pesquisarDestinatarioIcon">search</mat-icon>
-            </button>
+        <div id="telaDestinatario" class="containerLine">
+          <div class="destinatarios-importer-section">
+            <app-excel-importer type="2" text="{{'componenteDespesa.executarPagamentos' | translate}}"
+              [columns]="['Niss', 'Tin', 'Name', 'Address', 'IBAN', 'Swift', 'Account Number', 'Amount']"
+              url="/destinatario/ImportDestinatarios" (onComplete)="onImporterComplete($event)">{{
+              'excelImports.importDestinatarios' | translate }}</app-excel-importer>
+            <div class="selected-dests" *ngIf="this.importerId">{{ 'excelImports.selectedDestinatarios' | translate }}:
+              {{ this.selectedDests }}</div>
+            <mat-icon (click)="removeSelectedImported()" *ngIf="this.importerId"
+              class="remove-selected-dests">close</mat-icon>
           </div>
+          <mat-form-field class="nissTinContainer" appearance="outline">
+            <mat-label>{{'componenteDespesa.nissDestinatario' | translate}}</mat-label>
+            <input [disabled]="!!this.importerId" matInput maxlength="100" type="text"
+              [pattern]="availableRegex.intPattern" (keypress)="keyPressNumbers($event)" [(ngModel)]="destinatario.niss"
+              name="niss" />
+            <mat-error>{{'general.wrongFormat' | translate}}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="nissTinContainer" appearance="outline">
+            <mat-label>{{'componenteDespesa.tinDestinatario' | translate}}</mat-label>
+            <input [disabled]="!!this.importerId" matInput maxlength="100" type="text"
+              [pattern]="availableRegex.intPattern" (keypress)="keyPressNumbers($event)" [(ngModel)]="destinatario.tin"
+              name="tin" [errorStateMatcher]="matcher" [required]="submittedTry" />
+            <mat-error *ngIf="!destinatario.tin">{{'general.required' | translate}}</mat-error>
+            <mat-error *ngIf="!!destinatario.tin">{{'general.wrongFormat' | translate}}</mat-error>
+          </mat-form-field>
+          <button class="pesquisarDestinatarioButton"
+            [disabled]="(destinatario.niss == null || destinatario.niss == '')  && (destinatario.tin == null || destinatario.tin == '')"
+            mat-fab color="green" aria-label="Search" type="button" (click)="pesquisarDestinatario()">
+            <mat-icon class="pesquisarDestinatarioIcon">search</mat-icon>
+          </button>
+        </div>
 
 
-          <div class="containerLine">
-            <mat-form-field class="despesaAExecutar" appearance="outline">
-              <mat-label>{{'componenteDespesa.nomeDestinatario' | translate}}</mat-label>
-              <input [disabled]="!!this.importerId" matInput maxlength="100" type="text" [(ngModel)]="destinatario.nome" name="nomeDestinatario"
-                [errorStateMatcher]="matcher" [required]="submittedTry" />
-              <mat-error>{{'general.required' | translate}}</mat-error>
-            </mat-form-field>
-            <mat-form-field class="despesaAExecutar" appearance="outline">
-              <mat-label>{{'componenteDespesa.moradaDestinatario' | translate}}</mat-label>
-              <input [disabled]="!!this.importerId" matInput maxlength="100" type="text" [(ngModel)]="destinatario.morada" name="morada"
-                [errorStateMatcher]="matcher" [required]="submittedTry" />
-              <mat-error>{{'general.required' | translate}}</mat-error>
-            </mat-form-field>
-          </div>
+        <div class="containerLine">
+          <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'componenteDespesa.nomeDestinatario' | translate}}</mat-label>
+            <input [disabled]="!!this.importerId" matInput maxlength="100" type="text" [(ngModel)]="destinatario.nome"
+              name="nomeDestinatario" [errorStateMatcher]="matcher" [required]="submittedTry" />
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'componenteDespesa.moradaDestinatario' | translate}}</mat-label>
+            <input [disabled]="!!this.importerId" matInput maxlength="100" type="text" [(ngModel)]="destinatario.morada"
+              name="morada" [errorStateMatcher]="matcher" [required]="submittedTry" />
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
 
-          <div class="containerLine">
-            <!-- <button
+        <div class="containerLine">
+          <!-- <button
               [disabled]="existeDestinatarioBD || destinatario.tin == null || destinatario.tin == '' || destinatario.nome == null || destinatario.nome == '' || destinatario.morada == null || destinatario.morada == ''"
               class="novoDestinatarioButton" type="submit" (click)="novoDestinatario()" mat-raised-button>
               <mat-label>{{'componenteDespesa.novoDestinatario' | translate}}</mat-label>
             </button> -->
-          </div>
+        </div>
 
-          <div class="containerLine">
-            <mat-form-field class="despesaAExecutar" appearance="outline">
+        <div class="containerLine">
+          <!-- <mat-form-field class="despesaAExecutar" appearance="outline">
               <mat-label>{{ 'componenteDespesa.tipoConta' | translate }}</mat-label>
               <mat-select [disabled]="!!this.importerId" [(value)]="isIban" name="descricaoDespesa" [errorStateMatcher]="matcher"
                 [required]="submittedTry" (selectionChange)="changeIban()">
@@ -102,64 +109,71 @@
                 </ng-container>
               </mat-select>
               <mat-error>{{'general.required' | translate}}</mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
 
-            <div class="despesaAExecutar iban-field-wrapper" *ngIf="isIban">
-              <mat-form-field appearance="outline">
-                <mat-label>{{'componenteDespesa.ibanDestinatario' | translate}}</mat-label>
-                <input [disabled]="!!this.importerId" matInput maxlength="{{ ibanIsNacional ? 23 : 25 }}" type="text" [(ngModel)]="pagamento.iban" name="iban"
-                [errorStateMatcher]="matcher" [pattern]="ibanIsNacional ? availableRegex.IBANPattern : availableRegex.baseIBANPattern" [required]="submittedTry" />
-                <mat-error *ngIf="!pagamento.iban">{{'general.required' | translate}}</mat-error>
-                <mat-error *ngIf="!!pagamento.iban">{{'general.wrongFormat' | translate}}</mat-error>
-              </mat-form-field>
-              <mat-checkbox class="iban-is-nacional" [checked]="ibanIsNacional" [(ngModel)]="ibanIsNacional" (change)="ibanIsNacional = !ibanIsNacional" [color]="'primary'">
-                {{'pagamentosExecutados.ibanNacional' | translate}}
-              </mat-checkbox>
-            </div>
 
-            <mat-form-field *ngIf="!isIban" class="despesaAExecutar" appearance="outline">
-              <mat-label>{{'gerirCampos.NConta' | translate}}</mat-label>
-              <input [disabled]="!!this.importerId" matInput maxlength="21" type="text" [(ngModel)]="pagamento.numeroConta" name="accountNumber"
-                [errorStateMatcher]="matcher" [pattern]="availableRegex.intPattern" (keypress)="keyPressNumbers($event)" [required]="submittedTry" />
-              <mat-error *ngIf="!pagamento.numeroConta">{{'general.required' | translate}}</mat-error>
-              <mat-error *ngIf="!!pagamento.numeroConta">{{'general.wrongFormat' | translate}}</mat-error>
-            </mat-form-field>
+          <mat-form-field *ngIf="isIban" class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'gerirCampos.NConta' | translate}}</mat-label>
+            <input [disabled]="!!this.importerId" matInput maxlength="21" type="text"
+              [(ngModel)]="pagamento.numeroConta" name="accountNumber" [errorStateMatcher]="matcher"
+              [pattern]="availableRegex.intPattern" (keypress)="keyPressNumbers($event)" [required]="submittedTry" />
+            <mat-error *ngIf="!pagamento.numeroConta">{{'general.required' | translate}}</mat-error>
+            <mat-error *ngIf="!!pagamento.numeroConta">{{'general.wrongFormat' | translate}}</mat-error>
+          </mat-form-field>
 
-            <mat-form-field class="despesaAExecutar" appearance="outline">
-              <mat-label>{{'componenteDespesa.pagamento' | translate}}</mat-label>
-              <input matInput disabled maxlength="100" type="text" [(ngModel)]="data.numPagamento" name="pagamento" />
+          <div class="despesaAExecutar iban-field-wrapper" *ngIf="isIban">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'componenteDespesa.ibanDestinatario' | translate}}</mat-label>
+              <input [disabled]="!!this.importerId" matInput maxlength="{{ ibanIsNacional ? 23 : 25 }}" type="text"
+                [(ngModel)]="pagamento.iban" name="iban" [errorStateMatcher]="matcher"
+                [pattern]="ibanIsNacional ? availableRegex.IBANPattern : availableRegex.baseIBANPattern"
+                [required]="submittedTry" />
+              <mat-error *ngIf="!pagamento.iban">{{'general.required' | translate}}</mat-error>
+              <mat-error *ngIf="!!pagamento.iban">{{'general.wrongFormat' | translate}}</mat-error>
             </mat-form-field>
-
-            <mat-form-field *ngIf="isIban && !ibanIsNacional" class="despesaAExecutar" appearance="outline">
-              <mat-label>{{'gerirCampos.SWIFT' | translate}}</mat-label>
-              <input [disabled]="!!this.importerId" matInput maxlength="11" type="text" [(ngModel)]="pagamento.swift" name="swift"
-                [errorStateMatcher]="matcher" [pattern]="availableRegex.swiftPattern" [required]="submittedTry" />
-              <mat-error *ngIf="!pagamento.swift">{{'general.required' | translate}}</mat-error>
-              <mat-error *ngIf="!!pagamento.swift">{{'general.wrongFormat' | translate}}</mat-error>
-            </mat-form-field>
+            <mat-checkbox class="iban-is-nacional" [checked]="ibanIsNacional" [(ngModel)]="ibanIsNacional"
+              (change)="ibanIsNacional = !ibanIsNacional" [color]="'primary'">
+              {{'pagamentosExecutados.ibanNacional' | translate}}
+            </mat-checkbox>
           </div>
 
-          <div class="containerLine">
-            <mat-form-field class="despesaAExecutar" appearance="outline">
-              <mat-label>{{ 'general.descricao' | translate }}</mat-label>
-              <mat-select [(ngModel)]="pagamento.compromissoFk"
-                [(value)]="pagamento.compromissoFk" name="descricaoDespesa" [errorStateMatcher]="matcher"
-                [required]="submittedTry">
-                <ng-container>
-                  <mat-option *ngFor="let descricao of data.listaDespesaAExecutar" [value]="descricao.id">
-                    {{descricao.descricaoDespesa}}
-                  </mat-option>
-                </ng-container>
-              </mat-select>
-              <mat-error>{{'general.required' | translate}}</mat-error>
-            </mat-form-field>
-            <mat-form-field class="despesaAExecutar" appearance="outline">
-              <mat-label>{{'componenteDespesa.valorDespesa' | translate}}</mat-label>
-              <input [disabled]="!!this.importerId" autocomplete="off" matInput #name="ngModel" currencyMask [options]="currencyOptions" name="valor"
-                [(ngModel)]="pagamento.valorExecutado" [errorStateMatcher]="matcher" [required]="submittedTry">
-              <mat-error>{{'general.required' | translate}}</mat-error>
-            </mat-form-field>
-          </div>
+
+          <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'componenteDespesa.pagamento' | translate}}</mat-label>
+            <input matInput disabled maxlength="100" type="text" [(ngModel)]="data.numPagamento" name="pagamento" />
+          </mat-form-field>
+
+          <mat-form-field *ngIf="isIban && !ibanIsNacional" class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'gerirCampos.SWIFT' | translate}}</mat-label>
+            <input [disabled]="!!this.importerId" matInput maxlength="11" type="text" [(ngModel)]="pagamento.swift"
+              name="swift" [errorStateMatcher]="matcher" [pattern]="availableRegex.swiftPattern"
+              [required]="submittedTry" />
+            <mat-error *ngIf="!pagamento.swift">{{'general.required' | translate}}</mat-error>
+            <mat-error *ngIf="!!pagamento.swift">{{'general.wrongFormat' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="containerLine">
+          <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>{{ 'general.descricao' | translate }}</mat-label>
+            <mat-select [(ngModel)]="pagamento.compromissoFk" [(value)]="pagamento.compromissoFk"
+              name="descricaoDespesa" [errorStateMatcher]="matcher" [required]="submittedTry">
+              <ng-container>
+                <mat-option *ngFor="let descricao of data.listaDespesaAExecutar" [value]="descricao.id">
+                  {{descricao.descricaoDespesa}}
+                </mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'componenteDespesa.valorDespesa' | translate}}</mat-label>
+            <input [disabled]="!!this.importerId" autocomplete="off" matInput #name="ngModel" currencyMask
+              [options]="currencyOptions" name="valor" [(ngModel)]="pagamento.valorExecutado"
+              [errorStateMatcher]="matcher" [required]="submittedTry">
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
 
 
       </div>
@@ -200,53 +214,46 @@
 
         <mat-form-field class="despesaAExecutar" appearance="outline">
           <mat-label>{{'componenteDespesa.contabilidade' | translate}} {{'tarefa.credito' | translate}}</mat-label>
-          <mat-select
-              (selectionChange)="updateContabilidadeDebito(contabilidade.id)"
-              #name="ngModel" name="selectComponenteContabilidade" [(ngModel)]="contabilidade.id"
-              [errorStateMatcher]="matcher" [required]="submittedTry">
-              <mat-option>
-                  <ngx-mat-select-search #name="ngModel"
-                      noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
-                      placeholderLabel="{{'componenteDespesa.contabilidade' | translate}}" ngModel
-                      (ngModelChange)="filterCustomOptionsContabilidadeCredito($event)"
-                      name="ContabilidadeFilterSearch">
-                  </ngx-mat-select-search>
-              </mat-option>
-              <mat-option *ngFor="let value of filtersContabilidadeFilteredCredito" [value]="value.id"
+          <mat-select (selectionChange)="updateContabilidadeDebito(contabilidade.id)" #name="ngModel"
+            name="selectComponenteContabilidade" [(ngModel)]="contabilidade.id" [errorStateMatcher]="matcher"
+            [required]="submittedTry">
+            <mat-option>
+              <ngx-mat-select-search #name="ngModel" noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                placeholderLabel="{{'componenteDespesa.contabilidade' | translate}}" ngModel
+                (ngModelChange)="filterCustomOptionsContabilidadeCredito($event)" name="ContabilidadeFilterSearch">
+              </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let value of filtersContabilidadeFilteredCredito" [value]="value.id"
               matTooltip="{{value.designacao}}">
-                  {{value.designacao}}
-              </mat-option>
+              {{value.designacao}}
+            </mat-option>
           </mat-select>
           <mat-error>{{'general.required' | translate}}</mat-error>
         </mat-form-field>
 
-      <mat-form-field class="despesaAExecutar" appearance="outline">
+        <mat-form-field class="despesaAExecutar" appearance="outline">
           <mat-label>{{'componenteDespesa.contabilidade' | translate}} {{'tarefa.debito' | translate}}</mat-label>
-          <mat-select
-              (selectionChange)="updateContabilidadeCredito(contabilidadeDebito.id)"
-              #name="ngModel" name="selectComponenteContabilidadeDebito" [(ngModel)]="contabilidadeDebito.id"
-              [errorStateMatcher]="matcher" [required]="submittedTry">
-              <mat-option>
-                  <ngx-mat-select-search #name="ngModel"
-                      noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
-                      placeholderLabel="{{'componenteDespesa.contabilidade' | translate}}" ngModel
-                      (ngModelChange)="filterCustomOptionsContabilidadeDebito($event)"
-                      name="ContabilidadeFilterSearch">
-                  </ngx-mat-select-search>
-              </mat-option>
-              <mat-option *ngFor="let value of filtersContabilidadeFilteredDebito" [value]="value.id"
+          <mat-select (selectionChange)="updateContabilidadeCredito(contabilidadeDebito.id)" #name="ngModel"
+            name="selectComponenteContabilidadeDebito" [(ngModel)]="contabilidadeDebito.id"
+            [errorStateMatcher]="matcher" [required]="submittedTry">
+            <mat-option>
+              <ngx-mat-select-search #name="ngModel" noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                placeholderLabel="{{'componenteDespesa.contabilidade' | translate}}" ngModel
+                (ngModelChange)="filterCustomOptionsContabilidadeDebito($event)" name="ContabilidadeFilterSearch">
+              </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let value of filtersContabilidadeFilteredDebito" [value]="value.id"
               matTooltip="{{value.designacao}}">
-                  {{value.designacao}}
-              </mat-option>
+              {{value.designacao}}
+            </mat-option>
           </mat-select>
           <mat-error>{{'general.required' | translate}}</mat-error>
-      </mat-form-field>
+        </mat-form-field>
 
         <mat-form-field class="despesaAExecutar" appearance="outline">
           <mat-label>{{'componenteDespesa.dataObrigacao' | translate}}</mat-label>
-          <input name="dataInicio"
-            [errorStateMatcher]="matcher" [required]="submittedTry"
-            [(ngModel)]="dataregisto" matInput [matDatepicker]="pickerInicio">
+          <input name="dataInicio" [errorStateMatcher]="matcher" [required]="submittedTry" [(ngModel)]="dataregisto"
+            matInput [matDatepicker]="pickerInicio">
           <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
           <mat-datepicker #pickerInicio></mat-datepicker>
           <mat-error>{{'general.required' | translate}}</mat-error>
@@ -311,7 +318,8 @@
   </div>
 
   <div class="containerLine">
-    <button *ngIf="data.componenteDespesaConfig.emitirOrdemPagamento == 2" class="terminarButton" type="submit" (click)="emitirOrdemPagamento()" mat-raised-button>
+    <button *ngIf="data.componenteDespesaConfig.emitirOrdemPagamento == 2" class="terminarButton" type="submit"
+      (click)="emitirOrdemPagamento()" mat-raised-button>
       <mat-label>{{'componenteDespesa.emitirOrdemPagamento' | translate}}</mat-label>
     </button>
 

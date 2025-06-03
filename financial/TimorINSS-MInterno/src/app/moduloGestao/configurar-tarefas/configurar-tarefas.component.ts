@@ -436,7 +436,7 @@ export class ConfigurarTarefasComponent implements OnInit {
         this.componenteOrcamento = <ComponenteOrcamento>{};
       }
 
-      if (element.descricao == 'Despesa') {
+      if (element.descricao == 'Despesa' || element.descricao == 'Expense') {
         this.componenteDespesaTarefaOpenState = false;
         this.componenteDespesa = <ComponenteDespesa>{};
       }
@@ -446,7 +446,7 @@ export class ConfigurarTarefasComponent implements OnInit {
         this.componenteConciliacaoMovimentos = <ComponenteConciliacaoMovimentos>{};
       }
 
-      if (element.descricao == 'Receita') {
+      if (element.descricao == 'Receita' || element.descricao == 'Revenue') {
         this.componenteReceitaOpenState = false;
         this.componenteReceita = <ComponenteReceita>{};
       }
@@ -525,7 +525,7 @@ export class ConfigurarTarefasComponent implements OnInit {
         }, 300);
       }
 
-      if (element.descricao == 'Despesa') {
+      if (element.descricao == 'Despesa' || element.descricao == 'Expense') {
         this.componenteDespesaTarefaOpenState = true;
         this.componenteDespesa.id = 0;
         this.componenteDespesa.registarDespesa = 0;
@@ -559,7 +559,7 @@ export class ConfigurarTarefasComponent implements OnInit {
         }, 300);
       }
 
-      if (element.descricao == 'Receita') {
+      if (element.descricao == 'Receita' || element.descricao == 'Revenue') {
         this.componenteReceitaOpenState = true;
         this.componenteReceita.tarefaFk = this.idTarefa;
         this.componenteReceita.classificarMovSelecionados = 0;

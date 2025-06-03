@@ -6,7 +6,13 @@
                 (click)="getExtratosBancariosTable()">
                 <mat-icon class="situacoesSearchIcon">search</mat-icon>
             </button>
-            
+            <mat-form-field appearance="outline" class="input inputs-grid__cell">
+                <mat-label>{{'extratosbancarios.conta' | translate}}</mat-label>
+                <mat-select [(ngModel)]="contaId" name="Conta" [errorStateMatcher]="matcher" [required]="submittedTry" (selectionChange)="changedValue($event)">
+                    <mat-option *ngFor="let option of contasOptions" [value]="option.id">{{ option.descricao }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
             <mat-form-field class="input inputs-grid__cell" appearance="outline">
               <mat-label>{{'perfil.data' | translate}}</mat-label>
               <input [(ngModel)]="beginDate" matInput [matDatepicker]="beginDatePicker" name="BeginDate">
