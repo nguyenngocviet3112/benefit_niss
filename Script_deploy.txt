@@ -1,5 +1,9 @@
 juroApurado
 
+To access the RDP do the following:
+1. RDP to 180.189.167.18:7687
+2. Username: 180.189.167.18\inss.sinmor
+3. Password: h4uN14k0nTr453nH4&^%
 
 chạy nodejs
 npm install

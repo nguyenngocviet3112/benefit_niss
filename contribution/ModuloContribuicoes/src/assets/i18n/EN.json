@@ -277,7 +277,7 @@
   "guiaPagamentoListagem": {
     "title": "INVOICES",
     "type": "Invoice Type",
-    "numDocumento": "Document Number",
+    "numDocumento": "Payment Number",
     "mesAno": "Period Month/Year",
     "paymentRef": "Invoice Number",
     "bankCode": "Bank",
