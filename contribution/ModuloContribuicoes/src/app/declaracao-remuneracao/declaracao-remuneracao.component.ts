@@ -306,7 +306,7 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
 
   public checkRemuneracaoDeclarada(input: DeclaracaoListagem)
   {
-    if(input.declaracao.remunDeclarada < this.salarioMinimo)
+    if(input.declaracao.remunDeclarada < this.salarioMinimo )
     {
       let warn = this.showWarning('declaracaoremunerao.abaixoSalarioMinimo', false);
       warn?.afterClosed().subscribe(result => {

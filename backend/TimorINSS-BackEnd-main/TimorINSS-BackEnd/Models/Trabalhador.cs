@@ -24,7 +24,7 @@ namespace TimorINSSBackEnd.Models
         public int IdTrabalhador { get; set; }
         public string Nome { get; set; }
         public string Niss { get; set; }
-        public string Tin { get; set; }
+        public string? Tin { get; set; }
         public string NumInscProvisoria { get; set; }
         public DateTime DataNasc { get; set; }
         public string NomeMae { get; set; }

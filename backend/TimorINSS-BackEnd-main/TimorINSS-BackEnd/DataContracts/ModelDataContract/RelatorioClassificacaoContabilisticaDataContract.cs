@@ -28,7 +28,7 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public string niss { get; set; }
 
         [DataMember]
-        public string tin { get; set; }
+        public string? tin { get; set; }
 
         [DataMember]
         public bool isExecucao { get; set; }

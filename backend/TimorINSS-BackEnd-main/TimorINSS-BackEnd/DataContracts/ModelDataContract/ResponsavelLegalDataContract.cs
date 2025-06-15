@@ -13,7 +13,7 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public string Nome { get; set; }
 
         [DataMember(IsRequired = true)]
-        public string Tin { get; set; }
+        public string? Tin { get; set; }
 
         [DataMember(IsRequired = true)]
         public DateTime DataNascimento { get; set; }

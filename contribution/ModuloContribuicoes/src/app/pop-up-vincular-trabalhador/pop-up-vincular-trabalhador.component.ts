@@ -141,7 +141,7 @@ export class PopUpVincularTrabalhadorComponent {
 
   public updateIsProfissaoOutro() {
 
-    let profissaoOutro = this.data.profissoes.filter((c: { descricao: string; }) => c.descricao === 'Outro');
+    let profissaoOutro = this.data.profissoes.filter((c: { descricao: string; }) => c.descricao === 'Outro' || c.descricao === 'Other');
     if (profissaoOutro.length){
       this.profissaoOutroId = profissaoOutro[0].id;
 

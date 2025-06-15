@@ -69,7 +69,7 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         public string userName { get; set; }
 
         [DataMember]
-        public string tin { get; set; }
+        public string? tin { get; set; }
 
         [DataMember]
         public string paymentRef { get; set; }

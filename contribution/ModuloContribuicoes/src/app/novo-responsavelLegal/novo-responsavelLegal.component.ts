@@ -103,9 +103,9 @@ export class NovoResponsavelLegalComponent implements OnInit {
                 this.sexoOptions = domains[0].dominios;
                 this.nacionalidadeOptions = domains[1].dominios;
                 this.documentoOptions = domains[2].dominios;
-                this.passportId = this.documentoOptions.find(x => x.descricao == 'Passaporte')?.id;
+                this.passportId = this.documentoOptions.find(x => x.descricao == 'Passaporte' || x.descricao == 'Passport') ?.id;
                 this.funcaoOptions = domains[3].dominios;
-                this.otherOptionId = this.funcaoOptions.find(x => x.descricao == 'Outro')?.id;
+                this.otherOptionId = this.funcaoOptions.find(x => x.descricao == 'Outro' || x.descricao == 'Other')?.id;
                 if(domains[4])
                     this.MapTrabalhadorData(domains[4].trabalhador);
 

@@ -95,7 +95,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                             && u.EntidadeFk == request.id)
                 .Join(
                     _moduloContribuicoesContext.Trabalhador
-                    .Where(u => u.Nome.Contains(request.filter.filterBy)),
+                    .Where(u => u.Nome.Contains(request.filter.filterBy) || u.Niss.Contains(request.filter.filterBy)),
                     relEntidadeTrabalhador => relEntidadeTrabalhador.TrabalhadorFk,
                     trabalhador => trabalhador.IdTrabalhador,
                     (relEntidadeTrabalhador, trabalhador) => new TrabalhadorListagem

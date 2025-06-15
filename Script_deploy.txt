@@ -5,6 +5,9 @@ To access the RDP do the following:
 2. Username: 180.189.167.18\inss.sinmor
 3. Password: h4uN14k0nTr453nH4&^%
 
+git config --system core.longpaths true
+
+
 chạy nodejs
 npm install
 npx ng serve --open
@@ -27,7 +30,7 @@ Chạy app	dotnet run
 Build project	dotnet build
 Debug (VSCode)	F5
 Chạy không debug	Ctrl + F5
-Chạy với port custom	dotnet run --urls "http://localhost:5050"
+Chạy với port custom	dotnet run --urls "http://localhost:5000"
 
 
 taskkill /F /IM TimorINSSBackEnd.exe

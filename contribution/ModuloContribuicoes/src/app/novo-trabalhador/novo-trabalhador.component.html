@@ -35,7 +35,7 @@
             <mat-form-field class="mat-form-field" appearance="outline">
               <mat-label>{{'general.tin' | translate}}</mat-label>
               <input #name="ngModel" [disabled]="!editDadosPrincipais" [errorStateMatcher]="matcher" maxLength="20"
-                [required]="submittedTryDadosPrincipais || submittedTry" matInput type="text"
+                 matInput type="text"
                 [(ngModel)]="trabalhador.tin" name="TINInput" />
               <fa-icon *ngIf="trabalhador.tin && editDadosPrincipais" matSuffix aria-label="Clear"
                 [icon]="faTimesCircle" (click)="clearTIN()"></fa-icon>
@@ -283,7 +283,7 @@
             </div>
           </div>
           <div class="DadosContainer-expansion">
-            <div class="secondLineContainers">
+            <div *ngIf="!isCartaoEleitoral" class="secondLineContainers">
               <mat-form-field appearance="outline">
                 <mat-label>{{'general.dtValidade' | translate}}</mat-label>
                 <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry" name="dataValidade"
@@ -372,7 +372,7 @@
             <div class="secondLineContainers inputContainer">
               <mat-form-field appearance="outline">
                 <mat-label>{{'morada.numPorta' | translate}}</mat-label>
-                <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry"
+                <input #name="ngModel" [errorStateMatcher]="matcher"
                   [(ngModel)]="morada.NumPorta" type="text" maxLength="20" name="numPorta" matInput>
                 <fa-icon *ngIf="morada.NumPorta" matSuffix aria-label="Clear" [icon]="faTimesCircle"
                   (click)="clearNumPorta()"></fa-icon>

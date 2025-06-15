@@ -16,7 +16,7 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         public string Niss { get; set; }
 
         [DataMember]
-        public string Tin { get; set; }
+        public string? Tin { get; set; }
 
         [DataMember]
         public DateTime DtInscricao { get; set; }
@@ -62,7 +62,7 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         public string niss { get; set; }
 
         [DataMember(IsRequired = true)]
-        public string tin { get; set; }
+        public string? tin { get; set; }
 
         [DataMember(IsRequired = true)]
         public DateTime dataInicioDeclaracao { get; set; }

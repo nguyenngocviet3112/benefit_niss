@@ -10,7 +10,7 @@ namespace TimorINSSBackEnd.Models
         public int IdResPlegalHist { get; set; }
         public int IdEntidadeEmpreg { get; set; }
         public string Nome { get; set; }
-        public string Tin { get; set; }
+        public string? Tin { get; set; }
         public DateTime DataNasc { get; set; }
         public int Nacionalidade { get; set; }
         public string Naturalidade { get; set; }

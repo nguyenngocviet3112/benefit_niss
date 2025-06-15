@@ -16,7 +16,7 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public string Niss { get; set; }
 
         [DataMember]
-        public string Tin { get; set; }
+        public string? Tin { get; set; }
 
         [DataMember]
         public DateTime DtInscricao { get; set; }

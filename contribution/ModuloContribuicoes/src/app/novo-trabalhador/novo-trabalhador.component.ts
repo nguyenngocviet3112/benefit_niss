@@ -113,6 +113,7 @@ export class NovoTrabalhadorComponent implements OnInit {
 
   //booleans
   public isPassaporte: boolean = false;
+  
   public isEdicao: boolean = false;
   public editContrato: boolean = false;
   public editContratoRegime: boolean = false;
@@ -364,16 +365,16 @@ export class NovoTrabalhadorComponent implements OnInit {
       this.listaAldeias = requests[4].selects;
 
       //trabalhador (modo edição)
-      let passports = requests[0][0].dominios.filter((c: { descricao: string; }) => c.descricao === 'Passaporte');
+      let passports = requests[0][0].dominios.filter((c: { descricao: string; }) => c.descricao === 'Passaporte' || c.descricao === 'Passport');
       if (passports.length)
         this.passPortId = passports[0].id;
       
-      let cartaoEleitoral = requests[0][0].dominios.filter((c: { descricao: string; }) => c.descricao === 'Cartão eleitoral');
+      let cartaoEleitoral = requests[0][0].dominios.filter((c: { descricao: string; }) => c.descricao === 'Cartão eleitoral' || c.descricao === 'Eletroral Card');
       if (cartaoEleitoral.length)
         this.cartaoEleitoral = cartaoEleitoral[0].id;
 
       //profissao "Outro" (modo edição)
-      let profissaoOutro = requests[0][7].dominios.filter((c: { descricao: string; }) => c.descricao === 'Outro');
+      let profissaoOutro = requests[0][7].dominios.filter((c: { descricao: string; }) => c.descricao === 'Outro' || c.descricao === 'Other');
       if (profissaoOutro.length){
         this.profissaoOutroId = profissaoOutro[0].id;
 
@@ -542,8 +543,8 @@ export class NovoTrabalhadorComponent implements OnInit {
   }
 
   private validMainData(): boolean {
-    if (!this.trabalhador.tin || this.trabalhador.tin.length == 0)
-      return false;
+    // if (!this.trabalhador.tin || this.trabalhador.tin.length == 0)
+    //   return false;
     if (!this.trabalhador.nome || this.trabalhador.nome.length == 0)
       return false;
     if (!this.trabalhador.dataNasc)
@@ -578,8 +579,8 @@ export class NovoTrabalhadorComponent implements OnInit {
   private validMoradaData(): boolean {
     if (!this.morada.Rua || this.morada.Rua.length == 0)
       return false;
-    if (!this.morada.NumPorta || this.morada.NumPorta.length == 0)
-      return false;
+    // if (!this.morada.NumPorta || this.morada.NumPorta.length == 0)
+    //   return false;
     if (!this.morada.MoradaAldeiaFk)
       return false;
     if (!this.morada.MoradaPaisFk)

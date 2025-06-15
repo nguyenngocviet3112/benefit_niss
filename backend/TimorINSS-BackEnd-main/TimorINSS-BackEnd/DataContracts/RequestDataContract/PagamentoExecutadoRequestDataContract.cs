@@ -60,7 +60,7 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public string Niss;
 
         [DataMember]
-        public string Tin;
+        public string? Tin;
     }
 
     [DataContract]

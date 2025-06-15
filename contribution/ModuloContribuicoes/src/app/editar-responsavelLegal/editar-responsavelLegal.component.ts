@@ -91,9 +91,9 @@ import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuf
                 this.nacionalidadeOptions = domains[1].dominios;
                 this.otherOptionId = this.nacionalidadeOptions.find(x => x.descricao == 'Estrangeiro (não desconta em TL)')?.id;
                 this.documentoOptions = domains[2].dominios;
-                this.passportId = this.documentoOptions.find(x => x.descricao == 'Passaporte')?.id;
+                this.passportId = this.documentoOptions.find(x => x.descricao == 'Passaporte' || x.descricao == 'Passport')?.id;
                 this.funcaoOptions = domains[3].dominios;
-                this.otherOptionId = this.funcaoOptions.find(x => x.descricao == 'Outro')?.id;
+                this.otherOptionId = this.funcaoOptions.find(x => x.descricao == 'Outro' || x.descricao == 'Other')?.id;
                 if(domains[4].responsavelLegal.respLegalTabalhadorFk){
                     this.isLinked = true;
                     this.IndFacultivaSS = true;
