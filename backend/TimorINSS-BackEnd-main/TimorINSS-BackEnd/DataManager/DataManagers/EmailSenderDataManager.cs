@@ -50,19 +50,19 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             var builder = new BodyBuilder();
             string templatePath;
             //Vai buscar o caminho do logotipo de timor-leste
-            var logo = AppDomain.CurrentDomain.BaseDirectory + @"\EmailTemplates\inss_logo.png";
+            var logo = AppDomain.CurrentDomain.BaseDirectory + @"EmailTemplates/inss_logo.png";
 
             string url;
             if (string.IsNullOrEmpty(username))
             {
                 //Neste caso é um primeiro acesso, por isso vai buscar o template de primeiro acesso
-                templatePath = AppDomain.CurrentDomain.BaseDirectory + @"\EmailTemplates\FirstAcess.html";
+                templatePath = AppDomain.CurrentDomain.BaseDirectory + @"EmailTemplates/FirstAcess.html";
                 url = isInternal == false ? _emailSettings.FirstAcessUrl + token : _emailSettings.InternalFirstAcessUrl + token;
             }
             else
             {
                 //Neste caso como contém nome de utilizador vai buscar o template de recuperação de password
-                templatePath = AppDomain.CurrentDomain.BaseDirectory + @"\EmailTemplates\RecoverPassword.html";
+                templatePath = AppDomain.CurrentDomain.BaseDirectory + @"EmailTemplates/RecoverPassword.html";
                 url = isInternal == false ? _emailSettings.RecoverUrl + token + "/" + username : _emailSettings.InternalRecoverUrl + token + "/" + username;
             }
 
@@ -127,7 +127,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             var builder = new BodyBuilder();
             string templatePath;
             //Vai buscar o caminho do logotipo de timor-leste
-            var logo = AppDomain.CurrentDomain.BaseDirectory + @"\EmailTemplates\inss_logo.png";
+            var logo = AppDomain.CurrentDomain.BaseDirectory + @"EmailTemplates/inss_logo.png";
 
             try
             {
