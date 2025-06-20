@@ -230,7 +230,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 }
             }
 
-            if (_unitOfWork.TrabalhadoresRepository.TinExists(trabalhador.Tin))
+            if (!string.IsNullOrWhiteSpace(trabalhador.Tin) && _unitOfWork.TrabalhadoresRepository.TinExists(trabalhador.Tin))
             {
                 response.Errors.Add(new Error
                 {

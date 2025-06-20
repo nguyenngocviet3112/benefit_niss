@@ -93,7 +93,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 }
                 response.dominios = dominiosOut;
             }
-            
+            else {
+                response.dominios = dominios;
+            }
 
             return response;
         }
