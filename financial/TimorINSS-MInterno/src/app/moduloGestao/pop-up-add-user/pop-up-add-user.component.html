@@ -13,7 +13,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>NISS</mat-label>
                 <input  [errorStateMatcher]="matcher" [required]="submittedTry" [(ngModel)]="data.NISS"
-                       type="text" [pattern]="availableRegex.baseIBANPattern" maxlength="100" name="NISS" matInput>
+                       type="text" [pattern]="availableRegex.intTextPattern" maxlength="100" name="NISS" matInput>
                 <mat-error *ngIf="!data.NISS">>{{'general.required' | translate}}</mat-error>
                 <mat-error *ngIf="data.NISS">{{'general.wrongFormat' | translate}}</mat-error>
               </mat-form-field>

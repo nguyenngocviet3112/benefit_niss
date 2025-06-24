@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { Utilizador } from '../response-models/utilizador-response';
 import { LoginRequest } from '../request-models/login-request';
 import { RecoverPasswordRequest, RecoverSetPasswordRequest } from '../request-models/recoverPassword-request';
+import CreateNISSInfoRequest from '../request-models/createNISSInfo-request';
 
 @Injectable({
     providedIn: 'root'
@@ -27,7 +28,7 @@ export class LoginService {
                 // sessionStorage.setItem('user', JSON.stringify(user));
                 // return user;
                 return {
-                    user : 
+                    user :
                     {
                         id: response.user.id,
                         username: response.user.username,
@@ -57,6 +58,10 @@ export class LoginService {
 
     public createUser(request: RecoverSetPasswordRequest){
         return this.http.post(`${environment.apiUrl}/login/CreateInternalUser`, request);
+    }
+
+    public createNISSInfor(request: CreateNISSInfoRequest){
+        return this.http.post(`${environment.apiUrl}/login/CreateNissInfor`, request);
     }
 
     public logout() {

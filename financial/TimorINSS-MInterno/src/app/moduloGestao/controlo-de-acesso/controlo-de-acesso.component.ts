@@ -14,11 +14,6 @@ import {UtilizadoresAcessoListagem} from 'src/app/response-models/utilizadores-r
 import {TokenStorageService} from 'src/app/services/token-storage.service';
 import {UtilizadorService} from 'src/app/services/utilizador.service';
 import {openErrorsDialog, openSnackBar, showExpiredError} from 'src/app/utils';
-import {GuiaListagem} from "../../response-models/guiaPagamento-response";
-import {ReservaCreditoListagemRequest} from "../../request-models/reservaCredito-request";
-import {
-  PopUpHandleInvoiceComponent
-} from "../../moduloContribuicoes/pop-up-handle-invoice/pop-up-handle-invoice.component";
 import {PopUpAddUserComponent} from "../pop-up-add-user/pop-up-add-user.component";
 
 @Component({
@@ -237,7 +232,8 @@ export class ControloDeAcessoComponent implements OnInit {
       minHeight: '100px',
       width: '70%',
       height: '50%',
-      panelClass: 'modalWithBorder'
+      panelClass: 'modalWithBorder',
+      data: {}
     });
 
 
