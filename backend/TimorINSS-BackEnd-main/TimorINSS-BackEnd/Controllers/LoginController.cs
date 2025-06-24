@@ -141,6 +141,30 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("CreateNissInfor")]
+        public IActionResult CreateNissInfor(CreateNissInforRequest request)
+        {
+            ResponseBaseDataContract response = new ResponseBaseDataContract();
+            try
+            {
+                // Parse dos valores do header para o request
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.CreateNissInforManager(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            // Guardar log do erro no ficheiro de logs
+            if (response.ManageErrors("CreateNissInfor", Log, request))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
         [HttpPost("InternalAuthenticate")]
         public IActionResult InternalAuthenticate(LoginRequest request)
         {

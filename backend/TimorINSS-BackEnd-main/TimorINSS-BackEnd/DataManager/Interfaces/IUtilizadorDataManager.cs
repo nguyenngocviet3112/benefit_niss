@@ -31,6 +31,8 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
 
         public ResponseBaseDataContract CreateUserManager(RecoverSetPasswordRequest request);
 
+        public ResponseBaseDataContract CreateNissInforManager(CreateNissInforRequest request);
+
         public LoginResponse InternalLoginManager(LoginRequest request);
 
         public UtilizadorListagemResponse GetAllUtilizadoresInterno(SearchFilterRequest request);

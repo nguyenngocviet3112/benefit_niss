@@ -507,6 +507,95 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
+
+        public ResponseBaseDataContract CreateNissInforManager(CreateNissInforRequest request)
+        {
+            ResponseBaseDataContract response = new ResponseBaseDataContract();
+
+            //if (request.Username.ToLower() == "admin")
+            //{
+            //    response.Errors.Add(new Error
+            //    {
+            //        ErrorCode = ((int)ErrorsDataContract.InvalidUserName).ToString(),
+            //        ErrorMessage = ErrorsDataContract.InvalidUserName.ToString()
+            //    });
+            //    return response;
+            //}
+
+            //if (request.Password != request.ConfirmPassword)
+            //{
+            //    response.Errors.Add(new Error
+            //    {
+            //        ErrorCode = "-1",
+            //        ErrorMessage = "Password and Confirm password do not match"
+            //    });
+            //    return response;
+            //}
+
+            ////Valida o formato da password que deve conter pelo menos 8 caracteres, um número, um caractere maiúsculo, um caractere minúsculo e um caractere especial
+            //if (!Regex.Match(request.Password, regexPattern).Success)
+            //{
+            //    response.Errors.Add(new Error
+            //    {
+            //        ErrorCode = ((int)ErrorsDataContract.WrongPasswordFormat).ToString(),
+            //        ErrorMessage = ErrorsDataContract.WrongPasswordFormat.ToString()
+            //    });
+            //    return response;
+            //}
+
+            ////Valida se o token ainda está valido ou se já expirou
+            //var entidadeId = Authenticate(request.Token);
+
+            //if (entidadeId == null)
+            //{
+            //    response.Errors.Add(new Error
+            //    {
+            //        ErrorCode = ((int)ErrorsDataContract.ExpiredToken).ToString(),
+            //        ErrorMessage = ErrorsDataContract.ExpiredToken.ToString()
+            //    });
+            //    return response;
+            //}
+
+            ////Valida se já existe este nome de utilizador
+            //var existingUsername = _unitOfWork.UtilizadoresRepository.GetByUsername(request.Username);
+            //if (existingUsername != null)
+            //{
+            //    response.Errors.Add(new Error
+            //    {
+            //        ErrorCode = ((int)ErrorsDataContract.UsernameAlreadyExists).ToString(),
+            //        ErrorMessage = ErrorsDataContract.UsernameAlreadyExists.ToString()
+            //    });
+            //    return response;
+            //}
+
+            //// Valida token que é enviado com token que está na base de dados
+            //var activeToken = _unitOfWork.UtilizadorTokenRepository.GetUniqueTokensByEntidadeId(entidadeId.Value).FirstOrDefault();
+            //if (activeToken == null || activeToken.TokenString != _utils.CreateHashPassword(request.Token, activeToken.Salt, Configuration["AppSettings:TokenSalt"]))
+            //{
+            //    response.Errors.Add(new Error
+            //    {
+            //        ErrorCode = ((int)ErrorsDataContract.ExpiredToken).ToString(),
+            //        ErrorMessage = ErrorsDataContract.ExpiredToken.ToString()
+            //    });
+            //    return response;
+            //}
+
+            //var user = CreateNewUser(request, entidadeId);
+
+            //try
+            //{
+            //    _unitOfWork.UtilizadoresRepository.Add(user);
+            //    _unitOfWork.Commit();
+            //}
+            //catch (Exception ex)
+            //{
+            //    _unitOfWork.Rollback();
+            //    response.Errors = new List<Error> { new Error { ErrorCode = "-1", ErrorMessage = ex.Message } };
+            //}
+
+            return response;
+        }
+
         private int? Authenticate(string token)
         {
             var key = Encoding.ASCII.GetBytes(Configuration["AppSettings:Secret"]);

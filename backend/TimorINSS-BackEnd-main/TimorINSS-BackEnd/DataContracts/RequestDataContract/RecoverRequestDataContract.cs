@@ -29,6 +29,20 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public bool UsernameChange { get; set; }
     }
 
+    public class CreateNissInforRequest : RequestBaseDataContract
+    {
+       
+
+        [DataMember(IsRequired = true)]
+        public string NISS { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public string Email { get; set; }
+
+        [DataMember]
+        public bool InternalUser { get; set; }
+    }
+
     public class ValidTokenRequest : RequestBaseDataContract
     {
         [DataMember(IsRequired = true)]
