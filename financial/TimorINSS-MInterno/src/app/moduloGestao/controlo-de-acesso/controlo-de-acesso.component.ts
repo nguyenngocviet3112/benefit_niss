@@ -1,19 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { TranslateService } from '@ngx-translate/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Funcionalidades } from 'src/app/models/utils';
-import { PopUpWarningComponent } from 'src/app/componentes/pop-up-warning/pop-up-warning.component';
-import { UtilizadorListagemRequest } from 'src/app/request-models/utilizador-request';
-import { FilterRequest } from 'src/app/request-models/utils-request';
-import { DominioDescricaoString } from 'src/app/response-models/dominios-response';
-import { UtilizadoresAcessoListagem } from 'src/app/response-models/utilizadores-response';
-import { TokenStorageService } from 'src/app/services/token-storage.service';
-import { UtilizadorService } from 'src/app/services/utilizador.service';
-import { openErrorsDialog, openSnackBar, showExpiredError } from 'src/app/utils';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons';
+import {TranslateService} from '@ngx-translate/core';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Funcionalidades} from 'src/app/models/utils';
+import {PopUpWarningComponent} from 'src/app/componentes/pop-up-warning/pop-up-warning.component';
+import {UtilizadorListagemRequest} from 'src/app/request-models/utilizador-request';
+import {FilterRequest} from 'src/app/request-models/utils-request';
+import {DominioDescricaoString} from 'src/app/response-models/dominios-response';
+import {UtilizadoresAcessoListagem} from 'src/app/response-models/utilizadores-response';
+import {TokenStorageService} from 'src/app/services/token-storage.service';
+import {UtilizadorService} from 'src/app/services/utilizador.service';
+import {openErrorsDialog, openSnackBar, showExpiredError} from 'src/app/utils';
+import {GuiaListagem} from "../../response-models/guiaPagamento-response";
+import {ReservaCreditoListagemRequest} from "../../request-models/reservaCredito-request";
+import {
+  PopUpHandleInvoiceComponent
+} from "../../moduloContribuicoes/pop-up-handle-invoice/pop-up-handle-invoice.component";
+import {PopUpAddUserComponent} from "../pop-up-add-user/pop-up-add-user.component";
 
 @Component({
   selector: 'app-controlo-de-acesso',
@@ -77,14 +83,14 @@ export class ControloDeAcessoComponent implements OnInit {
     public translate: TranslateService,
     public _snackBar: MatSnackBar,
     private utilizadorService: UtilizadorService,
-  ) { }
+    public addUserDialog: MatDialog,
+  ) {
+  }
 
   ngOnInit(): void {
     if (!this.tokenStorage.getToken()) {
       this.router.navigate([''])
-    }
-    else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired())
-    {
+    } else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
       if (this.tokenStorage.getUser() && this.tokenStorage.getUser()?.permissions) {
         this.tokenStorage.getUser()?.permissions.forEach(permission => {
 
@@ -95,8 +101,7 @@ export class ControloDeAcessoComponent implements OnInit {
         });
       }
       this.getUsersTable();
-    }
-    else{
+    } else {
       showExpiredError(this.errorDialog, this.tokenStorage, this.translate);
     }
   }
@@ -129,14 +134,14 @@ export class ControloDeAcessoComponent implements OnInit {
 
     let request: UtilizadorListagemRequest;
 
-    request = { "filter": this.filter };
+    request = {"filter": this.filter};
 
     this.utilizadorService.GetAllAcessoUtilizadores(request).subscribe(x => {
-      x.rows == null ? this.totalRowsTable = 0 : this.totalRowsTable = x.rows;
-      x.utilizador == null ? this.utilizadoresList = [] : this.utilizadoresList = x.utilizador;
+        x.rows == null ? this.totalRowsTable = 0 : this.totalRowsTable = x.rows;
+        x.utilizador == null ? this.utilizadoresList = [] : this.utilizadoresList = x.utilizador;
 
-      this.hideLoader();
-    },
+        this.hideLoader();
+      },
       err => {
         this.utilizadoresList = [];
         this.hideLoader();
@@ -164,7 +169,10 @@ export class ControloDeAcessoComponent implements OnInit {
       width: '40%',
       height: '30%',
       panelClass: 'warningModal',
-      data: { function: this.utilizadorService.SwitchUserBlockState({ id: data.id }), msg: data.locked ? this.configWarningMsgDesbloquear : this.configWarningMsgBloquear }
+      data: {
+        function: this.utilizadorService.SwitchUserBlockState({id: data.id}),
+        msg: data.locked ? this.configWarningMsgDesbloquear : this.configWarningMsgBloquear
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -175,16 +183,13 @@ export class ControloDeAcessoComponent implements OnInit {
   }
 
   public applyInternoFilter(filter: string) {
-    if (!this.filter.filter || this.filter.filter?.filterField == 'Interno')
-    {
+    if (!this.filter.filter || this.filter.filter?.filterField == 'Interno') {
       this.filter.filter = {
         filterField: "Interno",
         filterBy: filter,
         filter: this.filter.filter?.filter
       };
-    }
-    else
-    {
+    } else {
       this.filter.filter.filter = {
         filterField: "Interno",
         filterBy: filter
@@ -197,16 +202,13 @@ export class ControloDeAcessoComponent implements OnInit {
   }
 
   public applyLockFilter(filter: string) {
-    if (!this.filter.filter || this.filter.filter?.filterField == 'Lock')
-    {
+    if (!this.filter.filter || this.filter.filter?.filterField == 'Lock') {
       this.filter.filter = {
         filterField: "Lock",
         filterBy: filter,
         filter: this.filter.filter?.filter
       };
-    }
-    else
-    {
+    } else {
       this.filter.filter.filter = {
         filterField: "Lock",
         filterBy: filter
@@ -226,5 +228,18 @@ export class ControloDeAcessoComponent implements OnInit {
     this.pageIndexTable = 0;
     this.filter = {};
     this.getUsersTable();
+  }
+
+  public openAddUserPopup(viewMode: boolean = false): void {
+
+    const dialogRef = this.addUserDialog.open(PopUpAddUserComponent, {
+      id: 'editarDocumento',
+      minHeight: '100px',
+      width: '70%',
+      height: '50%',
+      panelClass: 'modalWithBorder'
+    });
+
+
   }
 }

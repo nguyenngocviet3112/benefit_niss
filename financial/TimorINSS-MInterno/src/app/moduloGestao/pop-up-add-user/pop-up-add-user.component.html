@@ -1,0 +1,50 @@
+<div class="dialogPositionFix">
+  <div class="formSize" >
+    <h1 class="titulo" mat-dialog-title >
+      <mat-icon class="popUpIcon">home</mat-icon>
+      Add user
+    </h1>
+
+    <form class="formSize" #documentoForm="ngForm">
+      <div class="bodyDialog" mat-dialog-content>
+        <div class="DadosContainer">
+          <div class="DadosContainer-expansion">
+            <div class="secondLineContainers inputContainer">
+
+            </div>
+            <div class="secondLineContainers">
+
+            </div>
+            <div class="secondLineContainers">
+
+            </div>
+            <div class="secondLineContainers inputContainer">
+
+            </div>
+            <div class="secondLineContainers">
+
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="buttons">
+        <button class="gravarButton" mat-raised-button [disabled]="!documentoForm.valid"
+                (click)="approve()">
+          <mat-icon class="icon">check</mat-icon>
+          <mat-label>Approve</mat-label>
+        </button>
+
+        <button type="button" class="buttonCancelar" mat-raised-button (click)="closePopUp()">
+          <mat-icon class="icon">close</mat-icon>
+          <mat-label>Cancel</mat-label>
+        </button>
+      </div>
+    </form>
+  </div>
+  
+</div>
