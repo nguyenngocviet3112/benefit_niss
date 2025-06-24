@@ -740,7 +740,8 @@
       "1": "Invalid Receipt",
       "2": "Amount Mismatch",
       "3": "Duplicate Submission"
-    }
+    },
+    "addUser": "Add user"
   },
   "comprovativoPagamento": {
     "titleInsert": "Upload Payment Receipt",

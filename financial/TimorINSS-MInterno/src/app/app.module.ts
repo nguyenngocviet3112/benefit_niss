@@ -121,6 +121,7 @@ import { PopUpCompromissosComponent } from './moduloGestao/preencher-tarefa/comp
 import { PopUpEditDespesaCabimentadaComponent } from './moduloGestao/preencher-tarefa/componentes/componente-despesa/pop-up-edit-despesa-cabimentada/pop-up-edit-despesa-cabimentada.component';
 import { DatePickerFullComponent } from './componentes/date-picker-full/date-picker-full.component';
 import { PopUpHandleInvoiceComponent } from './moduloContribuicoes/pop-up-handle-invoice/pop-up-handle-invoice.component';
+import { PopUpAddUserComponent } from './moduloGestao/pop-up-add-user/pop-up-add-user.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -218,6 +219,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     PopUpEditDespesaCabimentadaComponent,
     DatePickerFullComponent,
     PopUpHandleInvoiceComponent,
+    PopUpAddUserComponent,
   ],
   imports: [
     BrowserModule,
