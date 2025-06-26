@@ -11,7 +11,7 @@
           <div class="DadosContainer-expansion">
             <div class="secondLineContainers inputContainer">
               <mat-form-field appearance="outline">
-                <mat-label>NISS</mat-label>
+                <mat-label>{{'guiasPagamento.niss' | translate}}</mat-label>
                 <input  [errorStateMatcher]="matcher" [required]="submittedTry" [(ngModel)]="data.NISS"
                        type="text" [pattern]="availableRegex.intTextPattern" maxlength="100" name="NISS" matInput>
                 <mat-error *ngIf="!data.NISS">>{{'general.required' | translate}}</mat-error>
@@ -29,7 +29,7 @@
             </div>
             <div class="secondLineContainers">
               <mat-checkbox [(ngModel)]="data.InternalUser" name="InternalUser">
-                {{ 'general.internalUser' | translate }}
+                {{ 'guiasPagamento.internalUser' | translate }}
               </mat-checkbox>
             </div>
 

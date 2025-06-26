@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {customCurrencyMaskConfig, RegexPatterns} from "../../utils";
+import {customCurrencyMaskConfig, openSnackBar, RegexPatterns} from "../../utils";
 import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {MyErrorStateMatcher} from "../../matcher";
 import {
@@ -11,6 +11,8 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {GuiaPagamentoService} from "../../services/guiaPagamento.service";
 import {LoginService} from "../../services/login.service";
 import CreateNISSInfoRequest from "../../request-models/createNISSInfo-request";
+import {TranslateService} from "@ngx-translate/core";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 export interface PopUpAddUserData {
   NISS: string;
@@ -33,6 +35,8 @@ export class PopUpAddUserComponent implements OnInit {
     public errorDialog: MatDialog,
     public dialogRef: MatDialogRef<PopUpAddUserComponent>,
     public loginService: LoginService,
+    public translate: TranslateService,
+    public _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: PopUpAddUserData
   ) { }
 
@@ -52,6 +56,7 @@ export class PopUpAddUserComponent implements OnInit {
       this.loginService.createNISSInfor(request)
         .subscribe(x => {
             this.hideLoader();
+            openSnackBar(this.translate.instant('snackBar.createUser'), this._snackBar);
             this.closePopUp(true);
           },
           err => {
@@ -59,7 +64,6 @@ export class PopUpAddUserComponent implements OnInit {
             err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
             this.showError();
           });
-      this.dialogRef.close(this.data); // trả về dữ liệu
     }
   }
 
