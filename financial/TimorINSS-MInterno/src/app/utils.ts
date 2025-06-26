@@ -209,14 +209,14 @@ export function CreateMenuPermissions(user: Utilizador | null) : MenuItem[]
             order: 3
           });
         }
-        if (response.find(x => x.name == contribValidationTitle) == null){
-          response.push({
-            name: contribValidationTitle,
-            icon: 'account_balance',
-            link: '/contribValidationHomePage',
-            order: 4
-          });
-        }
+        // if (response.find(x => x.name == contribValidationTitle) == null){
+        //   response.push({
+        //     name: contribValidationTitle,
+        //     icon: 'account_balance',
+        //     link: '/contribValidationHomePage',
+        //     order: 4
+        //   });
+        // }
       }
       if (permission.module == Modules.FINANCEIRO)
       {

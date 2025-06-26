@@ -511,87 +511,73 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         public ResponseBaseDataContract CreateNissInforManager(CreateNissInforRequest request)
         {
             ResponseBaseDataContract response = new ResponseBaseDataContract();
+            if (request.InternalUser != true)
+            {
+                //Validate if Entidade empregadora exists for this niss
+               
+                var entityWithNiss = _unitOfWork.EntidadeEmpregadoraRepository.GetByNiss(request.Niss);
 
-            //if (request.Username.ToLower() == "admin")
-            //{
-            //    response.Errors.Add(new Error
-            //    {
-            //        ErrorCode = ((int)ErrorsDataContract.InvalidUserName).ToString(),
-            //        ErrorMessage = ErrorsDataContract.InvalidUserName.ToString()
-            //    });
-            //    return response;
-            //}
+                if (entityWithNiss != null)
+                {
+                    response.Errors.Add(new Error
+                    {
+                        ErrorCode = ((int)ErrorsDataContract.NissAlreadyExists).ToString(),
+                        ErrorMessage = ErrorsDataContract.NissAlreadyExists.ToString()
+                    });
+                    return response;
+                }
+                EntidadeEmpregadoraUpsertRequest requestE = new EntidadeEmpregadoraUpsertRequest()
+                {
+                    EntidadeEmpregadora = new EntidadeEmpregadoraUpsertDataContract()
+                    {
+                        Nome = request.Name,
+                        Niss = request.Niss,
+                        Tin = request.Niss,
+                        SituacInscricao = "A", // Trạng thái đăng ký
+                        Telemovel = "76666656",
+                        Email = request.Email,
+                        IdNaturezaJuridica = 1, // Ví dụ loại hình pháp lý
+                        IdActividadeEconomica = 1, // Ví dụ loại hình kinh tế
+                        IdSectorActividade = 1, // Ví dụ ngành nghề
+                        NumTrabalhador = 0, // Số lượng nhân viên
+                        DataInicioActiv = DateTime.Now.AddYears(-2), // Ngày bắt đầu hoạt động
+                        DataInicioTrabServico = DateTime.Now.AddMonths(-6), // Ngày bắt đầu dịch vụ
+                        DataInscricao = DateTime.Now // Ngày đăng ký
+                    }
+                };
 
-            //if (request.Password != request.ConfirmPassword)
-            //{
-            //    response.Errors.Add(new Error
-            //    {
-            //        ErrorCode = "-1",
-            //        ErrorMessage = "Password and Confirm password do not match"
-            //    });
-            //    return response;
-            //}
+                _unitOfWork.EntidadeEmpregadoraRepository.Create(requestE);
+                _unitOfWork.Commit();
+            }
+            else
+            {
+                //Validate if internal trabalhador exists for this niss
+                var trabalhadorInterno = _unitOfWork.TrabalhadoresRepository.GetInternalByNiss(request.Niss);
+                if (trabalhadorInterno != null)
+                {
+                    response.Errors.Add(new Error
+                    {
+                        ErrorMessage = "NISS already exist"
+                    });
+                    return response;
+                }
 
-            ////Valida o formato da password que deve conter pelo menos 8 caracteres, um número, um caractere maiúsculo, um caractere minúsculo e um caractere especial
-            //if (!Regex.Match(request.Password, regexPattern).Success)
-            //{
-            //    response.Errors.Add(new Error
-            //    {
-            //        ErrorCode = ((int)ErrorsDataContract.WrongPasswordFormat).ToString(),
-            //        ErrorMessage = ErrorsDataContract.WrongPasswordFormat.ToString()
-            //    });
-            //    return response;
-            //}
+                EntidadeEmpregadoraUpsertRequest requestE = new EntidadeEmpregadoraUpsertRequest()
+                {
+                    EntidadeEmpregadora = new EntidadeEmpregadoraUpsertDataContract()
+                    {
+                        Nome = request.Name,
+                        Niss = request.Niss,
+                        Tin = request.Niss,
+                        Telemovel = "76666656",
+                        Email = request.Email
+                    }
+                };
 
-            ////Valida se o token ainda está valido ou se já expirou
-            //var entidadeId = Authenticate(request.Token);
+                _unitOfWork.TrabalhadoresRepository.Create(requestE);
+                _unitOfWork.Commit();
 
-            //if (entidadeId == null)
-            //{
-            //    response.Errors.Add(new Error
-            //    {
-            //        ErrorCode = ((int)ErrorsDataContract.ExpiredToken).ToString(),
-            //        ErrorMessage = ErrorsDataContract.ExpiredToken.ToString()
-            //    });
-            //    return response;
-            //}
-
-            ////Valida se já existe este nome de utilizador
-            //var existingUsername = _unitOfWork.UtilizadoresRepository.GetByUsername(request.Username);
-            //if (existingUsername != null)
-            //{
-            //    response.Errors.Add(new Error
-            //    {
-            //        ErrorCode = ((int)ErrorsDataContract.UsernameAlreadyExists).ToString(),
-            //        ErrorMessage = ErrorsDataContract.UsernameAlreadyExists.ToString()
-            //    });
-            //    return response;
-            //}
-
-            //// Valida token que é enviado com token que está na base de dados
-            //var activeToken = _unitOfWork.UtilizadorTokenRepository.GetUniqueTokensByEntidadeId(entidadeId.Value).FirstOrDefault();
-            //if (activeToken == null || activeToken.TokenString != _utils.CreateHashPassword(request.Token, activeToken.Salt, Configuration["AppSettings:TokenSalt"]))
-            //{
-            //    response.Errors.Add(new Error
-            //    {
-            //        ErrorCode = ((int)ErrorsDataContract.ExpiredToken).ToString(),
-            //        ErrorMessage = ErrorsDataContract.ExpiredToken.ToString()
-            //    });
-            //    return response;
-            //}
-
-            //var user = CreateNewUser(request, entidadeId);
-
-            //try
-            //{
-            //    _unitOfWork.UtilizadoresRepository.Add(user);
-            //    _unitOfWork.Commit();
-            //}
-            //catch (Exception ex)
-            //{
-            //    _unitOfWork.Rollback();
-            //    response.Errors = new List<Error> { new Error { ErrorCode = "-1", ErrorMessage = ex.Message } };
-            //}
+            }
 
             return response;
         }

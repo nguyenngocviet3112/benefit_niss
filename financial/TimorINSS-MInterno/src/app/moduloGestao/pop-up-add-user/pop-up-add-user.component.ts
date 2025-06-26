@@ -15,6 +15,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 export interface PopUpAddUserData {
+  Name: string;
   NISS: string;
   Email?: string;
   InternalUser?: boolean;
@@ -52,7 +53,7 @@ export class PopUpAddUserComponent implements OnInit {
 
     if (this.data.NISS && this.data.Email?.match(this.availableRegex.emailPattern)) {
       this.showLoader();
-      const request: CreateNISSInfoRequest = {Niss: this.data.NISS, Email: this.data.Email, InternalUser: this.data.InternalUser};
+      const request: CreateNISSInfoRequest = {Name: this.data.Name,Niss: this.data.NISS, Email: this.data.Email, InternalUser: this.data.InternalUser};
       this.loginService.createNISSInfor(request)
         .subscribe(x => {
             this.hideLoader();

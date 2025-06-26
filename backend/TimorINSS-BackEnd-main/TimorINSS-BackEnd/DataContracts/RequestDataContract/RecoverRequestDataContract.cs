@@ -31,15 +31,18 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
 
     public class CreateNissInforRequest : RequestBaseDataContract
     {
-       
+
+
+        [DataMember]
+        public string Niss { get; set; }
 
         [DataMember(IsRequired = true)]
-        public string NISS { get; set; }
+        public string Name { get; set; }
 
         [DataMember(IsRequired = true)]
         public string Email { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public bool InternalUser { get; set; }
     }
 

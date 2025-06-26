@@ -11,7 +11,17 @@
           <div class="DadosContainer-expansion">
             <div class="secondLineContainers inputContainer">
               <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input  [errorStateMatcher]="matcher" [required]="submittedTry" [(ngModel)]="data.Name"
+                       type="text" [pattern]="availableRegex.intTextPattern" maxlength="100" name="Name" matInput>
+                <mat-error *ngIf="!data.Name">>{{'general.required' | translate}}</mat-error>
+                <mat-error *ngIf="data.Name">{{'general.wrongFormat' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers inputContainer">
+              <mat-form-field appearance="outline">
                 <mat-label>{{'guiasPagamento.niss' | translate}}</mat-label>
+
                 <input  [errorStateMatcher]="matcher" [required]="submittedTry" [(ngModel)]="data.NISS"
                        type="text" [pattern]="availableRegex.intTextPattern" maxlength="100" name="NISS" matInput>
                 <mat-error *ngIf="!data.NISS">>{{'general.required' | translate}}</mat-error>
@@ -27,6 +37,7 @@
                 <mat-error *ngIf="data.Email">{{'general.wrongFormat' | translate}}</mat-error>
               </mat-form-field>
             </div>
+            
             <div class="secondLineContainers">
               <mat-checkbox [(ngModel)]="data.InternalUser" name="InternalUser">
                 {{ 'guiasPagamento.internalUser' | translate }}
