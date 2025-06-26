@@ -24,6 +24,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public string GetNextNISS();
 
+        public void Create(EntidadeEmpregadoraUpsertRequest entity);
+
         bool NissExists(string niss, int idTrabalhador = 0);
 
         bool TinExists(string tin, int idTrabalhador = 0);

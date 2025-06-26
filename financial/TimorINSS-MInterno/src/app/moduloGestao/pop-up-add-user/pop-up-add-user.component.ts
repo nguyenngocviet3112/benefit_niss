@@ -13,6 +13,7 @@ import {LoginService} from "../../services/login.service";
 import CreateNISSInfoRequest from "../../request-models/createNISSInfo-request";
 
 export interface PopUpAddUserData {
+  Name: string;
   NISS: string;
   Email?: string;
   InternalUser?: boolean;
@@ -48,7 +49,7 @@ export class PopUpAddUserComponent implements OnInit {
 
     if (this.data.NISS && this.data.Email?.match(this.availableRegex.emailPattern)) {
       this.showLoader();
-      const request: CreateNISSInfoRequest = {Niss: this.data.NISS, Email: this.data.Email, InternalUser: this.data.InternalUser};
+      const request: CreateNISSInfoRequest = {Name: this.data.Name,Niss: this.data.NISS, Email: this.data.Email, InternalUser: this.data.InternalUser};
       this.loginService.createNISSInfor(request)
         .subscribe(x => {
             this.hideLoader();

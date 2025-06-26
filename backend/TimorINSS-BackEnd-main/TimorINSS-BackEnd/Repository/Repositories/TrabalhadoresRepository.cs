@@ -56,6 +56,50 @@ namespace TimorINSSBackEnd.Repository.Repositories
             _moduloContribuicoesContext.Trabalhador.Add(entity);
         }
 
+
+        public void Create(EntidadeEmpregadoraUpsertRequest entity)
+        {
+            // Khởi tạo đối tượng Trabalhador
+            Trabalhador newEntity = new Trabalhador()
+            {
+                Nome = entity.EntidadeEmpregadora.Nome,
+                NomeMae = entity.EntidadeEmpregadora.Nome,
+                NomePai = entity.EntidadeEmpregadora.Nome,
+                Tin = entity.EntidadeEmpregadora.Tin,
+                Niss = entity.EntidadeEmpregadora.Niss,
+                UtilizadorCriacao = entity.UserId,
+                NumInscProvisoria = entity.EntidadeEmpregadora.Tin,
+                FlagImportado = false,
+                DataCriacao = DateTime.Now,
+                DataAlteracao = DateTime.Now,
+                DataNasc = DateTime.Now,
+                Ipv6 = "0.0.0.0", // Bạn có thể điền giá trị hợp lệ nếu cần
+                SexoTrabalhador = 10, // Mặc định giá trị giới tính, có thể cần điều chỉnh theo dữ liệu
+                NacionalidadeTrabalhador = 11, // Mặc định quốc tịch, có thể điều chỉnh
+                Interno = true, // Mặc định là false
+             
+                IndDescNomeMae = false, // Mặc định không ẩn tên mẹ
+   
+                IndDescNomePai = false, // Mặc định không ẩn tên cha
+                EstadoCivil = null, // Nếu không có dữ liệu trạng thái hôn nhân
+                Naturalidade = "Dili", // Mặc định giá trị cho nơi sinh
+
+                Contacto = new List<Contacto>()
+                {
+                    new Contacto()
+                    {
+                        Email = entity.EntidadeEmpregadora.Email,
+                        Telemovel = entity.EntidadeEmpregadora.Telemovel,
+                        UtilizadorCriacao = entity.UserId,
+                        DataCriacao = DateTime.Now,
+                    }
+                }
+            };
+
+            _moduloContribuicoesContext.Trabalhador.Add(newEntity);
+        }
+
+
         public void Update(Trabalhador entity)
         {
             Trabalhador entityToUpdate = _moduloContribuicoesContext.Trabalhador

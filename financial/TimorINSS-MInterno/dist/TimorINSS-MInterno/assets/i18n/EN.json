@@ -127,7 +127,8 @@
     "asc": "Ascending",
     "desc": "Descending",
     "compromisso": "Commitment",
-    "compromissos": "Commitments"
+    "compromissos": "Commitments",
+    "internalUser": "Internal user"
   },
   "login_form": {
     "title": "Authentication",
