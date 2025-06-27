@@ -461,7 +461,8 @@ namespace TimorINSSBackEnd.Controllers
         [HttpGet("GetAllGruposCamposEditaveis/{language}")]
         public IActionResult GetAllGruposCamposEditaveis(string language)
         {
-            DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllGruposCamposEditaveis");
+            //DominioDescricaoStringResponse response = _cache.GetFromCache<DominioDescricaoStringResponse>("GetAllGruposCamposEditaveis");
+            DominioDescricaoStringResponse response = null;
             if (response == null)
             {
                 try

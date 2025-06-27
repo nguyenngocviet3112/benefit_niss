@@ -107,18 +107,18 @@ namespace TimorINSSBackEnd.Repository.Repositories
             }    
                 //throw new Exception(ErrorsDataContract.EntityDoesNotExist.ToString());
 
-            var trabalhador = _moduloContribuicoesContext.Trabalhador
-                .SingleOrDefault(u => u.IdTrabalhador == utilizador.TrabalhadorFk);
-            //if (trabalhador == null)
-                if (trabalhador == null)
-                {
-                    GuiaListagemResponse result1 = new GuiaListagemResponse
-                    {
-                        guias = null,
-                        rows = 0
-                    };
-                    return result1;
-                }
+            //var trabalhador = _moduloContribuicoesContext.Trabalhador
+            //    .SingleOrDefault(u => u.IdTrabalhador == utilizador.TrabalhadorFk);
+            ////if (trabalhador == null)
+            //    if (trabalhador == null)
+            //    {
+            //        GuiaListagemResponse result1 = new GuiaListagemResponse
+            //        {
+            //            guias = null,
+            //            rows = 0
+            //        };
+            //        return result1;
+            //    }
             //throw new Exception(ErrorsDataContract.TrabalhadorDoesNotExist.ToString());
 
             var entidadeempregadora = _moduloContribuicoesContext.Entidadeempregadora
@@ -207,7 +207,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         niss = e.GuiaEntidadeFkNavigation.Niss,
                         estadoPagamento = e.IndPagoNavigation.Valor,
                         userName = entidadeempregadora.Nome,
-                        tin = trabalhador.Tin,
+                        tin = entidadeempregadora.Tin,
                         qrInvoice = e.QrInvoice,
                         //paymentRef = e.GuiaEntidadeFkNavigation.Niss + DateTime.Now.ToString("MMyyyy") + "01",
                         paymentRef = e.PaymentRef,

@@ -1391,7 +1391,8 @@
     "periodo": "Período",
     "valorGuia": "Valor da Guia",
     "valorComprovativo": "Valor do Comprovativo",
-    "valorDivida": "Valor em Dívida"
+    "valorDivida": "Valor em Dívida",
+    "internalUser": "Internal User"
   },
   "execucaoOrcamental": {
     "contaOGE": "Conta OGE",

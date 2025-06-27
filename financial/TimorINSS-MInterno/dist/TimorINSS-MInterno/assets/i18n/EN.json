@@ -127,8 +127,7 @@
     "asc": "Ascending",
     "desc": "Descending",
     "compromisso": "Commitment",
-    "compromissos": "Commitments",
-    "internalUser": "Internal user"
+    "compromissos": "Commitments"
   },
   "login_form": {
     "title": "Authentication",
@@ -741,7 +740,8 @@
       "1": "Invalid Receipt",
       "2": "Amount Mismatch",
       "3": "Duplicate Submission"
-    }
+    },
+    "addUser": "Add user"
   },
   "comprovativoPagamento": {
     "titleInsert": "Upload Payment Receipt",
@@ -1235,7 +1235,8 @@
     "despesaAutorizada": "Expense successfully authorized",
     "despesaCabimentada": "Despesa cabimentada com sucesso",
     "removePagamento": "Payment successfully removed",
-    "removeMovimento": "Movement successfully removed"
+    "removeMovimento": "Movement successfully removed",
+    "createUser": "User successfully created"
   },
   "infoLegal": {
     "firstLine": "Nos termos do artigo 8.º do Decreto-Lei n.º 20 /2017, de 24 de Maio, para a determinação do montante das contribuições das entidades empregadoras e dos trabalhadores, considera-se base de incidência contributiva a remuneração ilíquida devida em função do exercício da atividade profissional.",
@@ -1395,7 +1396,8 @@
     "periodo": "Period Date",
     "valorGuia": "Invoice Amount",
     "valorComprovativo": "Receipt Amount",
-    "valorDivida": "Amount in Debt"
+    "valorDivida": "Amount in Debt",
+    "internalUser": "Internal User"
   },
   "execucaoOrcamental": {
     "contaOGE": "OGE Account",

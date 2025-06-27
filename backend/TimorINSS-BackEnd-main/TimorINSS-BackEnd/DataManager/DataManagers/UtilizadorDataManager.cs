@@ -557,7 +557,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 {
                     response.Errors.Add(new Error
                     {
-                        ErrorMessage = "NISS already exist"
+                        ErrorCode = ((int)ErrorsDataContract.NissAlreadyExists).ToString(),
+                        ErrorMessage = ErrorsDataContract.NissAlreadyExists.ToString()
                     });
                     return response;
                 }
