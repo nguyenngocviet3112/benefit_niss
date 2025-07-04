@@ -1,4 +1,4 @@
-using log4net;
+﻿using log4net;
 using log4net.Config;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -21,6 +21,11 @@ namespace TimorINSSBackEnd
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    
+                    webBuilder.ConfigureKestrel((context, options) =>
+                    {
+                        options.ListenAnyIP(5000); // HTTP trên cổng 5000
+                    });
                 });
     }
 }

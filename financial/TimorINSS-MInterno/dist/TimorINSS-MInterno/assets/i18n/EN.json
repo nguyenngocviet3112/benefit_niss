@@ -55,7 +55,7 @@
     "docType": "Document Type",
     "docNumber": "Document Nº",
     "emitLocal": "Issuance Local",
-    "dtValidade": "Payment Due Date",
+    "dtValidade": "Expiry Date",
     "download": "Download",
     "buttonGravar": "SAVE",
     "buttonGravarEFechar": "SAVE AND CLOSE",

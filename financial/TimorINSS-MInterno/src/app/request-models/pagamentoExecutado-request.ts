@@ -17,6 +17,7 @@ export interface DeletePagamentoRequest {
   id: number;
 }
 
+
 export interface GetPagamentoExecutadoRequest {
   idDestinatario: number;
 }

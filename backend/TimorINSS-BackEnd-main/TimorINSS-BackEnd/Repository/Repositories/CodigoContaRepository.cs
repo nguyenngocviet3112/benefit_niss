@@ -317,7 +317,10 @@ namespace TimorINSSBackEnd.Repository.Repositories
         public bool IsCodeValid(Codigoconta codigoConta)
         {
             int countSameCode = _moduloContribuicoesContext.Codigoconta
-                 .Where(a => a.ParentFk == codigoConta.ParentFk && a.Codigo == codigoConta.Codigo && a.Id != codigoConta.Id)
+                 .Where(a => a.ParentFk == codigoConta.ParentFk 
+                 && a.Codigo == codigoConta.Codigo 
+                 && a.Id != codigoConta.Id && a.IndActivo == true
+                 )
                  .Count();
 
             return countSameCode == 0;
