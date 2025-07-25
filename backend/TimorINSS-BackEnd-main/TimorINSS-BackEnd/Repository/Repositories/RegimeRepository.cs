@@ -174,7 +174,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         new ParametrosAdicionais
                         {
                             Nome = "DiaVencimento",
-                            Size = "2",
+                            Size = "3",
                             Type = "number",
                             Valor = u.DataVencimento.ToString()
                         }

@@ -106,7 +106,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         new ParametrosAdicionais
                         {
                             Nome = "Codigo",
-                            Size = "2",
+                            Size = "3",
                             Type = "string",
                             Valor = u.Codigo
                         },

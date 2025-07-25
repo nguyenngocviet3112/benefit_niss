@@ -48,7 +48,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                                 new ParametrosAdicionais
                                 {
                                     Nome = "Codigo",
-                                    Size = "2",
+                                    Size = "3",
                                     Type = "number",
                                     Valor = ""
                                 }
@@ -80,7 +80,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                                 new ParametrosAdicionais
                                 {
                                     Nome = "Valor",
-                                    Size = "2",
+                                    Size = "3",
                                     Type = "number",
                                     Valor = ""
                                 }
@@ -170,7 +170,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                                 new ParametrosAdicionais
                                 {
                                     Nome = "DiaVencimento",
-                                    Size = "2",
+                                    Size = "3",
                                     Type = "number",
                                     Valor = ""
                                 }
@@ -257,7 +257,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                                 new ParametrosAdicionais
                                 {
                                     Nome = "Codigo",
-                                    Size = "2",
+                                    Size = "3",
                                     Type = "number",
                                     Valor = ""
                                 }
@@ -279,7 +279,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                                 new ParametrosAdicionais
                                 {
                                     Nome = "Codigo",
-                                    Size = "2",
+                                    Size = "3",
                                     Type = "string",
                                     Valor = ""
                                 },
@@ -2098,7 +2098,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             if (parameterClass != null)
             {
                 codigo = parameterClass.Valor;
-                if (codigo.Length > 2)
+                if (codigo.Length > 3)
                     throw new Exception("The code is in the wrong format");
             }
             else
