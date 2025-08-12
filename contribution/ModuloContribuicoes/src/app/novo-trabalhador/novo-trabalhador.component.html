@@ -617,7 +617,7 @@
                 <mat-form-field appearance="outline">
                   <mat-label>{{'vinculo.dataInicVinc' | translate}}</mat-label>
                   <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry || submittedTryContrato"
-                    [disabled]="!editContrato" name="dtIniVincTrabalhador" (dateChange)="updateDataInicioVinculo()"
+                    [disabled]="!!contrato?.dtIniVincTrabalhador" name="dtIniVincTrabalhador" (dateChange)="updateDataInicioVinculo()"
                     [(ngModel)]="contrato.dtIniVincTrabalhador" matInput [matDatepicker]="pickerInicioVindulo">
                   <mat-datepicker-toggle matSuffix [for]="pickerInicioVindulo"></mat-datepicker-toggle>
                   <mat-datepicker #pickerInicioVindulo></mat-datepicker>
