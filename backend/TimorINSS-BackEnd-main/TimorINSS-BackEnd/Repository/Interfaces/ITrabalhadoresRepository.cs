@@ -22,6 +22,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public string GetNextNumInscProvisoria();
 
+        public string GetNextNumInscProvisoriaBuySequence();
+
         public string GetNextNISS();
 
         public string GetNextNISSBuySequence();

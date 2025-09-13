@@ -389,6 +389,38 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return trabalhador;
         }
 
+        public string GetNextNumInscProvisoriaBuySequence()
+        {
+            var connection = _moduloContribuicoesContext.Database.GetDbConnection();
+            try
+            {
+                // Mở kết nối nếu chưa mở
+                if (connection.State != System.Data.ConnectionState.Open)
+                    connection.Open();
+
+                // Tạo lệnh SQL
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "SELECT NEXT VALUE FOR SEQ_INSC_TRABALHADOR";
+
+                    // Sử dụng ExecuteScalar để lấy giá trị tiếp theo từ sequence
+                    var result = command.ExecuteScalar();
+
+                    // Chuyển đổi giá trị trả về (object) thành long và trả về dưới dạng chuỗi
+                    var nextValue = Convert.ToInt64(result);
+                    return nextValue.ToString();
+                }
+            }
+            finally
+            {
+                // Đảm bảo kết nối được đóng lại nếu không sử dụng nữa
+                if (connection.State == System.Data.ConnectionState.Open)
+                    connection.Close();
+            }
+            //var nextValue = _moduloContribuicoesContext.Database.ExecuteSqlRaw("SELECT NEXT VALUE FOR SEQ_NISS_TRABALHADOR");
+
+            //return nextValue.ToString();
+        }
         public string GetNextNumInscProvisoria()
         {
             long numInsc = 0;

@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Linq;
+using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using TimorINSSBackEnd.Models;
 using TimorINSSBackEnd.Repository.Interfaces;
 using TimorINSSBackEnd.Resources;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace TimorINSSBackEnd.Repository.Repositories
 {
@@ -278,6 +282,48 @@ namespace TimorINSSBackEnd.Repository.Repositories
         //General functions to save changes or rollback
         public void Commit()
         { _moduloContribuicoesContext.SaveChanges(); }
+
+        //public void Commit()
+        //{
+        //    try
+        //    {
+        //        _moduloContribuicoesContext.SaveChanges();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Error SaveChanges: " + ex.Message);
+
+        //        // Lấy tất cả entity đang được theo dõi
+        //        var entries = _moduloContribuicoesContext.ChangeTracker.Entries()
+        //            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+
+        //        foreach (var entry in entries)
+        //        {
+        //            Console.WriteLine($"Entity: {entry.Entity.GetType().Name}, State: {entry.State}");
+
+        //            foreach (var prop in entry.Properties)
+        //            {
+        //                if (prop.CurrentValue == null)
+        //                {
+        //                    var clrType = prop.Metadata.ClrType;
+        //                    bool isNullable = Nullable.GetUnderlyingType(clrType) != null || !clrType.IsValueType;
+
+        //                    if (!isNullable)
+        //                    {
+        //                        Console.WriteLine($"❌ Field NULL : {prop.Metadata.Name}");
+        //                    }
+        //                    else
+        //                    {
+        //                        Console.WriteLine($"(nullable) Field {prop.Metadata.Name} = NULL");
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //        throw; // vẫn ném lỗi ra ngoài để không che bug
+        //    }
+        //}
+
 
         public void Rollback()
         { _moduloContribuicoesContext.Dispose(); }
