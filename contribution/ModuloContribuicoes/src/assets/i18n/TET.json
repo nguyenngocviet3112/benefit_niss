@@ -89,7 +89,8 @@
     "invoiceAPEE": "Valor a cargo da EE",
     "invoiceATCO": "Valor a cargo do TCO",
     "invoiceSSS": "Os Serviços da Segurança Social",
-    "invoiceSAS": "Assinatura e carimbo"
+    "invoiceSAS": "Assinatura e carimbo",
+    "period":"Period"
   },
   "login_form": {
     "title": "Autenticação",

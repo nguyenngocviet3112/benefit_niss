@@ -231,10 +231,10 @@ export class GuiaPagamentoComponent implements OnInit {
         pdf.setTextColor(10);
         //Número do Documento
         pdf.text(this.translate.instant('general.invoicePaymentRef') + ': ' + element.paymentRef, 20, 45);
-        pdf.text(this.translate.instant('general.period') + ': ' + this.formatDate(element.mesAno), 120, 45);
+        pdf.text(this.translate.instant('general.period') + ': ' + this.formatDate(element.mesAno), 160, 45);
         pdf.text(this.translate.instant('general.invoiceEm'), 20, 52);
         pdf.text(this.translate.instant('general.invoiceName') + ': ' + element.userName, 20, 59);
-        pdf.text(this.translate.instant('general.invoiceDate') + ': ' + this.formatDatePT(element.dataCriacao), 120, 59);
+        pdf.text(this.translate.instant('general.invoiceDate') + ': ' + this.formatDatePT(element.dataCriacao), 160, 59);
         pdf.text(this.translate.instant('general.invoiceNISS') + ': ' + element.niss, 20, 66);
         pdf.text(this.translate.instant('general.invoiceTIN') + ': ' + element.tin, 20, 73);
         pdf.text(this.translate.instant('general.invoicePM') + ':', 20, 80);
@@ -467,8 +467,12 @@ export class GuiaPagamentoComponent implements OnInit {
 
         pdf.text(this.translate.instant('general.invoiceSSS'), 83, 230);
 
-        pdf.text(this.translate.instant('general.invoiceDate'), 30, 270);
+       
 
+        pdf.text(this.formatDatePT(element.dataCriacao), 25, 265);
+         pdf.text(this.translate.instant('general.invoiceDate'), 30, 270);
+         
+        pdf.addImage(environment.signatureIcon, 'JPEG',  165, 245,25, 20);
         pdf.text(this.translate.instant('general.invoiceSAS'), 160, 270);
 
         QRCode.toDataURL(element.qrInvoice)
