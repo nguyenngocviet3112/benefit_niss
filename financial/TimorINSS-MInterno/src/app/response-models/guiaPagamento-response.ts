@@ -27,6 +27,7 @@ export interface GuiaListagem
   approveFile: string;
 }
 
+
 export interface RelatoriosGuiasListagemResponse {
   rows: number;
   guias: RelatoriosGuiasListagem[];

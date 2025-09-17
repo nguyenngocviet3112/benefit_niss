@@ -162,7 +162,7 @@ export class ContribValidationHomeSearchComponent implements OnInit {
 
     };
 
-    this.guiaPagamentoService.getAllGuiasByEntidadeApprove(request).subscribe(x => {
+    this.guiaPagamentoService.getAllGuiasByEntidade(request).subscribe(x => {
       x.rows == null ? this.totalRows = 0 : this.totalRows = x.rows;
       x.guias == null ? this.dataSourceGuiaPagamento = [] : this.dataSourceGuiaPagamento = x.guias;
       this.spinner.hide();

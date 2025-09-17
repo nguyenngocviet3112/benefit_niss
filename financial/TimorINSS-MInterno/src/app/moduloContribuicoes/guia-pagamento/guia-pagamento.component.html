@@ -29,6 +29,10 @@
                 {{'guiaPagamentoListagem.title' | translate}}
             </div>
             <table mat-table [dataSource]="dataSourceGuiaPagamento" class="mat-elevation-z8 tabelaContaCorrente">
+                <ng-container matColumnDef="paymentRef">
+                    <th mat-header-cell *matHeaderCellDef> {{'guiaPagamentoListagem.paymentRef' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.paymentRef}} </td>
+                </ng-container>
                 <ng-container matColumnDef="numDocumento">
                     <th mat-header-cell *matHeaderCellDef> {{'guiaPagamentoListagem.numDocumento' | translate}} </th>
                     <td mat-cell *matCellDef="let element"> {{element.numDocumento}} </td>
@@ -41,6 +45,15 @@
                     <th mat-header-cell *matHeaderCellDef> {{'guiaPagamentoListagem.descricao' | translate}} </th>
                     <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
                 </ng-container>
+                <ng-container matColumnDef="bankCode">
+                    <th mat-header-cell *matHeaderCellDef> {{'guiaPagamentoListagem.bankCode' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.bankCode}} </td>
+                </ng-container>
+                <ng-container matColumnDef="dataCriacao">
+                    <th mat-header-cell *matHeaderCellDef> {{'guiaPagamentoListagem.dataCriacao' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{formatDatePT(element.dataCriacao)}} </td>
+                </ng-container>
+                
                 <ng-container matColumnDef="valor">
                     <th mat-header-cell *matHeaderCellDef> {{'guiaPagamentoListagem.valor' | translate}} </th>
                     <td mat-cell *matCellDef="let element">${{formatDecimal(element.valor)}}
@@ -61,7 +74,7 @@
                     <td mat-cell *matCellDef="let element"> {{formatDatePT(element.dtValidade)}} </td>
                 </ng-container>
                 <ng-container matColumnDef="tipo">
-                    <th mat-header-cell *matHeaderCellDef> {{'guiaPagamentoListagem.tipo' | translate}} </th>
+                    <th mat-header-cell *matHeaderCellDef> {{'guiaPagamentoListagem.type' | translate}} </th>
                     <td mat-cell *matCellDef="let element">
                         <div *ngIf="element.tipo == 1">{{'guiaPagamentoListagem.simples' | translate}}</div>
                         <div *ngIf="element.tipo == 2">{{'guiaPagamentoListagem.composta' | translate}}</div>
@@ -78,9 +91,9 @@
                         <mat-icon class="estadoPago" *ngIf="element.estadoPagamento == 1"
                             matTooltip="{{'dropdownDominio.INDPAGO.1' | translate}}">
                             fiber_manual_record</mat-icon>
-                        <!-- <mat-icon class="estadoGerada" *ngIf="element.estadoPagamento == 2"
+                        <mat-icon class="estadoGerada" *ngIf="element.estadoPagamento == 2"
                             matTooltip="{{'dropdownDominio.INDPAGO.2' | translate}}">
-                            fiber_manual_record</mat-icon> -->
+                            fiber_manual_record</mat-icon>
                         <mat-icon class="estadoEmValidacao" *ngIf="element.estadoPagamento == 3"
                             matTooltip="{{'dropdownDominio.INDPAGO.3' | translate}}">
                             fiber_manual_record</mat-icon>
@@ -90,7 +103,7 @@
                         <mat-icon class="estadoPagoParcial" *ngIf="element.estadoPagamento == 5"
                             matTooltip="{{'dropdownDominio.INDPAGO.5' | translate}}">
                             fiber_manual_record</mat-icon>
-                            <mat-icon class="estadoPagoRed" *ngIf="element.estadoPagamento == 6"
+                        <mat-icon class="estadoPagoRed" *ngIf="element.estadoPagamento == 6"
                             matTooltip="{{'dropdownDominio.INDPAGO.6' | translate}}">
                             fiber_manual_record</mat-icon>
                     </td>
@@ -103,11 +116,11 @@
                                 matTooltip="{{'guiaPagamentoListagem.download' | translate}}">print</mat-icon>
                         </div>
                         <div class="divButtonList">
-                            <mat-icon *ngIf="element.estadoPagamento == 2" (click)="openPaymentPopup(element)"
+                            <mat-icon *ngIf="element.estadoPagamento == 2 || element.estadoPagamento == 6" (click)="openPaymentPopup(element)"
                                 class="popUpIcon" matTooltip="{{'guiaPagamentoListagem.uploadPagamento' | translate}}">
                                 file_upload
                             </mat-icon>
-                            <mat-icon *ngIf="element.estadoPagamento != 2" (click)="openPaymentPopup(element, true)"
+                            <mat-icon *ngIf="element.estadoPagamento != 2 && element.estadoPagamento != 6" (click)="openPaymentPopup(element, true)"
                                 class="viewPopUpIcon"
                                 matTooltip="{{'guiaPagamentoListagem.visualizarPagamento' | translate}}">visibility
                             </mat-icon>
@@ -123,7 +136,8 @@
 
             <div class="estadoGuia">
                 <div class="subEstadoGuia">
-                    
+                    <mat-icon class="estadoGerada">fiber_manual_record</mat-icon>
+                    {{'dropdownDominio.INDPAGO.2' | translate}}
                     <mat-icon class="estadoParcialEmValidacao">fiber_manual_record</mat-icon>
                     {{'dropdownDominio.INDPAGO.4' | translate}}
                     <mat-icon class="estadoEmValidacao">fiber_manual_record</mat-icon>

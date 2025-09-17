@@ -196,12 +196,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Where(e => e.ContaCorrenteEntidadeFk == request.IdEntidade)
                 .Select(c => new ResumoContaCorrenteListagem
                 {
-                    Ano = c.MesAno.Year,
-                    Contribuicoes = c.ValorEntidade,
-                    Quotizacoes = c.ValorTrabalhador,
-                    ValorAPagar = c.ValorTotal,
-                    TotalJuros = c.ValorJuros.Value,
-                    TotalPago = c.Guiapagamento.Sum(e => e.ValorComprovPag ?? 0),
+                    Ano = c.MesAno.Year,                    // đảm bảo MesAno không null. Nếu DateTime? thì dùng c.MesAno!.Value.Year hoặc c.MesAno.HasValue ? c.MesAno.Value.Year : 0
+                    Contribuicoes = c.ValorEntidade,             // nếu là decimal?
+                    Quotizacoes = c.ValorTrabalhador,          // nếu là decimal?
+                    ValorAPagar = c.ValorTotal,                // nếu là decimal?
+                    TotalJuros = c.ValorJuros ?? 0,                // ✅ không dùng .Value
+                    TotalPago = c.Guiapagamento.Sum(g => g.ValorComprovPag ?? 0)
                 })
                 .ToList()
                 .GroupBy(e => e.Ano)

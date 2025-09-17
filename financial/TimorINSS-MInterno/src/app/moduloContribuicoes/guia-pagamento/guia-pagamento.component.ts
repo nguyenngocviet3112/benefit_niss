@@ -21,6 +21,7 @@ import { environment } from "src/environments/environment";
 import { ReservaCreditoListagemRequest } from "../../request-models/reservaCredito-request";
 import { ReservaCreditoService } from "../../services/reservaCredito.service";
 import { PopUpComprovativoPagamentoComponent } from "../pop-up-comprovativo-pagamento/pop-up-comprovativo-pagamento.component";
+import * as QRCode from 'qrcode';
 
 @Component({
     selector: 'guiaPagamento',
@@ -40,7 +41,8 @@ export class GuiaPagamentoComponent implements OnInit {
     private filter: FilterRequest = {};
     //Region Guia Pagamento table
     public dataSourceGuiaPagamento: GuiaListagem[] = [];
-    public displayedColumnsGuiaPagamento: string[] = ['numDocumento', 'mesAno', 'descricao', 'valor', 'juros', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
+    // public displayedColumnsGuiaPagamento: string[] = ['numDocumento', 'mesAno', 'descricao', 'valor', 'juros', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
+    public displayedColumnsGuiaPagamento: string[] = ['paymentRef','numDocumento', 'mesAno','descricao','bankCode','dataCriacao',  'valor', 'juros', 'total', 'dtValidade', 'tipo', 'valorPago', 'estadoPagamento', 'actions'];
     public totalRows: number = 0;
     public pageSize = 20;
     public pageIndex = 0;
@@ -139,7 +141,7 @@ export class GuiaPagamentoComponent implements OnInit {
 
         request = { "idEntidade": this.entidadeId, "filter": this.filter };
 
-        this.guiaPagamentoService.getAllGuiasByEntidadeApprove(request).subscribe(x => {
+        this.guiaPagamentoService.getAllGuiasByEntidade(request).subscribe(x => {
             x.rows == null ? this.totalRows = 0 : this.totalRows = x.rows;
             x.guias == null ? this.dataSourceGuiaPagamento = [] : this.dataSourceGuiaPagamento = x.guias;
             this.spinner.hide();
@@ -215,76 +217,377 @@ export class GuiaPagamentoComponent implements OnInit {
         // INSS logo
         pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
 
+        const pageWidth = 210; // Chiều rộng trang A4 tính bằng mm
+
         //title
-        pdf.text(this.translate.instant('general.guiaDePagamento'), 83, 35);
-        pdf.setFontSize(12);
-        pdf.setTextColor(99);
-
-        //NISS
-        pdf.text('NISS: ' + element.niss, 20, 45);
-
+        pdf.setFontSize(13);
+        pdf.setTextColor(80);
+        pdf.text(this.translate.instant('general.invoiceTitleDoc'), 60, 35);
+        pdf.setFontSize(11);
+        pdf.setTextColor(10);
         //Número do Documento
-        pdf.text(this.translate.instant('guiasPagamento.numeroGuia') + ': ' + element.numDocumento, 75, 45);
+        pdf.text(this.translate.instant('general.invoicePaymentRef') + ': ' + element.paymentRef, 20, 45);
+        pdf.text(this.translate.instant('general.period') + ': ' + this.formatDate(element.mesAno), 160, 45);
+        pdf.text(this.translate.instant('general.invoiceEm'), 20, 52);
+        pdf.text(this.translate.instant('general.invoiceName') + ': ' + element.userName, 20, 59);
+        pdf.text(this.translate.instant('general.invoiceDate') + ': ' + this.formatDatePT(element.dataCriacao), 160, 59);
+        pdf.text(this.translate.instant('general.invoiceNISS') + ': ' + element.niss, 20, 66);
+        pdf.text(this.translate.instant('general.invoiceTIN') + ': ' + element.tin, 20, 73);
+        pdf.text(this.translate.instant('general.invoicePM') + ':', 20, 80);
+        pdf.addImage(environment.checkBoxIcon, 'JPEG', 20, 83, 5, 5);
+        pdf.text(this.translate.instant('general.invoiceCash'), 30, 87);
+        pdf.addImage(environment.checkBoxIcon, 'JPEG', 20, 90, 5, 5);
+        pdf.text(this.translate.instant('general.invoiceBT'), 30, 94);
 
-        //datas
-        pdf.text(this.translate.instant('pagamentosExecutados.dataEmissao') + ': ' + this.formatDatePT(element.mesAno), 20, 55);
-        pdf.text(this.translate.instant('conta_corrente.dataLimitePagamento') + ': ' + this.formatDatePT(element.dtValidade), 120, 55);
+        pdf.text(this.translate.instant('general.invoiceIP'), 20, 101);
+        pdf.text(this.translate.instant('general.invoiceBank') + ':', 20, 108);
+        pdf.text(this.translate.instant('general.invoiceNOT'), 20, 115);
+        pdf.text(this.translate.instant('general.invoiceCCATP'), 20, 122);
 
-        var body = [[this.formatDatePT(element.mesAno), element.descricao, element.valor, element.juros, element.total, this.formatDatePT(element.dtValidade), this.guiaTipoOptions.find(x => x.value == element.tipo)?.descricao, element.valorPago],
-        [{
-            content: `TOTAL: ${this.formatDecimal(element.total)}`, colSpan: 8,
-            styles: { fillColor: [42, 129, 204] }
-        }]]
+        var text1 = this.translate.instant('general.invoiceCFT') + ':';
+        var text2 = (element.total).toFixed(2);
+        var text3 = this.translate.instant('general.invoiceUSD');
+        // Tính toán chiều rộng của văn bản
+        var textWidth1 = pdf.getTextWidth(text1);
+        var textWidth2 = pdf.getTextWidth(text2);
+        var textWidth3 = pdf.getTextWidth(text3);
 
-        {
-            (pdf as any).autoTable({
-                startY: 60,
-                columnStyles: { europe: { halign: 'center' } },
-                head: [[this.translate.instant('guiaPagamentoListagem.mesAno'), this.translate.instant('general.descricao'), this.translate.instant('guiaPagamentoListagem.valor'), this.translate.instant('guiaPagamentoListagem.juros'), this.translate.instant('guiaPagamentoListagem.total'), this.translate.instant('general.dtValidade'), this.translate.instant('guiaPagamentoListagem.type'), this.translate.instant('conta_corrente.valorPago')]],
-                body: body,
-                theme: 'grid',
-                headStyles: {
-                    fillColor: [42, 129, 204],
-                    textColor: [0, 0, 0],
-                    fontSize: 8,
-                    padding: 0,
-                    valign: 'middle',
-                    halign: 'center',
-                },
+        // Tính toán vị trí căn lề phải
+        var rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
 
-                bodyStyles: {
-                    textColor: [0, 0, 0],
-                    fontSize: 10,
-                    padding: 0,
-                    valign: 'middle',
-                    halign: 'center',
-                },
-                didDrawCell: (data: { column: { index: any; }; }) => {
-                }
+        var rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        var rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+        pdf.text(this.translate.instant('general.invoiceCFT') + ':', rightAlignX1, 129);
+        pdf.text((element.valor).toFixed(2), rightAlignX2, 129);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 129);
+
+        text1 = this.translate.instant('general.invoiceEEC') + ':';
+        text2 = (element.valor - (element.total * 0.4)).toFixed(2);
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+        pdf.text(this.translate.instant('general.invoiceEEC') + ':', rightAlignX1, 136);
+        pdf.text((element.valor - (element.total * 0.4)).toFixed(2), rightAlignX2, 136);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 136);
+
+
+        text1 = this.translate.instant('general.invoiceTCO') + ':';
+        text2 = (element.total * 0.4).toFixed(2);
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+        pdf.text(this.translate.instant('general.invoiceTCO') + ':', rightAlignX1, 143);
+        pdf.text((element.total * 0.4).toFixed(2), rightAlignX2, 143);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 143);
+
+
+        text1 = this.translate.instant('general.invoiceOPA') + ':';
+        text2 = '0';
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+        pdf.text(this.translate.instant('general.invoiceOPA') + ':', rightAlignX1 - 7.5, 150);
+        pdf.text('0', rightAlignX2, 150);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 150);
+
+        text1 = this.translate.instant('general.invoiceINCLUDING')
+        textWidth1 = pdf.getTextWidth(text1);
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        pdf.text(this.translate.instant('general.invoiceINCLUDING'), rightAlignX1 - 7.5, 157);
+
+        text1 = this.translate.instant('general.invoiceLPI') + ':';
+        text2 = '0';
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+
+        pdf.text(this.translate.instant('general.invoiceLPI') + ':', rightAlignX1 - 7.5, 164);
+        pdf.text('0', rightAlignX2, 164);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 164);
+
+
+        text1 = this.translate.instant('general.invoiceFines') + ':';
+        text2 = (element.juros).toFixed(2);
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+
+
+        pdf.text(this.translate.instant('general.invoiceFines') + ':', rightAlignX1 - 7.5, 171);
+        pdf.text((element.juros).toFixed(2), rightAlignX2, 171);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 171);
+
+
+        text1 = this.translate.instant('general.invoiceOthers') + ':';
+        text2 = '0';
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+        pdf.text(this.translate.instant('general.invoiceOthers') + ':', rightAlignX1 - 7.5, 178);
+        pdf.text('0', rightAlignX2, 178);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 178);
+
+        text1 = this.translate.instant('general.invoiceTotal') + ':';
+        text2 = (element.total).toFixed(2);
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+        pdf.text(this.translate.instant('general.invoiceTotal') + ':', rightAlignX1, 185);
+        pdf.text((element.total ).toFixed(2), rightAlignX2, 185);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 185);
+
+
+        text1 = this.translate.instant('general.invoiceROP') + ':';
+        text2 = '0';
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+        pdf.text(this.translate.instant('general.invoiceROP') + ':', rightAlignX1 - 7.5, 192);
+        pdf.text('0', rightAlignX2, 192);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 192);
+
+        text1 = this.translate.instant('general.invoiceCCON') + ':';
+        text2 = '0';
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+        pdf.text(this.translate.instant('general.invoiceCCON') + ':', rightAlignX1 - 7.5, 199);
+        pdf.text('0', rightAlignX2, 199);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 199);
+
+
+        text1 = this.translate.instant('general.invoiceTTA') + ':';
+        
+        text2 = (element.total).toFixed(2);
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+        pdf.text(this.translate.instant('general.invoiceTTA') + ':', rightAlignX1 - 7.5, 206);
+        // pdf.text('0', rightAlignX2, 206);
+        pdf.text((element.total ).toFixed(2), rightAlignX2, 206);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 206);
+
+        text1 = this.translate.instant('general.invoiceAPEE') + ':';
+        text2 = (element.total * 0.6).toFixed(2);
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+        pdf.text(this.translate.instant('general.invoiceAPEE') + ':', rightAlignX1, 213);
+        pdf.text((element.total * 0.6).toFixed(2), rightAlignX2, 213);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 213);
+
+
+        text1 = this.translate.instant('general.invoiceATCO') + ':';
+        text2 = (element.total * 0.4).toFixed(2);
+
+        // Tính toán chiều rộng của văn bản
+        textWidth1 = pdf.getTextWidth(text1);
+        textWidth2 = pdf.getTextWidth(text2);
+        // Tính toán vị trí căn lề phải
+        rightAlignX1 = pageWidth - textWidth1 - textWidth2 - textWidth3 - 70; // 20 là khoảng cách lề trái
+        rightAlignX2 = pageWidth - textWidth2 - textWidth3 - 42; // 20 là khoảng cách lề trái
+        rightAlignX3 = pageWidth - textWidth3 - 40; // 20 là khoảng cách lề trái
+
+
+        pdf.text(this.translate.instant('general.invoiceATCO') + ':', rightAlignX1, 220);
+        pdf.text((element.total * 0.4).toFixed(2), rightAlignX2, 220);
+        pdf.text(this.translate.instant('general.invoiceUSD'), rightAlignX3, 220);
+
+        pdf.text(this.translate.instant('general.invoiceSSS'), 83, 230);
+
+       
+
+        pdf.text(this.formatDatePT(element.dataCriacao), 25, 265);
+         pdf.text(this.translate.instant('general.invoiceDate'), 30, 270);
+         
+        pdf.addImage(environment.signatureIcon, 'JPEG',  165, 245,25, 20);
+        pdf.text(this.translate.instant('general.invoiceSAS'), 160, 270);
+
+        QRCode.toDataURL(element.qrInvoice)
+            .then((url:string) => {
+                // Chèn mã QR vào file PDF
+
+                pdf.addImage(url, 'JPEG', 95, 275, 20, 20);
 
             })
-        }
+            .catch((err:any) => {
+                console.error(err);
+            });
 
-        const img = new Image();
+        // Download PDF doc
+        // pdf.save(this.formatDatePT(new Date) + '_invoice.pdf');
 
-        img.onload = function(){
-          const widthCap = 70;
-          const height = img.height;
-          const width = img.width;
+        // Download PDF doc
+        // const fileName = this.formatDatePT(new Date()) + '_invoice.pdf';
+        // pdf.save(fileName);
 
-          const { width: pdfWidth, height: pdfHeight } = pdf.internal.pageSize;
+        // // Mở file PDF sau khi lưu
+        // setTimeout(() => {
+        //     window.open(fileName, '_blank');
+        // }, 1000);
 
-          const resolvedHeight = height * widthCap / width;
+        pdf.save(this.formatDatePT(new Date()) + '_invoice.pdf');
 
-          // Stamp and Signature
-          pdf.addImage(environment.stampImage, 'JPEG', pdfWidth / 2 - widthCap / 2, pdfHeight - resolvedHeight - 30, widthCap, resolvedHeight);
+        setTimeout(() => {
+            // Xuất file PDF dưới dạng Blob
+            const blob = pdf.output('blob');
 
-          // Download PDF doc
-          pdf.save('table.pdf');
-        }
+            // Tạo URL từ Blob
+            const url = URL.createObjectURL(blob);
 
-        img.src = environment.stampImage;
+            // Mở PDF trong tab mới
+            window.open(url, '_blank');
+        }, 1000);
+
+
+
+
+
     }
+
+    // public gerarPDF(element: any) {
+    //     var pdf = new jsPDF();
+    //     // INSS logo
+    //     pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
+
+    //     //title
+    //     pdf.text(this.translate.instant('general.guiaDePagamento'), 83, 35);
+    //     pdf.setFontSize(12);
+    //     pdf.setTextColor(99);
+
+    //     //NISS
+    //     pdf.text('NISS: ' + element.niss, 20, 45);
+
+    //     //Número do Documento
+    //     pdf.text(this.translate.instant('guiasPagamento.numeroGuia') + ': ' + element.numDocumento, 75, 45);
+
+    //     //datas
+    //     pdf.text(this.translate.instant('pagamentosExecutados.dataEmissao') + ': ' + this.formatDatePT(element.mesAno), 20, 55);
+    //     pdf.text(this.translate.instant('conta_corrente.dataLimitePagamento') + ': ' + this.formatDatePT(element.dtValidade), 120, 55);
+
+    //     var body = [[this.formatDatePT(element.mesAno), element.descricao, element.valor, element.juros, element.total, this.formatDatePT(element.dtValidade), this.guiaTipoOptions.find(x => x.value == element.tipo)?.descricao, element.valorPago],
+    //     [{
+    //         content: `TOTAL: ${this.formatDecimal(element.total)}`, colSpan: 8,
+    //         styles: { fillColor: [42, 129, 204] }
+    //     }]]
+
+    //     {
+    //         (pdf as any).autoTable({
+    //             startY: 60,
+    //             columnStyles: { europe: { halign: 'center' } },
+    //             head: [[this.translate.instant('guiaPagamentoListagem.mesAno'), this.translate.instant('general.descricao'), this.translate.instant('guiaPagamentoListagem.valor'), this.translate.instant('guiaPagamentoListagem.juros'), this.translate.instant('guiaPagamentoListagem.total'), this.translate.instant('general.dtValidade'), this.translate.instant('guiaPagamentoListagem.type'), this.translate.instant('conta_corrente.valorPago')]],
+    //             body: body,
+    //             theme: 'grid',
+    //             headStyles: {
+    //                 fillColor: [42, 129, 204],
+    //                 textColor: [0, 0, 0],
+    //                 fontSize: 8,
+    //                 padding: 0,
+    //                 valign: 'middle',
+    //                 halign: 'center',
+    //             },
+
+    //             bodyStyles: {
+    //                 textColor: [0, 0, 0],
+    //                 fontSize: 10,
+    //                 padding: 0,
+    //                 valign: 'middle',
+    //                 halign: 'center',
+    //             },
+    //             didDrawCell: (data: { column: { index: any; }; }) => {
+    //             }
+
+    //         })
+    //     }
+
+    //     const img = new Image();
+
+    //     img.onload = function(){
+    //       const widthCap = 70;
+    //       const height = img.height;
+    //       const width = img.width;
+
+    //       const { width: pdfWidth, height: pdfHeight } = pdf.internal.pageSize;
+
+    //       const resolvedHeight = height * widthCap / width;
+
+    //       // Stamp and Signature
+    //       pdf.addImage(environment.stampImage, 'JPEG', pdfWidth / 2 - widthCap / 2, pdfHeight - resolvedHeight - 30, widthCap, resolvedHeight);
+
+    //       // Download PDF doc
+    //       pdf.save('table.pdf');
+    //     }
+
+    //     img.src = environment.stampImage;
+    // }
 
     public openPaymentPopup(guia: GuiaListagem, viewMode: boolean = false): void {
         this.spinner.show();
@@ -309,7 +612,14 @@ export class GuiaPagamentoComponent implements OnInit {
                 data: {
                     adicionar: !viewMode,
                     view: viewMode,
-                    data: { guiaId: guia.idGuia, entidadeId: this.entidadeId, valor: guia.valorPago, data: guia.dtValorPago, file: guia.comprovativoPagamento },
+                    data: {
+                        guiaId: guia.idGuia,
+                        entidadeId: this.entidadeId,
+                        valor: guia.estadoPagamento == 2 ? guia.total : guia.valorPago,
+                        data: guia.dtValorPago == null ? new Date() : guia.dtValorPago,
+                        bankCode: guia.bankCode,
+                        file: guia.comprovativoPagamento
+                    },
                     avaliableCredit: viewMode ? undefined : this.credit,
                 }
             });

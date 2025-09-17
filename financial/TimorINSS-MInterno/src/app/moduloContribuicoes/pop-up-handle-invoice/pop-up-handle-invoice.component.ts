@@ -60,8 +60,8 @@ export class PopUpHandleInvoiceComponent {
     idGuia: this.data.data.guiaId,
     dataComprovativoPag: this.data.data.data,
     valorComprovativoPag: this.data.data.valor,
-    total: this.data.data.valor,
-    approveFile: <string>{},
+    // total: this.data.data.valor,
+    comprovativoPag: <string>{},
     rejectReason: <string>{},
     rejectStatus: <string>{},
   }
@@ -96,10 +96,10 @@ export class PopUpHandleInvoiceComponent {
     this.guiaPagamentoService.getGuiasDetailByEntidade(request).subscribe(x => {
         console.log(x);
         this.comprovativoPag = x.guias[0].comprovativoPagamento ?? '';
-        this.approvePaymentRequest.approveFile = x.guias[0].approveFile ?? '';
+        this.approvePaymentRequest.comprovativoPag = x.guias[0].approveFile ?? '';
         this.guiaDetail = x.guias[0];
         this.pdfSrc = base64ToArrayBuffer(this.comprovativoPag);
-        this.pdfSrc2 = base64ToArrayBuffer(this.approvePaymentRequest.approveFile);
+        this.pdfSrc2 = base64ToArrayBuffer(this.approvePaymentRequest.comprovativoPag);
         this.hideLoader();
       },
       err => {
@@ -136,7 +136,7 @@ export class PopUpHandleInvoiceComponent {
                 var arrayBuffer = evt.target.result;
                 this.pdfSrc2 = arrayBuffer;
                 if (arrayBuffer instanceof ArrayBuffer)
-                  this.approvePaymentRequest.approveFile = base64ArrayBuffer(arrayBuffer);
+                  this.approvePaymentRequest.comprovativoPag = base64ArrayBuffer(arrayBuffer);
               }
           }
         }
@@ -223,7 +223,7 @@ export class PopUpHandleInvoiceComponent {
     blobToSaveAs(this.comprovativoPag, this.downloadFileName);
   }
   public downloadDocument2(): void {
-    blobToSaveAs(this.approvePaymentRequest.approveFile, this.downloadFileName);
+    blobToSaveAs(this.approvePaymentRequest.comprovativoPag, this.downloadFileName);
   }
 
   public focusCurrency(event: any) {

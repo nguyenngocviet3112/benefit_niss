@@ -52,19 +52,12 @@ export interface insertComprovativoPagamentoRequest{
   valorComprovativoPag: number;
   dataComprovativoPag: Date;
   comprovativoPag: string;
+  bankCode: string;
 }
 
-export interface approveComprovativoPagamentoRequest{
-  idEntidade: number;
-  idGuia: number;
-  valorComprovativoPag: number;
-  total: number;
-  dataComprovativoPag: Date;
-  approveFile: string;
-  rejectReason: string;
-  rejectStatus: string;
 
-}
+
+
 
 export interface ReasonOption {
   value: string;
@@ -75,4 +68,15 @@ export interface GetGuiasRelatoriosRequest extends FilterRequest {
   niss?: string;
   estado?: number;
   numeroGuia?: string;
+}
+
+export interface approveComprovativoPagamentoRequest{
+  idEntidade: number;
+  idGuia: number;
+  valorComprovativoPag: number;
+  dataComprovativoPag: Date;
+  comprovativoPag: string;
+  rejectReason: string;
+  rejectStatus: string;
+
 }

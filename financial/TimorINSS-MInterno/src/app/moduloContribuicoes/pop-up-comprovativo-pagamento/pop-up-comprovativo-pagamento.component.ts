@@ -11,14 +11,18 @@ import { MaxSizeValidator } from "@angular-material-components/file-input";
 import { MyErrorStateMatcher } from "../../matcher";
 import { TranslateService } from "@ngx-translate/core";
 import { GuiaPagamentoService } from "../../services/guiaPagamento.service";
-import { insertComprovativoPagamentoRequest, useCreditInGuiaPagamentoRequest } from "../../request-models/guiaPagamento-request";
+import { insertComprovativoPagamentoRequest, useCreditInGuiaPagamentoRequest,GetGuiasDetailsRequest ,approveComprovativoPagamentoRequest} from "../../request-models/guiaPagamento-request";
+import { FilterRequest } from "../../request-models/utils-request";
+import { GuiaListagem } from "../../response-models/guiaPagamento-response";
 
 export interface PopUpComprovativoPagamentoData {
-  data: { valor: number, data: Date, file: string, guiaId: number, entidadeId: number };
+  data: { valor: number, data: Date, file: string, guiaId: number, entidadeId: number, bankCode: string };
   view: boolean;
   adicionar: boolean;
   avaliableCredit?: number;
 }
+
+
 
 @Component({
   selector: 'app-pop-up-comprovativo-pagamento',
@@ -26,10 +30,14 @@ export interface PopUpComprovativoPagamentoData {
   styleUrls: ['./pop-up-comprovativo-pagamento.component.css']
 })
 export class PopUpComprovativoPagamentoComponent {
+  private filter: FilterRequest = {};
   public fileControl: FormControl;
   public faTimesCircle = faTimesCircle;
+  public guiaDetail?: GuiaListagem;
   public errors: string[] = [];
+  public selectedBanco: string = '';
   public matcher: MyErrorStateMatcher = new MyErrorStateMatcher();
+  public bankOptions: { key: string; label: string }[] = [];
   public submittedTry: boolean = false;
   public wrongFormat: boolean = false;
   public accept = ".pdf";
@@ -39,12 +47,22 @@ export class PopUpComprovativoPagamentoComponent {
     idEntidade: this.data.data.entidadeId,
     idGuia: this.data.data.guiaId
   };
+   public approvePaymentRequest: approveComprovativoPagamentoRequest = {
+    idEntidade: this.data.data.entidadeId,
+    idGuia: this.data.data.guiaId,
+    dataComprovativoPag: this.data.data.data,
+    valorComprovativoPag: this.data.data.valor,
+    comprovativoPag: <string>{},
+    rejectReason: <string>{},
+    rejectStatus: <string>{},
+  }
   public insertPaymentRequest: insertComprovativoPagamentoRequest = {
     idEntidade: this.data.data.entidadeId,
     idGuia: this.data.data.guiaId,
     dataComprovativoPag: this.data.data.data,
     valorComprovativoPag: this.data.data.valor,
-    comprovativoPag: <string>{}
+    comprovativoPag: <string>{},
+    bankCode: this.data.data.bankCode
   }
   public pdfSrc?: any;
   public fileName = '';
@@ -63,11 +81,44 @@ export class PopUpComprovativoPagamentoComponent {
     this.fileControl = new FormControl(this.data.data.file, []);
   }
 
-  ngOnInit(): void {
+  onBancoChange(event: any) {
+  // alert('Bank selected:'+ this.selectedBanco);
+  // alert('Bank selected:'+ event);
+  this.data.data.bankCode = event;
+  this.selectedBanco = event;
+  this.insertPaymentRequest.bankCode = event;
+}
+
+ngOnInit(): void {
+
+    let request: GetGuiasDetailsRequest;
+
+    request = {"idGuiaPagamento": this.data.data.guiaId, filter: this.filter};
+    this.showLoader();
+    this.guiaPagamentoService.getGuiasDetailByEntidade(request).subscribe(x => {
+        console.log(x);
+        this.approvePaymentRequest.comprovativoPag = x.guias[0].comprovativoPagamento ?? '';
+        this.guiaDetail = x.guias[0];
+        this.pdfSrc = base64ToArrayBuffer(this.approvePaymentRequest.comprovativoPag);
+        this.hideLoader();
+      },
+      err => {
+        this.spinner.hide();
+        err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        this.showError();
+      });
 
     this.translate.get('comprovativoPagamento.comprovativo').subscribe((translated: string) => {
       this.downloadFileName = translated;
     });
+    this.selectedBanco = this.data?.data?.bankCode ?? null;
+    this.translate.get('guiaPagamentoListagem.lstBankCode').subscribe((res: any) => {
+        this.bankOptions = Object.keys(res).map((key) => ({
+          key,
+          label: res[key],
+        }));
+      });
+      
     if (this.data.data.file)
       this.pdfSrc = base64ToArrayBuffer(this.data.data.file);
 
@@ -96,6 +147,40 @@ export class PopUpComprovativoPagamentoComponent {
       }
     });
   }
+  
+  // ngOnInit(): void {
+
+  //   this.translate.get('comprovativoPagamento.comprovativo').subscribe((translated: string) => {
+  //     this.downloadFileName = translated;
+  //   });
+  //   if (this.data.data.file)
+  //     this.pdfSrc = base64ToArrayBuffer(this.data.data.file);
+
+  //   this.fileControl.valueChanges.subscribe((file: any) => {
+  //     if (file){
+  //       if (file.type != 'application/pdf'){
+  //         this.wrongFormat = true;
+  //         this.pdfSrc = undefined;
+  //         this.fileControl.setValue(undefined);
+  //       }
+  //       else if (this.maxSize >= file.size) {
+  //         var reader = new FileReader();
+  //         reader.readAsArrayBuffer(file);
+  //         this.fileName = file.name;
+  //         reader.onloadend = (evt) => {
+  //           this.addDocumentoRequired();
+  //           if (evt.target)
+  //             if (evt.target.readyState == FileReader.DONE) {
+  //               var arrayBuffer = evt.target.result;
+  //               this.pdfSrc = arrayBuffer;
+  //               if (arrayBuffer instanceof ArrayBuffer)
+  //                 this.insertPaymentRequest.comprovativoPag = base64ArrayBuffer(arrayBuffer);
+  //             }
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
 
   public closePopUp(value: boolean = false): void {
     this.dialogRef.close(value);
@@ -172,7 +257,8 @@ export class PopUpComprovativoPagamentoComponent {
   }
 
   public downloadDocument(): void {
-    blobToSaveAs(this.data.data.file, this.downloadFileName);
+    // blobToSaveAs(this.data.data.file, this.downloadFileName);
+    blobToSaveAs(this.approvePaymentRequest.comprovativoPag, this.downloadFileName);
   }
 
   public focusCurrency(event: any)
