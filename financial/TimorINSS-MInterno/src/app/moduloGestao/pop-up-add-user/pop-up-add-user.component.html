@@ -11,9 +11,9 @@
           <div class="DadosContainer-expansion">
             <div class="secondLineContainers inputContainer">
               <mat-form-field appearance="outline">
-                <mat-label>Name</mat-label>
+                <mat-label>Name of Employee</mat-label>
                 <input  [errorStateMatcher]="matcher" [required]="submittedTry" [(ngModel)]="data.Name"
-                       type="text" [pattern]="availableRegex.intTextPattern" maxlength="100" name="Name" matInput>
+                       type="text" [pattern]="availableRegex.intTextPatternSpace" maxlength="100" name="Name" matInput>
                 <mat-error *ngIf="!data.Name">>{{'general.required' | translate}}</mat-error>
                 <mat-error *ngIf="data.Name">{{'general.wrongFormat' | translate}}</mat-error>
               </mat-form-field>

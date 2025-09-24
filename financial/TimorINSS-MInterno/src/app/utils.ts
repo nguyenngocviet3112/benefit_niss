@@ -84,6 +84,7 @@ export enum RegexPatterns {
   intPattern = "[0-9]*",
   idNoPattern = "^[A-Za-z0-9]+$",
   intTextPattern = "[\\w]*",
+  intTextPatternSpace = "[\\w\\s]*",
   intAndHalfPattern = "[0-9]*(,5|,0)?",
   decimal2Cases = "[0-9]*(.[0-9][0-9]?)?",
   passwordPattern = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@#!%*?&])[A-Za-z\\d$@#!%*?&].{8,}",
