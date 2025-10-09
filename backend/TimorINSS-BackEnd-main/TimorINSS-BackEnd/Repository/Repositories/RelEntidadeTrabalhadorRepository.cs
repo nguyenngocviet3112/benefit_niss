@@ -93,7 +93,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             return _moduloContribuicoesContext.Relentidadetrabalhador
                     .Where(r => r.EntidadeFk == entidadeId && r.DtIniVincTrabalhador <= end &&
-                        begin <= (r.DtIniFimTrabalhador ?? System.Data.SqlTypes.SqlDateTime.MaxValue.Value))
+                        begin < (r.DtIniFimTrabalhador ?? System.Data.SqlTypes.SqlDateTime.MaxValue.Value))
                     .Select(r => r.IdRel)
                     .ToList();
         }
