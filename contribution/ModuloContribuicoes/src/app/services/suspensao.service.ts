@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { SuspensaoDeleteRequest, SuspensaoListagemRequest, SuspensaoRequest } from '../request-models/suspensao-request';
 import { SuspensaoListagemResponse } from '../response-models/suspensao-response';
 import { Observable } from 'rxjs';
-
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,23 +16,24 @@ export class SuspensaoService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
   public saveSuspensao(entity: SuspensaoRequest) {
-    return this.http.post<boolean>(`${environment.apiUrl}/suspensao/saveSuspensao`, entity);
+    return this.api.post<boolean>('suspensao/saveSuspensao', entity);
   }
 
   public getSuspensaoByIdEntidadeEmpregadora(request: SuspensaoListagemRequest) : Observable<SuspensaoListagemResponse>  {
-    return this.http.post<SuspensaoListagemResponse>(`${environment.apiUrl}/suspensao/GetByIdEntidadeEmpregadora`,request);
+    return this.api.post<SuspensaoListagemResponse>('suspensao/GetByIdEntidadeEmpregadora',request);
   }
 
   public getSuspensaoByIdTrabalhador(request: SuspensaoListagemRequest) : Observable<SuspensaoListagemResponse>  {
-    return this.http.post<SuspensaoListagemResponse>(`${environment.apiUrl}/suspensao/GetByIdTrabalhador`,request);
+    return this.api.post<SuspensaoListagemResponse>('suspensao/GetByIdTrabalhador',request);
   }
 
   public deleteSuspensao(entity: SuspensaoDeleteRequest) {
-    return this.http.post(`${environment.apiUrl}/suspensao/DeleteSuspensao`, entity);
+    return this.api.post('suspensao/DeleteSuspensao', entity);
   }
 
 }

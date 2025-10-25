@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { MoradaDeleteRequest, MoradaListagemRequest } from '../request-models/morada-request';
 import { MoradaRequest } from '../request-models/morada-request';
 import { MoradaListagemResponse } from '../response-models/morada-response';
-
+import { ApiHelperService } from './api-helper.service';
 
 
 
@@ -19,27 +19,28 @@ export class MoradaService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public getMoradaByIdEntidadeEmpregadora(request: MoradaListagemRequest) : Observable<MoradaListagemResponse>  {
-    return this.http.post<MoradaListagemResponse>(`${environment.apiUrl}/morada/GetByIdEntidadeEmpregadora`,request);
+    return this.api.post<MoradaListagemResponse>('morada/GetByIdEntidadeEmpregadora',request);
   }
 
   public getMoradaByIdTrabalhador(request: MoradaListagemRequest) : Observable<MoradaListagemResponse>  {
-    return this.http.post<MoradaListagemResponse>(`${environment.apiUrl}/morada/GetByIdTrabalhador`,request);
+    return this.api.post<MoradaListagemResponse>('morada/GetByIdTrabalhador',request);
   }
 
   public saveMorada(entity: MoradaRequest) {
-    return this.http.post<boolean>(`${environment.apiUrl}/morada/SaveMorada`, entity);
+    return this.api.post<boolean>('morada/SaveMorada', entity);
   }
 
   public updateMorada(entity: MoradaRequest) {
-    return this.http.post<boolean>(`${environment.apiUrl}/morada/UpdateMorada`, entity);
+    return this.api.post<boolean>('morada/UpdateMorada', entity);
   }
 
   public deleteMorada(entity: MoradaDeleteRequest) {
-    return this.http.post(`${environment.apiUrl}/morada/DeleteMorada`, entity);
+    return this.api.post('morada/DeleteMorada', entity);
   }
 }

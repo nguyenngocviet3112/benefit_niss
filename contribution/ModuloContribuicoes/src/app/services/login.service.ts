@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { Utilizador } from '../models/utilizador';
 import { LoginRequest } from '../request-models/login-request';
 import { RecoverPasswordRequest, RecoverSetPasswordRequest } from '../request-models/recoverPassword-request';
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,12 +17,13 @@ export class LoginService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private api: ApiHelperService
     ) { }
 
     public login(request: LoginRequest): Observable<{ user: Utilizador, token: string, totalCount: number }> {
 
-        return this.http.post(`${environment.apiUrl}/login/Authenticate`, request)
+        return this.api.post('login/Authenticate', request)
             .pipe(map((response: any) => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 // sessionStorage.setItem('user', JSON.stringify(user));
@@ -43,7 +45,7 @@ export class LoginService {
     }
 
     public recoverPassword(request: RecoverPasswordRequest) {
-        return this.http.post(`${environment.apiUrl}/login/RecoverPassword`, request)
+        return this.api.post('login/RecoverPassword', request)
         .pipe(map((response: any) => {
             return {
                 errorCode:response.errors[0]?.errorCode,
@@ -53,7 +55,7 @@ export class LoginService {
     }
 
     public firstAcess(request: RecoverPasswordRequest) {
-        return this.http.post(`${environment.apiUrl}/login/FirstAcess`, request).pipe(map((response: any) => {
+        return this.api.post('login/FirstAcess', request).pipe(map((response: any) => {
             return {
                 errorCode:response.errors[0]?.errorCode,
                 errorMessage:response.errors[0]?.errorMessage
@@ -62,11 +64,11 @@ export class LoginService {
     }
 
     public setUpPassword(request: RecoverSetPasswordRequest) {
-        return this.http.post(`${environment.apiUrl}/login/SetUpPassword`, request);
+        return this.api.post('login/SetUpPassword', request);
     }
 
     public createUser(request: RecoverSetPasswordRequest) {
-        return this.http.post(`${environment.apiUrl}/login/CreateUser`, request);
+        return this.api.post('login/CreateUser', request);
     }
 
     public logout() {
@@ -76,10 +78,10 @@ export class LoginService {
     }
 
     public register(user: Utilizador) {
-        return this.http.post(`${environment.apiUrl}/users/register`, user);
+        return this.api.post('users/register', user);
     }
 
     public validToken(request: { token: string, isRecover: boolean }) {
-        return this.http.post(`${environment.apiUrl}/login/ValidToken`, request);
+        return this.api.post('login/ValidToken', request);
     }
 }

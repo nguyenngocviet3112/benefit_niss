@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { ContatoDeleteRequest, ContatoListagemRequest } from '../request-models/contato-request';
 import { ContatoRequest } from '../request-models/contato-request';
 import { ContatoListagemResponse } from '../response-models/contato-response';
-
+import { ApiHelperService } from './api-helper.service';
 
 
 
@@ -19,27 +19,28 @@ export class ContatoService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public getContatoByIdEntidadeEmpregadora(request: ContatoListagemRequest) : Observable<ContatoListagemResponse>  {
-    return this.http.post<ContatoListagemResponse>(`${environment.apiUrl}/contato/GetByIdEntidadeEmpregadora`,request);
+    return this.api.post<ContatoListagemResponse>('contato/GetByIdEntidadeEmpregadora',request);
   }
 
   public getContatoByIdTrabalhador(request: ContatoListagemRequest) : Observable<ContatoListagemResponse>  {
-    return this.http.post<ContatoListagemResponse>(`${environment.apiUrl}/contato/GetByIdTrabalhador`,request);
+    return this.api.post<ContatoListagemResponse>('contato/GetByIdTrabalhador',request);
   }
 
   public saveContato(entity: ContatoRequest) {
-    return this.http.post<boolean>(`${environment.apiUrl}/contato/SaveContato`, entity);
+    return this.api.post<boolean>('contato/SaveContato', entity);
   }
 
   public updateContato(entity: ContatoRequest) {
-    return this.http.post<boolean>(`${environment.apiUrl}/contato/UpdateContato`, entity);
+    return this.api.post<boolean>('contato/UpdateContato', entity);
   }
 
   public deleteContato(entity: ContatoDeleteRequest) {
-    return this.http.post(`${environment.apiUrl}/contato/DeleteContato`, entity);
+    return this.api.post('contato/DeleteContato', entity);
   }
 }

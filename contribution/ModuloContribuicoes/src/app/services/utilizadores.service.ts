@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { UtilizadorTrbalhador } from '../models/utilizador';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,13 @@ export class UtilizadoresServices {
 
   constructor(
       private router: Router,
-      private http: HttpClient
+      private http: HttpClient,
+      private api: ApiHelperService
   ) {}
 
   public getById(id: number): Observable<UtilizadorTrbalhador>
   {
-    return this.http.get<UtilizadorTrbalhador>(`${environment.apiUrl}/api/Utilizadores/` + id).pipe(map(user =>
+    return this.api.get<UtilizadorTrbalhador>('api/Utilizadores/' + id).pipe(map(user =>
       {
         return {
           id: user.id,

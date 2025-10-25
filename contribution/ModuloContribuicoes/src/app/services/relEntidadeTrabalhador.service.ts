@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { DesvincularTrabalhadorRequest, RelEntidadeTrabalhadorRegimeRequest, RelEntidadeTrabalhadorRequest, TrabalhadorViewListagemRequest } from '../request-models/relEntidadeTrabalhador-request';
 import { TrabalhadorViewResponse } from '../response-models/trabalhadores-response';
 import { Observable } from 'rxjs';
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,28 +14,29 @@ export class RelEntidadeTrabalhadorService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public saveRelEntidadeTrabalhador(entity: RelEntidadeTrabalhadorRequest) {
-    return this.http.post(`${environment.apiUrl}/RelEntidadesTrabalhadores/saveRelEntidadeTrabalhador`, entity);
+    return this.api.post('RelEntidadesTrabalhadores/saveRelEntidadeTrabalhador', entity);
   }
 
   public desvincularTrabalhador(entity: DesvincularTrabalhadorRequest) {
-    return this.http.post(`${environment.apiUrl}/RelEntidadesTrabalhadores/desvincularTrabalhador`, entity);
+    return this.api.post('RelEntidadesTrabalhadores/desvincularTrabalhador', entity);
   }
 
   public editRelEntidadeTrabalhador(entity: RelEntidadeTrabalhadorRequest) {
-    return this.http.post(`${environment.apiUrl}/RelEntidadesTrabalhadores/editRelEntidadeTrabalhador`, entity);
+    return this.api.post('RelEntidadesTrabalhadores/editRelEntidadeTrabalhador', entity);
   }
 
   public editRelEntidadeTrabalhadorRegime(entity: RelEntidadeTrabalhadorRegimeRequest) {
-    return this.http.post(`${environment.apiUrl}/RelEntidadesTrabalhadores/editRelEntidadeTrabalhadorRegime`, entity);
+    return this.api.post('RelEntidadesTrabalhadores/editRelEntidadeTrabalhadorRegime', entity);
   }
 
   public getTrabalhadorViewById(request: TrabalhadorViewListagemRequest) : Observable<TrabalhadorViewResponse>{
-    return this.http.post<TrabalhadorViewResponse>(`${environment.apiUrl}/RelEntidadesTrabalhadores/getTrabalhadorViewById`, request);
+    return this.api.post<TrabalhadorViewResponse>('RelEntidadesTrabalhadores/getTrabalhadorViewById', request);
   }
 }
 

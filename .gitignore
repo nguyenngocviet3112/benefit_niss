@@ -30,3 +30,7 @@ db_backup/TimorINSSModuloContribuicoes_FullBackup_25052025_2222.bak
 backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/obj/Debug/netcoreapp3.1/TimorINSS-BackEnd.AssemblyInfo.cs
 backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/obj/Debug/netcoreapp3.1/TimorINSS-BackEnd.AssemblyInfo.cs
 backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/obj/Debug/netcoreapp3.1/TimorINSS-BackEnd.AssemblyInfoInputs.cache
+*.dll
+*.dll
+*.dll
+*.dll

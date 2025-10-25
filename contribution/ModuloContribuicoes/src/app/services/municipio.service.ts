@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { SelectDescriptionResponse } from '../response-models/utils-response';
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,12 @@ export class MunicipioService {
 
   constructor(
       private router: Router,
-      private http: HttpClient
+      private http: HttpClient,
+      private api: ApiHelperService
   ) {}
 
   public getAllMunicipio(): Observable<SelectDescriptionResponse>
   {
-    return this.http.get<SelectDescriptionResponse>(`${environment.apiUrl}/municipio/getMunicipio`);
+    return this.api.get<SelectDescriptionResponse>('municipio/getMunicipio');
   }
 }
