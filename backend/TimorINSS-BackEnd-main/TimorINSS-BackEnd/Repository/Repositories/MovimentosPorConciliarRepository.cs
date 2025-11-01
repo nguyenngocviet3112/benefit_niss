@@ -403,6 +403,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
             var pagamentosExecutados = items.Where(e => e.Type == MovimentosPorConciliarListagemType.PagamentoExecutado).Select(x => x.Id).ToList();
             var movimentosAConciliar = items.Where(e => e.Type == MovimentosPorConciliarListagemType.MovimentoAConciliar).Select(x => x.Id).ToList();
 
+            var reservaCredito = items.Where(e => e.Type == MovimentosPorConciliarListagemType.ReservaCredito).Select(x => x.Id).ToList();
+
+
             if (guiasPagamentos.Any())
             {
                 var guiasValores = _moduloContribuicoesContext.Guiapagamento.Where(e => e.IndActivo && guiasPagamentos.Any(a => a == e.IdGuia)).Select(e => e.ValorComprovPag.Value).ToList();
@@ -420,6 +423,15 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 var movimentosValores = _moduloContribuicoesContext.Movimentosporconciliar.Where(e => e.IndActivo.Value && movimentosAConciliar.Any(a => a == e.Id)).Select(e => e.Valor).ToList();
                 result.AddRange(movimentosValores);
             }
+
+            if (reservaCredito.Any())
+            {   
+               
+                var reservaCreditoValores = _moduloContribuicoesContext.Reservacredito.Where(e => e.Valor != null && reservaCredito.Any(a => a == e.IdReserva)).Select(e => e.Valor.Value).ToList();
+                result.AddRange(reservaCreditoValores);
+
+            }
+
 
             return result;
         }

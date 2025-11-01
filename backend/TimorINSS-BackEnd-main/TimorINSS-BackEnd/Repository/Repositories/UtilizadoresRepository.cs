@@ -98,7 +98,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             if (request.filter.index.HasValue)
                 index = request.filter.index.Value;
 
-            int rows = 5;
+            int rows = 500;
             if (request.filter.rows.HasValue)
                 rows = request.filter.rows.Value;
 
@@ -113,6 +113,50 @@ namespace TimorINSSBackEnd.Repository.Repositories
                    id = u.IdUtilizador,
                    utilizador = u.TrabalhadorFkNavigation.Nome,
                    idTrabalhador = u.TrabalhadorFkNavigation.IdTrabalhador
+               });
+
+            var utilizadores = listaUtilizador
+                .OrderBy(request.filter.orderBy, request.filter.orderDirection)
+                .Skip(index * rows)
+                .Take(rows)
+                .ToList();
+
+            var totalNumber = listaUtilizador.Count();
+            response.rows = totalNumber;
+            response.utilizador = utilizadores;
+
+            return response;
+        }
+
+        public UtilizadorListagemResponse GetUtilizadoresInternoByPerfilId(SearchFilterRequest request)
+        {
+            UtilizadorListagemResponse response = new UtilizadorListagemResponse();
+
+            int index = 0;
+            if (request.filter.index.HasValue)
+                index = request.filter.index.Value;
+
+            int rows = 500;
+            if (request.filter.rows.HasValue)
+                rows = request.filter.rows.Value;
+            var perfilId = int.Parse(request.filter.filterBy);
+
+            var listaUtilizador = _moduloContribuicoesContext.Utilizador
+                .Join(
+                _moduloContribuicoesContext.Relutilizadorperfil,
+                u => u.IdUtilizador,
+                rel => rel.UtilizadorFk,
+                (u, rel) => new { u, rel })
+               .Where(x => x.u.Interno == true &&
+                           x.u.TrabalhadorFk != null &&
+                           x.rel.PerfilFk == perfilId &&
+                           x.u.TrabalhadorFkNavigation.Interno
+               )
+               .Select(x => new UtilizadorListagem
+               {
+                   id = x.u.IdUtilizador,
+                   utilizador = x.u.TrabalhadorFkNavigation.Nome,
+                   idTrabalhador = x.u.TrabalhadorFkNavigation.IdTrabalhador
                });
 
             var utilizadores = listaUtilizador

@@ -124,10 +124,10 @@ namespace TimorINSSBackEnd.Controllers
         [HttpGet("GetAllPerfisAtivo")]
         public IActionResult GetAllPerfisAtivo()
         {
-            SelectDescriptionResponse response = _cache.GetFromCache<SelectDescriptionResponse>("GetAllPerfisAtivo");
-
-            if (response == null)
-            {
+            SelectDescriptionResponse response = new SelectDescriptionResponse();
+            //SelectDescriptionResponse response = _cache.GetFromCache<SelectDescriptionResponse>("GetAllPerfisAtivo");
+            //if (response == null)
+            //{
                 try
                 {
                     response = _dataManager.GetAllPerfisAtivo();
@@ -142,11 +142,11 @@ namespace TimorINSSBackEnd.Controllers
                 {
                     return BadRequest(response);
                 }
-                else
-                {
-                    _cache.SetCache("GetAllPerfisAtivo", response, response.selects.Count);
-                }
-            }
+                //else
+                //{
+                //    _cache.SetCache("GetAllPerfisAtivo", response, response.selects.Count);
+                //}
+            //}
             return Ok(response);
         }
     }

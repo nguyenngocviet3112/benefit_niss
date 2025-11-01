@@ -382,7 +382,9 @@
 
                     <mat-form-field class="perfilUtilizadorTarefa" appearance="outline">
                         <mat-label>{{'tarefa.profile' | translate}}</mat-label>
-                        <mat-select [(ngModel)]="perfilTarefa.id" name="perfil" [errorStateMatcher]="dependentMatcher"
+                        <mat-select [(ngModel)]="perfilTarefa.id" name="perfil" 
+                            
+                            [errorStateMatcher]="dependentMatcher"
                             [required]="(componentePerfilUtilizadorOpenState && dataSourcePerfil.length <= 0) &&
                             (componentePerfilUtilizadorOpenState && dataSourceUtilizador.length <= 0)">
                             <mat-option *ngFor="let perfil of perfilListagem" [value]="perfil.id">

@@ -46,6 +46,29 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
+        [HttpPost("GetUtilizadoresInternoByPerfil")]
+        public IActionResult GetUtilizadoresInternoByPerfil(SearchFilterRequest request)
+        {
+            UtilizadorListagemResponse response = new UtilizadorListagemResponse();
+
+            try
+            {
+                // Parse dos valores do header para o request
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.GetUtilizadoresInternoByPerfilId(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            // Guardar log do erro no ficheiro de logs
+            if (response.ManageErrors("GetAllUtilizadoresInterno", Log, request))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
         [HttpPost("GetAllDadosUtilizador")]
         public IActionResult GetAllDadosUtilizador(DadosUtilizadorRequest request)
         {

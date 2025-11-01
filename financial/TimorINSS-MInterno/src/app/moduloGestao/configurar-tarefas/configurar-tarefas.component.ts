@@ -981,6 +981,27 @@ export class ConfigurarTarefasComponent implements OnInit {
   }
 
 
+  public updateUtilizadorListagem() {
+    let filter: FilterRequest;
+    filter = {};
+    filter.filterBy = ''+this.perfilTarefa.id;
+
+    let request: UtilizadorListagemRequest;
+    request = { "filter": filter };
+
+    this.utilizadorService.GetUtilizadoresInternoByPerfil(request).subscribe(x => {
+      this.utilizadorListagem = x.utilizador;
+      // alert('📦 Số lượng phần tử:'+ this.utilizadorListagem.length);
+      this.hideLoader();
+    },
+      err => {
+        this.hideLoader();
+        err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        this.showError();
+      });
+    
+  }
+
   public updateExpandir1(event: any, element: ComponenteTexto) {
     if (element.expandir1) {
       element.expandir1 = false;
@@ -1094,5 +1115,7 @@ export class ConfigurarTarefasComponent implements OnInit {
   public scroll(e: any) {
     e._body.nativeElement.scrollIntoView({ behavior: "smooth", block: "center" });
   }
+
+  
 
 }

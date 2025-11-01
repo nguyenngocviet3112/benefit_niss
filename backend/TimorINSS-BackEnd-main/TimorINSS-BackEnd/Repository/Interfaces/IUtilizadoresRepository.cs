@@ -15,6 +15,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public UtilizadorListagemResponse GetAllUtilizadoresInterno(SearchFilterRequest request);
 
+        public UtilizadorListagemResponse GetUtilizadoresInternoByPerfilId(SearchFilterRequest request);
+        
         public Utilizador GetByTrabalhadorFk(long trabalhadorId);
 
         public UtilizadoresAcessoListagemResponse GetAllAcessoUtilizadores(SearchFilterRequest request);

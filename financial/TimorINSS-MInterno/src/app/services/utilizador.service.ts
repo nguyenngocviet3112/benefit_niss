@@ -26,6 +26,11 @@ export class UtilizadorService {
     return this.http.post<UtilizadoresListagemResponse>(`${environment.apiUrl}/utilizadores/GetAllUtilizadoresInterno`, request);
   }
 
+  public GetUtilizadoresInternoByPerfil(request: UtilizadorListagemRequest): Observable<UtilizadoresListagemResponse>
+  {
+    return this.http.post<UtilizadoresListagemResponse>(`${environment.apiUrl}/utilizadores/GetUtilizadoresInternoByPerfil`, request);
+  }
+
   public GetAllDadosUtilizador(request: DadosUtilizadorRequest) : Observable<DadosUtilizadorResponse>  {
     return this.http.post<DadosUtilizadorResponse>(`${environment.apiUrl}/utilizadores/GetAllDadosUtilizador/`,request)
   }

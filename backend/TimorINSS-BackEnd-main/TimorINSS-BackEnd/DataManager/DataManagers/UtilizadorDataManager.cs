@@ -861,7 +861,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             // Validar se o utilizador tem as permissões necessárias
             bool permission = _utils.ValidatePermission((int)request.UserId, (int)ModuleGestao.GestaoUtilizador, _unitOfWork, CRUD.READ);
 
-            if (!permission)
+             if (!permission)
             {
                 response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
                 return response;
@@ -878,6 +878,79 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     foreach (var res in response.utilizador)
                     {
                         res.idPerfil = new List<int>();
+                        relUtilizadorPerfil = _unitOfWork.RelUtilizadorPerfilRepository.GetRelUtilizadorPerfilByUserId(res.id);
+
+                        if (relUtilizadorPerfil != null && relUtilizadorPerfil.Count > 0)
+                        {
+                            foreach (var perfil in relUtilizadorPerfil)
+                            {
+                                if (perfil.PerfilFkNavigation != null)
+                                {
+                                    //Caso haja mais que um perfil ele concatena as descrições, caso contrário mete uma string vazia
+                                    if (res.perfil == null || res.perfil == "")
+                                    {
+                                        res.perfil = perfil.PerfilFkNavigation.Descricao;
+                                    }
+                                    else
+                                        res.perfil = res.perfil + " / " + perfil.PerfilFkNavigation.Descricao;
+
+                                    res.idPerfil.Add(perfil.PerfilFk);
+                                }
+                            }
+                        }
+
+                        relUtilizadorDepartamento = _unitOfWork.RelUtilizadorDepartamentoRepository.GetRelUtilizadorDepartamentoByUserId(res.id);
+                        if (relUtilizadorDepartamento != null && relUtilizadorDepartamento.Count > 0)
+                        {
+                            foreach (var departamento in relUtilizadorDepartamento)
+                            {
+                                if (departamento.DepartamentoFkNavigation != null)
+                                {
+                                    if (res.departamento == null || res.departamento == "")
+                                    {
+                                        res.departamento = departamento.DepartamentoFkNavigation.Nome;
+                                    }
+                                    else
+                                        res.departamento = res.departamento + " / " + departamento.DepartamentoFkNavigation.Nome;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                response.Errors = new List<Error> { new Error { ErrorCode = "-1", ErrorMessage = e.Message } };
+            }
+
+            return response;
+        }
+
+        public UtilizadorListagemResponse GetUtilizadoresInternoByPerfilId(SearchFilterRequest request)
+        {
+            UtilizadorListagemResponse response = new UtilizadorListagemResponse();
+
+            // Validar se o utilizador tem as permissões necessárias
+            bool permission = _utils.ValidatePermission((int)request.UserId, (int)ModuleGestao.GestaoUtilizador, _unitOfWork, CRUD.READ);
+
+            if (!permission)
+            {
+                response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
+                return response;
+            }
+
+            try
+            {
+                response = _unitOfWork.UtilizadoresRepository.GetUtilizadoresInternoByPerfilId(request);
+                List<Relutilizadorperfil> relUtilizadorPerfil = new List<Relutilizadorperfil>();
+                List<Relutilizadordepartamento> relUtilizadorDepartamento = new List<Relutilizadordepartamento>();
+
+                if (response != null && response.utilizador != null && response.utilizador.Count > 0)
+                {
+                    foreach (var res in response.utilizador)
+                    {
+                        res.idPerfil = new List<int>();
+                        //res.idPerfil.Add(int.Parse(request.filter.filterBy));
                         relUtilizadorPerfil = _unitOfWork.RelUtilizadorPerfilRepository.GetRelUtilizadorPerfilByUserId(res.id);
 
                         if (relUtilizadorPerfil != null && relUtilizadorPerfil.Count > 0)

@@ -37,6 +37,8 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
 
         public UtilizadorListagemResponse GetAllUtilizadoresInterno(SearchFilterRequest request);
 
+        public UtilizadorListagemResponse GetUtilizadoresInternoByPerfilId(SearchFilterRequest request);
+
         public DadosUtilizadorResponse GetAllDadosUtilizador(DadosUtilizadorRequest request);
 
         public ResponseBaseDataContract AddUtilizador(UtilizadorRequest request);
