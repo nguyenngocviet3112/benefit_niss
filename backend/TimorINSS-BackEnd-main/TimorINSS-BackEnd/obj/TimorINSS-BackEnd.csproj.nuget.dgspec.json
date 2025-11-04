@@ -50,6 +50,10 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
             "CsvHelper": {
               "target": "Package",
               "version": "[30.0.1, )"
@@ -80,17 +84,17 @@
               "target": "Package",
               "version": "[5.0.2, )"
             },
-            "MigraDoc.DocumentObjectModel.Core": {
+            "MigraDocCore.DocumentObjectModel": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.3.67, )"
             },
-            "MigraDoc.Rendering.Core": {
+            "MigraDocCore.Rendering": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.3.67, )"
             },
             "PdfSharpCore": {
               "target": "Package",
-              "version": "[1.3.6, )"
+              "version": "[1.3.67, )"
             },
             "log4net": {
               "target": "Package",

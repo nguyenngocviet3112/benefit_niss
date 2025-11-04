@@ -1,12 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
-using MigraDoc.DocumentObjectModel;
-using MigraDoc.DocumentObjectModel.Tables;
-using MigraDoc.Rendering;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
+
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,12 +11,17 @@ using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DataManager.Interfaces;
 using TimorINSSBackEnd.DTO;
-using TimorINSSBackEnd.ExcelDocumentService;
 using TimorINSSBackEnd.Models;
 using TimorINSSBackEnd.Repository.Interfaces;
 using TimorINSSBackEnd.Resources;
-using static TimorINSSBackEnd.ExcelDocumentService.Enums;
-using static TimorINSSBackEnd.ExcelDocumentService.Models;
+using ClosedXML.Excel;
+
+using MigraDocCore.DocumentObjectModel;
+using MigraDocCore.DocumentObjectModel.Tables;
+using MigraDocCore.Rendering;
+
+
+
 
 namespace TimorINSSBackEnd.DataManager.DataManagers
 {
@@ -792,458 +792,787 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return combinationsFilter;
         }
 
+        //public OrcamentoExtractToExcelReponse ExtractToExcel(OrcamentoExtractRequest request)
+        //{
+        //    OrcamentoExtractToExcelReponse response = new OrcamentoExtractToExcelReponse();
+
+        //    Dictionary<string, List<ExcTractOrcamentoValor>> combinationsFilter = SearchForExtract(request);
+
+        //    var styles = Extensions.ServiceExtensions.ExcelDocumentTextStyles.ToDictionary(entry => entry.Key,
+        //                                                                                   entry => entry.Value);
+
+        //    // Estilos dos dados da coluna
+        //    styles.Add("Level1", new ExcelDocumentTextStyle()
+        //    {
+        //        Bold = true,
+        //        BackgroundColor = "#BFBFBF",
+        //        Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
+        //        HorizontalAlign = ExcelHorizontalAlignment.Left
+        //    });
+
+        //    styles.Add("Level2", new ExcelDocumentTextStyle()
+        //    {
+        //        BackgroundColor = "#CFCFCF",
+        //        Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
+        //        HorizontalAlign = ExcelHorizontalAlignment.Left
+
+        //    });
+
+        //    styles.Add("Level3", new ExcelDocumentTextStyle()
+        //    {
+        //        BackgroundColor = "#DFDFDF",
+        //        Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
+        //        HorizontalAlign = ExcelHorizontalAlignment.Left
+        //    });
+
+        //    styles.Add("Level4", new ExcelDocumentTextStyle()
+        //    {
+        //        BackgroundColor = "#EFEFEF",
+        //        Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
+        //        HorizontalAlign = ExcelHorizontalAlignment.Left
+        //    });
+
+        //    styles.Add("Level1Valor", new ExcelDocumentTextStyle()
+        //    {
+        //        NumberFormat = "$ #,##0.00",
+        //        Bold = true,
+        //        BackgroundColor = "#BFBFBF",
+        //        Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
+        //        HorizontalAlign = ExcelHorizontalAlignment.Left
+
+        //    });
+
+        //    styles.Add("Level2Valor", new ExcelDocumentTextStyle()
+        //    {
+        //        NumberFormat = "$ #,##0.00",
+        //        BackgroundColor = "#CFCFCF",
+        //        Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
+        //        HorizontalAlign = ExcelHorizontalAlignment.Left
+        //    });
+
+        //    styles.Add("Level3Valor", new ExcelDocumentTextStyle()
+        //    {
+        //        NumberFormat = "$ #,##0.00",
+        //        BackgroundColor = "#DFDFDF",
+        //        Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
+        //        HorizontalAlign = ExcelHorizontalAlignment.Left
+        //    });
+
+        //    styles.Add("Level4Valor", new ExcelDocumentTextStyle()
+        //    {
+        //        NumberFormat = "$ #,##0.00",
+        //        BackgroundColor = "#EFEFEF",
+        //        Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
+        //        HorizontalAlign = ExcelHorizontalAlignment.Left
+        //    });
+
+        //    // Inicialização do documento excel
+        //    var excelDocument = new ExcelDocument(_localizer["filtro"].Value + " 1", new ExcelDocumentOptions()
+        //    {
+        //        TextStyles = styles
+        //    });
+
+        //    // Adição dos título
+        //    ComponenteorcamentoRegisto orcamento = _unitOfWork.ComponenteOrcamentoRegistoRepository.Get(request.IdComponenteOrcamentoRegisto);
+        //    string header = "";
+        //    if (orcamento.Aprovado)
+        //        header = string.Format(_localizer["ocamentoAprovadoPeriodo"].Value, orcamento.DataInicio.ToString("dd/MM/yyyy"), orcamento.DataFim.ToString("dd/MM/yyyy")); // "Orçamento Aprovado para o período de " + orcamento.DataInicio.ToString("dd/MM/yyyy") + " a " + orcamento.DataFim.ToString("dd/MM/yyyy");
+        //    else
+        //        header = string.Format(_localizer["propostaOrcamentoPeriodo"].Value, orcamento.DataInicio.ToString("dd/MM/yyyy"), orcamento.DataFim.ToString("dd/MM/yyyy"));  // "Proposta de Orçamento para o período de " + orcamento.DataInicio.ToString("dd/MM/yyyy") + " a " + orcamento.DataFim.ToString("dd/MM/yyyy");
+
+        //    var page = 0;
+        //    foreach (string combination in combinationsFilter.Keys)
+        //    {
+        //        if (page != 0) excelDocument.AddPage(_localizer["filtro"].Value + " " + (page + 1));
+
+        //        // Adição dos títulos dos filtros
+        //        excelDocument.Pages[page].AddText(header, new ExcelDocumentTextPosition(1, 1), "Header", new ExcelDocumentTextPosition(10, 1));
+
+        //        var filters = combination.Split('-');
+
+        //        var row = 2;
+
+        //        for (int i = 0; i < filters.Length; i++)
+        //        {
+        //            excelDocument.Pages[page].AddText(filters[i], new ExcelDocumentTextPosition(1, row), "Header", new ExcelDocumentTextPosition(10, row));
+        //            row++;
+        //        }
+
+        //        // Retorna o o estilo do texto consoante o objeto
+        //        static string dataTextStyleKeyFunc(ExcTractOrcamentoValor data) => string.IsNullOrWhiteSpace(data.SubAgrupamento) ? "Level1" : string.IsNullOrWhiteSpace(data.Rubrica) ? "Level2" : string.IsNullOrWhiteSpace(data.Alinea) ? "Level3" : "Level4";
+        //        static string dataTextStyleKeyFuncValor(ExcTractOrcamentoValor data) => string.IsNullOrWhiteSpace(data.SubAgrupamento) ? "Level1Valor" : string.IsNullOrWhiteSpace(data.Rubrica) ? "Level2Valor" : string.IsNullOrWhiteSpace(data.Alinea) ? "Level3Valor" : "Level4Valor";
+
+        //        // Adição da tabela
+        //        excelDocument.Pages[page].AddTable(new ExcelDocumentTextPosition(1, row), combinationsFilter[combination], new List<ColumnOption<ExcTractOrcamentoValor>>()
+        //        {
+        //            new ColumnOption<ExcTractOrcamentoValor>()
+        //            {
+        //                Name = _localizer["tipoConta"].Value,
+        //                ColumnTextStyleKey = "TableColumn",
+        //                DataTextStyleKeyFunc = dataTextStyleKeyFunc,
+        //                Value = (data) => data.TipoConta
+        //            },
+        //            new ColumnOption<ExcTractOrcamentoValor>()
+        //            {
+        //                Name = _localizer["departamento"].Value,
+        //                ColumnTextStyleKey = "TableColumn",
+        //                DataTextStyleKeyFunc = dataTextStyleKeyFunc,
+        //                Value = (data) => data.Departamento
+        //            },
+        //            new ColumnOption<ExcTractOrcamentoValor>()
+        //            {
+        //                Name = _localizer["centroCusto"].Value,
+        //                ColumnTextStyleKey = "TableColumn",
+        //                DataTextStyleKeyFunc = dataTextStyleKeyFunc,
+        //                Value = (data) => data.CentrosCusto
+        //            },
+        //            new ColumnOption<ExcTractOrcamentoValor>()
+        //            {
+        //                Name = _localizer["agrupamento"].Value,
+        //                ColumnTextStyleKey = "TableColumn",
+        //                DataTextStyleKeyFunc = dataTextStyleKeyFunc,
+        //                Value = (data) => data.Agrupamento
+        //            },
+        //            new ColumnOption<ExcTractOrcamentoValor>()
+        //            {
+        //                Name = _localizer["subAgrupamento"].Value,
+        //                ColumnTextStyleKey = "TableColumn",
+        //                DataTextStyleKeyFunc = dataTextStyleKeyFunc,
+        //                Value = (data) => data.SubAgrupamento
+        //            },
+        //            new ColumnOption<ExcTractOrcamentoValor>()
+        //            {
+        //                Name = _localizer["rubrica"].Value,
+        //                ColumnTextStyleKey = "TableColumn",
+        //                DataTextStyleKeyFunc = dataTextStyleKeyFunc,
+        //                Value = (data) => data.Rubrica
+        //            },
+        //            new ColumnOption<ExcTractOrcamentoValor>()
+        //            {
+        //                Name = _localizer["alinea"].Value,
+        //                ColumnTextStyleKey = "TableColumn",
+        //                DataTextStyleKeyFunc = dataTextStyleKeyFunc,
+        //                Value = (data) => data.Alinea
+        //            },
+        //            new ColumnOption<ExcTractOrcamentoValor>()
+        //            {
+        //                Name = _localizer["subAlinea"].Value,
+        //                ColumnTextStyleKey = "TableColumn",
+        //                DataTextStyleKeyFunc = dataTextStyleKeyFunc,
+        //                Value = (data) => data.SubAlinea
+        //            },
+        //            new ColumnOption<ExcTractOrcamentoValor>()
+        //            {
+        //                Name = _localizer["designacao"].Value,
+        //                ColumnTextStyleKey = "TableColumn",
+        //                DataTextStyleKeyFunc = dataTextStyleKeyFunc,
+        //                Value = (data) => data.Designacao
+        //            },
+        //            new ColumnOption<ExcTractOrcamentoValor>()
+        //            {
+        //                Name = _localizer["valor"].Value,
+        //                ColumnTextStyleKey = "TableColumn",
+        //                DataTextStyleKeyFunc = dataTextStyleKeyFuncValor,
+        //                Value = (data) => data.Valor
+        //            },
+        //        });
+
+        //        page++;
+        //    }
+
+        //    response.ExcelExtraido = excelDocument.GetFileString();
+
+        //    return response;
+        //}
+
         public OrcamentoExtractToExcelReponse ExtractToExcel(OrcamentoExtractRequest request)
         {
-            OrcamentoExtractToExcelReponse response = new OrcamentoExtractToExcelReponse();
+            var response = new OrcamentoExtractToExcelReponse();
 
-            Dictionary<string, List<ExcTractOrcamentoValor>> combinationsFilter = SearchForExtract(request);
+            // Lấy dữ liệu
+            var combinationsFilter = SearchForExtract(request);
 
-            var styles = Extensions.ServiceExtensions.ExcelDocumentTextStyles.ToDictionary(entry => entry.Key,
-                                                                                           entry => entry.Value);
+            // Header theo trạng thái
+            var orcamento = _unitOfWork.ComponenteOrcamentoRegistoRepository.Get(request.IdComponenteOrcamentoRegisto);
+            string header = orcamento.Aprovado
+                ? string.Format(_localizer["ocamentoAprovadoPeriodo"].Value, orcamento.DataInicio.ToString("dd/MM/yyyy"), orcamento.DataFim.ToString("dd/MM/yyyy"))
+                : string.Format(_localizer["propostaOrcamentoPeriodo"].Value, orcamento.DataInicio.ToString("dd/MM/yyyy"), orcamento.DataFim.ToString("dd/MM/yyyy"));
 
-            // Estilos dos dados da coluna
-            styles.Add("Level1", new ExcelDocumentTextStyle()
+            using var wb = new XLWorkbook();
+
+            int page = 0;
+            foreach (var kv in combinationsFilter)
             {
-                Bold = true,
-                BackgroundColor = "#BFBFBF",
-                Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
-                HorizontalAlign = ExcelHorizontalAlignment.Left
-            });
+                var combination = kv.Key;
+                var rows = kv.Value;
 
-            styles.Add("Level2", new ExcelDocumentTextStyle()
-            {
-                BackgroundColor = "#CFCFCF",
-                Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
-                HorizontalAlign = ExcelHorizontalAlignment.Left
+                string sheetName = page == 0
+                    ? _localizer["filtro"].Value + " 1"
+                    : _localizer["filtro"].Value + $" {page + 1}";
 
-            });
+                var ws = wb.Worksheets.Add(sheetName);
 
-            styles.Add("Level3", new ExcelDocumentTextStyle()
-            {
-                BackgroundColor = "#DFDFDF",
-                Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
-                HorizontalAlign = ExcelHorizontalAlignment.Left
-            });
+                // Header (A1:J1 merge)
+                ws.Range("A1:J1").Merge();
+                var h = ws.Cell(1, 1);
+                h.Value = header;
+                h.Style.Font.Bold = true;
+                h.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                h.Style.Fill.BackgroundColor = XLColor.FromHtml("#BFBFBF");
+                BorderAll(ws.Range("A1:J1"));
 
-            styles.Add("Level4", new ExcelDocumentTextStyle()
-            {
-                BackgroundColor = "#EFEFEF",
-                Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
-                HorizontalAlign = ExcelHorizontalAlignment.Left
-            });
-
-            styles.Add("Level1Valor", new ExcelDocumentTextStyle()
-            {
-                NumberFormat = "$ #,##0.00",
-                Bold = true,
-                BackgroundColor = "#BFBFBF",
-                Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
-                HorizontalAlign = ExcelHorizontalAlignment.Left
-
-            });
-
-            styles.Add("Level2Valor", new ExcelDocumentTextStyle()
-            {
-                NumberFormat = "$ #,##0.00",
-                BackgroundColor = "#CFCFCF",
-                Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
-                HorizontalAlign = ExcelHorizontalAlignment.Left
-            });
-
-            styles.Add("Level3Valor", new ExcelDocumentTextStyle()
-            {
-                NumberFormat = "$ #,##0.00",
-                BackgroundColor = "#DFDFDF",
-                Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
-                HorizontalAlign = ExcelHorizontalAlignment.Left
-            });
-
-            styles.Add("Level4Valor", new ExcelDocumentTextStyle()
-            {
-                NumberFormat = "$ #,##0.00",
-                BackgroundColor = "#EFEFEF",
-                Border = ExcelDocumentBorderType.Top | ExcelDocumentBorderType.Right | ExcelDocumentBorderType.Bottom | ExcelDocumentBorderType.Left,
-                HorizontalAlign = ExcelHorizontalAlignment.Left
-            });
-
-            // Inicialização do documento excel
-            var excelDocument = new ExcelDocument(_localizer["filtro"].Value + " 1", new ExcelDocumentOptions()
-            {
-                TextStyles = styles
-            });
-
-            // Adição dos título
-            ComponenteorcamentoRegisto orcamento = _unitOfWork.ComponenteOrcamentoRegistoRepository.Get(request.IdComponenteOrcamentoRegisto);
-            string header = "";
-            if (orcamento.Aprovado)
-                header = string.Format(_localizer["ocamentoAprovadoPeriodo"].Value, orcamento.DataInicio.ToString("dd/MM/yyyy"), orcamento.DataFim.ToString("dd/MM/yyyy")); // "Orçamento Aprovado para o período de " + orcamento.DataInicio.ToString("dd/MM/yyyy") + " a " + orcamento.DataFim.ToString("dd/MM/yyyy");
-            else
-                header = string.Format(_localizer["propostaOrcamentoPeriodo"].Value, orcamento.DataInicio.ToString("dd/MM/yyyy"), orcamento.DataFim.ToString("dd/MM/yyyy"));  // "Proposta de Orçamento para o período de " + orcamento.DataInicio.ToString("dd/MM/yyyy") + " a " + orcamento.DataFim.ToString("dd/MM/yyyy");
-
-            var page = 0;
-            foreach (string combination in combinationsFilter.Keys)
-            {
-                if (page != 0) excelDocument.AddPage(_localizer["filtro"].Value + " " + (page + 1));
-
-                // Adição dos títulos dos filtros
-                excelDocument.Pages[page].AddText(header, new ExcelDocumentTextPosition(1, 1), "Header", new ExcelDocumentTextPosition(10, 1));
-
+                // In các bộ lọc (bắt đầu từ dòng 2)
                 var filters = combination.Split('-');
-
-                var row = 2;
-
-                for (int i = 0; i < filters.Length; i++)
+                int rowIdx = 2;
+                foreach (var f in filters)
                 {
-                    excelDocument.Pages[page].AddText(filters[i], new ExcelDocumentTextPosition(1, row), "Header", new ExcelDocumentTextPosition(10, row));
-                    row++;
+                    ws.Range(rowIdx, 1, rowIdx, 10).Merge();
+                    var c = ws.Cell(rowIdx, 1);
+                    c.Value = f;
+                    c.Style.Font.Bold = true;
+                    c.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                    c.Style.Fill.BackgroundColor = XLColor.FromHtml("#EFEFEF");
+                    BorderAll(ws.Range(rowIdx, 1, rowIdx, 10));
+                    rowIdx++;
                 }
 
-                // Retorna o o estilo do texto consoante o objeto
-                static string dataTextStyleKeyFunc(ExcTractOrcamentoValor data) => string.IsNullOrWhiteSpace(data.SubAgrupamento) ? "Level1" : string.IsNullOrWhiteSpace(data.Rubrica) ? "Level2" : string.IsNullOrWhiteSpace(data.Alinea) ? "Level3" : "Level4";
-                static string dataTextStyleKeyFuncValor(ExcTractOrcamentoValor data) => string.IsNullOrWhiteSpace(data.SubAgrupamento) ? "Level1Valor" : string.IsNullOrWhiteSpace(data.Rubrica) ? "Level2Valor" : string.IsNullOrWhiteSpace(data.Alinea) ? "Level3Valor" : "Level4Valor";
-
-                // Adição da tabela
-                excelDocument.Pages[page].AddTable(new ExcelDocumentTextPosition(1, row), combinationsFilter[combination], new List<ColumnOption<ExcTractOrcamentoValor>>()
+                // Header bảng
+                var headers = new[]
                 {
-                    new ColumnOption<ExcTractOrcamentoValor>()
-                    {
-                        Name = _localizer["tipoConta"].Value,
-                        ColumnTextStyleKey = "TableColumn",
-                        DataTextStyleKeyFunc = dataTextStyleKeyFunc,
-                        Value = (data) => data.TipoConta
-                    },
-                    new ColumnOption<ExcTractOrcamentoValor>()
-                    {
-                        Name = _localizer["departamento"].Value,
-                        ColumnTextStyleKey = "TableColumn",
-                        DataTextStyleKeyFunc = dataTextStyleKeyFunc,
-                        Value = (data) => data.Departamento
-                    },
-                    new ColumnOption<ExcTractOrcamentoValor>()
-                    {
-                        Name = _localizer["centroCusto"].Value,
-                        ColumnTextStyleKey = "TableColumn",
-                        DataTextStyleKeyFunc = dataTextStyleKeyFunc,
-                        Value = (data) => data.CentrosCusto
-                    },
-                    new ColumnOption<ExcTractOrcamentoValor>()
-                    {
-                        Name = _localizer["agrupamento"].Value,
-                        ColumnTextStyleKey = "TableColumn",
-                        DataTextStyleKeyFunc = dataTextStyleKeyFunc,
-                        Value = (data) => data.Agrupamento
-                    },
-                    new ColumnOption<ExcTractOrcamentoValor>()
-                    {
-                        Name = _localizer["subAgrupamento"].Value,
-                        ColumnTextStyleKey = "TableColumn",
-                        DataTextStyleKeyFunc = dataTextStyleKeyFunc,
-                        Value = (data) => data.SubAgrupamento
-                    },
-                    new ColumnOption<ExcTractOrcamentoValor>()
-                    {
-                        Name = _localizer["rubrica"].Value,
-                        ColumnTextStyleKey = "TableColumn",
-                        DataTextStyleKeyFunc = dataTextStyleKeyFunc,
-                        Value = (data) => data.Rubrica
-                    },
-                    new ColumnOption<ExcTractOrcamentoValor>()
-                    {
-                        Name = _localizer["alinea"].Value,
-                        ColumnTextStyleKey = "TableColumn",
-                        DataTextStyleKeyFunc = dataTextStyleKeyFunc,
-                        Value = (data) => data.Alinea
-                    },
-                    new ColumnOption<ExcTractOrcamentoValor>()
-                    {
-                        Name = _localizer["subAlinea"].Value,
-                        ColumnTextStyleKey = "TableColumn",
-                        DataTextStyleKeyFunc = dataTextStyleKeyFunc,
-                        Value = (data) => data.SubAlinea
-                    },
-                    new ColumnOption<ExcTractOrcamentoValor>()
-                    {
-                        Name = _localizer["designacao"].Value,
-                        ColumnTextStyleKey = "TableColumn",
-                        DataTextStyleKeyFunc = dataTextStyleKeyFunc,
-                        Value = (data) => data.Designacao
-                    },
-                    new ColumnOption<ExcTractOrcamentoValor>()
-                    {
-                        Name = _localizer["valor"].Value,
-                        ColumnTextStyleKey = "TableColumn",
-                        DataTextStyleKeyFunc = dataTextStyleKeyFuncValor,
-                        Value = (data) => data.Valor
-                    },
-                });
+            _localizer["tipoConta"].Value,
+            _localizer["departamento"].Value,
+            _localizer["centroCusto"].Value,
+            _localizer["agrupamento"].Value,
+            _localizer["subAgrupamento"].Value,
+            _localizer["rubrica"].Value,
+            _localizer["alinea"].Value,
+            _localizer["subAlinea"].Value,
+            _localizer["designacao"].Value,
+            _localizer["valor"].Value
+        };
 
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    var c = ws.Cell(rowIdx, i + 1);
+                    c.Value = headers[i];
+                    c.Style.Font.Bold = true;
+                    c.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    c.Style.Fill.BackgroundColor = XLColor.FromHtml("#D9D9D9");
+                    BorderAll(c);
+                }
+                rowIdx++;
+
+                // Helpers style theo Level
+                string LevelKey(ExcTractOrcamentoValor d)
+                    => string.IsNullOrWhiteSpace(d.SubAgrupamento) ? "L1"
+                     : string.IsNullOrWhiteSpace(d.Rubrica) ? "L2"
+                     : string.IsNullOrWhiteSpace(d.Alinea) ? "L3"
+                     : "L4";
+
+                XLColor Bg(string key) => key switch
+                {
+                    "L1" => XLColor.FromHtml("#BFBFBF"),
+                    "L2" => XLColor.FromHtml("#CFCFCF"),
+                    "L3" => XLColor.FromHtml("#DFDFDF"),
+                    _ => XLColor.FromHtml("#EFEFEF")
+                };
+                bool IsBold(string key) => key == "L1";
+
+                // Dữ liệu
+                foreach (var d in rows)
+                {
+                    var key = LevelKey(d);
+                    var bg = Bg(key);
+                    bool bold = IsBold(key);
+
+                    ws.Cell(rowIdx, 1).Value = d.TipoConta;
+                    ws.Cell(rowIdx, 2).Value = d.Departamento;
+                    ws.Cell(rowIdx, 3).Value = d.CentrosCusto;
+                    ws.Cell(rowIdx, 4).Value = d.Agrupamento;
+                    ws.Cell(rowIdx, 5).Value = d.SubAgrupamento;
+                    ws.Cell(rowIdx, 6).Value = d.Rubrica;
+                    ws.Cell(rowIdx, 7).Value = d.Alinea;
+                    ws.Cell(rowIdx, 8).Value = d.SubAlinea;
+                    ws.Cell(rowIdx, 9).Value = d.Designacao;
+
+                    var valorCell = ws.Cell(rowIdx, 10);
+                    valorCell.Value = d.Valor;
+                    valorCell.Style.NumberFormat.Format = "$ #,##0.00";
+
+                    // Áp style cho cả dòng
+                    for (int col = 1; col <= 10; col++)
+                    {
+                        var c = ws.Cell(rowIdx, col);
+                        c.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                        c.Style.Fill.BackgroundColor = bg;
+                        if (bold && col != 10) c.Style.Font.Bold = true; // Level1Valor
+                        BorderAll(c);
+                    }
+
+                    rowIdx++;
+                }
+
+                ws.Columns().AdjustToContents();
                 page++;
             }
 
-            response.ExcelExtraido = excelDocument.GetFileString();
-
+            using var ms = new MemoryStream();
+            wb.SaveAs(ms);
+            response.ExcelExtraido = Convert.ToBase64String(ms.ToArray());
             return response;
+
+           
         }
+
+        // helpers
+        static void BorderAll(IXLRange range)
+        {
+            range.Style.Border.TopBorder = XLBorderStyleValues.Thin;
+            range.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+            range.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+            range.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+        }
+        static void BorderAll(IXLCell cell) => BorderAll(cell.AsRange());
 
         public OrcamentoExtractToPDFReponse ExtractToPDF(OrcamentoExtractRequest request)
         {
-            OrcamentoExtractToPDFReponse response = new OrcamentoExtractToPDFReponse();
+            var response = new OrcamentoExtractToPDFReponse();
 
-            Dictionary<string, List<ExcTractOrcamentoValor>> combinationsFilter = SearchForExtract(request);
+            // Dữ liệu
+            var combinationsFilter = SearchForExtract(request);
 
-            ComponenteorcamentoRegisto orcamento = _unitOfWork.ComponenteOrcamentoRegistoRepository.Get(request.IdComponenteOrcamentoRegisto);
-            string headerS = "";
-            if (orcamento.Aprovado)
-                headerS = string.Format(_localizer["ocamentoAprovadoPeriodo"].Value, orcamento.DataInicio.ToString("dd/MM/yyyy"), orcamento.DataFim.ToString("dd/MM/yyyy"));  // "Orçamento Aprovado para o período de " + orcamento.DataInicio.ToString("dd/MM/yyyy") + " a " + orcamento.DataFim.ToString("dd/MM/yyyy");
-            else
-                headerS = string.Format(_localizer["propostaOrcamentoPeriodo"].Value, orcamento.DataInicio.ToString("dd/MM/yyyy"), orcamento.DataFim.ToString("dd/MM/yyyy"));  // "Proposta de Orçamento para o período de " + orcamento.DataInicio.ToString("dd/MM/yyyy") + " a " + orcamento.DataFim.ToString("dd/MM/yyyy");
+            var orcamento = _unitOfWork.ComponenteOrcamentoRegistoRepository
+                                       .Get(request.IdComponenteOrcamentoRegisto);
 
-            Document doc = new Document();
-            List<ExcTractOrcamentoValor> values;
-            string[] splitted;
-            Section sec;
-            Table table;
-            Column column;
-            Row row;
-            Cell cell;
-            Paragraph par;
-            HeaderFooter header;
-            HeaderFooter footer;
+            string headerS = orcamento.Aprovado
+                ? string.Format(_localizer["ocamentoAprovadoPeriodo"].Value,
+                                orcamento.DataInicio.ToString("dd/MM/yyyy"),
+                                orcamento.DataFim.ToString("dd/MM/yyyy"))
+                : string.Format(_localizer["propostaOrcamentoPeriodo"].Value,
+                                orcamento.DataInicio.ToString("dd/MM/yyyy"),
+                                orcamento.DataFim.ToString("dd/MM/yyyy"));
+
+            // Tạo document
+            var doc = new Document();
+            doc.Info.Title = "Orçamento";
             doc.DefaultPageSetup.PageFormat = PageFormat.A4;
             doc.DefaultPageSetup.Orientation = Orientation.Landscape;
-            foreach (string combination in combinationsFilter.Keys)
+            doc.DefaultPageSetup.TopMargin = Unit.FromCentimeter(2.5);
+            doc.DefaultPageSetup.LeftMargin = Unit.FromCentimeter(0.5);
+            doc.DefaultPageSetup.RightMargin = Unit.FromCentimeter(0.5);
+            doc.DefaultPageSetup.HeaderDistance = Unit.FromCentimeter(0.3);
+
+            foreach (var kv in combinationsFilter)
             {
-                values = combinationsFilter[combination];
+                var combination = kv.Key;
+                var values = kv.Value;
 
-                sec = doc.AddSection();
+                var sec = doc.AddSection();
 
-                header = sec.Headers.Primary;
-
-                par = header.AddParagraph(headerS);
-
+                // Header
+                var header = sec.Headers.Primary;
+                var par = header.AddParagraph(headerS);
                 par.Format.Alignment = ParagraphAlignment.Center;
                 par.Format.Font.Bold = true;
-                par.Format.Font.Color = MigraDoc.DocumentObjectModel.Color.Parse("#145792");
+                par.Format.Font.Color = Hex("#145792");
                 par.Format.Font.Size = 14;
 
-                splitted = combination.Split('-');
-                foreach (string s in splitted)
+                var splitted = combination.Split('-');
+                foreach (var s in splitted)
                 {
                     par = header.AddParagraph(s);
                     par.Format.Alignment = ParagraphAlignment.Center;
                     par.Format.Font.Bold = true;
-                    par.Format.Font.Color = MigraDoc.DocumentObjectModel.Color.Parse("#1a6aaf");
+                    par.Format.Font.Color = Hex("#1a6aaf");
                     par.Format.Font.Size = 12;
                 }
 
-                footer = sec.Footers.Primary;
-
+                // Footer (Trang hiện tại / Tổng trang)
+                var footer = sec.Footers.Primary;
                 par = footer.AddParagraph();
                 par.AddPageField();
-                par.AddChar('/');
+                par.AddText("/");
                 par.AddNumPagesField();
                 par.Format.Alignment = ParagraphAlignment.Right;
 
-                sec.AddParagraph();
-                sec.LastParagraph.Format.Alignment = ParagraphAlignment.Center;
-                sec.PageSetup.TopMargin = "2.5cm";
-                sec.PageSetup.TopMargin = "2.5cm";
-                sec.PageSetup.LeftMargin = "0.5cm";
-                sec.PageSetup.RightMargin = "0.5cm";
-                sec.PageSetup.HeaderDistance = "0.3cm";
+                // Khoảng cách dưới header
+                sec.AddParagraph().Format.Alignment = ParagraphAlignment.Center;
 
-                table = new Table();
-                table.Borders.Width = 0.5;
+                // Bảng
+                var table = new Table { Borders = { Width = 0.5 } };
 
-                #region Tamanhos Colunas
+                // Kích thước cột
+                table.AddColumn(Unit.FromCentimeter(3));   // Tipo de Conta
+                table.AddColumn(Unit.FromCentimeter(5));   // Departamento
+                table.AddColumn(Unit.FromCentimeter(5));   // Centro de Custo
+                table.AddColumn(Unit.FromCentimeter(1.5)); // Agrupamento
+                table.AddColumn(Unit.FromCentimeter(1.5)); // SubAgrupamento
+                table.AddColumn(Unit.FromCentimeter(1.5)); // Rubrica
+                table.AddColumn(Unit.FromCentimeter(1.5)); // Alinea
+                table.AddColumn(Unit.FromCentimeter(1.5)); // SubAlinea
+                table.AddColumn(Unit.FromCentimeter(5));   // Designacao
+                table.AddColumn(Unit.FromCentimeter(3));   // Valor
 
-                //Tipo de Conta
-                column = table.AddColumn("3cm");
-                column.Format.Alignment = ParagraphAlignment.Center;
-
-                //Departamento
-                column = table.AddColumn("5cm");
-                column.Format.Alignment = ParagraphAlignment.Center;
-
-                //Centro de Custo
-                column = table.AddColumn("5cm");
-                column.Format.Alignment = ParagraphAlignment.Center;
-
-                //Agrupamento
-                column = table.AddColumn("1.5cm");
-                column.Format.Alignment = ParagraphAlignment.Center;
-
-                //SubAgrupamento
-                column = table.AddColumn("1.5cm");
-                column.Format.Alignment = ParagraphAlignment.Center;
-
-                //Rúbrica
-                column = table.AddColumn("1.5cm");
-                column.Format.Alignment = ParagraphAlignment.Center;
-
-                //Alínea
-                column = table.AddColumn("1.5cm");
-                column.Format.Alignment = ParagraphAlignment.Center;
-
-                //SubAlínea
-                column = table.AddColumn("1.5cm");
-                column.Format.Alignment = ParagraphAlignment.Center;
-
-                //Designação
-                column = table.AddColumn("5cm");
-                column.Format.Alignment = ParagraphAlignment.Center;
-
-                //Valor
-                column = table.AddColumn("3cm");
-                column.Format.Alignment = ParagraphAlignment.Center;
-
-                #endregion Tamanhos Colunas
-
-                #region Titulos Colunas
-
-                row = table.AddRow();
-                cell = row.Cells[0];
-                cell.AddParagraph(_localizer["tipoConta"].Value);
-                cell.Format.Font.Bold = true;
-
-                cell = row.Cells[1];
-                cell.AddParagraph(_localizer["departamento"].Value);
-                cell.Format.Font.Bold = true;
-
-                cell = row.Cells[2];
-                cell.AddParagraph(_localizer["centroCusto"].Value);
-
-                cell = row.Cells[3];
-                cell.AddParagraph(_localizer["agrupamentoMin"].Value);
-
-                cell = row.Cells[4];
-                cell.AddParagraph(_localizer["subAgrupamentoMin"].Value);
-
-                cell = row.Cells[5];
-                cell.AddParagraph(_localizer["rubricaMin"].Value);
-
-                cell = row.Cells[6];
-                cell.AddParagraph(_localizer["alineaMin"].Value);
-
-                cell = row.Cells[7];
-                cell.AddParagraph(_localizer["subAlineaMin"].Value);
-
-                cell = row.Cells[8];
-                cell.AddParagraph(_localizer["designacao"].Value);
-
-                cell = row.Cells[9];
-                cell.AddParagraph(_localizer["valor"].Value);
-                row.Format.Font.Bold = true;
-
-                row.Shading.Color = MigraDoc.DocumentObjectModel.Color.Parse("#2A81CC");
-                row.Format.Font.Color = MigraDoc.DocumentObjectModel.Color.Parse("#FFFFFF");
+                // Header hàng tiêu đề
+                var row = table.AddRow();
                 row.HeadingFormat = true;
+                row.Shading.Color = Hex("#2A81CC");
+                row.Format.Font.Color = Hex("#FFFFFF");
+                row.Format.Font.Bold = true;
+                row.VerticalAlignment = VerticalAlignment.Center;
 
-                #endregion Titulos Colunas
+                row.Cells[0].AddParagraph(_localizer["tipoConta"].Value);
+                row.Cells[1].AddParagraph(_localizer["departamento"].Value);
+                row.Cells[2].AddParagraph(_localizer["centroCusto"].Value);
+                row.Cells[3].AddParagraph(_localizer["agrupamentoMin"].Value);
+                row.Cells[4].AddParagraph(_localizer["subAgrupamentoMin"].Value);
+                row.Cells[5].AddParagraph(_localizer["rubricaMin"].Value);
+                row.Cells[6].AddParagraph(_localizer["alineaMin"].Value);
+                row.Cells[7].AddParagraph(_localizer["subAlineaMin"].Value);
+                row.Cells[8].AddParagraph(_localizer["designacao"].Value);
+                row.Cells[9].AddParagraph(_localizer["valor"].Value);
 
-                #region Valores Colunas
-
-                foreach (ExcTractOrcamentoValor value in values)
+                // Dòng dữ liệu
+                foreach (var value in values)
                 {
                     row = table.AddRow();
                     row.VerticalAlignment = VerticalAlignment.Center;
-                    if (!string.IsNullOrEmpty(value.TipoConta))
-                    {
-                        cell = row.Cells[0];
-                        cell.AddParagraph(value.TipoConta);
-                    }
 
-                    if (!string.IsNullOrEmpty(value.Departamento))
-                    {
-                        cell = row.Cells[1];
-                        cell.AddParagraph(value.Departamento);
-                    }
+                    if (!string.IsNullOrEmpty(value.TipoConta)) row.Cells[0].AddParagraph(value.TipoConta);
+                    if (!string.IsNullOrEmpty(value.Departamento)) row.Cells[1].AddParagraph(value.Departamento);
+                    if (!string.IsNullOrEmpty(value.CentrosCusto)) row.Cells[2].AddParagraph(value.CentrosCusto);
+                    if (!string.IsNullOrEmpty(value.Agrupamento)) row.Cells[3].AddParagraph(value.Agrupamento);
+                    if (!string.IsNullOrEmpty(value.SubAgrupamento)) row.Cells[4].AddParagraph(value.SubAgrupamento);
+                    if (!string.IsNullOrEmpty(value.Rubrica)) row.Cells[5].AddParagraph(value.Rubrica);
+                    if (!string.IsNullOrEmpty(value.Alinea)) row.Cells[6].AddParagraph(value.Alinea);
+                    if (!string.IsNullOrEmpty(value.SubAlinea)) row.Cells[7].AddParagraph(value.SubAlinea);
+                    if (!string.IsNullOrEmpty(value.Designacao)) row.Cells[8].AddParagraph(value.Designacao);
 
-                    if (!string.IsNullOrEmpty(value.CentrosCusto))
-                    {
-                        cell = row.Cells[2];
-                        cell.AddParagraph(value.CentrosCusto);
-                    }
+                    var pValor = row.Cells[9].AddParagraph(value.Valor.ToString("#,##0.00"));
+                    pValor.Format.Alignment = ParagraphAlignment.Right;
 
-                    if (!string.IsNullOrEmpty(value.Agrupamento))
-                    {
-                        cell = row.Cells[3];
-                        cell.AddParagraph(value.Agrupamento);
-                    }
-
-                    if (!string.IsNullOrEmpty(value.SubAgrupamento))
-                    {
-                        cell = row.Cells[4];
-                        cell.AddParagraph(value.SubAgrupamento);
-                    }
-
-                    if (!string.IsNullOrEmpty(value.Rubrica))
-                    {
-                        cell = row.Cells[5];
-                        cell.AddParagraph(value.Rubrica);
-                    }
-
-                    if (!string.IsNullOrEmpty(value.Alinea))
-                    {
-                        cell = row.Cells[6];
-                        cell.AddParagraph(value.Alinea);
-                    }
-
-                    if (!string.IsNullOrEmpty(value.SubAlinea))
-                    {
-                        cell = row.Cells[7];
-                        cell.AddParagraph(value.SubAlinea);
-                    }
-
-                    if (!string.IsNullOrEmpty(value.Designacao))
-                    {
-                        cell = row.Cells[8];
-                        cell.AddParagraph(value.Designacao);
-                    }
-
-                    cell = row.Cells[9];
-                    cell.AddParagraph(value.Valor.ToString("#,##0.00"));
-
+                    // Tô màu theo “level”
                     if (string.IsNullOrWhiteSpace(value.SubAgrupamento))
                     {
                         row.Format.Font.Bold = true;
-                        row.Shading.Color = MigraDoc.DocumentObjectModel.Color.Parse("#BFBFBF");
+                        row.Shading.Color = Hex("#BFBFBF");
                     }
                     else if (string.IsNullOrWhiteSpace(value.Rubrica))
                     {
-                        row.Shading.Color = MigraDoc.DocumentObjectModel.Color.Parse("#CFCFCF");
+                        row.Shading.Color = Hex("#CFCFCF");
                     }
                     else if (string.IsNullOrWhiteSpace(value.Alinea))
                     {
-                        row.Shading.Color = MigraDoc.DocumentObjectModel.Color.Parse("#DFDFDF");
+                        row.Shading.Color = Hex("#DFDFDF");
                     }
                     else if (string.IsNullOrWhiteSpace(value.SubAlinea))
                     {
-                        row.Shading.Color = MigraDoc.DocumentObjectModel.Color.Parse("#EFEFEF");
+                        row.Shading.Color = Hex("#EFEFEF");
                     }
                 }
 
-                #endregion Valores Colunas
-
                 table.Rows.Alignment = RowAlignment.Center;
-                doc.LastSection.Add(table);
+                sec.Add(table);
             }
 
-            PdfDocumentRenderer docRend = new PdfDocumentRenderer
+            // Render PDF (MigraDocCore.Rendering)
+            var renderer = new PdfDocumentRenderer(unicode: true)   // <= chỉ truyền unicode
             {
                 Document = doc
             };
-            docRend.RenderDocument();
 
-            MemoryStream stream = new MemoryStream();
-            docRend.Save(stream, false);
 
-            byte[] byteArray = stream.ToArray();
-            string base64String = Convert.ToBase64String(byteArray);
-            response.PDFExtraido = base64String;
+            renderer.RenderDocument();
+
+            using var ms = new MemoryStream();
+            renderer.PdfDocument.Save(ms, false);
+            response.PDFExtraido = Convert.ToBase64String(ms.ToArray());
 
             return response;
         }
+
+        static Color Hex(string hex)
+        {
+            if (string.IsNullOrWhiteSpace(hex))
+                return Colors.Black;
+
+            if (hex.StartsWith("#"))
+                hex = hex.Substring(1);
+
+            var r = Convert.ToByte(hex.Substring(0, 2), 16) / 255.0;
+            var g = Convert.ToByte(hex.Substring(2, 2), 16) / 255.0;
+            var b = Convert.ToByte(hex.Substring(4, 2), 16) / 255.0;
+
+            // Chuyển RGB sang CMYK tạm (đơn giản)
+            double k = 1 - Math.Max(r, Math.Max(g, b));
+            double c = (1 - r - k) / (1 - k + 1e-8);
+            double m = (1 - g - k) / (1 - k + 1e-8);
+            double y = (1 - b - k) / (1 - k + 1e-8);
+
+            return Color.FromCmyk(c, m, y, k);
+        }
+
+
+
+        //public OrcamentoExtractToPDFReponse ExtractToPDF(OrcamentoExtractRequest request)
+        //{
+        //    OrcamentoExtractToPDFReponse response = new OrcamentoExtractToPDFReponse();
+
+        //    Dictionary<string, List<ExcTractOrcamentoValor>> combinationsFilter = SearchForExtract(request);
+
+        //    ComponenteorcamentoRegisto orcamento = _unitOfWork.ComponenteOrcamentoRegistoRepository.Get(request.IdComponenteOrcamentoRegisto);
+        //    string headerS = "";
+        //    if (orcamento.Aprovado)
+        //        headerS = string.Format(_localizer["ocamentoAprovadoPeriodo"].Value, orcamento.DataInicio.ToString("dd/MM/yyyy"), orcamento.DataFim.ToString("dd/MM/yyyy"));  // "Orçamento Aprovado para o período de " + orcamento.DataInicio.ToString("dd/MM/yyyy") + " a " + orcamento.DataFim.ToString("dd/MM/yyyy");
+        //    else
+        //        headerS = string.Format(_localizer["propostaOrcamentoPeriodo"].Value, orcamento.DataInicio.ToString("dd/MM/yyyy"), orcamento.DataFim.ToString("dd/MM/yyyy"));  // "Proposta de Orçamento para o período de " + orcamento.DataInicio.ToString("dd/MM/yyyy") + " a " + orcamento.DataFim.ToString("dd/MM/yyyy");
+
+        //    Document doc = new Document();
+        //    List<ExcTractOrcamentoValor> values;
+        //    string[] splitted;
+        //    Section sec;
+        //    Table table;
+        //    Column column;
+        //    Row row;
+        //    Cell cell;
+        //    Paragraph par;
+        //    HeaderFooter header;
+        //    HeaderFooter footer;
+        //    doc.DefaultPageSetup.PageFormat = PageFormat.A4;
+        //    doc.DefaultPageSetup.Orientation = Orientation.Landscape;
+        //    foreach (string combination in combinationsFilter.Keys)
+        //    {
+        //        values = combinationsFilter[combination];
+
+        //        sec = doc.AddSection();
+
+        //        header = sec.Headers.Primary;
+
+        //        par = header.AddParagraph(headerS);
+
+        //        par.Format.Alignment = ParagraphAlignment.Center;
+        //        par.Format.Font.Bold = true;
+        //        par.Format.Font.Color = MigraDoc.DocumentObjectModel.Color.Parse("#145792");
+        //        par.Format.Font.Size = 14;
+
+        //        splitted = combination.Split('-');
+        //        foreach (string s in splitted)
+        //        {
+        //            par = header.AddParagraph(s);
+        //            par.Format.Alignment = ParagraphAlignment.Center;
+        //            par.Format.Font.Bold = true;
+        //            par.Format.Font.Color = MigraDoc.DocumentObjectModel.Color.Parse("#1a6aaf");
+        //            par.Format.Font.Size = 12;
+        //        }
+
+        //        footer = sec.Footers.Primary;
+
+        //        par = footer.AddParagraph();
+        //        par.AddPageField();
+        //        par.AddChar('/');
+        //        par.AddNumPagesField();
+        //        par.Format.Alignment = ParagraphAlignment.Right;
+
+        //        sec.AddParagraph();
+        //        sec.LastParagraph.Format.Alignment = ParagraphAlignment.Center;
+        //        sec.PageSetup.TopMargin = "2.5cm";
+        //        sec.PageSetup.TopMargin = "2.5cm";
+        //        sec.PageSetup.LeftMargin = "0.5cm";
+        //        sec.PageSetup.RightMargin = "0.5cm";
+        //        sec.PageSetup.HeaderDistance = "0.3cm";
+
+        //        table = new Table();
+        //        table.Borders.Width = 0.5;
+
+        //        #region Tamanhos Colunas
+
+        //        //Tipo de Conta
+        //        column = table.AddColumn("3cm");
+        //        column.Format.Alignment = ParagraphAlignment.Center;
+
+        //        //Departamento
+        //        column = table.AddColumn("5cm");
+        //        column.Format.Alignment = ParagraphAlignment.Center;
+
+        //        //Centro de Custo
+        //        column = table.AddColumn("5cm");
+        //        column.Format.Alignment = ParagraphAlignment.Center;
+
+        //        //Agrupamento
+        //        column = table.AddColumn("1.5cm");
+        //        column.Format.Alignment = ParagraphAlignment.Center;
+
+        //        //SubAgrupamento
+        //        column = table.AddColumn("1.5cm");
+        //        column.Format.Alignment = ParagraphAlignment.Center;
+
+        //        //Rúbrica
+        //        column = table.AddColumn("1.5cm");
+        //        column.Format.Alignment = ParagraphAlignment.Center;
+
+        //        //Alínea
+        //        column = table.AddColumn("1.5cm");
+        //        column.Format.Alignment = ParagraphAlignment.Center;
+
+        //        //SubAlínea
+        //        column = table.AddColumn("1.5cm");
+        //        column.Format.Alignment = ParagraphAlignment.Center;
+
+        //        //Designação
+        //        column = table.AddColumn("5cm");
+        //        column.Format.Alignment = ParagraphAlignment.Center;
+
+        //        //Valor
+        //        column = table.AddColumn("3cm");
+        //        column.Format.Alignment = ParagraphAlignment.Center;
+
+        //        #endregion Tamanhos Colunas
+
+        //        #region Titulos Colunas
+
+        //        row = table.AddRow();
+        //        cell = row.Cells[0];
+        //        cell.AddParagraph(_localizer["tipoConta"].Value);
+        //        cell.Format.Font.Bold = true;
+
+        //        cell = row.Cells[1];
+        //        cell.AddParagraph(_localizer["departamento"].Value);
+        //        cell.Format.Font.Bold = true;
+
+        //        cell = row.Cells[2];
+        //        cell.AddParagraph(_localizer["centroCusto"].Value);
+
+        //        cell = row.Cells[3];
+        //        cell.AddParagraph(_localizer["agrupamentoMin"].Value);
+
+        //        cell = row.Cells[4];
+        //        cell.AddParagraph(_localizer["subAgrupamentoMin"].Value);
+
+        //        cell = row.Cells[5];
+        //        cell.AddParagraph(_localizer["rubricaMin"].Value);
+
+        //        cell = row.Cells[6];
+        //        cell.AddParagraph(_localizer["alineaMin"].Value);
+
+        //        cell = row.Cells[7];
+        //        cell.AddParagraph(_localizer["subAlineaMin"].Value);
+
+        //        cell = row.Cells[8];
+        //        cell.AddParagraph(_localizer["designacao"].Value);
+
+        //        cell = row.Cells[9];
+        //        cell.AddParagraph(_localizer["valor"].Value);
+        //        row.Format.Font.Bold = true;
+
+        //        row.Shading.Color = MigraDoc.DocumentObjectModel.Color.Parse("#2A81CC");
+        //        row.Format.Font.Color = MigraDoc.DocumentObjectModel.Color.Parse("#FFFFFF");
+        //        row.HeadingFormat = true;
+
+        //        #endregion Titulos Colunas
+
+        //        #region Valores Colunas
+
+        //        foreach (ExcTractOrcamentoValor value in values)
+        //        {
+        //            row = table.AddRow();
+        //            row.VerticalAlignment = VerticalAlignment.Center;
+        //            if (!string.IsNullOrEmpty(value.TipoConta))
+        //            {
+        //                cell = row.Cells[0];
+        //                cell.AddParagraph(value.TipoConta);
+        //            }
+
+        //            if (!string.IsNullOrEmpty(value.Departamento))
+        //            {
+        //                cell = row.Cells[1];
+        //                cell.AddParagraph(value.Departamento);
+        //            }
+
+        //            if (!string.IsNullOrEmpty(value.CentrosCusto))
+        //            {
+        //                cell = row.Cells[2];
+        //                cell.AddParagraph(value.CentrosCusto);
+        //            }
+
+        //            if (!string.IsNullOrEmpty(value.Agrupamento))
+        //            {
+        //                cell = row.Cells[3];
+        //                cell.AddParagraph(value.Agrupamento);
+        //            }
+
+        //            if (!string.IsNullOrEmpty(value.SubAgrupamento))
+        //            {
+        //                cell = row.Cells[4];
+        //                cell.AddParagraph(value.SubAgrupamento);
+        //            }
+
+        //            if (!string.IsNullOrEmpty(value.Rubrica))
+        //            {
+        //                cell = row.Cells[5];
+        //                cell.AddParagraph(value.Rubrica);
+        //            }
+
+        //            if (!string.IsNullOrEmpty(value.Alinea))
+        //            {
+        //                cell = row.Cells[6];
+        //                cell.AddParagraph(value.Alinea);
+        //            }
+
+        //            if (!string.IsNullOrEmpty(value.SubAlinea))
+        //            {
+        //                cell = row.Cells[7];
+        //                cell.AddParagraph(value.SubAlinea);
+        //            }
+
+        //            if (!string.IsNullOrEmpty(value.Designacao))
+        //            {
+        //                cell = row.Cells[8];
+        //                cell.AddParagraph(value.Designacao);
+        //            }
+
+        //            cell = row.Cells[9];
+        //            cell.AddParagraph(value.Valor.ToString("#,##0.00"));
+
+        //            if (string.IsNullOrWhiteSpace(value.SubAgrupamento))
+        //            {
+        //                row.Format.Font.Bold = true;
+        //                row.Shading.Color = MigraDoc.DocumentObjectModel.Color.Parse("#BFBFBF");
+        //            }
+        //            else if (string.IsNullOrWhiteSpace(value.Rubrica))
+        //            {
+        //                row.Shading.Color = MigraDoc.DocumentObjectModel.Color.Parse("#CFCFCF");
+        //            }
+        //            else if (string.IsNullOrWhiteSpace(value.Alinea))
+        //            {
+        //                row.Shading.Color = MigraDoc.DocumentObjectModel.Color.Parse("#DFDFDF");
+        //            }
+        //            else if (string.IsNullOrWhiteSpace(value.SubAlinea))
+        //            {
+        //                row.Shading.Color = MigraDoc.DocumentObjectModel.Color.Parse("#EFEFEF");
+        //            }
+        //        }
+
+        //        #endregion Valores Colunas
+
+        //        table.Rows.Alignment = RowAlignment.Center;
+        //        doc.LastSection.Add(table);
+        //    }
+
+        //    PdfDocumentRenderer docRend = new PdfDocumentRenderer
+        //    {
+        //        Document = doc
+        //    };
+        //    docRend.RenderDocument();
+
+        //    MemoryStream stream = new MemoryStream();
+        //    docRend.Save(stream, false);
+
+        //    byte[] byteArray = stream.ToArray();
+        //    string base64String = Convert.ToBase64String(byteArray);
+        //    response.PDFExtraido = base64String;
+
+        //    return response;
+        //}
 
         public GetComponenteOrcamentoAprovadoRegistoReponse GetOrcamentoAprovadoReceitaByIdTarefaActivo(GetComponenteOrcamentoRegistoAprovadoRequest request)
         {

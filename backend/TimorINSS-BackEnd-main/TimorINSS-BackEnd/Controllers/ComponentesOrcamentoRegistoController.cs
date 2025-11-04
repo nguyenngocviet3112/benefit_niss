@@ -179,7 +179,7 @@ namespace TimorINSSBackEnd.Controllers
             }
 
             // Guardar log do erro no ficheiro de logs
-            if (response.ManageErrors("ExtractToExcel", Log, request))
+            if (response.ManageErrors("ExtractToPDF", Log, request))
             {
                 return BadRequest(response);
             }

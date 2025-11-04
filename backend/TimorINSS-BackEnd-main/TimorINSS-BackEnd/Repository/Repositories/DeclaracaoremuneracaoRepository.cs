@@ -253,6 +253,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             var beginDate = request.filter.dateFilterBegin;
             var endDate = request.filter.dateFilterEnd;
 
+
             var listaDeclaracoes = _moduloContribuicoesContext.Declaracaoremuneracao
                .Include(e => e.DeclaracaoRelEntidadeTrabalhadorFkNavigation)
                .ThenInclude(e => e.EntidadeFkNavigation)
@@ -280,8 +281,19 @@ namespace TimorINSSBackEnd.Repository.Repositories
                    nomeTrabalhador = e.DeclaracaoRelEntidadeTrabalhadorFkNavigation.TrabalhadorFkNavigation.Nome,
                    valorRenumeracoes = e.RemunDeclarada,
                    valorContribuicoes = e.ContaCorrenteFkNavigation.ValorEntidade,
-                   valorPago = e.ContaCorrenteFkNavigation.Guiapagamento.Select(e => e.ValorComprovPag).DefaultIfEmpty(0).Sum(e => e ?? 0),
-                   valorDivida = e.ContaCorrenteFkNavigation.ValorTotal - e.ContaCorrenteFkNavigation.Guiapagamento.Select(e => e.ValorComprovPag).DefaultIfEmpty(0).Sum(e => e ?? 0),
+                   // ✅ Tổng số tiền đã thanh toán (ép kiểu nullable để dùng ?? 0m)
+                   valorPago = e.ContaCorrenteFkNavigation.Guiapagamento
+                      //.Where(gp => gp.IndActivo) // nếu có cờ active, bật lại
+                      .Sum(gp => (decimal?)gp.ValorComprovPag) ?? 0m,
+
+                   // ✅ Nợ = Tổng phải thu - Đã trả
+                   valorDivida = (e.ContaCorrenteFkNavigation.ValorTotal)
+                     - (e.ContaCorrenteFkNavigation.Guiapagamento
+                            //.Where(gp => gp.IndActivo)
+                            .Sum(gp => (decimal?)gp.ValorComprovPag) ?? 0m),
+
+                   //valorPago = e.ContaCorrenteFkNavigation.Guiapagamento.Select(e => e.ValorComprovPag).DefaultIfEmpty(0).Sum(e => e ?? 0),
+                   //valorDivida = e.ContaCorrenteFkNavigation.ValorTotal - e.ContaCorrenteFkNavigation.Guiapagamento.Select(e => e.ValorComprovPag).DefaultIfEmpty(0).Sum(e => e ?? 0),
                });
 
             var processos = listaDeclaracoes
