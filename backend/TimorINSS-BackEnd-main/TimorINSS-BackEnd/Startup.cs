@@ -190,7 +190,11 @@ namespace TimorINSSBackEnd
                         catch
                         {
                             // nếu lỗi decode → bỏ qua, giữ nguyên path
+                            return ;
                         }
+                    } else
+                    {
+                        return ;
                     }
                 }
 
