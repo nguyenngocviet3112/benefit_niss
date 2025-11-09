@@ -230,13 +230,15 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasPagamentoByFilter(GetGuiaPagamentoRequest request)
         {
-            
 
-         
+
+            const int SECRET_A = 511;
+            const int SECRET_B = 2025;
+            int decodedId = (request.idGuiaPagamento - SECRET_B) / SECRET_A;
 
             IQueryable<Guiapagamento> query = _moduloContribuicoesContext.Guiapagamento
                 .Include(e => e.GuiaEntidadeFkNavigation)
-                .Where(u => u.IdGuia == request.idGuiaPagamento);
+                .Where(u => u.IdGuia == decodedId);
 
 
             var guias = new List<GuiaListagem>();

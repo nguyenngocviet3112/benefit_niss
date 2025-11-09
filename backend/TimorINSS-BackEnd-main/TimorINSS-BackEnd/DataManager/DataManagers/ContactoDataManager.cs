@@ -82,7 +82,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     bool valid = false;
                     var userId = request.UserId;
                     var user = _unitOfWork.UtilizadoresRepository.Get(userId);
-                    var trabalhadorId = request.Id;
+                    //var trabalhadorId = request.Id;
+
+                    const int SECRET_A = 511;
+                    const int SECRET_B = 2025;
+                    int trabalhadorId = (request.Id - SECRET_B) / SECRET_A;
+
                     var entidadeEmpregadoraId = user.UtilizadorEntidadeFk;
 
                     // Validar se o utilizador tem as permissões necessárias

@@ -29,7 +29,9 @@ export class GuiaPagamentoService {
   }
 
   public getGuiasDetailByEntidade(entity: GetGuiasDetailsRequest) {
-    return this.api.post<GuiaListagemResponse>('guiaPagamento/guiaPagamentoDetail', entity);
+    const encodedId = this.api.encodeId(entity.idGuiaPagamento);
+    const payload = { ...entity, idGuiaPagamento: encodedId };
+    return this.api.post<GuiaListagemResponse>('guiaPagamento/guiaPagamentoDetail', payload);
   }
   
   public useCreditInGuiaPagamento(request: useCreditInGuiaPagamentoRequest) {

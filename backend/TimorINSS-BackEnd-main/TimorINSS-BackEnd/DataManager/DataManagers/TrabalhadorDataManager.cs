@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml.InkML;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
@@ -441,8 +443,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         public SingleTrabalhadorResponse GetById(TrabalhadorListagemRequest request)
         {
             var response = new SingleTrabalhadorResponse();
-
-            var trabalhador = _unitOfWork.TrabalhadoresRepository.Get(request.id);
+            const int SECRET_A = 511;
+            const int SECRET_B = 2025;
+            int decodedId = (request.id - SECRET_B) / SECRET_A;
+            var trabalhador = _unitOfWork.TrabalhadoresRepository.Get(decodedId);
 
             if (trabalhador != null)
             {
@@ -470,8 +474,17 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         public TrabalhadorListagemResponse GetSingleByNiss(TrabalhadorListagemNissRequest request)
         {
             var response = new TrabalhadorListagemResponse();
+            var decoded = "";
+            try
+            {
+                var b64 = request.niss.ToString().Replace('-', '+').Replace('_', '/');
+                switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+                decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+                
+            }
+            catch { /* tuỳ chọn: trả 400 nếu muốn fail cứng */ }
 
-            var domainTrabalhador = _unitOfWork.TrabalhadoresRepository.GetByNiss(request.niss);
+            var domainTrabalhador = _unitOfWork.TrabalhadoresRepository.GetByNiss(decoded);
 
             if (domainTrabalhador == null)
             {

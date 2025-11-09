@@ -339,9 +339,13 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     orderDirection = (OrderDirectionEnum)filter.orderDirection;
                 }
 
+                const int SECRET_A = 511;
+                const int SECRET_B = 2025;
+                int decodedId = (request.id - SECRET_B) / SECRET_A;
+
                 var queryTrabalhadores = _moduloContribuicoesContext.Relentidadetrabalhador
                      .Include(u => u.RegimeFkNavigation)
-                     .Where(u => u.EntidadeFk == request.id)
+                     .Where(u => u.EntidadeFk == decodedId)
                      .Join(
                          _moduloContribuicoesContext.Trabalhador
                          .Where(u => string.Compare(u.Niss.Trim(), filter.filterBy.Trim()) == 0),

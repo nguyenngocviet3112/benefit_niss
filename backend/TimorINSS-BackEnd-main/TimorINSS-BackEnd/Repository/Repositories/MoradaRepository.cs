@@ -86,15 +86,19 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             request.filter.orderDirection = OrderDirectionEnum.descending;
             request.filter.orderBy = "moradaPrincipal";
+            const int SECRET_A = 511;
+            const int SECRET_B = 2025;
+            int decodedId = (request.Id - SECRET_B) / SECRET_A;
+
             IQueryable<Morada> queryMoradasConditional = _moduloContribuicoesContext.Morada;
             switch (request.filter.filterField)
             {
                 case "ENTIDADEEMPREGADORA":
-                    queryMoradasConditional = queryMoradasConditional.Where(u => u.EntidadeMoradaFk == request.Id);
+                    queryMoradasConditional = queryMoradasConditional.Where(u => u.EntidadeMoradaFk == decodedId);
                     break;
 
                 case "TRABALHADOR":
-                    queryMoradasConditional = queryMoradasConditional.Where(u => u.TrabalhadorMoradaFk == request.Id);
+                    queryMoradasConditional = queryMoradasConditional.Where(u => u.TrabalhadorMoradaFk == decodedId);
                     break;
 
                 default:

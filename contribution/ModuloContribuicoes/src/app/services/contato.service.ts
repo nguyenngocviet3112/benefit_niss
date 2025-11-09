@@ -31,7 +31,9 @@ export class ContatoService {
   }
 
   public getContatoByIdTrabalhador(request: ContatoListagemRequest) : Observable<ContatoListagemResponse>  {
-    return this.api.post<ContatoListagemResponse>('contato/GetByIdTrabalhador',request);
+    const encodedId = this.api.encodeId(request.Id);
+    const payload = { ...request, id: encodedId };
+    return this.api.post<ContatoListagemResponse>('contato/GetByIdTrabalhador',payload);
   }
 
   public saveContato(entity: ContatoRequest) {

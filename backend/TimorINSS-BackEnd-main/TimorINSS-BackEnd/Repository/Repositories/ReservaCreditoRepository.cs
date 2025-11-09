@@ -92,8 +92,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
             if (request.filter.rows.HasValue)
                 rows = request.filter.rows.Value;
 
+            const int SECRET_A = 511;
+            const int SECRET_B = 2025;
+            int decodedId = (request.IdEntidade - SECRET_B) / SECRET_A;
+
             var queryReservaCredito = _moduloContribuicoesContext.Reservacredito
-                .Where(u => u.ReservaEntidadeFk == request.IdEntidade)
+                .Where(u => u.ReservaEntidadeFk == decodedId)
                 .Select(reservaCredito => new ReservaCreditoListagem
                 {
                     IdEntidade = reservaCredito.ReservaEntidadeFk,
