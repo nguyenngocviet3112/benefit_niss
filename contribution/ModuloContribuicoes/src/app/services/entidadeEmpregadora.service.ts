@@ -55,11 +55,13 @@ export class EntidadeEmpregadoraService {
 
   public GetEntidadeInfoForDeclaracao(request: EntidadeEmpregadoraIdRequest) {
     const rawPath = 'entidadeEmpregadora/GetEntidadeInfoForDeclaracao';
+    const encodedId = this.api.encodeId(request.idEntidade);
+    const payload = { ...request, idEntidade: encodedId };
 
 
   return this.api.post<EntidadeEmpregadoraDeclaracaoViewResponse>(
     rawPath,
-    request
+    payload
   );
     // return this.http.post<EntidadeEmpregadoraDeclaracaoViewResponse>(`${environment.apiUrl}/entidadeEmpregadora/GetEntidadeInfoForDeclaracao`, request);
   }

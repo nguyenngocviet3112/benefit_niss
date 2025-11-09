@@ -15,6 +15,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -154,6 +155,18 @@ namespace TimorINSSBackEnd
             // ✅ Middleware giải mã Base64 path trực tiếp
             app.Use(async (context, next) =>
             {
+                if (context.Request.Headers.TryGetValue("User-Id", out var raw))
+                {
+                    try
+                    {
+                        var b64 = raw.ToString().Replace('-', '+').Replace('_', '/');
+                        switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+                        var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+                        context.Request.Headers["User-Id"] = decoded;
+                    }
+                    catch { /* tuỳ chọn: trả 400 nếu muốn fail cứng */ }
+                }
+
                 const string apiPrefix = "/api/";
                 var path = context.Request.Path.Value ?? "";
 
@@ -205,6 +218,8 @@ namespace TimorINSSBackEnd
             app.UseRouting();
 
             app.UseAuthentication();
+
+
             app.UseAuthorization();
 
             app.UseRequestLocalization();

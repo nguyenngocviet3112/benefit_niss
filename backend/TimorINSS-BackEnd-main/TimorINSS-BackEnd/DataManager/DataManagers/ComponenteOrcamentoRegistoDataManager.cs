@@ -1175,7 +1175,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 par.Format.Alignment = ParagraphAlignment.Center;
                 par.Format.Font.Bold = true;
                 par.Format.Font.Color = Hex("#145792");
-                par.Format.Font.Size = 14;
+                par.Format.Font.Size = 10;
 
                 var splitted = combination.Split('-');
                 foreach (var s in splitted)
@@ -1184,7 +1184,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     par.Format.Alignment = ParagraphAlignment.Center;
                     par.Format.Font.Bold = true;
                     par.Format.Font.Color = Hex("#1a6aaf");
-                    par.Format.Font.Size = 12;
+                    par.Format.Font.Size = 10;
                 }
 
                 // Footer (Trang hiện tại / Tổng trang)

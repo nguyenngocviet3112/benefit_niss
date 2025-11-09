@@ -2,8 +2,10 @@
 using log4net.Config;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace TimorINSSBackEnd
 {
@@ -13,6 +15,8 @@ namespace TimorINSSBackEnd
         {
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+            AppContext.SetSwitch("System.Drawing.EnableUnixSupport", true);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             CreateHostBuilder(args).Build().Run();
         }
 

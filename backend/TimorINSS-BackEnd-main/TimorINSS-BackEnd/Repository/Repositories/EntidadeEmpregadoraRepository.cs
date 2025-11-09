@@ -168,8 +168,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public EntidadeEmpregadoraDeclaracaoViewResponse GetEntidadeInfoForDeclaracao(EntidadeEmpregadoraIdRequest request)
         {
+            const int SECRET_A = 511;
+            const int SECRET_B = 2025;
+            long decodedId = (request.IdEntidade - SECRET_B) / SECRET_A;
+
             return _moduloContribuicoesContext.Entidadeempregadora
-                .Where(u => u.IdEntidadeEmpreg == request.IdEntidade)
+                .Where(u => u.IdEntidadeEmpreg == decodedId)
                 .Select(u => new EntidadeEmpregadoraDeclaracaoViewResponse
                 {
                     idEntidadeEmpreg = u.IdEntidadeEmpreg,

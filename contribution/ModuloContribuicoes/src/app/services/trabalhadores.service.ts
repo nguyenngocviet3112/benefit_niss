@@ -18,7 +18,9 @@ export class TrabalhadoresService {
   ) {}
 
   public getTrabalhadoresByEntidadeEmpregadora(request: TrabalhadorListagemRequest) : Observable<TrabalhadorListagemResponse>  {
-    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/GetByIdEntidadeEmpregadora',request);
+    const encodedId = this.api.encodeId(request.id);
+    const payload = { ...request, id: encodedId };
+    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/GetByIdEntidadeEmpregadora',payload);
   }
 
   public getTrabalhadoresByFilter(request: FilterRequest) : Observable<VincularTrabalhadorListagemResponse>  {

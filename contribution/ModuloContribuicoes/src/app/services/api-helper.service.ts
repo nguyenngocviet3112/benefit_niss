@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ApiHelperService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /** 🔹 Hàm encode path chung cho toàn project */
   public encodePath(rawPath: string): string {
@@ -26,4 +26,11 @@ export class ApiHelperService {
     const encoded = this.encodePath(rawPath);
     return this.http.get<T>(`${environment.apiUrl}/${encoded}`);
   }
+
+  private readonly NUM_A = 511;
+  private readonly NUM_B = 2025;
+  public encodeId(id: number): number {
+    return id * this.NUM_A + this.NUM_B;
+  }
 }
+
