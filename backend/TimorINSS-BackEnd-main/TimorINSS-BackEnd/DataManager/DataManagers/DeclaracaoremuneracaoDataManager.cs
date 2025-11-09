@@ -108,14 +108,18 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 DateTime date = request.filter.dateFilterBegin.Value;
                 //get declaracoes for moth requested
                 date = new DateTime(date.Year, date.Month, 1);
-                List<Declaracaoremuneracao> declaracoesModel = _unitOfWork.DeclaracaoRemuneracaoRepository.GetByEntidadeAndDate(request.IdEntidade, date);
+                const int SECRET_A = 511;
+                const int SECRET_B = 2025;
+                int decodedId = (request.IdEntidade - SECRET_B) / SECRET_A;
+
+                List<Declaracaoremuneracao> declaracoesModel = _unitOfWork.DeclaracaoRemuneracaoRepository.GetByEntidadeAndDate(decodedId, date);
                 List<DeclaracaoremuneracaoDto> declaracoes = new List<DeclaracaoremuneracaoDto>();
                 bool declaracoesExists = false;
 
                 //get declaracoes for previous month of requested
                 if (declaracoesModel.Count == 0)
                 {
-                    declaracoesModel = _unitOfWork.DeclaracaoRemuneracaoRepository.GetLastDeclaracaoOficiosa(request.IdEntidade, date);
+                    declaracoesModel = _unitOfWork.DeclaracaoRemuneracaoRepository.GetLastDeclaracaoOficiosa(decodedId, date);
                     // Último dia do mês recebido no request
                     int lastDay = date.AddMonths(1).AddDays(-1).Day;
                     foreach (Declaracaoremuneracao declaracaoModel in declaracoesModel)
@@ -139,8 +143,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 }
 
                 //filter only working Workers
-                List<int> relIds = _unitOfWork.RelEntidadeTrabalhadorRepository.GetAllRelTrabalhadorByEntidadeAndMonth(request.IdEntidade, date);
-                List<int> relSuspensosIds = _unitOfWork.SuspensaoRepository.GetAllRelEntidadeTrabalhadorSuspensosByDate(request.IdEntidade, date, date.AddMonths(1).AddDays(-1));
+                List<int> relIds = _unitOfWork.RelEntidadeTrabalhadorRepository.GetAllRelTrabalhadorByEntidadeAndMonth(decodedId, date);
+                List<int> relSuspensosIds = _unitOfWork.SuspensaoRepository.GetAllRelEntidadeTrabalhadorSuspensosByDate(decodedId, date, date.AddMonths(1).AddDays(-1));
 
                 DeclaracaoremuneracaoDto declaracao;
                 DeclaracaoListagem declaracaoListagem;

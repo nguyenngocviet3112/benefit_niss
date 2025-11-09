@@ -158,8 +158,11 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 });
             else
             {
+                const int SECRET_A = 511;
+                const int SECRET_B = 2025;
+                int decodedId = (request.idEntidade - SECRET_B) / SECRET_A;
                 DateTime dateFinal;
-                DateTime dateInicial = _unitOfWork.EntidadeEmpregadoraRepository.GetByIdEntidade(request.idEntidade).DataInicioActiv;
+                DateTime dateInicial = _unitOfWork.EntidadeEmpregadoraRepository.GetByIdEntidade(decodedId).DataInicioActiv;
                 DateTime now = DateTime.Now;
 
                 if (request.filter.dateFilterBegin.Value.Year == now.Year)

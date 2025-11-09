@@ -92,6 +92,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
             int rows = 5;
             if (request.filter.rows.HasValue)
                 rows = request.filter.rows.Value;
+            const int SECRET_A = 511;
+            const int SECRET_B = 2025;
+            int decodedId = (request.IdEntidade - SECRET_B) / SECRET_A;
 
             IQueryable<Contacorrente> queryContaCorrenteConditional = _moduloContribuicoesContext.Contacorrente
                 .Include(u => u.TipoDividaNavigation)
@@ -104,13 +107,13 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 case "ENTIDADEEMPREGADORA":
                     if (request.filter.dateFilterBegin != null)
                     {
-                        queryContaCorrenteConditional = queryContaCorrenteConditional.Where(u => (u.ContaCorrenteEntidadeFk == request.IdEntidade &&
+                        queryContaCorrenteConditional = queryContaCorrenteConditional.Where(u => (u.ContaCorrenteEntidadeFk == decodedId &&
                          u.ContaCorrenteTrabalhadorFk == null && begin.Year == u.MesAno.Year && begin.Month == u.MesAno.Month && u.IndActivo));
                         break;
                     }
                     else
                     {
-                        queryContaCorrenteConditional = queryContaCorrenteConditional.Where(u => (u.ContaCorrenteEntidadeFk == request.IdEntidade &&
+                        queryContaCorrenteConditional = queryContaCorrenteConditional.Where(u => (u.ContaCorrenteEntidadeFk == decodedId &&
                         u.ContaCorrenteTrabalhadorFk == null && u.IndActivo));
                         break;
                     }
@@ -119,13 +122,13 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
                     if (request.filter.dateFilterBegin != null)
                     {
-                        queryContaCorrenteConditional = queryContaCorrenteConditional.Where(u => (u.ContaCorrenteEntidadeFk == request.IdEntidade &&
+                        queryContaCorrenteConditional = queryContaCorrenteConditional.Where(u => (u.ContaCorrenteEntidadeFk == decodedId &&
                         u.ContaCorrenteTrabalhadorFk == request.IdTrabalhador && begin.Year == u.MesAno.Year && begin.Month == u.MesAno.Month && u.IndActivo));
                         break;
                     }
                     else
                     {
-                        queryContaCorrenteConditional = queryContaCorrenteConditional.Where(u => (u.ContaCorrenteEntidadeFk == request.IdEntidade &&
+                        queryContaCorrenteConditional = queryContaCorrenteConditional.Where(u => (u.ContaCorrenteEntidadeFk == decodedId &&
                         u.ContaCorrenteTrabalhadorFk == request.IdTrabalhador && DateTime.Now.Year == u.MesAno.Year && u.IndActivo));
                         break;
                     }
