@@ -94,8 +94,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasByFilter(GetAllGuiasStatesFromYearByFilterRequest request)
         {
+            const int SECRET_A = 654321;
+            const int SECRET_B = 123456789;
+            int decodedId = (request.idEntidade - SECRET_B) / SECRET_A;
+
             var utilizador = _moduloContribuicoesContext.Utilizador
-                .SingleOrDefault(u => u.UtilizadorEntidadeFk == request.idEntidade);
+                .SingleOrDefault(u => u.UtilizadorEntidadeFk == decodedId);
             if (utilizador == null)
             {
                 GuiaListagemResponse result1 = new GuiaListagemResponse
@@ -122,7 +126,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             //throw new Exception(ErrorsDataContract.TrabalhadorDoesNotExist.ToString());
 
             var entidadeempregadora = _moduloContribuicoesContext.Entidadeempregadora
-            .SingleOrDefault(u => u.IdEntidadeEmpreg == request.idEntidade);
+            .SingleOrDefault(u => u.IdEntidadeEmpreg == decodedId);
             if (entidadeempregadora == null)
             {
                 GuiaListagemResponse result1 = new GuiaListagemResponse
@@ -148,7 +152,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             IQueryable<Guiapagamento> query = _moduloContribuicoesContext.Guiapagamento
                 .Include(e => e.GuiaEntidadeFkNavigation)
-                .Where(u => u.GuiaEntidadeFk == request.idEntidade && u.IndActivo == true);
+                .Where(u => u.GuiaEntidadeFk == decodedId && u.IndActivo == true);
 
             // Filtrar por data
             if (filter.dateFilterBegin != null)
@@ -230,10 +234,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasPagamentoByFilter(GetGuiaPagamentoRequest request)
         {
-
-
-            const int SECRET_A = 511;
-            const int SECRET_B = 2025;
+            const int SECRET_A = 654321;
+            const int SECRET_B = 123456789;
             int decodedId = (request.idGuiaPagamento - SECRET_B) / SECRET_A;
 
             IQueryable<Guiapagamento> query = _moduloContribuicoesContext.Guiapagamento

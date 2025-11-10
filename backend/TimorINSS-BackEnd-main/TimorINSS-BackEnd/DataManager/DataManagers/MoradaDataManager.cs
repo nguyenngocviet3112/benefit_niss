@@ -114,8 +114,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     //var trabalhadorId = request.Id;
                     var entidadeEmpregadoraId = user.UtilizadorEntidadeFk;
 
-                    const int SECRET_A = 511;
-                    const int SECRET_B = 2025;
+                    const int SECRET_A = 654321;
+                    const int SECRET_B = 123456789;
                     int trabalhadorId = (request.Id - SECRET_B) / SECRET_A;
 
                     // Validar se o utilizador tem as permissões necessárias

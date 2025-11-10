@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using DocumentFormat.OpenXml.InkML;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
@@ -443,8 +442,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         public SingleTrabalhadorResponse GetById(TrabalhadorListagemRequest request)
         {
             var response = new SingleTrabalhadorResponse();
-            const int SECRET_A = 511;
-            const int SECRET_B = 2025;
+            const int SECRET_A = 654321;
+            const int SECRET_B = 123456789;
             int decodedId = (request.id - SECRET_B) / SECRET_A;
             var trabalhador = _unitOfWork.TrabalhadoresRepository.Get(decodedId);
 

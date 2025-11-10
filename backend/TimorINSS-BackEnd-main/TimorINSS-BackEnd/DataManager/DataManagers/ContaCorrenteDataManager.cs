@@ -158,8 +158,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 });
             else
             {
-                const int SECRET_A = 511;
-                const int SECRET_B = 2025;
+                const int SECRET_A = 654321;
+                const int SECRET_B = 123456789;
                 int decodedId = (request.idEntidade - SECRET_B) / SECRET_A;
                 DateTime dateFinal;
                 DateTime dateInicial = _unitOfWork.EntidadeEmpregadoraRepository.GetByIdEntidade(decodedId).DataInicioActiv;

@@ -25,7 +25,9 @@ export class GuiaPagamentoService {
   }
 
   public getAllGuiasByEntidade(entity: GetAllGuiasStatesFromYearByFilterRequest) {
-    return this.api.post<GuiaListagemResponse>('guiaPagamento/listGuiasByEntidade', entity);
+    const encodedId = this.api.encodeId(entity.idEntidade);
+    const payload = { ...entity, idEntidade: encodedId };
+    return this.api.post<GuiaListagemResponse>('guiaPagamento/listGuiasByEntidade', payload);
   }
 
   public getGuiasDetailByEntidade(entity: GetGuiasDetailsRequest) {

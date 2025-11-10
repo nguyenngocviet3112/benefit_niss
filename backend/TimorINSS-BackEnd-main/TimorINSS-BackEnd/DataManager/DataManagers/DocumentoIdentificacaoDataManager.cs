@@ -67,8 +67,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     var userId = request.UserId;
                     var user = _unitOfWork.UtilizadoresRepository.Get(userId);
                     //var trabalhadorId = request.Id;
-                    const int SECRET_A = 511;
-                    const int SECRET_B = 2025;
+                    const int SECRET_A = 654321;
+                    const int SECRET_B = 123456789;
                     int trabalhadorId = (request.Id - SECRET_B) / SECRET_A;
                     var entidadeEmpregadoraId = user.UtilizadorEntidadeFk;
 
@@ -107,8 +107,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         public DocumentoResponse GetDocumentosIdentificacaoById(DocumentoIdRequest request)
         {
             var response = new DocumentoResponse { RequestId = request.RequestId };
-            const int SECRET_A = 511;
-            const int SECRET_B = 2025;
+            const int SECRET_A = 654321;
+            const int SECRET_B = 123456789;
             int decodedId = (request.id - SECRET_B) / SECRET_A;
             Documentoidentificacao documento = _unitOfWork.DocumentoIdentificacaoRepository.Get(decodedId);
             string doc = Convert.ToBase64String(documento.Documento);
