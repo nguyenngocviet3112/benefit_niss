@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -86,9 +88,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             request.filter.orderDirection = OrderDirectionEnum.descending;
             request.filter.orderBy = "moradaPrincipal";
-            const int SECRET_A = 999;
-            const int SECRET_B = 123456789;
-            int decodedId = (request.Id - SECRET_B) / SECRET_A;
+            var b64 = request.IdStr.ToString().Replace('-', '+').Replace('_', '/');
+            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+            int decodedId = int.Parse(decoded);
 
             IQueryable<Morada> queryMoradasConditional = _moduloContribuicoesContext.Morada;
             switch (request.filter.filterField)

@@ -26,13 +26,13 @@ export class GuiaPagamentoService {
 
   public getAllGuiasByEntidade(entity: GetAllGuiasStatesFromYearByFilterRequest) {
     const encodedId = this.api.encodeId(entity.idEntidade);
-    const payload = { ...entity, idEntidade: encodedId };
+    const payload = { ...entity, idEntidadeStr: encodedId };
     return this.api.post<GuiaListagemResponse>('guiaPagamento/listGuiasByEntidade', payload);
   }
 
   public getGuiasDetailByEntidade(entity: GetGuiasDetailsRequest) {
     const encodedId = this.api.encodeId(entity.idGuiaPagamento);
-    const payload = { ...entity, idGuiaPagamento: encodedId };
+    const payload = { ...entity, idGuiaPagamentoStr: encodedId };
     return this.api.post<GuiaListagemResponse>('guiaPagamento/guiaPagamentoDetail', payload);
   }
   

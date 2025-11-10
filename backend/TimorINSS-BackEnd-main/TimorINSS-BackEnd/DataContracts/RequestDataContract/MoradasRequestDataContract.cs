@@ -8,6 +8,8 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     {
         [DataMember]
         public int Id { get; set; }
+        [DataMember]
+        public string IdStr { get; set; }
     }
 
     public class MoradaRequest : RequestBaseDataContract
@@ -21,5 +23,7 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     {
         [DataMember(IsRequired = true)]
         public int Id { get; set; }
+        [DataMember(IsRequired = true)]
+        public string IdStr { get; set; }
     }
 }

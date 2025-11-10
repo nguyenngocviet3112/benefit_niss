@@ -25,13 +25,13 @@ export class ContaCorrenteService {
 
   public getContaCorrenteByIdEntidade(request: ContaCorrenteListagemRequest) : Observable<ContaCorrenteListagemResponse>  {
     const encodedId = this.api.encodeId(request.idEntidade!);
-    const payload = { ...request, idEntidade: encodedId };
+    const payload = { ...request, idEntidadeStr: encodedId };
     return this.api.post<ContaCorrenteListagemResponse>('contaCorrente/GetContaCorrenteByIdEntidade',payload);
   }
 
   public getAllContasStatesFromYearByFilter(entity: GetAllContasStatesFromYearByFilterRequest) {
     const encodedId = this.api.encodeId(entity.idEntidade);
-    const payload = { ...entity, idEntidade: encodedId };
+    const payload = { ...entity, idEntidadeStr: encodedId };
     return this.api.post<GetAllContasStatesFromYearByFilterResponse>('contaCorrente/GetAllContasStatesFromYearByFilter', payload);
   }
 }

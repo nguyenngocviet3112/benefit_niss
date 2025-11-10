@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DTO;
@@ -88,9 +90,14 @@ namespace TimorINSSBackEnd.Repository.Repositories
             int rows = 5;
             if (request.filter.rows.HasValue)
                 rows = request.filter.rows.Value;
+            var b64 = request.idStr.ToString().Replace('-', '+').Replace('_', '/');
+            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+            int decodedId = int.Parse(decoded);
 
             var query = _moduloContribuicoesContext.Relentidaderesplegal
-               .Where(u => u.RelEntidadeRespFk == request.id && u.IndActivo)
+               .Where(u => u.RelEntidadeRespFk == decodedId && u.IndActivo)
                .Join(
                     _moduloContribuicoesContext.Responsavellegal
                     .Where(u => u.IndActivo)

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
@@ -131,9 +132,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
             int rows = 5;
             if (request.filter.rows.HasValue)
                 rows = request.filter.rows.Value;
-            const int SECRET_A = 999;
-            const int SECRET_B = 123456789;
-            long decodedId = (request.id - SECRET_B) / SECRET_A;
+            var b64 = request.idStr.ToString().Replace('-', '+').Replace('_', '/');
+            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+            int decodedId = int.Parse(decoded);
 
             var queryTrabalhadores = _moduloContribuicoesContext.Relentidadetrabalhador
                 .Include(u => u.RegimeFkNavigation)
@@ -339,9 +342,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     orderDirection = (OrderDirectionEnum)filter.orderDirection;
                 }
 
-                const int SECRET_A = 999;
-                const int SECRET_B = 123456789;
-                int decodedId = (request.id - SECRET_B) / SECRET_A;
+                var b64 = request.idStr.ToString().Replace('-', '+').Replace('_', '/');
+                switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+                var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+                int decodedId = int.Parse(decoded);
 
                 var queryTrabalhadores = _moduloContribuicoesContext.Relentidadetrabalhador
                      .Include(u => u.RegimeFkNavigation)

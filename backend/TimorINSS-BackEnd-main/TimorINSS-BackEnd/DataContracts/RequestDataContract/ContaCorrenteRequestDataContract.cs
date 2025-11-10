@@ -17,6 +17,9 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public int IdEntidade { get; set; }
 
         [DataMember]
+        public string IdEntidadeStr { get; set; }
+
+        [DataMember]
         public int? IdTrabalhador { get; set; }
     }
 
@@ -25,11 +28,15 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     {
         [DataMember]
         public int IdEntidade { get; set; }
+        [DataMember]
+        public int IdEntidadeStr { get; set; }
     }
 
     public class GetAllContasStatesFromYearByFilterRequest : SearchFilterRequest
     {
         [DataMember(IsRequired = true)]
         public int idEntidade { get; set; }
+        [DataMember(IsRequired = true)]
+        public string idEntidadeStr { get; set; }
     }
 }

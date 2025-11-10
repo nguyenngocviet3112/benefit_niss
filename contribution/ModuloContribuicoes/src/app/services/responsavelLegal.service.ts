@@ -33,7 +33,7 @@ export class ResponsavelLegalService {
 
   public getByIdEntidadeEmpregadora(request: ListResponsavelLegal): Observable<ResponsavelLegalListagemResponse> {
     const encodedId = this.api.encodeId(request.id);
-    const payload = { ...request, id: encodedId };
+    const payload = { ...request, idStr: encodedId };
     return this.api.post<ResponsavelLegalListagemResponse>('responsavelLegal/GetByIdEntidadeEmpregadora', payload);
   }
 

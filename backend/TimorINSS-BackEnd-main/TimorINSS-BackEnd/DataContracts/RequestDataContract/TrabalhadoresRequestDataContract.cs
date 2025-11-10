@@ -8,6 +8,8 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     {
         [DataMember(IsRequired = true)]
         public int id;
+        [DataMember(IsRequired = true)]
+        public string idStr;
     }
 
     [DataContract]

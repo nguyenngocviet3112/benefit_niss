@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
@@ -94,9 +95,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasByFilter(GetAllGuiasStatesFromYearByFilterRequest request)
         {
-            const int SECRET_A = 999;
-            const int SECRET_B = 123456789;
-            int decodedId = (request.idEntidade - SECRET_B) / SECRET_A;
+            var b64 = request.idEntidadeStr.ToString().Replace('-', '+').Replace('_', '/');
+            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+            int decodedId = int.Parse(decoded);
+
 
             var utilizador = _moduloContribuicoesContext.Utilizador
                 .SingleOrDefault(u => u.UtilizadorEntidadeFk == decodedId);
@@ -234,9 +238,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasPagamentoByFilter(GetGuiaPagamentoRequest request)
         {
-            const int SECRET_A = 999;
-            const int SECRET_B = 123456789;
-            int decodedId = (request.idGuiaPagamento - SECRET_B) / SECRET_A;
+            var b64 = request.idGuiaPagamentoStr.ToString().Replace('-', '+').Replace('_', '/');
+            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+            int decodedId = int.Parse(decoded);
 
             IQueryable<Guiapagamento> query = _moduloContribuicoesContext.Guiapagamento
                 .Include(e => e.GuiaEntidadeFkNavigation)

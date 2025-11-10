@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
@@ -67,9 +68,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     var userId = request.UserId;
                     var user = _unitOfWork.UtilizadoresRepository.Get(userId);
                     //var trabalhadorId = request.Id;
-                    const int SECRET_A = 999;
-                    const int SECRET_B = 123456789;
-                    int trabalhadorId = (request.Id - SECRET_B) / SECRET_A;
+
+                    var b64 = request.IdStr.ToString().Replace('-', '+').Replace('_', '/');
+                    switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+                    var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+                    int trabalhadorId = int.Parse(decoded);
+
                     var entidadeEmpregadoraId = user.UtilizadorEntidadeFk;
 
                     // Validar se o utilizador tem as permissões necessárias
@@ -107,9 +112,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         public DocumentoResponse GetDocumentosIdentificacaoById(DocumentoIdRequest request)
         {
             var response = new DocumentoResponse { RequestId = request.RequestId };
-            const int SECRET_A = 999;
-            const int SECRET_B = 123456789;
-            int decodedId = (request.id - SECRET_B) / SECRET_A;
+
+            var b64 = request.idStr.ToString().Replace('-', '+').Replace('_', '/');
+            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+            int decodedId = int.Parse(decoded);
+
             Documentoidentificacao documento = _unitOfWork.DocumentoIdentificacaoRepository.Get(decodedId);
             string doc = Convert.ToBase64String(documento.Documento);
             response.documento = new DocumentoIdentificacaoDataContract

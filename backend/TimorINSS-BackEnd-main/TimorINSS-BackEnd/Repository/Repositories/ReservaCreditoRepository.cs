@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DTO;
@@ -92,9 +94,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
             if (request.filter.rows.HasValue)
                 rows = request.filter.rows.Value;
 
-            const int SECRET_A = 999;
-            const int SECRET_B = 123456789;
-            int decodedId = (request.IdEntidade - SECRET_B) / SECRET_A;
+            var b64 = request.IdEntidadeStr.ToString().Replace('-', '+').Replace('_', '/');
+            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+            int decodedId = int.Parse(decoded);
 
             var queryReservaCredito = _moduloContribuicoesContext.Reservacredito
                 .Where(u => u.ReservaEntidadeFk == decodedId)

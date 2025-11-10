@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -168,9 +169,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public EntidadeEmpregadoraDeclaracaoViewResponse GetEntidadeInfoForDeclaracao(EntidadeEmpregadoraIdRequest request)
         {
-            const int SECRET_A = 999;
-            const int SECRET_B = 123456789;
-            long decodedId = (request.IdEntidade - SECRET_B) / SECRET_A;
+            var b64 = request.IdEntidadeStr.ToString().Replace('-', '+').Replace('_', '/');
+            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+            int decodedId = int.Parse(decoded);
 
             return _moduloContribuicoesContext.Entidadeempregadora
                 .Where(u => u.IdEntidadeEmpreg == decodedId)

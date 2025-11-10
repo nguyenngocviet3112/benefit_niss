@@ -26,13 +26,13 @@ export class MoradaService {
 
   public getMoradaByIdEntidadeEmpregadora(request: MoradaListagemRequest) : Observable<MoradaListagemResponse>  {
     const encodedId = this.api.encodeId(request.id);
-    const payload = { ...request, id: encodedId };
+    const payload = { ...request, idStr: encodedId };
     return this.api.post<MoradaListagemResponse>('morada/GetByIdEntidadeEmpregadora',payload);
   }
 
   public getMoradaByIdTrabalhador(request: MoradaListagemRequest) : Observable<MoradaListagemResponse>  {
     const encodedId = this.api.encodeId(request.id);
-    const payload = { ...request, id: encodedId };
+    const payload = { ...request, idStr: encodedId };
     return this.api.post<MoradaListagemResponse>('morada/GetByIdTrabalhador',payload);
   }
 

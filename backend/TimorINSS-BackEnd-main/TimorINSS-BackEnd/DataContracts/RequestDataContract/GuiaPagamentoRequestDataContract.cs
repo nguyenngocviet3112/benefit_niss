@@ -17,12 +17,16 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     {
         [DataMember(IsRequired = true)]
         public int idEntidade { get; set; }
+        [DataMember(IsRequired = true)]
+        public string idEntidadeStr { get; set; }
     }
 
     public class GetGuiaPagamentoRequest : SearchFilterRequest
     {
         [DataMember(IsRequired = true)]
         public int idGuiaPagamento { get; set; }
+        [DataMember(IsRequired = true)]
+        public string idGuiaPagamentoStr { get; set; }
     }
 
     public class GetAllGuiasStatesFromDateByFilterRequest : SearchFilterRequest

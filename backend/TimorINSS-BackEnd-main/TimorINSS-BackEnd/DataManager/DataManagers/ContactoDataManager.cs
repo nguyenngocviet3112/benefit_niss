@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -84,9 +85,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     var user = _unitOfWork.UtilizadoresRepository.Get(userId);
                     //var trabalhadorId = request.Id;
 
-                    const int SECRET_A = 999;
-                    const int SECRET_B = 123456789;
-                    int trabalhadorId = (request.Id - SECRET_B) / SECRET_A;
+                    var b64 = request.IdStr.ToString().Replace('-', '+').Replace('_', '/');
+                    switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+                    var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+                    int trabalhadorId = int.Parse(decoded);
+
 
                     var entidadeEmpregadoraId = user.UtilizadorEntidadeFk;
 

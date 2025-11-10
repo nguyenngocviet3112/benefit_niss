@@ -31,16 +31,16 @@ export class ApiHelperService {
   private readonly NUM_B = 123456789;
 
 
-  public encodeId(id: number): number {
-    return id * this.NUM_A + this.NUM_B;
-  }
-
-  // public encodeId(rawPath: number): string {
-  //   return btoa(unescape(encodeURIComponent(rawPath)))
-  //     .replace(/\+/g, '-')   // Base64 URL-safe (+ → -)
-  //     .replace(/\//g, '_')   // (/ → _)
-  //     .replace(/=+$/, '');   // remove trailing '='
+  // public encodeId(id: number): number {
+  //   return id * this.NUM_A + this.NUM_B;
   // }
+
+  public encodeId(rawPath: number): string {
+    return btoa(unescape(encodeURIComponent(rawPath)))
+      .replace(/\+/g, '-')   // Base64 URL-safe (+ → -)
+      .replace(/\//g, '_')   // (/ → _)
+      .replace(/=+$/, '');   // remove trailing '='
+  }
  
   // public async encodeIdNumberOnly(id: number): Promise<string> {
   //   const v = ApiHelperService.VERSION;

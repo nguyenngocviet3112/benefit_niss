@@ -21,13 +21,13 @@ export class DocumentoService {
 
   public getDocumentosByIdTrabalhador(request: DocumentosListagemRequest) : Observable<DocumentosListagemResponse>  {
     const encodedId = this.api.encodeId(request.id);
-    const payload = { ...request, id: encodedId };
+    const payload = { ...request, idStr: encodedId };
     return this.api.post<DocumentosListagemResponse>('documentos/GetByIdTrabalhador',payload);
   }
 
   public getDocumentoById(entity: DocumentoIdRequest) {
     const encodedId = this.api.encodeId(entity.id);
-    const payload = { ...entity, id: encodedId };
+    const payload = { ...entity, idStr: encodedId };
     return this.api.post<DocumentoResponse>('documentos/GetDocumentoById', payload);
   }
 

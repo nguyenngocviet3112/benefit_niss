@@ -21,7 +21,7 @@ export class DeclaracaoService {
 
   public getDeclaracaoByEntidadeAndFilter(request: GetDeclaracaoByEntidadeAndFilterRequest) : Observable<GetDeclaracaoByEntidadeAndFilterResponse>  {
     const encodedId = this.api.encodeId(request.IdEntidade);
-    const payload = { ...request, IdEntidade: encodedId };
+    const payload = { ...request, IdEntidadeStr: encodedId };
     return this.api.post<GetDeclaracaoByEntidadeAndFilterResponse>('declaracao/GetDeclaracaoByEntidadeAndFilter',payload);
   }
 

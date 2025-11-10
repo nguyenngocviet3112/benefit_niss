@@ -26,13 +26,13 @@ export class ContatoService {
 
   public getContatoByIdEntidadeEmpregadora(request: ContatoListagemRequest) : Observable<ContatoListagemResponse>  {
     const encodedId = this.api.encodeId(request.Id);
-    const payload = { ...request, id: encodedId };
+    const payload = { ...request, idStr: encodedId };
     return this.api.post<ContatoListagemResponse>('contato/GetByIdEntidadeEmpregadora',payload);
   }
 
   public getContatoByIdTrabalhador(request: ContatoListagemRequest) : Observable<ContatoListagemResponse>  {
     const encodedId = this.api.encodeId(request.Id);
-    const payload = { ...request, id: encodedId };
+    const payload = { ...request, idStr: encodedId };
     return this.api.post<ContatoListagemResponse>('contato/GetByIdTrabalhador',payload);
   }
 

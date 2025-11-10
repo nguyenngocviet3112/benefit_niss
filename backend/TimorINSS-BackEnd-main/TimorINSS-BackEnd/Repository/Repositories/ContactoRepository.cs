@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -71,16 +73,21 @@ namespace TimorINSSBackEnd.Repository.Repositories
             int rows = 5;
             if (request.filter.rows.HasValue)
                 rows = request.filter.rows.Value;
+            var b64 = request.IdStr.ToString().Replace('-', '+').Replace('_', '/');
+            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+
+            int decodedId = int.Parse(decoded);
 
             IQueryable<Contacto> queryContatosConditional = _moduloContribuicoesContext.Contacto;
             switch (request.filter.filterField)
             {
                 case "ENTIDADEEMPREGADORA":
-                    queryContatosConditional = queryContatosConditional.Where(u => u.ContactoEntidadeFk == request.Id && u.IndActivo);
+                    queryContatosConditional = queryContatosConditional.Where(u => u.ContactoEntidadeFk == decodedId && u.IndActivo);
                     break;
 
                 case "TRABALHADOR":
-                    queryContatosConditional = queryContatosConditional.Where(u => u.ContactoTrabalhadorFk == request.Id && u.IndActivo);
+                    queryContatosConditional = queryContatosConditional.Where(u => u.ContactoTrabalhadorFk == decodedId && u.IndActivo);
                     break;
 
                 default:

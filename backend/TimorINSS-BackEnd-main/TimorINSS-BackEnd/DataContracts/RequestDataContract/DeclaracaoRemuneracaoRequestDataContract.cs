@@ -12,6 +12,8 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     {
         [DataMember(IsRequired = true)]
         public int IdEntidade { get; set; }
+        [DataMember(IsRequired = true)]
+        public string IdEntidadeStr { get; set; }
     }
 
     [DataContract]
@@ -34,5 +36,8 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
 
         [DataMember]
         public int entidadeId { get; set; }
+
+        [DataMember]
+        public string entidadeIdStr { get; set; }
     }
 }

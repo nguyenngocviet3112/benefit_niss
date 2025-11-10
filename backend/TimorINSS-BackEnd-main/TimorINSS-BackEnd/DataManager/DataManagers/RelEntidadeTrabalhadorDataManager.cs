@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
@@ -345,8 +346,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         public TrabalhadorViewResponse GetTrabalhadorViewById(TrabalhadorListagemRequest request)
         {
             var response = new TrabalhadorViewResponse();
+            var b64 = request.idStr.ToString().Replace('-', '+').Replace('_', '/');
+            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
 
-            Relentidadetrabalhador rel = _unitOfWork.RelEntidadeTrabalhadorRepository.Get(request.id);
+            int decodedId = int.Parse(decoded);
+            Relentidadetrabalhador rel = _unitOfWork.RelEntidadeTrabalhadorRepository.Get(decodedId);
             if (rel != null)
             {
                 response.RelEntidadeTrabalhador = BuildObjectRelEntidadeTrabalhadorDataContract(rel);

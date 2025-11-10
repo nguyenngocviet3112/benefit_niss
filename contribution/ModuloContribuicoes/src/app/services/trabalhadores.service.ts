@@ -19,7 +19,7 @@ export class TrabalhadoresService {
 
   public getTrabalhadoresByEntidadeEmpregadora(request: TrabalhadorListagemRequest) : Observable<TrabalhadorListagemResponse>  {
     const encodedId = this.api.encodeId(request.id);
-    const payload = { ...request, id: encodedId };
+    const payload = { ...request, idStr: encodedId };
     return this.api.post<TrabalhadorListagemResponse>('trabalhadores/GetByIdEntidadeEmpregadora',payload);
   }
 
@@ -33,13 +33,13 @@ export class TrabalhadoresService {
 
   public getTrabalhadorById(request: TrabalhadorListagemRequest) : Observable<GetTrabalhadorReponse>{
     const encodedId = this.api.encodeId(request.id);
-    const payload = { ...request, id: encodedId };
+    const payload = { ...request, idStr: encodedId };
     return this.api.post<GetTrabalhadorReponse>('trabalhadores/getById', payload);
   }
 
   public getTrabalhadorByNiss(request: TrabalhadorListagemRequest) : Observable<TrabalhadorListagemResponse>{
     const encodedId = this.api.encodeId(request.id);
-    const payload = { ...request, id: encodedId };
+    const payload = { ...request, idStr: encodedId };
     return this.api.post<TrabalhadorListagemResponse>('trabalhadores/getTrabalhadoresByNiss', payload);
   }
 

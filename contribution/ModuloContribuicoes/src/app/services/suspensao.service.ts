@@ -26,7 +26,7 @@ export class SuspensaoService {
 
   public getSuspensaoByIdEntidadeEmpregadora(request: SuspensaoListagemRequest) : Observable<SuspensaoListagemResponse>  {
     const encodedId = this.api.encodeId(request.IdEntidade);
-    const payload = { ...request, IdEntidade: encodedId };
+    const payload = { ...request, IdEntidadeStr: encodedId };
     return this.api.post<SuspensaoListagemResponse>('suspensao/GetByIdEntidadeEmpregadora',payload);
   }
 
