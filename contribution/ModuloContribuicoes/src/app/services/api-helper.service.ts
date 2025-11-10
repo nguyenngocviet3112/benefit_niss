@@ -27,7 +27,7 @@ export class ApiHelperService {
     return this.http.get<T>(`${environment.apiUrl}/${encoded}`);
   }
 
-  private readonly NUM_A = 654321;
+  private readonly NUM_A = 999;
   private readonly NUM_B = 123456789;
 
 

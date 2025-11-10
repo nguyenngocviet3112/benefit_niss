@@ -442,7 +442,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         public SingleTrabalhadorResponse GetById(TrabalhadorListagemRequest request)
         {
             var response = new SingleTrabalhadorResponse();
-            const int SECRET_A = 654321;
+            const int SECRET_A = 999;
             const int SECRET_B = 123456789;
             int decodedId = (request.id - SECRET_B) / SECRET_A;
             var trabalhador = _unitOfWork.TrabalhadoresRepository.Get(decodedId);

@@ -94,7 +94,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasByFilter(GetAllGuiasStatesFromYearByFilterRequest request)
         {
-            const int SECRET_A = 654321;
+            const int SECRET_A = 999;
             const int SECRET_B = 123456789;
             int decodedId = (request.idEntidade - SECRET_B) / SECRET_A;
 
@@ -234,7 +234,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasPagamentoByFilter(GetGuiaPagamentoRequest request)
         {
-            const int SECRET_A = 654321;
+            const int SECRET_A = 999;
             const int SECRET_B = 123456789;
             int decodedId = (request.idGuiaPagamento - SECRET_B) / SECRET_A;
 

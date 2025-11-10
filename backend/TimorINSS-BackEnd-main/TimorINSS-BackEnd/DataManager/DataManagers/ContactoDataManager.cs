@@ -84,7 +84,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     var user = _unitOfWork.UtilizadoresRepository.Get(userId);
                     //var trabalhadorId = request.Id;
 
-                    const int SECRET_A = 654321;
+                    const int SECRET_A = 999;
                     const int SECRET_B = 123456789;
                     int trabalhadorId = (request.Id - SECRET_B) / SECRET_A;
 

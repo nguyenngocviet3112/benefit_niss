@@ -108,7 +108,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 DateTime date = request.filter.dateFilterBegin.Value;
                 //get declaracoes for moth requested
                 date = new DateTime(date.Year, date.Month, 1);
-                const int SECRET_A = 987654321;
+                const int SECRET_A = 999;
                 const int SECRET_B = 123456789;
                 int decodedId = (request.IdEntidade - SECRET_B) / SECRET_A;
 

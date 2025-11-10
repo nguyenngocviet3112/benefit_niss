@@ -92,7 +92,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             int rows = 5;
             if (request.filter.rows.HasValue)
                 rows = request.filter.rows.Value;
-            const int SECRET_A = 654321;
+            const int SECRET_A = 999;
             const int SECRET_B = 123456789;
             int decodedId = (request.IdEntidade - SECRET_B) / SECRET_A;
 

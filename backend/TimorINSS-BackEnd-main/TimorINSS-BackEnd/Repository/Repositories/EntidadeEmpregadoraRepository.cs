@@ -168,7 +168,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public EntidadeEmpregadoraDeclaracaoViewResponse GetEntidadeInfoForDeclaracao(EntidadeEmpregadoraIdRequest request)
         {
-            const int SECRET_A = 654321;
+            const int SECRET_A = 999;
             const int SECRET_B = 123456789;
             long decodedId = (request.IdEntidade - SECRET_B) / SECRET_A;
 

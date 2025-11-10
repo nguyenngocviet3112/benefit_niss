@@ -86,7 +86,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             request.filter.orderDirection = OrderDirectionEnum.descending;
             request.filter.orderBy = "moradaPrincipal";
-            const int SECRET_A = 654321;
+            const int SECRET_A = 999;
             const int SECRET_B = 123456789;
             int decodedId = (request.Id - SECRET_B) / SECRET_A;
 
