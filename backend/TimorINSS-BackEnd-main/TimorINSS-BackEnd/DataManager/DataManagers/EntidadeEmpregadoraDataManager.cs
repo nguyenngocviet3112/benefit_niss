@@ -238,7 +238,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         {
             EntidadeEmpregadoraDeclaracaoViewResponse response = new EntidadeEmpregadoraDeclaracaoViewResponse();
 
-            if (request.IdEntidade == 0)
+            if (request.IdEntidade < 0)
             {
                 response.Errors.Add(new Error
                 {

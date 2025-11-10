@@ -120,6 +120,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
 
                     int trabalhadorId = int.Parse(decoded);
+                    const int SECRET_A = 12;
+                    const int SECRET_B = 123456789;
+                    trabalhadorId = (trabalhadorId - SECRET_B) / SECRET_A;
 
 
                     // Validar se o utilizador tem as permissões necessárias

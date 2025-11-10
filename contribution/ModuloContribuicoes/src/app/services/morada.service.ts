@@ -26,7 +26,7 @@ export class MoradaService {
 
   public getMoradaByIdEntidadeEmpregadora(request: MoradaListagemRequest) : Observable<MoradaListagemResponse>  {
     const encodedId = this.api.encodeId(request.id);
-    const payload = { ...request, idStr: encodedId };
+    const payload = { ...request, idStr: encodedId , id:0};
     return this.api.post<MoradaListagemResponse>('morada/GetByIdEntidadeEmpregadora',payload);
   }
 

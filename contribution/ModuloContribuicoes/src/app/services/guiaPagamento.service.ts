@@ -26,7 +26,7 @@ export class GuiaPagamentoService {
 
   public getAllGuiasByEntidade(entity: GetAllGuiasStatesFromYearByFilterRequest) {
     const encodedId = this.api.encodeId(entity.idEntidade);
-    const payload = { ...entity, idEntidadeStr: encodedId };
+    const payload = { ...entity, idEntidadeStr: encodedId , idEntidade:0};
     return this.api.post<GuiaListagemResponse>('guiaPagamento/listGuiasByEntidade', payload);
   }
 

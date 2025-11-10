@@ -26,13 +26,13 @@ export class SuspensaoService {
 
   public getSuspensaoByIdEntidadeEmpregadora(request: SuspensaoListagemRequest) : Observable<SuspensaoListagemResponse>  {
     const encodedId = this.api.encodeId(request.IdEntidade);
-    const payload = { ...request, IdEntidadeStr: encodedId };
+    const payload = { ...request, IdEntidadeStr: encodedId, IdEntidade:0 };
     return this.api.post<SuspensaoListagemResponse>('suspensao/GetByIdEntidadeEmpregadora',payload);
   }
 
   public getSuspensaoByIdTrabalhador(request: SuspensaoListagemRequest) : Observable<SuspensaoListagemResponse>  {
     const encodedId = this.api.encodeId(request.IdEntidade);
-    const payload = { ...request, id: encodedId };
+    const payload = { ...request, id: encodedId, IdEntidade:0 };
     return this.api.post<SuspensaoListagemResponse>('suspensao/GetByIdTrabalhador',payload);
   }
 

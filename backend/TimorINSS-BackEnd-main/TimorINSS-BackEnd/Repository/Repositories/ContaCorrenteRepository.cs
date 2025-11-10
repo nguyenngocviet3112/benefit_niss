@@ -99,6 +99,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
             var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
 
             int decodedId = int.Parse(decoded);
+            const int SECRET_A = 12;
+            const int SECRET_B = 123456789;
+            decodedId = (decodedId - SECRET_B) / SECRET_A;
 
             IQueryable<Contacorrente> queryContaCorrenteConditional = _moduloContribuicoesContext.Contacorrente
                 .Include(u => u.TipoDividaNavigation)

@@ -37,7 +37,7 @@ export class RelEntidadeTrabalhadorService {
 
   public getTrabalhadorViewById(request: TrabalhadorViewListagemRequest) : Observable<TrabalhadorViewResponse>{
     const encodedId = this.api.encodeId(request.id);
-    const payload = { ...request, idStr: encodedId };
+    const payload = { ...request, idStr: encodedId, id:0 };
     return this.api.post<TrabalhadorViewResponse>('RelEntidadesTrabalhadores/getTrabalhadorViewById', payload);
   }
 }

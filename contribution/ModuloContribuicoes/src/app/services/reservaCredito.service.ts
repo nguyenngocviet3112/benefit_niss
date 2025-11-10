@@ -18,7 +18,7 @@ export class ReservaCreditoService {
 
   public getReservaCreditoByIdEntidade(request: ReservaCreditoListagemRequest) : Observable<ReservaCreditoListagemResponse>  {
     const encodedId = this.api.encodeId(request.idEntidade!);
-    const payload = { ...request, idEntidadeStr: encodedId };
+    const payload = { ...request, idEntidadeStr: encodedId, idEntidade:0 };
     return this.api.post<ReservaCreditoListagemResponse>('reservaCredito/GetReservaCreditoByIdEntidade',payload);
   }
 
