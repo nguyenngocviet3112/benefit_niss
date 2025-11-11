@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GetComponenteOrcamentoConfigRequest } from '../request-models/componenteOrcamentoConfig-request';
 import { GetComponenteOrcamentoConfigReponse } from '../response-models/componenteOrcamentoConfig-response';
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,13 @@ export class ComponenteOrcamentoConfigService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
-  public getComponenteOrcamentoConfigByTarefaAtivoId(request: GetComponenteOrcamentoConfigRequest): Observable<GetComponenteOrcamentoConfigReponse>
-  {
-    return this.http.post<GetComponenteOrcamentoConfigReponse>(`${environment.apiUrl}/componenteOrcamentoConfig/GetComponenteOrcamentoConfigByTarefaAtivoId`, request);
+  public getComponenteOrcamentoConfigByTarefaAtivoId(request: GetComponenteOrcamentoConfigRequest): Observable<GetComponenteOrcamentoConfigReponse> {
+    return this.api.post<GetComponenteOrcamentoConfigReponse>('componenteOrcamentoConfig/GetComponenteOrcamentoConfigByTarefaAtivoId', request);
   }
 
 }

@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AgrupamentoConfigResponse } from '../response-models/agrupamentoConfig-response';
 import { GetAgrupamentoConfigRequest } from '../request-models/agrupamentoConfig-request';
-
+import { ApiHelperService } from './api-helper.service';
 
 
 
@@ -16,12 +16,13 @@ import { GetAgrupamentoConfigRequest } from '../request-models/agrupamentoConfig
 export class AgrupamentoConfigService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public getAgrupamentoConfigByIdCodigoContaTipoConta(request: GetAgrupamentoConfigRequest): Observable<AgrupamentoConfigResponse>
   {
-    return this.http.post<AgrupamentoConfigResponse>(`${environment.apiUrl}/agrupamentoConfig/GetAgrupamentoConfigByIdCodigoContaTipoConta`, request);
+    return this.api.post<AgrupamentoConfigResponse>('agrupamentoConfig/GetAgrupamentoConfigByIdCodigoContaTipoConta', request);
   }
 }

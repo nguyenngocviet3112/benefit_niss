@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ResponsavelLegalRequest, ListResponsavelLegal, ResponsavelLegalDeleteRequest } from '../request-models/responsavel-legal-request';
 import { ListResponsavelLegalResponse, ResponsavelLegalListagemResponse } from '../response-models/responsavel-legal-response';
-
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
     providedIn: 'root'
@@ -15,26 +15,27 @@ export class ResponsavelLegalService {
   public traceBack = false;
 
     constructor(
-      private http: HttpClient
+      private http: HttpClient,
+      private api: ApiHelperService
     ) {}
 
     public saveResponsavelLegal(request: ResponsavelLegalRequest) {
-      return this.http.post(`${environment.apiUrl}/responsavelLegal/AddReponsavelLegal`, request);
+      return this.api.post('responsavelLegal/AddReponsavelLegal', request);
     }
 
     public listResponsavelLegal(request: ListResponsavelLegal) {
-      return this.http.post<ListResponsavelLegalResponse>(`${environment.apiUrl}/responsavelLegal/ListReponsavelLegal`, request);
+      return this.api.post<ListResponsavelLegalResponse>('responsavelLegal/ListReponsavelLegal', request);
     }
 
     public updateResponsavelLegalRequest(request: ResponsavelLegalRequest) {
-      return this.http.post(`${environment.apiUrl}/responsavelLegal/UpdateResponsavelLegal`, request);
+      return this.api.post('responsavelLegal/UpdateResponsavelLegal', request);
     }
 
     public getByIdEntidadeEmpregadora(request: ListResponsavelLegal) : Observable<ResponsavelLegalListagemResponse>  {
-      return this.http.post<ResponsavelLegalListagemResponse>(`${environment.apiUrl}/responsavelLegal/GetByIdEntidadeEmpregadora`,request);
+      return this.api.post<ResponsavelLegalListagemResponse>('responsavelLegal/GetByIdEntidadeEmpregadora',request);
     }
 
     public deleteResponsavelLegal(entity: ResponsavelLegalDeleteRequest) {
-      return this.http.post(`${environment.apiUrl}/responsavelLegal/DeleteResponsavelLegal`, entity);
+      return this.api.post('responsavelLegal/DeleteResponsavelLegal', entity);
     }
 }

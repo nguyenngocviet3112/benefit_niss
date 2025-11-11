@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { GetComponenteOrcamentoRegistoAprovadoRequest, GetComponenteOrcamentoRegistoRequest, OrcamentoExtractRequest, UpdateComponenteOrcamentoRegistoDatesRequest } from '../request-models/componenteOrcamentoRegisto-request';
 import { GetComponenteOrcamentoAprovadoRegistoReponse, GetComponenteOrcamentoRegistoReponse, OrcamentoExtractToExcelReponse, OrcamentoExtractToPDFReponse, UpdateComponenteOrcamentoRegistoDatesResponse } from '../response-models/componenteOrcamentoRegisto-response';
 import { Observable } from 'rxjs';
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,39 +14,41 @@ export class componenteOrcamentoRegistoService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+
+    private api: ApiHelperService
   ) { }
 
 
-  public GetComponenteOrcamento(request: GetComponenteOrcamentoRegistoRequest) : Observable<GetComponenteOrcamentoRegistoReponse> {
-    return this.http.post<GetComponenteOrcamentoRegistoReponse>(`${environment.apiUrl}/componenteOrcamentoRegisto/GetComponenteOrcamentoRegisto`, request);
+  public GetComponenteOrcamento(request: GetComponenteOrcamentoRegistoRequest): Observable<GetComponenteOrcamentoRegistoReponse> {
+    return this.api.post<GetComponenteOrcamentoRegistoReponse>('componenteOrcamentoRegisto/GetComponenteOrcamentoRegisto', request);
   }
 
-  public UpdateComponenteOrcamentoRegistoDates(request: UpdateComponenteOrcamentoRegistoDatesRequest) : Observable<UpdateComponenteOrcamentoRegistoDatesResponse> {
-    return this.http.post<UpdateComponenteOrcamentoRegistoDatesResponse>(`${environment.apiUrl}/componenteOrcamentoRegisto/UpdateComponenteOrcamentoRegistoDates`, request);
+  public UpdateComponenteOrcamentoRegistoDates(request: UpdateComponenteOrcamentoRegistoDatesRequest): Observable<UpdateComponenteOrcamentoRegistoDatesResponse> {
+    return this.api.post<UpdateComponenteOrcamentoRegistoDatesResponse>('componenteOrcamentoRegisto/UpdateComponenteOrcamentoRegistoDates', request);
   }
 
-  public GetOrcamentoAprovadoDespesaByIdTarefaActivo(entity: GetComponenteOrcamentoRegistoAprovadoRequest) : Observable<GetComponenteOrcamentoAprovadoRegistoReponse> {
-    return this.http.post<GetComponenteOrcamentoAprovadoRegistoReponse>(`${environment.apiUrl}/componenteOrcamentoRegisto/GetOrcamentoAprovadoDespesaByIdTarefaActivo`, entity);
+  public GetOrcamentoAprovadoDespesaByIdTarefaActivo(entity: GetComponenteOrcamentoRegistoAprovadoRequest): Observable<GetComponenteOrcamentoAprovadoRegistoReponse> {
+    return this.api.post<GetComponenteOrcamentoAprovadoRegistoReponse>('componenteOrcamentoRegisto/GetOrcamentoAprovadoDespesaByIdTarefaActivo', entity);
   }
 
-  public RetificarOrcamentoAprovado(entity: UpdateComponenteOrcamentoRegistoDatesRequest) : Observable<GetComponenteOrcamentoRegistoReponse> {
-    return this.http.post<GetComponenteOrcamentoRegistoReponse>(`${environment.apiUrl}/componenteOrcamentoRegisto/RetificarOrcamentoAprovado`, entity);
+  public RetificarOrcamentoAprovado(entity: UpdateComponenteOrcamentoRegistoDatesRequest): Observable<GetComponenteOrcamentoRegistoReponse> {
+    return this.api.post<GetComponenteOrcamentoRegistoReponse>('componenteOrcamentoRegisto/RetificarOrcamentoAprovado', entity);
   }
 
   public AprovarOrcamento(request: GetComponenteOrcamentoRegistoRequest) {
-    return this.http.post(`${environment.apiUrl}/componenteOrcamentoRegisto/AprovarOrcamento`, request);
+    return this.api.post('componenteOrcamentoRegisto/AprovarOrcamento', request);
   }
 
-  public ExtractToExcel(request: OrcamentoExtractRequest) : Observable<OrcamentoExtractToExcelReponse>  {
-    return this.http.post<OrcamentoExtractToExcelReponse>(`${environment.apiUrl}/componenteOrcamentoRegisto/ExtractToExcel`, request);
+  public ExtractToExcel(request: OrcamentoExtractRequest): Observable<OrcamentoExtractToExcelReponse> {
+    return this.api.post<OrcamentoExtractToExcelReponse>('componenteOrcamentoRegisto/ExtractToExcel', request);
   }
 
-  public ExtractToPDF(request: OrcamentoExtractRequest) : Observable<OrcamentoExtractToPDFReponse>  {
-    return this.http.post<OrcamentoExtractToPDFReponse>(`${environment.apiUrl}/componenteOrcamentoRegisto/ExtractToPDF`, request);
+  public ExtractToPDF(request: OrcamentoExtractRequest): Observable<OrcamentoExtractToPDFReponse> {
+    return this.api.post<OrcamentoExtractToPDFReponse>('componenteOrcamentoRegisto/ExtractToPDF', request);
   }
 
-  public GetOrcamentoAprovadoReceitaByIdTarefaActivo(entity: GetComponenteOrcamentoRegistoAprovadoRequest) : Observable<GetComponenteOrcamentoAprovadoRegistoReponse> {
-    return this.http.post<GetComponenteOrcamentoAprovadoRegistoReponse>(`${environment.apiUrl}/componenteOrcamentoRegisto/GetOrcamentoAprovadoReceitaByIdTarefaActivo`, entity);
+  public GetOrcamentoAprovadoReceitaByIdTarefaActivo(entity: GetComponenteOrcamentoRegistoAprovadoRequest): Observable<GetComponenteOrcamentoAprovadoRegistoReponse> {
+    return this.api.post<GetComponenteOrcamentoAprovadoRegistoReponse>('componenteOrcamentoRegisto/GetOrcamentoAprovadoReceitaByIdTarefaActivo', entity);
   }
 }

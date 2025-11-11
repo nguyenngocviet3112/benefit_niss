@@ -9,6 +9,7 @@ import { Utilizador } from '../response-models/utilizador-response';
 import { LoginRequest } from '../request-models/login-request';
 import { RecoverPasswordRequest, RecoverSetPasswordRequest } from '../request-models/recoverPassword-request';
 import CreateNISSInfoRequest from '../request-models/createNISSInfo-request';
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
     providedIn: 'root'
@@ -17,12 +18,13 @@ export class LoginService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private api: ApiHelperService
     ) {}
 
     public login(request: LoginRequest) : Observable<{user: Utilizador, token: string, totalCount: number}> {
 
-        return this.http.post(`${environment.apiUrl}/login/InternalAuthenticate`, request)
+        return this.api.post('login/InternalAuthenticate', request)
             .pipe(map((response : any) => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 // sessionStorage.setItem('user', JSON.stringify(user));
@@ -45,23 +47,23 @@ export class LoginService {
     }
 
     public recoverPassword(request: RecoverPasswordRequest){
-        return this.http.post(`${environment.apiUrl}/login/InternalRecoverPassword`, request);
+        return this.api.post('login/InternalRecoverPassword', request);
     }
 
     public firstAcess(request: RecoverPasswordRequest){
-        return this.http.post(`${environment.apiUrl}/login/InternalFirstAcess`, request);
+        return this.api.post('login/InternalFirstAcess', request);
     }
 
     public setUpPassword(request: RecoverSetPasswordRequest){
-        return this.http.post(`${environment.apiUrl}/login/SetUpPassword`, request);
+        return this.api.post('login/SetUpPassword', request);
     }
 
     public createUser(request: RecoverSetPasswordRequest){
-        return this.http.post(`${environment.apiUrl}/login/CreateInternalUser`, request);
+        return this.api.post('login/CreateInternalUser', request);
     }
 
     public createNISSInfor(request: CreateNISSInfoRequest){
-        return this.http.post(`${environment.apiUrl}/login/CreateNissInfor`, request);
+        return this.api.post('login/CreateNissInfor', request);
     }
 
     public logout() {
@@ -71,15 +73,15 @@ export class LoginService {
     }
 
     public register(user: Utilizador) {
-        return this.http.post(`${environment.apiUrl}/users/register`, user);
+        return this.api.post('users/register', user);
     }
 
     public downloadLogs() {
         const request: any = {};
-        return this.http.post(`${environment.apiUrl}/login/Logs`, request);
+        return this.api.post('login/Logs', request);
     }
 
     public validToken(request:{token: string, isRecover: boolean}) {
-        return this.http.post(`${environment.apiUrl}/login/ValidToken`, request);
+        return this.api.post('login/ValidToken', request);
     }
 }

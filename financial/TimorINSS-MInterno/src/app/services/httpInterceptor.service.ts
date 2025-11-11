@@ -23,15 +23,23 @@ export class HttpInterceptorService implements HttpInterceptor {
         private route: ActivatedRoute
       ) { }
 
+      public encodePath(rawPath: string): string {
+    return btoa(unescape(encodeURIComponent(rawPath)))
+      .replace(/\+/g, '-')   // Base64 URL-safe (+ → -)
+      .replace(/\//g, '_')   // (/ → _)
+      .replace(/=+$/, '');   // remove trailing '='
+    }
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const userToken = this.tokenStorage.getToken();
-        const userId = this.tokenStorage.getUser()?.id;
+        const userId = this.tokenStorage.getUser()?.id ?? '';
         const requestId = guid();
+        const encodedUserId = this.encodePath(userId.toString());
         const modifiedReq = req.clone({
           headers: new HttpHeaders({
             'Authorization': `Bearer ${userToken}`,
             'Request-Id': requestId,
-            'User-Id': `${userId}`,
+            'User-Id': encodedUserId,
             'Accept-Language': this.translate.currentLang || 'PT',
           })
         });

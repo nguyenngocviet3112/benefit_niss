@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EntidadeEmpregadoraIdRequest, EntidadeEmpregadoraNissRequest, EntidadeEmpregadoraRequest, UpsertEntidadeEmpregadoraRequest } from '../request-models/entidadeEmpregadora-request';
 import { EntidadeEmpregadoraConsultaResponse, EntidadeEmpregadoraDeclaracaoViewResponse } from '../response-models/entidadeEmpregadora-response';
-
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +14,13 @@ import { EntidadeEmpregadoraConsultaResponse, EntidadeEmpregadoraDeclaracaoViewR
 export class EntidadeEmpregadoraService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public getEntidadeEmpregadoraByIdEntidade(id: number) : Observable<EntidadeEmpregadoraConsultaResponse>  {
-    return this.http.get<EntidadeEmpregadoraConsultaResponse>(`${environment.apiUrl}/entidadeEmpregadora/GetByIdEntidade/`+id)
+    return this.api.get<EntidadeEmpregadoraConsultaResponse>('entidadeEmpregadora/GetByIdEntidade/'+id)
     .pipe(map(x => {
       let response : EntidadeEmpregadoraConsultaResponse = {
       };
@@ -32,19 +33,19 @@ export class EntidadeEmpregadoraService {
   }
 
   public updateEntidadeEmpregadora(entity: EntidadeEmpregadoraRequest) {
-    return this.http.post<boolean>(`${environment.apiUrl}/entidadeEmpregadora/UpdateEntidade`, entity);
+    return this.api.post<boolean>('entidadeEmpregadora/UpdateEntidade', entity);
   }
 
   public GetEntidadeInfoForDeclaracao(request: EntidadeEmpregadoraIdRequest) {
-    return this.http.post<EntidadeEmpregadoraDeclaracaoViewResponse>(`${environment.apiUrl}/entidadeEmpregadora/GetEntidadeInfoForDeclaracao`, request);
+    return this.api.post<EntidadeEmpregadoraDeclaracaoViewResponse>('entidadeEmpregadora/GetEntidadeInfoForDeclaracao', request);
   }
 
   public GetEntidadeByNiss(request: EntidadeEmpregadoraNissRequest) {
-    return this.http.post<EntidadeEmpregadoraDeclaracaoViewResponse>(`${environment.apiUrl}/entidadeEmpregadora/GetEntidadeByNiss`, request);
+    return this.api.post<EntidadeEmpregadoraDeclaracaoViewResponse>('entidadeEmpregadora/GetEntidadeByNiss', request);
   }
 
   public upsertEntidadeEmpregadora(request: UpsertEntidadeEmpregadoraRequest) {
-    return this.http.post(`${environment.apiUrl}/entidadeEmpregadora/upsert`, request);
+    return this.api.post('entidadeEmpregadora/upsert', request);
   }
 
 }

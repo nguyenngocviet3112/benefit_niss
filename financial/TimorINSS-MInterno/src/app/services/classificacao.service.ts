@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SelectDescriptionResponse } from '../response-models/utils-response';
-
+import { ApiHelperService } from './api-helper.service';
 
 
 @Injectable({
@@ -14,13 +14,14 @@ export class ClassificacaoService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public getAllClassificacao(): Observable<SelectDescriptionResponse>
   {
-    return this.http.get<SelectDescriptionResponse>(`${environment.apiUrl}/classificacao/GetAllClassificacao`);
+    return this.api.get<SelectDescriptionResponse>('classificacao/GetAllClassificacao');
   }
   
 }

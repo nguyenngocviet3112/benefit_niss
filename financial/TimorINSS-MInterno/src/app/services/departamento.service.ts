@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SelectDescriptionResponse } from '../response-models/utils-response';
 import { DepartamentoListagemResponse } from '../response-models/departamento-response';
-
+import { ApiHelperService } from './api-helper.service';
 
 
 @Injectable({
@@ -15,18 +15,19 @@ export class DepartamentoService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public getAllDepartamentosAtivo(): Observable<SelectDescriptionResponse>
   {
-    return this.http.get<SelectDescriptionResponse>(`${environment.apiUrl}/departamento/GetAllDepartamentosAtivo`);
+    return this.api.get<SelectDescriptionResponse>('departamento/GetAllDepartamentosAtivo');
   }
 
   public getDepartamentosByUserId(id: number): Observable<DepartamentoListagemResponse>
   {
-    return this.http.post<DepartamentoListagemResponse>(`${environment.apiUrl}/relUtilizadorDepartamento/GetDepartamentosByUserId`, id);
+    return this.api.post<DepartamentoListagemResponse>('relUtilizadorDepartamento/GetDepartamentosByUserId', id);
   }
   
 }

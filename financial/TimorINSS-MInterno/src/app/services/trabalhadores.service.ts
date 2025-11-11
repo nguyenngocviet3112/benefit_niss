@@ -5,6 +5,7 @@ import { EditTrabalhadorRequest, SaveTrabalhadorRequest, TrabalhadorListagemNiss
 import { Observable } from 'rxjs';
 import { GetTrabalhadorReponse, TrabalhadorListagemResponse, VincularTrabalhadorListagemResponse } from '../response-models/trabalhadores-response';
 import { FilterRequest } from '../request-models/utils-request';
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,34 +13,35 @@ import { FilterRequest } from '../request-models/utils-request';
 export class TrabalhadoresService {
 
   constructor(
-      private http: HttpClient
+      private http: HttpClient,
+      private api: ApiHelperService
   ) {}
 
   public getTrabalhadoresByEntidadeEmpregadora(request: TrabalhadorListagemRequest) : Observable<TrabalhadorListagemResponse>  {
-    return this.http.post<TrabalhadorListagemResponse>(`${environment.apiUrl}/trabalhadores/GetByIdEntidadeEmpregadora`,request);
+    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/GetByIdEntidadeEmpregadora',request);
   }
 
   public getTrabalhadoresByFilter(request: FilterRequest) : Observable<VincularTrabalhadorListagemResponse>  {
-    return this.http.post<VincularTrabalhadorListagemResponse>(`${environment.apiUrl}/trabalhadores/getByFilter`,request);
+    return this.api.post<VincularTrabalhadorListagemResponse>('trabalhadores/getByFilter',request);
   }
 
   public saveTrabalhador(entity: SaveTrabalhadorRequest) {
-    return this.http.post<boolean>(`${environment.apiUrl}/trabalhadores/saveTrabalhador`, entity);
+    return this.api.post<boolean>('trabalhadores/saveTrabalhador', entity);
   }
 
   public getTrabalhadorById(request: TrabalhadorListagemRequest) : Observable<GetTrabalhadorReponse>{
-    return this.http.post<GetTrabalhadorReponse>(`${environment.apiUrl}/trabalhadores/getById`, request);
+    return this.api.post<GetTrabalhadorReponse>('trabalhadores/getById', request);
   }
 
   public getTrabalhadorByNiss(request: TrabalhadorListagemRequest) : Observable<TrabalhadorListagemResponse>{
-    return this.http.post<TrabalhadorListagemResponse>(`${environment.apiUrl}/trabalhadores/getTrabalhadoresByNiss`, request);
+    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/getTrabalhadoresByNiss', request);
   }
 
   public GetSingleByNiss(request: TrabalhadorListagemNissRequest) : Observable<TrabalhadorListagemResponse>{
-    return this.http.post<TrabalhadorListagemResponse>(`${environment.apiUrl}/trabalhadores/GetSingleByNiss`, request);
+    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/GetSingleByNiss', request);
   }
 
   public editDadosPrincipaisTrabalhador(entity: EditTrabalhadorRequest) {
-    return this.http.post<boolean>(`${environment.apiUrl}/trabalhadores/editDadosPrincipais`, entity);
+    return this.api.post<boolean>('trabalhadores/editDadosPrincipais', entity);
   }
 }

@@ -9,6 +9,7 @@ import { GetExecucaoOrcamentalRelatoriosRequest } from '../request-models/agrupa
 import { RelatoriosExecucaoOrcamentalListagemResponse } from '../response-models/agrupamentoConfig-response';
 import { FilterRequest } from '../request-models/utils-request';
 import { ReceitaNaoConciliadaRelatorioResponse, ReceitaRelatorioResponse } from '../models/componenteReceitaRegisto';
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,44 +18,45 @@ export class ComponenteReceitaRegistoService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
   public addEditComponenteReceitaRegisto(entity: RegistoReceitaRequest) {
-    return this.http.post(`${environment.apiUrl}/componenteReceitaRegisto/AddEditComponenteReceitaRegisto`, entity);
+    return this.api.post('componenteReceitaRegisto/AddEditComponenteReceitaRegisto', entity);
   }
 
   public GetComponenteReceitaRegistoByContaOSSId(request: GetComponenteReceitaRegistoByIdContaOSSRequest): Observable<ComponenteReceitaRegistoResponse>
   {
-    return this.http.post<ComponenteReceitaRegistoResponse>(`${environment.apiUrl}/componenteReceitaRegisto/GetComponenteReceitaRegistoByContaOSSId`, request);
+    return this.api.post<ComponenteReceitaRegistoResponse>('componenteReceitaRegisto/GetComponenteReceitaRegistoByContaOSSId', request);
   }
 
   public deleteReceita(request: DeleteReceitaRequest) {
-    return this.http.post(`${environment.apiUrl}/componenteReceitaRegisto/DeleteReceita`, request);
+    return this.api.post('componenteReceitaRegisto/DeleteReceita', request);
   }
 
   public GetExecucaoOrcamental(request: GetExecucaoOrcamentalRelatoriosRequest): Observable<RelatoriosExecucaoOrcamentalListagemResponse> {
-    return this.http.post<RelatoriosExecucaoOrcamentalListagemResponse>(`${environment.apiUrl}/componenteReceitaRegisto/GetExecucaoOrcamental`, request);
+    return this.api.post<RelatoriosExecucaoOrcamentalListagemResponse>('componenteReceitaRegisto/GetExecucaoOrcamental', request);
   }
 
   public GetExecucaoOrcamentalExcel(request: GetExecucaoOrcamentalRelatoriosRequest): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/componenteReceitaRegisto/GetExecucaoOrcamentalExcel`, request);
+    return this.api.post<any>('componenteReceitaRegisto/GetExecucaoOrcamentalExcel', request);
   }
 
   public GetReceitasRelatorio(request: FilterRequest): Observable<ReceitaRelatorioResponse> {
-    return this.http.post<ReceitaRelatorioResponse>(`${environment.apiUrl}/componenteReceitaRegisto/ReceitasRelatorios`, request);
+    return this.api.post<ReceitaRelatorioResponse>('componenteReceitaRegisto/ReceitasRelatorios', request);
   }
 
   public GetReceitasRelatorioExcel(request: FilterRequest): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/componenteReceitaRegisto/ReceitasRelatoriosExcel`, request);
+    return this.api.post<any>('componenteReceitaRegisto/ReceitasRelatoriosExcel', request);
   }
 
   public GetReceitasNaoConciliadasRelatorio(request: ReceitasNaoConciliadasRelatorioRequest): Observable<ReceitaNaoConciliadaRelatorioResponse> {
-    return this.http.post<ReceitaNaoConciliadaRelatorioResponse>(`${environment.apiUrl}/componenteReceitaRegisto/ReceitasNaoConciliadasRelatorios`, request);
+    return this.api.post<ReceitaNaoConciliadaRelatorioResponse>('componenteReceitaRegisto/ReceitasNaoConciliadasRelatorios', request);
   }
 
   public GetReceitasNaoConciliadasRelatorioExcel(request: ReceitasNaoConciliadasRelatorioRequest): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/componenteReceitaRegisto/ReceitasNaoConciliadasRelatoriosExcel`, request);
+    return this.api.post<any>('componenteReceitaRegisto/ReceitasNaoConciliadasRelatoriosExcel', request);
   }
 
 

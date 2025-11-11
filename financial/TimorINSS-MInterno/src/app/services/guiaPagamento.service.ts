@@ -12,7 +12,7 @@ import {
   useCreditInGuiaPagamentoRequest
 } from '../request-models/guiaPagamento-request';
 import { GuiaListagemResponse, RelatoriosGuiasListagemResponse } from '../response-models/guiaPagamento-response';
-
+import { ApiHelperService } from './api-helper.service';
 
 
 
@@ -23,39 +23,40 @@ export class GuiaPagamentoService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public saveGuiaPagamento(entity: GuiaPagamentoRequest) {
-    return this.http.post<boolean>(`${environment.apiUrl}/guiaPagamento/SaveGuiaPagamento`, entity);
+    return this.api.post<boolean>('guiaPagamento/SaveGuiaPagamento', entity);
   }
 
   public getAllGuiasByEntidade(entity: GetAllGuiasStatesFromYearByFilterRequest) {
-    return this.http.post<GuiaListagemResponse>(`${environment.apiUrl}/guiaPagamento/listGuiasByEntidade`, entity);
+    return this.api.post<GuiaListagemResponse>('guiaPagamento/listGuiasByEntidade', entity);
   }
 
   public getGuiasDetailByEntidade(entity: GetGuiasDetailsRequest) {
-    return this.http.post<GuiaListagemResponse>(`${environment.apiUrl}/guiaPagamento/guiaPagamentoDetail`, entity);
+    return this.api.post<GuiaListagemResponse>('guiaPagamento/guiaPagamentoDetail', entity);
   }
 
   public getAllGuiasByEntidadeApprove(entity: GetAllGuiasStatesFromYearByFilterRequest) {
-    return this.http.post<GuiaListagemResponse>(`${environment.apiUrl}/guiaPagamento/listGuiasByEntidadeApprove`, entity);
+    return this.api.post<GuiaListagemResponse>('guiaPagamento/listGuiasByEntidadeApprove', entity);
   }
 
   public useCreditInGuiaPagamento(request: useCreditInGuiaPagamentoRequest) {
-    return this.http.post(`${environment.apiUrl}/guiaPagamento/useCreditInGuiaPagamento`, request);
+    return this.api.post('guiaPagamento/useCreditInGuiaPagamento', request);
   }
 
   public insertComprovativoPagamento(request: insertComprovativoPagamentoRequest) {
-    return this.http.post(`${environment.apiUrl}/guiaPagamento/insertComprovativoPagamento`, request);
+    return this.api.post('guiaPagamento/insertComprovativoPagamento', request);
   }
 
   public approveComprovativoPagamento(request: approveComprovativoPagamentoRequest) {
-    return this.http.post(`${environment.apiUrl}/guiaPagamento/approveComprovativoPagamento`, request);
+    return this.api.post('guiaPagamento/approveComprovativoPagamento', request);
   }
 
   public GetGuiasRelatorios(request: GetGuiasRelatoriosRequest): Observable<RelatoriosGuiasListagemResponse> {
-    return this.http.post<RelatoriosGuiasListagemResponse>(`${environment.apiUrl}/guiaPagamento/GetGuiasPagamentoRelatorios`, request);
+    return this.api.post<RelatoriosGuiasListagemResponse>('guiaPagamento/GetGuiasPagamentoRelatorios', request);
 }
 }

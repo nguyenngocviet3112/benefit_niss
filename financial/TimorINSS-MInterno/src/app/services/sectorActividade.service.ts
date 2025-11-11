@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { SelectDescriptionResponse } from '../response-models/utils-response';
-
+import { ApiHelperService } from './api-helper.service';
 
 
 
@@ -15,12 +15,13 @@ import { SelectDescriptionResponse } from '../response-models/utils-response';
 export class SectorActividadeService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public getAllSectorActividade(): Observable<SelectDescriptionResponse>
   {
-    return this.http.get<SelectDescriptionResponse>(`${environment.apiUrl}/SectorActividade/getSectorActividade`);
+    return this.api.get<SelectDescriptionResponse>('SectorActividade/getSectorActividade');
   }
 }

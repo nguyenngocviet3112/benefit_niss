@@ -7,7 +7,7 @@ import { TarefaListagemRequest } from '../request-models/tarefa-request';
 import { ComponenteHistoricoTextoListagemResponse } from '../response-models/componenteTextoRegisto-response';
 import { ProcessoConfigResponse, ProcessoDataResponse, ProcessosArquivadosListagemResponse, ProcessosListagemResponse, RelatoriosProcessosListagemResponse, TipoProcessosRelatoriosResponse } from '../response-models/processo-response';
 import { SelectDescriptionResponse } from '../response-models/utils-response';
-
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
     providedIn: 'root'
@@ -15,59 +15,60 @@ import { SelectDescriptionResponse } from '../response-models/utils-response';
 export class ProcessoService {
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        private api: ApiHelperService
     ) { }
 
     public GetAllProcessos(request: TarefaListagemRequest): Observable<ProcessosListagemResponse> {
-        return this.http.post<ProcessosListagemResponse>(`${environment.apiUrl}/processos/GetAllProcessos`, request);
+        return this.api.post<ProcessosListagemResponse>('processos/GetAllProcessos', request);
     }
 
     public SwitchProcessoState(request: ProcessoUpdateRequest) {
-        return this.http.post(`${environment.apiUrl}/processos/SwitchProcessoState`, request);
+        return this.api.post('processos/SwitchProcessoState', request);
     }
 
     public CreateProcessoConfig(request: ProcessoConfigRequest) {
-        return this.http.post(`${environment.apiUrl}/processos/CreateProcessoConfig`, request);
+        return this.api.post('processos/CreateProcessoConfig', request);
     }
 
     public GetProcessoConfig(request: ListProcessoConfiRequest): Observable<ProcessoConfigResponse> {
-        return this.http.post<ProcessoConfigResponse>(`${environment.apiUrl}/processos/GetProcessoConfig`, request);
+        return this.api.post<ProcessoConfigResponse>('processos/GetProcessoConfig', request);
     }
 
     public UpdateProcessoConfig(request: ProcessoConfigRequest) {
-        return this.http.post(`${environment.apiUrl}/processos/UpdateProcessoConfig`, request);
+        return this.api.post('processos/UpdateProcessoConfig', request);
     }
 
     
     public ListIniciarProcessos(request: any): Observable<SelectDescriptionResponse> {
-        return this.http.post<SelectDescriptionResponse>(`${environment.apiUrl}/processos/ListIniciarProcessosApprove`, request);
+        return this.api.post<SelectDescriptionResponse>('processos/ListIniciarProcessosApprove', request);
     }
 
     public GetAllProcessosArquivados(request: any): Observable<ProcessosArquivadosListagemResponse> {
-        return this.http.post<ProcessosArquivadosListagemResponse>(`${environment.apiUrl}/processos/GetAllProcessosArquivados`, request);
+        return this.api.post<ProcessosArquivadosListagemResponse>('processos/GetAllProcessosArquivados', request);
     }
 
     public GetProcessoData(request: GetProcessoDataRequest): Observable<ProcessoDataResponse> {
-        return this.http.post<ProcessoDataResponse>(`${environment.apiUrl}/processos/GetProcessoData`, request);
+        return this.api.post<ProcessoDataResponse>('processos/GetProcessoData', request);
     }
 
     public StartProcess(request: ProcessoUpdateRequest) {
-        return this.http.post(`${environment.apiUrl}/processos/StartProcess`, request);
+        return this.api.post('processos/StartProcess', request);
     }
 
     public GetHistoricoTexto(request: GetHistoricoTextoRequest): Observable<ComponenteHistoricoTextoListagemResponse> {
-        return this.http.post<ComponenteHistoricoTextoListagemResponse>(`${environment.apiUrl}/processos/GetHistoricoTexto`, request);
+        return this.api.post<ComponenteHistoricoTextoListagemResponse>('processos/GetHistoricoTexto', request);
     }
 
     public GetProcessosRelatorios(request: GetProcessosRelatoriosRequest): Observable<RelatoriosProcessosListagemResponse> {
-        return this.http.post<RelatoriosProcessosListagemResponse>(`${environment.apiUrl}/processos/GetProcessosRelatorios`, request);
+        return this.api.post<RelatoriosProcessosListagemResponse>('processos/GetProcessosRelatorios', request);
     }
 
     public GetTipoProcessosRelatorios(request: any): Observable<TipoProcessosRelatoriosResponse> {
-        return this.http.post<TipoProcessosRelatoriosResponse>(`${environment.apiUrl}/processos/GetTipoProcessosRelatorios`, request);
+        return this.api.post<TipoProcessosRelatoriosResponse>('processos/GetTipoProcessosRelatorios', request);
     }
 
     public ExtractToExcelRelatorios(request: GetProcessosRelatoriosRequest): Observable<any> {
-        return this.http.post<any>(`${environment.apiUrl}/processos/ExtractToExcelRelatorios`, request);
+        return this.api.post<any>('processos/ExtractToExcelRelatorios', request);
     }
 }

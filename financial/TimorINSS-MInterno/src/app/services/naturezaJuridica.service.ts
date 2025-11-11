@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { SelectDescriptionResponse } from '../response-models/utils-response';
-
+import { ApiHelperService } from './api-helper.service';
 
 
 @Injectable({
@@ -13,12 +13,13 @@ import { SelectDescriptionResponse } from '../response-models/utils-response';
 export class NaturezaJuridicaService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public getAllNaturezaJuridica(): Observable<SelectDescriptionResponse>
   {
-    return this.http.get<SelectDescriptionResponse>(`${environment.apiUrl}/NaturezaJuridica/getNaturezaJuridica`);
+    return this.api.get<SelectDescriptionResponse>('NaturezaJuridica/getNaturezaJuridica');
   }
 }

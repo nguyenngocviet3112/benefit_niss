@@ -7,7 +7,7 @@ import { DadosUtilizadorRequest, UserUpdateRequest, UtilizadorListagemRequest, U
 import { UtilizadoresAcessoListagemResponse, UtilizadoresListagemResponse } from '../response-models/utilizadores-response';
 import { DadosUtilizadorResponse } from '../response-models/utilizador-response';
 import { map } from 'rxjs/operators';
-
+import { ApiHelperService } from './api-helper.service';
 
 
 @Injectable({
@@ -17,34 +17,35 @@ export class UtilizadorService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public GetAllUtilizadoresInterno(request: UtilizadorListagemRequest): Observable<UtilizadoresListagemResponse>
   {
-    return this.http.post<UtilizadoresListagemResponse>(`${environment.apiUrl}/utilizadores/GetAllUtilizadoresInterno`, request);
+    return this.api.post<UtilizadoresListagemResponse>('utilizadores/GetAllUtilizadoresInterno', request);
   }
 
   public GetUtilizadoresInternoByPerfil(request: UtilizadorListagemRequest): Observable<UtilizadoresListagemResponse>
   {
-    return this.http.post<UtilizadoresListagemResponse>(`${environment.apiUrl}/utilizadores/GetUtilizadoresInternoByPerfil`, request);
+    return this.api.post<UtilizadoresListagemResponse>('utilizadores/GetUtilizadoresInternoByPerfil', request);
   }
 
   public GetAllDadosUtilizador(request: DadosUtilizadorRequest) : Observable<DadosUtilizadorResponse>  {
-    return this.http.post<DadosUtilizadorResponse>(`${environment.apiUrl}/utilizadores/GetAllDadosUtilizador/`,request)
+    return this.api.post<DadosUtilizadorResponse>('utilizadores/GetAllDadosUtilizador/',request)
   }
 
   public AddUtilizador(request: UtilizadorRequest) {
-    return this.http.post(`${environment.apiUrl}/utilizadores/AddUtilizador`, request);
+    return this.api.post('utilizadores/AddUtilizador', request);
   }
 
   public GetAllAcessoUtilizadores(request: UtilizadorListagemRequest): Observable<UtilizadoresAcessoListagemResponse>
   {
-    return this.http.post<UtilizadoresAcessoListagemResponse>(`${environment.apiUrl}/utilizadores/GetAllAcessoUtilizadores`, request);
+    return this.api.post<UtilizadoresAcessoListagemResponse>('utilizadores/GetAllAcessoUtilizadores', request);
   }
 
   public SwitchUserBlockState(request: UserUpdateRequest) {
-    return this.http.post(`${environment.apiUrl}/utilizadores/SwitchUserBlockState`, request);
+    return this.api.post('utilizadores/SwitchUserBlockState', request);
 }
 }

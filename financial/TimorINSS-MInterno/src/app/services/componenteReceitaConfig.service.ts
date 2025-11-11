@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GetComponenteReceitaConfigRequest } from '../request-models/componenteReceitaConfig-request';
 import { GetComponenteReceitaConfigReponse } from '../response-models/componenteReceitaConfig-response';
+import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,14 @@ export class ComponenteReceitaConfigService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private api: ApiHelperService
   ) { }
 
 
   public getComponenteReceitaConfigByTarefaAtivoId(request: GetComponenteReceitaConfigRequest): Observable<GetComponenteReceitaConfigReponse>
   {
-    return this.http.post<GetComponenteReceitaConfigReponse>(`${environment.apiUrl}/componenteReceitaConfig/GetComponenteReceitaConfigByTarefaAtivoId`, request);
+    return this.api.post<GetComponenteReceitaConfigReponse>('componenteReceitaConfig/GetComponenteReceitaConfigByTarefaAtivoId', request);
   }
 
 }
