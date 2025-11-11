@@ -169,14 +169,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public EntidadeEmpregadoraDeclaracaoViewResponse GetEntidadeInfoForDeclaracao(EntidadeEmpregadoraIdRequest request)
         {
-            var b64 = request.IdEntidadeStr.ToString().Replace('-', '+').Replace('_', '/');
-            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
-            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
-
-            int decodedId = int.Parse(decoded);
-            const int SECRET_A = 12;
-            const int SECRET_B = 123456789;
-            decodedId = (decodedId - SECRET_B) / SECRET_A;
+        
+            int decodedId = IdDecoder.DecodeId(request.IdEntidadeStr);
 
             return _moduloContribuicoesContext.Entidadeempregadora
                 .Where(u => u.IdEntidadeEmpreg == decodedId)

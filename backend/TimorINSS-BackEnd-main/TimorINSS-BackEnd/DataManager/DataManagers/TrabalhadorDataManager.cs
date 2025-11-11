@@ -442,14 +442,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         public SingleTrabalhadorResponse GetById(TrabalhadorListagemRequest request)
         {
             var response = new SingleTrabalhadorResponse();
-            var b64 = request.idStr.ToString().Replace('-', '+').Replace('_', '/');
-            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
-            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
-
-            int decodedId = int.Parse(decoded);
-            const int SECRET_A = 12;
-            const int SECRET_B = 123456789;
-            decodedId = (decodedId - SECRET_B) / SECRET_A;
+        
+            int decodedId = IdDecoder.DecodeId(request.idStr);
             var trabalhador = _unitOfWork.TrabalhadoresRepository.Get(decodedId);
 
             if (trabalhador != null)

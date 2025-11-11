@@ -73,10 +73,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
                     var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
 
-                    int trabalhadorId = int.Parse(decoded);
-                    const int SECRET_A = 12;
-                    const int SECRET_B = 123456789;
-                    trabalhadorId = (trabalhadorId - SECRET_B) / SECRET_A;
+                    int trabalhadorId = IdDecoder.DecodeId(request.IdStr);
 
                     var entidadeEmpregadoraId = user.UtilizadorEntidadeFk;
 

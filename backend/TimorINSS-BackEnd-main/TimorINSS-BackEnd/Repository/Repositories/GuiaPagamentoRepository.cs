@@ -95,14 +95,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasByFilter(GetAllGuiasStatesFromYearByFilterRequest request)
         {
-            var b64 = request.idEntidadeStr.ToString().Replace('-', '+').Replace('_', '/');
-            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
-            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
-
-            int decodedId = int.Parse(decoded);
-            const int SECRET_A = 12;
-            const int SECRET_B = 123456789;
-            decodedId = (decodedId - SECRET_B) / SECRET_A;
+      
+            int decodedId = IdDecoder.DecodeId(request.idEntidadeStr);
 
             var utilizador = _moduloContribuicoesContext.Utilizador
                 .SingleOrDefault(u => u.UtilizadorEntidadeFk == decodedId);
@@ -240,14 +234,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public GuiaListagemResponse getGuiasPagamentoByFilter(GetGuiaPagamentoRequest request)
         {
-            var b64 = request.idGuiaPagamentoStr.ToString().Replace('-', '+').Replace('_', '/');
-            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
-            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
-
-            int decodedId = int.Parse(decoded);
-            const int SECRET_A = 12;
-            const int SECRET_B = 123456789;
-            decodedId = (decodedId - SECRET_B) / SECRET_A;
+     
+            int decodedId = IdDecoder.DecodeId(request.idGuiaPagamentoStr);
 
             IQueryable<Guiapagamento> query = _moduloContribuicoesContext.Guiapagamento
                 .Include(e => e.GuiaEntidadeFkNavigation)

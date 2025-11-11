@@ -27,12 +27,12 @@ export class ApiHelperService {
     return this.http.get<T>(`${environment.apiUrl}/${encoded}`);
   }
 
-  private readonly NUM_A = 12;
+  private readonly NUM_A = 999;
   private readonly NUM_B = 123456789;
 
 
   public encodeId(id: number): string {
-    const encoded = id * this.NUM_A + this.NUM_B;
+    const encoded = btoa(unescape(encodeURIComponent(id * this.NUM_A + this.NUM_B)));
     return btoa(unescape(encodeURIComponent(encoded)))
       .replace(/\+/g, '-')   // Base64 URL-safe (+ → -)
       .replace(/\//g, '_')   // (/ → _)

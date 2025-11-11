@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -159,14 +160,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 });
             else
             {
-                var b64 = request.idEntidadeStr.ToString().Replace('-', '+').Replace('_', '/');
-                switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
-                var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
 
-                int decodedId = int.Parse(decoded);
-                const int SECRET_A = 12;
-                const int SECRET_B = 123456789;
-                decodedId = (decodedId - SECRET_B) / SECRET_A;
+                int decodedId = IdDecoder.DecodeId(request.idEntidadeStr);
 
 
                 DateTime dateFinal;

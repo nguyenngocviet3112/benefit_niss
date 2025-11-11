@@ -88,14 +88,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             request.filter.orderDirection = OrderDirectionEnum.descending;
             request.filter.orderBy = "moradaPrincipal";
-            var b64 = request.IdStr.ToString().Replace('-', '+').Replace('_', '/');
-            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
-            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
-
-            int decodedId = int.Parse(decoded);
-            const int SECRET_A = 12;
-            const int SECRET_B = 123456789;
-            decodedId = (decodedId - SECRET_B) / SECRET_A;
+          
+            int decodedId = IdDecoder.DecodeId(request.IdStr);
 
             IQueryable<Morada> queryMoradasConditional = _moduloContribuicoesContext.Morada;
             switch (request.filter.filterField)
