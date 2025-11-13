@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({ providedIn: 'root' })
 export class ApiHelperService {
@@ -27,28 +28,38 @@ export class ApiHelperService {
     return this.http.get<T>(`${environment.apiUrl}/${encoded}`);
   }
 
-  private readonly NUM_A = 999;
-  private readonly NUM_B = 123456789;
+  // private readonly NUM_A = 999;
+  // private readonly NUM_B = 123456789;
 
 
-  public encodeId(id: number): string {
-    const encoded = btoa(unescape(encodeURIComponent(id * this.NUM_A + this.NUM_B)));
-    return btoa(unescape(encodeURIComponent(encoded)))
-      .replace(/\+/g, '-')   // Base64 URL-safe (+ → -)
-      .replace(/\//g, '_')   // (/ → _)
-      .replace(/=+$/, '');   // remove trailing '='
-  }
- 
-  // public async encodeIdNumberOnly(id: number): Promise<string> {
-  //   const v = ApiHelperService.VERSION;
-  //   const r = Math.floor(Math.random() * 100); // 0..99
-  //   const key = await this.deriveKey(r, v);
-  //   const payload = await this.fpeEncryptNumber(id, key, ApiHelperService.LENGTH);
-  //   const c = this.checksum97([v, Math.floor(r/10), r%10, ...payload.split('').map(Number)]);
-  //   return `${v}${r.toString().padStart(2,'0')}${c.toString().padStart(2,'0')}${payload}`;
+  // public encodeId(id: number): string {
+  //   const encoded = btoa(unescape(encodeURIComponent(id * this.NUM_A + this.NUM_B)));
+  //   return btoa(unescape(encodeURIComponent(encoded)))
+  //     .replace(/\+/g, '-')   // Base64 URL-safe (+ → -)
+  //     .replace(/\//g, '_')   // (/ → _)
+  //     .replace(/=+$/, '');   // remove trailing '='
   // }
 
+private readonly NUM_A = 99;
+private readonly NUM_B = 123456789;
+private readonly SECRET_XOR = 0x5a5a5a5a;
 
-  
+
+public encodeId(id: number): string {
+  // 1. Salt ngẫu nhiên (32-bit)
+  const salt = Math.floor(Math.random() * 0xffffffff);
+
+  // 2. Encode ID
+  const xored = id ^ this.SECRET_XOR;
+  const mixed = xored * this.NUM_A + this.NUM_B;
+
+  // 3. Ghép salt + mixed vào chung
+  const data = `${salt}:${mixed}`;
+
+  // 4. Base64 URL-safe
+  return btoa(data)
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
 }
-
+}
