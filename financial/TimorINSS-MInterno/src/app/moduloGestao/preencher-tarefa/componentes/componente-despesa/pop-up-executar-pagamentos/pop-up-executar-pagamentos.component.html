@@ -40,12 +40,13 @@
     <div class="dados">
       <div>
 
-
+<!--  /destinatario/ImportDestinatarios = ZGVzdGluYXRhcmlvL0ltcG9ydERlc3RpbmF0YXJpb3M-->
         <div id="telaDestinatario" class="containerLine">
           <div class="destinatarios-importer-section">
             <app-excel-importer type="2" text="{{'componenteDespesa.executarPagamentos' | translate}}"
               [columns]="['Niss', 'Tin', 'Name', 'Address', 'IBAN', 'Swift', 'Account Number', 'Amount']"
-              url="/destinatario/ImportDestinatarios" (onComplete)="onImporterComplete($event)">{{
+              
+              url="/ZGVzdGluYXRhcmlvL0ltcG9ydERlc3RpbmF0YXJpb3M" (onComplete)="onImporterComplete($event)">{{
               'excelImports.importDestinatarios' | translate }}</app-excel-importer>
             <div class="selected-dests" *ngIf="this.importerId">{{ 'excelImports.selectedDestinatarios' | translate }}:
               {{ this.selectedDests }}</div>

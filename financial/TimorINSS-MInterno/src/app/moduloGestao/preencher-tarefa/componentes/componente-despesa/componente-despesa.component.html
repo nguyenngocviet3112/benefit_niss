@@ -266,7 +266,7 @@
           <ng-container matColumnDef="accoes">
             <th mat-header-cell *matHeaderCellDef> {{'general.Editar' | translate}} </th>
             <td mat-cell *matCellDef="let element">
-              <mat-icon *ngIf="componenteDespesaConfig.visualizarDespesaR == 2" class="editIconTable"
+              <mat-icon *ngIf="componenteDespesaConfig.visualizarDespesaR == 1" class="editIconTable"
                 (click)="editarComponente(element)">edit</mat-icon>
               <mat-icon *ngIf="componenteDespesaConfig.visualizarDespesaR == 2" class="deleteIconTable"
                 (click)="deleteComponente(element)">clear</mat-icon>
