@@ -18,7 +18,7 @@
 
     <ng-container matColumnDef="valorExecutado">
       <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valorExecutado' | translate}} </th>
-      <td mat-cell *matCellDef="let element">$ {{element.valorExecutado}} </td>
+      <td mat-cell *matCellDef="let element">$ {{element.valorExecutado | number:'1.2-2'}} </td>
       <td mat-footer-cell *matFooterCellDef>$ {{data.totalValorExecutado}}</td>
     </ng-container>
 
