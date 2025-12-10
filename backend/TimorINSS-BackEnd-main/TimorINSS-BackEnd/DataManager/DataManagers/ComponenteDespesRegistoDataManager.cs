@@ -162,7 +162,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
 
             //obter os valores do Orçamento Aprovado
-            List<Componenteorcamentovalor> listaOrcamentoValor = _unitOfWork.ComponenteOrcamentoValorRepository.getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(request.AgrupamentoFk, request.OrcamentoRegistoFk);
+            List<Componenteorcamentovalor> listaOrcamentoValor = _unitOfWork.ComponenteOrcamentoValorRepository.getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk
+                (request.AgrupamentoFk, request.OrcamentoRegistoFk, request.InstitutionId, request.ActidadeFk, request.EconomicFk,                request.FuncionalFk);
             ValoresDespesaRegistadaDataContract valorDespesaRegisto = new ValoresDespesaRegistadaDataContract();
             decimal sumValorOrcamento = 0;
 
@@ -176,7 +177,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
 
             //obter somatório valor despesa Cabimentada, executada, autorizada
-            List<ComponentedespesaRegisto> listaComponentedespesaRegisto = _unitOfWork.ComponenteDespesaRegistoRepository.GetAllDespesaRegistadaByAgrupamentoConfigFk(request.AgrupamentoFk);
+            List<ComponentedespesaRegisto> listaComponentedespesaRegisto = _unitOfWork.ComponenteDespesaRegistoRepository.GetAllDespesaRegistadaByAgrupamentoConfigFk(request.AgrupamentoFk                , request.InstitutionId, request.ActidadeFk, request.EconomicFk,                request.FuncionalFk);
             decimal sumValorAutorizado = 0;
             decimal sumValorCabimentado = 0;
             decimal sumValorExecutado = 0;
@@ -362,6 +363,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 TipoContaFk = request.TipoContaFk,
                 //CodigoContaFk = request.CodigoContaFk,
                 AgrupamentoConfigFk = request.AgrupamentoConfigFk,
+                InstitutionId = request.InstitutionId,
+                ActidadeFk = request.ActidadeFk,
+                EconomicFk = request.EconomicFk,
+                FuncionalFk = request.FuncionalFk,
                 Descricao = request.Descricao,
                 Valor = request.Valor,
                 IndActivo = true,

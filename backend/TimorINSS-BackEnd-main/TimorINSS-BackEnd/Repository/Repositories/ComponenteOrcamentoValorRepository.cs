@@ -80,6 +80,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     .ThenInclude(a => a.InverseParentFkNavigation)
                 .Include(c => c.TipoContaFkNavigation)
                 .Include(c => c.DepartamentoFkNavigation)
+                .Include(c => c.InstitutionFkNavigation)
                 .Include(c => c.CentroCustoFkNavigation)
                 .Where(c => c.ComponenteOrcamentoRegistoFk == filter.Id && c.IndActivo);
 
@@ -125,7 +126,18 @@ namespace TimorINSSBackEnd.Repository.Repositories
         public List<Componenteorcamentovalor> getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(int agrupamentoId, int orcamentoRegistoID)
         {
             return _moduloContribuicoesContext.Componenteorcamentovalor
-                .Where(c => c.IndActivo && c.AgrupamentoFk == agrupamentoId && c.ComponenteOrcamentoRegistoFk == orcamentoRegistoID)
+                .Where(c => c.IndActivo && c.AgrupamentoFk == agrupamentoId && c.ComponenteOrcamentoRegistoFk == orcamentoRegistoID
+                )
+                .ToList();
+        }
+
+        public List<Componenteorcamentovalor> getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(int agrupamentoId, int orcamentoRegistoID,
+            int institutionId, int actidadeId, int economicId, int funcionalId)
+        {
+            return _moduloContribuicoesContext.Componenteorcamentovalor
+                .Where(c => c.IndActivo && c.AgrupamentoFk == agrupamentoId && c.ComponenteOrcamentoRegistoFk == orcamentoRegistoID
+                && c.InstitutionId == institutionId && c.ActidadeFk == actidadeId
+                && c.EconomicFk == economicId && c.FuncionalFk == funcionalId)
                 .ToList();
         }
 
@@ -134,7 +146,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return _moduloContribuicoesContext.Componenteorcamentovalor
                 .Where(c => c.IndActivo && c.ComponenteOrcamentoRegistoFk == componente.ComponenteOrcamentoRegistoFk
                     && c.CentroCustoFk == componente.CentroCustoFk && c.DepartamentoFk == componente.DepartamentoFk
-                    && c.AgrupamentoFk == componente.AgrupamentoFk).FirstOrDefault();
+                    && c.AgrupamentoFk == componente.AgrupamentoFk
+                    && c.ActidadeFk == componente.ActidadeFk
+                    && c.EconomicFk == componente.EconomicFk
+                    && c.FuncionalFk == componente.FuncionalFk
+                    ).FirstOrDefault();
         }
 
         public List<ExcTractOrcamentoValor> SearchComponenteOrcamentoValorExtraction(ComponenteOrcamentoValorSearch filter)

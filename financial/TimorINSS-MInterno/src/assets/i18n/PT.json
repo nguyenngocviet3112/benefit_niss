@@ -365,6 +365,7 @@
     "title": "Utilizadores",
     "utilizador": "Utilizador",
     "departamento": "Departamento",
+    "institution": "Institution",
     "perfil": "Perfil",
     "acao": "Ver Detalhes/Editar",
     "nomeUtilizador": "Nome Utilizador",
@@ -484,6 +485,12 @@
     "visualizarDespesasCompromisso": "Visualizar Despesas com Compromisso"
   },
   "componenteDespesa": {
+    "actidade": "Actidade",
+    "etidade": "Actidade",
+    "institution": "Institution",
+    "economic": "Economic",
+    "functional": "Funcional",
+    "funcional": "Funcional",
     "naoExisteOrcamentoAprovado": "Não há Orçamento Aprovado para o período – Não é possível registar Despesas",
     "title": "Despesa",
     "departamentoINSS": "Departamento INSS",
@@ -789,8 +796,13 @@
     "comprovativo": "Comprovativo"
   },
   "componenteOrcamento" : {
+    "actidade": "Actidade",
+    "economic": "Economic",
+    "functional": "Funcional",
+    "funcional": "Funcional",
     "editarOrcamentoValor": "Editar Valor de Orçamento",
     "valor": "Valor do Registo",
+    "institution": "Institution",
     "datasHeader": "Período do Orçamento",
     "adicaoHeader": "Adição de Valores",
     "centroDeCusto": "Centro de Custo",

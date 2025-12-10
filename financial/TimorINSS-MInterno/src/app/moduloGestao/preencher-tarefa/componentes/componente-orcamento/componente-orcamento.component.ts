@@ -53,21 +53,31 @@ export class ComponenteOrcamentoComponent implements OnInit {
   public centrosCusto: SelectDescription[] = [];
   public tiposDeConta: DominioDescricaoString[] = [];
   public agrupamentos: AgrupamentosConfig[] = [];
+  public actidades: AgrupamentosConfig[] = [];
+  public economics: AgrupamentosConfig[] = [];
+  public functionals: AgrupamentosConfig[] = [];
   public departamentos: SelectDescription[] = [];
+  public institutions: SelectDescription[] = [];
   public filteredAgrupamentos: AgrupamentosConfig[] = [];
+  // public filteredActidades: AgrupamentosConfig[] = [];
   public filteredAgrupamentosSearch: AgrupamentosConfig[] = [];
+  public filteredActidadesSearch: AgrupamentosConfig[] = [];
+  public filteredEconomicsSearch: AgrupamentosConfig[] = [];
+  public filteredFunctionalsSearch: AgrupamentosConfig[] = [];
 
   public filtersDepartamento: number[] = [];
+  public filtersInstitution: number[] = [];
   public filtersCentrosDeCusto: number[] = [];
   public filtersTipoDeConta: number[] = [];
 
-  public displayedColumns: string[] = ['tipo', 'departamento', 'centroCusto', 'contaOSS', 'valor', 'editar'];
+  public displayedColumns: string[] = ['tipo', 'institution','departamento', 'centroCusto','actidade','economic','funcional', 'contaOSS', 'valor', 'editar'];
 
   public datasRegistadas: boolean = false;
   public submitted: boolean = false;
   public matcher: MyErrorStateMatcher = new MyErrorStateMatcher();
 
 
+  
   @Input() tarefaActivoId: number = 0;
   @Input() isExpanded: boolean = false;
 
@@ -106,9 +116,13 @@ export class ComponenteOrcamentoComponent implements OnInit {
       };
       requests.push(this.orcamentoRegistoService.GetComponenteOrcamento(request));
 
+      
+      requests.push(this.departamentoService.getAllInstitutionsAtivo());
+
       forkJoin(requests).subscribe(
         x => {
           this.departamentos = x[0].selects;
+          
           let getRegistoResponse = x[1].componenteOrcamentoRegisto;
           if (getRegistoResponse != null) {
             this.filteredOrcamentoValores = x[1].valoresCorrentes;
@@ -117,7 +131,16 @@ export class ComponenteOrcamentoComponent implements OnInit {
             this.centrosCusto = x[1].centrosCusto;
             this.tiposDeConta = x[1].tiposDeConta;
             this.agrupamentos = x[1].agrupamentos;
+            
+            this.actidades = x[1].actidades;
+            
+            this.economics = x[1].economics;
+            this.functionals = x[1].functionals;
+            this.filteredActidadesSearch = this.actidades;
+            this.filteredEconomicsSearch= this.economics;
+            this.filteredFunctionalsSearch = this.functionals;
           }
+          this.institutions = x[2].selects;
           this.hideLoader();
         },
         err => {
@@ -171,6 +194,7 @@ export class ComponenteOrcamentoComponent implements OnInit {
     let filter: ComponenteOrcamentoValorSearch =
     {
       id: this.registoOrcamento.id,
+      institutions: this.filtersInstitution,
       departamentos: this.filtersDepartamento,
       centrosDeCusto: this.filtersCentrosDeCusto,
       tiposDeConta: this.filtersTipoDeConta
@@ -282,10 +306,13 @@ export class ComponenteOrcamentoComponent implements OnInit {
 
   public clearFilters() {
     this.filtersDepartamento = [];
+    this.filtersInstitution = [];
     this.filtersTipoDeConta = [];
     this.filtersCentrosDeCusto = [];
     this.filteredAgrupamentos = [];
     this.filteredAgrupamentosSearch = [];
+    // this.filteredActidades = [];
+    this.filteredActidadesSearch = [];
   }
 
   public showLoader() {
@@ -332,6 +359,9 @@ export class ComponenteOrcamentoComponent implements OnInit {
             x => {
               this.componenteOrcamentoValor.componenteOrcamentoRegistoFk = 0;
               this.componenteOrcamentoValor.agrupamentoFk = 0;
+              this.componenteOrcamentoValor.actidadeFk = 0;
+              this.componenteOrcamentoValor.economicFk = 0;
+              this.componenteOrcamentoValor.funcionalFk = 0;
               this.componenteOrcamentoValor.id = 0;
               this.componenteOrcamentoValor.valor = 0;
               this.selectedAgrupamento = undefined;
@@ -449,6 +479,21 @@ export class ComponenteOrcamentoComponent implements OnInit {
 
   public filterCustomOptions(event: any) {
     this.filteredAgrupamentosSearch = this.filteredAgrupamentos.filter(p => p.designacao.toLowerCase().startsWith(event.toLowerCase()));
+  }
+
+  public filterCustomActidadeOptions(event: any) {
+    // alert (event.toLowerCase());
+    this.filteredActidadesSearch = this.actidades.filter(p => p.designacao.toLowerCase().startsWith(event.toLowerCase()));
+  }
+
+  public filterFuncionalOptions(event: any) {
+    // alert (event.toLowerCase());
+    this.filteredFunctionalsSearch = this.functionals.filter(p => p.designacao.toLowerCase().startsWith(event.toLowerCase()));
+  }
+
+  public filterEconomicOptions(event: any) {
+    // alert (event.toLowerCase());
+    this.filteredEconomicsSearch = this.economics.filter(p => p.designacao.toLowerCase().startsWith(event.toLowerCase()));
   }
 
   public showWarning(msg: string, noConfirm: boolean, hideQuestion: boolean) {

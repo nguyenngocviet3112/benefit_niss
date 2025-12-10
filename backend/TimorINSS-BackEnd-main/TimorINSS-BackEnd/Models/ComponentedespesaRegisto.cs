@@ -19,6 +19,12 @@ namespace TimorINSSBackEnd.Models
         public int TipoContaFk { get; set; }
         public int? CodigoContaFk { get; set; }
         public int AgrupamentoConfigFk { get; set; }
+        public int? InstitutionId { get; set; }
+        public int? ActidadeFk { get; set; }
+        public int? EconomicFk { get; set; }
+        public int? FuncionalFk { get; set; }
+
+
         public string Descricao { get; set; }
         public decimal Valor { get; set; }
         public int UtilizadorCriacao { get; set; }

@@ -25,6 +25,10 @@ export interface CompromissoUpsertRequest {
 export interface GetValoresDespesaByIdCodigoOrcamentoRequest{
   agrupamentoFk: number;
   orcamentoRegistoFk: number;
+  institutionId: number;
+  actidadeFk: number;
+  economicFk: number;
+  funcionalFk: number;
 }
 
 export interface DeleteListaDespesaRequest{

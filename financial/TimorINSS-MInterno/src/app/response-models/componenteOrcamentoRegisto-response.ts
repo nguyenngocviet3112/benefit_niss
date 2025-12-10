@@ -9,6 +9,9 @@ import { DominioDescricaoString } from './dominios-response';
 export interface GetComponenteOrcamentoRegistoReponse {
   componenteOrcamentoRegisto: ComponenteOrcamentoRegisto;
   agrupamentos: AgrupamentosConfig[];
+  actidades: AgrupamentosConfig[];
+  economics: AgrupamentosConfig[];
+  functionals: AgrupamentosConfig[];
   centrosCusto: SelectDescription[];
   tiposDeConta: DominioDescricaoString[];
   valoresCorrentes: ComponenteOrcamentoValorFull[];

@@ -14,6 +14,10 @@ export interface DespesaRegistada
   idDepartamento?: number;
   idCentroCusto: number;
   idTipoConta: number;
+  idInstitution: number;
+  idActidade: number;
+  idEconomic: number;
+  idFuncional: number;
 }
 
 export interface DespesaCabimentadasParaExecucao

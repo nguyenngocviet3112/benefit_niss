@@ -11,5 +11,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public ValueCampoEditavelListagemResponse getAllActiveDepartamento(SearchFilter filter);
 
         public List<SelectDescription> GetAllDepartamentosAtivo();
+
+        public List<SelectDescription> GetAllInstitutionAtivo();
     }
 }

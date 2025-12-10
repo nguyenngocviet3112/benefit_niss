@@ -42,6 +42,17 @@
           <div class="containerLine">
 
             <mat-form-field appearance="outline">
+              <mat-label>{{'utilizador.institution' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="selectedInstitution" [errorStateMatcher]="matcher"
+                [required]="orcamentoValorSubmitted" [(ngModel)]="componenteOrcamentoValor.institutionId">
+                <mat-option matTooltip="{{institution.nome}}" *ngFor="let institution of institutions"
+                  [value]="institution.id">{{institution.nome}}
+                </mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
               <mat-label>{{'utilizador.departamento' | translate}}</mat-label>
               <mat-select #name="ngModel" name="selectedDepartamento" [errorStateMatcher]="matcher"
                 [required]="orcamentoValorSubmitted" [(ngModel)]="componenteOrcamentoValor.departamentoFk">
@@ -62,13 +73,66 @@
               <mat-error>{{'general.required' | translate}}</mat-error>
             </mat-form-field>
 
-          </div>
+            <mat-form-field appearance="outline">
+              <mat-label>{{'componenteOrcamento.actidade' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="selectedActidade" [errorStateMatcher]="matcher"
+                [required]="orcamentoValorSubmitted" [(ngModel)]="componenteOrcamentoValor.actidadeFk">
+                <mat-option>
+                  <ngx-mat-select-search #name="ngModel" noEntriesFoundLabel="{{'general.semResultados' | translate}}"
+                    placeholderLabel="{{'componenteOrcamento.selecionarConta' | translate}}" ngModel
+                    (ngModelChange)="filterCustomActidadeOptions($event)" name="{{'selectedActidadefilter'}}">
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let actidade of filteredActidadesSearch" [disabled]="!actidade.final"
+                matTooltip="{{actidade.designacao}}"
+                  [value]="actidade.id">{{actidade.designacao}}
+                </mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
 
+            <mat-form-field appearance="outline">
+              <mat-label>{{'componenteOrcamento.economic' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="selectedEconomic" [errorStateMatcher]="matcher"
+                [required]="orcamentoValorSubmitted" [(ngModel)]="componenteOrcamentoValor.economicFk">
+                <mat-option>
+                  <ngx-mat-select-search #name="ngModel" noEntriesFoundLabel="{{'general.semResultados' | translate}}"
+                    placeholderLabel="{{'componenteOrcamento.selecionarConta' | translate}}" ngModel
+                    (ngModelChange)="filterEconomicOptions($event)" name="{{'selectedEconomicfilter'}}">
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let economic of filteredEconomicsSearch" [disabled]="!economic.final"
+                matTooltip="{{economic.designacao}}"
+                  [value]="economic.id">{{economic.designacao}}
+                </mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+
+                     
+            </div>
           <div class="containerLine">
 
             <!-- <div class="labelBorder greyBox">
               <mat-label class="centeredLabel">{{'componenteOrcamento.contaOSS' | translate}}</mat-label>
             </div> -->
+            <mat-form-field appearance="outline">
+              <mat-label>{{'componenteOrcamento.functional' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="selectedFunctional" [errorStateMatcher]="matcher"
+                [required]="orcamentoValorSubmitted" [(ngModel)]="componenteOrcamentoValor.funcionalFk">
+                <mat-option>
+                  <ngx-mat-select-search #name="ngModel" noEntriesFoundLabel="{{'general.semResultados' | translate}}"
+                    placeholderLabel="{{'componenteOrcamento.selecionarConta' | translate}}" ngModel
+                    (ngModelChange)="filterFuncionalOptions($event)" name="{{'selectedFuncionalfilter'}}">
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let functional of filteredFunctionalsSearch" [disabled]="!functional.final"
+                matTooltip="{{functional.designacao}}"
+                  [value]="functional.id">{{functional.designacao}}
+                </mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
 
             <mat-form-field appearance="outline" class="tipoConta">
               <mat-label>{{'componenteOrcamento.tipoDeConta' | translate}}</mat-label>
@@ -129,6 +193,19 @@
           </div>
 
           <mat-form-field appearance="outline">
+            <mat-label>{{'componenteOrcamento.institution' | translate}}</mat-label>
+            <mat-select multiple #name="ngModel" [(ngModel)]="filtersDepartamento" name="DepartamentoFilter">
+              <mat-option matTooltip="{{value.nome}}" *ngFor="let value of institutions" [value]="value.id">
+                {{value.nome}}</mat-option>
+            </mat-select>
+            <button matTooltip="{{'general.limparSelecao' | translate}}" mat-button
+              *ngIf="filtersDepartamento.length > 0" matSuffix mat-icon-button aria-label="Clear"
+              (click)="clearDepartamentoSelection($event)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
             <mat-label>{{'componenteOrcamento.departamentos' | translate}}</mat-label>
             <mat-select multiple #name="ngModel" [(ngModel)]="filtersDepartamento" name="DepartamentoFilter">
               <mat-option matTooltip="{{value.nome}}" *ngFor="let value of departamentos" [value]="value.id">
@@ -183,6 +260,10 @@
               <th mat-header-cell *matHeaderCellDef>{{'componenteOrcamento.tipoDeConta' | translate}}</th>
               <td mat-cell *matCellDef="let element"> {{element.tipoDeContaDescricao}} </td>
             </ng-container>
+            <ng-container matColumnDef="institution">
+              <th mat-header-cell *matHeaderCellDef>{{'utilizador.institution' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element.institutionDescricao}} </td>
+            </ng-container>
             <ng-container matColumnDef="departamento">
               <th mat-header-cell *matHeaderCellDef>{{'utilizador.departamento' | translate}}</th>
               <td mat-cell *matCellDef="let element"> {{element.departamentoDescricao}} </td>
@@ -190,6 +271,18 @@
             <ng-container matColumnDef="centroCusto">
               <th mat-header-cell *matHeaderCellDef>{{'componenteOrcamento.centroDeCusto' | translate}}</th>
               <td mat-cell *matCellDef="let element"> {{element.centroCustoDescricao}} </td>
+            </ng-container>
+            <ng-container matColumnDef="actidade">
+              <th mat-header-cell *matHeaderCellDef>{{'componenteOrcamento.actidade' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element.actidadeDescricao}} </td>
+            </ng-container>
+            <ng-container matColumnDef="economic">
+              <th mat-header-cell *matHeaderCellDef>{{'componenteOrcamento.economic' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element.economicDescricao}} </td>
+            </ng-container>
+            <ng-container matColumnDef="funcional">
+              <th mat-header-cell *matHeaderCellDef>{{'componenteOrcamento.funcional' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element.funcionalDescricao}} </td>
             </ng-container>
             <ng-container matColumnDef="contaOSS">
               <th mat-header-cell *matHeaderCellDef>{{'componenteOrcamento.contaOSS' | translate}}</th>

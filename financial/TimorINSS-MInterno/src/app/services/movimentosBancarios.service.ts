@@ -42,11 +42,13 @@ export class movimentosBancariosService {
   }
 
   public ListContasBancarias(incluirSaldo: boolean = false) : Observable<ContasBancariasListagemResponse> {
-    return this.api.get<ContasBancariasListagemResponse>('movimentosBancarios/ListContasBancarias?incluirSaldo=${incluirSaldo}');
+    // alert(incluirSaldo);
+    // return this.api.get<ContasBancariasListagemResponse>('movimentosBancarios/ListContasBancarias');
+    return this.api.get<ContasBancariasListagemResponse>(`movimentosBancarios/ListContasBancarias?incluirSaldo=${incluirSaldo}`);
   }
 
   public GetMovimentoBancarioDropList(tipoMovimento: number) : Observable<MovimentoBancarioDropListResponse> {
-    return this.api.get<MovimentoBancarioDropListResponse>('movimentosBancarios/getMovimentoBancarioDropList?domainFilterId=${tipoMovimento || ""}');
+    return this.api.get<MovimentoBancarioDropListResponse>(`movimentosBancarios/getMovimentoBancarioDropList?domainFilterId=${tipoMovimento}`);
   }
 
   public ListMovimentoDespesaReceita(entity: MovimentosAConciliarFilterRequest) : Observable<MovimentosDespesaReceitaListagemResponse> {

@@ -365,6 +365,7 @@
     "title": "Users",
     "utilizador": "User",
     "departamento": "Departament",
+    "institution": "Institution",
     "perfil": "Perfil",
     "acao": "Show Details/Edit",
     "nomeUtilizador": "Username",
@@ -485,6 +486,12 @@
     "visualizarDespesasCompromisso": "View Commitment Expenses"
   },
   "componenteDespesa": {
+    "actidade": "Actidade",
+    "etidade": "Actidade",
+    "institution": "Institution",
+    "economic": "Economic",
+    "functional": "Funcional",
+    "funcional": "Funcional",
     "naoExisteOrcamentoAprovado": "There is no Approved Budget for the period – It is not possible to record expenses",
     "title": "Expense",
     "departamentoINSS": "INSS Departament",
@@ -789,8 +796,13 @@
     "comprovativo": "Payment Receipt"
   },
   "componenteOrcamento": {
+    "actidade": "Actidade",
+    "economic": "Economic",
+    "functional": "Funcional",
+    "funcional": "Funcional",
     "editarOrcamentoValor": "Edit Budget Value",
     "valor": "Registry Value",
+    "institution": "Institution",
     "datasHeader": "Budget Time Period",
     "adicaoHeader": "Add Value",
     "centroDeCusto": "Cost Center",

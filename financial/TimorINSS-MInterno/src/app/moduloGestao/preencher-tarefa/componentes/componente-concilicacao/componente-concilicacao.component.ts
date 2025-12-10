@@ -143,7 +143,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       // let dominioMovimentosTypes = this.dominiosService.getAllMovimentosTypes();
       // let permissions = this.movimentosService.ListPermissions(permissinonsRequest);
 
-
+      // alert(1);
 
       forkJoin({
         dominioCaixas: this.dominiosService.getAllCaixas().pipe(
@@ -176,8 +176,9 @@ export class ComponenteConcilicacaoComponent implements OnInit {
         if (dominioCaixas?.dominios) {
           this.caixasList = dominioCaixas.dominios;
         }
-
+        // alert(contasBancarias);
         if (contasBancarias?.contas) {
+          // alert(2);
           this.contasList = contasBancarias.contas;
         }
 

@@ -25,6 +25,11 @@ export class DepartamentoService {
     return this.api.get<SelectDescriptionResponse>('departamento/GetAllDepartamentosAtivo');
   }
 
+  public getAllInstitutionsAtivo(): Observable<SelectDescriptionResponse>
+  {
+    return this.api.get<SelectDescriptionResponse>('institution/GetAllInstitutionsAtivo');
+  }
+
   public getDepartamentosByUserId(id: number): Observable<DepartamentoListagemResponse>
   {
     return this.api.post<DepartamentoListagemResponse>('relUtilizadorDepartamento/GetDepartamentosByUserId', id);

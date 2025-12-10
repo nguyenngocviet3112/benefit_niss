@@ -71,11 +71,19 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
                 string fullCode = "";
                 bool editavel = true;
+                string actidadeDes = "";
+                string economicDes = "";
+                string funcionalDes = "";
                 foreach (Componenteorcamentovalor valor in valores)
                 {
                     fullCode = valor.AgrupamentoFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.AgrupamentoFk.Value) : "";
                     editavel = valor.AgrupamentoFkNavigation == null || valor.AgrupamentoFkNavigation.InverseParentFkNavigation.Count == 0;
                     //editavel = true;
+                    actidadeDes = valor.ActidadeFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.ActidadeFk.Value) : "";
+                    economicDes = valor.EconomicFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.EconomicFk.Value) : "";
+                    funcionalDes = valor.FuncionalFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.FuncionalFk.Value) : "";
+
+
                     response.ValoresCorrentes.Add(new ComponenteOrcamentoValorFullDataContract
                     {
                         Id = valor.Id,
@@ -83,12 +91,17 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                         CentroCustoFk = valor.CentroCustoFk,
                         ComponenteOrcamentoRegistoFk = valor.ComponenteOrcamentoRegistoFk,
                         DepartamentoDescricao = valor.DepartamentoFkNavigation != null ? valor.DepartamentoFkNavigation.Nome : "",
+                        InstitutionDescricao = valor.InstitutionFkNavigation != null ? valor.InstitutionFkNavigation.Nome : "",
                         CentroCustoDescricao = valor.CentroCustoFkNavigation != null ? valor.CentroCustoFkNavigation.Descricao : "",
                         DepartamentoFk = valor.DepartamentoFk,
+                        InstitutionId = valor.InstitutionId,
                         Valor = valor.Valor,
                         TipoDeConta = valor.TipoContaFk ?? 0,
                         TipoDeContaDescricao = valor.TipoContaFkNavigation?.Descricao,
                         Codigo = fullCode,
+                        ActidadeDescricao = actidadeDes,
+                        EconomicDescricao = economicDes,
+                        FuncionalDescricao = funcionalDes,
                         Descricao = valor.AgrupamentoFkNavigation?.Designacao,
                         Editavel = editavel
                     });
@@ -99,6 +112,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Orcamentoconfig orcamento = _unitOfWork.OrcamentoConfigRepository.GetOrcamentoConfigByDates(componente.DataInicio, componente.DataFim);
 
                 response.Agrupamentos = _unitOfWork.AgrupamentoConfigRepository.GetAlllActivAgrupamentoConfigByOrcamentoConfig(orcamento.Id);
+                response.Actidades = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(2018, 1111);
+                response.Economics = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(2018, 1113);
+                response.Functionals = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(2018, 1114);
                 response.CentrosCusto = _unitOfWork.CentroCustoRepository.GetAllActiveCentroCustoByOrcamentoRegisto(componente.Id);
                 response.TiposDeConta = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA);
             }

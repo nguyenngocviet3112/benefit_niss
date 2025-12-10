@@ -16,6 +16,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public Trabalhador GetByNiss(string niss);
 
+        public List<INSSCompanyStaffModel> GetCompanyStaffByNiss(string niss);
+
         public TrabalhadorListagemResponse GetTrabalhadoresByNiss(TrabalhadorListagemRequest request);
 
         public Trabalhador GetTrabalhadorViewById(long id);
@@ -43,5 +45,6 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public Destinatario GetDestinatarioByIdTrabalhador(int id);
 
         public List<Trabalhador> GetTrabalhadoresByNissOrTin(List<string> niss, List<string> tin);
+       
     }
 }

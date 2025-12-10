@@ -5,21 +5,16 @@ using System.Collections.Generic;
 
 namespace TimorINSSBackEnd.Models
 {
-    public partial class Departamento
+    public partial class Institution
     {
-        public Departamento()
+        public Institution()
         {
             ComponentedespesaRegisto = new HashSet<ComponentedespesaRegisto>();
             Componenteorcamentovalor = new HashSet<Componenteorcamentovalor>();
             ComponentereceitaRegisto = new HashSet<ComponentereceitaRegisto>();
             Movimentosporconciliar = new HashSet<Movimentosporconciliar>();
             Relutilizadordepartamento = new HashSet<Relutilizadordepartamento>();
-            
         }
-
-        public int? InstitutionId { get; set; }     // phải có property này
-
-        public virtual Institution Institution { get; set; }   // navigation
 
         public int Id { get; set; }
         public string Nome { get; set; }
@@ -29,13 +24,11 @@ namespace TimorINSSBackEnd.Models
         public int? UtilizadorAlteracao { get; set; }
         public DateTime? DataAlteracao { get; set; }
         public string Ipv6 { get; set; }
-        //public int? InstitutionId { get; set; }
 
         public virtual ICollection<ComponentedespesaRegisto> ComponentedespesaRegisto { get; set; }
         public virtual ICollection<Componenteorcamentovalor> Componenteorcamentovalor { get; set; }
         public virtual ICollection<ComponentereceitaRegisto> ComponentereceitaRegisto { get; set; }
         public virtual ICollection<Movimentosporconciliar> Movimentosporconciliar { get; set; }
         public virtual ICollection<Relutilizadordepartamento> Relutilizadordepartamento { get; set; }
-        
     }
 }

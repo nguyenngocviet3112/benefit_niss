@@ -108,5 +108,18 @@ namespace TimorINSSBackEnd.Repository.Repositories
                })
                 .ToList();
         }
+
+        public List<SelectDescription> GetAllInstitutionAtivo()
+        {
+            return _moduloContribuicoesContext.Institution
+                .Where(u => u.IndActivo)
+               .Select(u => new SelectDescription
+               {
+                   id = u.Id,
+                   nome = u.Nome,
+                   indActivo = u.IndActivo
+               })
+                .ToList();
+        }
     }
 }

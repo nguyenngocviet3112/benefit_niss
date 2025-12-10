@@ -61,6 +61,10 @@ export class ComponenteDespesaComponent implements OnInit {
   public processoId: number = 0;
   //id Componente Orçamento Registo Aprovado
   public idOrcamentoRegisto: number = 0;
+  public idInstitution: number = 0;
+  public idActidade: number = 0;
+  public idEconomic: number = 0;
+  public idFuncional: number = 0;
   //edit
   public idDespesa: number = 0;
   public editar: boolean = false;
@@ -68,6 +72,10 @@ export class ComponenteDespesaComponent implements OnInit {
   // Departamento INSS
   public departamentoINSS = <SelectDescription>{};
   public departamentoINSSListagem: SelectDescription[] = [];
+
+    // Institution 
+  public institution = <SelectDescription>{};
+  public institutionListagem: SelectDescription[] = [];
 
   // Centro de Custo
   public centroCusto = <SelectDescription>{};
@@ -92,6 +100,26 @@ export class ComponenteDespesaComponent implements OnInit {
   public contaOSSListagem: AgrupamentosConfig[] = [];
   public idContaOssEdit: number = 0;
 
+  // Etidade
+  public filtersEtidade: number[] = [];
+  public filtersEtidadeFiltered: AgrupamentosConfig[] = [];
+  public etidade = <AgrupamentosConfig>{};
+  public etidadeListagem: AgrupamentosConfig[] = [];
+  public idEtidadeEdit: number = 0;
+
+  // Economic
+  public filtersEconomic: number[] = [];
+  public filtersEconomicFiltered: AgrupamentosConfig[] = [];
+  public economic = <AgrupamentosConfig>{};
+  public economicListagem: AgrupamentosConfig[] = [];
+  public idEconomicEdit: number = 0;
+
+  // Funcional
+  public filtersFuncional: number[] = [];
+  public filtersFuncionalFiltered: AgrupamentosConfig[] = [];
+  public funcional = <AgrupamentosConfig>{};
+  public funcionalListagem: AgrupamentosConfig[] = [];
+  public idFuncionalEdit: number = 0;
   //Descricao Despesa
   public descricaoDespesa: string = '';
 
@@ -189,6 +217,9 @@ export class ComponenteDespesaComponent implements OnInit {
       this.getOrcamentoAprovado(this.tarefaActivoId);
 
       this.updateFilteredAgrupamentos(false);
+      this.updateFilteredEtidades(false);
+      this.updateFilteredEconomic(false);
+      this.updateFilteredFuncional(false);
 
       // TODO: traduzir
       //parte 2- valores Orçamento/Despesa
@@ -291,9 +322,12 @@ export class ComponenteDespesaComponent implements OnInit {
 
     let despesaCompromisso = this.componenteDespesaService.GetDespesasCompromissoByTarefaAtivoId(compromissoRequest);
 
+    let institutions = this.departamentoService.getAllInstitutionsAtivo();
+    
 
-    forkJoin([departamentoInss, despesaRegistada, despesaCabimentadaParaExecutar, despesaCompromisso, despesaCompromissoParaExecutar]).subscribe(([departamentoInss, despesaRegistada, despesaCabimentadaParaExecutar, despesaCompromisso, despesaCompromissoParaExecutar]) => {
+    forkJoin([departamentoInss, despesaRegistada,institutions, despesaCabimentadaParaExecutar, despesaCompromisso, despesaCompromissoParaExecutar]).subscribe(([departamentoInss, despesaRegistada,institutions, despesaCabimentadaParaExecutar, despesaCompromisso, despesaCompromissoParaExecutar]) => {
       this.departamentoINSSListagem = departamentoInss.selects;
+      this.institutionListagem = institutions.selects;
 
       if (despesaRegistada.componenteDespesaRegisto != null && despesaRegistada.componenteDespesaRegisto.length > 0) {
         this.despesaRegistadaAutorizadaListagem = despesaRegistada.componenteDespesaRegisto.filter(estadoDespesa => estadoDespesa.estado == 'R');
@@ -313,8 +347,6 @@ export class ComponenteDespesaComponent implements OnInit {
 
           if (ultimaDespesaRegistada != null && ultimaDespesaRegistada.length > 0) {
             this.despesaRegistadaAutorizada.id = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].id;
-            //this.despesaRegistadaAutorizada.idContabilidade = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].idContabilidade;
-            //this.despesaRegistadaAutorizada.descricaoContabilidade = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].descricaoContabilidade;
             this.despesaRegistadaAutorizada.idOrcamento = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].idOrcamento;
             this.despesaRegistadaAutorizada.descricaoOrcamento = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].descricaoOrcamento;
             this.despesaRegistadaAutorizada.valorRegistado = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].valorRegistado;
@@ -323,6 +355,11 @@ export class ComponenteDespesaComponent implements OnInit {
             this.despesaRegistadaAutorizada.idTipoConta = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].idTipoConta;
             this.despesaRegistadaAutorizada.descricaoDespesa = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].descricaoDespesa;
             this.despesaRegistadaAutorizada.estado = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].estado;
+
+            this.despesaRegistadaAutorizada.idActidade = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].idActidade;
+            this.despesaRegistadaAutorizada.idInstitution = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].idInstitution;
+            this.despesaRegistadaAutorizada.idEconomic = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].idEconomic;
+            this.despesaRegistadaAutorizada.idFuncional = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].idFuncional;
 
             this.updateDespesaRegistada();
           }
@@ -389,6 +426,19 @@ export class ComponenteDespesaComponent implements OnInit {
     this.filtersContaOSSFiltered = this.contaOSSListagem.filter(p => p.designacao.toLowerCase().startsWith(event.toLowerCase()));
   }
 
+  public filterCustomOptionsEtidade(event: any) {
+    this.filtersEtidadeFiltered = this.etidadeListagem.filter(p => p.designacao.toLowerCase().startsWith(event.toLowerCase()));
+  }
+
+  public filterCustomOptionsEconomic(event: any) {
+    this.filtersEconomicFiltered = this.economicListagem.filter(p => p.designacao.toLowerCase().startsWith(event.toLowerCase()));
+  }
+
+  public filterCustomOptionsFuncional(event: any) {
+    this.filtersFuncionalFiltered = this.funcionalListagem.filter(p => p.designacao.toLowerCase().startsWith(event.toLowerCase()));
+  }
+
+
   public filterCustomOptionsContabilidade(event: any) {
     this.filtersContabilidadeFiltered = this.contabilidadeListagem.filter(p => p.designacao.toLowerCase().startsWith(event.toLowerCase()));
   }
@@ -413,6 +463,10 @@ export class ComponenteDespesaComponent implements OnInit {
       tipoContaFk: this.tipoConta.id,
       codigoContaFk: this.contabilidade.id,
       agrupamentoConfigFk: this.contaOSS.id,
+      institutionId: this.institution.id,
+      actidadeFk: this.etidade.id,
+      economicFk: this.economic.id,
+      funcionalFk: this.funcional.id,
       descricao: this.descricaoDespesa,
       valor: this.valorDespesa
     };
@@ -451,6 +505,7 @@ export class ComponenteDespesaComponent implements OnInit {
     this.contaOSSListagem = [];
     this.filtersContaOSSFiltered = [];
 
+
       this.showLoader();
       let request = <GetAgrupamentoConfigRequest>{
         idOrcamento: this.idOrcamentoRegisto
@@ -476,6 +531,102 @@ export class ComponenteDespesaComponent implements OnInit {
         });
   }
 
+  public updateFilteredEtidades(editar: boolean) {
+    this.etidadeListagem = [];
+
+    this.filtersEtidadeFiltered = [];
+
+
+      this.showLoader();
+      let request = <GetAgrupamentoConfigRequest>{
+        idOrcamento: 2018,
+        tipoContaFK: 1111
+      };
+
+      this.agrupamentoService.getAgrupamentoConfigByIdCodigoContaTipoConta(request).subscribe(x => {
+        if (x != null && x.agrupamentos != null) {
+          this.etidadeListagem = x.agrupamentos;
+          this.filtersEtidadeFiltered = x.agrupamentos;
+          this.etidade = <AgrupamentosConfig>{};
+        }
+
+        if (editar) {
+          this.etidade = this.filtersEtidadeFiltered.filter((c: { id: number; }) => c.id === this.idEtidadeEdit)[0];
+        }
+        this.hideLoader();
+      },
+        err => {
+
+          this.hideLoader();
+          err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+          this.showError();
+        });
+  }
+
+  public updateFilteredEconomic(editar: boolean) {
+    this.economicListagem = [];
+
+    this.filtersEconomicFiltered = [];
+
+
+      this.showLoader();
+      let request = <GetAgrupamentoConfigRequest>{
+        idOrcamento: 2018,
+        tipoContaFK: 1113
+      };
+
+      this.agrupamentoService.getAgrupamentoConfigByIdCodigoContaTipoConta(request).subscribe(x => {
+        if (x != null && x.agrupamentos != null) {
+          this.economicListagem = x.agrupamentos;
+          this.filtersEconomicFiltered = x.agrupamentos;
+          this.economic = <AgrupamentosConfig>{};
+        }
+
+        if (editar) {
+          this.economic = this.filtersEconomicFiltered.filter((c: { id: number; }) => c.id === this.idEconomicEdit)[0];
+        }
+        this.hideLoader();
+      },
+        err => {
+
+          this.hideLoader();
+          err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+          this.showError();
+        });
+  }
+
+  public updateFilteredFuncional(editar: boolean) {
+    this.funcionalListagem = [];
+
+    this.filtersFuncionalFiltered = [];
+
+
+      this.showLoader();
+      let request = <GetAgrupamentoConfigRequest>{
+        idOrcamento: 2018,
+        tipoContaFK: 1114
+      };
+
+      this.agrupamentoService.getAgrupamentoConfigByIdCodigoContaTipoConta(request).subscribe(x => {
+        if (x != null && x.agrupamentos != null) {
+          this.funcionalListagem = x.agrupamentos;
+          this.filtersFuncionalFiltered = x.agrupamentos;
+          this.funcional = <AgrupamentosConfig>{};
+        }
+
+        if (editar) {
+          this.funcional = this.filtersFuncionalFiltered.filter((c: { id: number; }) => c.id === this.idFuncionalEdit)[0];
+        }
+        this.hideLoader();
+      },
+        err => {
+
+          this.hideLoader();
+          err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+          this.showError();
+        });
+  }
+
   public updateDespesaRegistada() {
     this.despesaRegistadaAutorizada.id = this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].id;
     this.despesaRegistadaAutorizada.idContabilidade = this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idContabilidade;
@@ -489,6 +640,11 @@ export class ComponenteDespesaComponent implements OnInit {
     this.despesaRegistadaAutorizada.descricaoDespesa = this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].descricaoDespesa;
     this.despesaRegistadaAutorizada.estado = this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].estado;
 
+    this.despesaRegistadaAutorizada.idInstitution = this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idInstitution;
+    this.despesaRegistadaAutorizada.idActidade = this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idActidade;
+    this.despesaRegistadaAutorizada.idEconomic = this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idEconomic;
+    this.despesaRegistadaAutorizada.idFuncional = this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idFuncional;
+
 
     //obter valor orçamento, somatorio despesas executadas, cabimentadas e autorizadas para o Código de orçamento
     // this.contaOSSListagem = [];
@@ -496,7 +652,11 @@ export class ComponenteDespesaComponent implements OnInit {
 
     let request = <GetValoresDespesaByIdCodigoOrcamentoRequest>{
       agrupamentoFk: this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idOrcamento,
-      orcamentoRegistoFk: this.idOrcamentoRegisto
+      orcamentoRegistoFk: this.idOrcamentoRegisto,
+      institutionId: this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idInstitution,
+      actidadeFk: this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idActidade,
+      economicFk: this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idEconomic,
+      funcionalFk: this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idFuncional
     };
 
     this.showLoader();
@@ -624,6 +784,9 @@ export class ComponenteDespesaComponent implements OnInit {
     this.contabilidade.id = componenteDespesa.idContabilidade;
     this.idContaOssEdit = componenteDespesa.idOrcamento;
     this.updateFilteredAgrupamentos(true);
+    this.updateFilteredEtidades(true);
+    this.updateFilteredEconomic(true);
+    this.updateFilteredFuncional(true);
     this.descricaoDespesa = componenteDespesa.descricaoDespesa;
     this.valorDespesa = componenteDespesa.valorRegistado;
     this.idDespesa = componenteDespesa.id;

@@ -46,7 +46,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 // no caso de não devolver nada, vai buscar os agrupamentos só com o id tipo de conta
                 //ps: os tipos de conta encontram-se na na tabela DOMINIO com o dominio="TIPOCONTA"
                 //if (componenteOrcamentoRegisto != null) {
-                    response.Agrupamentos = _unitOfWork.AgrupamentoConfigRepository.GetAlllActivAgrupamentoConfigByOrcamentoConfigTipoConta(componenteOrcamentoRegisto?.OrcamentoConfigFk, request.TipoContaFK);
+                    response.Agrupamentos = _unitOfWork.AgrupamentoConfigRepository.GetAlllActivAgrupamentoConfigByOrcamentoConfigTipoConta(componenteOrcamentoRegisto?.OrcamentoConfigFk == null ? request.IdOrcamento : componenteOrcamentoRegisto?.OrcamentoConfigFk, request.TipoContaFK);
                 //}
             //}
 

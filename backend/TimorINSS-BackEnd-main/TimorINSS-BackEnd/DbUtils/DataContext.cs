@@ -4,6 +4,10 @@ namespace TimorINSSBackEnd.Models
 {
     public partial class TimorINSSModuloContribuicoesContext : DbContext
     {
+        public object RelEntidadeTrabalhador { get; internal set; }
+        public object EntidadeEmpregadora { get; internal set; }
+        public object DeclaracaoRemuneracao { get; internal set; }
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Contacorrente>(entity =>

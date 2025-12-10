@@ -24,6 +24,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public List<AgrupamentoConfigDataContract> GetAlllActivAgrupamentoConfigByOrcamentoConfig(int orcamentoId);
 
+        public List<AgrupamentoConfigDataContract> GetActidadesAgrupamentoConfigByOrcamentoConfig(int orcamentoId, int tipoContaId);
+
         public string GetFullCodigo(int id);
 
         public string GetFullDesignacao(int id);

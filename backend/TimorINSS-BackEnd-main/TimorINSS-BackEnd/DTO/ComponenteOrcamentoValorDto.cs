@@ -14,10 +14,19 @@ namespace TimorINSSBackEnd.DTO
         public int? DepartamentoFk { get; set; }
 
         [Mapper]
+        public int? InstitutionId { get; set; }
+
+        [Mapper]
         public int? CentroCustoFk { get; set; }
 
         [Mapper]
         public int? AgrupamentoFk { get; set; }
+        [Mapper]
+        public int? ActidadeFk { get; set; }
+        [Mapper]
+        public int? EconomicFk { get; set; }
+        [Mapper]
+        public int? FuncionalFk { get; set; }
 
         [Mapper]
         public decimal Valor { get; set; }

@@ -152,30 +152,102 @@ namespace TimorINSSBackEnd
                 ForwardedHeaders = ForwardedHeaders.All
             });
 
-            // ✅ Middleware giải mã Base64 path trực tiếp
+            //✅ Middleware giải mã Base64 path trực tiếp
+            //app.Use(async (context, next) =>
+            //{
+            //    if (context.Request.Headers.TryGetValue("User-Id", out var raw))
+            //    {
+            //        try
+            //        {
+            //            var b64 = raw.ToString().Replace('-', '+').Replace('_', '/');
+            //            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+            //            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
+            //            context.Request.Headers["User-Id"] = decoded;
+            //        }
+            //        catch { /* tuỳ chọn: trả 400 nếu muốn fail cứng */ }
+            //    }
+
+            //    const string apiPrefix = "/api/";
+            //    var path = context.Request.Path.Value ?? "";
+
+            //    // kiểm tra nếu request bắt đầu bằng /api/
+            //    if (path.StartsWith(apiPrefix, StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        var encoded = path.Substring(apiPrefix.Length).Trim('/');
+
+            //        // Regex: chỉ các chuỗi có thể là base64-url
+            //        var base64Regex = new Regex(@"^[A-Za-z0-9\-_]+={0,2}$", RegexOptions.Compiled);
+
+            //        if (base64Regex.IsMatch(encoded) && encoded.Length > 8)
+            //        {
+            //            try
+            //            {
+            //                // Chuẩn hóa base64-url -> base64 chuẩn
+            //                string normalized = encoded.Replace('-', '+').Replace('_', '/');
+            //                switch (normalized.Length % 4)
+            //                {
+            //                    case 2: normalized += "=="; break;
+            //                    case 3: normalized += "="; break;
+            //                }
+
+            //                // Giải mã
+            //                var bytes = Convert.FromBase64String(normalized);
+            //                var decoded = Encoding.UTF8.GetString(bytes);
+
+            //                // Nếu kết quả có dấu '/', coi là path hợp lệ
+            //                if (decoded.Contains('/'))
+            //                {
+            //                    context.Request.Path = apiPrefix + decoded;
+            //                }
+            //            }
+            //            catch
+            //            {
+            //                // nếu lỗi decode → bỏ qua, giữ nguyên path
+            //                return;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            return;
+            //        }
+            //    }
+
+            //    await next();
+            //});
+
             app.Use(async (context, next) =>
             {
+                // Giải mã header User-Id (giữ nguyên như cũ)
                 if (context.Request.Headers.TryGetValue("User-Id", out var raw))
                 {
                     try
                     {
                         var b64 = raw.ToString().Replace('-', '+').Replace('_', '/');
-                        switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
+                        switch (b64.Length % 4)
+                        {
+                            case 2: b64 += "=="; break;
+                            case 3: b64 += "="; break;
+                        }
+
                         var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
                         context.Request.Headers["User-Id"] = decoded;
                     }
-                    catch { /* tuỳ chọn: trả 400 nếu muốn fail cứng */ }
+                    catch
+                    {
+                        // TODO: nếu muốn fail cứng có thể set 400 ở đây
+                    }
                 }
 
                 const string apiPrefix = "/api/";
-                var path = context.Request.Path.Value ?? "";
+                var path = context.Request.Path.Value ?? string.Empty;
 
-                // kiểm tra nếu request bắt đầu bằng /api/
+                // chỉ xử lý nếu bắt đầu bằng /api/
                 if (path.StartsWith(apiPrefix, StringComparison.OrdinalIgnoreCase))
                 {
+                    // phần sau /api/ chính là chuỗi base64-url
                     var encoded = path.Substring(apiPrefix.Length).Trim('/');
 
-                    // Regex: chỉ các chuỗi có thể là base64-url
+                    // Regex: chỉ chấp nhận base64-url
                     var base64Regex = new Regex(@"^[A-Za-z0-9\-_]+={0,2}$", RegexOptions.Compiled);
 
                     if (base64Regex.IsMatch(encoded) && encoded.Length > 8)
@@ -183,7 +255,7 @@ namespace TimorINSSBackEnd
                         try
                         {
                             // Chuẩn hóa base64-url -> base64 chuẩn
-                            string normalized = encoded.Replace('-', '+').Replace('_', '/');
+                            var normalized = encoded.Replace('-', '+').Replace('_', '/');
                             switch (normalized.Length % 4)
                             {
                                 case 2: normalized += "=="; break;
@@ -192,23 +264,34 @@ namespace TimorINSSBackEnd
 
                             // Giải mã
                             var bytes = Convert.FromBase64String(normalized);
-                            var decoded = Encoding.UTF8.GetString(bytes);
+                            var decoded = Encoding.UTF8.GetString(bytes).Trim();
+                            // decoded lúc này có thể là:
+                            // "movimentosBancarios/getMovimentoBancarioDropList?domainFilterId=70"
 
-                            // Nếu kết quả có dấu '/', coi là path hợp lệ
                             if (decoded.Contains('/'))
                             {
-                                context.Request.Path = apiPrefix + decoded;
+                                // TÁCH PATH VÀ QUERY RA
+                                var parts = decoded.Split('?', 2);
+                                var decodedPath = parts[0].Trim('/');          // movimentosBancarios/...
+                                var decodedQuery = parts.Length == 2 ? parts[1] : null; // domainFilterId=70
+
+                                // Gán lại Path
+                                context.Request.Path = apiPrefix + decodedPath;
+
+                                // Nếu có query trong chuỗi decode thì merge vào QueryString hiện tại
+                                if (!string.IsNullOrEmpty(decodedQuery))
+                                {
+                                    var newQs = QueryString.FromUriComponent("?" + decodedQuery);
+                                    context.Request.QueryString = context.Request.QueryString.Add(newQs);
+                                }
                             }
                         }
                         catch
                         {
-                            // nếu lỗi decode → bỏ qua, giữ nguyên path
-                            return ;
+                            // lỗi decode -> bỏ qua, giữ nguyên path + query cũ
                         }
-                    } else
-                    {
-                        return ;
                     }
+                    // Nếu không match base64 thì không làm gì, để nguyên path cho routing bình thường
                 }
 
                 await next();

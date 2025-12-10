@@ -1,4 +1,5 @@
 ﻿using System;
+using DocumentFormat.OpenXml.Bibliography;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -51,7 +52,8 @@ namespace TimorINSSBackEnd.Models
         public virtual DbSet<Contacorrente> Contacorrente { get; set; }
         public virtual DbSet<Contacto> Contacto { get; set; }
         public virtual DbSet<Declaracaoremuneracao> Declaracaoremuneracao { get; set; }
-        public virtual DbSet<Departamento> Departamento { get; set; }
+        
+        
         public virtual DbSet<Destinatario> Destinatario { get; set; }
         public virtual DbSet<Dispensacontributiva> Dispensacontributiva { get; set; }
         public virtual DbSet<Documentoidentificacao> Documentoidentificacao { get; set; }
@@ -101,6 +103,8 @@ namespace TimorINSSBackEnd.Models
         public virtual DbSet<Utilizador> Utilizador { get; set; }
         public virtual DbSet<Utilizadortoken> Utilizadortoken { get; set; }
 
+        public virtual DbSet<Departamento> Departamento { get; set; }
+        public virtual DbSet<Institution> Institution { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -840,6 +844,9 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.AgrupamentoConfigFk).HasColumnName("agrupamentoConfig_fk");
+                entity.Property(e => e.ActidadeFk).HasColumnName("actidade_fk");
+                entity.Property(e => e.EconomicFk).HasColumnName("economic_fk");
+                entity.Property(e => e.FuncionalFk).HasColumnName("funcional_fk");
 
                 entity.Property(e => e.CentroCustoFk).HasColumnName("centroCusto_fk");
 
@@ -1090,6 +1097,9 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.AgrupamentoFk).HasColumnName("agrupamento_fk");
+                entity.Property(e => e.ActidadeFk).HasColumnName("actidade_fk");
+                entity.Property(e => e.EconomicFk).HasColumnName("economic_fk");
+                entity.Property(e => e.FuncionalFk).HasColumnName("funcional_fk");
 
                 entity.Property(e => e.CentroCustoFk).HasColumnName("centroCusto_fk");
 
@@ -1104,6 +1114,7 @@ namespace TimorINSSBackEnd.Models
                     .HasColumnName("dataCriacao");
 
                 entity.Property(e => e.DepartamentoFk).HasColumnName("departamento_fk");
+                entity.Property(e => e.InstitutionId).HasColumnName("InstitutionId");
 
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
@@ -1121,6 +1132,12 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.Valor)
                     .HasColumnType("decimal(20, 2)")
                     .HasColumnName("valor");
+
+                entity.HasOne(d => d.InstitutionFkNavigation)
+                    .WithMany(p => p.Componenteorcamentovalor)
+                    .HasForeignKey(d => d.InstitutionId)
+                    .HasConstraintName("FK_componentOrcamentoRegisto_institution");
+
 
                 entity.HasOne(d => d.AgrupamentoFkNavigation)
                     .WithMany(p => p.Componenteorcamentovalor)

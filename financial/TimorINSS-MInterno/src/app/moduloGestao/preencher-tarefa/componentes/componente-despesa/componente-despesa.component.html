@@ -20,6 +20,18 @@
             </div>
           </div>
 
+       
+            <mat-form-field class="componenteDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.institution' | translate}}</mat-label>
+            <mat-select [(ngModel)]="institution.id" [(value)]="institution.id" name="institution">
+              <ng-container *ngIf="institutionListagem.length > 1">
+                <mat-option *ngFor="let institution of institutionListagem" [value]="institution.id"
+                  matTooltip="{{institution.nome}}">
+                  {{institution.nome}}
+                </mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
 
           <mat-form-field class="componenteDespesa" appearance="outline">
             <mat-label>{{'componenteDespesa.departamentoINSS' | translate}}</mat-label>
@@ -59,28 +71,71 @@
             </mat-select>
             <mat-error>{{'general.required' | translate}}</mat-error>
           </mat-form-field>
-        </div>
 
-        <div>
-          <!-- <mat-form-field class="componenteDespesa" appearance="outline">
-            <mat-label>{{'componenteDespesa.contabilidade' | translate}}</mat-label>
-            <mat-select (selectionChange)="updateFilteredAgrupamentos(tipoConta.id, false)"
-              #name="ngModel" name="selectComponenteContabilidade" [(ngModel)]="contabilidade.id"
+          <mat-form-field class="componenteDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.etidade' | translate}}</mat-label>
+            <mat-select #name="ngModel" name="selectComponenteEtidade" [(ngModel)]="etidade.id"
               [errorStateMatcher]="matcher" [required]="submittedTry">
               <mat-option>
                 <ngx-mat-select-search #name="ngModel"
                   noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
-                  placeholderLabel="{{'componenteDespesa.contabilidade' | translate}}" ngModel
-                  (ngModelChange)="filterCustomOptionsContabilidade($event)" name="ContabilidadeFilterSearch">
+                  placeholderLabel="{{'componenteDespesa.etidade' | translate}}" ngModel
+                  (ngModelChange)="filterCustomOptionsEtidade($event)" name="EtidadeFilterSearch">
                 </ngx-mat-select-search>
               </mat-option>
-              <mat-option *ngFor="let value of filtersContabilidadeFiltered" [value]="value.id"
+              <mat-option *ngFor="let value of filtersEtidadeFiltered" [value]="value.id"
                 matTooltip="{{value.designacao}}">
                 {{value.designacao}}
               </mat-option>
             </mat-select>
             <mat-error>{{'general.required' | translate}}</mat-error>
-          </mat-form-field> -->
+
+          </mat-form-field>
+
+          <mat-form-field class="componenteDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.economic' | translate}}</mat-label>
+            <mat-select #name="ngModel" name="selectComponenteEconomic" [(ngModel)]="economic.id"
+              [errorStateMatcher]="matcher" [required]="submittedTry">
+              <mat-option>
+                <ngx-mat-select-search #name="ngModel"
+                  noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                  placeholderLabel="{{'componenteDespesa.economic' | translate}}" ngModel
+                  (ngModelChange)="filterCustomOptionsEconomic($event)" name="EconomicFilterSearch">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let value of filtersEconomicFiltered" [value]="value.id"
+                matTooltip="{{value.designacao}}">
+                {{value.designacao}}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+
+          </mat-form-field>
+
+
+        </div>
+
+        <div>
+          
+          <mat-form-field class="componenteDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.funcional' | translate}}</mat-label>
+            <mat-select #name="ngModel" name="selectComponenteFuncional" [(ngModel)]="funcional.id"
+              [errorStateMatcher]="matcher" [required]="submittedTry">
+              <mat-option>
+                <ngx-mat-select-search #name="ngModel"
+                  noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                  placeholderLabel="{{'componenteDespesa.funcional' | translate}}" ngModel
+                  (ngModelChange)="filterCustomOptionsFuncional($event)" name="FuncionalFilterSearch">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let value of filtersFuncionalFiltered" [value]="value.id"
+                matTooltip="{{value.designacao}}">
+                {{value.designacao}}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+
+          </mat-form-field>
 
           <mat-form-field class="componenteDespesa" appearance="outline">
             <mat-label>{{'componenteDespesa.contaOSS' | translate}}</mat-label>

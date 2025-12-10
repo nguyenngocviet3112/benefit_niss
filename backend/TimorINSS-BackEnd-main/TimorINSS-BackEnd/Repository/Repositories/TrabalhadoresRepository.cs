@@ -291,6 +291,64 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return trabalhador;
         }
 
+        public List<INSSCompanyStaffModel> GetCompanyStaffByNiss(string niss)
+        {
+            _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
+
+            var baseQuery =
+                from t in _moduloContribuicoesContext.Trabalhador
+                where t.Niss == niss
+
+                // JOIN 1: Trabalhador → Relentidadetrabalhador
+                join r in _moduloContribuicoesContext.Relentidadetrabalhador
+                    on t.IdTrabalhador equals r.TrabalhadorFk
+
+                // JOIN 2: Relentidadetrabalhador → Entidadeempregadora
+                join e in _moduloContribuicoesContext.Entidadeempregadora
+                    on r.EntidadeFk equals e.IdEntidadeEmpreg
+
+                // JOIN 3: Relentidadetrabalhador → Declaracaoremuneracao
+                join d in _moduloContribuicoesContext.Declaracaoremuneracao
+                    on r.IdRel equals d.DeclaracaoRelEntidadeTrabalhadorFk
+
+                where d.IndActivo == true
+
+                group new { d, e } by new { e.IdEntidadeEmpreg, e.Nome } into g
+
+                orderby g.Key.Nome
+
+                select new
+                {
+                    Name = g.Key.Nome,
+                    Start = g.Min(x => x.d.MesAno),
+                    End = g.Max(x => x.d.MesAno),
+
+                    // số tháng đóng góp (distinct theo yyyy-MM)
+                    ContributeMonth =
+                        g.Select(x => x.d.MesAno.ToString("yyyy-MM")).Distinct().Count(),
+
+                    // tổng tiền lương khai báo đã đóng
+                    ContributeMoney = g.Sum(x => x.d.RemunDeclarada)
+                };
+
+            // vì ToString("yyyy-MM") không dịch xuống SQL → cần AsEnumerable trước khi chuyển string
+            var result = baseQuery
+                .AsEnumerable()
+                .Select(x => new INSSCompanyStaffModel
+                {
+                    Name = x.Name,
+                    StartDate = x.Start,
+                    EndDate = x.End,
+                    ContributeMonth = x.ContributeMonth,
+                    ContributeMoney = (double)x.ContributeMoney
+                })
+                .ToList();
+
+            return result;
+        }
+
+
+
         public bool NissExists(string niss, int idTrabalhador = 0)
         {
             if (niss == null)

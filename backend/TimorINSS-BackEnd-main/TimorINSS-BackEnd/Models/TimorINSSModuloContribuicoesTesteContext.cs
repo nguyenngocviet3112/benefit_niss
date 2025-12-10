@@ -837,6 +837,9 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.AgrupamentoConfigFk).HasColumnName("agrupamentoConfig_fk");
+                entity.Property(e => e.ActidadeFk).HasColumnName("actidade_fk");
+                entity.Property(e => e.EconomicFk).HasColumnName("economic_fk");
+                entity.Property(e => e.FuncionalFk).HasColumnName("funcional_fk");
 
                 entity.Property(e => e.CentroCustoFk).HasColumnName("centroCusto_fk");
 
@@ -1087,6 +1090,9 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.AgrupamentoFk).HasColumnName("agrupamento_fk");
+                entity.Property(e => e.ActidadeFk).HasColumnName("actidade_fk");
+                entity.Property(e => e.EconomicFk).HasColumnName("economic_fk");
+                entity.Property(e => e.FuncionalFk).HasColumnName("funcional_fk");
 
                 entity.Property(e => e.CentroCustoFk).HasColumnName("centroCusto_fk");
 
@@ -1101,6 +1107,8 @@ namespace TimorINSSBackEnd.Models
                     .HasColumnName("dataCriacao");
 
                 entity.Property(e => e.DepartamentoFk).HasColumnName("departamento_fk");
+
+                entity.Property(e => e.InstitutionId).HasColumnName("InstitutionId");
 
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
@@ -1139,6 +1147,11 @@ namespace TimorINSSBackEnd.Models
                     .WithMany(p => p.Componenteorcamentovalor)
                     .HasForeignKey(d => d.DepartamentoFk)
                     .HasConstraintName("FK_componentOrcamentoRegisto_departamento");
+
+                entity.HasOne(d => d.InstitutionFkNavigation)
+                    .WithMany(p => p.Componenteorcamentovalor)
+                    .HasForeignKey(d => d.InstitutionId)
+                    .HasConstraintName("FK_componentOrcamentoRegisto_institution");
 
                 entity.HasOne(d => d.TipoContaFkNavigation)
                     .WithMany(p => p.Componenteorcamentovalor)

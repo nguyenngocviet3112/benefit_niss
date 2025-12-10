@@ -84,5 +84,18 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
 
         [DataMember]
         public List<INSSEstrangeiroDataContract> InssEstrangeiro { get; set; }
+
+        [DataMember]
+        public List<INSSCompanyStaffData> INSSCompanyStaff { get; set; }
+
+        [DataMember]
+        public double? TotalMonth { get; set; }
+
+        [DataMember]
+        public double? TotalYear { get; set; }
+
+        [DataMember]
+        public double? TotalAmount { get; set; }
+
     }
 }

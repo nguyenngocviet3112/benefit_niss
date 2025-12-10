@@ -295,15 +295,39 @@ namespace TimorINSSBackEnd.Repository.Repositories
             .Where(a => a.ReltipoDeContaOrcamentoConfigFkNavigation.OrcamentoConfigFk == orcamentoId)
             .ToDictionary(a => a.Id);
 
-            if (objectDictionary.Count == 0) {
-                objectDictionary = _moduloContribuicoesContext.Agrupamentoconfig
+            List<AgrupamentoConfigDataContract> result = new List<AgrupamentoConfigDataContract>();
+            Agrupamentoconfig a;
+            foreach (int key in objectDictionary.Keys)
+            {
+                a = objectDictionary[key];
+                StringBuilder nome = new StringBuilder();
+                nome.Append(GetFullCodigoTransactionless(a.Id, objectDictionary));
+                nome.Append(" - ");
+                nome.Append(a.Designacao);
+                result.Add(
+                    new AgrupamentoConfigDataContract
+                    {
+                        Id = a.Id,
+                        Designacao = nome.ToString(),
+                        ParentFk = a.ParentFk,
+                        TipoDeConta = a.ReltipoDeContaOrcamentoConfigFkNavigation.TipoContaFk,
+                        Final = a.InverseParentFkNavigation.Count == 0
+                    });
+            }
+
+            return result;
+        }
+
+        public List<AgrupamentoConfigDataContract> GetActidadesAgrupamentoConfigByOrcamentoConfig(int orcamentoId, int tipoContaId)
+        {
+            Dictionary<int, Agrupamentoconfig> objectDictionary = _moduloContribuicoesContext.Agrupamentoconfig
             .Where(a => a.IndActivo)
             .Include(a => a.ParentFkNavigation)
             .Include(a => a.ReltipoDeContaOrcamentoConfigFkNavigation)
             .Include(a => a.InverseParentFkNavigation)
-            .Where(a => a.ReltipoDeContaOrcamentoConfigFkNavigation.OrcamentoConfigFk == 2006)
+            .Where(a => a.ReltipoDeContaOrcamentoConfigFkNavigation.OrcamentoConfigFk == orcamentoId
+            && a.ReltipoDeContaOrcamentoConfigFkNavigation.TipoContaFk == tipoContaId)
             .ToDictionary(a => a.Id);
-            }
 
             List<AgrupamentoConfigDataContract> result = new List<AgrupamentoConfigDataContract>();
             Agrupamentoconfig a;
@@ -338,6 +362,17 @@ namespace TimorINSSBackEnd.Repository.Repositories
             .Include(a => a.InverseParentFkNavigation)
             //.Where(a => a.ReltipoDeContaOrcamentoConfigFkNavigation.OrcamentoConfigFk == orcamentoId && a.ReltipoDeContaOrcamentoConfigFkNavigation.TipoContaFk == tipoContaFK)
             .ToDictionary(a => a.Id);
+
+            if (orcamentoId != null && orcamentoId > 0)
+            {
+            objectDictionary = _moduloContribuicoesContext.Agrupamentoconfig
+                .Where(a => a.IndActivo)
+                .Include(a => a.ParentFkNavigation)
+                .Include(a => a.ReltipoDeContaOrcamentoConfigFkNavigation)
+                .Include(a => a.InverseParentFkNavigation)
+                .Where(a => a.ReltipoDeContaOrcamentoConfigFkNavigation.OrcamentoConfigFk == orcamentoId && a.ReltipoDeContaOrcamentoConfigFkNavigation.TipoContaFk == tipoContaFK)
+                .ToDictionary(a => a.Id);
+            }
 
             List<AgrupamentoConfigDataContract> result = new List<AgrupamentoConfigDataContract>();
             Agrupamentoconfig a;

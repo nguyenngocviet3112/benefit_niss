@@ -8,6 +8,10 @@ export interface Despesa
   tipoContaFk: number;
   codigoContaFk: number;
   agrupamentoConfigFk: number;
+  institutionId: number;
+  actidadeFk: number;
+  economicFk: number;
+  funcionalFk: number;
   descricao: string;
   valor: number|undefined;
 }

@@ -89,16 +89,32 @@ namespace TimorINSSBackEnd.Repository.Repositories
                   estado = u.EstadoNavigation.Descricao,
                   idDepartamento = (int)u.DepartamentoFk,
                   idCentroCusto = u.CentroCustoFk,
-                  idTipoConta = u.TipoContaFk
+                  idTipoConta = u.TipoContaFk,
+                  idInstitution = u.InstitutionId,
+                  idActidade = u.ActidadeFk,
+                  idEconomic = u.EconomicFk,
+                  idFuncional = u.FuncionalFk
               })
                .ToList();
+        }
+
+        public List<ComponentedespesaRegisto> GetAllDespesaRegistadaByAgrupamentoConfigFk(int agrupamentoConfigFk,
+            int institutionId, int actidadeId, int economicId, int funcionalId)
+        {
+            _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
+            var componenteDespesaRegisto = _moduloContribuicoesContext.ComponentedespesaRegisto
+                .Where(u => u.AgrupamentoConfigFk == agrupamentoConfigFk && u.IndActivo && u.InstitutionId == institutionId && u.ActidadeFk == actidadeId
+                && u.EconomicFk == economicId && u.FuncionalFk == funcionalId)
+                .ToList();
+
+            return componenteDespesaRegisto;
         }
 
         public List<ComponentedespesaRegisto> GetAllDespesaRegistadaByAgrupamentoConfigFk(int agrupamentoConfigFk)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
             var componenteDespesaRegisto = _moduloContribuicoesContext.ComponentedespesaRegisto
-                .Where(u => u.AgrupamentoConfigFk == agrupamentoConfigFk && u.IndActivo)
+                .Where(u => u.AgrupamentoConfigFk == agrupamentoConfigFk)
                 .ToList();
 
             return componenteDespesaRegisto;

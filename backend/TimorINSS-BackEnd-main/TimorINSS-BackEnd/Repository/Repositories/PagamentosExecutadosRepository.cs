@@ -405,6 +405,30 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .ToList();
         }
 
+        IEnumerable<Agrupamentoconfig> GetLeafNodes(Agrupamentoconfig node)
+        {
+            // Không có con → đây là leaf (level 3)
+            if (node.InverseParentFkNavigation == null
+                || !node.InverseParentFkNavigation.Any())
+            {
+                // Nếu có cha thì trả cả cha
+                if (node.ParentFkNavigation != null)
+                    yield return node.ParentFkNavigation;
+
+                // Và luôn trả chính nó
+                yield return node;
+                yield break;
+            }
+
+            // Có con → đi tiếp xuống các con
+            foreach (var child in node.InverseParentFkNavigation)
+            {
+                foreach (var leaf in GetLeafNodes(child))
+                    yield return leaf;
+            }
+        }
+
+
         public ExecucaoOrcamentalListagemResponse GetExecucaoOrcamental(RelatorioExecucaoOrcamentalListagemRequest request)
         {
             ExecucaoOrcamentalListagemResponse response = new ExecucaoOrcamentalListagemResponse();
@@ -452,24 +476,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     centrosCusto = e.Componenteorcamentovalor.Where(a => a.CentroCustoFk.HasValue).Select(a => a.CentroCustoFkNavigation.Descricao),
                     // Rubricas do agrupamento (códigos do 3º nível do agrupamento - InverseParentFkNavigation são os filhos)
                     //rubricas = e.ParentFk != null ? e.InverseParentFkNavigation.SelectMany(a => a.InverseParentFkNavigation.Select(s => s.Codigo)).Distinct() : new List<string>(),
-                    rubricas =
-                    // LEVEL 3 → không có con → lấy chính nó
-                    (!e.InverseParentFkNavigation.Any())
-                        ? new List<string> { e.Codigo }
-
-                        // LEVEL 2 → có con nhưng con không có cháu → lấy các con
-                        : (!e.InverseParentFkNavigation.Any(child => child.InverseParentFkNavigation.Any()))
-                            ? e.InverseParentFkNavigation
-                                .Select(child => child.Codigo)
-                                .Distinct()
-                                .ToList()
-
-                            // LEVEL 1 → có con và có cháu → lấy cháu (level 3)
-                            : e.InverseParentFkNavigation
-                                .SelectMany(child => child.InverseParentFkNavigation)
-                                .Select(g => g.Codigo)
-                                .Distinct()
-                                .ToList(),
+                    rubricas = GetLeafNodes(e).Select(x => x.Codigo).Distinct().ToList(),
 
                     valorOrcamentoInicial = e.Componenteorcamentovalor.Where(a => a.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year && a.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year).Select(a => a.Valor).First(),
                     valorOrcamentado = e.Componenteorcamentovalor.Where(a => a.ComponenteOrcamentoRegistoFkNavigation.Aprovado && a.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year && a.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year).Select(a => a.Valor).Last(),

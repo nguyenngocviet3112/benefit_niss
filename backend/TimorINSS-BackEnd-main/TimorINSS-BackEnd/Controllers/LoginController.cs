@@ -50,6 +50,31 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("AuthenticateCitizen")]
+        public IActionResult AuthenticateCitizen(LoginRequest request)
+        {
+            LoginResponse response = new LoginResponse();
+            try
+            {
+                // Parse dos valores do header para o request
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.LoginManager(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            // Guardar log do erro no ficheiro de logs
+            if (response.ManageErrors("AuthenticateCitizen", Log, request))
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
         [HttpPost("RecoverPassword")]
         public IActionResult RecoverPassword(RecoverRequest request)
         {

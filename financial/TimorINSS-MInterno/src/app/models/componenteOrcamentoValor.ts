@@ -3,8 +3,12 @@ export interface ComponenteOrcamentoValor
     id: number;
     componenteOrcamentoRegistoFk: number;
     departamentoFk?: number;
+    institutionId?: number;
     centroCustoFk?: number;
     agrupamentoFk: number;
+    actidadeFk: number;
+    economicFk: number;
+    funcionalFk: number;
     valor: number;
     tipoContaFk?: number;
 }
@@ -18,9 +22,15 @@ export interface ComponenteOrcamentoValorFull
     departamentoDescricao: string;
     centroCustoDescricao: string;
     agrupamentoFk: number;
+    actidadeFk: number;
+    economicFk: number;
+    funcionalFk: number;
     valor: number;
     tipoDeConta: number;
     tipoDeContaDescricao: string;
+    actidadeDescricao?: string;
+    economicDescricao?: string;
+    functionalDescricao?: string;
     codigo: string;
     descricao: string;
     editavel: boolean;
@@ -30,6 +40,7 @@ export interface ComponenteOrcamentoValorSearch
 {
     id: number;
     departamentos?: number[];
+    institutions?: number[];
     centrosDeCusto?: number[];
     tiposDeConta?: number[];
 }
