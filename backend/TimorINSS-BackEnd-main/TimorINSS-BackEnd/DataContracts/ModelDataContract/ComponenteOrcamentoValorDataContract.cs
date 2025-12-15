@@ -17,8 +17,7 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         [DataMember]
         public int? ActidadeFk { get; set; }
         [DataMember]
-        public int? EconomicFk { get; set; }
-        [DataMember]
+       
         public int? FuncionalFk { get; set; }
 
         [DataMember]
@@ -58,8 +57,8 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         [DataMember]
         public string ActidadeDescricao { get; set; }
 
-        [DataMember]
-        public string EconomicDescricao { get; set; }
+        //[DataMember]
+        //public string EconomicDescricao { get; set; }
 
         [DataMember]
         public string FuncionalDescricao { get; set; }

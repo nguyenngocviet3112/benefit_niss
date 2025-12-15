@@ -120,7 +120,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 fullCode = valor.AgrupamentoFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.AgrupamentoFk.Value) : "";
                 editavel = valor.AgrupamentoFkNavigation == null || valor.AgrupamentoFkNavigation.InverseParentFkNavigation.Count == 0;
                 actidadeDes = valor.ActidadeFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.ActidadeFk.Value) : "";
-                economicDes = valor.EconomicFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.EconomicFk.Value) : "";
+                
                 funcionalDes = valor.FuncionalFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.FuncionalFk.Value) : "";
                 //editavel = true;
                 response.ValoresCorrentes.Add(new ComponenteOrcamentoValorFullDataContract
@@ -135,7 +135,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     TipoDeContaDescricao = valor.TipoContaFkNavigation?.Descricao,
                     Codigo = fullCode,
                     ActidadeDescricao = actidadeDes,
-                    EconomicDescricao = economicDes,
+                    //EconomicDescricao = economicDes,
                     FuncionalDescricao = funcionalDes,
                     Descricao = valor.AgrupamentoFkNavigation?.Designacao,
                     DepartamentoDescricao = valor.DepartamentoFkNavigation != null ? valor.DepartamentoFkNavigation.Nome : "",
@@ -217,7 +217,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             entity.TipoContaFk = input.TipoContaFk;
             entity.AgrupamentoFk = input.AgrupamentoFk;
             entity.ActidadeFk = input.ActidadeFk;
-            entity.EconomicFk = input.EconomicFk;
+            
             entity.FuncionalFk = input.FuncionalFk;
             entity.IndActivo = true;
 

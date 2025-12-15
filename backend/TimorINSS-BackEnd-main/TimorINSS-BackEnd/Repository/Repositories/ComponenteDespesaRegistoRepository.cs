@@ -92,19 +92,19 @@ namespace TimorINSSBackEnd.Repository.Repositories
                   idTipoConta = u.TipoContaFk,
                   idInstitution = u.InstitutionId,
                   idActidade = u.ActidadeFk,
-                  idEconomic = u.EconomicFk,
+                  
                   idFuncional = u.FuncionalFk
               })
                .ToList();
         }
 
         public List<ComponentedespesaRegisto> GetAllDespesaRegistadaByAgrupamentoConfigFk(int agrupamentoConfigFk,
-            int institutionId, int actidadeId, int economicId, int funcionalId)
+            int institutionId, int actidadeId, int funcionalId)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
             var componenteDespesaRegisto = _moduloContribuicoesContext.ComponentedespesaRegisto
                 .Where(u => u.AgrupamentoConfigFk == agrupamentoConfigFk && u.IndActivo && u.InstitutionId == institutionId && u.ActidadeFk == actidadeId
-                && u.EconomicFk == economicId && u.FuncionalFk == funcionalId)
+                && u.FuncionalFk == funcionalId)
                 .ToList();
 
             return componenteDespesaRegisto;

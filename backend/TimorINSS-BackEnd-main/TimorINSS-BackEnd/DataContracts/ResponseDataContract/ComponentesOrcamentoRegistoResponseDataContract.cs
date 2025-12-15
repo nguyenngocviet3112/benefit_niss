@@ -16,8 +16,8 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         [DataMember]
         public List<AgrupamentoConfigDataContract> Actidades { get; set; }
 
-        [DataMember]
-        public List<AgrupamentoConfigDataContract> Economics { get; set; }
+        //[DataMember]
+        //public List<AgrupamentoConfigDataContract> Economics { get; set; }
 
         [DataMember]
         public List<AgrupamentoConfigDataContract> Functionals { get; set; }

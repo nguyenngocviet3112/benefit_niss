@@ -838,7 +838,7 @@ namespace TimorINSSBackEnd.Models
 
                 entity.Property(e => e.AgrupamentoConfigFk).HasColumnName("agrupamentoConfig_fk");
                 entity.Property(e => e.ActidadeFk).HasColumnName("actidade_fk");
-                entity.Property(e => e.EconomicFk).HasColumnName("economic_fk");
+                //entity.Property(e => e.EconomicFk).HasColumnName("economic_fk");
                 entity.Property(e => e.FuncionalFk).HasColumnName("funcional_fk");
 
                 entity.Property(e => e.CentroCustoFk).HasColumnName("centroCusto_fk");
@@ -1091,7 +1091,7 @@ namespace TimorINSSBackEnd.Models
 
                 entity.Property(e => e.AgrupamentoFk).HasColumnName("agrupamento_fk");
                 entity.Property(e => e.ActidadeFk).HasColumnName("actidade_fk");
-                entity.Property(e => e.EconomicFk).HasColumnName("economic_fk");
+                //entity.Property(e => e.EconomicFk).HasColumnName("economic_fk");
                 entity.Property(e => e.FuncionalFk).HasColumnName("funcional_fk");
 
                 entity.Property(e => e.CentroCustoFk).HasColumnName("centroCusto_fk");

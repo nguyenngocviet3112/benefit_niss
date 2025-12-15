@@ -72,7 +72,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 string fullCode = "";
                 bool editavel = true;
                 string actidadeDes = "";
-                string economicDes = "";
+                //string economicDes = "";
                 string funcionalDes = "";
                 foreach (Componenteorcamentovalor valor in valores)
                 {
@@ -80,7 +80,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     editavel = valor.AgrupamentoFkNavigation == null || valor.AgrupamentoFkNavigation.InverseParentFkNavigation.Count == 0;
                     //editavel = true;
                     actidadeDes = valor.ActidadeFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.ActidadeFk.Value) : "";
-                    economicDes = valor.EconomicFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.EconomicFk.Value) : "";
+                    
                     funcionalDes = valor.FuncionalFk.HasValue ? _unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(valor.FuncionalFk.Value) : "";
 
 
@@ -100,7 +100,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                         TipoDeContaDescricao = valor.TipoContaFkNavigation?.Descricao,
                         Codigo = fullCode,
                         ActidadeDescricao = actidadeDes,
-                        EconomicDescricao = economicDes,
+                        //EconomicDescricao = economicDes,
                         FuncionalDescricao = funcionalDes,
                         Descricao = valor.AgrupamentoFkNavigation?.Designacao,
                         Editavel = editavel
@@ -113,7 +113,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
                 response.Agrupamentos = _unitOfWork.AgrupamentoConfigRepository.GetAlllActivAgrupamentoConfigByOrcamentoConfig(orcamento.Id);
                 response.Actidades = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(2018, 1111);
-                response.Economics = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(2018, 1113);
+                //response.Economics = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(2018, 1113);
                 response.Functionals = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(2018, 1114);
                 response.CentrosCusto = _unitOfWork.CentroCustoRepository.GetAllActiveCentroCustoByOrcamentoRegisto(componente.Id);
                 response.TiposDeConta = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA);

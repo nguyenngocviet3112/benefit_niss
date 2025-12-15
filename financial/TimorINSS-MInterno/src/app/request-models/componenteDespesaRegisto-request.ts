@@ -27,7 +27,6 @@ export interface GetValoresDespesaByIdCodigoOrcamentoRequest{
   orcamentoRegistoFk: number;
   institutionId: number;
   actidadeFk: number;
-  economicFk: number;
   funcionalFk: number;
 }
 

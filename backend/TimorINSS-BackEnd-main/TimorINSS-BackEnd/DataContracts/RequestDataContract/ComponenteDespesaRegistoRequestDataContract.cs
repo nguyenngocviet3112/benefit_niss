@@ -44,8 +44,8 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public int InstitutionId { get; set; }
         [DataMember]
         public int ActidadeFk { get; set; }
-        [DataMember]
-        public int EconomicFk { get; set; }
+        //[DataMember]
+        //public int EconomicFk { get; set; }
         [DataMember]
         public int FuncionalFk { get; set; }
     }

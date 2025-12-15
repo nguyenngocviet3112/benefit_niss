@@ -21,7 +21,7 @@ namespace TimorINSSBackEnd.Models
         public int AgrupamentoConfigFk { get; set; }
         public int? InstitutionId { get; set; }
         public int? ActidadeFk { get; set; }
-        public int? EconomicFk { get; set; }
+        //public int? EconomicFk { get; set; }
         public int? FuncionalFk { get; set; }
 
 

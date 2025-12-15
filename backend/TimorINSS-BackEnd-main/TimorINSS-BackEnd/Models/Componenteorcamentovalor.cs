@@ -15,7 +15,7 @@ namespace TimorINSSBackEnd.Models
         public int? CentroCustoFk { get; set; }
         public int? AgrupamentoFk { get; set; }
         public int? ActidadeFk { get; set; }
-        public int? EconomicFk { get; set; }
+        //public int? EconomicFk { get; set; }
         public int? FuncionalFk { get; set; }
 
         public decimal Valor { get; set; }

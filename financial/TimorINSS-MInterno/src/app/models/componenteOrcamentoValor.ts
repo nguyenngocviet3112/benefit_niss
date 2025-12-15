@@ -7,7 +7,6 @@ export interface ComponenteOrcamentoValor
     centroCustoFk?: number;
     agrupamentoFk: number;
     actidadeFk: number;
-    economicFk: number;
     funcionalFk: number;
     valor: number;
     tipoContaFk?: number;
@@ -23,13 +22,12 @@ export interface ComponenteOrcamentoValorFull
     centroCustoDescricao: string;
     agrupamentoFk: number;
     actidadeFk: number;
-    economicFk: number;
     funcionalFk: number;
     valor: number;
     tipoDeConta: number;
     tipoDeContaDescricao: string;
     actidadeDescricao?: string;
-    economicDescricao?: string;
+    // economicDescricao?: string;
     functionalDescricao?: string;
     codigo: string;
     descricao: string;

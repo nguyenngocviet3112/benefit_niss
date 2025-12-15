@@ -23,8 +23,8 @@ namespace TimorINSSBackEnd.DTO
         public int? AgrupamentoFk { get; set; }
         [Mapper]
         public int? ActidadeFk { get; set; }
-        [Mapper]
-        public int? EconomicFk { get; set; }
+        //[Mapper]
+        //public int? EconomicFk { get; set; }
         [Mapper]
         public int? FuncionalFk { get; set; }
 

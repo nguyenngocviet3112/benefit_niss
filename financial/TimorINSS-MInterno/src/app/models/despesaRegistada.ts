@@ -16,7 +16,7 @@ export interface DespesaRegistada
   idTipoConta: number;
   idInstitution: number;
   idActidade: number;
-  idEconomic: number;
+  // idEconomic: number;
   idFuncional: number;
 }
 
