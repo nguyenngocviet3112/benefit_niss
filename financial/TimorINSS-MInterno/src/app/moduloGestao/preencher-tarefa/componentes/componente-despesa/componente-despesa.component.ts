@@ -539,7 +539,7 @@ export class ComponenteDespesaComponent implements OnInit {
       this.showLoader();
       let request = <GetAgrupamentoConfigRequest>{
         idOrcamento: 2018,
-        tipoContaFK: 1111
+        tipoContaFK: 1221
       };
 
       this.agrupamentoService.getAgrupamentoConfigByIdCodigoContaTipoConta(request).subscribe(x => {
@@ -603,7 +603,7 @@ export class ComponenteDespesaComponent implements OnInit {
       this.showLoader();
       let request = <GetAgrupamentoConfigRequest>{
         idOrcamento: 2018,
-        tipoContaFK: 1114
+        tipoContaFK: 1223
       };
 
       this.agrupamentoService.getAgrupamentoConfigByIdCodigoContaTipoConta(request).subscribe(x => {
