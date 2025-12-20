@@ -241,6 +241,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
                         case "Agrupamento":
                         case "SubAgrupamento":
+                        case "Categoria":
+                        case "SubCategoria":
                         case "Rúbrica":
                         case "Alínea":
                         case "SubAlínea":
@@ -554,6 +556,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                             break;
 
                         case "Agrupamento":
+                        case "Categoria":
                             response = _unitOfWork.AgrupamentoConfigRepository.GetAllActiveAgrupamentoConfig(request.Filter);
                             if (response.CountValuesCampo > 0)
                             {
@@ -565,6 +568,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                             break;
 
                         case "SubAgrupamento":
+                        case "SubCategoria":
                             response = _unitOfWork.AgrupamentoConfigRepository.GetAllActiveSubAgrupamentoConfig(request.Filter);
                             if (response.CountValuesCampo > 0)
                             {

@@ -112,9 +112,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Orcamentoconfig orcamento = _unitOfWork.OrcamentoConfigRepository.GetOrcamentoConfigByDates(componente.DataInicio, componente.DataFim);
 
                 response.Agrupamentos = _unitOfWork.AgrupamentoConfigRepository.GetAlllActivAgrupamentoConfigByOrcamentoConfig(orcamento.Id);
-                response.Actidades = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(2018, 1111);
-                //response.Economics = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(2018, 1113);
-                response.Functionals = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(2018, 1114);
+                int tipoContaActidateId = _unitOfWork.DominioRepository.getDominioByDescricao(TiposDominio.TIPOCONTA, "Actidade").IdDominio;
+                int tipoContaFunctionalId = _unitOfWork.DominioRepository.getDominioByDescricao(TiposDominio.TIPOCONTA, "Funcional").IdDominio;
+                int orcamentoId = _unitOfWork.OrcamentoConfigRepository.GetOrcamentoConfigCurrentDate().Id;
+
+                response.Actidades = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(orcamentoId, tipoContaActidateId);
+                response.Functionals = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(orcamentoId, tipoContaFunctionalId);
                 response.CentrosCusto = _unitOfWork.CentroCustoRepository.GetAllActiveCentroCustoByOrcamentoRegisto(componente.Id);
                 response.TiposDeConta = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA);
             }

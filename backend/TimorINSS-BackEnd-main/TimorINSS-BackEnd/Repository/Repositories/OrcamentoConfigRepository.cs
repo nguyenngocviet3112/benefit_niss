@@ -187,6 +187,15 @@ namespace TimorINSSBackEnd.Repository.Repositories
                  .FirstOrDefault();
         }
 
+
+        public Orcamentoconfig GetOrcamentoConfigCurrentDate()
+        {
+            var today = DateTime.Today;
+            return _moduloContribuicoesContext.Orcamentoconfig
+                 .Where(o => o.IndActivo && today >= o.DataInicio && (today <= o.DataFim || o.DataFim == null))
+                 .FirstOrDefault();
+        }
+
         public bool IsOrcamentoDeleteValid(Orcamentoconfig orcamento)
         {
             DateTime maxDate = System.Data.SqlTypes.SqlDateTime.MaxValue.Value;

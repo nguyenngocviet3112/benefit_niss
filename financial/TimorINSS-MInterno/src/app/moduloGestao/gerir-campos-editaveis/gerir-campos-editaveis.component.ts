@@ -159,8 +159,10 @@ export class GerirCamposEditaveisComponent implements OnInit {
       this.selectedTable = 2;
     else if(this.selectedCampo.nome == 'Período de vigência da estrutura do orçamento' || this.selectedCampo.nome == 'Período de vigência')
       this.selectedTable = 3;
-    else if(this.selectedCampo.nome == 'Tipo de conta (1.º nível)' || this.selectedCampo.nome == 'Agrupamento' ||
-            this.selectedCampo.nome == 'SubAgrupamento' || this.selectedCampo.nome == 'Rúbrica' ||
+    else if(this.selectedCampo.nome == 'Tipo de conta (1.º nível)' || this.selectedCampo.nome == 'Categoria' ||
+            this.selectedCampo.nome == 'SubCategoria' ||
+            this.selectedCampo.nome == 'SubAgrupamento' ||
+            this.selectedCampo.nome == 'SubCategoria' || this.selectedCampo.nome == 'Rúbrica' ||
             this.selectedCampo.nome == 'Alínea' || this.selectedCampo.nome == 'SubAlínea' || this.selectedCampo.nome.startsWith('Código de conta ('))
         this.selectedTable = 4;
 

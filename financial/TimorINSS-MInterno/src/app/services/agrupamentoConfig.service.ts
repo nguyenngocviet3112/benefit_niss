@@ -23,6 +23,8 @@ export class AgrupamentoConfigService {
 
   public getAgrupamentoConfigByIdCodigoContaTipoConta(request: GetAgrupamentoConfigRequest): Observable<AgrupamentoConfigResponse>
   {
+    // alert(request.idOrcamento);
+    // alert(request.tipoContaFK);
     return this.api.post<AgrupamentoConfigResponse>('agrupamentoConfig/GetAgrupamentoConfigByIdCodigoContaTipoConta', request);
   }
 }

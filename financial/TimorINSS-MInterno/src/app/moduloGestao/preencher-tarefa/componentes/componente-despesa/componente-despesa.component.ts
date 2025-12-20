@@ -217,6 +217,7 @@ export class ComponenteDespesaComponent implements OnInit {
       this.getOrcamentoAprovado(this.tarefaActivoId);
 
       this.updateFilteredAgrupamentos(false);
+      // alert(1);
       this.updateFilteredEtidades(false);
       // this.updateFilteredEconomic(false);
       this.updateFilteredFuncional(false);
@@ -323,6 +324,9 @@ export class ComponenteDespesaComponent implements OnInit {
     let despesaCompromisso = this.componenteDespesaService.GetDespesasCompromissoByTarefaAtivoId(compromissoRequest);
 
     let institutions = this.departamentoService.getAllInstitutionsAtivo();
+
+    // this.updateFilteredEtidades(true);
+    // this.updateFilteredFuncional(true);
     
 
     forkJoin([departamentoInss, despesaRegistada,institutions, despesaCabimentadaParaExecutar, despesaCompromisso, despesaCompromissoParaExecutar]).subscribe(([departamentoInss, despesaRegistada,institutions, despesaCabimentadaParaExecutar, despesaCompromisso, despesaCompromissoParaExecutar]) => {
@@ -538,17 +542,18 @@ export class ComponenteDespesaComponent implements OnInit {
 
       this.showLoader();
       let request = <GetAgrupamentoConfigRequest>{
-        idOrcamento: 2018,
-        tipoContaFK: 1221
+        idOrcamento: -1,
+        tipoContaFK: -1
       };
-
+      
       this.agrupamentoService.getAgrupamentoConfigByIdCodigoContaTipoConta(request).subscribe(x => {
         if (x != null && x.agrupamentos != null) {
+          // alert(`Id: ${x.agrupamentos[0].id} - Nome: ${x.agrupamentos[0].designacao}`);
           this.etidadeListagem = x.agrupamentos;
           this.filtersEtidadeFiltered = x.agrupamentos;
           this.etidade = <AgrupamentosConfig>{};
         }
-
+        
         if (editar) {
           this.etidade = this.filtersEtidadeFiltered.filter((c: { id: number; }) => c.id === this.idEtidadeEdit)[0];
         }
@@ -602,8 +607,8 @@ export class ComponenteDespesaComponent implements OnInit {
 
       this.showLoader();
       let request = <GetAgrupamentoConfigRequest>{
-        idOrcamento: 2018,
-        tipoContaFK: 1223
+        idOrcamento: -1,
+        tipoContaFK: -2
       };
 
       this.agrupamentoService.getAgrupamentoConfigByIdCodigoContaTipoConta(request).subscribe(x => {
@@ -932,6 +937,8 @@ export class ComponenteDespesaComponent implements OnInit {
       this.totalValorFaltaExecutar = 0;
       this.totalValorCabimentado = 0;
       this.getOrcamentoAprovado(this.tarefaActivoId);
+      // this.updateFilteredEtidades(true);
+      // this.updateFilteredFuncional(true);
 
     });
   }

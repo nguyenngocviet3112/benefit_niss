@@ -43,10 +43,23 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             //    response.Agrupamentos = relCodigoAgrupamento;
             //}
             //else {
-                // no caso de não devolver nada, vai buscar os agrupamentos só com o id tipo de conta
-                //ps: os tipos de conta encontram-se na na tabela DOMINIO com o dominio="TIPOCONTA"
-                //if (componenteOrcamentoRegisto != null) {
-                    response.Agrupamentos = _unitOfWork.AgrupamentoConfigRepository.GetAlllActivAgrupamentoConfigByOrcamentoConfigTipoConta(componenteOrcamentoRegisto?.OrcamentoConfigFk == null ? request.IdOrcamento : componenteOrcamentoRegisto?.OrcamentoConfigFk, request.TipoContaFK);
+            // no caso de não devolver nada, vai buscar os agrupamentos só com o id tipo de conta
+            //ps: os tipos de conta encontram-se na na tabela DOMINIO com o dominio="TIPOCONTA"
+            //if (componenteOrcamentoRegisto != null) {
+            if (request.IdOrcamento == -1) {
+                request.IdOrcamento = _unitOfWork.OrcamentoConfigRepository.GetOrcamentoConfigCurrentDate().Id;
+            }
+            if (request.TipoContaFK == -1)
+            {
+                request.TipoContaFK = _unitOfWork.DominioRepository.getDominioByDescricao(TiposDominio.TIPOCONTA, "Actidade").IdDominio;
+            }
+
+            if (request.TipoContaFK == -2)
+            {
+                request.TipoContaFK = _unitOfWork.DominioRepository.getDominioByDescricao(TiposDominio.TIPOCONTA, "Funcional").IdDominio;
+            }
+
+            response.Agrupamentos = _unitOfWork.AgrupamentoConfigRepository.GetAlllActivAgrupamentoConfigByOrcamentoConfigTipoConta(componenteOrcamentoRegisto?.OrcamentoConfigFk == null ? request.IdOrcamento : componenteOrcamentoRegisto?.OrcamentoConfigFk, request.TipoContaFK);
                 //}
             //}
 

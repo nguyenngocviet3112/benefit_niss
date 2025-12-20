@@ -18,6 +18,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public Orcamentoconfig GetOrcamentoConfigByDates(DateTime start, DateTime end);
 
+        public Orcamentoconfig GetOrcamentoConfigCurrentDate();
+
         public bool IsOrcamentoDeleteValid(Orcamentoconfig orcamento);
     }
 }
