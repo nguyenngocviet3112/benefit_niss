@@ -308,7 +308,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             foreach (RegimesResumoDeclaracao resumoRegime in sumRegimes.Values)
             {
-                //Consoante o regime que o que declarou a contar com o subsidio (decimo terceiro mes) ele adiciona ao total de contribuições e quotizações para calcular o resumo para ser exposto
+                if (totalTrabalhadores > 0 && totalTrabalhadores <= 10 &&
+                totalTrabalhadores * 0.6M <= nacionais && entidadeId > 0)
+                {
+                    resumoRegime.taxaEntidade = 5.4M;
+                }
+                    //Consoante o regime que o que declarou a contar com o subsidio (decimo terceiro mes) ele adiciona ao total de contribuições e quotizações para calcular o resumo para ser exposto
                 resumoRegime.contribuicoes = resumoRegime.remuneracoes * resumoRegime.taxaEntidade * 0.01M * (100 - dispensaContributiva) * 0.01M;
                 resumoRegime.quotizacoes = resumoRegime.remuneracoes * resumoRegime.taxaTrabalhador * 0.01M;
                 resumoRegime.total = resumoRegime.contribuicoes + resumoRegime.quotizacoes;
