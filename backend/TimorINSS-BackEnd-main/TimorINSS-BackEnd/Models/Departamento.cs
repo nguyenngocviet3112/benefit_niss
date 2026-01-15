@@ -17,9 +17,9 @@ namespace TimorINSSBackEnd.Models
             
         }
 
-        public int? InstitutionId { get; set; }     // phải có property này
+        //public int? InstitutionId { get; set; }     // phải có property này
 
-        public virtual Institution Institution { get; set; }   // navigation
+        //public virtual Institution Institution { get; set; }   // navigation
 
         public int Id { get; set; }
         public string Nome { get; set; }
@@ -29,7 +29,6 @@ namespace TimorINSSBackEnd.Models
         public int? UtilizadorAlteracao { get; set; }
         public DateTime? DataAlteracao { get; set; }
         public string Ipv6 { get; set; }
-        //public int? InstitutionId { get; set; }
 
         public virtual ICollection<ComponentedespesaRegisto> ComponentedespesaRegisto { get; set; }
         public virtual ICollection<Componenteorcamentovalor> Componenteorcamentovalor { get; set; }

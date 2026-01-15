@@ -152,68 +152,6 @@ namespace TimorINSSBackEnd
                 ForwardedHeaders = ForwardedHeaders.All
             });
 
-            //✅ Middleware giải mã Base64 path trực tiếp
-            //app.Use(async (context, next) =>
-            //{
-            //    if (context.Request.Headers.TryGetValue("User-Id", out var raw))
-            //    {
-            //        try
-            //        {
-            //            var b64 = raw.ToString().Replace('-', '+').Replace('_', '/');
-            //            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
-            //            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
-            //            context.Request.Headers["User-Id"] = decoded;
-            //        }
-            //        catch { /* tuỳ chọn: trả 400 nếu muốn fail cứng */ }
-            //    }
-
-            //    const string apiPrefix = "/api/";
-            //    var path = context.Request.Path.Value ?? "";
-
-            //    // kiểm tra nếu request bắt đầu bằng /api/
-            //    if (path.StartsWith(apiPrefix, StringComparison.OrdinalIgnoreCase))
-            //    {
-            //        var encoded = path.Substring(apiPrefix.Length).Trim('/');
-
-            //        // Regex: chỉ các chuỗi có thể là base64-url
-            //        var base64Regex = new Regex(@"^[A-Za-z0-9\-_]+={0,2}$", RegexOptions.Compiled);
-
-            //        if (base64Regex.IsMatch(encoded) && encoded.Length > 8)
-            //        {
-            //            try
-            //            {
-            //                // Chuẩn hóa base64-url -> base64 chuẩn
-            //                string normalized = encoded.Replace('-', '+').Replace('_', '/');
-            //                switch (normalized.Length % 4)
-            //                {
-            //                    case 2: normalized += "=="; break;
-            //                    case 3: normalized += "="; break;
-            //                }
-
-            //                // Giải mã
-            //                var bytes = Convert.FromBase64String(normalized);
-            //                var decoded = Encoding.UTF8.GetString(bytes);
-
-            //                // Nếu kết quả có dấu '/', coi là path hợp lệ
-            //                if (decoded.Contains('/'))
-            //                {
-            //                    context.Request.Path = apiPrefix + decoded;
-            //                }
-            //            }
-            //            catch
-            //            {
-            //                // nếu lỗi decode → bỏ qua, giữ nguyên path
-            //                return;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            return;
-            //        }
-            //    }
-
-            //    await next();
-            //});
 
             app.Use(async (context, next) =>
             {

@@ -2,9 +2,9 @@
 
 namespace TimorINSSBackEnd.DataManager.Interfaces
 {
-    public interface IDepartamentoDataManager
+    public interface IInstitutionDataManager
     {
-        public SelectDescriptionResponse GetAllDepartamentosAtivo();
-
+        
+        public SelectDescriptionResponse GetAllInstitutionAtivo();
     }
 }

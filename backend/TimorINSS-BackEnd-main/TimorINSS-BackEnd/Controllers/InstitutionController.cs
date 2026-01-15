@@ -14,11 +14,11 @@ namespace TimorINSSBackEnd.Controllers
     [ApiController]
     public class InstitutionController : ControllerBase
     {
-        private readonly IDepartamentoDataManager _dataManager;
+        private readonly IInstitutionDataManager _dataManager;
         public readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ICacheProvider _cache;
 
-        public InstitutionController(IDepartamentoDataManager dataManager, ICacheProvider memoryCache)
+        public InstitutionController(IInstitutionDataManager dataManager, ICacheProvider memoryCache)
         {
             _dataManager = dataManager;
             _cache = memoryCache;

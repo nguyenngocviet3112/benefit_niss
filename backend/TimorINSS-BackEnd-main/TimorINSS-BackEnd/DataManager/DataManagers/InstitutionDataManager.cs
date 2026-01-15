@@ -6,23 +6,24 @@ using TimorINSSBackEnd.Repository.Interfaces;
 
 namespace TimorINSSBackEnd.DataManager.DataManagers
 {
-    public class DepartamentoDataManager : IDepartamentoDataManager
+    public class InstitutionDataManager : IInstitutionDataManager
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUtilsDataManager _utils;
 
-        public DepartamentoDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils)
+        public InstitutionDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils)
         {
             _unitOfWork = unitOfWork;
             _utils = utils;
         }
 
-        public SelectDescriptionResponse GetAllDepartamentosAtivo()
+
+        public SelectDescriptionResponse GetAllInstitutionAtivo()
         {
             SelectDescriptionResponse response = new SelectDescriptionResponse();
             try
             {
-                List<SelectDescription> selects = _unitOfWork.DepartamentoRepository.GetAllDepartamentosAtivo();
+                List<SelectDescription> selects = _unitOfWork.InstitutionRepository.GetAllInstitutionAtivo();
                 response.selects = selects;
             }
             catch (Exception e)
@@ -31,7 +32,5 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
             return response;
         }
-
-        
     }
 }

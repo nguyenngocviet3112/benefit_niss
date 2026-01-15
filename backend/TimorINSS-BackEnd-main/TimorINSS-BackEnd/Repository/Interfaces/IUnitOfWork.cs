@@ -41,6 +41,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         ICamposEditaveisRepository CamposEditaveisRepository { get; }
         IFuncionalidadeRepository FuncionalidadeRepository { get; }
         IDepartamentoRepository DepartamentoRepository { get; }
+        IInstitutionRepository InstitutionRepository { get; }
         IRelPerfilFuncionalidadeRepository RelPerfilFuncionalidadeRepository { get; }
         IRelUtilizadorDepartamentoRepository RelUtilizadorDepartamentoRepository { get; }
         IOrcamentoConfigRepository OrcamentoConfigRepository { get; }

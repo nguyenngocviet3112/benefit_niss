@@ -12,6 +12,5 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public List<SelectDescription> GetAllDepartamentosAtivo();
 
-        public List<SelectDescription> GetAllInstitutionAtivo();
     }
 }

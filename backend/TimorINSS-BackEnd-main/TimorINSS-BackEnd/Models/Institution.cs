@@ -13,7 +13,7 @@ namespace TimorINSSBackEnd.Models
             Componenteorcamentovalor = new HashSet<Componenteorcamentovalor>();
             ComponentereceitaRegisto = new HashSet<ComponentereceitaRegisto>();
             Movimentosporconciliar = new HashSet<Movimentosporconciliar>();
-            Relutilizadordepartamento = new HashSet<Relutilizadordepartamento>();
+            //Relutilizadordepartamento = new HashSet<Relutilizadordepartamento>();
         }
 
         public int Id { get; set; }
@@ -29,6 +29,6 @@ namespace TimorINSSBackEnd.Models
         public virtual ICollection<Componenteorcamentovalor> Componenteorcamentovalor { get; set; }
         public virtual ICollection<ComponentereceitaRegisto> ComponentereceitaRegisto { get; set; }
         public virtual ICollection<Movimentosporconciliar> Movimentosporconciliar { get; set; }
-        public virtual ICollection<Relutilizadordepartamento> Relutilizadordepartamento { get; set; }
+        //public virtual ICollection<Relutilizadordepartamento> Relutilizadordepartamento { get; set; }
     }
 }

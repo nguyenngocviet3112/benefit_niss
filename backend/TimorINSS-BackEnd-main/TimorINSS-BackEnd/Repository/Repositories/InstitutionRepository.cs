@@ -9,54 +9,54 @@ using TimorINSSBackEnd.Repository.Interfaces;
 
 namespace TimorINSSBackEnd.Repository.Repositories
 {
-    public class DepartamentoRepository : IDepartamentoRepository
+    public class InstitutionRepository : IInstitutionRepository
     {
         private readonly TimorINSSModuloContribuicoesContext _moduloContribuicoesContext;
 
-        public DepartamentoRepository(TimorINSSModuloContribuicoesContext storeContext)
+        public InstitutionRepository(TimorINSSModuloContribuicoesContext storeContext)
         {
             _moduloContribuicoesContext = storeContext;
         }
 
-        public IEnumerable<Departamento> GetAll()
+        public IEnumerable<Institution> GetAll()
         {
-            return _moduloContribuicoesContext.Departamento.Where(u => u.IndActivo).ToList();
+            return _moduloContribuicoesContext.Institution.Where(u => u.IndActivo).ToList();
         }
 
-        public Departamento Get(long id)
+        public Institution Get(long id)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
-            var departamento = _moduloContribuicoesContext.Departamento
+            var departamento = _moduloContribuicoesContext.Institution
                 .SingleOrDefault(u => u.Id == id);
 
             return departamento;
         }
 
-        public DepartamentoDto GetDto(long id)
+        public InstitutionDto GetDto(long id)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = true;
 
-            var departamento = _moduloContribuicoesContext.Departamento
+            var departamento = _moduloContribuicoesContext.Institution
                 .SingleOrDefault(u => u.Id == id);
 
-            DepartamentoDto departamentoDto = Utils.MappClassToDto<Departamento, DepartamentoDto>(departamento);
+            InstitutionDto departamentoDto = Utils.MappClassToDto<Institution, InstitutionDto>(departamento);
             return departamentoDto;
         }
 
-        public void Add(Departamento entity)
+        public void Add(Institution entity)
         {
-            _moduloContribuicoesContext.Departamento.Add(entity);
+            _moduloContribuicoesContext.Institution.Add(entity);
         }
 
-        public void Update(Departamento entity)
+        public void Update(Institution entity)
         {
-            Departamento entityToUpdate = _moduloContribuicoesContext.Departamento
+            Institution entityToUpdate = _moduloContribuicoesContext.Institution
                 .Single(d => d.Id == entity.Id);
 
             entityToUpdate = Utils.UpdateClassWithoutVirtuals(entity, entityToUpdate);
         }
 
-        public void Delete(Departamento entity)
+        public void Delete(Institution entity)
         {
             _moduloContribuicoesContext.Remove(entity);
         }
@@ -109,5 +109,17 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .ToList();
         }
 
+        public List<SelectDescription> GetAllInstitutionAtivo()
+        {
+            return _moduloContribuicoesContext.Institution
+                .Where(u => u.IndActivo)
+               .Select(u => new SelectDescription
+               {
+                   id = u.Id,
+                   nome = u.Nome,
+                   indActivo = u.IndActivo
+               })
+                .ToList();
+        }
     }
 }

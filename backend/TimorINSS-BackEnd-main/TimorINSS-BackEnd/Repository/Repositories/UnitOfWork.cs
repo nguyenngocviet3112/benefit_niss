@@ -98,9 +98,10 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IUtilizadorTokenRepository _utilizadorTokenRepository;
         private ICompromissoRepository _compromissoRepository;
         private IKhachHangRepository _khachHangRepository;
+        private IInstitutionRepository _institutionRepository;
 
 
-        
+
 
         public UnitOfWork(TimorINSSModuloContribuicoesContext moduloContribuicoesContext, IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResource> localizer)
         {
@@ -108,6 +109,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
             _httpContextAccessor = httpContextAccessor;
             _localizer = localizer;
         }
+
+        public IInstitutionRepository InstitutionRepository
+        { get { return _institutionRepository ??= new InstitutionRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository
