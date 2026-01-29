@@ -1108,7 +1108,7 @@ namespace TimorINSSBackEnd.Models
 
                 entity.Property(e => e.DepartamentoFk).HasColumnName("departamento_fk");
 
-                entity.Property(e => e.InstitutionId).HasColumnName("InstitutionId");
+
 
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 

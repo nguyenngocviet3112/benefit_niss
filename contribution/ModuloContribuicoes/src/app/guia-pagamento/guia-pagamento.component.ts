@@ -471,8 +471,12 @@ export class GuiaPagamentoComponent implements OnInit {
 
         pdf.text(this.formatDatePT(element.dataCriacao), 25, 265);
          pdf.text(this.translate.instant('general.invoiceDate'), 30, 270);
-         
-        pdf.addImage(environment.signatureIcon, 'JPEG',  165, 245,25, 20);
+        
+         const SIGNATURE_CHANGE_DATE = new Date('2026-01-01');
+        const invoiceDate = new Date(element.mesAno);
+        const signatureIcon =  invoiceDate >= SIGNATURE_CHANGE_DATE    ? environment.signatureNew2026    : environment.signatureIcon;
+
+        pdf.addImage(signatureIcon, 'JPEG',  165, 245,25, 20);
         pdf.text(this.translate.instant('general.invoiceSAS'), 160, 270);
 
         QRCode.toDataURL(element.qrInvoice)

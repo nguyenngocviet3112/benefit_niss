@@ -10,6 +10,7 @@ export const environment = {
   ssIcon: 'assets/image/inss_logo.png',
   signatureIcon: 'assets/image/signature_icon.png',
   checkBoxIcon: 'assets/image/check_box.png',
+  signatureNew2026: 'assets/image/signature_new_2026.png',
 };
 
 /*

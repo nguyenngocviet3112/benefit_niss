@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 #nullable disable
 
@@ -30,6 +31,7 @@ namespace TimorINSSBackEnd.Models
         public int? CodigoContaDebitoFk { get; set; }
         public int? CodigoContaCreditoFk { get; set; }
         public int? DepartamentoFk { get; set; }
+        public int? InstitutionId { get; set; }
         public int? CentroCustoFk { get; set; }
         public int? TipoContaFk { get; set; }
         public int? AgrupamentoConfigFk { get; set; }

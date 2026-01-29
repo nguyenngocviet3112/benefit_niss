@@ -927,6 +927,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                             break;
 
                         case "Agrupamento":
+                        case "Categoria":
                             Agrupamentoconfig agrupamentoConfig = BuildAgrupamenttoConfigFirstLevelObject(request.ValorCampo);
                             response = ValidateCreateAgrupamentoConfig(agrupamentoConfig);
                             if (response.Errors.Count > 0)
@@ -938,6 +939,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                             break;
 
                         case "SubAgrupamento":
+                        case "SubCategoria":
                         case "Rúbrica":
                         case "Alínea":
                         case "SubAlínea":

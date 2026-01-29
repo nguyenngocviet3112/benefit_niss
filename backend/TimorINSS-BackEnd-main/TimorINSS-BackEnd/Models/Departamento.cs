@@ -17,10 +17,6 @@ namespace TimorINSSBackEnd.Models
             
         }
 
-        //public int? InstitutionId { get; set; }     // phải có property này
-
-        //public virtual Institution Institution { get; set; }   // navigation
-
         public int Id { get; set; }
         public string Nome { get; set; }
         public bool IndActivo { get; set; }
