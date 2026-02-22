@@ -426,7 +426,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 decimal dispensaContributiva = 0;
                 //Regra de negócio de dispensa contributiva:
                 //Caso o número de trabalhadores da empresa seja menor ou igual a 10, pelo menos 60% dos trabalhadores da empresa forem nacionais e a empresa não tenha guias não pagas com a data de vencimento superior à data atual
-                if (totalTrabalhadores <= 10 && totalTrabalhadores * 0.6M <= nacionais)
+                
+                if (DateTime.Now.Year == 2026 && totalTrabalhadores <= 10 && totalTrabalhadores * 0.6M <= nacionais)
                 {
                     bool semDividas = _unitOfWork.ContaCorrenteRepository.IsEntidadeRegularizada(request.entidadeId);
 
