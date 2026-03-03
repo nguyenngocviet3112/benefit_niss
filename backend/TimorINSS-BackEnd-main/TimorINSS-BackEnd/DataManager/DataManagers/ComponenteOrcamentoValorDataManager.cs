@@ -130,6 +130,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     CentroCustoFk = valor.CentroCustoFk,
                     ComponenteOrcamentoRegistoFk = valor.ComponenteOrcamentoRegistoFk,
                     DepartamentoFk = valor.DepartamentoFk,
+                    InstitutionId = valor.InstitutionId,
                     Valor = valor.Valor,
                     TipoDeConta = valor.TipoContaFk ?? 0,
                     TipoDeContaDescricao = valor.TipoContaFkNavigation?.Descricao,
