@@ -8,7 +8,7 @@
           <mat-label>{{'general.docType' | translate}}</mat-label>
           <mat-select #name="ngModel" [(ngModel)]="documento.tpDocIdentificacao" name="tpDocIdentificacao"
           (selectionChange)="changedDocType()">
-            <mat-optgroup *ngFor="let group of documentosList.groups" [label]="'general.'+group.name | translate">
+            <mat-optgroup *ngFor="let group of documentosList?.groups" [label]="'general.'+group.name | translate">
               <mat-option *ngFor="let documentType of group.values" [value]="documentType.id">
                 {{documentType.descricao}}</mat-option>
             </mat-optgroup>
