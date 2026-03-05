@@ -125,6 +125,7 @@ export class ComponenteOrcamentoComponent implements OnInit {
           
           let getRegistoResponse = x[1].componenteOrcamentoRegisto;
           if (getRegistoResponse != null) {
+        
             this.filteredOrcamentoValores = x[1].valoresCorrentes;
             this.registoOrcamento = getRegistoResponse;
             this.datasRegistadas = true;

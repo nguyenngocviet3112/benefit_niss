@@ -131,6 +131,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     ComponenteOrcamentoRegistoFk = valor.ComponenteOrcamentoRegistoFk,
                     DepartamentoFk = valor.DepartamentoFk,
                     InstitutionId = valor.InstitutionId,
+                    ActidadeFk= valor.ActidadeFk,
+                    FuncionalFk=valor.FuncionalFk,
+                    InstitutionDescricao = valor.InstitutionFkNavigation != null ? valor.InstitutionFkNavigation.Nome : "",
                     Valor = valor.Valor,
                     TipoDeConta = valor.TipoContaFk ?? 0,
                     TipoDeContaDescricao = valor.TipoContaFkNavigation?.Descricao,
@@ -155,10 +158,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             Componenteorcamentovalor componenteFilho = BuildComponenteOrcamentoValorObject(request.ComponenteOrcamentoValor);
             Componenteorcamentovalor componenteFilhoOriginal = _unitOfWork.ComponenteOrcamentoValorRepository.GetComponenteOrcamentoValorSameForeignKeys(componenteFilho);
 
-            decimal valorDiff = componenteFilho.Valor - componenteFilhoOriginal.Valor;
+            decimal valorDiff = (componenteFilho?.Valor??0) - (componenteFilhoOriginal?.Valor ?? 0);
 
             ComponenteOrcamentoValorDto componenteFilhoDto = Utils.MappClassToDto<Componenteorcamentovalor, ComponenteOrcamentoValorDto>(componenteFilhoOriginal);
-            componenteFilhoDto.Valor = componenteFilho.Valor;
+            componenteFilhoDto.Valor = (componenteFilhoOriginal?.Valor ?? 0);
             componenteFilhoDto = _utils.UpdateDetailsToEntity(componenteFilhoDto);
             componenteFilhoOriginal = Utils.MappClassFromDto<ComponenteOrcamentoValorDto, Componenteorcamentovalor>(componenteFilhoDto);
 

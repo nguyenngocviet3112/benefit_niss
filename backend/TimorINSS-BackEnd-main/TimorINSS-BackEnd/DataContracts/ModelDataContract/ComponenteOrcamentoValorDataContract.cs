@@ -52,6 +52,16 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public int? InstitutionId { get; set; }
 
         [DataMember]
+        public int? FuncionalFk { get; set; }
+
+
+        [DataMember]
+        public string InstitutionDescricao { get; set; }
+
+        [DataMember]
+        public int? ActidadeFk { get; set; }
+
+        [DataMember]
         public string DepartamentoDescricao { get; set; }
 
         [DataMember]
@@ -63,9 +73,7 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         [DataMember]
         public string FuncionalDescricao { get; set; }
 
-        [DataMember]
-        public string InstitutionDescricao { get; set; }
-
+  
         [DataMember]
         public int? CentroCustoFk { get; set; }
 

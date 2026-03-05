@@ -148,8 +148,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     && c.CentroCustoFk == componente.CentroCustoFk && c.DepartamentoFk == componente.DepartamentoFk
                     && c.AgrupamentoFk == componente.AgrupamentoFk
                     && c.ActidadeFk == componente.ActidadeFk
-                    //&& c.EconomicFk == componente.EconomicFk
                     && c.FuncionalFk == componente.FuncionalFk
+                    && c.InstitutionId == componente.InstitutionId
                     ).FirstOrDefault();
         }
 

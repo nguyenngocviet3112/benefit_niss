@@ -23,11 +23,11 @@ export interface ComponenteOrcamentoValorFull
     agrupamentoFk: number;
     actidadeFk: number;
     funcionalFk: number;
+    institutionId?: number;
     valor: number;
     tipoDeConta: number;
     tipoDeContaDescricao: string;
     actidadeDescricao?: string;
-    // economicDescricao?: string;
     functionalDescricao?: string;
     codigo: string;
     descricao: string;
