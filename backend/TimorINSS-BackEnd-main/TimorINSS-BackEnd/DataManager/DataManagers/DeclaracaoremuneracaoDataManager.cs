@@ -294,7 +294,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             //Caso o número de trabalhadores da empresa seja menor ou igual a 10, pelo menos 60% dos trabalhadores da empresa forem nacionais e a empresa não tenha guias não pagas com a data de vencimento superior à data atual
             //Ele vai validar se não tem dividas, para poder ir buscar o ano de declaração para poder exibir a dispensa contributiva no resumo
-            if (totalTrabalhadores > 0 && totalTrabalhadores <= 10 &&
+            if (DateTime.Now.Year == 2026 && totalTrabalhadores > 0 && totalTrabalhadores <= 10 &&
                 totalTrabalhadores * 0.6M <= nacionais && entidadeId > 0)
             {
                 bool semDividas = _unitOfWork.ContaCorrenteRepository.IsEntidadeRegularizada(entidadeId);
@@ -308,7 +308,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             foreach (RegimesResumoDeclaracao resumoRegime in sumRegimes.Values)
             {
-                if (totalTrabalhadores > 0 && totalTrabalhadores <= 10 &&
+                if (DateTime.Now.Year == 2026 && totalTrabalhadores > 0 && totalTrabalhadores <= 10 &&
                 totalTrabalhadores * 0.6M <= nacionais && entidadeId > 0)
                 {
                     resumoRegime.taxaEntidade = 5.4M;
@@ -416,7 +416,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
                     if (nacionalidade != "Estrangeiro (não desconta em TL)")
                     {
-                        if (nacionalidade == "Timor - Leste")
+                        if (nacionalidade == "Timor-Leste")
                             nacionais++;
 
                         descontantes.Add(new Tuple<int, decimal>(rel.RegimeFk, declaracao.remunDeclarada + declaracao.decimoTerceiro));
@@ -443,8 +443,14 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     regime = _unitOfWork.RegimeRepository.GetRegimeByParentAndDate(tuple.Item1, request.data);
                     if (regime != null)
                     {
+                        decimal taxaEntidade = 1M;
+                        if (DateTime.Now.Year == 2026 && totalTrabalhadores > 0 && totalTrabalhadores <= 10 &&
+                            totalTrabalhadores * 0.6M <= nacionais)
+                        {
+                            taxaEntidade = 0.054M;
+                        }
                         //Regra de negocio: consoante o regime que o trabalhador se encontra e o que declarou a contar com o subsidio (decimo terceiro mes) ele adiciona ao total de contribuições e quotizações
-                        decimal contribuicoes = tuple.Item2 * regime.PercentEntidadeEmpreg * 0.01M * (100 - dispensaContributiva) * 0.01M;
+                        decimal contribuicoes = tuple.Item2 * taxaEntidade * regime.PercentEntidadeEmpreg * 0.01M * (100 - dispensaContributiva) * 0.01M;
                         decimal quotizacoes = tuple.Item2 * regime.PercentTrabalhador * 0.01M;
                         totalQuotizacoes += quotizacoes;
                         totalContribuicoes += contribuicoes;

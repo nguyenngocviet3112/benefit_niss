@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using OfficeOpenXml.FormulaParsing.Utilities;
@@ -158,17 +159,19 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             Componenteorcamentovalor componenteFilho = BuildComponenteOrcamentoValorObject(request.ComponenteOrcamentoValor);
             Componenteorcamentovalor componenteFilhoOriginal = _unitOfWork.ComponenteOrcamentoValorRepository.GetComponenteOrcamentoValorSameForeignKeys(componenteFilho);
 
-            decimal valorDiff = (componenteFilho?.Valor??0) - (componenteFilhoOriginal?.Valor ?? 0);
+            decimal valorDiff = componenteFilho.Valor - componenteFilhoOriginal.Valor;
 
             ComponenteOrcamentoValorDto componenteFilhoDto = Utils.MappClassToDto<Componenteorcamentovalor, ComponenteOrcamentoValorDto>(componenteFilhoOriginal);
-            componenteFilhoDto.Valor = (componenteFilhoOriginal?.Valor ?? 0);
+            componenteFilhoDto.Valor = componenteFilhoOriginal.Valor;
+
             componenteFilhoDto = _utils.UpdateDetailsToEntity(componenteFilhoDto);
             componenteFilhoOriginal = Utils.MappClassFromDto<ComponenteOrcamentoValorDto, Componenteorcamentovalor>(componenteFilhoDto);
-
+            componenteFilhoOriginal.Valor += valorDiff;
             List<Componenteorcamentovalor> componentesUpdate = new List<Componenteorcamentovalor>
             {
                 componenteFilhoOriginal
             };
+            
 
             ////Agrupamentoconfig agrupamento = _unitOfWork.AgrupamentoConfigRepository.Get(componenteFilhoOriginal.AgrupamentoFk);
             //Componenteorcamentovalor componente;
