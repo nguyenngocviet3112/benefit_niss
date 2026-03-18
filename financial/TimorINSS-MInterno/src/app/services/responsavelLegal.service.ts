@@ -7,35 +7,37 @@ import { ListResponsavelLegalResponse, ResponsavelLegalListagemResponse } from '
 import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
-    providedIn: 'root'
-  })
+  providedIn: 'root'
+})
 export class ResponsavelLegalService {
 
   public savedSuccessfully = false;
   public traceBack = false;
 
-    constructor(
-      private http: HttpClient,
-      private api: ApiHelperService
-    ) {}
+  constructor(
+    private http: HttpClient,
+    private api: ApiHelperService
+  ) { }
 
-    public saveResponsavelLegal(request: ResponsavelLegalRequest) {
-      return this.api.post('responsavelLegal/AddReponsavelLegal', request);
-    }
+  public saveResponsavelLegal(request: ResponsavelLegalRequest) {
+    return this.api.post('responsavelLegal/AddReponsavelLegal', request);
+  }
 
-    public listResponsavelLegal(request: ListResponsavelLegal) {
-      return this.api.post<ListResponsavelLegalResponse>('responsavelLegal/ListReponsavelLegal', request);
-    }
+  public listResponsavelLegal(request: ListResponsavelLegal) {
+    return this.api.post<ListResponsavelLegalResponse>('responsavelLegal/ListReponsavelLegal', request);
+  }
 
-    public updateResponsavelLegalRequest(request: ResponsavelLegalRequest) {
-      return this.api.post('responsavelLegal/UpdateResponsavelLegal', request);
-    }
+  public updateResponsavelLegalRequest(request: ResponsavelLegalRequest) {
+    return this.api.post('responsavelLegal/UpdateResponsavelLegal', request);
+  }
 
-    public getByIdEntidadeEmpregadora(request: ListResponsavelLegal) : Observable<ResponsavelLegalListagemResponse>  {
-      return this.api.post<ResponsavelLegalListagemResponse>('responsavelLegal/GetByIdEntidadeEmpregadora',request);
-    }
+  public getByIdEntidadeEmpregadora(request: ListResponsavelLegal): Observable<ResponsavelLegalListagemResponse> {
+    const encodedId = this.api.encodeId(request.id);
+    const payload = { ...request, idStr: encodedId, id: 0 };
+    return this.api.post<ResponsavelLegalListagemResponse>('responsavelLegal/GetByIdEntidadeEmpregadora', payload);
+  }
 
-    public deleteResponsavelLegal(entity: ResponsavelLegalDeleteRequest) {
-      return this.api.post('responsavelLegal/DeleteResponsavelLegal', entity);
-    }
+  public deleteResponsavelLegal(entity: ResponsavelLegalDeleteRequest) {
+    return this.api.post('responsavelLegal/DeleteResponsavelLegal', entity);
+  }
 }

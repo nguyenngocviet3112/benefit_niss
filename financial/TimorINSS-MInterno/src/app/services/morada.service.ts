@@ -22,11 +22,15 @@ export class MoradaService {
 
 
   public getMoradaByIdEntidadeEmpregadora(request: MoradaListagemRequest) : Observable<MoradaListagemResponse>  {
-    return this.api.post<MoradaListagemResponse>('morada/GetByIdEntidadeEmpregadora',request);
+    const encodedId = this.api.encodeId(request.id);
+    const payload = { ...request, idStr: encodedId , id:0};
+    return this.api.post<MoradaListagemResponse>('morada/GetByIdEntidadeEmpregadora',payload);
   }
 
   public getMoradaByIdTrabalhador(request: MoradaListagemRequest) : Observable<MoradaListagemResponse>  {
-    return this.api.post<MoradaListagemResponse>('morada/GetByIdTrabalhador',request);
+    const encodedId = this.api.encodeId(request.id);
+    const payload = { ...request, idStr: encodedId };
+    return this.api.post<MoradaListagemResponse>('morada/GetByIdTrabalhador',payload);
   }
 
   public saveMorada(entity: MoradaRequest) {

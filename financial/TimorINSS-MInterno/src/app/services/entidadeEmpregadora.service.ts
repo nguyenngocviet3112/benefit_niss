@@ -37,7 +37,9 @@ export class EntidadeEmpregadoraService {
   }
 
   public GetEntidadeInfoForDeclaracao(request: EntidadeEmpregadoraIdRequest) {
-    return this.api.post<EntidadeEmpregadoraDeclaracaoViewResponse>('entidadeEmpregadora/GetEntidadeInfoForDeclaracao', request);
+    const encodedId = this.api.encodeId(request.idEntidade!);
+    const payload = { ...request, idEntidadeStr: encodedId, idEntidade:0 };
+    return this.api.post<EntidadeEmpregadoraDeclaracaoViewResponse>('entidadeEmpregadora/GetEntidadeInfoForDeclaracao', payload);
   }
 
   public GetEntidadeByNiss(request: EntidadeEmpregadoraNissRequest) {

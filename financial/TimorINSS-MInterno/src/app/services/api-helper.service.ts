@@ -28,7 +28,9 @@ export class ApiHelperService {
 
   /** 🔹 POST auto-encode */
   public post<T>(rawPath: string, body: any): Observable<T> {
+    // alert('RAW PATH:'+ rawPath);
     const encoded = this.encodePath(rawPath);
+    // alert('ENCODED PATH:'+ encoded);
     return this.http.post<T>(`${environment.apiUrl}/${encoded}`, body);
   }
 

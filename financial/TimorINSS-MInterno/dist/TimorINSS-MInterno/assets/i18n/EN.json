@@ -363,7 +363,7 @@
   "utilizador": {
     "hearder": "EDIT USER",
     "title": "Users",
-    "actidade": "Actidade",
+    "actidade": "Actividade",
     "economic": "Economic",
     "funcional": "Funcional",
     "utilizador": "User",
@@ -490,8 +490,8 @@
   },
   "componenteDespesa": {
 
-"actidade": "Actidade",
-    "etidade": "Actidade",
+"actidade": "Actividade",
+    "etidade": "Actividade",
     "institution": "Institution",
     "economic": "Economic",
     "functional": "Funcional",
@@ -806,7 +806,7 @@
     "comprovativo": "Payment Receipt"
   },
   "componenteOrcamento": {
-    "actidade": "Actidade",
+    "actidade": "Actividade",
     "economic": "Economic",
     "functional": "Funcional",
     "funcional": "Funcional",

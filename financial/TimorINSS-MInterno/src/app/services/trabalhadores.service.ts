@@ -18,7 +18,9 @@ export class TrabalhadoresService {
   ) {}
 
   public getTrabalhadoresByEntidadeEmpregadora(request: TrabalhadorListagemRequest) : Observable<TrabalhadorListagemResponse>  {
-    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/GetByIdEntidadeEmpregadora',request);
+    const encodedId = this.api.encodeId(request.id);
+    const payload = { ...request, idStr: encodedId , id:0};
+    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/GetByIdEntidadeEmpregadora',payload);
   }
 
   public getTrabalhadoresByFilter(request: FilterRequest) : Observable<VincularTrabalhadorListagemResponse>  {
@@ -30,15 +32,21 @@ export class TrabalhadoresService {
   }
 
   public getTrabalhadorById(request: TrabalhadorListagemRequest) : Observable<GetTrabalhadorReponse>{
-    return this.api.post<GetTrabalhadorReponse>('trabalhadores/getById', request);
+    const encodedId = this.api.encodeId(request.id);
+    const payload = { ...request, idStr: encodedId , id:0};
+    return this.api.post<GetTrabalhadorReponse>('trabalhadores/getById', payload);
   }
 
   public getTrabalhadorByNiss(request: TrabalhadorListagemRequest) : Observable<TrabalhadorListagemResponse>{
-    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/getTrabalhadoresByNiss', request);
+    const encodedId = this.api.encodeId(request.id);
+    const payload = { ...request, idStr: encodedId, id:0 };
+    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/getTrabalhadoresByNiss', payload);
   }
 
   public GetSingleByNiss(request: TrabalhadorListagemNissRequest) : Observable<TrabalhadorListagemResponse>{
-    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/GetSingleByNiss', request);
+    const encodedId = this.api.encodePath(request.niss!);
+    const payload = { ...request, niss: encodedId };
+    return this.api.post<TrabalhadorListagemResponse>('trabalhadores/GetSingleByNiss', payload);
   }
 
   public editDadosPrincipaisTrabalhador(entity: EditTrabalhadorRequest) {

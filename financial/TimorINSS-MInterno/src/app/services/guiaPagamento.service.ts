@@ -33,15 +33,21 @@ export class GuiaPagamentoService {
   }
 
   public getAllGuiasByEntidade(entity: GetAllGuiasStatesFromYearByFilterRequest) {
-    return this.api.post<GuiaListagemResponse>('guiaPagamento/listGuiasByEntidade', entity);
+    const encodedId = this.api.encodeId(entity.idEntidade);
+    const payload = { ...entity, idEntidadeStr: encodedId , idEntidade:0};
+    return this.api.post<GuiaListagemResponse>('guiaPagamento/listGuiasByEntidade', payload);
   }
 
   public getGuiasDetailByEntidade(entity: GetGuiasDetailsRequest) {
-    return this.api.post<GuiaListagemResponse>('guiaPagamento/guiaPagamentoDetail', entity);
+    const encodedId = this.api.encodeId(entity.idGuiaPagamento);
+    const payload = { ...entity, idGuiaPagamentoStr: encodedId };
+    return this.api.post<GuiaListagemResponse>('guiaPagamento/guiaPagamentoDetail', payload);
   }
 
   public getAllGuiasByEntidadeApprove(entity: GetAllGuiasStatesFromYearByFilterRequest) {
-    return this.api.post<GuiaListagemResponse>('guiaPagamento/listGuiasByEntidadeApprove', entity);
+    const encodedId = this.api.encodeId(entity.idEntidade);
+    const payload = { ...entity, idEntidadeStr: encodedId , idEntidade:0};
+    return this.api.post<GuiaListagemResponse>('guiaPagamento/listGuiasByEntidadeApprove', payload);
   }
 
   public useCreditInGuiaPagamento(request: useCreditInGuiaPagamentoRequest) {

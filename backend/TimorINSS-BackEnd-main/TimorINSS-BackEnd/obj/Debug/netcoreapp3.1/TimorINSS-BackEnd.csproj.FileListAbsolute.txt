@@ -44,13 +44,9 @@ F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
-F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\MigraDoc.DocumentObjectModel.Core.dll
-F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\MigraDoc.Rendering.Core.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\MimeKit.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
-F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\PdfSharp.Charting.Core.dll
-F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\PdfSharp.Core.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\PdfSharpCore.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\SixLabors.Fonts.dll
@@ -63,7 +59,6 @@ F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\System.Xml.XPath.XmlDocument.dll
-F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\de\MigraDoc.Rendering.Core.resources.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\de\PdfSharpCore.resources.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
@@ -102,3 +97,14 @@ F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\obj\Debug\netcoreapp3.1\TimorINSSBackEnd.dll
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\obj\Debug\netcoreapp3.1\TimorINSSBackEnd.pdb
 F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\obj\Debug\netcoreapp3.1\TimorINSS-BackEnd.genruntimeconfig.cache
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\ClosedXML.dll
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\ClosedXML.Parser.dll
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\DocumentFormat.OpenXml.dll
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\DocumentFormat.OpenXml.Framework.dll
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\ExcelNumberFormat.dll
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\MigraDocCore.DocumentObjectModel.dll
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\MigraDocCore.Rendering.dll
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\PdfSharpCore.Charting.dll
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\RBush.dll
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\ICSharpCode.SharpZipLib.dll
+F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\bin\Debug\netcoreapp3.1\System.IO.Packaging.dll

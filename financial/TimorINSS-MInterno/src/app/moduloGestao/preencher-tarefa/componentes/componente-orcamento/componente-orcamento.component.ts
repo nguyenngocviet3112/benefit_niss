@@ -360,9 +360,9 @@ export class ComponenteOrcamentoComponent implements OnInit {
             x => {
               this.componenteOrcamentoValor.componenteOrcamentoRegistoFk = 0;
               this.componenteOrcamentoValor.agrupamentoFk = 0;
-              this.componenteOrcamentoValor.actidadeFk = 0;
+              // this.componenteOrcamentoValor.actidadeFk = 0;
               // this.componenteOrcamentoValor.economicFk = 0;
-              this.componenteOrcamentoValor.funcionalFk = 0;
+              // this.componenteOrcamentoValor.funcionalFk = 0;
               this.componenteOrcamentoValor.id = 0;
               this.componenteOrcamentoValor.valor = 0;
               this.selectedAgrupamento = undefined;

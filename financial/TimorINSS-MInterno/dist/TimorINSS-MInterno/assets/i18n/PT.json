@@ -485,8 +485,8 @@
     "visualizarDespesasCompromisso": "Visualizar Despesas com Compromisso"
   },
   "componenteDespesa": {
-    "actidade": "Actidade",
-    "etidade": "Actidade",
+    "actidade": "Actividade",
+    "etidade": "Actividade",
     "institution": "Institution",
     "economic": "Economic",
     "functional": "Funcional",
@@ -796,7 +796,7 @@
     "comprovativo": "Comprovativo"
   },
   "componenteOrcamento" : {
-    "actidade": "Actidade",
+    "actidade": "Actividade",
     "economic": "Economic",
     "functional": "Funcional",
     "funcional": "Funcional",

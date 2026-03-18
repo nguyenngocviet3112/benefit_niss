@@ -34,3 +34,13 @@ backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/obj/Debug/netcoreapp3.1/TimorIN
 *.dll
 *.dll
 *.dll
+/backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug
+/backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug
+/backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug/netcoreapp3.1
+backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug/netcoreapp3.1/PT/TimorINSSBackEnd.resources.dll
+/backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug/netcoreapp3.1/EN
+/backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug
+backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/obj/Debug/netcoreapp3.1/TimorINSS-BackEnd.AssemblyInfoInputs.cache
+backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/obj/Debug/netcoreapp3.1/TimorINSS-BackEnd.AssemblyInfo.cs
+backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug/netcoreapp3.1/TimorINSSBackEnd.exe
+backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug/netcoreapp3.1/TimorINSSBackEnd.dll

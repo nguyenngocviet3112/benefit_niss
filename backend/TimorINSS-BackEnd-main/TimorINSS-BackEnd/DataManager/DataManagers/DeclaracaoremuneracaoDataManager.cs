@@ -443,14 +443,14 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     regime = _unitOfWork.RegimeRepository.GetRegimeByParentAndDate(tuple.Item1, request.data);
                     if (regime != null)
                     {
-                        decimal taxaEntidade = 1M;
+                        
                         if (DateTime.Now.Year == 2026 && totalTrabalhadores > 0 && totalTrabalhadores <= 10 &&
                             totalTrabalhadores * 0.6M <= nacionais)
                         {
-                            taxaEntidade = 0.054M;
+                            regime.PercentEntidadeEmpreg = 5.4M;
                         }
                         //Regra de negocio: consoante o regime que o trabalhador se encontra e o que declarou a contar com o subsidio (decimo terceiro mes) ele adiciona ao total de contribuições e quotizações
-                        decimal contribuicoes = tuple.Item2 * taxaEntidade * regime.PercentEntidadeEmpreg * 0.01M * (100 - dispensaContributiva) * 0.01M;
+                        decimal contribuicoes = tuple.Item2 * regime.PercentEntidadeEmpreg * 0.01M * (100 - dispensaContributiva) * 0.01M;
                         decimal quotizacoes = tuple.Item2 * regime.PercentTrabalhador * 0.01M;
                         totalQuotizacoes += quotizacoes;
                         totalContribuicoes += contribuicoes;
