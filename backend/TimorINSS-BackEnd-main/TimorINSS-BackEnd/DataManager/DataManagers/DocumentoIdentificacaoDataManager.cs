@@ -328,7 +328,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 if (request.filter != null)
                 {
-                    request.Id = _unitOfWork.TarefaAtivoRepository.GetTarefaAtivoById(request.Id).ProcessoAtivoFk;
+                    int decodedId = IdDecoder.DecodeId(request.IdStr);
+
+                    request.Id = _unitOfWork.TarefaAtivoRepository.GetTarefaAtivoById(decodedId).ProcessoAtivoFk;
                     response = _unitOfWork.ComponenteDocumentosRegistoRepository.GetListagemByIdProcesso(request);
                 }
                 else
@@ -352,7 +354,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 if (request.filter != null)
                 {
-                    request.Id = request.Id;
+                    request.Id = IdDecoder.DecodeId(request.IdStr);
                     response = _unitOfWork.ComponenteDocumentosRegistoRepository.GetListagemByIdProcesso(request);
                 }
                 else

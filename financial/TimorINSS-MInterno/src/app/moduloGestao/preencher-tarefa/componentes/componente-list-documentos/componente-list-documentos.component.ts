@@ -49,6 +49,7 @@ export class ComponenteListDocumentosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // alert(1);
     if (!this.readOnly) this.displayedColumnsDocumento.push('verEditar');
     this.getTableDocumentos().subscribe(x => {
       x.rows == null ? this.totalRowsDocumentosTable = 0 : this.totalRowsDocumentosTable = x.rows;
@@ -88,7 +89,7 @@ export class ComponenteListDocumentosComponent implements OnInit {
     filter.index = this.pageIndexDocumentosTable;
     filter.rows = this.pageSizeDocumentosTable;
     request = { "id": this.tarefaActivoId || this.processoId, "filter": filter };
-
+    // alert(this.tarefaActivoId);
     return this.tarefaActivoId ? this.documentoService.getDocumentosByIdTarefaAtivo(request) : this.documentoService.getDocumentosByIdProcessoAtivo(request);
   }
 

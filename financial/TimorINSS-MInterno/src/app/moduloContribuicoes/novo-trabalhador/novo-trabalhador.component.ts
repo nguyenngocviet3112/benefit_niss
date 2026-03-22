@@ -230,6 +230,7 @@ export class NovoTrabalhadorComponent implements OnInit {
         this.contrato.entidadeFk = idEntidade;
         this.idEntidade = idEntidade;
         let requests: Observable<any>[] = [];
+        
         requests.push(this.dominiosService.getAllDominiosForNovoTrabalhador());
         requests.push(this.municipioService.getAllMunicipio());
         requests.push(this.postoAdministrativoService.getAllPostoAdministrativo());

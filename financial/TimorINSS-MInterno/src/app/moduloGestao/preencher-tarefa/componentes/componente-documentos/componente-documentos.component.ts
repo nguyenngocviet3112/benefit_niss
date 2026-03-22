@@ -56,6 +56,7 @@ export class ComponenteDocumentosComponent implements OnInit {
     this.dominiosService.GetTiposDocumentoPorTarefaAtiva(request).subscribe(x => {
       this.hideLoader();
       this.documentosList = x.dominio;
+      // alert(JSON.stringify(this.documentosList));
       },
     err => {
       this.hideLoader();

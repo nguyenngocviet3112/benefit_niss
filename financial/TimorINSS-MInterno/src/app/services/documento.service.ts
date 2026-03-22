@@ -44,11 +44,16 @@ export class DocumentoService {
   }
 
   public getDocumentosByIdTarefaAtivo(request: DocumentosListagemRequest) : Observable<DocumentosTarefaListagemResponse>  {
-    return this.api.post<DocumentosTarefaListagemResponse>('documentos/getDocumentosByIdTarefaAtivo',request);
+    const encodedId = this.api.encodeId(request.id);
+    const payload = { ...request, idStr: encodedId , id:0};
+
+    return this.api.post<DocumentosTarefaListagemResponse>('documentos/getDocumentosByIdTarefaAtivo',payload);
   }
 
   public getDocumentosByIdProcessoAtivo(request: DocumentosListagemRequest) : Observable<DocumentosTarefaListagemResponse>  {
-    return this.api.post<DocumentosTarefaListagemResponse>('documentos/getDocumentosByIdProcessoAtivo',request);
+    const encodedId = this.api.encodeId(request.id);
+    const payload = { ...request, idStr: encodedId , id:0};
+    return this.api.post<DocumentosTarefaListagemResponse>('documentos/getDocumentosByIdProcessoAtivo',payload);
   }
 
   public SaveTarefaDocumento(request: TarefaDocumentoRequest) {
