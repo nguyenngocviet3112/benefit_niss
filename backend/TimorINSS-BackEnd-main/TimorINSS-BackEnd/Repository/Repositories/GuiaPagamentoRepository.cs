@@ -216,7 +216,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         //paymentRef = e.GuiaEntidadeFkNavigation.Niss + DateTime.Now.ToString("MMyyyy") + "01",
                         paymentRef = e.PaymentRef,
                         bankCode = e.BankCode,
-                        dataCriacao = e.DataCriacao
+                        dataCriacao = e.DataCriacao,
+                        valorEntidade = e.ContaCorrente.ValorEntidade,
+                        valorTrabalhador = e.ContaCorrente.ValorTrabalhador,
                     })
                     .OrderBy("idGuia", OrderDirectionEnum.descending)
                     //.OrderBy("mesAno", OrderDirectionEnum.descending)

@@ -25,4 +25,6 @@ export interface GuiaListagem
   bankCode: string;
   estadoPagamento: number;
   userName: string;
+  valorEntidade?: number;
+  valorTrabalhador?: number;
 }

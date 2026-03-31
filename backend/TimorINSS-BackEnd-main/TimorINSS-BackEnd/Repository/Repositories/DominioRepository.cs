@@ -64,7 +64,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         public List<DominioDescricaoString> getAllTiposDeDominio(TiposDominio tipo)
         {
             return _moduloContribuicoesContext.Dominio
-                .Where(u => u.Dominio1 == tipo.ToString() && u.Valor > 0)
+                .Where(u => u.Dominio1 == tipo.ToString())
                 .Select(u => new DominioDescricaoString
                 {
                     id = u.IdDominio,
