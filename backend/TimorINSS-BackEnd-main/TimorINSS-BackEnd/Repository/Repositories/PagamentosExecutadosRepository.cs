@@ -453,7 +453,10 @@ namespace TimorINSSBackEnd.Repository.Repositories
                             // Filtrar por tipo de conta
                             e.ReltipoDeContaOrcamentoConfigFkNavigation.TipoContaFk == request.tipoConta &&
                             // Filtrar pelo ano do orçamento
-                            e.Componenteorcamentovalor.Any(a => a.ComponenteOrcamentoRegistoFkNavigation.Aprovado && a.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year && a.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
+                            e.Componenteorcamentovalor.Any(a => a.ComponenteOrcamentoRegistoFkNavigation.Aprovado 
+                            && a.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year 
+                            && a.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year
+                            && a.InstitutionId == request.institution)
                 );
 
             var contas = listaContas

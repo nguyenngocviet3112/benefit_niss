@@ -14,12 +14,14 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUtilsDataManager _utils;
+        private readonly IInstitutionDataManager _dataManager;
 
         public DominioDataManager(IUnitOfWork unitOfWork,
-                                 IUtilsDataManager utils)
+                                 IUtilsDataManager utils, IInstitutionDataManager dataManager)
         {
             _unitOfWork = unitOfWork;
             _utils = utils;
+            _dataManager = dataManager;
         }
 
         public IEnumerable<Dominio> GetAll()
@@ -335,6 +337,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA).Where(x => x.indActivo == true).ToList();
             List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
+
+            SelectDescriptionResponse institution = _dataManager.GetAllInstitutionAtivo();
+            response.institutions = institution.selects;
+
             if (language != null && language.ToUpper().Contains("EN"))
             {
                 foreach (DominioDescricaoString dominio in dominios)

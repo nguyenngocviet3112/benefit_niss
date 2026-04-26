@@ -485,8 +485,8 @@
     "visualizarDespesasCompromisso": "Visualizar Despesas com Compromisso"
   },
   "componenteDespesa": {
-    "actidade": "Actividade",
-    "etidade": "Actividade",
+    "actidade": "Actidade",
+    "etidade": "Actidade",
     "institution": "Institution",
     "economic": "Economic",
     "functional": "Funcional",
@@ -796,7 +796,7 @@
     "comprovativo": "Comprovativo"
   },
   "componenteOrcamento" : {
-    "actidade": "Actividade",
+    "actidade": "Actidade",
     "economic": "Economic",
     "functional": "Funcional",
     "funcional": "Funcional",
@@ -1449,6 +1449,7 @@
 
   "execucaoOrcamental": {
     "contaOGE": "Conta OGE",
+    "instiutiton": "Instiutiton",
     "centroCusto": "Centro de Custo",
     "rubricaClassificacao": "Rúbrica de Classificação Económica",
     "valorOrcamentoInicial": "Valor Orçamento Inicial",

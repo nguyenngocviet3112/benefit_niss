@@ -8,6 +8,8 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
     {
         [DataMember]
         public List<DominioDescricaoString> dominios { get; set; }
+        [DataMember]
+        public List<SelectDescription> institutions { get; set; }
     }
 
     [DataContract]

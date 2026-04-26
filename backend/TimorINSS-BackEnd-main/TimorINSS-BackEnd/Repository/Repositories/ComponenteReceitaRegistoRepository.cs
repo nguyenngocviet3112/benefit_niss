@@ -145,17 +145,27 @@ namespace TimorINSSBackEnd.Repository.Repositories
                             // Filtrar por tipo de conta
                             e.ReltipoDeContaOrcamentoConfigFkNavigation.TipoContaFk == request.tipoConta &&
                             // Filtrar pelo ano do orçamento
-                            e.Componenteorcamentovalor.Any(a => a.ComponenteOrcamentoRegistoFkNavigation.Aprovado && a.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year && a.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
+                            e.Componenteorcamentovalor.Any(a => a.ComponenteOrcamentoRegistoFkNavigation.Aprovado 
+                            && a.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year 
+                            && a.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
+                            && e.Componenteorcamentovalor.Any(a =>
+                            a.ComponenteOrcamentoRegistoFkNavigation.Aprovado
+                                && (a.InstitutionId == request.institution)
+                            )
+                //&& e.Componenteorcamentovalor.Instituti
                 );
 
             var contas = listaContas
                 .Include(e => e.Componenteorcamentovalor)
                 .ThenInclude(e => e.CentroCustoFkNavigation)
                 .Include(e => e.Componenteorcamentovalor)
+                .ThenInclude(e => e.InstitutionFkNavigation)
+                .Include(e => e.Componenteorcamentovalor)
                 .ThenInclude(e => e.ComponenteOrcamentoRegistoFkNavigation)
                 .Include(e => e.ComponentereceitaRegisto)
                 .ThenInclude(e => e.ComponentereceitaRegistoMovimentos)
                 .ThenInclude(e => e.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation)
+          
                 .Include(e => e.InverseParentFkNavigation)
                 .OrderBy(request.filter.orderBy, request.filter.orderDirection)
                 .Skip(index * rows)
@@ -164,6 +174,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Select(e => new ExecucaoOrcamentalDataContract()
                 {
                     contaOGE = e.Codigo + " - " + e.Designacao,
+                    instiutiton = e.Componenteorcamentovalor.Where(a => a.InstitutionFkNavigation != null).Select(a => a.InstitutionFkNavigation.Nome).FirstOrDefault(),
+                    //instiutiton = e.Componenteorcamentovalor.InstitutionFkNavigation.,
                     // Lista de centros de custo
                     centrosCusto = e.Componenteorcamentovalor.Where(a => a.CentroCustoFk.HasValue).Select(a => a.CentroCustoFkNavigation.Descricao),
                     // Rubricas do agrupamento (códigos do 3º nível do agrupamento - InverseParentFkNavigation são os filhos)

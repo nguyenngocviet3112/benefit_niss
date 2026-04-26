@@ -9,4 +9,5 @@ export interface GetAgrupamentoConfigRequest {
 export interface GetExecucaoOrcamentalRelatoriosRequest extends FilterRequest {
   year: number;
   tipoConta: number;
+  institution: number;
 }

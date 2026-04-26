@@ -13,6 +13,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public IEnumerable<string> centrosCusto { get; set; }
 
         [DataMember]
+        public string instiutiton { get; set; }
+
+        [DataMember]
         public IEnumerable<string> rubricas { get; set; }
 
         [DataMember]

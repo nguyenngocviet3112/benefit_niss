@@ -10,5 +10,8 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
 
         [DataMember(IsRequired = true)]
         public int tipoConta { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public int institution { get; set; }
     }
 }

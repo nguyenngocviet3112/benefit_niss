@@ -61,6 +61,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             _moduloContribuicoesContext.Remove(entity);
         }
 
+
         public List<DominioDescricaoString> getAllTiposDeDominio(TiposDominio tipo)
         {
             return _moduloContribuicoesContext.Dominio

@@ -14,6 +14,7 @@ export interface RelatoriosExecucaoOrcamentalListagemResponse {
 }
 
 export interface RelatoriosExecucaoOrcamentalListagem {
+  instiutitons: string[];
   contaOGE: string;
   centrosCusto: string[];
   rubricas: string[];

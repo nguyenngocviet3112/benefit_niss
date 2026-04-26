@@ -33,17 +33,22 @@ export class RelatoriosExecucaoOrcamentalComponent implements OnInit {
   public tipoContaOptions: any[] = [];
   public tipoContaText: string = "";
 
+  public institutionContaOptions: any[] = [];
+  public institutionContaText: string = "";
+
   public filter: FilterRequest = {};
   public submittedTry: boolean = false;
   public resultsShown: boolean = false;
   public tipoConta?: number;
+  public selectedInstitution?: number;
   public year?: number;
   public beginDate?: Date;
   public tipoContaDict: any = {};
+  public institutionDict: any = {};
 
   //Region tarefa table
   public contasList: RelatoriosExecucaoOrcamentalListagem[] = [];
-  public displayedColumns: string[] = ['conta', 'centroCusto', 'rubrica', 'valorOrcamentoInicial', 'valorOrcamentado', 'valorAnoAnterior', 'janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro', 'totalExecucao', 'taxaExecucao', 'variacaoExecucao'];
+  public displayedColumns: string[] = ['instiutiton','conta', 'centroCusto', 'rubrica', 'valorOrcamentoInicial', 'valorOrcamentado', 'valorAnoAnterior', 'janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro', 'totalExecucao', 'taxaExecucao', 'variacaoExecucao'];
   public totalRowsTable: number = 0;
   public pageSizeTable = 20;
   public pageIndexTable = 0;
@@ -97,7 +102,7 @@ export class RelatoriosExecucaoOrcamentalComponent implements OnInit {
 
     if (!this.submittedTry) this.submittedTry = true;
 
-    if (!this.year || !this.tipoConta) return;
+    if (!this.year || !this.tipoConta || !this.selectedInstitution) return;
 
     this.showLoader();
 
@@ -108,6 +113,7 @@ export class RelatoriosExecucaoOrcamentalComponent implements OnInit {
       filter: this.filter,
       year: this.year!,
       tipoConta: this.tipoConta!,
+      institution: this.selectedInstitution!,
     };
 
     if (!this.resultsShown) this.resultsShown = true;
@@ -133,6 +139,7 @@ export class RelatoriosExecucaoOrcamentalComponent implements OnInit {
 
   public getTiposConta() {
     this.dominiosService.getAllTiposConta().subscribe((response) => {
+      console.log("response string =", JSON.stringify(response, null, 2));
       this.tipoContaOptions = response.dominios || [];
       response.dominios.forEach(dom => {
         this.tipoContaDict[dom.id] = {
@@ -141,6 +148,10 @@ export class RelatoriosExecucaoOrcamentalComponent implements OnInit {
         }
       });
 
+      this.institutionContaOptions = response.institutions || [];
+
+
+      
       this.hideLoader();
     },
       err => {
@@ -150,6 +161,7 @@ export class RelatoriosExecucaoOrcamentalComponent implements OnInit {
         this.showError();
       });
   }
+
 
   chosenYearHandler(date: Moment, datepicker: MatDatepicker<Moment>) {
     const normalDate = date.toDate();
@@ -162,6 +174,7 @@ export class RelatoriosExecucaoOrcamentalComponent implements OnInit {
     this.year = undefined;
     this.filter = {};
     this.tipoConta = undefined;
+    this.selectedInstitution = undefined;
     this.submittedTry = false;
   }
 
@@ -173,6 +186,7 @@ export class RelatoriosExecucaoOrcamentalComponent implements OnInit {
       filter: this.filter,
       year: this.year!,
       tipoConta: this.tipoConta!,
+      institution: this.selectedInstitution!,
     };
 
     const isReceita = this.tipoContaDict[this.tipoConta!].value == 1;

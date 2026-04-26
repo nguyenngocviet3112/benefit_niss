@@ -1,6 +1,17 @@
 export interface ListagemDominios
 {
     dominios: DominioDescricaoString[];
+
+    institutions: SelectDescription[];
+}
+
+export interface SelectDescription
+{
+  id: number;
+   parentId: number;
+  nome: string;
+  indActivo?: boolean;
+  hasInitialValue?: boolean;
 }
 
 export interface DominioDescricaoString

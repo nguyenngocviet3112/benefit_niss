@@ -363,9 +363,6 @@
   "utilizador": {
     "hearder": "EDIT USER",
     "title": "Users",
-    "actidade": "Actividade",
-    "economic": "Economic",
-    "funcional": "Funcional",
     "utilizador": "User",
     "departamento": "Departament",
     "institution": "Institution",
@@ -489,9 +486,8 @@
     "visualizarDespesasCompromisso": "View Commitment Expenses"
   },
   "componenteDespesa": {
-
-"actidade": "Actividade",
-    "etidade": "Actividade",
+    "actidade": "Actidade",
+    "etidade": "Actidade",
     "institution": "Institution",
     "economic": "Economic",
     "functional": "Funcional",
@@ -773,12 +769,6 @@
     "invNo": "INV No",
     "bankAcc": "Bank Acc",
     "dataCriacao": "Submitted Date",
-    "bankCode": {
-      "BNU": "BNU Bank",
-      "MANDIRI": "Mandiri Bank",
-      "BNCTL": "BNCTL Bank",
-      "BNTL": "BNTL Bank"
-    },
     "lstBankCode": {
       "BNU": "BNU",
       "MANDIRI": "MANDIRI",
@@ -806,7 +796,7 @@
     "comprovativo": "Payment Receipt"
   },
   "componenteOrcamento": {
-    "actidade": "Actividade",
+    "actidade": "Actidade",
     "economic": "Economic",
     "functional": "Funcional",
     "funcional": "Funcional",
@@ -824,7 +814,6 @@
     "detalhes": "Budget Details",
     "vizualizarPor": "View By:",
     "departamentos": "Departaments",
-    "institutions": "Institutions",
     "centrosDeCusto": "Cost Centers",
     "tiposDeConta": "Account Types",
     "aplicarFiltros": "Apply Filters",
@@ -1458,6 +1447,7 @@
   },
   "execucaoOrcamental": {
     "contaOGE": "OGE Account",
+    "instiutiton": "Instiutiton",
     "centroCusto": "Cost Center",
     "rubricaClassificacao": "Economic Classification Rubric",
     "valorOrcamentoInicial": "Initial Budget Amount",

@@ -1430,6 +1430,7 @@
   },
   "execucaoOrcamental": {
     "contaOGE": "Conta OGE",
+    "instiutiton": "Instiutiton",
     "centroCusto": "Centro de Custo",
     "rubricaClassificacao": "Rúbrica de Classificação Económica",
     "valorOrcamentoInicial": "Valor Orçamento Inicial",

@@ -129,6 +129,11 @@ export class DominiosService {
     return this.api.get<ListagemDominios>('Dominios/GetAllTiposConta/'+ localStorage.getItem('selectedLanguage'));
   }
 
+  public getAllInstitutionsAtivo(): Observable<SelectDescriptionResponse>
+  {
+    return this.api.get<SelectDescriptionResponse>('institution/GetAllInstitutionsAtivo');
+  }
+  
   public getAllEstadosPagamento(): Observable<ListagemDominios>
   {
     return this.api.get<ListagemDominios>('Dominios/GetAllEstadosPagamento/'+ localStorage.getItem('selectedLanguage'));

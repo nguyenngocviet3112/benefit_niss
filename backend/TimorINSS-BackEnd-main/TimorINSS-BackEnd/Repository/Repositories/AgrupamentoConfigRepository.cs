@@ -525,6 +525,15 @@ namespace TimorINSSBackEnd.Repository.Repositories
             {
                 new ColumnOption<ExecucaoOrcamentalDataContract>()
                 {
+                    Name = _localizer["instiutiton"].Value,
+                    ColumnTextStyleKey = "HeaderWrap",
+                    DataTextStyleKey = "TableCellWrap",
+                    Value = (data) => data.instiutiton,
+                    RowSpan = 5,
+                    Width = 14
+                },
+                new ColumnOption<ExecucaoOrcamentalDataContract>()
+                {
                     Name = _localizer["contaOGE"].Value,
                     ColumnTextStyleKey = "HeaderWrap",
                     DataTextStyleKey = "TableCellWrap",
