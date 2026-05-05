@@ -12,7 +12,12 @@
 }
 
 .paginador{
-  width: 96%;
+  border: 2px solid #2A81CC;
+  margin-right: 50px;
+  margin-left: 50px;
+  /* display: flex; */
+  min-height: 45px;
+  /* border-radius: 5px; */
 }
 
 .subHeader {
