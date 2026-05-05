@@ -8,6 +8,9 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
     public class GetDeclaracaoByEntidadeAndFilterResponse : ResponseBaseDataContract
     {
         [DataMember]
+        public int rows;
+
+        [DataMember]
         public List<DeclaracaoListagem> declaracoes { get; set; }
     }
 

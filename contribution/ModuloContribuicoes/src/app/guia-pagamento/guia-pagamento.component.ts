@@ -148,12 +148,12 @@ export class GuiaPagamentoComponent implements OnInit {
         this.guiaPagamentoService.getAllGuiasByEntidade(request).subscribe(x => {
             x.rows == null ? this.totalRows = 0 : this.totalRows = x.rows;
             x.guias == null ? this.dataSourceGuiaPagamento = [] : this.dataSourceGuiaPagamento = x.guias;
-            const joined = Object.values(x).join(" | ");
-            alert(
-                x.guias
-                    .map(g => Object.values(g).join(" | "))
-                    .join("\n")
-            );
+            // const joined = Object.values(x).join(" | ");
+            // alert(
+            //     x.guias
+            //         .map(g => Object.values(g).join(" | "))
+            //         .join("\n")
+            // );
             this.spinner.hide();
         },
             err => {

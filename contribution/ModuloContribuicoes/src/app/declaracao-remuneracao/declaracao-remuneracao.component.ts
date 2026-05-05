@@ -55,6 +55,9 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
   public salarioMinimo: number = 115;
   public canOverWrite: boolean = false;
   public saving: boolean = false;
+  public totalRows: number = 0;
+  public pageSize = 10;
+  public pageIndex = 0;
   @ViewChild('declaracaoForm') myForm: NgForm | undefined;
 
   constructor(private tokenStorage: TokenStorageService,
@@ -182,6 +185,7 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
     forkJoin([tableRequest,contasCorrentes])
     .subscribe( ([tableRequest,contasCorrentes]) => {
       this.declaracoesOriginal = tableRequest.declaracoes;
+      this.totalRows = tableRequest.rows;
       this.declaracoes = JSON.parse(JSON.stringify(tableRequest.declaracoes));
       this.contas = contasCorrentes.contasState;
       let contaCurrente = this.contas.find(c => c.month == (moment(this.date).month() + 1));
@@ -194,10 +198,18 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
     });
   }
 
+  public updateTable(event: any) {
+        this.pageIndex = event.pageIndex;
+        this.pageSize = event.pageSize;
+        this.dateUpdated();
+    }
+    
   public getTable() {
     let filter: FilterRequest;
     filter = {};
     filter.dateFilterBegin = this.date;
+    filter.index = this.pageIndex;
+    filter.rows = this.pageSize;
     let request = {
       IdEntidade: this.idEntidade,
       filter: filter,

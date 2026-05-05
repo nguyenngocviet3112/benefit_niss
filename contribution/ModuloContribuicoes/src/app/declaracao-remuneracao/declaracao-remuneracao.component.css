@@ -11,11 +11,15 @@
   margin-right: 5%;
 }
 
+.paginador{
+  width: 96%;
+}
+
 .subHeader {
   min-height: 50px;
   background: rgba(207, 207, 207, 0.966);
   width: 95%;
-  padding-left: 5%;
+  padding: 5%;
 }
 
 .adicionarTrabalhadorButton {

@@ -141,12 +141,14 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 }
 
                 //filter only working Workers
-                List<int> relIds = _unitOfWork.RelEntidadeTrabalhadorRepository.GetAllRelTrabalhadorByEntidadeAndMonth(decodedId, date);
+                List<int> relIds = _unitOfWork.RelEntidadeTrabalhadorRepository.GetAllRelTrabalhadorByEntidadeAndMonth(decodedId, date, request);
+                List<int> relIdsAll = _unitOfWork.RelEntidadeTrabalhadorRepository.GetAllRelTrabalhadorByEntidadeAndMonthAll(decodedId, date);
                 List<int> relSuspensosIds = _unitOfWork.SuspensaoRepository.GetAllRelEntidadeTrabalhadorSuspensosByDate(decodedId, date, date.AddMonths(1).AddDays(-1));
 
                 DeclaracaoremuneracaoDto declaracao;
                 DeclaracaoListagem declaracaoListagem;
                 response.declaracoes = new List<DeclaracaoListagem>();
+                response.rows = relIdsAll.Count;
                 //Para todas as relações de trabalhadores com entidades valida se existe pelo menos um trabalhador relacionado e se existe alguma declaração, senão cria uma nova vazia
                 bool exists;
                 foreach (int idRel in relIds)

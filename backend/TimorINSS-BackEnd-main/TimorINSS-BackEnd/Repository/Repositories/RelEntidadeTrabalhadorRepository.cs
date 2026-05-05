@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DTO;
 using TimorINSSBackEnd.Models;
 using TimorINSSBackEnd.Repository.Interfaces;
@@ -86,10 +88,36 @@ namespace TimorINSSBackEnd.Repository.Repositories
                          );
         }
 
-        public List<int> GetAllRelTrabalhadorByEntidadeAndMonth(int entidadeId, DateTime date)
+        public List<int> GetAllRelTrabalhadorByEntidadeAndMonth(int entidadeId, DateTime date, GetDeclaracaoByEntidadeAndFilterRequest request)
         {
             DateTime begin = date;
             DateTime end = date.AddMonths(1).AddDays(-1);
+
+            int index = 0;
+            if (request.filter.index.HasValue)
+                index = request.filter.index.Value;
+
+            int rows = 10;
+            if (request.filter.rows.HasValue)
+                rows = request.filter.rows.Value;
+
+
+
+            return _moduloContribuicoesContext.Relentidadetrabalhador
+                    .Where(r => r.EntidadeFk == entidadeId && r.DtIniVincTrabalhador <= end &&
+                        begin < (r.DtIniFimTrabalhador ?? System.Data.SqlTypes.SqlDateTime.MaxValue.Value))
+                    .OrderBy(r => r.IdRel)
+                    .Select(r => r.IdRel)
+                    .Skip(index * rows)
+                    .Take(rows)
+                    .ToList();
+        }
+
+        public List<int> GetAllRelTrabalhadorByEntidadeAndMonthAll(int entidadeId, DateTime date)
+        {
+            DateTime begin = date;
+            DateTime end = date.AddMonths(1).AddDays(-1);
+
 
             return _moduloContribuicoesContext.Relentidadetrabalhador
                     .Where(r => r.EntidadeFk == entidadeId && r.DtIniVincTrabalhador <= end &&
