@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TimorINSSBackEnd")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ffb2e67355e35712fec6eba1ff23afb1f1435715")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+97fd52bad3ae5dd8a0e48e0510d57d980e82bda6")]
 [assembly: System.Reflection.AssemblyProductAttribute("TimorINSSBackEnd")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TimorINSSBackEnd")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
