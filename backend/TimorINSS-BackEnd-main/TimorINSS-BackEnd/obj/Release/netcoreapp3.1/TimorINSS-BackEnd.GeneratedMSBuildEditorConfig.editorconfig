@@ -1,0 +1,8 @@
+is_global = true
+build_property.RootNamespace = TimorINSSBackEnd
+build_property.ProjectDir = F:\Code\github_code\Timor_INSS\git-github.com-nguyenngocviet3112-TimorINSSModule.git\backend\TimorINSS-BackEnd-main\TimorINSS-BackEnd\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.CsWinRTUseWindowsUIXamlProjections = false
+build_property.EffectiveAnalysisLevelStyle = 
+build_property.EnableCodeStyleSeverity = 
