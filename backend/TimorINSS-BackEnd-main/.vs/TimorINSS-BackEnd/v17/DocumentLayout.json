@@ -1,0 +1,1718 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\declaracaoremuneracaocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\declaracaoremuneracaocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\declaracaoremuneracaodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\declaracaoremuneracaodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\guiaspagamentocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\guiaspagamentocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\guiapagamentodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\guiapagamentodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\guiapagamentorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\guiapagamentorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\responsedatacontract\\declaracaoremuneracaoresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\responsedatacontract\\declaracaoremuneracaoresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\interfaces\\irelentidadetrabalhadorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\interfaces\\irelentidadetrabalhadorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\declaracaoremuneracaorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\declaracaoremuneracaorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\trabalhadoresrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\trabalhadoresrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\relentidadetrabalhadorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\relentidadetrabalhadorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\interfaces\\ideclaracaoremuneracaorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\interfaces\\ideclaracaoremuneracaorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\trabalhadorescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\trabalhadorescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\componentesreceitaregistocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\componentesreceitaregistocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\componentereceitaregistodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\componentereceitaregistodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\componentereceitaregistorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\componentereceitaregistorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\agrupamentoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\agrupamentoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\requestdatacontract\\relatorioexecucaoorcamentalrequestdatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\requestdatacontract\\relatorioexecucaoorcamentalrequestdatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\modeldatacontract\\execucaoorcamentaldatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\modeldatacontract\\execucaoorcamentaldatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\models\\agrupamentoconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\models\\agrupamentoconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\models\\timorinssmodulocontribuicoescontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\models\\timorinssmodulocontribuicoescontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\dominioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\dominioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\dominiodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\dominiodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\tarefascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\tarefascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\pagamentosexecutadoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\pagamentosexecutadoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\pagamentoexecutadodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\pagamentoexecutadodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\pagamentosexecutadosrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\pagamentosexecutadosrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\responsedatacontract\\dominioresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\responsedatacontract\\dominioresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\institutiondatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\institutiondatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\dominiorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\dominiorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\interfaces\\iinstitutiondatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\interfaces\\iinstitutiondatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\institutioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\institutioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\responsedatacontract\\guiapagamentoresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\responsedatacontract\\guiapagamentoresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\contacorrentecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\contacorrentecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\utilizadordatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\utilizadordatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\tarefarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\tarefarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\camposeditaveiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\camposeditaveiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\camposeditaveisdatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\camposeditaveisdatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\documentoidentificacaodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\documentoidentificacaodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\documentosidentificacaocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\documentosidentificacaocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\entidadesempregadorascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\entidadesempregadorascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\componentedocumentosregistorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\componentedocumentosregistorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\models\\componentedocumentoregisto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\models\\componentedocumentoregisto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\dto\\componentedocumentoregistodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\dto\\componentedocumentoregistodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\models\\timorinssmodulocontribuicoestestecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\models\\timorinssmodulocontribuicoestestecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\dto\\tarefaativodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\dto\\tarefaativodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\models\\dominio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\models\\dominio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\tarefadatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\tarefadatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\componentesorcamentovalorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\componentesorcamentovalorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\componenteorcamentovalordatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\componenteorcamentovalordatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\processoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\processoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\processosdatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\processosdatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\tarefaativorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\tarefaativorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\interfaces\\iprocessoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\interfaces\\iprocessoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\componentesorcamentoregistocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\componentesorcamentoregistocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\componenteorcamentoregistodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\componenteorcamentoregistodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\contatoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\contatoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\componenteorcamentovalorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\componenteorcamentovalorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\utilizadorescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\utilizadorescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\relutilizadordepartamentorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\relutilizadordepartamentorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\contacorrenterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\contacorrenterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\modeldatacontract\\componenteorcamentovalordatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\modeldatacontract\\componenteorcamentovalordatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\responsedatacontract\\componentesorcamentoregistoresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\responsedatacontract\\componentesorcamentoregistoresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\requestdatacontract\\componenteorcamentovalorrequestdatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\requestdatacontract\\componenteorcamentovalorrequestdatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\interfaces\\icomponenteorcamentovalorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\interfaces\\icomponenteorcamentovalorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\agrupamentoconfigcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\agrupamentoconfigcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\dto\\componenteorcamentovalordto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\dto\\componenteorcamentovalordto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\componentedespesregistodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\componentedespesregistodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\errorsdatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\errorsdatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\models\\movimentosporconciliar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\models\\movimentosporconciliar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\modeldatacontract\\componentedespesaregistodatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\modeldatacontract\\componentedespesaregistodatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\models\\componentedespesaregisto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\models\\componentedespesaregisto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\models\\departamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\models\\departamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\responsedatacontract\\movimentosporconciliarresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\responsedatacontract\\movimentosporconciliarresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\relmovimentosporconciliarmovimentosrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\relmovimentosporconciliarmovimentosrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\movimentosporconcoliarcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\movimentosporconcoliarcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\institutionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\institutionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\interfaces\\iinstitutionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\interfaces\\iinstitutionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\requestdatacontract\\componentedespesaregistorequestdatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\requestdatacontract\\componentedespesaregistorequestdatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\componentesdespesaregistocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\componentesdespesaregistocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\extensions\\serviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\extensions\\serviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\orcamentoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\orcamentoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\departamentorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\departamentorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\departamentodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\departamentodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\interfaces\\idepartamentodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\interfaces\\idepartamentodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\dto\\institutiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\dto\\institutiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\destinatariodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\destinatariodatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Todaypc.vn\\AppData\\Local\\SourceServer\\369d63681fd5ea14eff43d0b6bbc81fd89cfabc0208ffed71247cc56dd34ab69\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\InstitutionController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\relutilizadorperfilrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\relutilizadorperfilrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\resources\\sharedresource.pt.resx||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\resources\\sharedresource.pt.resx||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\reltipodecontaorcamentoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\reltipodecontaorcamentoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\interfaces\\iorcamentoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\interfaces\\iorcamentoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\interfaces\\icomponentedespesaregistorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\interfaces\\icomponentedespesaregistorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\componentedespesaregistorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\componentedespesaregistorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\responsedatacontract\\entidadeempregadoraresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\responsedatacontract\\entidadeempregadoraresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\modeldatacontract\\entidadeempregadoradatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\modeldatacontract\\entidadeempregadoradatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\actividadeseconomicascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\actividadeseconomicascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\models\\entidadeempregadora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\models\\entidadeempregadora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datamanager\\datamanagers\\movimentosbancariosdatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datamanager\\datamanagers\\movimentosbancariosdatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\controllers\\movimentosbancarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\controllers\\movimentosbancarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\datacontracts\\responsedatacontract\\movimentosbancariosresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\datacontracts\\responsedatacontract\\movimentosbancariosresponsedatacontract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\repository\\repositories\\relcodigocontaagrupamentoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\repository\\repositories\\relcodigocontaagrupamentoconfigrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|f:\\code\\github_code\\timor_inss\\git-github.com-nguyenngocviet3112-timorinssmodule.git\\backend\\timorinss-backend-main\\timorinss-backend\\dto\\agrupamentoconfigdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8E6BF1B-05CE-41C3-A136-06733F789CAC}|TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj|solutionrelative:timorinss-backend\\dto\\agrupamentoconfigdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Todaypc.vn\\AppData\\Local\\SourceServer\\4fe1055d3ee42f95ee9b38e9d3aabee5dcb33faf4fc1e48fca45cfdada4ee765\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\DepartamentoDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 244,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DeclaracaoRemuneracaoController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\DeclaracaoRemuneracaoController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\DeclaracaoRemuneracaoController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\DeclaracaoRemuneracaoController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\DeclaracaoRemuneracaoController.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAASwFQAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-09T00:13:10.96Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DeclaracaoremuneracaoDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\DeclaracaoremuneracaoDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\DeclaracaoremuneracaoDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\DeclaracaoremuneracaoDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\DeclaracaoremuneracaoDataManager.cs",
+              "ViewState": "AgIAAFACAAAAAAAAAAASwFsCAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-10T11:48:22.476Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GuiaPagamentoRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\GuiaPagamentoRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\GuiaPagamentoRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\GuiaPagamentoRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\GuiaPagamentoRepository.cs",
+              "ViewState": "AgIAANgAAAAAAAAAAAAWwOQAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-31T07:53:12.887Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GuiaPagamentoDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\GuiaPagamentoDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\GuiaPagamentoDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\GuiaPagamentoDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\GuiaPagamentoDataManager.cs",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAWwIoAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-31T07:39:17.716Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GuiasPagamentoController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\GuiasPagamentoController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\GuiasPagamentoController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\GuiasPagamentoController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\GuiasPagamentoController.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAWwD4AAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T06:43:19.387Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DeclaracaoRemuneracaoResponseDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\DeclaracaoRemuneracaoResponseDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\DeclaracaoRemuneracaoResponseDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\DeclaracaoRemuneracaoResponseDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\DeclaracaoRemuneracaoResponseDataContract.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBcAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-10T11:48:16Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "DeclaracaoremuneracaoRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\DeclaracaoremuneracaoRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\DeclaracaoremuneracaoRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\DeclaracaoremuneracaoRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\DeclaracaoremuneracaoRepository.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAUwEQAAABdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T05:52:44.799Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IRelEntidadeTrabalhadorRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IRelEntidadeTrabalhadorRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Interfaces\\IRelEntidadeTrabalhadorRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IRelEntidadeTrabalhadorRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Interfaces\\IRelEntidadeTrabalhadorRepository.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T06:16:15.696Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "TrabalhadoresRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\TrabalhadoresRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\TrabalhadoresRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\TrabalhadoresRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\TrabalhadoresRepository.cs",
+              "ViewState": "AgIAAI8AAAAAAAAAAAAcwKcAAABQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T05:52:44.878Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "RelEntidadeTrabalhadorRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelEntidadeTrabalhadorRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\RelEntidadeTrabalhadorRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelEntidadeTrabalhadorRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\RelEntidadeTrabalhadorRepository.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAA1wFUAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T06:12:32.512Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IDeclaracaoremuneracaoRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IDeclaracaoremuneracaoRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Interfaces\\IDeclaracaoremuneracaoRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IDeclaracaoremuneracaoRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Interfaces\\IDeclaracaoremuneracaoRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T06:15:45.03Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "TrabalhadoresController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\TrabalhadoresController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\TrabalhadoresController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\TrabalhadoresController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\TrabalhadoresController.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAA2wCEAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T06:05:12.056Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ComponentesReceitaRegistoController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ComponentesReceitaRegistoController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\ComponentesReceitaRegistoController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ComponentesReceitaRegistoController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\ComponentesReceitaRegistoController.cs",
+              "ViewState": "AgIAAHMAAAAAAAAAAAAEwIIAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T00:57:39.59Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "AgrupamentoConfigRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\AgrupamentoConfigRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\AgrupamentoConfigRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\AgrupamentoConfigRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\AgrupamentoConfigRepository.cs",
+              "ViewState": "AgIAAAICAAAAAAAAAAASwA4CAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T08:37:37.822Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "RelatorioExecucaoOrcamentalRequestDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\RelatorioExecucaoOrcamentalRequestDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\RelatorioExecucaoOrcamentalRequestDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\RelatorioExecucaoOrcamentalRequestDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\RelatorioExecucaoOrcamentalRequestDataContract.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAUAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-12T23:07:55.766Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ComponenteReceitaRegistoRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteReceitaRegistoRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteReceitaRegistoRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteReceitaRegistoRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteReceitaRegistoRepository.cs",
+              "ViewState": "AgIAAOAAAAAAAAAAAAASwO4AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-25T21:39:24.419Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ComponenteReceitaRegistoDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteReceitaRegistoDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteReceitaRegistoDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteReceitaRegistoDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteReceitaRegistoDataManager.cs",
+              "ViewState": "AgIAAAYBAAAAAAAAAAASwBQBAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T00:57:39.607Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Agrupamentoconfig.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\Agrupamentoconfig.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Models\\Agrupamentoconfig.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\Agrupamentoconfig.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Models\\Agrupamentoconfig.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAA3wCIAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T02:59:03.047Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ExecucaoOrcamentalDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ExecucaoOrcamentalDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ExecucaoOrcamentalDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ExecucaoOrcamentalDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ExecucaoOrcamentalDataContract.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwA4AAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-25T21:42:44.26Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "TimorINSSModuloContribuicoesContext.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\TimorINSSModuloContribuicoesContext.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Models\\TimorINSSModuloContribuicoesContext.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\TimorINSSModuloContribuicoesContext.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Models\\TimorINSSModuloContribuicoesContext.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABgAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T00:15:30.245Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "DominiosController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\DominiosController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\DominiosController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\DominiosController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\DominiosController.cs",
+              "ViewState": "AgIAAGwCAAAAAAAAAAAlwHkCAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T00:56:56.836Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "DominioDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\DominioDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\DominioDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\DominioDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\DominioDataManager.cs",
+              "ViewState": "AgIAAEkBAAAAAAAAAIAwwFQBAABJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T01:02:02.293Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "TarefasController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\TarefasController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\TarefasController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\TarefasController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\TarefasController.cs",
+              "ViewState": "AgIAAIUAAAAAAAAAAAApwJUAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T01:30:28.878Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "PagamentosExecutadosRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\PagamentosExecutadosRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\PagamentosExecutadosRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\PagamentosExecutadosRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\PagamentosExecutadosRepository.cs",
+              "ViewState": "AgIAAPcBAAAAAAAAAAAuwAICAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T00:57:39.563Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "PagamentoExecutadoDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\PagamentoExecutadoDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\PagamentoExecutadoDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\PagamentoExecutadoDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\PagamentoExecutadoDataManager.cs",
+              "ViewState": "AgIAAGADAAAAAAAAAAAnwHMDAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T00:57:39.552Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "PagamentosExecutadosController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\PagamentosExecutadosController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\PagamentosExecutadosController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\PagamentosExecutadosController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\PagamentosExecutadosController.cs",
+              "ViewState": "AgIAAAcBAAAAAAAAAAAqwBQBAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T00:57:39.535Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "IInstitutionDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\Interfaces\\IInstitutionDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\Interfaces\\IInstitutionDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\Interfaces\\IInstitutionDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\Interfaces\\IInstitutionDataManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T06:45:00.248Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "DominioRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\DominioRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\DominioRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\DominioRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\DominioRepository.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAUwDcAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-10T11:37:07.399Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "DominioResponseDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\DominioResponseDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\DominioResponseDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\DominioResponseDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\DominioResponseDataContract.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAoAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-12T00:02:04.258Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "InstitutionDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\InstitutionDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\InstitutionDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\InstitutionDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\InstitutionDataManager.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAtwCEAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T00:26:54.16Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "InstitutionController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\InstitutionController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\InstitutionController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\InstitutionController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\InstitutionController.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAIAwwCMAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T00:11:07.564Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "GuiaPagamentoResponseDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\GuiaPagamentoResponseDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\GuiaPagamentoResponseDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\GuiaPagamentoResponseDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\GuiaPagamentoResponseDataContract.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAMwFIAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-31T07:57:33.983Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "ContaCorrenteController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ContaCorrenteController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\ContaCorrenteController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ContaCorrenteController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\ContaCorrenteController.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAIAzwB8AAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-31T07:50:31.141Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "UtilizadorDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\UtilizadorDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\UtilizadorDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\UtilizadorDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\UtilizadorDataManager.cs",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAEwFQAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T00:06:10.402Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "TarefaRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\TarefaRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\TarefaRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\TarefaRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\TarefaRepository.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-31T06:47:11.743Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "CamposEditaveisController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\CamposEditaveisController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\CamposEditaveisController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\CamposEditaveisController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\CamposEditaveisController.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAASwFkAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-18T07:53:09.76Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "CamposEditaveisDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\CamposEditaveisDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\CamposEditaveisDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\CamposEditaveisDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\CamposEditaveisDataManager.cs",
+              "ViewState": "AgIAAOMCAAAAAAAAAAASwPQCAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-18T08:27:20.655Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "DocumentosIdentificacaoController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\DocumentosIdentificacaoController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\DocumentosIdentificacaoController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\DocumentosIdentificacaoController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\DocumentosIdentificacaoController.cs",
+              "ViewState": "AgIAAJQAAAAAAAAAAAArwK8AAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T00:53:09.926Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "DocumentoIdentificacaoDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\DocumentoIdentificacaoDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\DocumentoIdentificacaoDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\DocumentoIdentificacaoDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\DocumentoIdentificacaoDataManager.cs",
+              "ViewState": "AgIAAFMBAAAAAAAAAAAnwHIBAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T01:13:51.46Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "EntidadesEmpregadorasController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\EntidadesEmpregadorasController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\EntidadesEmpregadorasController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\EntidadesEmpregadorasController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\EntidadesEmpregadorasController.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAnwF8AAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T00:50:39.697Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "ComponentedocumentoRegistoDto.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\ComponentedocumentoRegistoDto.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DTO\\ComponentedocumentoRegistoDto.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\ComponentedocumentoRegistoDto.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DTO\\ComponentedocumentoRegistoDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T01:30:24.607Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "ComponenteDocumentosRegistoRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteDocumentosRegistoRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteDocumentosRegistoRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteDocumentosRegistoRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteDocumentosRegistoRepository.cs",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAYwGIAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T01:30:48.307Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "ComponentedocumentoRegisto.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\ComponentedocumentoRegisto.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Models\\ComponentedocumentoRegisto.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\ComponentedocumentoRegisto.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Models\\ComponentedocumentoRegisto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T01:30:28.445Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "TarefaativoDto.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\TarefaativoDto.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DTO\\TarefaativoDto.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\TarefaativoDto.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DTO\\TarefaativoDto.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAWwBsAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T01:29:54.165Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "TimorINSSModuloContribuicoesTesteContext.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\TimorINSSModuloContribuicoesTesteContext.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Models\\TimorINSSModuloContribuicoesTesteContext.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\TimorINSSModuloContribuicoesTesteContext.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Models\\TimorINSSModuloContribuicoesTesteContext.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAApwCQAAABTAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T06:13:33.535Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "Dominio.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\Dominio.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Models\\Dominio.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\Dominio.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Models\\Dominio.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAASwD4AAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T01:29:57.315Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "TarefaDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\TarefaDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\TarefaDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\TarefaDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\TarefaDataManager.cs",
+              "ViewState": "AgIAAFADAAAAAAAAAAAEwGYDAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T01:33:21.067Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "ComponenteOrcamentoValorDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteOrcamentoValorDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteOrcamentoValorDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteOrcamentoValorDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteOrcamentoValorDataManager.cs",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAEwG0AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T06:12:53.336Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "ProcessosController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ProcessosController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\ProcessosController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ProcessosController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\ProcessosController.cs",
+              "ViewState": "AgIAAIwAAAAAAAAAAAAUwKwAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T00:18:29.816Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "ComponentesOrcamentoValorController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ComponentesOrcamentoValorController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\ComponentesOrcamentoValorController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ComponentesOrcamentoValorController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\ComponentesOrcamentoValorController.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAEwDoAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T07:01:37.644Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "ProcessosDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\ProcessosDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\ProcessosDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\ProcessosDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\ProcessosDataManager.cs",
+              "ViewState": "AgIAAGoBAAAAAAAAAAAEwH0BAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T06:39:13.468Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "TarefaAtivoRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\TarefaAtivoRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\TarefaAtivoRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\TarefaAtivoRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\TarefaAtivoRepository.cs",
+              "ViewState": "AgIAAG8AAAAAAAAAAAASwIQAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T02:03:17.606Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "IProcessoConfigRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IProcessoConfigRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Interfaces\\IProcessoConfigRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IProcessoConfigRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Interfaces\\IProcessoConfigRepository.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAnwBAAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T00:22:09.87Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "ComponentesOrcamentoRegistoController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ComponentesOrcamentoRegistoController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\ComponentesOrcamentoRegistoController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ComponentesOrcamentoRegistoController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\ComponentesOrcamentoRegistoController.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAEwCMAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:15:56.728Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "ContatosController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ContatosController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\ContatosController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ContatosController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\ContatosController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAvwBkAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T00:53:35.343Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "ComponenteOrcamentoRegistoDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteOrcamentoRegistoDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteOrcamentoRegistoDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteOrcamentoRegistoDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteOrcamentoRegistoDataManager.cs",
+              "ViewState": "AgIAAGkAAAAAAAAAAAASwHoAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:24:42.791Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "ComponenteOrcamentoValorRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteOrcamentoValorRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteOrcamentoValorRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteOrcamentoValorRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteOrcamentoValorRepository.cs",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAqwJEAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T06:32:06.462Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "RelUtilizadorDepartamentoRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelUtilizadorDepartamentoRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\RelUtilizadorDepartamentoRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelUtilizadorDepartamentoRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\RelUtilizadorDepartamentoRepository.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAA7wEMAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T00:06:10.367Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "UtilizadoresController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\UtilizadoresController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\UtilizadoresController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\UtilizadoresController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\UtilizadoresController.cs",
+              "ViewState": "AgIAAFQAAAAAAAAAAAASwGcAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-14T23:52:17.909Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
+              "Title": "ContaCorrenteRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\ContaCorrenteRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\ContaCorrenteRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\ContaCorrenteRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\ContaCorrenteRepository.cs",
+              "ViewState": "AgIAAD0BAAAAAAAAAAArwFIBAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T07:27:30.425Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 60,
+              "Title": "ComponenteOrcamentoValorDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ComponenteOrcamentoValorDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ComponenteOrcamentoValorDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ComponenteOrcamentoValorDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ComponenteOrcamentoValorDataContract.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAA7wEcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T08:37:50.312Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 61,
+              "Title": "ComponentesOrcamentoRegistoResponseDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\ComponentesOrcamentoRegistoResponseDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\ComponentesOrcamentoRegistoResponseDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\ComponentesOrcamentoRegistoResponseDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\ComponentesOrcamentoRegistoResponseDataContract.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBAAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T06:11:07.398Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 62,
+              "Title": "ComponenteOrcamentoValorRequestDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\ComponenteOrcamentoValorRequestDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\ComponenteOrcamentoValorRequestDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\ComponenteOrcamentoValorRequestDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\ComponenteOrcamentoValorRequestDataContract.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T06:13:10.417Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 63,
+              "Title": "IComponenteOrcamentoValorRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IComponenteOrcamentoValorRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Interfaces\\IComponenteOrcamentoValorRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IComponenteOrcamentoValorRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Interfaces\\IComponenteOrcamentoValorRepository.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAD4vxUAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T22:43:59.267Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 64,
+              "Title": "AgrupamentoConfigController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\AgrupamentoConfigController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\AgrupamentoConfigController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\AgrupamentoConfigController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\AgrupamentoConfigController.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAlwCMAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T06:34:35.265Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 65,
+              "Title": "ComponenteOrcamentoValorDto.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\ComponenteOrcamentoValorDto.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DTO\\ComponenteOrcamentoValorDto.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\ComponenteOrcamentoValorDto.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DTO\\ComponenteOrcamentoValorDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T07:02:33.508Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 66,
+              "Title": "ComponenteDespesRegistoDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteDespesRegistoDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteDespesRegistoDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteDespesRegistoDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\ComponenteDespesRegistoDataManager.cs",
+              "ViewState": "AgIAAJMAAAAAAAAAAAAgwKQAAACiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T05:31:51.403Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 67,
+              "Title": "ErrorsDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ErrorsDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ErrorsDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ErrorsDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ErrorsDataContract.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAEwDAAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-26T08:01:51.559Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 68,
+              "Title": "Movimentosporconciliar.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\Movimentosporconciliar.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Models\\Movimentosporconciliar.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\Movimentosporconciliar.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Models\\Movimentosporconciliar.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAA+wCMAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T07:40:30.677Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 70,
+              "Title": "ComponentedespesaRegisto.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\ComponentedespesaRegisto.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Models\\ComponentedespesaRegisto.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\ComponentedespesaRegisto.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Models\\ComponentedespesaRegisto.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwBUAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T05:27:19.852Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 69,
+              "Title": "ComponenteDespesaRegistoDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ComponenteDespesaRegistoDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ComponenteDespesaRegistoDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ComponenteDespesaRegistoDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\ComponenteDespesaRegistoDataContract.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAswCMAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T05:32:22.221Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 71,
+              "Title": "Departamento.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\Departamento.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Models\\Departamento.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\Departamento.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Models\\Departamento.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAvwAoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T00:15:51.885Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 72,
+              "Title": "MovimentosPorConciliarResponseDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\MovimentosPorConciliarResponseDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\MovimentosPorConciliarResponseDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\MovimentosPorConciliarResponseDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\MovimentosPorConciliarResponseDataContract.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAA1wAgAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T06:52:19.739Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 73,
+              "Title": "RelMovimentosporconciliarMovimentosRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelMovimentosporconciliarMovimentosRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\RelMovimentosporconciliarMovimentosRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelMovimentosporconciliarMovimentosRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\RelMovimentosporconciliarMovimentosRepository.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAcwEQAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T06:52:34.145Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 76,
+              "Title": "MovimentosPorConcoliarController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\MovimentosPorConcoliarController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\MovimentosPorConcoliarController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\MovimentosPorConcoliarController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\MovimentosPorConcoliarController.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwA8AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T06:48:06.288Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 78,
+              "Title": "IInstitutionRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IInstitutionRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Interfaces\\IInstitutionRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IInstitutionRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Interfaces\\IInstitutionRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T00:30:58.28Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 75,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\UnitOfWork.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\UnitOfWork.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\UnitOfWork.cs",
+              "ViewState": "AgIAAAABAAAAAAAAAAA7wAwBAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T06:13:23.746Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 74,
+              "Title": "IUnitOfWork.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IUnitOfWork.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Interfaces\\IUnitOfWork.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IUnitOfWork.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Interfaces\\IUnitOfWork.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAA1wFAAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T00:37:49.732Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 79,
+              "Title": "ComponenteDespesaRegistoRequestDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\ComponenteDespesaRegistoRequestDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\ComponenteDespesaRegistoRequestDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\ComponenteDespesaRegistoRequestDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\RequestDataContract\\ComponenteDespesaRegistoRequestDataContract.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAcwCsAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T22:43:07.064Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 77,
+              "Title": "InstitutionRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\InstitutionRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\InstitutionRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\InstitutionRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\InstitutionRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwA8AAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T00:29:49.546Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 80,
+              "Title": "ComponentesDespesaRegistoController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ComponentesDespesaRegistoController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\ComponentesDespesaRegistoController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ComponentesDespesaRegistoController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\ComponentesDespesaRegistoController.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAlwD0AAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T05:08:00.15Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 81,
+              "Title": "ServiceExtensions.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Extensions\\ServiceExtensions.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Extensions\\ServiceExtensions.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Extensions\\ServiceExtensions.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Extensions\\ServiceExtensions.cs",
+              "ViewState": "AgIAAP0AAAAAAAAAAAASwAsBAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T01:02:22.035Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 82,
+              "Title": "OrcamentoConfigRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\OrcamentoConfigRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\OrcamentoConfigRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\OrcamentoConfigRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\OrcamentoConfigRepository.cs",
+              "ViewState": "AgIAALQAAAAAAAAAAAAewMAAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-19T01:31:08.45Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 83,
+              "Title": "DepartamentoRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\DepartamentoRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\DepartamentoRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\DepartamentoRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\DepartamentoRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T00:15:13.107Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 84,
+              "Title": "DepartamentoDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\DepartamentoDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\DepartamentoDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\DepartamentoDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\DepartamentoDataManager.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAtwBgAAABtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T00:14:40.41Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 85,
+              "Title": "IDepartamentoDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\Interfaces\\IDepartamentoDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\Interfaces\\IDepartamentoDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\Interfaces\\IDepartamentoDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\Interfaces\\IDepartamentoDataManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAYAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T00:13:57.827Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 86,
+              "Title": "InstitutionDto.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\InstitutionDto.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DTO\\InstitutionDto.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\InstitutionDto.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DTO\\InstitutionDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T00:33:09.014Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 87,
+              "Title": "DestinatarioDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\DestinatarioDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\DestinatarioDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\DestinatarioDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\DestinatarioDataManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-14T23:50:43.71Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 88,
+              "Title": "InstitutionController.cs",
+              "DocumentMoniker": "C:\\Users\\Todaypc.vn\\AppData\\Local\\SourceServer\\369d63681fd5ea14eff43d0b6bbc81fd89cfabc0208ffed71247cc56dd34ab69\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\InstitutionController.cs",
+              "ToolTip": "C:\\Users\\Todaypc.vn\\AppData\\Local\\SourceServer\\369d63681fd5ea14eff43d0b6bbc81fd89cfabc0208ffed71247cc56dd34ab69\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\InstitutionController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T00:22:36.878Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 89,
+              "Title": "RelUtilizadorPerfilRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelUtilizadorPerfilRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\RelUtilizadorPerfilRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelUtilizadorPerfilRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\RelUtilizadorPerfilRepository.cs",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAWwE0AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T00:06:10.416Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 90,
+              "Title": "SharedResource.PT.resx",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Resources\\SharedResource.PT.resx",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Resources\\SharedResource.PT.resx",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Resources\\SharedResource.PT.resx",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Resources\\SharedResource.PT.resx",
+              "ViewState": "AgIAALIAAAAAAAAAAAAowMUAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-12-19T02:15:20.769Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 91,
+              "Title": "RelTipoDeContaOrcamentoConfigRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelTipoDeContaOrcamentoConfigRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\RelTipoDeContaOrcamentoConfigRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelTipoDeContaOrcamentoConfigRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\RelTipoDeContaOrcamentoConfigRepository.cs",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAtwFwAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-18T08:26:51.008Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 92,
+              "Title": "IOrcamentoConfigRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IOrcamentoConfigRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Interfaces\\IOrcamentoConfigRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IOrcamentoConfigRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Interfaces\\IOrcamentoConfigRepository.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAASwBQAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-19T01:34:45.489Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 93,
+              "Title": "IComponenteDespesaRegistoRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IComponenteDespesaRegistoRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Interfaces\\IComponenteDespesaRegistoRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Interfaces\\IComponenteDespesaRegistoRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Interfaces\\IComponenteDespesaRegistoRepository.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAiwA8AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T22:48:01.203Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 94,
+              "Title": "ComponenteDespesaRegistoRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteDespesaRegistoRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteDespesaRegistoRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteDespesaRegistoRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\ComponenteDespesaRegistoRepository.cs",
+              "ViewState": "AgIAAFwAAAAAAAAAAAAawGQAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T07:41:46.571Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 95,
+              "Title": "EntidadeEmpregadoraResponseDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\EntidadeEmpregadoraResponseDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\EntidadeEmpregadoraResponseDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\EntidadeEmpregadoraResponseDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\EntidadeEmpregadoraResponseDataContract.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAIA3wCoAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T05:38:21.682Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 96,
+              "Title": "EntidadeEmpregadoraDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\EntidadeEmpregadoraDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\EntidadeEmpregadoraDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\EntidadeEmpregadoraDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ModelDataContract\\EntidadeEmpregadoraDataContract.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAADgvyoAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T05:37:57.385Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 97,
+              "Title": "ActividadesEconomicasController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ActividadesEconomicasController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\ActividadesEconomicasController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\ActividadesEconomicasController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\ActividadesEconomicasController.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAIAzwBsAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T05:37:19.222Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 98,
+              "Title": "Entidadeempregadora.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\Entidadeempregadora.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Models\\Entidadeempregadora.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Models\\Entidadeempregadora.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Models\\Entidadeempregadora.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAhwCMAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T05:38:50.644Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 99,
+              "Title": "MovimentosBancariosDataManager.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\MovimentosBancariosDataManager.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataManager\\DataManagers\\MovimentosBancariosDataManager.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataManager\\DataManagers\\MovimentosBancariosDataManager.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataManager\\DataManagers\\MovimentosBancariosDataManager.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAIA2wIoAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T11:12:51.419Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 100,
+              "Title": "MovimentosBancariosController.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\MovimentosBancariosController.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Controllers\\MovimentosBancariosController.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Controllers\\MovimentosBancariosController.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Controllers\\MovimentosBancariosController.cs",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAWwIsAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T11:08:12.066Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 101,
+              "Title": "MovimentosBancariosResponseDataContract.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\MovimentosBancariosResponseDataContract.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\MovimentosBancariosResponseDataContract.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\MovimentosBancariosResponseDataContract.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DataContracts\\ResponseDataContract\\MovimentosBancariosResponseDataContract.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAMwBIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T11:04:11.462Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 102,
+              "Title": "RelCodigoContaAgrupamentoConfigRepository.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelCodigoContaAgrupamentoConfigRepository.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\Repository\\Repositories\\RelCodigoContaAgrupamentoConfigRepository.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\Repository\\Repositories\\RelCodigoContaAgrupamentoConfigRepository.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\Repository\\Repositories\\RelCodigoContaAgrupamentoConfigRepository.cs",
+              "ViewState": "AgIAAHcAAAAAAAAAAAAwwIcAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T05:30:21.256Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 103,
+              "Title": "AgrupamentoConfigDto.cs",
+              "DocumentMoniker": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\AgrupamentoConfigDto.cs",
+              "RelativeDocumentMoniker": "TimorINSS-BackEnd\\DTO\\AgrupamentoConfigDto.cs",
+              "ToolTip": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\AgrupamentoConfigDto.cs",
+              "RelativeToolTip": "TimorINSS-BackEnd\\DTO\\AgrupamentoConfigDto.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAA/wB0AAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T06:13:05.574Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 104,
+              "Title": "DepartamentoDto.cs",
+              "DocumentMoniker": "C:\\Users\\Todaypc.vn\\AppData\\Local\\SourceServer\\4fe1055d3ee42f95ee9b38e9d3aabee5dcb33faf4fc1e48fca45cfdada4ee765\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\DepartamentoDto.cs",
+              "ToolTip": "C:\\Users\\Todaypc.vn\\AppData\\Local\\SourceServer\\4fe1055d3ee42f95ee9b38e9d3aabee5dcb33faf4fc1e48fca45cfdada4ee765\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\DTO\\DepartamentoDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T01:13:16.5Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimorINSS-BackEnd", "TimorINSS-BackEnd\TimorINSS-BackEnd.csproj", "{F8E6BF1B-05CE-41C3-A136-06733F789CAC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F693CA7F-3119-4B9B-984A-9B1243F7AE74}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8E6BF1B-05CE-41C3-A136-06733F789CAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8E6BF1B-05CE-41C3-A136-06733F789CAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8E6BF1B-05CE-41C3-A136-06733F789CAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8E6BF1B-05CE-41C3-A136-06733F789CAC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E7C8BE99-B649-4343-ADE1-576EB7CD8C74}
+	EndGlobalSection
+EndGlobal
