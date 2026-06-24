@@ -25,11 +25,15 @@ export class SuspensaoService {
   }
 
   public getSuspensaoByIdEntidadeEmpregadora(request: SuspensaoListagemRequest) : Observable<SuspensaoListagemResponse>  {
-    return this.api.post<SuspensaoListagemResponse>('suspensao/GetByIdEntidadeEmpregadora',request);
+    const encodedId = this.api.encodeId(request.IdEntidade);
+    const payload = { ...request, IdEntidadeStr: encodedId, IdEntidade:0 };
+    return this.api.post<SuspensaoListagemResponse>('suspensao/GetByIdEntidadeEmpregadora',payload);
   }
 
   public getSuspensaoByIdTrabalhador(request: SuspensaoListagemRequest) : Observable<SuspensaoListagemResponse>  {
-    return this.api.post<SuspensaoListagemResponse>('suspensao/GetByIdTrabalhador',request);
+    const encodedId = this.api.encodeId(request.IdEntidade);
+    const payload = { ...request, id: encodedId, IdEntidade:0 };
+    return this.api.post<SuspensaoListagemResponse>('suspensao/GetByIdTrabalhador',payload);
   }
 
   public deleteSuspensao(entity: SuspensaoDeleteRequest) {

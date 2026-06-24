@@ -25,11 +25,15 @@ export class ContatoService {
 
 
   public getContatoByIdEntidadeEmpregadora(request: ContatoListagemRequest) : Observable<ContatoListagemResponse>  {
-    return this.api.post<ContatoListagemResponse>('contato/GetByIdEntidadeEmpregadora',request);
+    const encodedId = this.api.encodeId(request.Id);
+    const payload = { ...request, idStr: encodedId , Id :0 };
+    return this.api.post<ContatoListagemResponse>('contato/GetByIdEntidadeEmpregadora',payload);
   }
 
   public getContatoByIdTrabalhador(request: ContatoListagemRequest) : Observable<ContatoListagemResponse>  {
-    return this.api.post<ContatoListagemResponse>('contato/GetByIdTrabalhador',request);
+    const encodedId = this.api.encodeId(request.Id);
+    const payload = { ...request, idStr: encodedId , Id:0};
+    return this.api.post<ContatoListagemResponse>('contato/GetByIdTrabalhador',payload);
   }
 
   public saveContato(entity: ContatoRequest) {
