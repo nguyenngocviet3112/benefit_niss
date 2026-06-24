@@ -1,6 +1,7 @@
 import { Declaracao } from "../models/declaracao";
 
 export interface GetDeclaracaoByEntidadeAndFilterResponse {
+  rows: number;
   declaracoes: DeclaracaoListagem[];
 }
 

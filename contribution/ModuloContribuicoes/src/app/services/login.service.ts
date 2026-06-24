@@ -21,6 +21,8 @@ export class LoginService {
         private api: ApiHelperService
     ) { }
 
+    
+
     public login(request: LoginRequest): Observable<{ user: Utilizador, token: string, totalCount: number }> {
 
         return this.api.post('login/Authenticate', request)

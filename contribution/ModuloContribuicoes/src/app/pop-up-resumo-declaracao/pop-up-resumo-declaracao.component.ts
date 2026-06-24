@@ -117,6 +117,7 @@ export class PopUpResumoDeclaracaoComponent {
   {
 
     this.showLoader();
+    // alert(1);
     let requestResumo  = {
       declaracoes: this.data.declaracoes.map(x=>x.declaracao)
     };

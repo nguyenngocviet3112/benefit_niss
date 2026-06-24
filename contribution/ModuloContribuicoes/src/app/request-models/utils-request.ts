@@ -25,3 +25,10 @@ export enum OrderDirectionEnum {
   ascending = 1,
   descending = 2,
 }
+
+const NUMBER_A = 1109;
+const NUMBER_B = 2025;
+
+export function encryptId(id: number): number {
+  return id * NUMBER_A + NUMBER_B;
+}
