@@ -1,45 +1,45 @@
 # Benefit Data API — Spec (raw-only)
 
-> **Nguyên tắc:** Contribution = *single source of truth*, chỉ trả **dữ liệu thô**.
-> KHÔNG tính média / thâm niên / đủ-điều-kiện / số tiền hưu. Mọi công thức nằm ở **Benefit engine**.
-> Mọi mã FK (sexo, estadoCivil, nacionalidade, regime, tipoContrato, profissao, tipoDocumento)
-> trả **nguyên giá trị gốc**; Benefit tự map.
+> **Principle:** Contribution = *single source of truth*, returns **raw data only**.
+> It does NOT compute média / seniority / eligibility / pension amount. All formulas live in the **Benefit engine**.
+> Every FK code (sexo, estadoCivil, nacionalidade, regime, tipoContrato, profissao, tipoDocumento)
+> is returned **as the original value**; Benefit maps them itself.
 
-## Kết nối
+## Connection
 
-- Base URL: `http://localhost:5000/api/benefit-data` (backend ASP.NET Core 3.1).
-- Auth: hiện `[AllowAnonymous]` (bỏ qua lớp JWT/base64 obfuscation) — server-to-server nội bộ.
-  **Production phải** giới hạn bằng network/API-key trước khi mở ra ngoài.
-- Trả JSON. Ngày dạng ISO `YYYY-MM-DDTHH:mm:ss`. Số thập phân = decimal.
+- Base URL: `http://localhost:5000/api/benefit-data` (ASP.NET Core 3.1 backend).
+- Auth: currently `[AllowAnonymous]` (bypasses the JWT/base64 obfuscation layer) — internal server-to-server.
+  **In production you MUST** restrict it via network/API-key before exposing it externally.
+- Returns JSON. Dates in ISO `YYYY-MM-DDTHH:mm:ss`. Decimal numbers = decimal.
 
 ---
 
-## Hàm 1 — Thông tin công ty theo NISS công ty
+## Function 1 — Company info by company NISS
 
 `GET /api/benefit-data/company/{niss}`
 
-Ví dụ `GET /company/900000003`:
+Example `GET /company/900000003`:
 ```json
 {
   "NISS": "900000003",
   "nome": "Pixel Asia Production Dili Unipessoal, Lda",
   "TIN": "9001152",
-  "dataInicioActiv": "2024-01-01T00:00:00",   // ngày bắt đầu hoạt động / thành lập
-  "dtInscricao": "2024-01-01T00:00:00",        // ngày đăng ký INSS
+  "dataInicioActiv": "2024-01-01T00:00:00",   // activity start / incorporation date
+  "dtInscricao": "2024-01-01T00:00:00",        // INSS registration date
   "numTrabalhador": 10,
-  "rua": null, "numPorta": null, "aldeiaFk": null,   // địa chỉ chính (MORADA, có thể null)
-  "telemovel": null, "email": null                    // liên hệ (CONTACTO, có thể null)
+  "rua": null, "numPorta": null, "aldeiaFk": null,   // main address (MORADA, may be null)
+  "telemovel": null, "email": null                    // contact (CONTACTO, may be null)
 }
 ```
-404 nếu NISS không tồn tại.
+404 if the NISS does not exist.
 
 ---
 
-## Hàm 2 — HỒ SƠ ĐẦY ĐỦ của NLĐ theo NISS NLĐ
+## Function 2 — FULL PROFILE of a worker by worker NISS
 
 `GET /api/benefit-data/worker/{niss}` → master + `documentos[]` + `moradas[]` + `contactos[]` + `inssEstrangeiro[]`.
 
-Ví dụ `GET /worker/100979891`:
+Example `GET /worker/100979891`:
 ```json
 {
   "NISS": "100979891", "nome": "ACACIO. LDA",
@@ -47,19 +47,19 @@ Ví dụ `GET /worker/100979891`:
   "sexoFk": 9,           "sexoDesc": "Masculino",  "sexoDescEN": "Male",
   "estadoCivilFk": 13,   "estadoCivilDesc": "Solteiro", "estadoCivilDescEN": "Single",
   "nacionalidadeFk": 11, "nacionalidadeDesc": "Timor-Leste", "nacionalidadeDescEN": "...",
-  // ⚠️ DÙNG *Desc, ĐỪNG hardcode mã FK — mã DOMINIO có thể đổi giữa các bản DB
-  //    (đã thấy: Viuvo đổi 1110 -> 1111). *Desc luôn đúng.
+  // ⚠️ USE *Desc, DON'T hardcode FK codes — DOMINIO codes can change between DB versions
+  //    (observed: Viuvo changed 1110 -> 1111). *Desc is always correct.
   "TIN": "12346", "numInscProvisoria": "111111112",
-  "nomeMae": "Ikulu Costa", "indDescNomeMae": false,   // indDesc*=true nghĩa là "không rõ tên"
+  "nomeMae": "Ikulu Costa", "indDescNomeMae": false,   // indDesc*=true means "name unknown"
   "nomePai": "Martinho",     "indDescNomePai": false,
-  "interno": false,          // true = người của chính INSS
+  "interno": false,          // true = a person belonging to INSS itself
 
   "documentos": [
     { "idDoc": 5086, "tipoFk": 22, "tipoDesc": "Cartão eleitoral", "tipoDescEN": "Eletroral Card",
       "numero": "1234556", "dataEmissao": null, "dataValidade": "2030-02-01T00:00:00",
       "localEmissao": null, "fileName": "INACIO_PASSPORT.pdf", "hasFile": 1 } ],
 
-  "moradas": [   // địa chỉ + chuỗi địa giới đọc được
+  "moradas": [   // address + human-readable administrative-boundary chain
     { "idMorada": 5124, "rua": "Manleuana", "numPorta": "45", "moradaPrincipal": false,
       "aldeiaFk": 2273, "aldeia": "Aninfuic", "sucoFk": 448, "suco": "Manleuana",
       "postoFk": 30, "posto": "Dom Aleixo", "municipioFk": 6, "municipio": "Díli",
@@ -68,45 +68,45 @@ Ví dụ `GET /worker/100979891`:
   "contactos": [
     { "idContacto": 9464, "telemovel": "73696930", "email": "costaikulu4@gmail.com", "indActivo": true } ],
 
-  "inssEstrangeiro": [   // an sinh nước ngoài (thường rỗng)
+  "inssEstrangeiro": [   // foreign social security (usually empty)
     { "id": 1, "nomeSSEstrangeiro": "bpjs", "paisFk": 1101, "pais": "Indonésia",
       "NISSEstrangeiro": "100025649", "indDecontAtualmente": true, "indBenfAtualmente": true,
       "nomeDocumento": "...pdf", "hasFile": 1 } ]
 }
 ```
-404 nếu NISS không tồn tại. Mọi mảng có thể rỗng (`[]`). `moradas[].moradaPrincipal=true` = địa chỉ chính.
+404 if the NISS does not exist. Any array may be empty (`[]`). `moradas[].moradaPrincipal=true` = main address.
 
-### Hàm 2b — Tải file PDF giấy tờ
+### Function 2b — Download document PDF file
 
-`GET /api/benefit-data/document/{idDoc}` → trả **file PDF nhị phân** (`Content-Type: application/pdf`,
-`Content-Disposition: attachment; filename=...`). `idDoc` lấy từ `documentos[].idDoc` của Hàm 2.
-404 nếu không có giấy tờ hoặc không có file.
+`GET /api/benefit-data/document/{idDoc}` → returns the **binary PDF file** (`Content-Type: application/pdf`,
+`Content-Disposition: attachment; filename=...`). `idDoc` comes from `documentos[].idDoc` in Function 2.
+404 if there is no document or no file.
 
-**Loại giấy tờ đi kèm trong response header** (⚠️ tên file KHÔNG đáng tin để suy ra loại —
-vd file `INACIO_PASSPORT.pdf` thực ra là *Cartão eleitoral*). Giá trị URL-encoded, client `decodeURIComponent`:
-- `X-Document-Type-Fk` — mã loại (vd `22`)
-- `X-Document-Type` — mô tả PT, vd `Cart%C3%A3o%20eleitoral` → "Cartão eleitoral"
-- `X-Document-Type-EN` — mô tả EN, vd `Eletroral%20Card`
-- `X-Document-Number` — số giấy tờ
+**The document type is carried in the response headers** (⚠️ the file name is NOT reliable for inferring the type —
+e.g. file `INACIO_PASSPORT.pdf` is actually a *Cartão eleitoral*). Values are URL-encoded; the client should `decodeURIComponent`:
+- `X-Document-Type-Fk` — type code (e.g. `22`)
+- `X-Document-Type` — PT description, e.g. `Cart%C3%A3o%20eleitoral` → "Cartão eleitoral"
+- `X-Document-Type-EN` — EN description, e.g. `Eletroral%20Card`
+- `X-Document-Number` — document number
 
-Các loại đang có file trong DB: **Cartão eleitoral (22), Bilhete de Identidade (1), Passaporte (2)**.
+Types that currently have files in the DB: **Cartão eleitoral (22), Bilhete de Identidade (1), Passaporte (2)**.
 
 ---
 
-## Hàm 3 — Lịch sử đóng góp theo NISS NLĐ (lồng theo từng hợp đồng)
+## Function 3 — Contribution history by worker NISS (nested per contract)
 
 `GET /api/benefit-data/contributions/{niss}`
 
-Cấu trúc **2 tầng: CÔNG TY → các HỢP ĐỒNG → các THÁNG**. Xử lý được cả 2 case:
-- **1 công ty ký nhiều hợp đồng** → 1 phần tử `companies[]`, nhiều phần tử `contracts[]` bên trong.
-- **NLĐ làm nhiều công ty** → nhiều phần tử `companies[]`.
+Structure has **2 levels: COMPANY → CONTRACTS → MONTHS**. Handles both cases:
+- **One company signs multiple contracts** → 1 `companies[]` element, multiple `contracts[]` inside.
+- **Worker employed at multiple companies** → multiple `companies[]` elements.
 
-Mỗi **công ty** có `totalMonths` (số tháng đóng) + `totalRemunDeclarada` (tổng giá trị) — **CHỈ TIỆN ÍCH HIỂN THỊ**, Benefit engine tự tính lại từ `months[]`.
-Mỗi **hợp đồng** có 3 mốc: `dtIniVincTrabalhador` (ngày ký HĐ/bắt đầu), `dtIniFimTrabalhador` (ngày kết HĐ, null=đang làm), `lastContribMonth` (tháng đóng cuối = "hết thấy đóng góp").
-`months[]` chỉ chứa tháng **có declaração** (status `CONTRIBUTED`); tháng trống = gap → Benefit tự điền & quyết định tính N.
-`suspensions[]` = kỳ tạm dừng thô (Benefit tự gắn SUSPENSO).
+Each **company** has `totalMonths` (number of contributed months) + `totalRemunDeclarada` (total value) — **DISPLAY CONVENIENCE ONLY**, the Benefit engine recomputes them from `months[]`.
+Each **contract** has 3 milestones: `dtIniVincTrabalhador` (contract sign / start date), `dtIniFimTrabalhador` (contract end date, null = still active), `lastContribMonth` (last contributed month = "no contribution seen after this").
+`months[]` contains only months that **have a declaração** (status `CONTRIBUTED`); a missing month = gap → Benefit fills it in and decides how to compute N.
+`suspensions[]` = raw suspension periods (Benefit attaches SUSPENSO itself).
 
-Ví dụ `GET /contributions/199100002`:
+Example `GET /contributions/199100002`:
 ```json
 {
   "niss": "199100002",
@@ -116,24 +116,24 @@ Ví dụ `GET /contributions/199100002`:
       "nissCompany": "900000003",
       "nomeCompany": "Pixel Asia Production Dili Unipessoal, Lda",
       "numContracts": 1,
-      "totalMonths": 13,                 // số tháng công ty này đóng (display)
-      "totalRemunDeclarada": 5844.53,    // tổng giá trị (display — engine tính lại)
+      "totalMonths": 13,                 // months this company contributed (display)
+      "totalRemunDeclarada": 5844.53,    // total value (display — engine recomputes)
       "contracts": [
         {
           "idRel": 8062,
-          "dtIniVincTrabalhador": "2024-01-01T00:00:00",   // ngày ký HĐ
-          "dtIniFimTrabalhador": null,                      // null = đang làm
+          "dtIniVincTrabalhador": "2024-01-01T00:00:00",   // contract sign date
+          "dtIniFimTrabalhador": null,                      // null = still active
           "tipoContratoFk": 4,  "tipoContratoDesc": "Por tempo determinado (Lei Trabalho)",
           "regimeFk": 23,       "regimeDesc": "Regime Geral", "regimeDescEN": "General Regime",
           "profissaoFk": 52,    "profissaoDesc": "Outro",
-          // ⚠️ dùng *Desc, đừng hardcode mã. LƯU Ý: regimeFk mức HỢP ĐỒNG (tra DOMINIO, vd 23)
-          //    KHÁC hệ mã với month.regimeFk mức THÁNG (tra bảng REGIME, vd 1) — cả 2 đều có regimeDesc.
+          // ⚠️ use *Desc, don't hardcode codes. NOTE: contract-level regimeFk (look up in DOMINIO, e.g. 23)
+          //    uses a DIFFERENT code system than month-level month.regimeFk (look up in REGIME table, e.g. 1) — both carry regimeDesc.
           "firstContribMonth": "2024-02-01T00:00:00",
           "lastContribMonth":  "2025-05-01T00:00:00",
           "months": [
             { "mesAno":"2024-02-01T00:00:00", "remunDeclarada":450.00, "decimoTerceiro":0.00,
               "regimeFk":1, "regimeDesc":"Regime Geral",
-              "taxaEntidade":6.0, "taxaTrabalhador":4.0,   // % theo regime (tham chiếu — benefit TỰ tính nếu cần)
+              "taxaEntidade":6.0, "taxaTrabalhador":4.0,   // % per regime (reference — benefit computes itself if needed)
               "diasTrabSegSocial":30.0, "diasContrato":30.0, "diasEfecTrabalhados":30.0,
               "faltasInjustific":0, "diasParentalidade":0, "oficioso":false,
               "status":"CONTRIBUTED" }
@@ -152,71 +152,71 @@ Ví dụ `GET /contributions/199100002`:
   ]
 }
 ```
-404 nếu NISS không tồn tại. Nếu NLĐ chưa có HĐ nào → `companies: []`.
-Ví dụ **1 công ty nhiều HĐ**: `GET /contributions/100006105` → công ty `900000003` có `numContracts:2`.
+404 if the NISS does not exist. If the worker has no contracts → `companies: []`.
+Example of **one company, multiple contracts**: `GET /contributions/100006105` → company `900000003` has `numContracts:2`.
 
-> **⚠️ NGUYÊN TẮC: chỉ trả số DOANH NGHIỆP ĐÃ KHAI BÁO, KHÔNG tự tính.**
-> - `months[]` chỉ gồm tháng thực có khai báo. Vd HĐ 12 tháng nhưng DN chỉ khai 5 tháng → trả đúng 5 tháng,
->   KHÔNG suy diễn/điền 7 tháng còn lại. (NLĐ chưa khai tháng nào → `months: []`.)
-> - DN chỉ khai báo **lương** (`remunDeclarada`), KHÔNG khai số tiền đóng → API **không nhân sẵn** tiền đóng.
->   Có gửi kèm `taxaEntidade`/`taxaTrabalhador` (% theo regime, master-data) để benefit TỰ tính nếu muốn
->   (tiền đóng = %×(remunDeclarada+decimoTerceiro)). Số tiền thực đóng per-NLĐ không lưu sẵn trong DB
->   (CONTACORRENTE chỉ gộp theo công ty/tháng).
+> **⚠️ PRINCIPLE: return only what the EMPLOYER DECLARED, do NOT infer.**
+> - `months[]` contains only months that were actually declared. E.g. a 12-month contract but the employer declared only 5 months → return exactly 5 months,
+>   do NOT infer/fill the remaining 7. (Worker who declared no month → `months: []`.)
+> - The employer declares only the **salary** (`remunDeclarada`), NOT the contribution amount → the API does **not** pre-multiply contributions.
+>   It does include `taxaEntidade`/`taxaTrabalhador` (% per regime, master-data) so benefit can compute it itself if desired
+>   (contribution = %×(remunDeclarada+decimoTerceiro)). The actual per-worker contribution amount is not stored in the DB
+>   (CONTACORRENTE aggregates only by company/month).
 >
-> **Lưu ý raw:** `remunDeclarada` = lương khai báo gốc theo tháng (biến R cho công thức).
-> `regimeFk` thô (Benefit map RTSS/RG theo mốc 01/10/2017). `DISPENSACONTRIBUTIVA` là bảng %
-> theo năm toàn cục (không gắn NLĐ) → KHÔNG nằm trong hàm này.
+> **Raw note:** `remunDeclarada` = original declared monthly salary (variable R for the formula).
+> `regimeFk` is raw (Benefit maps RTSS/RG by the 2017-10-01 cutoff). `DISPENSACONTRIBUTIVA` is a global per-year %
+> table (not tied to a worker) → NOT part of this function.
 
 ---
 
-## Bảng tra mã DOMINIO (cho thiết kế DB Benefit)
+## DOMINIO code lookup table (for Benefit DB design)
 
-| Nhóm | Mã → mô tả |
+| Group | Code → description |
 |---|---|
 | **SEXO** | 9=Masculino/Male, 10=Feminino/Female |
 | **ESTADOCIVIL** | 13=Solteiro, 14=Casado, 1109=Divorciado, 1110=Viuvo |
-| **TIPODOCUMENTO** (giấy tờ tuỳ thân) | 1=Bilhete de Identidade, 2=Passaporte, 21=Certidão, 22=Cartão eleitoral |
-| NACIONALIDADE / PROFISSAO / REGIME / TIPOCONTRACTO / NATUREZACONTRACTO / LEILABORALAPLICAVEL | tra trong bảng `DOMINIO` (cột `dominio`,`valor`,`descricao`,`descricaoEN`) |
+| **TIPODOCUMENTO** (identity documents) | 1=Bilhete de Identidade, 2=Passaporte, 21=Certidão, 22=Cartão eleitoral |
+| NACIONALIDADE / PROFISSAO / REGIME / TIPOCONTRACTO / NATUREZACONTRACTO / LEILABORALAPLICAVEL | look up in the `DOMINIO` table (columns `dominio`,`valor`,`descricao`,`descricaoEN`) |
 
 ---
 
-## Bản kê TOÀN BỘ trường gắn với 1 WORKER (để thiết kế DB Benefit)
+## Full inventory of fields tied to ONE WORKER (for Benefit DB design)
 
 ### TRABALHADOR (master 1-1)
 `idTrabalhador` (PK), `nome`, `NISS`, `TIN`, `numInscProvisoria`, `dataNasc`,
-`nomeMae`, `indDescNomeMae` (bit – mẹ vô danh), `nomePai`, `indDescNomePai` (bit – cha vô danh),
+`nomeMae`, `indDescNomeMae` (bit – mother unknown), `nomePai`, `indDescNomePai` (bit – father unknown),
 `estadoCivil` (FK), `naturalidade`, `sexoTrabalhador` (FK), `nacionalidadeTrabalhador` (FK),
-`interno` (bit – là người của chính INSS).
+`interno` (bit – belongs to INSS itself).
 *(audit: flagImportado, utilizadorCriacao, dataCriacao, utilizadorAlteracao, dataAlteracao, ipv6)*
 
 ### DOCUMENTOIDENTIFICACAO (1-n) — `trabalhador_documeto_fk`
-`tpDocIdentificacao` (FK loại), `numero`, `localEmissao`, `dataEmissao`, `dataValidade`,
-`documento` (varbinary – **file PDF**), `nomeDocumento`, `indActivo`.
+`tpDocIdentificacao` (FK type), `numero`, `localEmissao`, `dataEmissao`, `dataValidade`,
+`documento` (varbinary – **PDF file**), `nomeDocumento`, `indActivo`.
 
-### MORADA (1-n, địa chỉ NLĐ) — `trabalhador_morada_fk`
-`rua`, `numPorta`, `morada_aldeia_fk` (FK địa giới), `morada_pais_fk` (FK quốc gia), `moradaPrincipal` (bit).
+### MORADA (1-n, worker address) — `trabalhador_morada_fk`
+`rua`, `numPorta`, `morada_aldeia_fk` (FK administrative boundary), `morada_pais_fk` (FK country), `moradaPrincipal` (bit).
 
-### CONTACTO (1-n, liên hệ NLĐ) — `contacto_trabalhador_fk`
+### CONTACTO (1-n, worker contact) — `contacto_trabalhador_fk`
 `telemovel`, `email`, `indActivo`.
 
-### INSSESTRANGEIRO (0-n, an sinh nước ngoài) — `estrangeiro_trabalhador_fk`
-`nomeSSEstrangeiro`, `estrangeiro_pais_fk` (FK nước), `NISSEstrangeiro`,
-`indDecontAtualmente` (bit – đang đóng ở nước ngoài), `indBenfAtualmente` (bit – đang hưởng),
+### INSSESTRANGEIRO (0-n, foreign social security) — `estrangeiro_trabalhador_fk`
+`nomeSSEstrangeiro`, `estrangeiro_pais_fk` (FK country), `NISSEstrangeiro`,
+`indDecontAtualmente` (bit – currently contributing abroad), `indBenfAtualmente` (bit – currently receiving benefit),
 `documento` (varbinary PDF), `nomeDocumento`.
 
-### RELENTIDADETRABALHADOR (1-n, hợp đồng/việc làm) — `trabalhador_fk`
-`idRel` (PK), `entidade_fk` (→ công ty), `tipoContrato` (FK), `naturezaContrato` (FK),
-`leiLabAplicavel` (FK), `horasSemana`, `diasSemana`, `dtIniVincTrabalhador` (ngày ký HĐ),
-`dtIniFimTrabalhador` (ngày kết HĐ), `funcPublico` (bit), `numFuncPublico`,
+### RELENTIDADETRABALHADOR (1-n, contract/employment) — `trabalhador_fk`
+`idRel` (PK), `entidade_fk` (→ company), `tipoContrato` (FK), `naturezaContrato` (FK),
+`leiLabAplicavel` (FK), `horasSemana`, `diasSemana`, `dtIniVincTrabalhador` (contract sign date),
+`dtIniFimTrabalhador` (contract end date), `funcPublico` (bit), `numFuncPublico`,
 `regime_fk` (FK), `escalao_fk` (FK), `profissao` (FK), `profissaoOutro`.
 
-### DECLARACAOREMUNERACAO (1-n, khai báo lương/tháng) — `declaracao_relEntidadeTrabalhador_FK`
+### DECLARACAOREMUNERACAO (1-n, salary declaration per month) — `declaracao_relEntidadeTrabalhador_FK`
 `mesAno`, `remunDeclarada`, `decimoTerceiro`, `RegimeFK`, `diasContrato`, `diasEfecTrabalhados`,
 `diasTrabcontabSegSocial`, `faltasInjustific`, `diasParentalidade`, `oficioso` (bit), `indActivo`.
 
-### SUSPENSOES (0-n, kỳ tạm dừng) — `trabalhador_suspensao_fk` + `entidade_suspensao_fk`
+### SUSPENSOES (0-n, suspension periods) — `trabalhador_suspensao_fk` + `entidade_suspensao_fk`
 `dataInicioSuspensao`, `dataFimSuspensao`, `indActivo`.
 
 ---
 
-*Backend: `Controllers/BenefitDataController.cs`. SQL đã verify trên DB thật `TimorINSSModuloContribuicoes`.*
+*Backend: `Controllers/BenefitDataController.cs`. SQL verified against the real DB `TimorINSSModuloContribuicoes`.*
