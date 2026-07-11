@@ -28,6 +28,8 @@ import { KyNganSachComponent } from './settings/ky-ngan-sach/ky-ngan-sach.compon
 import { UserPermissionComponent } from './user-permission/user-permission.component';
 import { PaymentComponent } from './payment/payment.component';
 import { OrcamentoConfigSelectComponent } from './orcamento-config-select/orcamento-config-select.component';
+import { ReceitaPacComponent } from './receita-pac/receita-pac.component';
+import { DepartamentoConfigComponent } from './departamento-config/departamento-config.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { OrcamentoConfigSelectComponent } from './orcamento-config-select/orcame
     KyNganSachComponent,
     UserPermissionComponent,
     PaymentComponent,
-    OrcamentoConfigSelectComponent
+    OrcamentoConfigSelectComponent,
+    ReceitaPacComponent,
+    DepartamentoConfigComponent
   ],
   imports: [
     CommonModule,

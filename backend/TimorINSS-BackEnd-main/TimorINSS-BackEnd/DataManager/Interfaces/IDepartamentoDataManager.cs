@@ -1,4 +1,5 @@
-﻿using TimorINSSBackEnd.DataContracts.ResponseDataContract;
+﻿using TimorINSSBackEnd.DataContracts.RequestDataContract;
+using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 
 namespace TimorINSSBackEnd.DataManager.Interfaces
 {
@@ -6,5 +7,8 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
     {
         public SelectDescriptionResponse GetAllDepartamentosAtivo();
 
+        DepartamentoConfigListResponse GetAllConfig();
+        DepartamentoConfigResponse SaveConfig(SaveDepartamentoConfigRequest request);
+        ResponseBaseDataContract DeactivateConfig(DeactivateDepartamentoConfigRequest request);
     }
 }

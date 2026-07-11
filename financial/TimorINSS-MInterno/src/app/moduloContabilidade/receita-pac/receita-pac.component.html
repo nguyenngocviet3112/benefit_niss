@@ -1,0 +1,160 @@
+<div class="rec-container">
+  <div class="rec-header">
+    <h2>Receita <span class="en">(RECEITAS_PAC — juros bancários, saldo de gerência, etc.; sem cổng duyệt, chỉ đăng ký)</span></h2>
+  </div>
+
+  <div class="rec-context-bar">
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>Ano</mat-label>
+      <input matInput type="number" [(ngModel)]="ano" name="ano" />
+    </mat-form-field>
+    <button mat-stroked-button (click)="load()">Tải lại</button>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button color="primary" (click)="openCreateForm()">+ Nhập Receita (PAC)</button>
+  </div>
+
+  <div class="rec-list" *ngIf="!loading">
+    <div class="rec-row rec-row-header">
+      <span class="rec-col-num">N.º PAC</span>
+      <span class="rec-col-regime">Regime</span>
+      <span class="rec-col-ec">Classificação Económica</span>
+      <span class="rec-col-descritivo">Descritivo</span>
+      <span class="rec-col-valor">Valor PAC</span>
+      <span class="rec-col-valor">Saldo por cobrar</span>
+    </div>
+
+    <ng-container *ngFor="let item of items">
+      <div class="rec-row rec-row-summary" (click)="toggleExpand(item)">
+        <span class="rec-col-num">{{ item.numero }}/{{ item.mes }}</span>
+        <span class="rec-col-regime">{{ item.regimeDesignacao }}</span>
+        <span class="rec-col-ec">{{ item.economicClassificationCodigo }} — {{ item.economicClassificationDesignacao }}</span>
+        <span class="rec-col-descritivo">{{ item.descritivo }}</span>
+        <span class="rec-col-valor">{{ item.valorPac | number:'1.2-2' }}</span>
+        <span class="rec-col-valor" [class.rec-saldo-pending]="item.saldoPorCobrar !== 0">{{ item.saldoPorCobrar | number:'1.2-2' }}</span>
+      </div>
+
+      <div class="rec-detail" *ngIf="expandedId === item.id">
+        <div class="rec-detail-grid">
+          <div class="rec-field">
+            <label>NISS <span class="itag type">Gõ tay</span></label>
+            <span>{{ item.niss || '—' }}</span>
+          </div>
+          <div class="rec-field">
+            <label>Atividade <span class="itag drop">Chọn</span></label>
+            <span>{{ item.atividadeCodigo ? (item.atividadeCodigo + ' — ' + item.atividadeDesignacao) : '—' }}</span>
+          </div>
+          <div class="rec-field">
+            <label>Organization <span class="itag drop">Chọn</span></label>
+            <span>{{ item.organizationNome }}</span>
+          </div>
+          <div class="rec-field">
+            <label>Valor cobrado (banco) <span class="itag type">Gõ tay</span></label>
+            <span>{{ item.valorCobradoBanco | number:'1.2-2' }}</span>
+          </div>
+          <div class="rec-field">
+            <label>Valor cobrado (caixa) <span class="itag type">Gõ tay</span></label>
+            <span>{{ item.valorCobradoCaixa | number:'1.2-2' }}</span>
+          </div>
+          <div class="rec-field">
+            <label>Valor cobrado (total) <span class="itag auto">Tự động</span></label>
+            <span>{{ item.valorCobradoTotal | number:'1.2-2' }}</span>
+          </div>
+          <div class="rec-field">
+            <label>Saldo liquidado por cobrar <span class="itag auto">Tự động</span></label>
+            <span>{{ item.saldoPorCobrar | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="rec-actions-bar">
+          <button mat-stroked-button (click)="openEditForm(item)">Sửa</button>
+          <button mat-stroked-button color="warn" (click)="deactivate(item)">Vô hiệu hóa</button>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="rec-empty" *ngIf="items.length === 0">Chưa có Receita (PAC) nào cho năm này.</div>
+  </div>
+
+  <div class="rec-form-overlay" *ngIf="showForm">
+    <div class="rec-form">
+      <h3>{{ editingId ? 'Sửa Receita (PAC)' : 'Nhập Receita (PAC)' }}</h3>
+
+      <div class="rec-form-grid">
+        <mat-form-field appearance="outline" class="small-field">
+          <mat-label>Mês <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formMes" name="formMes">
+            <mat-option *ngFor="let m of meses" [value]="m">{{ m }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>NISS (tùy chọn) <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formNiss" name="formNiss" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Regime <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formRegimeFk" name="formRegimeFk">
+            <mat-option *ngFor="let r of regimes" [value]="r.id">{{ r.codigo }} — {{ r.designacao }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Atividade (tùy chọn) <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formAtividadeFk" name="formAtividadeFk">
+            <mat-option [value]="null">— Không chọn —</mat-option>
+            <mat-option *ngFor="let a of atividades" [value]="a.id" [style.paddingLeft]="indent(a.nivel)">{{ a.codigo }} — {{ a.designacao }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Classificação Económica <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formEconomicClassificationFk" name="formEconomicClassificationFk">
+            <mat-option *ngFor="let e of economicClassifications" [value]="e.id" [style.paddingLeft]="indent(e.nivel)">{{ e.codigo }} — {{ e.designacao }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Organization <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formOrganizationFk" name="formOrganizationFk">
+            <mat-option *ngFor="let inst of institutions" [value]="inst.id">{{ inst.nome }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="rec-form-span2">
+          <mat-label>Descritivo do movimento <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="rec-form-span2">
+          <mat-label>Valor PAC (số tiền phải thu đã ghi nhận) <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput type="number" min="0" step="0.01" [(ngModel)]="formValorPac" name="formValorPac" required />
+        </mat-form-field>
+
+        <div class="rec-form-span2">
+          <div class="rec-hint">
+            Đã thực thu được bao nhiêu trong số Valor PAC ở trên — tách theo kênh. Phải nhập tay vì hệ thống
+            chưa nối với sao kê ngân hàng tự động (màn Conciliação de Movimentos chưa build); 0 nghĩa là chưa xác nhận về tài khoản/quỹ.
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Đã thu qua ngân hàng <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput type="number" min="0" step="0.01" [(ngModel)]="formValorCobradoBanco" name="formValorCobradoBanco" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Đã thu qua tiền mặt <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput type="number" min="0" step="0.01" [(ngModel)]="formValorCobradoCaixa" name="formValorCobradoCaixa" />
+        </mat-form-field>
+      </div>
+
+      <div class="rec-form-actions">
+        <button mat-button (click)="cancelForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="saveReceita()">{{ editingId ? 'Lưu' : 'Tạo' }}</button>
+      </div>
+    </div>
+  </div>
+</div>

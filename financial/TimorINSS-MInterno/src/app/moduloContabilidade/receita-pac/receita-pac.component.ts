@@ -1,0 +1,197 @@
+import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EconomicClassificationDataContract } from '../../response-models/economic-classification-response';
+import { ProgramActivityDataContract } from '../../response-models/program-activity-response';
+import { ReceitaPacDataContract } from '../../response-models/receita-pac-response';
+import { EconomicClassificationService } from '../../services/economic-classification.service';
+import { InstitutionService } from '../../services/institution.service';
+import { ProgramActivityService } from '../../services/program-activity.service';
+import { ReceitaPacService } from '../../services/receita-pac.service';
+import { SelectDescription } from '../../models/utils';
+
+@Component({
+  selector: 'app-receita-pac',
+  templateUrl: './receita-pac.component.html',
+  styleUrls: ['./receita-pac.component.css']
+})
+export class ReceitaPacComponent implements OnInit {
+
+  public ano = 2026;
+  public orcamentoConfigFk = 1;
+  public loading = false;
+
+  public items: ReceitaPacDataContract[] = [];
+  public expandedId: number | null = null;
+
+  public meses = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+  public regimes: ProgramActivityDataContract[] = [];
+  public atividades: ProgramActivityDataContract[] = [];
+  public economicClassifications: EconomicClassificationDataContract[] = [];
+  public institutions: SelectDescription[] = [];
+
+  public showForm = false;
+  public editingId = 0;
+  public formMes = new Date().getMonth() + 1;
+  public formNiss = '';
+  public formRegimeFk: number | null = null;
+  public formAtividadeFk: number | null = null;
+  public formEconomicClassificationFk: number | null = null;
+  public formOrganizationFk: number | null = null;
+  public formDescritivo = '';
+  public formValorPac: number | null = null;
+  public formValorCobradoBanco = 0;
+  public formValorCobradoCaixa = 0;
+
+  constructor(
+    private receitaPacService: ReceitaPacService,
+    private programActivityService: ProgramActivityService,
+    private economicClassificationService: EconomicClassificationService,
+    private institutionService: InstitutionService,
+    private snackBar: MatSnackBar
+  ) { }
+
+  ngOnInit(): void {
+    this.load();
+    this.loadMasterData();
+  }
+
+  public load(): void {
+    this.loading = true;
+    this.receitaPacService.getByAno(this.ano).subscribe(
+      response => {
+        this.items = response.items ?? [];
+        this.loading = false;
+      },
+      err => {
+        this.loading = false;
+        this.showError(err);
+      }
+    );
+  }
+
+  private loadMasterData(): void {
+    this.programActivityService.getTree(this.orcamentoConfigFk).subscribe(
+      response => {
+        const all = response.items ?? [];
+        this.regimes = all.filter(a => !a.parentFk);
+        this.atividades = all;
+      },
+      err => this.showError(err)
+    );
+
+    this.economicClassificationService.getTree(this.orcamentoConfigFk).subscribe(
+      response => {
+        // RECEITAS_PAC only registers Receita codes (4xx) — RECEITAS_GP (401.xx contribution
+        // income) already comes from the Contribuições module, not entered here either way,
+        // but keep the picker scoped to the Receita branch of the tree for clarity.
+        const all = response.items ?? [];
+        const receitaRootIds = new Set(all.filter(e => e.tipo === 'Receita').map(e => e.id));
+        const isUnderReceita = (node: EconomicClassificationDataContract): boolean => {
+          let currentId: number | undefined = node.id;
+          while (currentId !== undefined) {
+            if (receitaRootIds.has(currentId)) { return true; }
+            const parent: EconomicClassificationDataContract | undefined = all.find(e => e.id === currentId);
+            currentId = parent ? parent.parentFk : undefined;
+          }
+          return false;
+        };
+        this.economicClassifications = all.filter(e => isUnderReceita(e));
+      },
+      err => this.showError(err)
+    );
+
+    this.institutionService.getAllInstitutionsAtivo().subscribe(
+      response => this.institutions = response.selects ?? [],
+      err => this.showError(err)
+    );
+  }
+
+  public indent(nivel: number): string {
+    return `${(nivel - 1) * 16}px`;
+  }
+
+  public toggleExpand(item: ReceitaPacDataContract): void {
+    this.expandedId = this.expandedId === item.id ? null : item.id;
+  }
+
+  public openCreateForm(): void {
+    this.editingId = 0;
+    this.formMes = new Date().getMonth() + 1;
+    this.formNiss = '';
+    this.formRegimeFk = null;
+    this.formAtividadeFk = null;
+    this.formEconomicClassificationFk = null;
+    this.formOrganizationFk = null;
+    this.formDescritivo = '';
+    this.formValorPac = null;
+    this.formValorCobradoBanco = 0;
+    this.formValorCobradoCaixa = 0;
+    this.showForm = true;
+  }
+
+  public openEditForm(item: ReceitaPacDataContract): void {
+    this.editingId = item.id;
+    this.formMes = item.mes;
+    this.formNiss = item.niss ?? '';
+    this.formRegimeFk = item.regimeFk;
+    this.formAtividadeFk = item.atividadeFk ?? null;
+    this.formEconomicClassificationFk = item.economicClassificationFk;
+    this.formOrganizationFk = item.organizationFk;
+    this.formDescritivo = item.descritivo;
+    this.formValorPac = item.valorPac;
+    this.formValorCobradoBanco = item.valorCobradoBanco;
+    this.formValorCobradoCaixa = item.valorCobradoCaixa;
+    this.showForm = true;
+  }
+
+  public cancelForm(): void {
+    this.showForm = false;
+  }
+
+  public saveReceita(): void {
+    if (!this.formRegimeFk || !this.formEconomicClassificationFk || !this.formOrganizationFk || !this.formValorPac || !this.formDescritivo) {
+      this.snackBar.open('Vui lòng nhập đủ Regime, Classificação Económica, Organization, Descritivo và Valor PAC.', 'Đóng', { duration: 3500 });
+      return;
+    }
+
+    this.receitaPacService.save({
+      id: this.editingId,
+      mes: this.formMes,
+      ano: this.ano,
+      niss: this.formNiss || undefined,
+      regimeFk: this.formRegimeFk,
+      atividadeFk: this.formAtividadeFk ?? undefined,
+      economicClassificationFk: this.formEconomicClassificationFk,
+      organizationFk: this.formOrganizationFk,
+      descritivo: this.formDescritivo,
+      valorPac: this.formValorPac,
+      valorCobradoBanco: this.formValorCobradoBanco,
+      valorCobradoCaixa: this.formValorCobradoCaixa
+    }).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          return;
+        }
+        this.showForm = false;
+        this.snackBar.open(`Đã lưu PAC số ${response.item.numero}.`, 'Đóng', { duration: 3000 });
+        this.load();
+      },
+      err => this.showError(err)
+    );
+  }
+
+  public deactivate(item: ReceitaPacDataContract): void {
+    if (!confirm(`Vô hiệu hóa PAC số ${item.numero}?`)) { return; }
+    this.receitaPacService.deactivate({ id: item.id }).subscribe(
+      () => this.load(),
+      err => this.showError(err)
+    );
+  }
+
+  private showError(err: any): void {
+    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
+    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+  }
+}

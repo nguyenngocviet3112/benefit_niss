@@ -281,6 +281,7 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<ILanguageConfigDataManager, LanguageConfigDataManager>();
             services.AddScoped<IOrcamentoConfigDataManager, OrcamentoConfigDataManager>();
             services.AddScoped<IPaymentDataManager, PaymentDataManager>();
+            services.AddScoped<IReceitaPacDataManager, ReceitaPacDataManager>();
 
             //Misc
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

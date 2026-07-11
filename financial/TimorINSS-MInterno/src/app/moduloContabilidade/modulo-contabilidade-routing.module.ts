@@ -24,6 +24,8 @@ import { PaymentComponent } from './payment/payment.component';
 import { ContribHomeSearchComponent } from '../moduloContribuicoes/modulo-contribuicoes-search-page/modulo-contribuicoes-main-search';
 import { ContribValidationHomeSearchComponent } from '../moduloContribuicoes/modulo-contribuicoes-validation-search-page/modulo-contribuicoes-validation-main-search';
 import { ConsultasSituacoesContributivasComponent } from '../moduloRelatorios/consultas/situacao-contributiva/consultas-situacao.component';
+import { ReceitaPacComponent } from './receita-pac/receita-pac.component';
+import { DepartamentoConfigComponent } from './departamento-config/departamento-config.component';
 
 const routes: Routes = [
   {
@@ -40,6 +42,8 @@ const routes: Routes = [
       { path: 'compromissoDespesa', component: CompromissoDespesaComponent },
       { path: 'obligation', component: ObligationComponent },
       { path: 'payment', component: PaymentComponent },
+      { path: 'receita', component: ReceitaPacComponent },
+      { path: 'sistema/departamentos', component: DepartamentoConfigComponent },
       { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
       { path: 'settings/idioma', component: IdiomaConfigComponent },
       { path: 'settings/kyNganSach', component: KyNganSachComponent },

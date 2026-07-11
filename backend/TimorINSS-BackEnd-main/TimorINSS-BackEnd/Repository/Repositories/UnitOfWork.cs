@@ -114,6 +114,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private ILanguageConfigRepository _languageConfigRepository;
         private IPaymentAuthorizationRepository _paymentAuthorizationRepository;
         private IPaymentExecutionRepository _paymentExecutionRepository;
+        private IReceitaPacRepository _receitaPacRepository;
 
 
         public UnitOfWork(TimorINSSModuloContribuicoesContext moduloContribuicoesContext, IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResource> localizer)
@@ -167,6 +168,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public IPaymentExecutionRepository PaymentExecutionRepository
         { get { return _paymentExecutionRepository ??= new PaymentExecutionRepository(_moduloContribuicoesContext); } }
+
+        public IReceitaPacRepository ReceitaPacRepository
+        { get { return _receitaPacRepository ??= new ReceitaPacRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository

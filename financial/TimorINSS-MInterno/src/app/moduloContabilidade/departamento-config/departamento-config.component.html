@@ -1,0 +1,54 @@
+<div class="dept-container">
+  <div class="dept-header">
+    <h2>Cấu hình phòng ban <span class="en">(Department configuration)</span></h2>
+  </div>
+
+  <div class="dept-context-bar">
+    <button mat-stroked-button (click)="load()">Tải lại</button>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="openCreateForm()">+ Thêm phòng ban</button>
+  </div>
+
+  <div class="dept-list" *ngIf="!loading">
+    <div class="dept-row dept-row-header">
+      <span class="dept-col-nome">Tên phòng ban</span>
+      <span class="dept-col-inst">Organization</span>
+      <span class="dept-col-actions"></span>
+    </div>
+
+    <div class="dept-row" *ngFor="let item of items">
+      <span class="dept-col-nome">{{ item.nome }}</span>
+      <span class="dept-col-inst">{{ item.institutionNome || '—' }}</span>
+      <span class="dept-col-actions">
+        <button mat-button (click)="openEditForm(item)">Sửa</button>
+        <button mat-button color="warn" (click)="deactivate(item)">Vô hiệu hóa</button>
+      </span>
+    </div>
+
+    <div class="dept-empty" *ngIf="items.length === 0">Chưa có phòng ban nào.</div>
+  </div>
+
+  <div class="dept-form-overlay" *ngIf="showForm">
+    <div class="dept-form">
+      <h3>{{ editingId ? 'Sửa phòng ban' : 'Thêm phòng ban' }}</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tên phòng ban <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput [(ngModel)]="formNome" name="formNome" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Organization (tùy chọn) <span class="itag drop">Chọn</span></mat-label>
+        <mat-select [(ngModel)]="formInstitutionId" name="formInstitutionId">
+          <mat-option [value]="null">— Không chọn —</mat-option>
+          <mat-option *ngFor="let inst of institutions" [value]="inst.id">{{ inst.nome }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="dept-form-actions">
+        <button mat-button (click)="cancelForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="saveDepartamento()">{{ editingId ? 'Lưu' : 'Tạo' }}</button>
+      </div>
+    </div>
+  </div>
+</div>
