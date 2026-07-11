@@ -66,6 +66,21 @@ export class ContabilidadeShellComponent implements OnInit {
       ]
     },
     {
+      // Kế thừa nguyên bản (BRD §9) — trỏ thẳng vào 3 màn hình cũ đã có sẵn ở
+      // root AppModule (KHÔNG nằm dưới /contabilidade), không build lại.
+      // Lưu ý: các route này ở ngoài prefix /contabilidade nên AppComponent sẽ
+      // coi là quay lại "mode cũ" (hiện lại menu/footer cũ) khi điều hướng tới
+      // — đúng như hành vi "kế thừa nguyên bản" của BRD, không phải lỗi.
+      label: 'Đóng góp BHXH',
+      icon: 'badge',
+      expanded: false,
+      items: [
+        { label: 'Tra cứu Entidade (theo NISS)', route: '/contribHomePage' },
+        { label: 'Guia Pagamento (Validação)', route: '/contribValidationHomePage' },
+        { label: 'Situação Contributiva', route: '/consultasSituacaoContributiva' },
+      ]
+    },
+    {
       label: 'Ngân hàng',
       icon: 'account_balance',
       expanded: false,
