@@ -1,0 +1,71 @@
+<div class="ce-container">
+  <div class="ce-header">
+    <h2>Classificação Económica <span class="en">(Mã kinh tế ngân sách — Receita/Despesa)</span></h2>
+  </div>
+
+  <div class="ce-context-bar">
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>Kỳ ngân sách (Ano)</mat-label>
+      <input matInput type="number" [(ngModel)]="orcamentoConfigFk" name="orcamentoConfigFk" />
+    </mat-form-field>
+    <button mat-stroked-button (click)="loadTree()">Tải lại</button>
+
+    <span class="spacer"></span>
+
+    <app-master-data-import-button entityPath="economicclassification" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadTree()"></app-master-data-import-button>
+    <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm mã gốc</button>
+  </div>
+
+  <div class="ce-tree" *ngIf="!loading">
+    <ng-container *ngFor="let root of tree">
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: root }"></ng-container>
+    </ng-container>
+    <div class="ce-empty" *ngIf="tree.length === 0">Chưa có dữ liệu cho kỳ ngân sách này.</div>
+  </div>
+
+  <ng-template #nodeTemplate let-node="node">
+    <div class="ce-row" [style.padding-left.px]="12 + (node.nivel - 1) * 24" [class.lvl1]="node.nivel === 1">
+      <span class="ce-code">{{ node.codigo }}</span>
+      <span class="ce-desig">{{ node.designacao }}</span>
+      <span class="ce-tipo" *ngIf="node.tipo">{{ node.tipo }}</span>
+      <span class="ce-actions">
+        <button mat-button (click)="openAddForm(node)">+ Con</button>
+        <button mat-button (click)="openEditForm(node)">Sửa</button>
+        <button mat-button (click)="deactivate(node)">Xóa</button>
+      </span>
+    </div>
+    <ng-container *ngFor="let child of node.children">
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: child }"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <div class="ce-form-overlay" *ngIf="showForm">
+    <div class="ce-form">
+      <h3>{{ editingId ? 'Sửa' : 'Thêm' }} mã kinh tế</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mã (Código)</mat-label>
+        <input matInput [(ngModel)]="formCodigo" name="formCodigo" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tên gọi (Designação)</mat-label>
+        <input matInput [(ngModel)]="formDesignacao" name="formDesignacao" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Loại (Tipo)</mat-label>
+        <mat-select [(ngModel)]="formTipo" name="formTipo">
+          <mat-option value="">—</mat-option>
+          <mat-option value="Receita">Receita (Thu)</mat-option>
+          <mat-option value="Despesa">Despesa (Chi)</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="ce-form-actions">
+        <button mat-button (click)="cancelForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>

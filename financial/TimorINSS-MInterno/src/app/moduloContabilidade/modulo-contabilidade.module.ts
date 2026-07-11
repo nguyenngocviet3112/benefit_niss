@@ -14,13 +14,17 @@ import { EstruturaProgramaticaComponent } from './estrutura-programatica/estrutu
 import { ClassificacaoFuncionalComponent } from './classificacao-funcional/classificacao-funcional.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { ContabilidadeShellComponent } from './contabilidade-shell/contabilidade-shell.component';
+import { ClassificacaoEconomicaComponent } from './classificacao-economica/classificacao-economica.component';
+import { MasterDataImportButtonComponent } from './master-data-import-button/master-data-import-button.component';
 
 @NgModule({
   declarations: [
     EstruturaProgramaticaComponent,
     ClassificacaoFuncionalComponent,
     OrganizationComponent,
-    ContabilidadeShellComponent
+    ContabilidadeShellComponent,
+    ClassificacaoEconomicaComponent,
+    MasterDataImportButtonComponent
   ],
   imports: [
     CommonModule,

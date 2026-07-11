@@ -18,6 +18,7 @@
     </mat-form-field>
     <button mat-stroked-button (click)="copyFromCurrentYear()">⧉ Sao chép từ kỳ này</button>
 
+    <app-master-data-import-button entityPath="programactivity" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadTree()"></app-master-data-import-button>
     <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm Programa</button>
   </div>
 
@@ -35,7 +36,7 @@
       <span class="ep-actions">
         <button mat-button *ngIf="node.nivel < 3" (click)="openAddForm(node)">+ Con</button>
         <button mat-button (click)="openEditForm(node)">Sửa</button>
-        <button mat-button (click)="deactivate(node)">Ẩn</button>
+        <button mat-button (click)="deactivate(node)">Xóa</button>
       </span>
     </div>
     <ng-container *ngFor="let child of node.children">

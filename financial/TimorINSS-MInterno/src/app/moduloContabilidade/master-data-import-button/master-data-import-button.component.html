@@ -1,0 +1,25 @@
+<button mat-stroked-button [disabled]="importing" (click)="triggerFileSelect()">
+  {{ importing ? 'Đang import...' : '⇪ Import Excel' }}
+</button>
+<input #fileInput type="file" accept=".xlsx" hidden (change)="onFileSelected($event)">
+
+<div class="import-result-overlay" *ngIf="showResult">
+  <div class="import-result-box">
+    <h3>Kết quả Import</h3>
+    <div class="import-summary">
+      <span>Tổng số dòng: <b>{{ lastResult?.total }}</b></span>
+      <span class="ok">Thành công: <b>{{ lastResult?.success }}</b></span>
+      <span class="fail">Lỗi: <b>{{ lastResult?.failed }}</b></span>
+    </div>
+
+    <div class="import-errors" *ngIf="lastResult?.rowErrors?.length">
+      <div class="import-error-row" *ngFor="let e of lastResult?.rowErrors">
+        Dòng {{ e.row }} ({{ e.codigo || '—' }}): {{ e.message }}
+      </div>
+    </div>
+
+    <div class="import-result-actions">
+      <button mat-raised-button color="primary" (click)="closeResult()">Đóng</button>
+    </div>
+  </div>
+</div>

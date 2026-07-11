@@ -1,0 +1,108 @@
+.ce-container {
+  padding: 24px;
+  max-width: 960px;
+}
+
+.ce-header h2 {
+  margin: 0 0 16px;
+}
+
+.ce-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.ce-context-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.ce-context-bar .spacer {
+  flex: 1;
+}
+
+.small-field {
+  width: 160px;
+}
+
+.ce-tree {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ce-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+.ce-row.lvl1 {
+  background: #f4f5f7;
+  font-weight: 600;
+}
+
+.ce-code {
+  font-family: monospace;
+  color: #7c2d22;
+  min-width: 76px;
+}
+
+.ce-desig {
+  flex: 1;
+}
+
+.ce-tipo {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #eef2f7;
+  color: #555;
+  white-space: nowrap;
+}
+
+.ce-actions {
+  white-space: nowrap;
+}
+
+.ce-empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+}
+
+.ce-form-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.ce-form {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  width: 420px;
+  max-width: 90vw;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.ce-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}

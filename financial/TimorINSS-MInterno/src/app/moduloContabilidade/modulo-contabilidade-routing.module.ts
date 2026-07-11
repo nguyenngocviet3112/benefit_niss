@@ -4,6 +4,7 @@ import { EstruturaProgramaticaComponent } from './estrutura-programatica/estrutu
 import { ClassificacaoFuncionalComponent } from './classificacao-funcional/classificacao-funcional.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { ContabilidadeShellComponent } from './contabilidade-shell/contabilidade-shell.component';
+import { ClassificacaoEconomicaComponent } from './classificacao-economica/classificacao-economica.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,7 @@ const routes: Routes = [
     children: [
       { path: 'estruturaProgramatica', component: EstruturaProgramaticaComponent },
       { path: 'classificacaoFuncional', component: ClassificacaoFuncionalComponent },
+      { path: 'classificacaoEconomica', component: ClassificacaoEconomicaComponent },
       { path: 'organization', component: OrganizationComponent },
       { path: '', redirectTo: 'estruturaProgramatica', pathMatch: 'full' },
     ]

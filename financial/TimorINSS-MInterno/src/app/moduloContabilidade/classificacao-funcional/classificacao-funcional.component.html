@@ -1,6 +1,7 @@
 <div class="cf-container">
   <div class="cf-header">
     <h2>Classificação Funcional <span class="en">(Phân loại theo chức năng — COFOG)</span></h2>
+    <app-master-data-import-button entityPath="functionalclassification" (imported)="load()"></app-master-data-import-button>
     <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm Divisão</button>
   </div>
 
@@ -18,7 +19,7 @@
       <span class="cf-actions">
         <button mat-button *ngIf="!node.parentFk" (click)="openAddForm(node)">+ Grupo</button>
         <button mat-button (click)="openEditForm(node)">Sửa</button>
-        <button mat-button (click)="deactivate(node)">Ẩn</button>
+        <button mat-button (click)="deactivate(node)">Xóa</button>
       </span>
     </div>
     <ng-container *ngFor="let child of node.children">

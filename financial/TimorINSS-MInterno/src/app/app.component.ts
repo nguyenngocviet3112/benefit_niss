@@ -71,8 +71,13 @@ export class AppComponent {
       // Sử dụng ngôn ngữ đã lưu (VI chỉ áp dụng khi đang ở giao diện mới)
       this.selectLang = savedLanguage;
       this.translate.use(savedLanguage);
+    } else if (this.isNewMode) {
+      // Giao diện mới: tạm thời mặc định tiếng Việt (2026-07-11, user yêu cầu) —
+      // không đổi mặc định của mode cũ (vẫn PT như trước).
+      this.selectLang = 'VI';
+      this.translate.use('VI');
     } else {
-      // Nếu không có, không hợp lệ, hoặc là VI nhưng đang ở mode cũ — dùng ngôn ngữ mặc định
+      // Mode cũ: giữ nguyên ngôn ngữ mặc định như trước (PT).
       this.selectLang = this.translate.getDefaultLang();
       this.translate.use(this.selectLang);
     }
