@@ -258,6 +258,7 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<IComponenteDespesaConfigDataManager, ComponenteDespesaConfigDataManager>();
             services.AddScoped<IDestinatarioDataManager, DestinatarioDataManager>();
             services.AddScoped<IPagamentoExecutadoDataManager, PagamentoExecutadoDataManager>();
+            services.AddScoped<ICeInssGlobalDataManager, CeInssGlobalDataManager>();
             services.AddScoped<IMovimentosPorConciliarDataManager, MovimentosPorConciliarDataManager>();
             services.AddScoped<IComponenteReceitaConfigDataManager, ComponenteReceitaConfigDataManager>();
             services.AddScoped<IMovimentosBancariosDataManager, MovimentosBancariosDataManager>();

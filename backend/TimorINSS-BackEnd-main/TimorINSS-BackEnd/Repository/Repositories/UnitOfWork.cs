@@ -86,6 +86,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IComponenteDespesaRegistoRepository _componenteDespesaRegistoRepository;
         private IComponenteTextoRegistoRepository _componenteTextoRegistoRepository;
         private IPagamentosExecutadosRepository _pagamentosExecutadosRepository;
+        private ICeInssGlobalRepository _ceInssGlobalRepository;
         private IComponenteDocumentosRegistoRepository _componenteDocumentosRegistoRepository;
         private IComponenteClassificacaoSubClassificRegistoRepository _componenteClassificacaoSubClassificRegistoRepository;
         private IDestinatarioRepository _destinatarioRepository;
@@ -286,6 +287,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
         { get { return _componenteTextoRegistoRepository ??= new ComponenteTextoRegistoRepository(_moduloContribuicoesContext); } }
         public IPagamentosExecutadosRepository PagamentosExecutadosRepository
         { get { return _pagamentosExecutadosRepository ??= new PagamentosExecutadosRepository(_moduloContribuicoesContext, _localizer); } }
+        public ICeInssGlobalRepository CeInssGlobalRepository
+        { get { return _ceInssGlobalRepository ??= new CeInssGlobalRepository(_moduloContribuicoesContext); } }
         public IComponenteDocumentosRegistoRepository ComponenteDocumentosRegistoRepository
         { get { return _componenteDocumentosRegistoRepository ??= new ComponenteDocumentosRegistoRepository(_moduloContribuicoesContext); } }
         public IComponenteClassificacaoSubClassificRegistoRepository ComponenteClassificacaoSubClassificRegistoRepository
