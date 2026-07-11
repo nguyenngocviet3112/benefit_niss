@@ -42,6 +42,35 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 ObligationNumero = entity.ObligationFkNavigation?.Numero ?? 0,
                 ObligationDescritivo = entity.ObligationFkNavigation?.DescritivoObrigacao,
                 ValorObrigacao = ValorObrigacao(entity.ObligationFkNavigation),
+                BeneficiarioNome = entity.ObligationFkNavigation?.BeneficiarioNome,
+                BeneficiarioCategoria = entity.ObligationFkNavigation?.BeneficiarioCategoria,
+                BeneficiarioNomeConta = entity.ObligationFkNavigation?.BeneficiarioNomeConta,
+                BeneficiarioNumeroConta = entity.ObligationFkNavigation?.BeneficiarioNumeroConta,
+                BeneficiarioIban = entity.ObligationFkNavigation?.BeneficiarioIban,
+                BeneficiarioSwift = entity.ObligationFkNavigation?.BeneficiarioSwift,
+                BeneficiarioBanco = entity.ObligationFkNavigation?.BeneficiarioBanco,
+                BeneficiarioMontanteAPagar = entity.ObligationFkNavigation?.BeneficiarioMontanteAPagar,
+                BeneficiaryList = (entity.ObligationFkNavigation?.ObligationBeneficiary ?? new List<ObligationBeneficiary>())
+                    .Where(b => b.IndActivo)
+                    .Select(b => new ObligationBeneficiaryDataContract
+                    {
+                        Id = b.Id,
+                        Niss = b.Niss,
+                        NomeContribuinte = b.NomeContribuinte,
+                        NomeBeneficiario = b.NomeBeneficiario,
+                        NomeConta = b.NomeConta,
+                        NumeroConta = b.NumeroConta,
+                        Iban = b.Iban,
+                        Swift = b.Swift,
+                        Banco = b.Banco,
+                        SalarioIliquido = b.SalarioIliquido,
+                        Cotizacao4 = b.Cotizacao4,
+                        Imposto10 = b.Imposto10,
+                        SalarioLiquido = b.SalarioLiquido,
+                        OutrosSuplementos = b.OutrosSuplementos,
+                        MontanteAPagar = b.MontanteAPagar
+                    })
+                    .ToList(),
                 Descritivo = entity.Descritivo,
                 ValorAutorizado = entity.ValorAutorizado,
                 CodigoContaDebitoFk = entity.CodigoContaDebitoFk,

@@ -137,6 +137,50 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
+        [HttpPost("AddBeneficiary")]
+        public IActionResult AddBeneficiary(AddObligationBeneficiaryRequest request)
+        {
+            ResponseBaseDataContract response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.AddBeneficiary(request);
+            }
+            catch (Exception e)
+            {
+                response = new ResponseBaseDataContract();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("AddBeneficiary", Log, request))
+                return BadRequest(response);
+
+            _cache.Reset();
+            return Ok(response);
+        }
+
+        [HttpPost("RemoveBeneficiary")]
+        public IActionResult RemoveBeneficiary(RemoveObligationBeneficiaryRequest request)
+        {
+            ResponseBaseDataContract response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.RemoveBeneficiary(request);
+            }
+            catch (Exception e)
+            {
+                response = new ResponseBaseDataContract();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("RemoveBeneficiary", Log, request))
+                return BadRequest(response);
+
+            _cache.Reset();
+            return Ok(response);
+        }
+
         [HttpPost("Submit")]
         public IActionResult Submit(SubmitObligationRequest request)
         {

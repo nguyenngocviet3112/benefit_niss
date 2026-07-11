@@ -10,6 +10,7 @@ namespace TimorINSSBackEnd.Models
         public Obligation()
         {
             ObligationItem = new HashSet<ObligationItem>();
+            ObligationBeneficiary = new HashSet<ObligationBeneficiary>();
         }
 
         public int Id { get; set; }
@@ -17,6 +18,16 @@ namespace TimorINSSBackEnd.Models
         public int Mes { get; set; }
         public int Ano { get; set; }
         public string DescritivoObrigacao { get; set; }
+        public string LiquidacaoTipo { get; set; }
+        public string BeneficiarioNome { get; set; }
+        public string BeneficiarioNiss { get; set; }
+        public string BeneficiarioCategoria { get; set; }
+        public string BeneficiarioNomeConta { get; set; }
+        public string BeneficiarioNumeroConta { get; set; }
+        public string BeneficiarioIban { get; set; }
+        public string BeneficiarioSwift { get; set; }
+        public string BeneficiarioBanco { get; set; }
+        public decimal? BeneficiarioMontanteAPagar { get; set; }
         public string Estado { get; set; }
         public int? SubmittedBy { get; set; }
         public DateTime? SubmittedAt { get; set; }
@@ -33,5 +44,6 @@ namespace TimorINSSBackEnd.Models
         public string Ipv6 { get; set; }
 
         public virtual ICollection<ObligationItem> ObligationItem { get; set; }
+        public virtual ICollection<ObligationBeneficiary> ObligationBeneficiary { get; set; }
     }
 }

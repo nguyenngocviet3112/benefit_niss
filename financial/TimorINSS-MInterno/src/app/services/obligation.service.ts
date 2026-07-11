@@ -3,9 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
+  AddObligationBeneficiaryRequest,
   AddObligationItemRequest,
   ApproveObligationRequest,
   CreateObligationRequest,
+  RemoveObligationBeneficiaryRequest,
   RemoveObligationItemRequest,
   SubmitObligationRequest
 } from '../request-models/obligation-request';
@@ -41,6 +43,14 @@ export class ObligationService {
 
   public removeItem(request: RemoveObligationItemRequest): Observable<ResponseBase> {
     return this.http.post<ResponseBase>(`${environment.apiUrl}/obligation/RemoveItem`, request);
+  }
+
+  public addBeneficiary(request: AddObligationBeneficiaryRequest): Observable<ResponseBase> {
+    return this.http.post<ResponseBase>(`${environment.apiUrl}/obligation/AddBeneficiary`, request);
+  }
+
+  public removeBeneficiary(request: RemoveObligationBeneficiaryRequest): Observable<ResponseBase> {
+    return this.http.post<ResponseBase>(`${environment.apiUrl}/obligation/RemoveBeneficiary`, request);
   }
 
   public submit(request: SubmitObligationRequest): Observable<ResponseBase> {

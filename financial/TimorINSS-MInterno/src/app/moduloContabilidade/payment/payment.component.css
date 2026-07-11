@@ -7,7 +7,7 @@
   margin: 0 0 16px;
 }
 
-.pag-header .en {
+.en {
   font-size: 13px;
   font-style: italic;
   color: #777;
@@ -125,6 +125,37 @@
   padding: 8px 12px;
   font-size: 13px;
   margin-bottom: 12px;
+}
+
+.pag-beneficiario {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+
+.pag-beneficiario h4 {
+  margin: 0 0 10px;
+  font-size: 13px;
+}
+
+.pag-ben-row {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr 2fr 1fr;
+  gap: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+}
+
+.pag-ben-row-header {
+  background: #f4f5f7;
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #666;
 }
 
 .itag {

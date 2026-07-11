@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace TimorINSSBackEnd.DataContracts.ModelDataContract
@@ -12,6 +13,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         [DataMember]
         public DateTime DataPagamento { get; set; }
 
+        // Tài khoản NGÂN HÀNG NỘI BỘ của INSS (nguồn chi) — KHÁC với tài khoản
+        // người thụ hưởng (xem BeneficiarioNomeConta.../BeneficiaryList trên
+        // PaymentAuthorizationDataContract, lấy từ Obligation).
         [DataMember]
         public int? ContaBancariaFk { get; set; }
 
@@ -54,6 +58,38 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public decimal ValorObrigacao { get; set; }
+
+        // Thông tin người thụ hưởng — ECHOED read-only từ Obligation (nguồn dữ
+        // liệu duy nhất là Obrigação, không nhập lại ở đây). Xác nhận qua sheet
+        // Pagamento gốc: khối "Nome conta/N.º conta/IBAN/Swift/Banco/Montante a
+        // pagar" ở đây trùng với Obrigação — là tài khoản người thụ hưởng, KHÔNG
+        // phải tài khoản nội bộ INSS (đó là PaymentExecution.ContaBancariaFk).
+        [DataMember]
+        public string BeneficiarioNome { get; set; }
+
+        [DataMember]
+        public string BeneficiarioCategoria { get; set; }
+
+        [DataMember]
+        public string BeneficiarioNomeConta { get; set; }
+
+        [DataMember]
+        public string BeneficiarioNumeroConta { get; set; }
+
+        [DataMember]
+        public string BeneficiarioIban { get; set; }
+
+        [DataMember]
+        public string BeneficiarioSwift { get; set; }
+
+        [DataMember]
+        public string BeneficiarioBanco { get; set; }
+
+        [DataMember]
+        public decimal? BeneficiarioMontanteAPagar { get; set; }
+
+        [DataMember]
+        public List<ObligationBeneficiaryDataContract> BeneficiaryList { get; set; } = new List<ObligationBeneficiaryDataContract>();
 
         [DataMember]
         public string Descritivo { get; set; }

@@ -18,7 +18,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IQueryable<PaymentAuthorization> BaseQuery()
         {
             return _moduloContribuicoesContext.PaymentAuthorization
-                .Include(p => p.ObligationFkNavigation)
+                .Include(p => p.ObligationFkNavigation).ThenInclude(o => o.ObligationBeneficiary)
                 .Include(p => p.CodigoContaDebitoFkNavigation)
                 .Include(p => p.CodigoContaCreditoFkNavigation)
                 .Include(p => p.PaymentExecution).ThenInclude(e => e.ContaBancariaFkNavigation);

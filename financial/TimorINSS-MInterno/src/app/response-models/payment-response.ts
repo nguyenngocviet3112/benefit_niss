@@ -1,8 +1,11 @@
 import { ResponseBase } from './utils-response';
+import { ObligationBeneficiaryDataContract } from './obligation-response';
 
 export interface PaymentExecutionDataContract {
   id: number;
   dataPagamento: string;
+  // Tài khoản ngân hàng NỘI BỘ của INSS (nguồn chi) — khác với tài khoản
+  // người thụ hưởng (xem beneficiario* trên PaymentAuthorizationDataContract).
   contaBancariaFk?: number;
   contaBancariaNome?: string;
   numeroDocumento?: string;
@@ -19,6 +22,18 @@ export interface PaymentAuthorizationDataContract {
   obligationNumero: number;
   obligationDescritivo?: string;
   valorObrigacao: number;
+  // Thông tin người thụ hưởng — echo read-only từ Obligation (không nhập lại
+  // ở Pagamento). Với các Obligation dùng danh sách (Beneficiário/Pessoal),
+  // các field đơn lẻ dưới đây rỗng, dùng beneficiaryList thay thế.
+  beneficiarioNome?: string;
+  beneficiarioCategoria?: string;
+  beneficiarioNomeConta?: string;
+  beneficiarioNumeroConta?: string;
+  beneficiarioIban?: string;
+  beneficiarioSwift?: string;
+  beneficiarioBanco?: string;
+  beneficiarioMontanteAPagar?: number;
+  beneficiaryList: ObligationBeneficiaryDataContract[];
   descritivo?: string;
   valorAutorizado: number;
   codigoContaDebitoFk?: number;

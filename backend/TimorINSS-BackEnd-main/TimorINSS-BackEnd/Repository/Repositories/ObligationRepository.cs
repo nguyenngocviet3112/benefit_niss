@@ -19,7 +19,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
         {
             return _moduloContribuicoesContext.Obligation
                 .Include(o => o.ObligationItem).ThenInclude(i => i.CompromissoDespesaFkNavigation).ThenInclude(c => c.CabimentoFkNavigation).ThenInclude(cab => cab.ExpenditureAuthorizationFkNavigation).ThenInclude(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.AtividadeFkNavigation)
-                .Include(o => o.ObligationItem).ThenInclude(i => i.CompromissoDespesaFkNavigation).ThenInclude(c => c.CabimentoFkNavigation).ThenInclude(cab => cab.ExpenditureAuthorizationFkNavigation).ThenInclude(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.EconomicClassificationFkNavigation);
+                .Include(o => o.ObligationItem).ThenInclude(i => i.CompromissoDespesaFkNavigation).ThenInclude(c => c.CabimentoFkNavigation).ThenInclude(cab => cab.ExpenditureAuthorizationFkNavigation).ThenInclude(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.EconomicClassificationFkNavigation)
+                .Include(o => o.ObligationBeneficiary);
         }
 
         public List<Obligation> GetByAno(int ano)
@@ -82,6 +83,24 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Where(i => i.IndActivo && i.CompromissoDespesaFk == compromissoDespesaFk)
                 .Select(i => (decimal?)i.Value)
                 .Sum() ?? 0;
+        }
+
+        public void AddBeneficiary(ObligationBeneficiary entity)
+        {
+            _moduloContribuicoesContext.ObligationBeneficiary.Add(entity);
+        }
+
+        public void UpdateBeneficiary(ObligationBeneficiary entity)
+        {
+            ObligationBeneficiary entityToUpdate = _moduloContribuicoesContext.ObligationBeneficiary
+                .Single(b => b.Id == entity.Id);
+
+            entityToUpdate = Utils.UpdateClassWithoutVirtuals(entity, entityToUpdate);
+        }
+
+        public ObligationBeneficiary GetBeneficiary(int id)
+        {
+            return _moduloContribuicoesContext.ObligationBeneficiary.SingleOrDefault(b => b.Id == id);
         }
     }
 }

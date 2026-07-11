@@ -182,6 +182,27 @@ namespace TimorINSSBackEnd.Models
                     .HasConstraintName("FK_ObligationItem_CompromissoDespesa");
             });
 
+            modelBuilder.Entity<Obligation>(entity =>
+            {
+                entity.Property(e => e.BeneficiarioMontanteAPagar).HasColumnType("decimal(18, 2)");
+            });
+
+            modelBuilder.Entity<ObligationBeneficiary>(entity =>
+            {
+                entity.Property(e => e.MontanteAPagar).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.SalarioIliquido).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Cotizacao4).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Imposto10).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.SalarioLiquido).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OutrosSuplementos).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.ObligationFkNavigation)
+                    .WithMany(p => p.ObligationBeneficiary)
+                    .HasForeignKey(d => d.ObligationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ObligationBeneficiary_Obligation");
+            });
+
             modelBuilder.Entity<PermissionPresetItem>(entity =>
             {
                 entity.HasOne(d => d.PermissionPresetFkNavigation)

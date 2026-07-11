@@ -12,6 +12,27 @@ export interface ObligationItemDataContract {
   value: number;
 }
 
+export interface ObligationBeneficiaryDataContract {
+  id: number;
+  niss?: string;
+  nomeContribuinte?: string;
+  nomeBeneficiario?: string;
+  nomeConta?: string;
+  numeroConta?: string;
+  iban?: string;
+  swift?: string;
+  banco?: string;
+  salarioIliquido?: number;
+  cotizacao4?: number;
+  imposto10?: number;
+  salarioLiquido?: number;
+  outrosSuplementos?: number;
+  montanteAPagar: number;
+}
+
+export type LiquidacaoTipo = 'SALARIOS' | 'PENSOES' | 'SUBSIDIOS_IMEDIATOS' | 'DESPESAS_SEM_CONTRATO' | 'OUTRAS_DESPESAS_CONTRATO';
+export type BeneficiarioCategoria = 'FORNECEDOR' | 'BENEFICIARIO' | 'CONTRIBUINTE_EE' | 'PESSOAL' | 'OUTRO';
+
 export interface ObligationDataContract {
   id: number;
   numero: number;
@@ -19,12 +40,23 @@ export interface ObligationDataContract {
   ano: number;
   descritivoObrigacao: string;
   valorObrigacao: number;
+  liquidacaoTipo?: LiquidacaoTipo;
+  beneficiarioNome?: string;
+  beneficiarioNiss?: string;
+  beneficiarioCategoria?: BeneficiarioCategoria;
+  beneficiarioNomeConta?: string;
+  beneficiarioNumeroConta?: string;
+  beneficiarioIban?: string;
+  beneficiarioSwift?: string;
+  beneficiarioBanco?: string;
+  beneficiarioMontanteAPagar?: number;
   estado: 'DRAFT' | 'PENDING_APPROVAL' | 'APPROVED';
   submittedAt?: string;
   approvedAt?: string;
   lastRejectComment?: string;
   lastRejectAt?: string;
   items: ObligationItemDataContract[];
+  beneficiaries: ObligationBeneficiaryDataContract[];
 }
 
 export interface CompromissoComSaldoDataContract {

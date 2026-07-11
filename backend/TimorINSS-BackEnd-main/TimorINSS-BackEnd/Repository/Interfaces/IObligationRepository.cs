@@ -15,5 +15,9 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         void UpdateItem(ObligationItem entity);
         ObligationItem GetItem(int id);
         decimal GetTotalCommittedForCompromisso(int compromissoDespesaFk);
+
+        void AddBeneficiary(ObligationBeneficiary entity);
+        void UpdateBeneficiary(ObligationBeneficiary entity);
+        ObligationBeneficiary GetBeneficiary(int id);
     }
 }

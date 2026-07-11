@@ -55,6 +55,28 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 })
                 .ToList();
 
+            List<ObligationBeneficiaryDataContract> beneficiaries = (entity.ObligationBeneficiary ?? new List<ObligationBeneficiary>())
+                .Where(b => b.IndActivo)
+                .Select(b => new ObligationBeneficiaryDataContract
+                {
+                    Id = b.Id,
+                    Niss = b.Niss,
+                    NomeContribuinte = b.NomeContribuinte,
+                    NomeBeneficiario = b.NomeBeneficiario,
+                    NomeConta = b.NomeConta,
+                    NumeroConta = b.NumeroConta,
+                    Iban = b.Iban,
+                    Swift = b.Swift,
+                    Banco = b.Banco,
+                    SalarioIliquido = b.SalarioIliquido,
+                    Cotizacao4 = b.Cotizacao4,
+                    Imposto10 = b.Imposto10,
+                    SalarioLiquido = b.SalarioLiquido,
+                    OutrosSuplementos = b.OutrosSuplementos,
+                    MontanteAPagar = b.MontanteAPagar
+                })
+                .ToList();
+
             return new ObligationDataContract
             {
                 Id = entity.Id,
@@ -63,12 +85,23 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Ano = entity.Ano,
                 DescritivoObrigacao = entity.DescritivoObrigacao,
                 ValorObrigacao = items.Sum(i => i.Value),
+                LiquidacaoTipo = entity.LiquidacaoTipo,
+                BeneficiarioNome = entity.BeneficiarioNome,
+                BeneficiarioNiss = entity.BeneficiarioNiss,
+                BeneficiarioCategoria = entity.BeneficiarioCategoria,
+                BeneficiarioNomeConta = entity.BeneficiarioNomeConta,
+                BeneficiarioNumeroConta = entity.BeneficiarioNumeroConta,
+                BeneficiarioIban = entity.BeneficiarioIban,
+                BeneficiarioSwift = entity.BeneficiarioSwift,
+                BeneficiarioBanco = entity.BeneficiarioBanco,
+                BeneficiarioMontanteAPagar = entity.BeneficiarioMontanteAPagar,
                 Estado = entity.Estado,
                 SubmittedAt = entity.SubmittedAt,
                 ApprovedAt = entity.ApprovedAt,
                 LastRejectComment = entity.LastRejectComment,
                 LastRejectAt = entity.LastRejectAt,
-                Items = items
+                Items = items,
+                Beneficiaries = beneficiaries
             };
         }
 
@@ -137,6 +170,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     Mes = request.Mes,
                     Ano = request.Ano,
                     DescritivoObrigacao = request.DescritivoObrigacao,
+                    LiquidacaoTipo = request.LiquidacaoTipo,
+                    BeneficiarioNome = request.BeneficiarioNome,
+                    BeneficiarioNiss = request.BeneficiarioNiss,
+                    BeneficiarioCategoria = request.BeneficiarioCategoria,
+                    BeneficiarioNomeConta = request.BeneficiarioNomeConta,
+                    BeneficiarioNumeroConta = request.BeneficiarioNumeroConta,
+                    BeneficiarioIban = request.BeneficiarioIban,
+                    BeneficiarioSwift = request.BeneficiarioSwift,
+                    BeneficiarioBanco = request.BeneficiarioBanco,
+                    BeneficiarioMontanteAPagar = request.BeneficiarioMontanteAPagar,
                     Estado = ESTADO_DRAFT,
                     IndActivo = true
                 };
@@ -230,6 +273,89 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 item.IndActivo = false;
                 item = _utils.UpdateDetailsToEntity(item);
                 _unitOfWork.ObligationRepository.UpdateItem(item);
+                _unitOfWork.Commit();
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
+        public ResponseBaseDataContract AddBeneficiary(AddObligationBeneficiaryRequest request)
+        {
+            ResponseBaseDataContract response = new ResponseBaseDataContract { RequestId = request.RequestId };
+            try
+            {
+                Obligation obligation = _unitOfWork.ObligationRepository.Get(request.ObligationFk);
+                if (obligation == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "OBR-NOT-FOUND", ErrorMessage = "Không tìm thấy Obrigação." });
+                    return response;
+                }
+                if (obligation.Estado != ESTADO_DRAFT)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "OBR-NOT-DRAFT", ErrorMessage = "Obrigação đang chờ duyệt, không thể sửa." });
+                    return response;
+                }
+                if (request.MontanteAPagar <= 0)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "OBR-BEN-INVALID-VALUE", ErrorMessage = "Montante a pagar phải lớn hơn 0." });
+                    return response;
+                }
+
+                ObligationBeneficiary beneficiary = new ObligationBeneficiary
+                {
+                    ObligationFk = request.ObligationFk,
+                    Niss = request.Niss,
+                    NomeContribuinte = request.NomeContribuinte,
+                    NomeBeneficiario = request.NomeBeneficiario,
+                    NomeConta = request.NomeConta,
+                    NumeroConta = request.NumeroConta,
+                    Iban = request.Iban,
+                    Swift = request.Swift,
+                    Banco = request.Banco,
+                    SalarioIliquido = request.SalarioIliquido,
+                    Cotizacao4 = request.Cotizacao4,
+                    Imposto10 = request.Imposto10,
+                    SalarioLiquido = request.SalarioLiquido,
+                    OutrosSuplementos = request.OutrosSuplementos,
+                    MontanteAPagar = request.MontanteAPagar,
+                    IndActivo = true
+                };
+                beneficiary = _utils.SetDetailsToEntity(beneficiary);
+                _unitOfWork.ObligationRepository.AddBeneficiary(beneficiary);
+                _unitOfWork.Commit();
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
+        public ResponseBaseDataContract RemoveBeneficiary(RemoveObligationBeneficiaryRequest request)
+        {
+            ResponseBaseDataContract response = new ResponseBaseDataContract { RequestId = request.RequestId };
+            try
+            {
+                ObligationBeneficiary beneficiary = _unitOfWork.ObligationRepository.GetBeneficiary(request.Id);
+                if (beneficiary == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "OBR-BEN-NOT-FOUND", ErrorMessage = "Không tìm thấy người thụ hưởng." });
+                    return response;
+                }
+
+                Obligation obligation = _unitOfWork.ObligationRepository.Get(beneficiary.ObligationFk);
+                if (obligation == null || obligation.Estado != ESTADO_DRAFT)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "OBR-NOT-DRAFT", ErrorMessage = "Obrigação đang chờ duyệt, không thể xoá." });
+                    return response;
+                }
+
+                beneficiary.IndActivo = false;
+                beneficiary = _utils.UpdateDetailsToEntity(beneficiary);
+                _unitOfWork.ObligationRepository.UpdateBeneficiary(beneficiary);
                 _unitOfWork.Commit();
             }
             catch (Exception e)

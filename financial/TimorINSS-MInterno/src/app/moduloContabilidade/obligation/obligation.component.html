@@ -34,6 +34,143 @@
       </div>
 
       <div class="obr-detail" *ngIf="expandedId === item.id">
+        <div class="obr-detail-grid" *ngIf="item.liquidacaoTipo || item.beneficiarioCategoria">
+          <div><span class="lbl">Liquidação de despesa relativa a <span class="itag drop">Chọn</span></span><span class="val">{{ (item.liquidacaoTipo && liquidacaoTipoLabels[item.liquidacaoTipo]) || '—' }}</span></div>
+          <div><span class="lbl">Categoria <span class="itag drop">Chọn</span></span><span class="val">{{ (item.beneficiarioCategoria && beneficiarioCategoriaLabels[item.beneficiarioCategoria]) || '—' }}</span></div>
+        </div>
+
+        <div class="obr-beneficiario-single" *ngIf="item.beneficiarioCategoria && !precisaLista(item.beneficiarioCategoria)">
+          <h4>Identificação do Beneficiário <span class="en">(mục 4-5 form gốc)</span></h4>
+          <div class="obr-detail-grid">
+            <div><span class="lbl">Nome</span><span class="val">{{ item.beneficiarioNome || '—' }}</span></div>
+            <div><span class="lbl">NISS</span><span class="val">{{ item.beneficiarioNiss || '—' }}</span></div>
+            <div><span class="lbl">Nome conta</span><span class="val">{{ item.beneficiarioNomeConta || '—' }}</span></div>
+            <div><span class="lbl">N.º conta</span><span class="val">{{ item.beneficiarioNumeroConta || '—' }}</span></div>
+            <div><span class="lbl">IBAN</span><span class="val">{{ item.beneficiarioIban || '—' }}</span></div>
+            <div><span class="lbl">Swift</span><span class="val">{{ item.beneficiarioSwift || '—' }}</span></div>
+            <div><span class="lbl">Banco</span><span class="val">{{ item.beneficiarioBanco || '—' }}</span></div>
+            <div><span class="lbl">Montante a pagar</span><span class="val">$ {{ item.beneficiarioMontanteAPagar | number:'1.2-2' }}</span></div>
+          </div>
+        </div>
+
+        <div class="obr-beneficiario-lista" *ngIf="item.beneficiarioCategoria && precisaLista(item.beneficiarioCategoria)">
+          <h4>
+            Lista de Beneficiários
+            <span class="en">({{ item.beneficiarioCategoria === 'PESSOAL' ? 'ListaObrigação2 — Pessoal/salários' : 'ListaObrigação1 — Beneficiários/prestações' }})</span>
+          </h4>
+          <div class="obr-ben-row obr-ben-row-header" *ngIf="item.beneficiarioCategoria === 'PESSOAL'">
+            <span>NISS</span>
+            <span>Nome Contribuinte</span>
+            <span>Detalhes bancários</span>
+            <span>Salário ilíquido</span>
+            <span>Cotização 4%</span>
+            <span>Imposto 10%</span>
+            <span>Suplementos</span>
+            <span>Montante a pagar</span>
+            <span *ngIf="item.estado === 'DRAFT'"></span>
+          </div>
+          <div class="obr-ben-row obr-ben-row-header" *ngIf="item.beneficiarioCategoria !== 'PESSOAL'">
+            <span>NISS</span>
+            <span>Nome Contribuinte</span>
+            <span>Nome Beneficiário</span>
+            <span>Detalhes bancários</span>
+            <span>Montante a pagar</span>
+            <span *ngIf="item.estado === 'DRAFT'"></span>
+          </div>
+          <div class="obr-ben-row" *ngFor="let b of item.beneficiaries" [class.obr-ben-row-pessoal]="item.beneficiarioCategoria === 'PESSOAL'">
+            <ng-container *ngIf="item.beneficiarioCategoria === 'PESSOAL'">
+              <span>{{ b.niss || '—' }}</span>
+              <span>{{ b.nomeContribuinte || '—' }}</span>
+              <span>{{ b.nomeConta }} / {{ b.numeroConta }} / {{ b.banco }}</span>
+              <span>$ {{ b.salarioIliquido | number:'1.2-2' }}</span>
+              <span>$ {{ b.cotizacao4 | number:'1.2-2' }}</span>
+              <span>$ {{ b.imposto10 | number:'1.2-2' }}</span>
+              <span>$ {{ b.outrosSuplementos | number:'1.2-2' }}</span>
+              <span>$ {{ b.montanteAPagar | number:'1.2-2' }}</span>
+            </ng-container>
+            <ng-container *ngIf="item.beneficiarioCategoria !== 'PESSOAL'">
+              <span>{{ b.niss || '—' }}</span>
+              <span>{{ b.nomeContribuinte || '—' }}</span>
+              <span>{{ b.nomeBeneficiario || '—' }}</span>
+              <span>{{ b.nomeConta }} / {{ b.numeroConta }} / {{ b.banco }}</span>
+              <span>$ {{ b.montanteAPagar | number:'1.2-2' }}</span>
+            </ng-container>
+            <span *ngIf="item.estado === 'DRAFT'">
+              <button mat-button (click)="removeBeneficiary(b.id)">Xóa</button>
+            </span>
+          </div>
+          <div class="obr-empty" *ngIf="item.beneficiaries.length === 0">Chưa có người thụ hưởng nào trong danh sách.</div>
+
+          <div class="obr-add-item" *ngIf="item.estado === 'DRAFT' && addBeneficiaryTarget?.id !== item.id">
+            <button mat-stroked-button (click)="openAddBeneficiary(item)">+ Thêm người thụ hưởng</button>
+          </div>
+
+          <div class="obr-add-ben-form" *ngIf="addBeneficiaryTarget?.id === item.id">
+            <mat-form-field appearance="outline" class="small-field">
+              <mat-label>NISS <span class="itag type">Gõ tay</span></mat-label>
+              <input matInput [(ngModel)]="formBenNiss" name="formBenNiss" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="medium-field">
+              <mat-label>Nome Contribuinte <span class="itag type">Gõ tay</span></mat-label>
+              <input matInput [(ngModel)]="formBenNomeContribuinte" name="formBenNomeContribuinte" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="medium-field" *ngIf="item.beneficiarioCategoria !== 'PESSOAL'">
+              <mat-label>Nome Beneficiário <span class="itag type">Gõ tay</span></mat-label>
+              <input matInput [(ngModel)]="formBenNomeBeneficiario" name="formBenNomeBeneficiario" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="medium-field">
+              <mat-label>Nome conta <span class="itag type">Gõ tay</span></mat-label>
+              <input matInput [(ngModel)]="formBenNomeConta" name="formBenNomeConta" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="medium-field">
+              <mat-label>N.º conta <span class="itag type">Gõ tay</span></mat-label>
+              <input matInput [(ngModel)]="formBenNumeroConta" name="formBenNumeroConta" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="small-field">
+              <mat-label>IBAN <span class="itag type">Gõ tay</span></mat-label>
+              <input matInput [(ngModel)]="formBenIban" name="formBenIban" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="small-field">
+              <mat-label>Swift <span class="itag type">Gõ tay</span></mat-label>
+              <input matInput [(ngModel)]="formBenSwift" name="formBenSwift" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="medium-field">
+              <mat-label>Banco <span class="itag type">Gõ tay</span></mat-label>
+              <input matInput [(ngModel)]="formBenBanco" name="formBenBanco" />
+            </mat-form-field>
+
+            <ng-container *ngIf="item.beneficiarioCategoria === 'PESSOAL'">
+              <mat-form-field appearance="outline" class="small-field">
+                <mat-label>Salário ilíquido <span class="itag type">Gõ tay</span></mat-label>
+                <input matInput type="number" step="0.01" [(ngModel)]="formBenSalarioIliquido" name="formBenSalarioIliquido" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="small-field">
+                <mat-label>Cotização 4% <span class="itag type">Gõ tay</span></mat-label>
+                <input matInput type="number" step="0.01" [(ngModel)]="formBenCotizacao4" name="formBenCotizacao4" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="small-field">
+                <mat-label>Imposto 10% <span class="itag type">Gõ tay</span></mat-label>
+                <input matInput type="number" step="0.01" [(ngModel)]="formBenImposto10" name="formBenImposto10" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="small-field">
+                <mat-label>Salário líquido <span class="itag type">Gõ tay</span></mat-label>
+                <input matInput type="number" step="0.01" [(ngModel)]="formBenSalarioLiquido" name="formBenSalarioLiquido" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="small-field">
+                <mat-label>Outros suplementos <span class="itag type">Gõ tay</span></mat-label>
+                <input matInput type="number" step="0.01" [(ngModel)]="formBenOutrosSuplementos" name="formBenOutrosSuplementos" />
+              </mat-form-field>
+            </ng-container>
+
+            <mat-form-field appearance="outline" class="small-field">
+              <mat-label>Montante a pagar (USD) <span class="itag type">Gõ tay</span></mat-label>
+              <input matInput type="number" step="0.01" [(ngModel)]="formBenMontanteAPagar" name="formBenMontanteAPagar" />
+            </mat-form-field>
+            <button mat-button (click)="cancelAddBeneficiary()">Hủy</button>
+            <button mat-raised-button color="primary" (click)="confirmAddBeneficiary()">Thêm</button>
+          </div>
+        </div>
+
         <div class="obr-items">
           <div class="obr-item-row obr-item-row-header">
             <span>N.º Compromisso</span>
@@ -95,6 +232,59 @@
         <mat-label>Descritivo da Obrigação <span class="itag type">Gõ tay (tùy chọn)</span></mat-label>
         <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
       </mat-form-field>
+
+      <mat-form-field appearance="outline" class="medium-field">
+        <mat-label>Liquidação de despesa relativa a <span class="itag drop">Chọn</span></mat-label>
+        <mat-select [(ngModel)]="formLiquidacaoTipo" name="formLiquidacaoTipo">
+          <mat-option *ngFor="let key of liquidacaoTipoLabels | keyvalue" [value]="key.key">{{ key.value }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="medium-field">
+        <mat-label>Categoria do Beneficiário <span class="itag drop">Chọn</span></mat-label>
+        <mat-select [(ngModel)]="formBeneficiarioCategoria" name="formBeneficiarioCategoria">
+          <mat-option *ngFor="let key of beneficiarioCategoriaLabels | keyvalue" [value]="key.key">{{ key.value }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="obr-form-hint" *ngIf="precisaLista(formBeneficiarioCategoria)">
+        Categoria này dùng danh sách nhiều người thụ hưởng — sau khi tạo Obrigação, thêm từng người vào danh sách trong màn chi tiết.
+      </div>
+
+      <ng-container *ngIf="formBeneficiarioCategoria && !precisaLista(formBeneficiarioCategoria)">
+        <mat-form-field appearance="outline" class="medium-field">
+          <mat-label>Nome <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formBeneficiarioNome" name="formBeneficiarioNome" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="small-field">
+          <mat-label>NISS <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formBeneficiarioNiss" name="formBeneficiarioNiss" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="medium-field">
+          <mat-label>Nome conta <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formBeneficiarioNomeConta" name="formBeneficiarioNomeConta" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="medium-field">
+          <mat-label>N.º conta <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formBeneficiarioNumeroConta" name="formBeneficiarioNumeroConta" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="small-field">
+          <mat-label>IBAN <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formBeneficiarioIban" name="formBeneficiarioIban" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="small-field">
+          <mat-label>Swift <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formBeneficiarioSwift" name="formBeneficiarioSwift" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="medium-field">
+          <mat-label>Banco <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formBeneficiarioBanco" name="formBeneficiarioBanco" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="small-field">
+          <mat-label>Montante a pagar (USD) <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput type="number" step="0.01" [(ngModel)]="formBeneficiarioMontanteAPagar" name="formBeneficiarioMontanteAPagar" />
+        </mat-form-field>
+      </ng-container>
 
       <mat-form-field appearance="outline" class="small-field">
         <mat-label>Mês</mat-label>

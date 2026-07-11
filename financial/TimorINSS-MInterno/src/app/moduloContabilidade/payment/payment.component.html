@@ -46,6 +46,35 @@
           <div><span class="lbl">Conta Crédito <span class="itag drop">Chọn</span></span><span class="val">{{ item.codigoContaCreditoDesignacao || '—' }}</span></div>
         </div>
 
+        <div class="pag-beneficiario" *ngIf="item.beneficiarioNome || item.beneficiarioNomeConta">
+          <h4>Identificação do montante a pagar e detalhes bancários <span class="en">(echo từ Obrigação — không nhập lại)</span></h4>
+          <div class="pag-detail-grid">
+            <div><span class="lbl">Nome</span><span class="val">{{ item.beneficiarioNome || '—' }}</span></div>
+            <div><span class="lbl">Nome conta</span><span class="val">{{ item.beneficiarioNomeConta || '—' }}</span></div>
+            <div><span class="lbl">N.º conta</span><span class="val">{{ item.beneficiarioNumeroConta || '—' }}</span></div>
+            <div><span class="lbl">IBAN</span><span class="val">{{ item.beneficiarioIban || '—' }}</span></div>
+            <div><span class="lbl">Swift</span><span class="val">{{ item.beneficiarioSwift || '—' }}</span></div>
+            <div><span class="lbl">Banco</span><span class="val">{{ item.beneficiarioBanco || '—' }}</span></div>
+            <div><span class="lbl">Montante a pagar</span><span class="val">$ {{ item.beneficiarioMontanteAPagar | number:'1.2-2' }}</span></div>
+          </div>
+        </div>
+
+        <div class="pag-beneficiario" *ngIf="item.beneficiaryList.length > 0">
+          <h4>Lista de Beneficiários <span class="en">(echo từ Obrigação — không nhập lại)</span></h4>
+          <div class="pag-ben-row pag-ben-row-header">
+            <span>NISS</span>
+            <span>Nome Contribuinte</span>
+            <span>Detalhes bancários</span>
+            <span>Montante a pagar</span>
+          </div>
+          <div class="pag-ben-row" *ngFor="let b of item.beneficiaryList">
+            <span>{{ b.niss || '—' }}</span>
+            <span>{{ b.nomeContribuinte || '—' }}</span>
+            <span>{{ b.nomeConta }} / {{ b.numeroConta }} / {{ b.banco }}</span>
+            <span>$ {{ b.montanteAPagar | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
         <div class="pag-reject-note" *ngIf="item.lastRejectComment">
           <strong>Lần từ chối gần nhất:</strong> {{ item.lastRejectComment }}
         </div>
@@ -63,7 +92,7 @@
 
         <div class="pag-execution-summary" *ngIf="item.execution">
           <div><span class="lbl">Data Pagamento <span class="itag type">Gõ tay</span></span><span class="val">{{ item.execution.dataPagamento | date:'dd/MM/yyyy' }}</span></div>
-          <div><span class="lbl">Conta Bancária <span class="itag drop">Chọn</span></span><span class="val">{{ item.execution.contaBancariaNome || '—' }}</span></div>
+          <div><span class="lbl">Conta Bancária INSS (nguồn chi) <span class="itag drop">Chọn</span></span><span class="val">{{ item.execution.contaBancariaNome || '—' }}</span></div>
           <div><span class="lbl">N.º Documento <span class="itag type">Gõ tay</span></span><span class="val">{{ item.execution.numeroDocumento || '—' }}</span></div>
           <div><span class="lbl">Observação <span class="itag type">Gõ tay</span></span><span class="val">{{ item.execution.observacao || '—' }}</span></div>
         </div>
@@ -74,7 +103,7 @@
             <input matInput type="date" [(ngModel)]="formDataPagamento" name="formDataPagamento" />
           </mat-form-field>
           <mat-form-field appearance="outline" class="medium-field">
-            <mat-label>Conta Bancária <span class="itag drop">Chọn</span></mat-label>
+            <mat-label>Conta Bancária INSS (nguồn chi) <span class="itag drop">Chọn (tùy chọn)</span></mat-label>
             <mat-select [(ngModel)]="formContaBancariaFk" name="formContaBancariaFk">
               <mat-option *ngFor="let c of contaBancariaOptions" [value]="c.id">
                 {{ c.entidadeBancaria }} ({{ c.numero }})

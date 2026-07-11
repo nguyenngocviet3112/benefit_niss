@@ -10,6 +10,8 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         ObligationResponse Create(CreateObligationRequest request);
         ResponseBaseDataContract AddItem(AddObligationItemRequest request);
         ResponseBaseDataContract RemoveItem(RemoveObligationItemRequest request);
+        ResponseBaseDataContract AddBeneficiary(AddObligationBeneficiaryRequest request);
+        ResponseBaseDataContract RemoveBeneficiary(RemoveObligationBeneficiaryRequest request);
         ResponseBaseDataContract Submit(SubmitObligationRequest request);
         ResponseBaseDataContract Approve(ApproveObligationRequest request);
     }
