@@ -1,0 +1,74 @@
+<div class="ba-container">
+  <div class="ba-header">
+    <h2>Ngân hàng <span class="en">(Contas Bancárias)</span></h2>
+    <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm ngân hàng</button>
+  </div>
+
+  <div class="ba-list" *ngIf="!loading">
+    <table class="ba-table">
+      <thead>
+        <tr>
+          <th>Tên ngân hàng</th>
+          <th>Mô tả tài khoản</th>
+          <th>Swift</th>
+          <th>IBAN</th>
+          <th>Số tài khoản</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let acc of accounts">
+          <td>{{ acc.entidadeBancaria }}</td>
+          <td>{{ acc.descricao || '—' }}</td>
+          <td>{{ acc.swift || '—' }}</td>
+          <td>{{ acc.iban }}</td>
+          <td>{{ acc.numero || '—' }}</td>
+          <td>
+            <button mat-button (click)="openEditForm(acc)">Sửa</button>
+          </td>
+        </tr>
+        <tr *ngIf="accounts.length === 0">
+          <td colspan="6" class="ba-empty">Chưa có tài khoản ngân hàng nào — bấm "+ Thêm ngân hàng" để tạo.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ba-form-overlay" *ngIf="showForm">
+    <div class="ba-form">
+      <h3>{{ editingId ? 'Sửa ngân hàng' : 'Thêm ngân hàng mới' }}</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tên ngân hàng (Entidade Bancária)</mat-label>
+        <input matInput [(ngModel)]="formEntidadeBancaria" name="formEntidadeBancaria" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mô tả tài khoản (VD: Conta Subsídios)</mat-label>
+        <input matInput [(ngModel)]="formDescricao" name="formDescricao" />
+      </mat-form-field>
+
+      <div class="ba-form-row">
+        <mat-form-field appearance="outline" class="ba-field">
+          <mat-label>Swift</mat-label>
+          <input matInput [(ngModel)]="formSwift" name="formSwift" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="ba-field">
+          <mat-label>Số tài khoản</mat-label>
+          <input matInput [(ngModel)]="formNumero" name="formNumero" />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>IBAN</mat-label>
+        <input matInput [(ngModel)]="formIban" name="formIban" />
+      </mat-form-field>
+
+      <div class="ba-form-actions">
+        <button mat-button (click)="cancelForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>

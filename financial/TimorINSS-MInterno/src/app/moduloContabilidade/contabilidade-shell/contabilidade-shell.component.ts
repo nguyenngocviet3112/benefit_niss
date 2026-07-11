@@ -105,20 +105,6 @@ export class ContabilidadeShellComponent implements OnInit {
       ]
     },
     {
-      // Mục "Hệ thống" — user yêu cầu (2026-07-11) thêm cấu hình chung của hệ
-      // thống: email gửi thông báo, tích hợp API với dự án Benefit, cấu hình
-      // phòng ban. Phòng ban làm trước (CRUD đầy đủ, tái dùng bảng DEPARTAMENTO
-      // cũ đã có 11 dòng thật); email/API integration còn comingSoon.
-      label: 'Hệ thống',
-      icon: 'settings',
-      expanded: true,
-      items: [
-        { label: 'Cấu hình phòng ban', route: '/contabilidade/sistema/departamentos' },
-        { label: 'Cấu hình Email', comingSoon: true },
-        { label: 'API Integration (Benefit)', comingSoon: true },
-      ]
-    },
-    {
       // Danh sách đầy đủ báo cáo cần ra, gộp 43 sheet gốc của Excel thành các
       // report có filter (vd: 1 report "Execução por Atividade" bao 22 sheet
       // Programa/SubPrograma/Atividade/CE_Regime* thay vì 22 màn riêng biệt).
@@ -195,12 +181,20 @@ export class ContabilidadeShellComponent implements OnInit {
       ]
     },
     {
+      // Gộp lại 2026-07-11 (user phát hiện có 2 nhóm "Cấu hình hệ thống"/"Hệ
+      // thống" trùng ý nhau) — trước đó "Cấu hình phòng ban/Email/API
+      // Integration" nằm ở nhóm "Hệ thống" riêng, còn "Ngôn ngữ/Kỳ ngân sách/
+      // Ngân hàng" nằm ở nhóm "Cấu hình hệ thống". Giờ chỉ còn 1 nhóm duy nhất.
       label: 'Cấu hình hệ thống',
       icon: 'settings',
       expanded: false,
       items: [
         { label: 'Ngôn ngữ (Idioma)', route: '/contabilidade/settings/idioma' },
         { label: 'Kỳ ngân sách (Orçamento Config)', route: '/contabilidade/settings/kyNganSach' },
+        { label: 'Ngân hàng (Contas Bancárias)', route: '/contabilidade/settings/bankAccount' },
+        { label: 'Cấu hình phòng ban', route: '/contabilidade/sistema/departamentos' },
+        { label: 'Cấu hình Email', comingSoon: true },
+        { label: 'API Integration (Benefit)', comingSoon: true },
       ]
     },
   ];

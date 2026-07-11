@@ -26,6 +26,9 @@ import { ContribValidationHomeSearchComponent } from '../moduloContribuicoes/mod
 import { ConsultasSituacoesContributivasComponent } from '../moduloRelatorios/consultas/situacao-contributiva/consultas-situacao.component';
 import { ReceitaPacComponent } from './receita-pac/receita-pac.component';
 import { DepartamentoConfigComponent } from './departamento-config/departamento-config.component';
+import { OrcamentoSuplementarComponent } from './orcamento-suplementar/orcamento-suplementar.component';
+import { SaldosAberturaComponent } from './saldos-abertura/saldos-abertura.component';
+import { BankAccountComponent } from './settings/bank-account/bank-account.component';
 
 const routes: Routes = [
   {
@@ -37,6 +40,8 @@ const routes: Routes = [
       { path: 'classificacaoEconomica', component: ClassificacaoEconomicaComponent },
       { path: 'organization', component: OrganizationComponent },
       { path: 'orcamento', component: OrcamentoComponent },
+      { path: 'orcamentoSuplementar', component: OrcamentoSuplementarComponent },
+      { path: 'saldosAbertura', component: SaldosAberturaComponent },
       { path: 'adCabimento', component: AdCabimentoComponent },
       { path: 'cabimento', component: CabimentoComponent },
       { path: 'compromissoDespesa', component: CompromissoDespesaComponent },
@@ -47,6 +52,7 @@ const routes: Routes = [
       { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
       { path: 'settings/idioma', component: IdiomaConfigComponent },
       { path: 'settings/kyNganSach', component: KyNganSachComponent },
+      { path: 'settings/bankAccount', component: BankAccountComponent },
       { path: 'userPermission', component: UserPermissionComponent },
       { path: 'contribuicoes/entidade', component: ContribHomeSearchComponent },
       { path: 'contribuicoes/guiaPagamento', component: ContribValidationHomeSearchComponent },

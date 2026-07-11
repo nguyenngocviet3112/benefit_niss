@@ -1,0 +1,91 @@
+.ba-container {
+  padding: 24px;
+  max-width: 960px;
+}
+
+.ba-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.ba-header h2 {
+  margin: 0;
+}
+
+.ba-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.ba-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ba-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f4f5f7;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+}
+
+.ba-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.ba-empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+}
+
+.ba-form-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.ba-form {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  width: 460px;
+  max-width: 92vw;
+}
+
+.ba-form h3 {
+  margin-top: 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.ba-form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.ba-field {
+  flex: 1;
+}
+
+.ba-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}

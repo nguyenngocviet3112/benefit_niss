@@ -31,6 +31,9 @@ import { PaymentComponent } from './payment/payment.component';
 import { OrcamentoConfigSelectComponent } from './orcamento-config-select/orcamento-config-select.component';
 import { ReceitaPacComponent } from './receita-pac/receita-pac.component';
 import { DepartamentoConfigComponent } from './departamento-config/departamento-config.component';
+import { OrcamentoSuplementarComponent } from './orcamento-suplementar/orcamento-suplementar.component';
+import { SaldosAberturaComponent } from './saldos-abertura/saldos-abertura.component';
+import { BankAccountComponent } from './settings/bank-account/bank-account.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,10 @@ import { DepartamentoConfigComponent } from './departamento-config/departamento-
     PaymentComponent,
     OrcamentoConfigSelectComponent,
     ReceitaPacComponent,
-    DepartamentoConfigComponent
+    DepartamentoConfigComponent,
+    OrcamentoSuplementarComponent,
+    SaldosAberturaComponent,
+    BankAccountComponent
   ],
   imports: [
     CommonModule,
