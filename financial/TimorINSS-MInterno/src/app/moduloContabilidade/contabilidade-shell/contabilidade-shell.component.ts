@@ -74,6 +74,21 @@ export class ContabilidadeShellComponent implements OnInit {
       ]
     },
     {
+      // Nhóm mới 2026-07-11 — phát hiện từ SCFSSTL2024_VF.xlsm/FRSSVF.xlsm
+      // (2 file khách cung cấp mới nạp): hệ thống kế toán kép (double-entry)
+      // hoàn toàn khác với chu trình chấp hành ngân sách (Chu trình chi tiêu/
+      // Thu) đã build — sổ Nợ/Có (Lançamentos/DB/CR) là dữ liệu giao dịch,
+      // không phải báo cáo, nên tách nhóm riêng thay vì bỏ vào Báo cáo.
+      // Xem [[financial-statements-scope-gap]] — toàn bộ nhóm này comingSoon,
+      // chưa xác nhận có nằm trong phạm vi Change Request hay không.
+      label: 'Contabilidade Geral',
+      icon: 'menu_book',
+      expanded: false,
+      items: [
+        { label: 'Registo de Lançamentos (Débito/Crédito)', comingSoon: true },
+      ]
+    },
+    {
       label: 'Ngân sách (Orçamento)',
       icon: 'account_balance_wallet',
       expanded: false,
@@ -101,7 +116,11 @@ export class ContabilidadeShellComponent implements OnInit {
       // Danh sách đầy đủ báo cáo cần ra, gộp 43 sheet gốc của Excel thành các
       // report có filter (vd: 1 report "Execução por Atividade" bao 22 sheet
       // Programa/SubPrograma/Atividade/CE_Regime* thay vì 22 màn riêng biệt).
-      // Liệt kê hết ở đây trước — làm dần từng cái theo comingSoon.
+      // Liệt kê hết ở đây trước — làm dần từng cái theo comingSoon. CHỈ
+      // CE_OSS_Global có route thật (ưu tiên #1, 2026-07-11) — mọi mục khác
+      // dừng ở comingSoon, kể cả 6 báo cáo tài chính mới thêm bên dưới (phát
+      // hiện 2026-07-11 từ SCFSSTL2024_VF.xlsm/FRSSVF.xlsm — 2 file khách
+      // cung cấp mới nạp, trước đó chưa đọc qua). Xem [[financial-statements-scope-gap]].
       label: 'Báo cáo',
       icon: 'summarize',
       expanded: false,
@@ -110,7 +129,7 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Ciclo da Despesa', comingSoon: true },
         { label: 'Síntese Programas', comingSoon: true },
         { label: 'Classificação Funcional (relatório)', comingSoon: true },
-        { label: 'Execução por Atividade / Programa / Regime', comingSoon: true },
+        { label: 'Execução por Atividade / Programa / Regime (4 regimes: Contributivo/Não Contributivo/Administração/Capitalização FRSS)', comingSoon: true },
         { label: 'Registo AD', comingSoon: true },
         { label: 'Registo Cabimentos', comingSoon: true },
         { label: 'Registo Compromissos', comingSoon: true },
@@ -120,6 +139,12 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Controlo', comingSoon: true },
         { label: 'Extratos Bancários (8 contas)', comingSoon: true },
         { label: 'INTERFACE (Ledger contábil)', comingSoon: true },
+        { label: 'Mapa de Transferências OE', comingSoon: true },
+        { label: 'Balanço (Bảng cân đối kế toán)', comingSoon: true },
+        { label: 'Demonstração de Resultados (DR)', comingSoon: true },
+        { label: 'Fluxos de Caixa (mensal/anual)', comingSoon: true },
+        { label: 'Balancete (Bảng cân đối thử)', comingSoon: true },
+        { label: 'Extrato de Conta Corrente', comingSoon: true },
       ]
     },
     {
@@ -147,6 +172,12 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Classificação Funcional', route: '/contabilidade/classificacaoFuncional' },
         { label: 'Classificação Económica', route: '/contabilidade/classificacaoEconomica' },
         { label: 'Organization', route: '/contabilidade/organization' },
+        // Novos, 2026-07-11 (do phạm vi kế toán kép mới phát hiện — xem
+        // [[financial-statements-scope-gap]]): Plano de Contas là bảng gốc,
+        // Mapeamento Rubricas ánh xạ Plano Contas -> dòng Balanço/DR.
+        { label: 'Plano de Contas (Chart of Accounts)', comingSoon: true },
+        { label: 'Mapeamento Rubricas ↔ Plano de Contas', comingSoon: true },
+        { label: 'Fornecedores / Clientes', comingSoon: true },
       ]
     },
     {
