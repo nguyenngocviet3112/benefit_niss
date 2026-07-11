@@ -466,5 +466,19 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             return countFilhos > 0;
         }
+
+        public List<Codigoconta> GetTreeByOrcamentoConfig(int orcamentoConfigFk)
+        {
+            return _moduloContribuicoesContext.Codigoconta
+                .Where(a => a.IndActivo && a.OrcamentoConfigFk == orcamentoConfigFk)
+                .OrderBy(a => a.Codigo)
+                .ToList();
+        }
+
+        public bool HasActiveChildren(int id)
+        {
+            return _moduloContribuicoesContext.Codigoconta
+                .Any(a => a.IndActivo && a.ParentFk == id);
+        }
     }
 }

@@ -102,6 +102,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IProgramActivityRepository _programActivityRepository;
         private IFunctionalClassificationRepository _functionalClassificationRepository;
         private IUserModeAccessRepository _userModeAccessRepository;
+        private IEconomicClassificationRepository _economicClassificationRepository;
 
 
 
@@ -124,6 +125,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public IUserModeAccessRepository UserModeAccessRepository
         { get { return _userModeAccessRepository ??= new UserModeAccessRepository(_moduloContribuicoesContext); } }
+
+        public IEconomicClassificationRepository EconomicClassificationRepository
+        { get { return _economicClassificationRepository ??= new EconomicClassificationRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository

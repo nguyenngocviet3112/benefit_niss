@@ -11,15 +11,15 @@ using TimorINSSBackEnd.DataManager.Interfaces;
 namespace TimorINSSBackEnd.Controllers
 {
     [Authorize]
-    [Route("api/programactivity")]
+    [Route("api/economicclassification")]
     [ApiController]
-    public class ProgramActivityController : ControllerBase
+    public class EconomicClassificationController : ControllerBase
     {
-        private readonly IProgramActivityDataManager _dataManager;
+        private readonly IEconomicClassificationDataManager _dataManager;
         public readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ICacheProvider _cache;
 
-        public ProgramActivityController(IProgramActivityDataManager dataManager, ICacheProvider memoryCache)
+        public EconomicClassificationController(IEconomicClassificationDataManager dataManager, ICacheProvider memoryCache)
         {
             _dataManager = dataManager;
             _cache = memoryCache;
@@ -28,17 +28,17 @@ namespace TimorINSSBackEnd.Controllers
         [HttpGet("GetTree/{orcamentoConfigFk}")]
         public IActionResult GetTree(int orcamentoConfigFk)
         {
-            ProgramActivityTreeResponse response;
+            EconomicClassificationTreeResponse response;
             try
             {
-                GetProgramActivityTreeRequest request = new GetProgramActivityTreeRequest();
+                GetEconomicClassificationTreeRequest request = new GetEconomicClassificationTreeRequest();
                 request.GetHeaderInfo(Request.Headers);
                 request.OrcamentoConfigFk = orcamentoConfigFk;
                 response = _dataManager.GetTreeByOrcamentoConfig(request);
             }
             catch (Exception e)
             {
-                response = new ProgramActivityTreeResponse();
+                response = new EconomicClassificationTreeResponse();
                 response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
             }
 
@@ -49,13 +49,13 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Save")]
-        public IActionResult Save(SaveProgramActivityRequest request)
+        public IActionResult Save(SaveEconomicClassificationRequest request)
         {
             ResponseBaseDataContract response;
             try
             {
                 request.GetHeaderInfo(Request.Headers);
-                response = _dataManager.SaveProgramActivity(request);
+                response = _dataManager.SaveEconomicClassification(request);
             }
             catch (Exception e)
             {
@@ -71,13 +71,13 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Deactivate")]
-        public IActionResult Deactivate(DeactivateProgramActivityRequest request)
+        public IActionResult Deactivate(DeactivateEconomicClassificationRequest request)
         {
             ResponseBaseDataContract response;
             try
             {
                 request.GetHeaderInfo(Request.Headers);
-                response = _dataManager.DeactivateProgramActivity(request);
+                response = _dataManager.DeactivateEconomicClassification(request);
             }
             catch (Exception e)
             {
@@ -92,28 +92,6 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
-        [HttpPost("CopyYear")]
-        public IActionResult CopyYear(CopyProgramActivityYearRequest request)
-        {
-            ResponseBaseDataContract response;
-            try
-            {
-                request.GetHeaderInfo(Request.Headers);
-                response = _dataManager.CopyProgramActivityYear(request);
-            }
-            catch (Exception e)
-            {
-                response = new ResponseBaseDataContract();
-                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
-            }
-
-            if (response.ManageErrors("CopyYear", Log, request))
-                return BadRequest(response);
-
-            _cache.Reset();
-            return Ok(response);
-        }
-
         [HttpPost("Import")]
         [RequestSizeLimit(20000000)]
         public IActionResult Import([FromForm] ImportMasterDataTreeRequest request)
@@ -122,7 +100,7 @@ namespace TimorINSSBackEnd.Controllers
             try
             {
                 request.GetHeaderInfo(Request.Headers);
-                response = _dataManager.ImportProgramActivity(request);
+                response = _dataManager.ImportEconomicClassification(request);
             }
             catch (Exception e)
             {

@@ -8,5 +8,6 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         FunctionalClassificationTreeResponse GetAllActive();
         ResponseBaseDataContract SaveFunctionalClassification(SaveFunctionalClassificationRequest request);
         ResponseBaseDataContract DeactivateFunctionalClassification(DeactivateFunctionalClassificationRequest request);
+        ImportMasterDataTreeResponse ImportFunctionalClassification(ImportMasterDataTreeRequest request);
     }
 }

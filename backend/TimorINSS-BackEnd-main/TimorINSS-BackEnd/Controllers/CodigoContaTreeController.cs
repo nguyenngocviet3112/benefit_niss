@@ -11,15 +11,15 @@ using TimorINSSBackEnd.DataManager.Interfaces;
 namespace TimorINSSBackEnd.Controllers
 {
     [Authorize]
-    [Route("api/programactivity")]
+    [Route("api/codigocontatree")]
     [ApiController]
-    public class ProgramActivityController : ControllerBase
+    public class CodigoContaTreeController : ControllerBase
     {
-        private readonly IProgramActivityDataManager _dataManager;
+        private readonly ICodigoContaTreeDataManager _dataManager;
         public readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ICacheProvider _cache;
 
-        public ProgramActivityController(IProgramActivityDataManager dataManager, ICacheProvider memoryCache)
+        public CodigoContaTreeController(ICodigoContaTreeDataManager dataManager, ICacheProvider memoryCache)
         {
             _dataManager = dataManager;
             _cache = memoryCache;
@@ -28,17 +28,17 @@ namespace TimorINSSBackEnd.Controllers
         [HttpGet("GetTree/{orcamentoConfigFk}")]
         public IActionResult GetTree(int orcamentoConfigFk)
         {
-            ProgramActivityTreeResponse response;
+            CodigoContaTreeResponse response;
             try
             {
-                GetProgramActivityTreeRequest request = new GetProgramActivityTreeRequest();
+                GetCodigoContaTreeRequest request = new GetCodigoContaTreeRequest();
                 request.GetHeaderInfo(Request.Headers);
                 request.OrcamentoConfigFk = orcamentoConfigFk;
                 response = _dataManager.GetTreeByOrcamentoConfig(request);
             }
             catch (Exception e)
             {
-                response = new ProgramActivityTreeResponse();
+                response = new CodigoContaTreeResponse();
                 response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
             }
 
@@ -49,13 +49,13 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Save")]
-        public IActionResult Save(SaveProgramActivityRequest request)
+        public IActionResult Save(SaveCodigoContaRequest request)
         {
             ResponseBaseDataContract response;
             try
             {
                 request.GetHeaderInfo(Request.Headers);
-                response = _dataManager.SaveProgramActivity(request);
+                response = _dataManager.SaveCodigoConta(request);
             }
             catch (Exception e)
             {
@@ -71,13 +71,13 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Deactivate")]
-        public IActionResult Deactivate(DeactivateProgramActivityRequest request)
+        public IActionResult Deactivate(DeactivateCodigoContaRequest request)
         {
             ResponseBaseDataContract response;
             try
             {
                 request.GetHeaderInfo(Request.Headers);
-                response = _dataManager.DeactivateProgramActivity(request);
+                response = _dataManager.DeactivateCodigoConta(request);
             }
             catch (Exception e)
             {
@@ -86,51 +86,6 @@ namespace TimorINSSBackEnd.Controllers
             }
 
             if (response.ManageErrors("Deactivate", Log, request))
-                return BadRequest(response);
-
-            _cache.Reset();
-            return Ok(response);
-        }
-
-        [HttpPost("CopyYear")]
-        public IActionResult CopyYear(CopyProgramActivityYearRequest request)
-        {
-            ResponseBaseDataContract response;
-            try
-            {
-                request.GetHeaderInfo(Request.Headers);
-                response = _dataManager.CopyProgramActivityYear(request);
-            }
-            catch (Exception e)
-            {
-                response = new ResponseBaseDataContract();
-                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
-            }
-
-            if (response.ManageErrors("CopyYear", Log, request))
-                return BadRequest(response);
-
-            _cache.Reset();
-            return Ok(response);
-        }
-
-        [HttpPost("Import")]
-        [RequestSizeLimit(20000000)]
-        public IActionResult Import([FromForm] ImportMasterDataTreeRequest request)
-        {
-            ImportMasterDataTreeResponse response;
-            try
-            {
-                request.GetHeaderInfo(Request.Headers);
-                response = _dataManager.ImportProgramActivity(request);
-            }
-            catch (Exception e)
-            {
-                response = new ImportMasterDataTreeResponse();
-                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
-            }
-
-            if (response.ManageErrors("Import", Log, null))
                 return BadRequest(response);
 
             _cache.Reset();

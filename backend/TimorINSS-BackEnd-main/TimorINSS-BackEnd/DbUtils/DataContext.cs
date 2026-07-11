@@ -40,6 +40,20 @@ namespace TimorINSSBackEnd.Models
                     .HasConstraintName("FK_FunctionalClassification_Parent");
             });
 
+            modelBuilder.Entity<EconomicClassification>(entity =>
+            {
+                entity.HasOne(d => d.OrcamentoConfigFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.OrcamentoConfigFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EconomicClassification_OrcamentoConfig");
+
+                entity.HasOne(d => d.ParentFkNavigation)
+                    .WithMany(p => p.InverseParentFkNavigation)
+                    .HasForeignKey(d => d.ParentFk)
+                    .HasConstraintName("FK_EconomicClassification_Parent");
+            });
+
             modelBuilder.Entity<UserModeAccess>(entity =>
             {
                 entity.HasOne(d => d.UtilizadorFkNavigation)

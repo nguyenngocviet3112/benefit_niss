@@ -9,5 +9,6 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         ResponseBaseDataContract SaveProgramActivity(SaveProgramActivityRequest request);
         ResponseBaseDataContract DeactivateProgramActivity(DeactivateProgramActivityRequest request);
         ResponseBaseDataContract CopyProgramActivityYear(CopyProgramActivityYearRequest request);
+        ImportMasterDataTreeResponse ImportProgramActivity(ImportMasterDataTreeRequest request);
     }
 }

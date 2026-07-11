@@ -32,5 +32,9 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public bool CodigoContaHasChilds(Codigoconta codigoConta);
 
         public List<CodigoContaDataContract> GetAllActiveCodigoConta();
+
+        public List<Codigoconta> GetTreeByOrcamentoConfig(int orcamentoConfigFk);
+
+        public bool HasActiveChildren(int id);
     }
 }

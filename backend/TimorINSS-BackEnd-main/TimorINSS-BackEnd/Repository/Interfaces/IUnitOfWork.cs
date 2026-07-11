@@ -92,6 +92,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IProgramActivityRepository ProgramActivityRepository { get; }
         IFunctionalClassificationRepository FunctionalClassificationRepository { get; }
         IUserModeAccessRepository UserModeAccessRepository { get; }
+        IEconomicClassificationRepository EconomicClassificationRepository { get; }
 
         void Commit();
 

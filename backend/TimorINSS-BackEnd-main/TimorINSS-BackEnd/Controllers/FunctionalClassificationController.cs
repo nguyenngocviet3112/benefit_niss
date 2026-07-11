@@ -93,5 +93,28 @@ namespace TimorINSSBackEnd.Controllers
             _cache.Reset();
             return Ok(response);
         }
+
+        [HttpPost("Import")]
+        [RequestSizeLimit(20000000)]
+        public IActionResult Import([FromForm] ImportMasterDataTreeRequest request)
+        {
+            ImportMasterDataTreeResponse response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.ImportFunctionalClassification(request);
+            }
+            catch (Exception e)
+            {
+                response = new ImportMasterDataTreeResponse();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("Import", Log, null))
+                return BadRequest(response);
+
+            _cache.Reset();
+            return Ok(response);
+        }
     }
 }
