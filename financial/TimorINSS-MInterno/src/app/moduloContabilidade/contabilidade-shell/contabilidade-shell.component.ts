@@ -38,25 +38,28 @@ export class ContabilidadeShellComponent implements OnInit {
 
   // Cây menu tĩnh (hardcoded) — KHÔNG tính toán động theo permissions như menu cũ.
   // Cấu trúc phản ánh đầy đủ wireframe M0-M4; các mục chưa code xong đánh dấu comingSoon.
-  // Thứ tự nhóm theo yêu cầu (2026-07-11): Chi tiêu → Thu → Ngân hàng → Cut-over
-  // → Ngân sách → Quản lý User → Báo cáo → Master Data (cuối cùng).
+  // Thứ tự nhóm theo yêu cầu (2026-07-11): Chi tiêu → Thu → Ngân hàng
+  // → Ngân sách (gồm cả Cut-over/Saldos de Abertura) → Quản lý User → Báo cáo
+  // → Master Data (cuối cùng). Cut-over gộp chung vào Ngân sách theo yêu cầu
+  // user (2026-07-11) — không còn là nhóm riêng. Tất cả nhóm mặc định collapse
+  // (expanded: false), user tự click để mở nhóm đang cần.
   public groups: TreebarGroup[] = [
     {
       label: 'Chu trình chi tiêu',
       icon: 'sync_alt',
-      expanded: true,
+      expanded: false,
       items: [
         { label: 'AD (Autorização de Despesa)', route: '/contabilidade/adCabimento' },
         { label: 'Cabimento (DIC)', route: '/contabilidade/cabimento' },
         { label: 'Compromisso', route: '/contabilidade/compromissoDespesa' },
         { label: 'Obrigação', route: '/contabilidade/obligation' },
-        { label: 'Pagamento', comingSoon: true },
+        { label: 'Pagamento', route: '/contabilidade/payment' },
       ]
     },
     {
       label: 'Thu (Receita)',
       icon: 'payments',
-      expanded: true,
+      expanded: false,
       items: [
         { label: 'Receita', comingSoon: true },
       ]
@@ -64,32 +67,25 @@ export class ContabilidadeShellComponent implements OnInit {
     {
       label: 'Ngân hàng',
       icon: 'account_balance',
-      expanded: true,
+      expanded: false,
       items: [
         { label: 'Conciliação de Movimentos', comingSoon: true },
       ]
     },
     {
-      label: 'Cut-over',
-      icon: 'flag',
-      expanded: true,
-      items: [
-        { label: 'Saldos de Abertura', comingSoon: true },
-      ]
-    },
-    {
       label: 'Ngân sách (Orçamento)',
       icon: 'account_balance_wallet',
-      expanded: true,
+      expanded: false,
       items: [
         { label: 'Orçamento', route: '/contabilidade/orcamento' },
         { label: 'Suplementar', comingSoon: true },
+        { label: 'Saldos de Abertura (Cut-over)', comingSoon: true },
       ]
     },
     {
       label: 'Quản lý User',
       icon: 'group',
-      expanded: true,
+      expanded: false,
       items: [
         { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission' },
       ]
@@ -101,7 +97,7 @@ export class ContabilidadeShellComponent implements OnInit {
       // Liệt kê hết ở đây trước — làm dần từng cái theo comingSoon.
       label: 'Báo cáo',
       icon: 'summarize',
-      expanded: true,
+      expanded: false,
       items: [
         { label: 'CE_OSS_Global (ưu tiên #1)', route: '/contabilidade/relatorios/ceInssGlobal' },
         { label: 'Ciclo da Despesa', comingSoon: true },
@@ -122,7 +118,7 @@ export class ContabilidadeShellComponent implements OnInit {
     {
       label: 'Master Data',
       icon: 'dns',
-      expanded: true,
+      expanded: false,
       items: [
         { label: 'Estrutura Programática', route: '/contabilidade/estruturaProgramatica' },
         { label: 'Classificação Funcional', route: '/contabilidade/classificacaoFuncional' },
@@ -133,7 +129,7 @@ export class ContabilidadeShellComponent implements OnInit {
     {
       label: 'Cấu hình hệ thống',
       icon: 'settings',
-      expanded: true,
+      expanded: false,
       items: [
         { label: 'Ngôn ngữ (Idioma)', route: '/contabilidade/settings/idioma' },
         { label: 'Kỳ ngân sách (Orçamento Config)', route: '/contabilidade/settings/kyNganSach' },

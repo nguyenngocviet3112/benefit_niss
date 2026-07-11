@@ -26,6 +26,7 @@ import { ObligationComponent } from './obligation/obligation.component';
 import { IdiomaConfigComponent } from './settings/idioma-config/idioma-config.component';
 import { KyNganSachComponent } from './settings/ky-ngan-sach/ky-ngan-sach.component';
 import { UserPermissionComponent } from './user-permission/user-permission.component';
+import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { UserPermissionComponent } from './user-permission/user-permission.compo
     ObligationComponent,
     IdiomaConfigComponent,
     KyNganSachComponent,
-    UserPermissionComponent
+    UserPermissionComponent,
+    PaymentComponent
   ],
   imports: [
     CommonModule,

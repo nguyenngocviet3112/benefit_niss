@@ -14,6 +14,7 @@ import { ObligationComponent } from './obligation/obligation.component';
 import { IdiomaConfigComponent } from './settings/idioma-config/idioma-config.component';
 import { KyNganSachComponent } from './settings/ky-ngan-sach/ky-ngan-sach.component';
 import { UserPermissionComponent } from './user-permission/user-permission.component';
+import { PaymentComponent } from './payment/payment.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,7 @@ const routes: Routes = [
       { path: 'cabimento', component: CabimentoComponent },
       { path: 'compromissoDespesa', component: CompromissoDespesaComponent },
       { path: 'obligation', component: ObligationComponent },
+      { path: 'payment', component: PaymentComponent },
       { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
       { path: 'settings/idioma', component: IdiomaConfigComponent },
       { path: 'settings/kyNganSach', component: KyNganSachComponent },

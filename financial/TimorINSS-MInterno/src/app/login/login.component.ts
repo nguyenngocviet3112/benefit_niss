@@ -43,7 +43,9 @@ export class LoginComponent implements OnInit {
   public counter = 0;
   public availableRegex = RegexPatterns;
   // Lựa chọn mode ngay trên màn login, không cần màn chọn riêng sau khi login.
-  public selectedMode: 'old' | 'new' = 'old';
+  // Default là mode mới (2026-07-11, theo yêu cầu user) — mode cũ giờ là lựa
+  // chọn phụ, chỉ dùng khi cần quay lại (vd. tài khoản chưa có quyền mode mới).
+  public selectedMode: 'old' | 'new' = 'new';
 
   constructor(
     private loginService: LoginService,

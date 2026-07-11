@@ -102,6 +102,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IObligationRepository ObligationRepository { get; }
         IUserPermissionRepository UserPermissionRepository { get; }
         ILanguageConfigRepository LanguageConfigRepository { get; }
+        IPaymentAuthorizationRepository PaymentAuthorizationRepository { get; }
+        IPaymentExecutionRepository PaymentExecutionRepository { get; }
 
         void Commit();
 
