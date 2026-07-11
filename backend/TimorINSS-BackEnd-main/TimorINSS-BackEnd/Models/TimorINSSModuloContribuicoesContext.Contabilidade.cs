@@ -10,5 +10,7 @@ namespace TimorINSSBackEnd.Models
         public virtual DbSet<EconomicClassification> EconomicClassification { get; set; }
         public virtual DbSet<OrcamentoBatch> OrcamentoBatch { get; set; }
         public virtual DbSet<OrcamentoLinha> OrcamentoLinha { get; set; }
+        public virtual DbSet<ExpenditureAuthorization> ExpenditureAuthorization { get; set; }
+        public virtual DbSet<ExpenditureAuthorizationPlurianualidade> ExpenditureAuthorizationPlurianualidade { get; set; }
     }
 }

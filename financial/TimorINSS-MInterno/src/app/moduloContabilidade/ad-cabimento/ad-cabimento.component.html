@@ -1,0 +1,151 @@
+<div class="ad-container">
+  <div class="ad-header">
+    <h2>AD / Cabimento <span class="en">(Autorização de Despesa — sinh từ rúbrica Orçamento đã duyệt)</span></h2>
+  </div>
+
+  <div class="ad-context-bar">
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>Ano</mat-label>
+      <input matInput type="number" [(ngModel)]="ano" name="ano" />
+    </mat-form-field>
+    <button mat-stroked-button (click)="load()">Tải lại</button>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button color="primary" (click)="openRubricaPicker()">+ Tạo AD từ rúbrica</button>
+  </div>
+
+  <div class="ad-list" *ngIf="!loading">
+    <div class="ad-row ad-row-header">
+      <span class="ad-col-num">N.º AD</span>
+      <span class="ad-col-atividade">Atividade / Classificação Económica</span>
+      <span class="ad-col-org">Org.</span>
+      <span class="ad-col-valor">Valor revisto</span>
+      <span class="ad-col-estado">Trạng thái</span>
+    </div>
+
+    <ng-container *ngFor="let item of items">
+      <div class="ad-row ad-row-summary" (click)="toggleExpand(item)">
+        <span class="ad-col-num">{{ item.numero }}/{{ item.mes }}</span>
+        <span class="ad-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
+        <span class="ad-col-org">{{ item.organizationNome }}</span>
+        <span class="ad-col-valor">{{ item.valorRevisto | number:'1.2-2' }}</span>
+        <span class="ad-col-estado">
+          <span class="ad-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
+        </span>
+      </div>
+
+      <div class="ad-detail" *ngIf="expandedId === item.id">
+        <div class="ad-detail-grid">
+          <div class="ad-field">
+            <label>Descritivo <span class="itag type">Gõ tay</span></label>
+            <span>{{ item.descritivo || '—' }}</span>
+          </div>
+          <div class="ad-field">
+            <label>Valor Autorizado <span class="itag type">Gõ tay</span></label>
+            <span>{{ item.valorAutorizado | number:'1.2-2' }}</span>
+          </div>
+          <div class="ad-field">
+            <label>Regularização <span class="itag type">Gõ tay</span></label>
+            <span *ngIf="item.estado !== 'DRAFT'">{{ item.regularizacao | number:'1.2-2' }}</span>
+            <span *ngIf="item.estado === 'DRAFT'" class="ad-regularizacao-edit">
+              <input type="number" [(ngModel)]="formRegularizacao" name="formRegularizacao{{item.id}}" />
+              <button mat-button (click)="saveRegularizacao(item)">Lưu</button>
+            </span>
+          </div>
+          <div class="ad-field">
+            <label>Valor revisto <span class="itag auto">Tự động</span></label>
+            <span>{{ item.valorRevisto | number:'1.2-2' }}</span>
+          </div>
+          <div class="ad-field" *ngIf="item.lastRejectComment">
+            <label>Lý do từ chối gần nhất</label>
+            <span class="ad-reject-text">{{ item.lastRejectComment }}</span>
+          </div>
+        </div>
+
+        <div class="ad-pluri">
+          <h4>Plurianualidade <span class="en">(khai báo giá trị dự kiến các năm sau, chỉ mang tính kế hoạch)</span></h4>
+          <div class="ad-pluri-row" *ngFor="let p of item.plurianualidade">
+            <span>{{ p.ano }}</span>
+            <span>{{ p.valor | number:'1.2-2' }}</span>
+            <button mat-button *ngIf="item.estado === 'DRAFT'" (click)="deletePlurianualidade(p.id)">Xóa</button>
+          </div>
+          <div class="ad-pluri-add" *ngIf="item.estado === 'DRAFT'">
+            <input type="number" placeholder="Ano" [(ngModel)]="formPluriAno" name="formPluriAno{{item.id}}" class="ad-pluri-input-ano" />
+            <input type="number" placeholder="Valor" [(ngModel)]="formPluriValor" name="formPluriValor{{item.id}}" class="ad-pluri-input-valor" />
+            <button mat-button (click)="addPlurianualidade(item)">+ Thêm năm</button>
+          </div>
+        </div>
+
+        <div class="ad-actions-bar">
+          <button mat-raised-button color="primary" *ngIf="item.estado === 'DRAFT'" (click)="submitAd(item)">Gửi duyệt</button>
+
+          <ng-container *ngIf="item.estado === 'PENDING_REVIEW'">
+            <button mat-raised-button color="primary" (click)="reviewApprove(item)">Xác nhận kiểm tra</button>
+            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'review')">Từ chối</button>
+          </ng-container>
+
+          <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
+            <button mat-raised-button color="primary" (click)="finalApprove(item)">Phê duyệt</button>
+            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'approve')">Từ chối</button>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="ad-empty" *ngIf="items.length === 0">Chưa có AD/Cabimento nào cho năm này.</div>
+  </div>
+
+  <div class="ad-form-overlay" *ngIf="showRubricaPicker">
+    <div class="ad-form ad-form-wide">
+      <h3>Tạo AD từ rúbrica Orçamento đã duyệt</h3>
+
+      <div class="ad-rubrica-list" *ngIf="!pickedRubrica">
+        <div class="ad-rubrica-row" *ngFor="let r of availableRubricas" (click)="pickRubrica(r)">
+          <span>{{ r.atividadeCodigo }} — {{ r.economicClassificationCodigo }} {{ r.economicClassificationDesignacao }}</span>
+          <span>{{ r.organizationNome }}</span>
+          <span>{{ r.valor | number:'1.2-2' }}</span>
+        </div>
+        <div class="ad-empty" *ngIf="availableRubricas.length === 0">Không còn rúbrica nào chưa có AD.</div>
+      </div>
+
+      <div *ngIf="pickedRubrica">
+        <p><b>Rúbrica:</b> {{ pickedRubrica.atividadeCodigo }} — {{ pickedRubrica.economicClassificationCodigo }} ({{ pickedRubrica.organizationNome }})</p>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descritivo <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Valor Autorizado <span class="itag type">Gõ tay (mặc định = Valor rúbrica)</span></mat-label>
+          <input matInput type="number" [(ngModel)]="formValorAutorizado" name="formValorAutorizado" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="small-field">
+          <mat-label>Mês</mat-label>
+          <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
+        </mat-form-field>
+      </div>
+
+      <div class="ad-form-actions">
+        <button mat-button (click)="cancelRubricaPicker()">Hủy</button>
+        <button mat-raised-button color="primary" *ngIf="pickedRubrica" (click)="createAd()">Tạo AD</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-form-overlay" *ngIf="showRejectPrompt">
+    <div class="ad-form">
+      <h3>Lý do từ chối</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ghi chú</mat-label>
+        <textarea matInput [(ngModel)]="rejectComment" name="rejectComment" rows="3"></textarea>
+      </mat-form-field>
+      <div class="ad-form-actions">
+        <button mat-button (click)="cancelReject()">Hủy</button>
+        <button mat-raised-button color="warn" (click)="confirmReject()">Xác nhận từ chối</button>
+      </div>
+    </div>
+  </div>
+</div>

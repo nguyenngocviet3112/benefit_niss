@@ -95,6 +95,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IEconomicClassificationRepository EconomicClassificationRepository { get; }
         IOrcamentoBatchRepository OrcamentoBatchRepository { get; }
         IOrcamentoLinhaRepository OrcamentoLinhaRepository { get; }
+        IExpenditureAuthorizationRepository ExpenditureAuthorizationRepository { get; }
 
         void Commit();
 

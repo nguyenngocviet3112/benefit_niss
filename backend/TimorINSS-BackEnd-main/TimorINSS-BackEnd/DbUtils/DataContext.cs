@@ -106,6 +106,29 @@ namespace TimorINSSBackEnd.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrcamentoLinha_Institution");
             });
+
+            modelBuilder.Entity<ExpenditureAuthorization>(entity =>
+            {
+                entity.Property(e => e.ValorAutorizado).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Regularizacao).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.OrcamentoLinhaFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.OrcamentoLinhaFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExpenditureAuthorization_OrcamentoLinha");
+            });
+
+            modelBuilder.Entity<ExpenditureAuthorizationPlurianualidade>(entity =>
+            {
+                entity.Property(e => e.Valor).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.ExpenditureAuthorizationFkNavigation)
+                    .WithMany(p => p.ExpenditureAuthorizationPlurianualidade)
+                    .HasForeignKey(d => d.ExpenditureAuthorizationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExpAuthPluri_ExpAuth");
+            });
         }
 
         public TimorINSSModuloContribuicoesContext(string connectionString) : base(GetOptions(connectionString))

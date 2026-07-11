@@ -26,6 +26,19 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .ToList();
         }
 
+        public List<OrcamentoLinha> GetApprovedByOrcamentoConfig(int orcamentoConfigFk)
+        {
+            return _moduloContribuicoesContext.OrcamentoLinha
+                .Include(l => l.AtividadeFkNavigation)
+                .Include(l => l.EconomicClassificationFkNavigation)
+                .Include(l => l.OrganizationFkNavigation)
+                .Include(l => l.OrcamentoBatchFkNavigation)
+                .Where(l => l.IndActivo
+                    && l.OrcamentoBatchFkNavigation.OrcamentoConfigFk == orcamentoConfigFk
+                    && l.OrcamentoBatchFkNavigation.Estado == "APPROVED")
+                .ToList();
+        }
+
         public OrcamentoLinha Get(int id)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
