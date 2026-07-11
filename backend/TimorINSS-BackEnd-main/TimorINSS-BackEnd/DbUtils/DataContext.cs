@@ -164,6 +164,64 @@ namespace TimorINSSBackEnd.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CompDespPluri_CompDesp");
             });
+
+            modelBuilder.Entity<ObligationItem>(entity =>
+            {
+                entity.Property(e => e.Value).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.ObligationFkNavigation)
+                    .WithMany(p => p.ObligationItem)
+                    .HasForeignKey(d => d.ObligationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ObligationItem_Obligation");
+
+                entity.HasOne(d => d.CompromissoDespesaFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CompromissoDespesaFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ObligationItem_CompromissoDespesa");
+            });
+
+            modelBuilder.Entity<PermissionPresetItem>(entity =>
+            {
+                entity.HasOne(d => d.PermissionPresetFkNavigation)
+                    .WithMany(p => p.PermissionPresetItem)
+                    .HasForeignKey(d => d.PermissionPresetFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PermissionPresetItem_Preset");
+            });
+
+            modelBuilder.Entity<UserPermission>(entity =>
+            {
+                entity.HasOne(d => d.UtilizadorFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.UtilizadorFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserPermission_Utilizador");
+
+                entity.HasOne(d => d.SourcePresetFkNavigation)
+                    .WithMany(p => p.UserPermission)
+                    .HasForeignKey(d => d.SourcePresetFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserPermission_Preset");
+            });
+
+            // ORCAMENTOCONFIG pre-existed (old app) with explicit Fluent config in the
+            // generated context using lowercase-first column names — Ano/Tipo are new
+            // columns added on top (see db_migrations/2026-07-11i_system_settings.sql),
+            // so they need the same explicit HasColumnName here (EF convention alone
+            // would look for "Ano"/"Tipo", not "ano"/"tipo"). Relocated here from
+            // TimorINSSModuloContribuicoesContext.Contabilidade.cs — a partial method
+            // can only have one implementing body, and this file already owns it.
+            modelBuilder.Entity<Orcamentoconfig>(entity =>
+            {
+                entity.Property(e => e.Ano).HasColumnName("ano");
+
+                entity.Property(e => e.Tipo)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("tipo");
+            });
         }
 
         public TimorINSSModuloContribuicoesContext(string connectionString) : base(GetOptions(connectionString))

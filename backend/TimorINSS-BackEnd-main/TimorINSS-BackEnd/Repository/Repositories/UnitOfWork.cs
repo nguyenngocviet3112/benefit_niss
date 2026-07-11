@@ -109,8 +109,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IExpenditureAuthorizationRepository _expenditureAuthorizationRepository;
         private ICabimentoRepository _cabimentoRepository;
         private ICompromissoDespesaRepository _compromissoDespesaRepository;
-
-
+        private IObligationRepository _obligationRepository;
+        private IUserPermissionRepository _userPermissionRepository;
+        private ILanguageConfigRepository _languageConfigRepository;
 
 
         public UnitOfWork(TimorINSSModuloContribuicoesContext moduloContribuicoesContext, IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResource> localizer)
@@ -149,6 +150,15 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public ICompromissoDespesaRepository CompromissoDespesaRepository
         { get { return _compromissoDespesaRepository ??= new CompromissoDespesaRepository(_moduloContribuicoesContext); } }
+
+        public IObligationRepository ObligationRepository
+        { get { return _obligationRepository ??= new ObligationRepository(_moduloContribuicoesContext); } }
+
+        public IUserPermissionRepository UserPermissionRepository
+        { get { return _userPermissionRepository ??= new UserPermissionRepository(_moduloContribuicoesContext); } }
+
+        public ILanguageConfigRepository LanguageConfigRepository
+        { get { return _languageConfigRepository ??= new LanguageConfigRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository

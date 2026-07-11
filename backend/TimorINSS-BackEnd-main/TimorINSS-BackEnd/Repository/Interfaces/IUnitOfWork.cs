@@ -99,6 +99,9 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IExpenditureAuthorizationRepository ExpenditureAuthorizationRepository { get; }
         ICabimentoRepository CabimentoRepository { get; }
         ICompromissoDespesaRepository CompromissoDespesaRepository { get; }
+        IObligationRepository ObligationRepository { get; }
+        IUserPermissionRepository UserPermissionRepository { get; }
+        ILanguageConfigRepository LanguageConfigRepository { get; }
 
         void Commit();
 
