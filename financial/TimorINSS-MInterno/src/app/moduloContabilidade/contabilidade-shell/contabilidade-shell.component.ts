@@ -39,10 +39,10 @@ export class ContabilidadeShellComponent implements OnInit {
   // Cây menu tĩnh (hardcoded) — KHÔNG tính toán động theo permissions như menu cũ.
   // Cấu trúc phản ánh đầy đủ wireframe M0-M4; các mục chưa code xong đánh dấu comingSoon.
   // Thứ tự nhóm theo yêu cầu (2026-07-11): Chi tiêu → Thu → Ngân hàng
-  // → Ngân sách (gồm cả Cut-over/Saldos de Abertura) → Báo cáo → Master Data
-  // → Quản lý User → Cấu hình hệ thống (cuối cùng). Cut-over gộp chung vào
-  // Ngân sách — không còn là nhóm riêng. Quản lý User đặt dưới Master Data,
-  // trên Cấu hình hệ thống (theo yêu cầu user). Tất cả nhóm mặc định collapse
+  // → Ngân sách (gồm cả Cut-over/Saldos de Abertura) → Báo cáo → Đóng góp BHXH
+  // → Master Data → Quản lý User → Cấu hình hệ thống (cuối cùng). Cut-over gộp
+  // chung vào Ngân sách — không còn là nhóm riêng. Đóng góp BHXH đặt dưới Báo
+  // cáo, trên Master Data (theo yêu cầu user). Tất cả nhóm mặc định collapse
   // (expanded: false), user tự click để mở nhóm đang cần.
   public groups: TreebarGroup[] = [
     {
@@ -63,21 +63,6 @@ export class ContabilidadeShellComponent implements OnInit {
       expanded: false,
       items: [
         { label: 'Receita', comingSoon: true },
-      ]
-    },
-    {
-      // Kế thừa nguyên bản (BRD §9) — dùng lại NGUYÊN component cũ (không sửa 1
-      // dòng logic nào), chỉ route thêm dưới /contabilidade/* (xem
-      // modulo-contabilidade-routing.module.ts) để nó hiện trong treebar/chrome
-      // mới thay vì rơi về giao diện cũ. Component vẫn được declare duy nhất ở
-      // AppModule như trước — ở đây chỉ thêm 1 route thứ 2 trỏ tới cùng class.
-      label: 'Đóng góp BHXH',
-      icon: 'badge',
-      expanded: false,
-      items: [
-        { label: 'Tra cứu Entidade (theo NISS)', route: '/contabilidade/contribuicoes/entidade' },
-        { label: 'Guia Pagamento (Validação)', route: '/contabilidade/contribuicoes/guiaPagamento' },
-        { label: 'Situação Contributiva', route: '/contabilidade/contribuicoes/situacaoContributiva' },
       ]
     },
     {
@@ -121,6 +106,22 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Controlo', comingSoon: true },
         { label: 'Extratos Bancários (8 contas)', comingSoon: true },
         { label: 'INTERFACE (Ledger contábil)', comingSoon: true },
+      ]
+    },
+    {
+      // Kế thừa nguyên bản (BRD §9) — dùng lại NGUYÊN component cũ (không sửa 1
+      // dòng logic nào), chỉ route thêm dưới /contabilidade/* (xem
+      // modulo-contabilidade-routing.module.ts) để nó hiện trong treebar/chrome
+      // mới thay vì rơi về giao diện cũ. Component vẫn được declare duy nhất ở
+      // AppModule như trước — ở đây chỉ thêm 1 route thứ 2 trỏ tới cùng class.
+      // Đặt dưới Báo cáo, trên Master Data theo yêu cầu user (2026-07-11).
+      label: 'Đóng góp BHXH',
+      icon: 'badge',
+      expanded: false,
+      items: [
+        { label: 'Tra cứu Entidade (theo NISS)', route: '/contabilidade/contribuicoes/entidade' },
+        { label: 'Guia Pagamento (Validação)', route: '/contabilidade/contribuicoes/guiaPagamento' },
+        { label: 'Situação Contributiva', route: '/contabilidade/contribuicoes/situacaoContributiva' },
       ]
     },
     {
