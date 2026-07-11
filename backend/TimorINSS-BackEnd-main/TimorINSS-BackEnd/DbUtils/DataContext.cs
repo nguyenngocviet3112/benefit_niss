@@ -206,6 +206,50 @@ namespace TimorINSSBackEnd.Models
                     .HasConstraintName("FK_UserPermission_Preset");
             });
 
+            // Mechanical registration only (mirrors the ExpenditureAuthorization/
+            // Cabimento pattern above) — Models/PaymentAuthorization.cs and
+            // PaymentExecution.cs already existed from a concurrent change but
+            // were missing their DbSet/Fluent config, which broke the whole
+            // solution's build (CS1061). No new logic/relationships invented
+            // here beyond what the model classes already declare.
+            modelBuilder.Entity<PaymentAuthorization>(entity =>
+            {
+                entity.Property(e => e.ValorAutorizado).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.ObligationFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.ObligationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PaymentAuthorization_Obligation");
+
+                entity.HasOne(d => d.CodigoContaDebitoFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CodigoContaDebitoFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PaymentAuthorization_CodigoContaDebito");
+
+                entity.HasOne(d => d.CodigoContaCreditoFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CodigoContaCreditoFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PaymentAuthorization_CodigoContaCredito");
+            });
+
+            modelBuilder.Entity<PaymentExecution>(entity =>
+            {
+                entity.HasOne(d => d.PaymentAuthorizationFkNavigation)
+                    .WithOne(p => p.PaymentExecution)
+                    .HasForeignKey<PaymentExecution>(d => d.PaymentAuthorizationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PaymentExecution_PaymentAuthorization");
+
+                entity.HasOne(d => d.ContaBancariaFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.ContaBancariaFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PaymentExecution_ContaBancaria");
+            });
+
             // ORCAMENTOCONFIG pre-existed (old app) with explicit Fluent config in the
             // generated context using lowercase-first column names — Ano/Tipo are new
             // columns added on top (see db_migrations/2026-07-11i_system_settings.sql),

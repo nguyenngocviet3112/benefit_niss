@@ -21,5 +21,7 @@ namespace TimorINSSBackEnd.Models
         public virtual DbSet<PermissionPresetItem> PermissionPresetItem { get; set; }
         public virtual DbSet<UserPermission> UserPermission { get; set; }
         public virtual DbSet<LanguageConfig> LanguageConfig { get; set; }
+        public virtual DbSet<PaymentAuthorization> PaymentAuthorization { get; set; }
+        public virtual DbSet<PaymentExecution> PaymentExecution { get; set; }
     }
 }
