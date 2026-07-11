@@ -38,7 +38,7 @@
       </div>
 
     </div>
-    <div class="navigation-header" >
+    <div class="navigation-header" *ngIf="!isNewMode">
       <button *ngIf="isLoggedIn" mat-button [matMenuTriggerFor]="panel.menu">
         <span style="color: white;">{{ 'general.menu' | translate }}</span>
         <mat-icon class="menuIcon">menu</mat-icon>
@@ -48,11 +48,11 @@
 
   </div>
 
-  <div class="scrollContainer">
-    <div class="container">
+  <div class="scrollContainer" [class.no-padding]="isNewMode">
+    <div class="container" [class.full-width]="isNewMode">
       <router-outlet></router-outlet>
     </div>
-    <footer>
+    <footer *ngIf="!isNewMode">
       <div class="disclaimer">© 2020 {{ 'general.disclaimer' | translate }}</div>
     </footer>
   </div>

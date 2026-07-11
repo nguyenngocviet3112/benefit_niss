@@ -61,54 +61,6 @@ namespace TimorINSSBackEnd.Repository.Repositories
             _moduloContribuicoesContext.Remove(entity);
         }
 
-        public ValueCampoEditavelListagemResponse getAllActiveDepartamento(SearchFilter filter)
-        {
-            ValueCampoEditavelListagemResponse response = new ValueCampoEditavelListagemResponse();
-
-            int index = 0;
-            if (filter.index.HasValue)
-                index = filter.index.Value;
-
-            int rows = 5;
-            if (filter.rows.HasValue)
-                rows = filter.rows.Value;
-
-            var queryDepartamento = _moduloContribuicoesContext.Departamento
-                .Where(a => a.IndActivo && a.Nome.Contains(filter.filterBy))
-               .Select(u => new ValorCamposEditaveis
-               {
-                   Id = u.Id,
-                   Nome = u.Nome,
-                   Parametros = new List<ParametrosAdicionais>()
-               });
-
-            var dominios = queryDepartamento
-                .OrderBy("Id")
-                .Skip(index * rows)
-                .Take(rows)
-                .ToList();
-
-            var totalNumber = queryDepartamento.Count();
-
-            response.ValuesCampo = dominios;
-            response.CountValuesCampo = totalNumber;
-
-            return response;
-        }
-
-        public List<SelectDescription> GetAllDepartamentosAtivo()
-        {
-            return _moduloContribuicoesContext.Departamento
-                .Where(u => u.IndActivo)
-               .Select(u => new SelectDescription
-               {
-                   id = u.Id,
-                   nome = u.Nome,
-                   indActivo = u.IndActivo
-               })
-                .ToList();
-        }
-
         public List<SelectDescription> GetAllInstitutionAtivo()
         {
             return _moduloContribuicoesContext.Institution

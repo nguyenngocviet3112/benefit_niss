@@ -99,6 +99,7 @@ const routes: Routes = [
   { path: 'preencherTarefa/:id', component: PreencherTarefaComponent},
   { path: 'controloDeAcesso', component: ControloDeAcessoComponent},
   { path: 'popupListarPagamentosPDF', component: PopUpListarPagamentosExecutadosComponent},
+  { path: 'contabilidade', loadChildren: () => import('./moduloContabilidade/modulo-contabilidade.module').then(m => m.ModuloContabilidadeModule) },
 ];
 
 @NgModule({

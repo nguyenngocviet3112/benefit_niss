@@ -89,6 +89,10 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         IKhachHangRepository KhachHangRepository { get; }
 
+        IProgramActivityRepository ProgramActivityRepository { get; }
+        IFunctionalClassificationRepository FunctionalClassificationRepository { get; }
+        IUserModeAccessRepository UserModeAccessRepository { get; }
+
         void Commit();
 
         void Rollback();

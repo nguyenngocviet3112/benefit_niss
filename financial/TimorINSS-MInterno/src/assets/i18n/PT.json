@@ -73,6 +73,10 @@
     "moduloContrib": "Módulo de Contribuições",
     "moduloContribValidation": "Validação de Contribuições",
     "moduloFinanceiro": "Módulo Financeiro",
+    "moduloContabilidade": "Módulo Contabilidade",
+    "estruturaProgramatica": "Estrutura Programática",
+    "classificacaoFuncional": "Classificação Funcional",
+    "organization": "Organização",
     "relatorios": "Relatórios",
     "auditoria": "Auditoria",
     "home": "Página Inicial",
@@ -180,7 +184,8 @@
     "emailRequired": "Email é obrigatório",
     "emailSent": "Email enviado!",
     "passwordNoMatch": "Não é igual à Palavra-passe",
-    "invalidPassword": "Palavra-passe deve conter pelo menos 8 caracteres, um número, um caractere maiúsculo, um caractere minúsculo e um caractere especial."
+    "invalidPassword": "Palavra-passe deve conter pelo menos 8 caracteres, um número, um caractere maiúsculo, um caractere minúsculo e um caractere especial.",
+    "noNewModeAccess": "Esta conta não tem acesso à nova interface Financeira."
   },
   "home": {
     "declaracaoTitle": "DECLARAÇÃO REMUNERAÇÃO",

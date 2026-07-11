@@ -99,6 +99,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private ICompromissoRepository _compromissoRepository;
         private IKhachHangRepository _khachHangRepository;
         private IInstitutionRepository _institutionRepository;
+        private IProgramActivityRepository _programActivityRepository;
+        private IFunctionalClassificationRepository _functionalClassificationRepository;
+        private IUserModeAccessRepository _userModeAccessRepository;
 
 
 
@@ -112,6 +115,15 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public IInstitutionRepository InstitutionRepository
         { get { return _institutionRepository ??= new InstitutionRepository(_moduloContribuicoesContext); } }
+
+        public IProgramActivityRepository ProgramActivityRepository
+        { get { return _programActivityRepository ??= new ProgramActivityRepository(_moduloContribuicoesContext); } }
+
+        public IFunctionalClassificationRepository FunctionalClassificationRepository
+        { get { return _functionalClassificationRepository ??= new FunctionalClassificationRepository(_moduloContribuicoesContext); } }
+
+        public IUserModeAccessRepository UserModeAccessRepository
+        { get { return _userModeAccessRepository ??= new UserModeAccessRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository

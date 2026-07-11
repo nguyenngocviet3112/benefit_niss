@@ -1,0 +1,31 @@
+<div class="shell">
+  <aside class="treebar">
+    <div class="treebar-header">
+      <span class="treebar-title">Módulo Contabilidade</span>
+    </div>
+
+    <nav class="treebar-nav">
+      <div class="tree-group" *ngFor="let group of groups">
+        <div class="tree-group-label" (click)="toggleGroup(group)" role="button" tabindex="0" (keydown.enter)="toggleGroup(group)">
+          <mat-icon class="expand-caret" [class.collapsed]="!group.expanded">expand_more</mat-icon>
+          <mat-icon>{{ group.icon }}</mat-icon>
+          <span>{{ group.label }}</span>
+        </div>
+        <ul class="tree-items" *ngIf="group.expanded">
+          <li *ngFor="let item of group.items">
+            <a *ngIf="!item.comingSoon" [routerLink]="item.route" routerLinkActive="active" class="tree-item">
+              {{ item.label }}
+            </a>
+            <span *ngIf="item.comingSoon" class="tree-item disabled" matTooltip="Sắp có">
+              {{ item.label }}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="shell-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

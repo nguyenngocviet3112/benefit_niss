@@ -25,6 +25,20 @@
         </mat-form-field>
       </div>
 
+      <div class="mode-select-container">
+        <div class="mode-select-label">Giao diện (Interface)</div>
+        <div class="mode-select-options">
+          <label class="mode-select-option">
+            <input type="radio" name="loginMode" value="old" [(ngModel)]="selectedMode">
+            <span>Giao diện cũ</span>
+          </label>
+          <label class="mode-select-option">
+            <input type="radio" name="loginMode" value="new" [(ngModel)]="selectedMode">
+            <span>Giao diện mới (Contabilidade)</span>
+          </label>
+        </div>
+      </div>
+
       <div class="button-container">
         <button mat-raised-button class="login-button" color="primary"  [disabled]="disabledButton" (click)="onSubmit()">{{'login_form.login' | translate}}</button>
         <div class="login-error" *ngIf="loginFailed">{{ errorMessage }}</div>

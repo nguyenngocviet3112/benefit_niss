@@ -1,0 +1,52 @@
+.org-container {
+  padding: 24px;
+  max-width: 640px;
+}
+
+.org-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.org-list {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.org-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+.org-row:last-child {
+  border-bottom: none;
+}
+
+.org-nome {
+  font-weight: 600;
+}
+
+.org-status {
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  background: #e1eee4;
+  color: #3d7a4f;
+}
+
+.org-status.inactive {
+  background: #f3e8d2;
+  color: #9c6b15;
+}
+
+.org-empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+}

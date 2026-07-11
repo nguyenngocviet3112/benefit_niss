@@ -141,6 +141,34 @@ export function CreateMenuPermissions(user: Utilizador | null) : MenuItem[]
 
   if (user)
   {
+    // Módulo Contabilidade (mode mới) — menu tạm thời không gate theo Perfil/Funcionalidade cũ;
+    // sẽ gate theo permission token mới (UserPermission) khi hệ thống phân quyền mới được xây.
+    response.push({
+      name: 'general.moduloContabilidade',
+      icon: 'account_balance_wallet',
+      order: 3,
+      children: [
+        {
+          name: 'general.estruturaProgramatica',
+          icon: 'account_tree',
+          link: '/contabilidade/estruturaProgramatica',
+          order: 1
+        },
+        {
+          name: 'general.classificacaoFuncional',
+          icon: 'category',
+          link: '/contabilidade/classificacaoFuncional',
+          order: 2
+        },
+        {
+          name: 'general.organization',
+          icon: 'business',
+          link: '/contabilidade/organization',
+          order: 3
+        }
+      ]
+    });
+
     user.permissions.forEach(permission => {
       if (permission.module == Modules.GESTAO)
       {
@@ -548,3 +576,4 @@ export function blobExcelSaveAs(documentStr: any, documentName: string) {
     document.body.removeChild(link);
   }
 }
+

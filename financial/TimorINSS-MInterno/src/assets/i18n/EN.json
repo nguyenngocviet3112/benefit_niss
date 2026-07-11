@@ -73,6 +73,10 @@
     "moduloContrib": "Contributions Module",
     "moduloContribValidation": "Contribution Validation",
     "moduloFinanceiro": "Financial Module",
+    "moduloContabilidade": "Accounting Module",
+    "estruturaProgramatica": "Program Structure",
+    "classificacaoFuncional": "Functional Classification",
+    "organization": "Organization",
     "relatorios": "Reports",
     "auditoria": "Audit",
     "home": "Homepage",
@@ -180,7 +184,8 @@
     "emailRequired": "Email is required",
     "emailSent": "Email sent!",
     "passwordNoMatch": "Doesn't match with Password",
-    "invalidPassword": "Password should be at least 8 characters long, contain one number, one letter uppercase, one letter lowercase and one special character."
+    "invalidPassword": "Password should be at least 8 characters long, contain one number, one letter uppercase, one letter lowercase and one special character.",
+    "noNewModeAccess": "This account does not have access to the new Finance interface."
   },
   "home": {
     "declaracaoTitle": "REMUNERATION DECLARATION",

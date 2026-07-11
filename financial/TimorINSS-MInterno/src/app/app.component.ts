@@ -6,7 +6,7 @@ import { TokenStorageService } from './services/token-storage.service';
 import '@angular/common/locales/global/pt';
 import { MenuItem } from './models/utils';
 import { CreateMenuPermissions } from './utils';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +17,9 @@ export class AppComponent {
   public ssIcon = environment.ssIcon;
   public isLoggedIn = true;
   public isLoginRoute = false;
+  // true khi đang ở Módulo Contabilidade (mode mới) — ẩn menu dropdown cũ,
+  // vì module mới có treebar tĩnh riêng của nó.
+  public isNewMode = false;
   public selectLang: string = "";
   public TransLang: string[] = [];
   public username?: string;
@@ -31,7 +34,9 @@ export class AppComponent {
   ) {
     translate.setDefaultLang('PT');
     translate.use('PT');
-    translate.addLangs(['EN', 'PT', 'TET']);
+    // VI chỉ dùng cho giao diện mới (Módulo Contabilidade) — không hiện ở mode cũ,
+    // để mode cũ giữ nguyên hành vi/danh sách ngôn ngữ như trước.
+    translate.addLangs(['EN', 'PT', 'TET', 'VI']);
     translate.onLangChange.subscribe(() => {
       document.title = this.translate.instant('general.inssCore');
     });
@@ -42,23 +47,34 @@ export class AppComponent {
     localStorage.setItem('selectedLanguage', this.selectLang);
   }
   public getTransLanguage() {
-    this.TransLang = [...this.translate.getLangs()];
+    const allLangs = [...this.translate.getLangs()];
+    // VI chỉ hiện trong danh sách chọn khi đang ở giao diện mới.
+    this.TransLang = this.isNewMode ? allLangs : allLangs.filter(l => l !== 'VI');
   }
 
   public ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
     this.isLoginRoute = window.location.pathname == '/login';
+    this.isNewMode = window.location.pathname.startsWith('/contabilidade');
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.isNewMode = event.urlAfterRedirects.startsWith('/contabilidade');
+        this.getTransLanguage();
+      }
+    });
 
     this.getTransLanguage();
-    
+
     const savedLanguage = localStorage.getItem('selectedLanguage');
-    if (savedLanguage && this.translate.getLangs().includes(savedLanguage)) {
-      // Sử dụng ngôn ngữ đã lưu
+    if (savedLanguage && this.translate.getLangs().includes(savedLanguage) && (savedLanguage !== 'VI' || this.isNewMode)) {
+      // Sử dụng ngôn ngữ đã lưu (VI chỉ áp dụng khi đang ở giao diện mới)
       this.selectLang = savedLanguage;
       this.translate.use(savedLanguage);
     } else {
-      // Nếu không có hoặc không hợp lệ, sử dụng ngôn ngữ mặc định
+      // Nếu không có, không hợp lệ, hoặc là VI nhưng đang ở mode cũ — dùng ngôn ngữ mặc định
       this.selectLang = this.translate.getDefaultLang();
+      this.translate.use(this.selectLang);
     }
     
     if (this.isLoggedIn) {

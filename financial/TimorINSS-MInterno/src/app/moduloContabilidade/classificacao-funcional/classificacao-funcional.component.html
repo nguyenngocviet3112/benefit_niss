@@ -1,0 +1,49 @@
+<div class="cf-container">
+  <div class="cf-header">
+    <h2>Classificação Funcional <span class="en">(Phân loại theo chức năng — COFOG)</span></h2>
+    <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm Divisão</button>
+  </div>
+
+  <div class="cf-tree" *ngIf="!loading">
+    <ng-container *ngFor="let root of tree">
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: root }"></ng-container>
+    </ng-container>
+    <div class="cf-empty" *ngIf="tree.length === 0">Chưa có dữ liệu.</div>
+  </div>
+
+  <ng-template #nodeTemplate let-node="node">
+    <div class="cf-row" [ngClass]="node.parentFk ? 'lvl2' : 'lvl1'">
+      <span class="cf-code">{{ node.codigo }}</span>
+      <span class="cf-desig">{{ node.designacao }}</span>
+      <span class="cf-actions">
+        <button mat-button *ngIf="!node.parentFk" (click)="openAddForm(node)">+ Grupo</button>
+        <button mat-button (click)="openEditForm(node)">Sửa</button>
+        <button mat-button (click)="deactivate(node)">Ẩn</button>
+      </span>
+    </div>
+    <ng-container *ngFor="let child of node.children">
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: child }"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <div class="cf-form-overlay" *ngIf="showForm">
+    <div class="cf-form">
+      <h3>{{ editingId ? 'Sửa' : 'Thêm' }}</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mã (Código)</mat-label>
+        <input matInput [(ngModel)]="formCodigo" name="formCodigo" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tên gọi (Designação)</mat-label>
+        <input matInput [(ngModel)]="formDesignacao" name="formDesignacao" />
+      </mat-form-field>
+
+      <div class="cf-form-actions">
+        <button mat-button (click)="cancelForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>

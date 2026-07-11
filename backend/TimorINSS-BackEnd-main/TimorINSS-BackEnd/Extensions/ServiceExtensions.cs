@@ -266,6 +266,9 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<IKhachHangDataManager, KhachHangDataManager>();
             services.AddScoped<IBenefitDataManager, BenefitDataManager>();
             services.AddScoped<IInstitutionDataManager, InstitutionDataManager>();
+            services.AddScoped<IProgramActivityDataManager, ProgramActivityDataManager>();
+            services.AddScoped<IFunctionalClassificationDataManager, FunctionalClassificationDataManager>();
+            services.AddScoped<IUserModeAccessDataManager, UserModeAccessDataManager>();
 
             //Misc
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

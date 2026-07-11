@@ -6,11 +6,38 @@
  }
 
 .login-box {
-  height: 380px;
+  height: auto;
+  min-height: 380px;
+  padding-bottom: 20px;
   margin-right: 29%;
   margin-left: 29%;
   background-color: white;
   border: 1px solid rgba(42, 129, 204, 100);
+}
+
+.mode-select-container {
+  margin-left: 14%;
+  margin-right: 14%;
+  margin-top: 10px;
+}
+
+.mode-select-label {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.mode-select-options {
+  display: flex;
+  gap: 20px;
+}
+
+.mode-select-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 .extra{

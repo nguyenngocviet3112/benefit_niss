@@ -11,6 +11,7 @@ import { RecoverPasswordRequest } from '../request-models/recoverPassword-reques
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MyErrorStateMatcher } from '../matcher';
 import { PopUpWarningComponent } from '../componentes/pop-up-warning/pop-up-warning.component';
+import { UserModeAccessService } from '../services/user-mode-access.service';
 
 @Component({
   selector: 'app-login',
@@ -41,6 +42,8 @@ export class LoginComponent implements OnInit {
   public submittedFormError = false;
   public counter = 0;
   public availableRegex = RegexPatterns;
+  // Lựa chọn mode ngay trên màn login, không cần màn chọn riêng sau khi login.
+  public selectedMode: 'old' | 'new' = 'old';
 
   constructor(
     private loginService: LoginService,
@@ -49,6 +52,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     public errorDialog: MatDialog,
     public _snackBar: MatSnackBar,
+    private userModeAccessService: UserModeAccessService,
   ) { }
 
   ngOnInit(): void {
@@ -74,8 +78,29 @@ export class LoginComponent implements OnInit {
           this.tokenStorage.saveUser(response.user);
 
           this.isLoggedIn = true;
-          this.reloadPage();
           this.disabledButton = false;
+
+          if (this.selectedMode === 'new') {
+            this.userModeAccessService.hasAccess().subscribe(
+              access => {
+                if (access.hasAccess) {
+                  window.location.href = '/contabilidade';
+                } else {
+                  this.disabledButton = false;
+                  this.loginFailed = true;
+                  this.errorMessage = this.translate.instant('login_form.noNewModeAccess');
+                }
+              },
+              () => {
+                this.disabledButton = false;
+                this.loginFailed = true;
+                this.errorMessage = this.translate.instant('login_form.noNewModeAccess');
+              }
+            );
+          } else {
+            // Mode cũ: giữ nguyên hành vi gốc — full reload về trang chủ.
+            this.reloadPage();
+          }
         },
         err => {
           this.loginFailed = true;
