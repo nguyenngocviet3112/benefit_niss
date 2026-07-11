@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
 using TimorINSSBackEnd.Cache;
+using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DataManager.Interfaces;
 
@@ -50,6 +51,70 @@ namespace TimorINSSBackEnd.Controllers
                     _cache.SetCache("GetAllDepartamentosAtivo", response, response.selects.Count);
                 }
             }
+            return Ok(response);
+        }
+
+        [HttpGet("GetAllConfig")]
+        public IActionResult GetAllConfig()
+        {
+            DepartamentoConfigListResponse response;
+            try
+            {
+                response = _dataManager.GetAllConfig();
+            }
+            catch (Exception e)
+            {
+                response = new DepartamentoConfigListResponse();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("GetAllConfig", Log, null))
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpPost("SaveConfig")]
+        public IActionResult SaveConfig(SaveDepartamentoConfigRequest request)
+        {
+            DepartamentoConfigResponse response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.SaveConfig(request);
+            }
+            catch (Exception e)
+            {
+                response = new DepartamentoConfigResponse();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("SaveConfig", Log, request))
+                return BadRequest(response);
+
+            _cache.Reset();
+            return Ok(response);
+        }
+
+        [HttpPost("DeactivateConfig")]
+        public IActionResult DeactivateConfig(DeactivateDepartamentoConfigRequest request)
+        {
+            ResponseBaseDataContract response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.DeactivateConfig(request);
+            }
+            catch (Exception e)
+            {
+                response = new ResponseBaseDataContract();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("DeactivateConfig", Log, request))
+                return BadRequest(response);
+
+            _cache.Reset();
             return Ok(response);
         }
     }

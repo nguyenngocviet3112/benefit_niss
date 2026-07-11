@@ -109,7 +109,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IExpenditureAuthorizationRepository _expenditureAuthorizationRepository;
         private ICabimentoRepository _cabimentoRepository;
         private ICompromissoDespesaRepository _compromissoDespesaRepository;
-
+        private IReceitaPacRepository _receitaPacRepository;
 
 
 
@@ -149,6 +149,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public ICompromissoDespesaRepository CompromissoDespesaRepository
         { get { return _compromissoDespesaRepository ??= new CompromissoDespesaRepository(_moduloContribuicoesContext); } }
+
+        public IReceitaPacRepository ReceitaPacRepository
+        { get { return _receitaPacRepository ??= new ReceitaPacRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository

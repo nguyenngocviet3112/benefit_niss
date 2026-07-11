@@ -58,7 +58,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'payments',
       expanded: true,
       items: [
-        { label: 'Receita', comingSoon: true },
+        { label: 'Receita (PAC)', route: '/contabilidade/receita' },
       ]
     },
     {
@@ -92,6 +92,20 @@ export class ContabilidadeShellComponent implements OnInit {
       expanded: true,
       items: [
         { label: 'Quản lý User', comingSoon: true },
+      ]
+    },
+    {
+      // Mục "Hệ thống" — user yêu cầu (2026-07-11) thêm cấu hình chung của hệ
+      // thống: email gửi thông báo, tích hợp API với dự án Benefit, cấu hình
+      // phòng ban. Phòng ban làm trước (CRUD đầy đủ, tái dùng bảng DEPARTAMENTO
+      // cũ đã có 11 dòng thật); email/API integration còn comingSoon.
+      label: 'Hệ thống',
+      icon: 'settings',
+      expanded: true,
+      items: [
+        { label: 'Cấu hình phòng ban', route: '/contabilidade/sistema/departamentos' },
+        { label: 'Cấu hình Email', comingSoon: true },
+        { label: 'API Integration (Benefit)', comingSoon: true },
       ]
     },
     {

@@ -25,6 +25,7 @@ namespace TimorINSSBackEnd.Models
         public int? UtilizadorAlteracao { get; set; }
         public DateTime? DataAlteracao { get; set; }
         public string Ipv6 { get; set; }
+        public int? InstitutionId { get; set; }
 
         public virtual ICollection<ComponentedespesaRegisto> ComponentedespesaRegisto { get; set; }
         public virtual ICollection<Componenteorcamentovalor> Componenteorcamentovalor { get; set; }

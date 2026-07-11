@@ -10,6 +10,8 @@ import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
 import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component';
 import { CabimentoComponent } from './cabimento/cabimento.component';
 import { CompromissoDespesaComponent } from './compromisso-despesa/compromisso-despesa.component';
+import { ReceitaPacComponent } from './receita-pac/receita-pac.component';
+import { DepartamentoConfigComponent } from './departamento-config/departamento-config.component';
 
 const routes: Routes = [
   {
@@ -24,6 +26,8 @@ const routes: Routes = [
       { path: 'adCabimento', component: AdCabimentoComponent },
       { path: 'cabimento', component: CabimentoComponent },
       { path: 'compromissoDespesa', component: CompromissoDespesaComponent },
+      { path: 'receita', component: ReceitaPacComponent },
+      { path: 'sistema/departamentos', component: DepartamentoConfigComponent },
       { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
       { path: '', redirectTo: 'estruturaProgramatica', pathMatch: 'full' },
     ]

@@ -164,6 +164,37 @@ namespace TimorINSSBackEnd.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CompDespPluri_CompDesp");
             });
+
+            modelBuilder.Entity<ReceitaPac>(entity =>
+            {
+                entity.Property(e => e.ValorPac).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ValorCobradoBanco).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ValorCobradoCaixa).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.RegimeFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.RegimeFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceitaPac_Regime");
+
+                entity.HasOne(d => d.AtividadeFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.AtividadeFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceitaPac_Atividade");
+
+                entity.HasOne(d => d.EconomicClassificationFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.EconomicClassificationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceitaPac_EconomicClassification");
+
+                entity.HasOne(d => d.OrganizationFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.OrganizationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceitaPac_Institution");
+            });
         }
 
         public TimorINSSModuloContribuicoesContext(string connectionString) : base(GetOptions(connectionString))

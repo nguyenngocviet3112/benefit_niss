@@ -21,6 +21,8 @@ import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
 import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component';
 import { CabimentoComponent } from './cabimento/cabimento.component';
 import { CompromissoDespesaComponent } from './compromisso-despesa/compromisso-despesa.component';
+import { ReceitaPacComponent } from './receita-pac/receita-pac.component';
+import { DepartamentoConfigComponent } from './departamento-config/departamento-config.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { CompromissoDespesaComponent } from './compromisso-despesa/compromisso-d
     AdCabimentoComponent,
     CeInssGlobalComponent,
     CabimentoComponent,
-    CompromissoDespesaComponent
+    CompromissoDespesaComponent,
+    ReceitaPacComponent,
+    DepartamentoConfigComponent
   ],
   imports: [
     CommonModule,
