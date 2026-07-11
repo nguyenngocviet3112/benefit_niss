@@ -93,6 +93,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IFunctionalClassificationRepository FunctionalClassificationRepository { get; }
         IUserModeAccessRepository UserModeAccessRepository { get; }
         IEconomicClassificationRepository EconomicClassificationRepository { get; }
+        IOrcamentoBatchRepository OrcamentoBatchRepository { get; }
+        IOrcamentoLinhaRepository OrcamentoLinhaRepository { get; }
 
         void Commit();
 

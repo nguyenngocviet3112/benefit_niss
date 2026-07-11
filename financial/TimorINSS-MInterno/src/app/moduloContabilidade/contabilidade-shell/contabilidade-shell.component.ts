@@ -81,7 +81,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'account_balance_wallet',
       expanded: true,
       items: [
-        { label: 'Orçamento', comingSoon: true },
+        { label: 'Orçamento', route: '/contabilidade/orcamento' },
         { label: 'Suplementar', comingSoon: true },
       ]
     },

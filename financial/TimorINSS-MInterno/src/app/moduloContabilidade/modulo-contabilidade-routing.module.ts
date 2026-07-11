@@ -5,6 +5,7 @@ import { ClassificacaoFuncionalComponent } from './classificacao-funcional/class
 import { OrganizationComponent } from './organization/organization.component';
 import { ContabilidadeShellComponent } from './contabilidade-shell/contabilidade-shell.component';
 import { ClassificacaoEconomicaComponent } from './classificacao-economica/classificacao-economica.component';
+import { OrcamentoComponent } from './orcamento/orcamento.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,7 @@ const routes: Routes = [
       { path: 'classificacaoFuncional', component: ClassificacaoFuncionalComponent },
       { path: 'classificacaoEconomica', component: ClassificacaoEconomicaComponent },
       { path: 'organization', component: OrganizationComponent },
+      { path: 'orcamento', component: OrcamentoComponent },
       { path: '', redirectTo: 'estruturaProgramatica', pathMatch: 'full' },
     ]
   },

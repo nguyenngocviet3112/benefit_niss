@@ -103,6 +103,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IFunctionalClassificationRepository _functionalClassificationRepository;
         private IUserModeAccessRepository _userModeAccessRepository;
         private IEconomicClassificationRepository _economicClassificationRepository;
+        private IOrcamentoBatchRepository _orcamentoBatchRepository;
+        private IOrcamentoLinhaRepository _orcamentoLinhaRepository;
 
 
 
@@ -128,6 +130,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public IEconomicClassificationRepository EconomicClassificationRepository
         { get { return _economicClassificationRepository ??= new EconomicClassificationRepository(_moduloContribuicoesContext); } }
+
+        public IOrcamentoBatchRepository OrcamentoBatchRepository
+        { get { return _orcamentoBatchRepository ??= new OrcamentoBatchRepository(_moduloContribuicoesContext); } }
+
+        public IOrcamentoLinhaRepository OrcamentoLinhaRepository
+        { get { return _orcamentoLinhaRepository ??= new OrcamentoLinhaRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository

@@ -62,6 +62,50 @@ namespace TimorINSSBackEnd.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserModeAccess_Utilizador");
             });
+
+            modelBuilder.Entity<OrcamentoBatch>(entity =>
+            {
+                entity.HasOne(d => d.OrcamentoConfigFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.OrcamentoConfigFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrcamentoBatch_OrcamentoConfig");
+            });
+
+            modelBuilder.Entity<OrcamentoLinha>(entity =>
+            {
+                entity.Property(e => e.Valor).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.OrcamentoBatchFkNavigation)
+                    .WithMany(p => p.OrcamentoLinha)
+                    .HasForeignKey(d => d.OrcamentoBatchFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrcamentoLinha_Batch");
+
+                entity.HasOne(d => d.AtividadeFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.AtividadeFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrcamentoLinha_Atividade");
+
+                entity.HasOne(d => d.EconomicClassificationFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.EconomicClassificationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrcamentoLinha_EconomicClassification");
+
+                entity.HasOne(d => d.FunctionalClassificationFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.FunctionalClassificationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrcamentoLinha_FunctionalClassification");
+
+                entity.HasOne(d => d.OrganizationFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.OrganizationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrcamentoLinha_Institution");
+            });
         }
 
         public TimorINSSModuloContribuicoesContext(string connectionString) : base(GetOptions(connectionString))

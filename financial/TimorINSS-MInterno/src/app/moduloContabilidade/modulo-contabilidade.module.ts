@@ -16,6 +16,7 @@ import { OrganizationComponent } from './organization/organization.component';
 import { ContabilidadeShellComponent } from './contabilidade-shell/contabilidade-shell.component';
 import { ClassificacaoEconomicaComponent } from './classificacao-economica/classificacao-economica.component';
 import { MasterDataImportButtonComponent } from './master-data-import-button/master-data-import-button.component';
+import { OrcamentoComponent } from './orcamento/orcamento.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { MasterDataImportButtonComponent } from './master-data-import-button/mas
     OrganizationComponent,
     ContabilidadeShellComponent,
     ClassificacaoEconomicaComponent,
-    MasterDataImportButtonComponent
+    MasterDataImportButtonComponent,
+    OrcamentoComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,117 @@
+<div class="orc-container" *ngIf="batch">
+  <div class="orc-header">
+    <h2>Orçamento <span class="en">(Ngân sách — rúbrica Atividade × Classificação Económica × Organization)</span></h2>
+    <span class="orc-estado" [ngClass]="'estado-' + batch.estado">{{ estadoLabels[batch.estado] }}</span>
+  </div>
+
+  <div class="orc-context-bar">
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>Kỳ ngân sách (Ano)</mat-label>
+      <input matInput type="number" [(ngModel)]="orcamentoConfigFk" name="orcamentoConfigFk" />
+    </mat-form-field>
+    <button mat-stroked-button (click)="loadBatch()">Tải lại</button>
+
+    <span class="spacer"></span>
+
+    <app-master-data-import-button *ngIf="isDraft" entityPath="orcamento" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadBatch()"></app-master-data-import-button>
+    <button mat-raised-button color="primary" *ngIf="isDraft" (click)="openAddForm()">+ Thêm rúbrica</button>
+  </div>
+
+  <div class="orc-reject-banner" *ngIf="batch.lastRejectComment && isDraft">
+    <b>Bị từ chối lần gần nhất:</b> {{ batch.lastRejectComment }}
+  </div>
+
+  <div class="orc-table">
+    <div class="orc-row orc-row-header">
+      <span class="orc-col-atividade">Atividade</span>
+      <span class="orc-col-ec">Classificação Económica</span>
+      <span class="orc-col-org">Organization</span>
+      <span class="orc-col-valor">Valor (USD)</span>
+      <span class="orc-col-actions" *ngIf="isDraft">Ações</span>
+    </div>
+    <div class="orc-row" *ngFor="let l of batch.linhas">
+      <span class="orc-col-atividade">{{ l.atividadeCodigo }} - {{ l.atividadeDesignacao }}</span>
+      <span class="orc-col-ec">{{ l.economicClassificationCodigo }} - {{ l.economicClassificationDesignacao }}</span>
+      <span class="orc-col-org">{{ l.organizationNome }}</span>
+      <span class="orc-col-valor">{{ l.valor | number:'1.2-2' }}</span>
+      <span class="orc-col-actions" *ngIf="isDraft">
+        <button mat-button (click)="openEditForm(l)">Sửa</button>
+        <button mat-button (click)="deleteLinha(l)">Xóa</button>
+      </span>
+    </div>
+    <div class="orc-empty" *ngIf="batch.linhas.length === 0">Chưa có rúbrica nào.</div>
+  </div>
+
+  <div class="orc-summary">
+    <span>Tổng: <b>{{ batch.totalValor | number:'1.2-2' }}</b> USD ({{ batch.linhas.length }} rúbrica)</span>
+  </div>
+
+  <div class="orc-actions-bar">
+    <button mat-raised-button color="primary" *ngIf="batch.estado === 'DRAFT'" [disabled]="batch.linhas.length === 0" (click)="submitBatch()">Gửi duyệt</button>
+
+    <ng-container *ngIf="batch.estado === 'PENDING_REVIEW'">
+      <button mat-raised-button color="primary" (click)="reviewApprove()">Xác nhận kiểm tra</button>
+      <button mat-stroked-button color="warn" (click)="openRejectPrompt('review')">Từ chối</button>
+    </ng-container>
+
+    <ng-container *ngIf="batch.estado === 'PENDING_APPROVAL'">
+      <button mat-raised-button color="primary" (click)="finalApprove()">Phê duyệt</button>
+      <button mat-stroked-button color="warn" (click)="openRejectPrompt('approve')">Từ chối</button>
+    </ng-container>
+
+    <span class="orc-approved-note" *ngIf="batch.estado === 'APPROVED'">
+      Đã duyệt. Thêm rúbrica mới sẽ tự tạo lô ngân sách tiếp theo cho cùng kỳ này.
+    </span>
+  </div>
+
+  <div class="orc-form-overlay" *ngIf="showForm">
+    <div class="orc-form">
+      <h3>{{ editingId ? 'Sửa' : 'Thêm' }} rúbrica</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Atividade</mat-label>
+        <mat-select [(ngModel)]="formAtividadeFk" name="formAtividadeFk">
+          <mat-option *ngFor="let a of atividades" [value]="a.id">{{ a.codigo }} - {{ a.designacao }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Classificação Económica</mat-label>
+        <mat-select [(ngModel)]="formEconomicClassificationFk" name="formEconomicClassificationFk">
+          <mat-option *ngFor="let e of economicClassifications" [value]="e.id">{{ e.codigo }} - {{ e.designacao }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Organization</mat-label>
+        <mat-select [(ngModel)]="formOrganizationFk" name="formOrganizationFk">
+          <mat-option *ngFor="let o of organizations" [value]="o.id">{{ o.nome }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Valor (USD)</mat-label>
+        <input matInput type="number" [(ngModel)]="formValor" name="formValor" />
+      </mat-form-field>
+
+      <div class="orc-form-actions">
+        <button mat-button (click)="cancelForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="saveLinha()">Lưu</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="orc-form-overlay" *ngIf="showRejectPrompt">
+    <div class="orc-form">
+      <h3>Lý do từ chối</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ghi chú</mat-label>
+        <textarea matInput [(ngModel)]="rejectComment" name="rejectComment" rows="3"></textarea>
+      </mat-form-field>
+      <div class="orc-form-actions">
+        <button mat-button (click)="cancelReject()">Hủy</button>
+        <button mat-raised-button color="warn" (click)="confirmReject()">Xác nhận từ chối</button>
+      </div>
+    </div>
+  </div>
+</div>
