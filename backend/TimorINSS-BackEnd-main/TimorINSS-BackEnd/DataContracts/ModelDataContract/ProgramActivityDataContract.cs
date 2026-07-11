@@ -27,6 +27,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public bool IndActivo { get; set; }
 
         [DataMember]
+        public bool IsOssPerimeter { get; set; }
+
+        [DataMember]
         public bool HasKids { get; set; }
     }
 }

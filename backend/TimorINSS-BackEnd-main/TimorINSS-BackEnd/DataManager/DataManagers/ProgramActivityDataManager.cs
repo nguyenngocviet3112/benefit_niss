@@ -39,6 +39,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     ParentFk = a.ParentFk,
                     OrcamentoConfigFk = a.OrcamentoConfigFk,
                     IndActivo = a.IndActivo,
+                    IsOssPerimeter = a.IsOssPerimeter,
                     HasKids = parentIds.Contains(a.Id)
                 }).ToList();
             }

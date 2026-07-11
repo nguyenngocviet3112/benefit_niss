@@ -103,7 +103,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'summarize',
       expanded: true,
       items: [
-        { label: 'CE_INSS_Global (ưu tiên #1)', route: '/contabilidade/relatorios/ceInssGlobal' },
+        { label: 'CE_OSS_Global (ưu tiên #1)', route: '/contabilidade/relatorios/ceInssGlobal' },
         { label: 'Ciclo da Despesa', comingSoon: true },
         { label: 'Síntese Programas', comingSoon: true },
         { label: 'Classificação Funcional (relatório)', comingSoon: true },

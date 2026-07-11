@@ -18,6 +18,10 @@ namespace TimorINSSBackEnd.Models
         public int Nivel { get; set; }
         public int? ParentFk { get; set; }
         public int OrcamentoConfigFk { get; set; }
+        // False = outside the OSS budget perimeter (e.g. A08 Regime Contributivo de
+        // Capitalização, per OSS_Global_2026_FINAL_livro.xlsx) — the record still exists
+        // fully in the system, it's just excluded from CE_OSS_Global's totals.
+        public bool IsOssPerimeter { get; set; }
         public bool IndActivo { get; set; }
         public int UtilizadorCriacao { get; set; }
         public DateTime DataCriacao { get; set; }

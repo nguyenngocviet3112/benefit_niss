@@ -1,6 +1,6 @@
 <div class="cg-container">
   <div class="cg-header">
-    <h2>CE_INSS_Global <span class="en">(Báo cáo tổng toàn INSS — Despesa + Receita gộp)</span></h2>
+    <h2>CE_OSS_Global <span class="en">(Báo cáo tổng toàn OSS — Despesa + Receita gộp)</span></h2>
   </div>
 
   <div class="cg-filterbar">
@@ -14,7 +14,7 @@
     <mat-form-field appearance="outline" class="cg-field">
       <mat-label>Organization</mat-label>
       <mat-select [(ngModel)]="selectedInstitution" (selectionChange)="load()">
-        <mat-option [value]="undefined">Cả 2 (Both) — INSS Global</mat-option>
+        <mat-option [value]="undefined">Cả 2 (Both) — OSS Global</mat-option>
         <mat-option *ngFor="let inst of institutions" [value]="inst.id">{{ inst.nome }}</mat-option>
       </mat-select>
     </mat-form-field>
