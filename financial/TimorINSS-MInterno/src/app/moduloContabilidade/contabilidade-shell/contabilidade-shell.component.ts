@@ -49,7 +49,7 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'AD (Autorização de Despesa)', route: '/contabilidade/adCabimento' },
         { label: 'Cabimento (DIC)', route: '/contabilidade/cabimento' },
         { label: 'Compromisso', route: '/contabilidade/compromissoDespesa' },
-        { label: 'Obrigação', comingSoon: true },
+        { label: 'Obrigação', route: '/contabilidade/obligation' },
         { label: 'Pagamento', comingSoon: true },
       ]
     },
@@ -91,7 +91,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'group',
       expanded: true,
       items: [
-        { label: 'Quản lý User', comingSoon: true },
+        { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission' },
       ]
     },
     {
@@ -128,6 +128,15 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Classificação Funcional', route: '/contabilidade/classificacaoFuncional' },
         { label: 'Classificação Económica', route: '/contabilidade/classificacaoEconomica' },
         { label: 'Organization', route: '/contabilidade/organization' },
+      ]
+    },
+    {
+      label: 'Cấu hình hệ thống',
+      icon: 'settings',
+      expanded: true,
+      items: [
+        { label: 'Ngôn ngữ (Idioma)', route: '/contabilidade/settings/idioma' },
+        { label: 'Kỳ ngân sách (Orçamento Config)', route: '/contabilidade/settings/kyNganSach' },
       ]
     },
   ];

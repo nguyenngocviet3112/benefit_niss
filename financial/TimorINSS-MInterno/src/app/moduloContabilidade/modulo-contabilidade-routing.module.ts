@@ -10,6 +10,10 @@ import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
 import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component';
 import { CabimentoComponent } from './cabimento/cabimento.component';
 import { CompromissoDespesaComponent } from './compromisso-despesa/compromisso-despesa.component';
+import { ObligationComponent } from './obligation/obligation.component';
+import { IdiomaConfigComponent } from './settings/idioma-config/idioma-config.component';
+import { KyNganSachComponent } from './settings/ky-ngan-sach/ky-ngan-sach.component';
+import { UserPermissionComponent } from './user-permission/user-permission.component';
 
 const routes: Routes = [
   {
@@ -24,7 +28,11 @@ const routes: Routes = [
       { path: 'adCabimento', component: AdCabimentoComponent },
       { path: 'cabimento', component: CabimentoComponent },
       { path: 'compromissoDespesa', component: CompromissoDespesaComponent },
+      { path: 'obligation', component: ObligationComponent },
       { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
+      { path: 'settings/idioma', component: IdiomaConfigComponent },
+      { path: 'settings/kyNganSach', component: KyNganSachComponent },
+      { path: 'userPermission', component: UserPermissionComponent },
       { path: '', redirectTo: 'estruturaProgramatica', pathMatch: 'full' },
     ]
   },

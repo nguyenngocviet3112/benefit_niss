@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { ModuloContabilidadeRoutingModule } from './modulo-contabilidade-routing.module';
 import { EstruturaProgramaticaComponent } from './estrutura-programatica/estrutura-programatica.component';
@@ -21,6 +22,10 @@ import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
 import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component';
 import { CabimentoComponent } from './cabimento/cabimento.component';
 import { CompromissoDespesaComponent } from './compromisso-despesa/compromisso-despesa.component';
+import { ObligationComponent } from './obligation/obligation.component';
+import { IdiomaConfigComponent } from './settings/idioma-config/idioma-config.component';
+import { KyNganSachComponent } from './settings/ky-ngan-sach/ky-ngan-sach.component';
+import { UserPermissionComponent } from './user-permission/user-permission.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +39,11 @@ import { CompromissoDespesaComponent } from './compromisso-despesa/compromisso-d
     AdCabimentoComponent,
     CeInssGlobalComponent,
     CabimentoComponent,
-    CompromissoDespesaComponent
+    CompromissoDespesaComponent,
+    ObligationComponent,
+    IdiomaConfigComponent,
+    KyNganSachComponent,
+    UserPermissionComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +55,8 @@ import { CompromissoDespesaComponent } from './compromisso-despesa/compromisso-d
     MatInputModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatPaginatorModule
   ]
 })
 export class ModuloContabilidadeModule { }

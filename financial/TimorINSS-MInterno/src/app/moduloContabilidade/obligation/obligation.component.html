@@ -1,0 +1,124 @@
+<div class="obr-container">
+  <div class="obr-header">
+    <h2>Obrigação <span class="en">(nghĩa vụ phải trả — nhóm nhiều Compromisso vào 1 lần thanh toán; luồng duyệt Diretor DF)</span></h2>
+  </div>
+
+  <div class="obr-context-bar">
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>Ano</mat-label>
+      <input matInput type="number" [(ngModel)]="ano" name="ano" />
+    </mat-form-field>
+    <button mat-stroked-button (click)="load()">Tải lại</button>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button color="primary" (click)="openCreateForm()">+ Tạo Obrigação</button>
+  </div>
+
+  <div class="obr-list" *ngIf="!loading">
+    <div class="obr-row obr-row-header">
+      <span class="obr-col-num">N.º Obrigação</span>
+      <span class="obr-col-desc">Descritivo</span>
+      <span class="obr-col-valor">Valor</span>
+      <span class="obr-col-estado">Trạng thái</span>
+    </div>
+
+    <ng-container *ngFor="let item of items">
+      <div class="obr-row obr-row-summary" (click)="toggleExpand(item)">
+        <span class="obr-col-num">{{ item.numero }}/{{ item.mes }}</span>
+        <span class="obr-col-desc">{{ item.descritivoObrigacao || '—' }}</span>
+        <span class="obr-col-valor">{{ item.valorObrigacao | number:'1.2-2' }}</span>
+        <span class="obr-col-estado">
+          <span class="obr-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
+        </span>
+      </div>
+
+      <div class="obr-detail" *ngIf="expandedId === item.id">
+        <div class="obr-items">
+          <div class="obr-item-row obr-item-row-header">
+            <span>N.º Compromisso</span>
+            <span>Atividade / Classificação Económica</span>
+            <span>Valor</span>
+            <span *ngIf="item.estado === 'DRAFT'"></span>
+          </div>
+          <div class="obr-item-row" *ngFor="let i of item.items">
+            <span>Comp {{ i.compromissoDespesaNumero }}</span>
+            <span>{{ i.atividadeCodigo }} — {{ i.economicClassificationCodigo }} {{ i.economicClassificationDesignacao }}</span>
+            <span>{{ i.value | number:'1.2-2' }}</span>
+            <span *ngIf="item.estado === 'DRAFT'">
+              <button mat-button (click)="removeItem(i.id)">Xóa</button>
+            </span>
+          </div>
+          <div class="obr-empty" *ngIf="item.items.length === 0">Chưa có dòng Compromisso nào.</div>
+        </div>
+
+        <div class="obr-add-item" *ngIf="item.estado === 'DRAFT' && addItemTarget?.id !== item.id">
+          <button mat-stroked-button (click)="openAddItem(item)">+ Thêm dòng Compromisso</button>
+        </div>
+
+        <div class="obr-add-item-form" *ngIf="addItemTarget?.id === item.id">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Compromisso <span class="itag drop">Chọn</span></mat-label>
+            <mat-select [(ngModel)]="formCompromissoFk" name="formCompromissoFk">
+              <mat-option *ngFor="let c of compromissosComSaldo" [value]="c.compromissoDespesaId">
+                Comp {{ c.numero }} — {{ c.atividadeCodigo }} / {{ c.economicClassificationCodigo }} (còn {{ c.saldoDisponivel | number:'1.2-2' }})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="small-field">
+            <mat-label>Giá trị <span class="itag type">Gõ tay</span></mat-label>
+            <input matInput type="number" [(ngModel)]="formValue" name="formValue" />
+          </mat-form-field>
+          <button mat-button (click)="cancelAddItem()">Hủy</button>
+          <button mat-raised-button color="primary" (click)="confirmAddItem()">Thêm</button>
+        </div>
+
+        <div class="obr-actions-bar">
+          <button mat-raised-button color="primary" *ngIf="item.estado === 'DRAFT'" [disabled]="item.items.length === 0" (click)="submitObligation(item)">Gửi duyệt</button>
+
+          <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
+            <button mat-raised-button color="primary" (click)="approve(item)">Duyệt (Diretor DF — Aprovação e Liquidação)</button>
+            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id)">Từ chối</button>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="obr-empty" *ngIf="items.length === 0">Chưa có Obrigação nào cho năm này.</div>
+  </div>
+
+  <div class="obr-form-overlay" *ngIf="showCreateForm">
+    <div class="obr-form">
+      <h3>Tạo Obrigação mới</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descritivo da Obrigação <span class="itag type">Gõ tay (tùy chọn)</span></mat-label>
+        <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="small-field">
+        <mat-label>Mês</mat-label>
+        <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
+      </mat-form-field>
+
+      <div class="obr-form-actions">
+        <button mat-button (click)="cancelCreateForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="createObligation()">Tạo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="obr-form-overlay" *ngIf="showRejectPrompt">
+    <div class="obr-form">
+      <h3>Lý do từ chối</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ghi chú</mat-label>
+        <textarea matInput [(ngModel)]="rejectComment" name="rejectComment" rows="3"></textarea>
+      </mat-form-field>
+      <div class="obr-form-actions">
+        <button mat-button (click)="cancelReject()">Hủy</button>
+        <button mat-raised-button color="warn" (click)="confirmReject()">Xác nhận từ chối</button>
+      </div>
+    </div>
+  </div>
+</div>
