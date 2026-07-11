@@ -96,6 +96,31 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .GroupBy(l => l.EconomicClassificationFk)
                 .ToDictionary(g => g.Key, g => g.Sum(l => l.Valor));
 
+            // Receita (PAC) — execution-only, no approval gate (see memory receita-approval-decision),
+            // so every active row counts directly (no Estado/APPROVED filter like OrcamentoLinha above).
+            // totalExecucao = actual CASH collected (ValorCobradoBanco+ValorCobradoCaixa), mirroring
+            // Despesa's "Total Execução (paid)" meaning — NOT ValorPac ("Receita Liquidada", the billed/
+            // assessed figure), so saldoExecucao = Orçamentado - Execução stays the same formula on both
+            // Receita and Despesa sides (matches the source workbook's "(7) Saldo Execução = (2)-(5)",
+            // where (5) is the collected/monthly-breakdown total, not the separate "(3) Receita Liquidada"
+            // column). RegimeFk is itself a ProgramActivity node (root or descendant) — reuse
+            // offPerimeterAtividadeIds to exclude A08 the same way Despesa does.
+            var valorCobradoPacPorCodigo = _context.ReceitaPac
+                .Where(r => r.IndActivo
+                    && r.Ano == request.year
+                    && (!request.institution.HasValue || r.OrganizationFk == request.institution))
+                .Select(r => new { r.EconomicClassificationFk, r.RegimeFk, Cobrado = r.ValorCobradoBanco + r.ValorCobradoCaixa })
+                .ToList()
+                .Where(r => !offPerimeterAtividadeIds.Contains(r.RegimeFk))
+                .GroupBy(r => r.EconomicClassificationFk)
+                .ToDictionary(g => g.Key, g => g.Sum(r => r.Cobrado));
+
+            // Receita GP (Contribuições) — this money lives in the OLD Contribuições module
+            // (Contacorrente/Entidadeempregadora/Guiapagamento), which has NO EconomicClassificationFk of
+            // its own. Bridged to the 4 leaf codes 401.03.01-04 (Contribuição EE/Trabalhador x Público/
+            // Privado) via a mapping confirmed with the user 2026-07-11 — see GetValorCobradoGpPorCodigo.
+            var valorCobradoGpPorCodigo = GetValorCobradoGpPorCodigo(request.year, orcamentoConfigFk);
+
             foreach (var root in roots)
             {
                 var codeIds = GetSelfAndDescendants(root, childrenByParentId).Select(n => n.Id).ToList();
@@ -103,6 +128,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
                 if (root.Tipo == "Receita")
                 {
+                    var cobrado = codeIds.Sum(id => valorCobradoPacPorCodigo.TryGetValue(id, out var v) ? v : 0)
+                        + codeIds.Sum(id => valorCobradoGpPorCodigo.TryGetValue(id, out var v) ? v : 0);
                     response.receitas.Add(new CeInssGlobalDataContract
                     {
                         agrupamentoId = root.Id,
@@ -110,7 +137,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         designacao = root.Designacao,
                         valorOrcamentoInicial = valor,
                         valorOrcamentado = valor,
-                        saldoExecucao = valor // totalExecucao still 0 pending Receita entry (M2 continued)
+                        totalExecucao = cobrado,
+                        taxaExecucao = valor == 0 ? 0 : cobrado / valor,
+                        saldoExecucao = valor - cobrado
                     });
                 }
                 else
@@ -134,6 +163,62 @@ namespace TimorINSSBackEnd.Repository.Repositories
             response.saldoOrcamental = response.totalReceitaCorrigido - response.totalDespesaCorrigido;
 
             return response;
+        }
+
+        // Receita GP (Contribuições) collected amount, bridged from the OLD Contribuições module into
+        // the 4 leaf Classificação Económica codes it maps to. Confirmed with the user 2026-07-11:
+        //   - "Público" = Entidadeempregadora.EntidadeNatJuridicaFk in (10, 11) — looked up live in
+        //     NATUREZAJURIDICA: 10 = "Empresa Publico", 11 = "Instituição Publico", the only 2 government
+        //     codes out of 11 total (01-09 are private-sector legal forms: Lda, SA, ONG, Fundação, etc.).
+        //     Everything else = Privado. Spelling this mapping out here (not hiding it behind an opaque
+        //     helper/flag elsewhere) is deliberate — the user asked to keep the reasoning traceable.
+        //   - "Cobrado" (collected) = Contacorrente.ValorEntidade / ValorTrabalhador, counted only for
+        //     Contacorrente rows that have at least one linked Guiapagamento with IndPago == 1 (paid) —
+        //     confirmed with the user as the source of truth for "already collected", mirroring
+        //     ReceitaPac's ValorCobradoBanco+ValorCobradoCaixa on the PAC side.
+        //   - Codigo mapping (verified against the real RECEITAS_GP sheet's row descriptions):
+        //     401.03.01 = Contribuição EE Setor Público   ("6% EE públicas")
+        //     401.03.02 = Contribuição EE Setor Privado    ("6% EE setor privado")
+        //     401.03.03 = Cotização Trabalhador Setor Público  ("4% trabalhadores Estado")
+        //     401.03.04 = Cotização Trabalhador Setor Privado  ("4% trabalhadores setor privado")
+        private Dictionary<int, decimal> GetValorCobradoGpPorCodigo(int year, int orcamentoConfigFk)
+        {
+            var contas = _context.Contacorrente
+                .Where(c => c.IndActivo
+                    && c.MesAno.Year == year
+                    && c.ContaCorrenteEntidadeFk.HasValue
+                    && c.Guiapagamento.Any(g => g.IndPago == 1))
+                .Select(c => new
+                {
+                    c.ValorEntidade,
+                    c.ValorTrabalhador,
+                    NatJuridicaFk = c.ContaCorrenteEntidadeFkNavigation.EntidadeNatJuridicaFk
+                })
+                .ToList();
+
+            // Scoped to this budget period's own catalog copy — EconomicClassification.Codigo is only
+            // unique WITHIN one OrcamentoConfigFk (see IsCodeValid), so a plain Codigo lookup across all
+            // periods would crash ToDictionary on a duplicate key once a 2nd period's catalog exists.
+            var codigoIdByCodigo = _context.EconomicClassification
+                .Where(e => e.IndActivo && e.OrcamentoConfigFk == orcamentoConfigFk
+                    && new[] { "401.03.01", "401.03.02", "401.03.03", "401.03.04" }.Contains(e.Codigo))
+                .ToDictionary(e => e.Codigo, e => e.Id);
+
+            var result = new Dictionary<int, decimal>();
+            void Add(string codigo, decimal valor)
+            {
+                if (valor == 0 || !codigoIdByCodigo.TryGetValue(codigo, out var id)) return;
+                result[id] = result.TryGetValue(id, out var existing) ? existing + valor : valor;
+            }
+
+            foreach (var conta in contas)
+            {
+                bool publico = conta.NatJuridicaFk == 10 || conta.NatJuridicaFk == 11;
+                Add(publico ? "401.03.01" : "401.03.02", conta.ValorEntidade);
+                Add(publico ? "401.03.03" : "401.03.04", conta.ValorTrabalhador);
+            }
+
+            return result;
         }
 
         // Every ProgramActivity.Id (at any level: Programa/Subprograma/Atividade) that rolls up to a

@@ -62,7 +62,13 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'payments',
       expanded: false,
       items: [
-        { label: 'Receita (PAC)', route: '/contabilidade/receita' },
+        { label: 'Receita PAC (Outras)', route: '/contabilidade/receita' },
+        // Receita GP (contribuições) — 2026-07-11, user-stated: nên có trong tab
+        // Receita, không chỉ Receita PAC. Dữ liệu GP đã được nhập/validado qua
+        // module Contribuições cũ (ContaCorrente/GuiaPagamento) — tái dùng màn
+        // "Guia Pagamento (Validação)" có sẵn (route dưới nhóm Đóng góp BHXH)
+        // thay vì xây màn nhập mới, để tránh 2 nơi nhập trùng dữ liệu.
+        { label: 'Receita GP (Contribuições)', route: '/contabilidade/contribuicoes/guiaPagamento' },
       ]
     },
     {
@@ -94,8 +100,8 @@ export class ContabilidadeShellComponent implements OnInit {
       expanded: false,
       items: [
         { label: 'Orçamento', route: '/contabilidade/orcamento' },
-        { label: 'Suplementar', comingSoon: true },
-        { label: 'Saldos de Abertura (Cut-over)', comingSoon: true },
+        { label: 'Suplementar', route: '/contabilidade/orcamentoSuplementar' },
+        { label: 'Saldos de Abertura (Cut-over)', route: '/contabilidade/saldosAbertura' },
       ]
     },
     {
