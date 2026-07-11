@@ -46,6 +46,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     : 0,
                 Descritivo = entity.Descritivo,
                 ValorCabimentado = entity.ValorCabimentado,
+                ProcessoAprovisionamentoPrevio = entity.ProcessoAprovisionamentoPrevio,
                 Estado = entity.Estado,
                 SubmittedAt = entity.SubmittedAt,
                 ApprovedAt = entity.ApprovedAt,
@@ -130,6 +131,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     ExpenditureAuthorizationFk = request.ExpenditureAuthorizationFk,
                     Descritivo = request.Descritivo,
                     ValorCabimentado = request.ValorCabimentado,
+                    ProcessoAprovisionamentoPrevio = request.ProcessoAprovisionamentoPrevio,
                     Estado = ESTADO_DRAFT,
                     IndActivo = true
                 };

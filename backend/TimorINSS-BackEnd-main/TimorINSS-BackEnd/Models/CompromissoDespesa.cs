@@ -21,6 +21,7 @@ namespace TimorINSSBackEnd.Models
         public decimal ValorCompromissoGlobal { get; set; }
         public decimal ValorCompromissoAno { get; set; }
         public decimal Regularizacao { get; set; }
+        public string AssumidoCom { get; set; }
         public string Estado { get; set; }
         public int? SubmittedBy { get; set; }
         public DateTime? SubmittedAt { get; set; }

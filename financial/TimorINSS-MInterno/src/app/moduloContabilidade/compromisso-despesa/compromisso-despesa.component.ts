@@ -10,6 +10,12 @@ const ESTADO_LABELS: { [key: string]: string } = {
   APPROVED: 'Đã duyệt'
 };
 
+const ASSUMIDO_COM_LABELS: { [key: string]: string } = {
+  CONTRATO: 'Contrato',
+  LISTA_BENEFICIARIOS: 'Listas Beneficiários (subsídios imediatos)',
+  OBRIGACAO: 'Obrigação'
+};
+
 @Component({
   selector: 'app-compromisso-despesa',
   templateUrl: './compromisso-despesa.component.html',
@@ -19,6 +25,7 @@ export class CompromissoDespesaComponent implements OnInit {
 
   public ano = 2026;
   public estadoLabels = ESTADO_LABELS;
+  public assumidoComLabels = ASSUMIDO_COM_LABELS;
   public loading = false;
   public items: CompromissoDespesaDataContract[] = [];
   public expandedId: number | null = null;
@@ -29,6 +36,7 @@ export class CompromissoDespesaComponent implements OnInit {
   public formDescritivo = '';
   public formValorCompromissoGlobal: number | null = null;
   public formValorCompromissoAno: number | null = null;
+  public formAssumidoCom: 'CONTRATO' | 'LISTA_BENEFICIARIOS' | 'OBRIGACAO' = 'CONTRATO';
   public formMes = 1;
 
   public formPluriAno: number | null = null;
@@ -80,6 +88,7 @@ export class CompromissoDespesaComponent implements OnInit {
     this.formDescritivo = '';
     this.formValorCompromissoGlobal = c.valorCabimentado;
     this.formValorCompromissoAno = c.valorCabimentado;
+    this.formAssumidoCom = 'CONTRATO';
     this.formMes = new Date().getMonth() + 1;
   }
 
@@ -99,6 +108,7 @@ export class CompromissoDespesaComponent implements OnInit {
       descritivo: this.formDescritivo,
       valorCompromissoGlobal: this.formValorCompromissoGlobal,
       valorCompromissoAno: this.formValorCompromissoAno,
+      assumidoCom: this.formAssumidoCom,
       mes: this.formMes,
       ano: this.ano
     }).subscribe(

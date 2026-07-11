@@ -22,6 +22,8 @@ export interface ExpenditureAuthorizationDataContract {
   valorAutorizado: number;
   regularizacao: number;
   valorRevisto: number;
+  tipoDespesa?: 'UNICA' | 'CONJUNTO';
+  solicitaAberturaAprovisionamento?: boolean;
   estado: 'DRAFT' | 'PENDING_REVIEW' | 'PENDING_APPROVAL' | 'APPROVED';
   submittedAt?: string;
   reviewedAt?: string;

@@ -30,6 +30,8 @@ export class AdCabimentoComponent implements OnInit {
   public pickedRubrica: RubricaDisponivelDataContract | null = null;
   public formDescritivo = '';
   public formValorAutorizado: number | null = null;
+  public formTipoDespesa: 'UNICA' | 'CONJUNTO' = 'UNICA';
+  public formSolicitaAberturaAprovisionamento = false;
   public formMes = 1;
 
   public formRegularizacao = 0;
@@ -83,6 +85,8 @@ export class AdCabimentoComponent implements OnInit {
     this.pickedRubrica = r;
     this.formDescritivo = '';
     this.formValorAutorizado = r.valor;
+    this.formTipoDespesa = 'UNICA';
+    this.formSolicitaAberturaAprovisionamento = false;
     this.formMes = new Date().getMonth() + 1;
   }
 
@@ -101,6 +105,8 @@ export class AdCabimentoComponent implements OnInit {
       orcamentoLinhaFk: this.pickedRubrica.orcamentoLinhaId,
       descritivo: this.formDescritivo,
       valorAutorizado: this.formValorAutorizado,
+      tipoDespesa: this.formTipoDespesa,
+      solicitaAberturaAprovisionamento: this.formSolicitaAberturaAprovisionamento,
       mes: this.formMes,
       ano: this.ano
     }).subscribe(

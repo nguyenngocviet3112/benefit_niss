@@ -46,6 +46,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 ValorAutorizado = entity.ValorAutorizado,
                 Regularizacao = entity.Regularizacao,
                 ValorRevisto = entity.ValorAutorizado + entity.Regularizacao,
+                TipoDespesa = entity.TipoDespesa,
+                SolicitaAberturaAprovisionamento = entity.SolicitaAberturaAprovisionamento,
                 Estado = entity.Estado,
                 SubmittedAt = entity.SubmittedAt,
                 ReviewedAt = entity.ReviewedAt,
@@ -126,6 +128,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     Descritivo = request.Descritivo,
                     ValorAutorizado = request.ValorAutorizado,
                     Regularizacao = 0,
+                    TipoDespesa = request.TipoDespesa,
+                    SolicitaAberturaAprovisionamento = request.SolicitaAberturaAprovisionamento,
                     Estado = ESTADO_DRAFT,
                     IndActivo = true
                 };
@@ -163,6 +167,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 entity.Descritivo = request.Descritivo;
                 entity.ValorAutorizado = request.ValorAutorizado;
                 entity.Regularizacao = request.Regularizacao;
+                entity.TipoDespesa = request.TipoDespesa;
+                entity.SolicitaAberturaAprovisionamento = request.SolicitaAberturaAprovisionamento;
                 entity = _utils.UpdateDetailsToEntity(entity);
                 _unitOfWork.ExpenditureAuthorizationRepository.Update(entity);
                 _unitOfWork.Commit();

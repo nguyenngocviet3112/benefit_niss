@@ -20,6 +20,8 @@ namespace TimorINSSBackEnd.Models
         public string Descritivo { get; set; }
         public decimal ValorAutorizado { get; set; }
         public decimal Regularizacao { get; set; }
+        public string TipoDespesa { get; set; }
+        public bool? SolicitaAberturaAprovisionamento { get; set; }
         public string Estado { get; set; }
         public int? SubmittedBy { get; set; }
         public DateTime? SubmittedAt { get; set; }

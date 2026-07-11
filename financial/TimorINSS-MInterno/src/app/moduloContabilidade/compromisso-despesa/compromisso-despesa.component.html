@@ -54,6 +54,10 @@
             <span>$ {{ item.regularizacao | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field">
+            <label>Compromisso assumido com <span class="itag drop">Chọn</span></label>
+            <span>{{ (item.assumidoCom && assumidoComLabels[item.assumidoCom]) || '—' }}</span>
+          </div>
+          <div class="comp-field">
             <label>Valor revisto <span class="itag auto">Tự động</span></label>
             <span>$ {{ item.valorRevisto | number:'1.2-2' }}</span>
           </div>
@@ -124,6 +128,15 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Compromisso no Ano (USD) <span class="itag type">Gõ tay</span></mat-label>
           <input matInput type="number" [(ngModel)]="formValorCompromissoAno" name="formValorCompromissoAno" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="medium-field">
+          <mat-label>Compromisso assumido com <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formAssumidoCom" name="formAssumidoCom">
+            <mat-option value="CONTRATO">Contrato</mat-option>
+            <mat-option value="LISTA_BENEFICIARIOS">Listas Beneficiários (subsídios imediatos)</mat-option>
+            <mat-option value="OBRIGACAO">Obrigação</mat-option>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="small-field">

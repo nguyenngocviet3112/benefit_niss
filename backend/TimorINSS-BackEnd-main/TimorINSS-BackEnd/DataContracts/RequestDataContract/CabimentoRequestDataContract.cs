@@ -29,6 +29,9 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public decimal ValorCabimentado { get; set; }
 
         [DataMember]
+        public bool? ProcessoAprovisionamentoPrevio { get; set; }
+
+        [DataMember]
         public int Mes { get; set; }
 
         [DataMember]

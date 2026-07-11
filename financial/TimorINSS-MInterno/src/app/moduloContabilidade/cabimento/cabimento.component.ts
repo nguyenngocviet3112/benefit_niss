@@ -26,6 +26,7 @@ export class CabimentoComponent implements OnInit {
   public pickedAd: AdDisponivelParaCabimentoDataContract | null = null;
   public formDescritivo = '';
   public formValorCabimentado: number | null = null;
+  public formProcessoAprovisionamentoPrevio = false;
   public formMes = 1;
 
   public showRejectPrompt = false;
@@ -69,6 +70,7 @@ export class CabimentoComponent implements OnInit {
     this.pickedAd = ad;
     this.formDescritivo = '';
     this.formValorCabimentado = ad.valorRevisto;
+    this.formProcessoAprovisionamentoPrevio = false;
     this.formMes = new Date().getMonth() + 1;
   }
 
@@ -87,6 +89,7 @@ export class CabimentoComponent implements OnInit {
       expenditureAuthorizationFk: this.pickedAd.expenditureAuthorizationId,
       descritivo: this.formDescritivo,
       valorCabimentado: this.formValorCabimentado,
+      processoAprovisionamentoPrevio: this.formProcessoAprovisionamentoPrevio,
       mes: this.formMes,
       ano: this.ano
     }).subscribe(

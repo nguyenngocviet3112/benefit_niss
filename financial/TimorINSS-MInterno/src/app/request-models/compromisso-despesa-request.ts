@@ -3,6 +3,7 @@ export interface CreateCompromissoDespesaRequest {
   descritivo: string;
   valorCompromissoGlobal: number;
   valorCompromissoAno: number;
+  assumidoCom?: 'CONTRATO' | 'LISTA_BENEFICIARIOS' | 'OBRIGACAO';
   mes: number;
   ano: number;
 }

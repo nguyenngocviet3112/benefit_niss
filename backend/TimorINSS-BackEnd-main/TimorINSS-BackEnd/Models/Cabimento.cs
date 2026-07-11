@@ -13,6 +13,7 @@ namespace TimorINSSBackEnd.Models
         public int ExpenditureAuthorizationFk { get; set; }
         public string Descritivo { get; set; }
         public decimal ValorCabimentado { get; set; }
+        public bool? ProcessoAprovisionamentoPrevio { get; set; }
         public string Estado { get; set; }
         public int? SubmittedBy { get; set; }
         public DateTime? SubmittedAt { get; set; }

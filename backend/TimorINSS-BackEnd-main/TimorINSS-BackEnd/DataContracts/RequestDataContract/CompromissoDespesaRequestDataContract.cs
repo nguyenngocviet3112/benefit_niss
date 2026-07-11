@@ -32,6 +32,9 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public decimal ValorCompromissoAno { get; set; }
 
         [DataMember]
+        public string AssumidoCom { get; set; }
+
+        [DataMember]
         public int Mes { get; set; }
 
         [DataMember]

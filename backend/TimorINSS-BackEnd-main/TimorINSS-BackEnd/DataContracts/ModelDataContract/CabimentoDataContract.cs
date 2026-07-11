@@ -49,6 +49,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public decimal ValorCabimentado { get; set; }
 
         [DataMember]
+        public bool? ProcessoAprovisionamentoPrevio { get; set; }
+
+        [DataMember]
         public string Estado { get; set; }
 
         [DataMember]

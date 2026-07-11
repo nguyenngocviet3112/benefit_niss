@@ -29,6 +29,12 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public decimal ValorAutorizado { get; set; }
 
         [DataMember]
+        public string TipoDespesa { get; set; }
+
+        [DataMember]
+        public bool? SolicitaAberturaAprovisionamento { get; set; }
+
+        [DataMember]
         public int Mes { get; set; }
 
         [DataMember]
@@ -49,6 +55,12 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
 
         [DataMember]
         public decimal Regularizacao { get; set; }
+
+        [DataMember]
+        public string TipoDespesa { get; set; }
+
+        [DataMember]
+        public bool? SolicitaAberturaAprovisionamento { get; set; }
     }
 
     [DataContract]

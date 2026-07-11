@@ -46,6 +46,14 @@
             <span>$ {{ item.valorAutorizado | number:'1.2-2' }}</span>
           </div>
           <div class="ad-field">
+            <label>Tipo despesa <span class="itag drop">Chọn</span></label>
+            <span>{{ item.tipoDespesa === 'CONJUNTO' ? 'Conjunto de despesas' : 'Despesa única' }}</span>
+          </div>
+          <div class="ad-field">
+            <label>Abertura procedimento aprovisionamento <span class="itag drop">Chọn</span></label>
+            <span>{{ item.solicitaAberturaAprovisionamento ? 'Sim' : 'Não' }}</span>
+          </div>
+          <div class="ad-field">
             <label>Regularização <span class="itag type">Gõ tay</span></label>
             <span *ngIf="item.estado !== 'DRAFT'">$ {{ item.regularizacao | number:'1.2-2' }}</span>
             <span *ngIf="item.estado === 'DRAFT'" class="ad-regularizacao-edit">
@@ -120,6 +128,22 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Valor Autorizado (USD) <span class="itag type">Gõ tay (mặc định = Valor rúbrica)</span></mat-label>
           <input matInput type="number" [(ngModel)]="formValorAutorizado" name="formValorAutorizado" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="medium-field">
+          <mat-label>Tipo despesa <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formTipoDespesa" name="formTipoDespesa">
+            <mat-option value="UNICA">Despesa única</mat-option>
+            <mat-option value="CONJUNTO">Conjunto de despesas</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="medium-field">
+          <mat-label>Abertura procedimento aprovisionamento? <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formSolicitaAberturaAprovisionamento" name="formSolicitaAberturaAprovisionamento">
+            <mat-option [value]="true">Sim</mat-option>
+            <mat-option [value]="false">Não</mat-option>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="small-field">

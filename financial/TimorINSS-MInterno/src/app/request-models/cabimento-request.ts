@@ -2,6 +2,7 @@ export interface CreateCabimentoRequest {
   expenditureAuthorizationFk: number;
   descritivo: string;
   valorCabimentado: number;
+  processoAprovisionamentoPrevio?: boolean;
   mes: number;
   ano: number;
 }

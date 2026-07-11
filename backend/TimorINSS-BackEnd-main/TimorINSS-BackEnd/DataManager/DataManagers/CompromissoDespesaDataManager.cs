@@ -52,6 +52,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 ValorCompromissoAno = entity.ValorCompromissoAno,
                 Regularizacao = entity.Regularizacao,
                 ValorRevisto = entity.ValorCompromissoAno + entity.Regularizacao,
+                AssumidoCom = entity.AssumidoCom,
                 Estado = entity.Estado,
                 SubmittedAt = entity.SubmittedAt,
                 ReviewedAt = entity.ReviewedAt,
@@ -133,6 +134,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     ValorCompromissoGlobal = request.ValorCompromissoGlobal,
                     ValorCompromissoAno = request.ValorCompromissoAno,
                     Regularizacao = 0,
+                    AssumidoCom = request.AssumidoCom,
                     Estado = ESTADO_DRAFT,
                     IndActivo = true
                 };

@@ -29,6 +29,10 @@
   width: 120px;
 }
 
+.medium-field {
+  width: 240px;
+}
+
 .comp-list {
   border: 1px solid #ddd;
   border-radius: 6px;

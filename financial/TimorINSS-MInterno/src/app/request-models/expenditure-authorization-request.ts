@@ -2,6 +2,8 @@ export interface CreateExpenditureAuthorizationRequest {
   orcamentoLinhaFk: number;
   descritivo: string;
   valorAutorizado: number;
+  tipoDespesa?: 'UNICA' | 'CONJUNTO';
+  solicitaAberturaAprovisionamento?: boolean;
   mes: number;
   ano: number;
 }
@@ -11,6 +13,8 @@ export interface SaveExpenditureAuthorizationRequest {
   descritivo: string;
   valorAutorizado: number;
   regularizacao: number;
+  tipoDespesa?: 'UNICA' | 'CONJUNTO';
+  solicitaAberturaAprovisionamento?: boolean;
 }
 
 export interface SavePlurianualidadeRequest {

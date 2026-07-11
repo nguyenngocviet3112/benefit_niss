@@ -71,6 +71,14 @@
           <input matInput type="number" [(ngModel)]="formValorCabimentado" name="formValorCabimentado" />
         </mat-form-field>
 
+        <mat-form-field appearance="outline" class="medium-field">
+          <mat-label>Processo aprovisionamento prévio? <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formProcessoAprovisionamentoPrevio" name="formProcessoAprovisionamentoPrevio">
+            <mat-option [value]="true">Sim</mat-option>
+            <mat-option [value]="false">Não</mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <mat-form-field appearance="outline" class="small-field">
           <mat-label>Mês</mat-label>
           <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
