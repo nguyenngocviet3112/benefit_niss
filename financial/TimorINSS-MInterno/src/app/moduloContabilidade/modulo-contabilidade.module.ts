@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { ModuloContabilidadeRoutingModule } from './modulo-contabilidade-routing.module';
 import { EstruturaProgramaticaComponent } from './estrutura-programatica/estrutura-programatica.component';
@@ -64,7 +65,8 @@ import { DepartamentoConfigComponent } from './departamento-config/departamento-
     MatSelectModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatAutocompleteModule
   ]
 })
 export class ModuloContabilidadeModule { }

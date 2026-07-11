@@ -69,24 +69,39 @@
       <h3>{{ editingId ? 'Sửa' : 'Thêm' }} rúbrica</h3>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Atividade</mat-label>
-        <mat-select [(ngModel)]="formAtividadeFk" name="formAtividadeFk">
-          <mat-option *ngFor="let a of atividades" [value]="a.id">{{ a.codigo }} - {{ a.designacao }}</mat-option>
-        </mat-select>
+        <mat-label>Atividade <span class="itag type">Gõ để tìm</span></mat-label>
+        <input matInput [(ngModel)]="atividadeSearch" name="atividadeSearchInput"
+               (ngModelChange)="onAtividadeSearchChange()" [matAutocomplete]="autoAtividade" />
+        <mat-autocomplete #autoAtividade="matAutocomplete">
+          <mat-option *ngFor="let a of filteredAtividades" [value]="a" (onSelectionChange)="selectAtividade(a)">
+            {{ a.codigo }} - {{ a.designacao }}
+          </mat-option>
+          <mat-option *ngIf="filteredAtividades.length === 0" disabled>Không tìm thấy</mat-option>
+        </mat-autocomplete>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Classificação Económica</mat-label>
-        <mat-select [(ngModel)]="formEconomicClassificationFk" name="formEconomicClassificationFk">
-          <mat-option *ngFor="let e of economicClassifications" [value]="e.id">{{ e.codigo }} - {{ e.designacao }}</mat-option>
-        </mat-select>
+        <mat-label>Classificação Económica <span class="itag type">Gõ để tìm</span></mat-label>
+        <input matInput [(ngModel)]="economicClassificationSearch" name="ecSearchInput"
+               (ngModelChange)="onEconomicClassificationSearchChange()" [matAutocomplete]="autoEc" />
+        <mat-autocomplete #autoEc="matAutocomplete">
+          <mat-option *ngFor="let e of filteredEconomicClassifications" [value]="e" (onSelectionChange)="selectEconomicClassification(e)">
+            {{ e.codigo }} - {{ e.designacao }}
+          </mat-option>
+          <mat-option *ngIf="filteredEconomicClassifications.length === 0" disabled>Không tìm thấy</mat-option>
+        </mat-autocomplete>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Organization</mat-label>
-        <mat-select [(ngModel)]="formOrganizationFk" name="formOrganizationFk">
-          <mat-option *ngFor="let o of organizations" [value]="o.id">{{ o.nome }}</mat-option>
-        </mat-select>
+        <mat-label>Organization <span class="itag type">Gõ để tìm</span></mat-label>
+        <input matInput [(ngModel)]="organizationSearch" name="orgSearchInput"
+               (ngModelChange)="onOrganizationSearchChange()" [matAutocomplete]="autoOrg" />
+        <mat-autocomplete #autoOrg="matAutocomplete">
+          <mat-option *ngFor="let o of filteredOrganizations" [value]="o" (onSelectionChange)="selectOrganization(o)">
+            {{ o.nome }}
+          </mat-option>
+          <mat-option *ngIf="filteredOrganizations.length === 0" disabled>Không tìm thấy</mat-option>
+        </mat-autocomplete>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">

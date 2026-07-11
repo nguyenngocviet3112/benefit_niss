@@ -14,6 +14,16 @@
   margin: 0;
 }
 
+.itag {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.itag.type { background: #fff3e0; color: #ef6c00; }
+
 .orc-header .en {
   font-size: 13px;
   font-style: italic;
@@ -125,8 +135,11 @@
   background: #fff;
   border-radius: 8px;
   padding: 24px;
-  width: 460px;
-  max-width: 90vw;
+  width: 95vw;
+  max-width: 1400px;
+  height: 90vh;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .full-width {

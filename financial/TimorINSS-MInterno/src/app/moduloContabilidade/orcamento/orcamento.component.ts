@@ -33,6 +33,16 @@ export class OrcamentoComponent implements OnInit {
   public economicClassifications: EconomicClassificationDataContract[] = [];
   public organizations: SelectDescription[] = [];
 
+  // Danh sách đã lọc theo ô tìm kiếm (autocomplete) — gõ tới đâu lọc tới đó,
+  // thay cho kéo-chọn trong mat-select khi danh sách quá dài.
+  public filteredAtividades: ProgramActivityDataContract[] = [];
+  public filteredEconomicClassifications: EconomicClassificationDataContract[] = [];
+  public filteredOrganizations: SelectDescription[] = [];
+
+  public atividadeSearch = '';
+  public economicClassificationSearch = '';
+  public organizationSearch = '';
+
   public editingId: number | null = null;
   public formAtividadeFk: number | null = null;
   public formEconomicClassificationFk: number | null = null;
@@ -60,13 +70,52 @@ export class OrcamentoComponent implements OnInit {
   private loadPickers(): void {
     this.programActivityService.getTree(this.orcamentoConfigFk).subscribe(response => {
       this.atividades = (response.items ?? []).filter(a => !a.hasKids);
+      this.filteredAtividades = this.atividades;
     });
     this.economicClassificationService.getTree(this.orcamentoConfigFk).subscribe(response => {
       this.economicClassifications = (response.items ?? []).filter(e => !e.hasKids);
+      this.filteredEconomicClassifications = this.economicClassifications;
     });
     this.institutionService.getAllInstitutionsAtivo().subscribe(response => {
       this.organizations = response.selects ?? [];
+      this.filteredOrganizations = this.organizations;
     });
+  }
+
+  private normalize(value: string): string {
+    return (value || '').toLowerCase();
+  }
+
+  public onAtividadeSearchChange(): void {
+    const term = this.normalize(this.atividadeSearch);
+    this.filteredAtividades = this.atividades.filter(a =>
+      this.normalize(a.codigo).includes(term) || this.normalize(a.designacao).includes(term));
+  }
+
+  public selectAtividade(a: ProgramActivityDataContract): void {
+    this.formAtividadeFk = a.id;
+    this.atividadeSearch = `${a.codigo} - ${a.designacao}`;
+  }
+
+  public onEconomicClassificationSearchChange(): void {
+    const term = this.normalize(this.economicClassificationSearch);
+    this.filteredEconomicClassifications = this.economicClassifications.filter(e =>
+      this.normalize(e.codigo).includes(term) || this.normalize(e.designacao).includes(term));
+  }
+
+  public selectEconomicClassification(e: EconomicClassificationDataContract): void {
+    this.formEconomicClassificationFk = e.id;
+    this.economicClassificationSearch = `${e.codigo} - ${e.designacao}`;
+  }
+
+  public onOrganizationSearchChange(): void {
+    const term = this.normalize(this.organizationSearch);
+    this.filteredOrganizations = this.organizations.filter(o => this.normalize(o.nome).includes(term));
+  }
+
+  public selectOrganization(o: SelectDescription): void {
+    this.formOrganizationFk = o.id;
+    this.organizationSearch = o.nome;
   }
 
   public loadBatch(): void {
@@ -93,6 +142,12 @@ export class OrcamentoComponent implements OnInit {
     this.formEconomicClassificationFk = null;
     this.formOrganizationFk = null;
     this.formValor = null;
+    this.atividadeSearch = '';
+    this.economicClassificationSearch = '';
+    this.organizationSearch = '';
+    this.filteredAtividades = this.atividades;
+    this.filteredEconomicClassifications = this.economicClassifications;
+    this.filteredOrganizations = this.organizations;
     this.showForm = true;
   }
 
@@ -102,6 +157,12 @@ export class OrcamentoComponent implements OnInit {
     this.formEconomicClassificationFk = linha.economicClassificationFk;
     this.formOrganizationFk = linha.organizationFk;
     this.formValor = linha.valor;
+    this.atividadeSearch = `${linha.atividadeCodigo} - ${linha.atividadeDesignacao}`;
+    this.economicClassificationSearch = `${linha.economicClassificationCodigo} - ${linha.economicClassificationDesignacao}`;
+    this.organizationSearch = linha.organizationNome;
+    this.filteredAtividades = this.atividades;
+    this.filteredEconomicClassifications = this.economicClassifications;
+    this.filteredOrganizations = this.organizations;
     this.showForm = true;
   }
 
