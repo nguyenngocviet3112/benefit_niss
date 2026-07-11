@@ -622,18 +622,31 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return null;
         }
 
-        private string GenerateToken(int entityId, int? expireTime = null)
+        private string GenerateToken(int entityId, int? expireTime = null, IEnumerable<string> perms = null)
         {
             //Metodo para criar o token de autenticação
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Configuration["AppSettings:Secret"]);
             var signingKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(key);
+
+            List<Claim> claims = new List<Claim> { new Claim(ClaimTypes.Name, entityId.ToString()) };
+            // "perms" — granular RBAC tokens for the new-mode "Quản lý User & Phân
+            // quyền" screen (ORC_SUBMIT, AD_APPROVE, ...). One claim per token so
+            // JwtSecurityTokenHandler serializes them as a JSON array under "perms"
+            // in the token payload — FE decodes the token client-side to read it.
+            // Only ever populated for internal-staff logins; other entity types
+            // (company/external, trabalhador) never pass perms in, so they get none.
+            if (perms != null)
+            {
+                foreach (string perm in perms.Distinct())
+                {
+                    claims.Add(new Claim("perms", perm));
+                }
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, entityId.ToString())
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Issuer = "INSSTimor",
                 Expires = DateTime.UtcNow.AddMinutes(expireTime ?? 60),
                 SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
@@ -751,7 +764,20 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 perfis = _unitOfWork.PerfilRepository.GetPerfisByIds(perfilIds);
             }
 
-            var tokenString = GenerateToken(user.IdUtilizador, int.Parse(Configuration["AppSettings:expirationTimeMinutes"]));
+            // Granular RBAC tokens (new-mode "Quản lý User & Phân quyền") — kept
+            // separate from the old Perfil/Funcionalidade Permissions list below.
+            // The old-system admin superuser also gets the new "ADMIN" bypass
+            // token automatically so it isn't locked out of the new mode.
+            List<string> perms = _unitOfWork.UserPermissionRepository.GetByUser(user.IdUtilizador)
+                .Select(p => p.PermissionToken)
+                .Distinct()
+                .ToList();
+            if (isAdmin && !perms.Contains("ADMIN"))
+            {
+                perms.Add("ADMIN");
+            }
+
+            var tokenString = GenerateToken(user.IdUtilizador, int.Parse(Configuration["AppSettings:expirationTimeMinutes"]), perms);
 
             response.user = new User
             {
