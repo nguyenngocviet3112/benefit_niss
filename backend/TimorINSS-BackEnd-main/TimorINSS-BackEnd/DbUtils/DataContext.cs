@@ -206,6 +206,21 @@ namespace TimorINSSBackEnd.Models
                     .HasConstraintName("FK_UserPermission_Preset");
             });
 
+            modelBuilder.Entity<UserProfile>(entity =>
+            {
+                entity.HasOne(d => d.UtilizadorFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.UtilizadorFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserProfile_Utilizador");
+
+                entity.HasOne(d => d.DepartamentoFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.DepartamentoFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserProfile_Departamento");
+            });
+
             // Mechanical registration only (mirrors the ExpenditureAuthorization/
             // Cabimento pattern above) — Models/PaymentAuthorization.cs and
             // PaymentExecution.cs already existed from a concurrent change but

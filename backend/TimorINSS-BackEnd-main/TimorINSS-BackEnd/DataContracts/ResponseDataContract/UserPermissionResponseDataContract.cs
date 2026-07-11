@@ -12,6 +12,9 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
 
         [DataMember]
         public List<PermissionPresetDataContract> Presets { get; set; } = new List<PermissionPresetDataContract>();
+
+        [DataMember]
+        public List<SelectDescription> Departamentos { get; set; } = new List<SelectDescription>();
     }
 
     [DataContract]

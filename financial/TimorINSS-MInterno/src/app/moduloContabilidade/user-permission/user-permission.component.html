@@ -1,0 +1,115 @@
+<div class="up-container">
+  <div class="up-header">
+    <h2>Quản lý User & Phân quyền <span class="en">(User Management & Permissions)</span></h2>
+    <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm User</button>
+  </div>
+
+  <div class="up-list" *ngIf="!loading">
+    <table class="up-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Tên</th>
+          <th>Email</th>
+          <th>Phòng ban</th>
+          <th>Trạng thái</th>
+          <th>Preset</th>
+          <th>Số quyền</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.username }}</td>
+          <td>{{ user.nome || '—' }}</td>
+          <td>{{ user.email || '—' }}</td>
+          <td>{{ user.departamentoNome || '—' }}</td>
+          <td>
+            <span class="up-badge" [class.inactive]="!user.indActivo">
+              {{ user.indActivo ? 'Ativo' : 'Inativo' }}
+            </span>
+            <span class="up-badge locked" *ngIf="user.locked">Locked</span>
+          </td>
+          <td>
+            <span class="up-chip" *ngFor="let codigo of user.presetCodigos">{{ codigo }}</span>
+            <span class="up-empty-cell" *ngIf="user.presetCodigos.length === 0">—</span>
+          </td>
+          <td>{{ user.tokens.length }}</td>
+          <td>
+            <button mat-button (click)="openEditForm(user)">Sửa</button>
+          </td>
+        </tr>
+        <tr *ngIf="users.length === 0">
+          <td colspan="8" class="up-empty">Chưa có user nào trong hệ thống mới.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="up-form-overlay" *ngIf="showForm">
+    <div class="up-form">
+      <h3>{{ editingId ? 'Sửa User' : 'Thêm User mới' }}</h3>
+
+      <div class="up-form-row">
+        <mat-form-field appearance="outline" class="up-field">
+          <mat-label>Username</mat-label>
+          <input matInput [(ngModel)]="formUsername" name="formUsername" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="up-field">
+          <mat-label>{{ editingId ? 'Password mới (để trống nếu không đổi)' : 'Password' }}</mat-label>
+          <input matInput type="password" [(ngModel)]="formPassword" name="formPassword" />
+        </mat-form-field>
+
+        <label class="up-checkbox-inline">
+          <input type="checkbox" [(ngModel)]="formIndActivo" name="formIndActivo" />
+          Ativo
+        </label>
+      </div>
+
+      <div class="up-form-row">
+        <mat-form-field appearance="outline" class="up-field">
+          <mat-label>Tên (Nome)</mat-label>
+          <input matInput [(ngModel)]="formNome" name="formNome" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="up-field">
+          <mat-label>Email (dùng để reset password)</mat-label>
+          <input matInput type="email" [(ngModel)]="formEmail" name="formEmail" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="up-field">
+          <mat-label>Phòng ban (Departamento)</mat-label>
+          <mat-select [(ngModel)]="formDepartamentoFk" name="formDepartamentoFk">
+            <mat-option [value]="null">—</mat-option>
+            <mat-option *ngFor="let d of departamentos" [value]="d.id">{{ d.nome }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <h4>Preset (nhóm quyền có sẵn)</h4>
+      <div class="up-preset-list">
+        <label class="up-checkbox" *ngFor="let preset of presets">
+          <input type="checkbox" [checked]="isPresetChecked(preset)" (change)="togglePreset(preset)" />
+          {{ preset.nome }}
+        </label>
+      </div>
+
+      <h4>Quyền chi tiết (Permission tokens)</h4>
+      <div class="up-token-groups">
+        <div class="up-token-group" *ngFor="let group of groups">
+          <div class="up-token-group-title">{{ group.nome }}</div>
+          <label class="up-checkbox" *ngFor="let t of group.tokens">
+            <input type="checkbox" [checked]="isTokenChecked(t.token)" (change)="toggleToken(t.token)" />
+            {{ t.label }}
+          </label>
+        </div>
+      </div>
+
+      <div class="up-form-actions">
+        <button mat-button (click)="cancelForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>

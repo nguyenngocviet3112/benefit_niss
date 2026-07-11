@@ -76,5 +76,33 @@ namespace TimorINSSBackEnd.Repository.Repositories
         {
             return _moduloContribuicoesContext.Utilizador.Any(u => u.Username == username);
         }
+
+        public List<UserProfile> GetAllProfiles()
+        {
+            return _moduloContribuicoesContext.UserProfile
+                .Include(p => p.DepartamentoFkNavigation)
+                .Where(p => p.IndActivo)
+                .ToList();
+        }
+
+        public UserProfile GetProfile(int utilizadorFk)
+        {
+            return _moduloContribuicoesContext.UserProfile
+                .Include(p => p.DepartamentoFkNavigation)
+                .SingleOrDefault(p => p.IndActivo && p.UtilizadorFk == utilizadorFk);
+        }
+
+        public void AddProfile(UserProfile entity)
+        {
+            _moduloContribuicoesContext.UserProfile.Add(entity);
+        }
+
+        public void UpdateProfile(UserProfile entity)
+        {
+            UserProfile entityToUpdate = _moduloContribuicoesContext.UserProfile
+                .Single(p => p.Id == entity.Id);
+
+            entityToUpdate = Utils.UpdateClassWithoutVirtuals(entity, entityToUpdate);
+        }
     }
 }

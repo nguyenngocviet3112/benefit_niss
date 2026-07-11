@@ -19,6 +19,18 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public bool Locked { get; set; }
 
         [DataMember]
+        public string Nome { get; set; }
+
+        [DataMember]
+        public string Email { get; set; }
+
+        [DataMember]
+        public int? DepartamentoFk { get; set; }
+
+        [DataMember]
+        public string DepartamentoNome { get; set; }
+
+        [DataMember]
         public List<string> Tokens { get; set; } = new List<string>();
 
         [DataMember]

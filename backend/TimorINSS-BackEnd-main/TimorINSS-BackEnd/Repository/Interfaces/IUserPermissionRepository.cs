@@ -19,5 +19,10 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         List<Utilizador> GetAllInternalUsers();
         Utilizador GetInternalUser(int id);
         bool UsernameExists(string username);
+
+        List<UserProfile> GetAllProfiles();
+        UserProfile GetProfile(int utilizadorFk);
+        void AddProfile(UserProfile entity);
+        void UpdateProfile(UserProfile entity);
     }
 }

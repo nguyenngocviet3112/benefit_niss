@@ -37,6 +37,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 response.Presets = _unitOfWork.UserPermissionRepository.GetAllPresets()
                     .Select(MapPreset)
                     .ToList();
+                response.Departamentos = _unitOfWork.DepartamentoRepository.GetAllDepartamentosAtivo();
             }
             catch (Exception e)
             {
@@ -53,9 +54,14 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 List<Utilizador> users = _unitOfWork.UserPermissionRepository.GetAllInternalUsers();
                 List<UserPermission> allPerms = _unitOfWork.UserPermissionRepository.GetAll();
                 List<PermissionPreset> presets = _unitOfWork.UserPermissionRepository.GetAllPresets();
+                List<UserProfile> profiles = _unitOfWork.UserPermissionRepository.GetAllProfiles();
 
                 response.Items = users
-                    .Select(u => MapUser(u, allPerms.Where(p => p.UtilizadorFk == u.IdUtilizador).ToList(), presets))
+                    .Select(u => MapUser(
+                        u,
+                        allPerms.Where(p => p.UtilizadorFk == u.IdUtilizador).ToList(),
+                        presets,
+                        profiles.SingleOrDefault(p => p.UtilizadorFk == u.IdUtilizador)))
                     .ToList();
             }
             catch (Exception e)
@@ -79,7 +85,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
                 List<UserPermission> perms = _unitOfWork.UserPermissionRepository.GetByUser(user.IdUtilizador);
                 List<PermissionPreset> presets = _unitOfWork.UserPermissionRepository.GetAllPresets();
-                response.Item = MapUser(user, perms, presets);
+                UserProfile profile = _unitOfWork.UserPermissionRepository.GetProfile(user.IdUtilizador);
+                response.Item = MapUser(user, perms, presets, profile);
             }
             catch (Exception e)
             {
@@ -171,6 +178,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 }
 
                 SyncPermissions(user.IdUtilizador, explicitTokens, chosenPresets);
+                SaveProfile(user.IdUtilizador, request.Nome, request.Email, request.DepartamentoFk);
 
                 response.Id = user.IdUtilizador;
             }
@@ -237,7 +245,38 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             _unitOfWork.Commit();
         }
 
-        private UserPermissionListItemDataContract MapUser(Utilizador user, List<UserPermission> perms, List<PermissionPreset> allPresets)
+        // Nome/Email/Departamento — added on top of the original username/
+        // password/permissions scope (user request, 2026-07-11). Email is
+        // captured to back a future password-reset flow; that flow itself
+        // isn't built yet, this only stores the data.
+        private void SaveProfile(int utilizadorId, string nome, string email, int? departamentoFk)
+        {
+            UserProfile profile = _unitOfWork.UserPermissionRepository.GetProfile(utilizadorId);
+            if (profile == null)
+            {
+                profile = new UserProfile
+                {
+                    UtilizadorFk = utilizadorId,
+                    Nome = nome,
+                    Email = email,
+                    DepartamentoFk = departamentoFk,
+                    IndActivo = true
+                };
+                profile = _utils.SetDetailsToEntity(profile);
+                _unitOfWork.UserPermissionRepository.AddProfile(profile);
+            }
+            else
+            {
+                profile.Nome = nome;
+                profile.Email = email;
+                profile.DepartamentoFk = departamentoFk;
+                profile = _utils.UpdateDetailsToEntity(profile);
+                _unitOfWork.UserPermissionRepository.UpdateProfile(profile);
+            }
+            _unitOfWork.Commit();
+        }
+
+        private UserPermissionListItemDataContract MapUser(Utilizador user, List<UserPermission> perms, List<PermissionPreset> allPresets, UserProfile profile)
         {
             List<int> presetIds = perms.Where(p => p.SourcePresetFk.HasValue).Select(p => p.SourcePresetFk.Value).Distinct().ToList();
 
@@ -247,6 +286,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Username = user.Username,
                 IndActivo = user.IndActivo,
                 Locked = user.Locked,
+                Nome = profile?.Nome,
+                Email = profile?.Email,
+                DepartamentoFk = profile?.DepartamentoFk,
+                DepartamentoNome = profile?.DepartamentoFkNavigation?.Nome,
                 Tokens = perms.Select(p => p.PermissionToken).Distinct().ToList(),
                 PresetCodigos = allPresets.Where(p => presetIds.Contains(p.Id)).Select(p => p.Codigo).ToList()
             };

@@ -30,6 +30,15 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public bool IndActivo { get; set; }
 
         [DataMember]
+        public string Nome { get; set; }
+
+        [DataMember]
+        public string Email { get; set; }
+
+        [DataMember]
+        public int? DepartamentoFk { get; set; }
+
+        [DataMember]
         public List<int> PresetIds { get; set; } = new List<int>();
 
         [DataMember]
