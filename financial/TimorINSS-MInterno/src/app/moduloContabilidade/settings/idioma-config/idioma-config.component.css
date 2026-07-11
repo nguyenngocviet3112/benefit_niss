@@ -1,0 +1,65 @@
+.lc-container {
+  padding: 24px;
+  max-width: 720px;
+}
+
+.lc-header h2 {
+  margin: 0 0 4px;
+}
+
+.lc-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.lc-hint {
+  margin: 0 0 16px;
+  color: #666;
+  font-size: 13px;
+}
+
+.lc-list {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.lc-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+.lc-codigo {
+  font-family: monospace;
+  font-weight: 600;
+  min-width: 48px;
+}
+
+.lc-nome {
+  flex: 1;
+}
+
+.lc-status {
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  background: #e6f4ea;
+  color: #1e7d34;
+  white-space: nowrap;
+}
+
+.lc-status.inactive {
+  background: #f4f4f4;
+  color: #999;
+}
+
+.lc-empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+}

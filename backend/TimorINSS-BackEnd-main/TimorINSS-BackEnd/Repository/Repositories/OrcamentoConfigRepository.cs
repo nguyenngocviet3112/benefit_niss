@@ -209,5 +209,22 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             return count == 0;
         }
+
+        public bool IsAnoTipoValid(Orcamentoconfig orcamento)
+        {
+            int count = _moduloContribuicoesContext.Orcamentoconfig
+                .Where(o => o.Id != orcamento.Id && o.IndActivo
+                    && o.Ano == orcamento.Ano
+                    && o.Tipo == orcamento.Tipo)
+                .Count();
+
+            return count == 0;
+        }
+
+        public bool HasOrcamentoBatch(int id)
+        {
+            return _moduloContribuicoesContext.OrcamentoBatch
+                .Any(b => b.OrcamentoConfigFk == id && b.IndActivo);
+        }
     }
 }

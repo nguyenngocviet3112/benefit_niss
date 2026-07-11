@@ -1,0 +1,80 @@
+<div class="kns-container">
+  <div class="kns-header">
+    <h2>Kỳ ngân sách <span class="en">(Orçamento Config — budget period)</span></h2>
+  </div>
+
+  <div class="kns-toolbar">
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="openAddForm()">+ Tạo kỳ ngân sách (Principal)</button>
+  </div>
+
+  <div class="kns-table-wrap" *ngIf="!loading">
+    <table class="kns-table">
+      <thead>
+        <tr>
+          <th>Năm (Ano)</th>
+          <th>Loại (Tipo)</th>
+          <th>Ngày bắt đầu</th>
+          <th>Ngày kết thúc</th>
+          <th>Trạng thái</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of pagedItems">
+          <td>{{ item.ano }}</td>
+          <td>{{ item.tipo }}</td>
+          <td>{{ item.dataInicio | date:'dd-MM-yyyy' }}</td>
+          <td>{{ item.dataFim ? (item.dataFim | date:'dd-MM-yyyy') : '—' }}</td>
+          <td>
+            <span class="kns-status" [class.inactive]="!item.indActivo">
+              {{ item.indActivo ? 'Ativo' : 'Inativo' }}
+            </span>
+          </td>
+          <td class="kns-actions">
+            <button mat-button (click)="openEditForm(item)">Sửa</button>
+            <button mat-button (click)="deactivate(item)">Xóa</button>
+          </td>
+        </tr>
+        <tr *ngIf="allItems.length === 0">
+          <td colspan="6" class="kns-empty">Chưa có kỳ ngân sách nào.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <mat-paginator
+      *ngIf="allItems.length > 0"
+      [length]="allItems.length"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[10, 20, 50]"
+      (page)="onPage($event)">
+    </mat-paginator>
+  </div>
+
+  <div class="kns-form-overlay" *ngIf="showForm">
+    <div class="kns-form">
+      <h3>{{ editingId ? 'Sửa' : 'Tạo' }} kỳ ngân sách (Principal)</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Năm (Ano)</mat-label>
+        <input matInput type="number" [(ngModel)]="formAno" name="formAno" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ngày bắt đầu (Data Início)</mat-label>
+        <input matInput type="date" [(ngModel)]="formDataInicio" name="formDataInicio" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ngày kết thúc (Data Fim)</mat-label>
+        <input matInput type="date" [(ngModel)]="formDataFim" name="formDataFim" />
+      </mat-form-field>
+
+      <div class="kns-form-actions">
+        <button mat-button (click)="cancelForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,7 @@ import '@angular/common/locales/global/pt';
 import { MenuItem } from './models/utils';
 import { CreateMenuPermissions } from './utils';
 import { Router, NavigationEnd } from '@angular/router';
+import { LanguageConfigService } from './services/language-config.service';
 
 @Component({
   selector: 'app-root',
@@ -26,16 +27,24 @@ export class AppComponent {
   public profiles?: string;
   public menuItems: MenuItem[] = [];
 
+  // Danh sách ngôn ngữ hiển thị trong dropdown giờ đọc từ cấu hình Admin
+  // (bảng LanguageConfig, màn /contabilidade/settings/idioma) thay vì hardcode.
+  // Giữ nguyên set 4 ngôn ngữ này làm fallback nếu chưa gọi được API (offline,
+  // lỗi mạng) — để không vỡ màn hình như hành vi hardcode trước đây.
+  private activeLangCodes: string[] = ['EN', 'PT', 'TET', 'VI'];
+
   constructor(
     public translate: TranslateService,
     private tokenStorageService: TokenStorageService,
     public errorDialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private languageConfigService: LanguageConfigService
   ) {
     translate.setDefaultLang('PT');
     translate.use('PT');
-    // VI chỉ dùng cho giao diện mới (Módulo Contabilidade) — không hiện ở mode cũ,
-    // để mode cũ giữ nguyên hành vi/danh sách ngôn ngữ như trước.
+    // Đăng ký với ngx-translate toàn bộ 4 ngôn ngữ có file dịch sẵn
+    // (src/assets/i18n/*.json) — việc ngôn ngữ nào THỰC SỰ được phép chọn do
+    // activeLangCodes (đọc từ LanguageConfig) quyết định, không phải danh sách này.
     translate.addLangs(['EN', 'PT', 'TET', 'VI']);
     translate.onLangChange.subscribe(() => {
       document.title = this.translate.instant('general.inssCore');
@@ -47,9 +56,8 @@ export class AppComponent {
     localStorage.setItem('selectedLanguage', this.selectLang);
   }
   public getTransLanguage() {
-    const allLangs = [...this.translate.getLangs()];
     // VI chỉ hiện trong danh sách chọn khi đang ở giao diện mới.
-    this.TransLang = this.isNewMode ? allLangs : allLangs.filter(l => l !== 'VI');
+    this.TransLang = this.isNewMode ? this.activeLangCodes : this.activeLangCodes.filter(l => l !== 'VI');
   }
 
   public ngOnInit(): void {
@@ -65,7 +73,40 @@ export class AppComponent {
     });
 
     this.getTransLanguage();
+    this.applySavedOrDefaultLanguage();
 
+    // GetActive là API public (không cần token) vì dropdown này phải hoạt động
+    // cả ở màn hình login. Lỗi mạng thì giữ nguyên fallback hardcode ở trên.
+    this.languageConfigService.getActive().subscribe(
+      response => {
+        const codes = (response.items ?? []).map(i => i.codigo);
+        if (codes.length > 0) {
+          this.activeLangCodes = codes;
+        }
+        this.getTransLanguage();
+
+        // Ngôn ngữ đang chọn vừa bị Admin tắt (hoặc trước đó lưu ngôn ngữ không
+        // còn active) — chuyển về ngôn ngữ đầu tiên còn bật để tránh kẹt UI.
+        if (!this.TransLang.includes(this.selectLang) && this.TransLang.length > 0) {
+          this.selectLang = this.TransLang[0];
+          this.translate.use(this.selectLang);
+        }
+      },
+      () => { /* giữ nguyên fallback hardcode nếu API lỗi */ }
+    );
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.menuItems = CreateMenuPermissions(user);
+
+      if (user != null) {
+        this.username = user.username;
+        this.profiles = user.perfil;
+      }
+    }
+  }
+
+  private applySavedOrDefaultLanguage(): void {
     const savedLanguage = localStorage.getItem('selectedLanguage');
     if (savedLanguage && this.translate.getLangs().includes(savedLanguage) && (savedLanguage !== 'VI' || this.isNewMode)) {
       // Sử dụng ngôn ngữ đã lưu (VI chỉ áp dụng khi đang ở giao diện mới)
@@ -80,16 +121,6 @@ export class AppComponent {
       // Mode cũ: giữ nguyên ngôn ngữ mặc định như trước (PT).
       this.selectLang = this.translate.getDefaultLang();
       this.translate.use(this.selectLang);
-    }
-    
-    if (this.isLoggedIn) {
-      const user = this.tokenStorageService.getUser();
-      this.menuItems = CreateMenuPermissions(user);
-
-      if (user != null) {
-        this.username = user.username;
-        this.profiles = user.perfil;
-      }
     }
   }
 
