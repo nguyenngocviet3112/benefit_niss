@@ -107,6 +107,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IOrcamentoBatchRepository _orcamentoBatchRepository;
         private IOrcamentoLinhaRepository _orcamentoLinhaRepository;
         private IExpenditureAuthorizationRepository _expenditureAuthorizationRepository;
+        private ICabimentoRepository _cabimentoRepository;
 
 
 
@@ -141,6 +142,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public IExpenditureAuthorizationRepository ExpenditureAuthorizationRepository
         { get { return _expenditureAuthorizationRepository ??= new ExpenditureAuthorizationRepository(_moduloContribuicoesContext); } }
+
+        public ICabimentoRepository CabimentoRepository
+        { get { return _cabimentoRepository ??= new CabimentoRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository

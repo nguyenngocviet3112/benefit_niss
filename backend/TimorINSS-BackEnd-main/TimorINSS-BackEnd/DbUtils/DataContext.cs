@@ -129,6 +129,17 @@ namespace TimorINSSBackEnd.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExpAuthPluri_ExpAuth");
             });
+
+            modelBuilder.Entity<Cabimento>(entity =>
+            {
+                entity.Property(e => e.ValorCabimentado).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.ExpenditureAuthorizationFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.ExpenditureAuthorizationFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Cabimento_ExpenditureAuthorization");
+            });
         }
 
         public TimorINSSModuloContribuicoesContext(string connectionString) : base(GetOptions(connectionString))

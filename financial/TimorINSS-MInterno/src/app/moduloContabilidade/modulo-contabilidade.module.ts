@@ -19,6 +19,7 @@ import { MasterDataImportButtonComponent } from './master-data-import-button/mas
 import { OrcamentoComponent } from './orcamento/orcamento.component';
 import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
 import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component';
+import { CabimentoComponent } from './cabimento/cabimento.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component
     MasterDataImportButtonComponent,
     OrcamentoComponent,
     AdCabimentoComponent,
-    CeInssGlobalComponent
+    CeInssGlobalComponent,
+    CabimentoComponent
   ],
   imports: [
     CommonModule,

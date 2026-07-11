@@ -97,6 +97,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IOrcamentoBatchRepository OrcamentoBatchRepository { get; }
         IOrcamentoLinhaRepository OrcamentoLinhaRepository { get; }
         IExpenditureAuthorizationRepository ExpenditureAuthorizationRepository { get; }
+        ICabimentoRepository CabimentoRepository { get; }
 
         void Commit();
 

@@ -8,6 +8,7 @@ import { ClassificacaoEconomicaComponent } from './classificacao-economica/class
 import { OrcamentoComponent } from './orcamento/orcamento.component';
 import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
 import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component';
+import { CabimentoComponent } from './cabimento/cabimento.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'organization', component: OrganizationComponent },
       { path: 'orcamento', component: OrcamentoComponent },
       { path: 'adCabimento', component: AdCabimentoComponent },
+      { path: 'cabimento', component: CabimentoComponent },
       { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
       { path: '', redirectTo: 'estruturaProgramatica', pathMatch: 'full' },
     ]

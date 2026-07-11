@@ -1,0 +1,100 @@
+<div class="cab-container">
+  <div class="cab-header">
+    <h2>Cabimento <span class="en">(DIC — Declaração de Inscrição e Cabimento, tách biệt pháp lý khỏi AD, chỉ cần Diretor DF duyệt)</span></h2>
+  </div>
+
+  <div class="cab-context-bar">
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>Ano</mat-label>
+      <input matInput type="number" [(ngModel)]="ano" name="ano" />
+    </mat-form-field>
+    <button mat-stroked-button (click)="load()">Tải lại</button>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button color="primary" (click)="openAdPicker()">+ Tạo Cabimento từ AD</button>
+  </div>
+
+  <div class="cab-list" *ngIf="!loading">
+    <div class="cab-row cab-row-header">
+      <span class="cab-col-num">N.º Cabimento</span>
+      <span class="cab-col-ad">AD gốc</span>
+      <span class="cab-col-atividade">Atividade / Classificação Económica</span>
+      <span class="cab-col-valor">Valor cabimentado</span>
+      <span class="cab-col-estado">Trạng thái</span>
+      <span class="cab-col-actions">Hành động</span>
+    </div>
+
+    <div class="cab-row" *ngFor="let item of items">
+      <span class="cab-col-num">{{ item.numero }}/{{ item.mes }}</span>
+      <span class="cab-col-ad">AD {{ item.expenditureAuthorizationNumero }}</span>
+      <span class="cab-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
+      <span class="cab-col-valor">{{ item.valorCabimentado | number:'1.2-2' }}</span>
+      <span class="cab-col-estado">
+        <span class="cab-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
+      </span>
+      <span class="cab-col-actions">
+        <button mat-button *ngIf="item.estado === 'DRAFT'" (click)="submitCabimento(item)">Gửi duyệt</button>
+        <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
+          <button mat-button color="primary" (click)="approve(item)">Duyệt (Diretor DF)</button>
+          <button mat-button color="warn" (click)="openRejectPrompt(item.id)">Từ chối</button>
+        </ng-container>
+      </span>
+    </div>
+
+    <div class="cab-empty" *ngIf="items.length === 0">Chưa có Cabimento nào cho năm này.</div>
+  </div>
+
+  <div class="cab-form-overlay" *ngIf="showAdPicker">
+    <div class="cab-form cab-form-wide">
+      <h3>Tạo Cabimento từ AD đã duyệt</h3>
+
+      <div class="cab-ad-list" *ngIf="!pickedAd">
+        <div class="cab-ad-row" *ngFor="let ad of availableAds" (click)="pickAd(ad)">
+          <span>AD {{ ad.numero }} — {{ ad.atividadeCodigo }} / {{ ad.economicClassificationCodigo }}</span>
+          <span>{{ ad.organizationNome }}</span>
+          <span>{{ ad.valorRevisto | number:'1.2-2' }}</span>
+        </div>
+        <div class="cab-empty" *ngIf="availableAds.length === 0">Không còn AD nào chưa có Cabimento.</div>
+      </div>
+
+      <div *ngIf="pickedAd">
+        <p><b>AD:</b> {{ pickedAd.numero }} — {{ pickedAd.atividadeCodigo }} / {{ pickedAd.economicClassificationCodigo }} ({{ pickedAd.organizationNome }})</p>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descritivo <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Valor Cabimentado <span class="itag type">Gõ tay (mặc định = Valor revisto AD)</span></mat-label>
+          <input matInput type="number" [(ngModel)]="formValorCabimentado" name="formValorCabimentado" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="small-field">
+          <mat-label>Mês</mat-label>
+          <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
+        </mat-form-field>
+      </div>
+
+      <div class="cab-form-actions">
+        <button mat-button (click)="cancelAdPicker()">Hủy</button>
+        <button mat-raised-button color="primary" *ngIf="pickedAd" (click)="createCabimento()">Tạo Cabimento</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cab-form-overlay" *ngIf="showRejectPrompt">
+    <div class="cab-form">
+      <h3>Lý do từ chối</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ghi chú</mat-label>
+        <textarea matInput [(ngModel)]="rejectComment" name="rejectComment" rows="3"></textarea>
+      </mat-form-field>
+      <div class="cab-form-actions">
+        <button mat-button (click)="cancelReject()">Hủy</button>
+        <button mat-raised-button color="warn" (click)="confirmReject()">Xác nhận từ chối</button>
+      </div>
+    </div>
+  </div>
+</div>
