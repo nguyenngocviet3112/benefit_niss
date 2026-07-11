@@ -29,7 +29,7 @@
       <span class="cab-col-num">{{ item.numero }}/{{ item.mes }}</span>
       <span class="cab-col-ad">AD {{ item.expenditureAuthorizationNumero }}</span>
       <span class="cab-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
-      <span class="cab-col-valor">{{ item.valorCabimentado | number:'1.2-2' }}</span>
+      <span class="cab-col-valor">$ {{ item.valorCabimentado | number:'1.2-2' }}</span>
       <span class="cab-col-estado">
         <span class="cab-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
       </span>
@@ -53,7 +53,7 @@
         <div class="cab-ad-row" *ngFor="let ad of availableAds" (click)="pickAd(ad)">
           <span>AD {{ ad.numero }} — {{ ad.atividadeCodigo }} / {{ ad.economicClassificationCodigo }}</span>
           <span>{{ ad.organizationNome }}</span>
-          <span>{{ ad.valorRevisto | number:'1.2-2' }}</span>
+          <span>$ {{ ad.valorRevisto | number:'1.2-2' }}</span>
         </div>
         <div class="cab-empty" *ngIf="availableAds.length === 0">Không còn AD nào chưa có Cabimento.</div>
       </div>
@@ -67,7 +67,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Valor Cabimentado <span class="itag type">Gõ tay (mặc định = Valor revisto AD)</span></mat-label>
+          <mat-label>Valor Cabimentado (USD) <span class="itag type">Gõ tay (mặc định = Valor revisto AD)</span></mat-label>
           <input matInput type="number" [(ngModel)]="formValorCabimentado" name="formValorCabimentado" />
         </mat-form-field>
 

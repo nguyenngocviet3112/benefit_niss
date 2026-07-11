@@ -39,9 +39,10 @@ export class ContabilidadeShellComponent implements OnInit {
   // Cây menu tĩnh (hardcoded) — KHÔNG tính toán động theo permissions như menu cũ.
   // Cấu trúc phản ánh đầy đủ wireframe M0-M4; các mục chưa code xong đánh dấu comingSoon.
   // Thứ tự nhóm theo yêu cầu (2026-07-11): Chi tiêu → Thu → Ngân hàng
-  // → Ngân sách (gồm cả Cut-over/Saldos de Abertura) → Quản lý User → Báo cáo
-  // → Master Data (cuối cùng). Cut-over gộp chung vào Ngân sách theo yêu cầu
-  // user (2026-07-11) — không còn là nhóm riêng. Tất cả nhóm mặc định collapse
+  // → Ngân sách (gồm cả Cut-over/Saldos de Abertura) → Báo cáo → Master Data
+  // → Quản lý User → Cấu hình hệ thống (cuối cùng). Cut-over gộp chung vào
+  // Ngân sách — không còn là nhóm riêng. Quản lý User đặt dưới Master Data,
+  // trên Cấu hình hệ thống (theo yêu cầu user). Tất cả nhóm mặc định collapse
   // (expanded: false), user tự click để mở nhóm đang cần.
   public groups: TreebarGroup[] = [
     {
@@ -83,14 +84,6 @@ export class ContabilidadeShellComponent implements OnInit {
       ]
     },
     {
-      label: 'Quản lý User',
-      icon: 'group',
-      expanded: false,
-      items: [
-        { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission' },
-      ]
-    },
-    {
       // Danh sách đầy đủ báo cáo cần ra, gộp 43 sheet gốc của Excel thành các
       // report có filter (vd: 1 report "Execução por Atividade" bao 22 sheet
       // Programa/SubPrograma/Atividade/CE_Regime* thay vì 22 màn riêng biệt).
@@ -124,6 +117,14 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Classificação Funcional', route: '/contabilidade/classificacaoFuncional' },
         { label: 'Classificação Económica', route: '/contabilidade/classificacaoEconomica' },
         { label: 'Organization', route: '/contabilidade/organization' },
+      ]
+    },
+    {
+      label: 'Quản lý User',
+      icon: 'group',
+      expanded: false,
+      items: [
+        { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission' },
       ]
     },
     {

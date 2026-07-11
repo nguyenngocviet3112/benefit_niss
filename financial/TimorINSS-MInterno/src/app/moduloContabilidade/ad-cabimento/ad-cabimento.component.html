@@ -29,7 +29,7 @@
         <span class="ad-col-num">{{ item.numero }}/{{ item.mes }}</span>
         <span class="ad-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
         <span class="ad-col-org">{{ item.organizationNome }}</span>
-        <span class="ad-col-valor">{{ item.valorRevisto | number:'1.2-2' }}</span>
+        <span class="ad-col-valor">$ {{ item.valorRevisto | number:'1.2-2' }}</span>
         <span class="ad-col-estado">
           <span class="ad-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
         </span>
@@ -43,11 +43,11 @@
           </div>
           <div class="ad-field">
             <label>Valor Autorizado <span class="itag type">Gõ tay</span></label>
-            <span>{{ item.valorAutorizado | number:'1.2-2' }}</span>
+            <span>$ {{ item.valorAutorizado | number:'1.2-2' }}</span>
           </div>
           <div class="ad-field">
             <label>Regularização <span class="itag type">Gõ tay</span></label>
-            <span *ngIf="item.estado !== 'DRAFT'">{{ item.regularizacao | number:'1.2-2' }}</span>
+            <span *ngIf="item.estado !== 'DRAFT'">$ {{ item.regularizacao | number:'1.2-2' }}</span>
             <span *ngIf="item.estado === 'DRAFT'" class="ad-regularizacao-edit">
               <input type="number" [(ngModel)]="formRegularizacao" name="formRegularizacao{{item.id}}" />
               <button mat-button (click)="saveRegularizacao(item)">Lưu</button>
@@ -55,7 +55,7 @@
           </div>
           <div class="ad-field">
             <label>Valor revisto <span class="itag auto">Tự động</span></label>
-            <span>{{ item.valorRevisto | number:'1.2-2' }}</span>
+            <span>$ {{ item.valorRevisto | number:'1.2-2' }}</span>
           </div>
           <div class="ad-field" *ngIf="item.lastRejectComment">
             <label>Lý do từ chối gần nhất</label>
@@ -67,7 +67,7 @@
           <h4>Plurianualidade <span class="en">(khai báo giá trị dự kiến các năm sau, chỉ mang tính kế hoạch)</span></h4>
           <div class="ad-pluri-row" *ngFor="let p of item.plurianualidade">
             <span>{{ p.ano }}</span>
-            <span>{{ p.valor | number:'1.2-2' }}</span>
+            <span>$ {{ p.valor | number:'1.2-2' }}</span>
             <button mat-button *ngIf="item.estado === 'DRAFT'" (click)="deletePlurianualidade(p.id)">Xóa</button>
           </div>
           <div class="ad-pluri-add" *ngIf="item.estado === 'DRAFT'">
@@ -104,7 +104,7 @@
         <div class="ad-rubrica-row" *ngFor="let r of availableRubricas" (click)="pickRubrica(r)">
           <span>{{ r.atividadeCodigo }} — {{ r.economicClassificationCodigo }} {{ r.economicClassificationDesignacao }}</span>
           <span>{{ r.organizationNome }}</span>
-          <span>{{ r.valor | number:'1.2-2' }}</span>
+          <span>$ {{ r.valor | number:'1.2-2' }}</span>
         </div>
         <div class="ad-empty" *ngIf="availableRubricas.length === 0">Không còn rúbrica nào chưa có AD.</div>
       </div>
@@ -118,7 +118,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Valor Autorizado <span class="itag type">Gõ tay (mặc định = Valor rúbrica)</span></mat-label>
+          <mat-label>Valor Autorizado (USD) <span class="itag type">Gõ tay (mặc định = Valor rúbrica)</span></mat-label>
           <input matInput type="number" [(ngModel)]="formValorAutorizado" name="formValorAutorizado" />
         </mat-form-field>
 

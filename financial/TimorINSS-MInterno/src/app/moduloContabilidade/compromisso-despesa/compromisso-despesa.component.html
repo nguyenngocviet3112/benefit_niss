@@ -29,7 +29,7 @@
         <span class="comp-col-num">{{ item.numero }}/{{ item.mes }}</span>
         <span class="comp-col-cab">Cab {{ item.cabimentoNumero }} / AD {{ item.expenditureAuthorizationNumero }}</span>
         <span class="comp-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
-        <span class="comp-col-valor">{{ item.valorRevisto | number:'1.2-2' }}</span>
+        <span class="comp-col-valor">$ {{ item.valorRevisto | number:'1.2-2' }}</span>
         <span class="comp-col-estado">
           <span class="comp-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
         </span>
@@ -43,19 +43,19 @@
           </div>
           <div class="comp-field">
             <label>Valor Compromisso global (Plurianual) <span class="itag type">Gõ tay</span></label>
-            <span>{{ item.valorCompromissoGlobal | number:'1.2-2' }}</span>
+            <span>$ {{ item.valorCompromissoGlobal | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field">
             <label>Compromisso no Ano <span class="itag type">Gõ tay</span></label>
-            <span>{{ item.valorCompromissoAno | number:'1.2-2' }}</span>
+            <span>$ {{ item.valorCompromissoAno | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field">
             <label>Regularização</label>
-            <span>{{ item.regularizacao | number:'1.2-2' }}</span>
+            <span>$ {{ item.regularizacao | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field">
             <label>Valor revisto <span class="itag auto">Tự động</span></label>
-            <span>{{ item.valorRevisto | number:'1.2-2' }}</span>
+            <span>$ {{ item.valorRevisto | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field" *ngIf="item.lastRejectComment">
             <label>Lý do từ chối gần nhất</label>
@@ -67,7 +67,7 @@
           <h4>Plurianualidade</h4>
           <div class="comp-pluri-row" *ngFor="let p of item.plurianualidade">
             <span>{{ p.ano }}</span>
-            <span>{{ p.valor | number:'1.2-2' }}</span>
+            <span>$ {{ p.valor | number:'1.2-2' }}</span>
           </div>
           <div class="comp-pluri-add" *ngIf="item.estado === 'DRAFT'">
             <input type="number" placeholder="Ano" [(ngModel)]="formPluriAno" name="formPluriAno{{item.id}}" class="comp-pluri-input-ano" />
@@ -103,7 +103,7 @@
         <div class="comp-cab-row" *ngFor="let c of availableCabimentos" (click)="pickCabimento(c)">
           <span>Cab {{ c.numero }} — {{ c.atividadeCodigo }} / {{ c.economicClassificationCodigo }}</span>
           <span>{{ c.organizationNome }}</span>
-          <span>{{ c.valorCabimentado | number:'1.2-2' }}</span>
+          <span>$ {{ c.valorCabimentado | number:'1.2-2' }}</span>
         </div>
         <div class="comp-empty" *ngIf="availableCabimentos.length === 0">Không có Cabimento nào đã duyệt.</div>
       </div>
@@ -117,12 +117,12 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Valor Compromisso global (Plurianual) <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>Valor Compromisso global (Plurianual) (USD) <span class="itag type">Gõ tay</span></mat-label>
           <input matInput type="number" [(ngModel)]="formValorCompromissoGlobal" name="formValorCompromissoGlobal" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Compromisso no Ano <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>Compromisso no Ano (USD) <span class="itag type">Gõ tay</span></mat-label>
           <input matInput type="number" [(ngModel)]="formValorCompromissoAno" name="formValorCompromissoAno" />
         </mat-form-field>
 

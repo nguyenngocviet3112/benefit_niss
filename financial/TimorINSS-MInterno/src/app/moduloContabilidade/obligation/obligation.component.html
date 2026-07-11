@@ -27,7 +27,7 @@
       <div class="obr-row obr-row-summary" (click)="toggleExpand(item)">
         <span class="obr-col-num">{{ item.numero }}/{{ item.mes }}</span>
         <span class="obr-col-desc">{{ item.descritivoObrigacao || '—' }}</span>
-        <span class="obr-col-valor">{{ item.valorObrigacao | number:'1.2-2' }}</span>
+        <span class="obr-col-valor">$ {{ item.valorObrigacao | number:'1.2-2' }}</span>
         <span class="obr-col-estado">
           <span class="obr-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
         </span>
@@ -44,7 +44,7 @@
           <div class="obr-item-row" *ngFor="let i of item.items">
             <span>Comp {{ i.compromissoDespesaNumero }}</span>
             <span>{{ i.atividadeCodigo }} — {{ i.economicClassificationCodigo }} {{ i.economicClassificationDesignacao }}</span>
-            <span>{{ i.value | number:'1.2-2' }}</span>
+            <span>$ {{ i.value | number:'1.2-2' }}</span>
             <span *ngIf="item.estado === 'DRAFT'">
               <button mat-button (click)="removeItem(i.id)">Xóa</button>
             </span>
@@ -61,12 +61,12 @@
             <mat-label>Compromisso <span class="itag drop">Chọn</span></mat-label>
             <mat-select [(ngModel)]="formCompromissoFk" name="formCompromissoFk">
               <mat-option *ngFor="let c of compromissosComSaldo" [value]="c.compromissoDespesaId">
-                Comp {{ c.numero }} — {{ c.atividadeCodigo }} / {{ c.economicClassificationCodigo }} (còn {{ c.saldoDisponivel | number:'1.2-2' }})
+                Comp {{ c.numero }} — {{ c.atividadeCodigo }} / {{ c.economicClassificationCodigo }} (còn $ {{ c.saldoDisponivel | number:'1.2-2' }})
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="outline" class="small-field">
-            <mat-label>Giá trị <span class="itag type">Gõ tay</span></mat-label>
+            <mat-label>Giá trị (USD) <span class="itag type">Gõ tay</span></mat-label>
             <input matInput type="number" [(ngModel)]="formValue" name="formValue" />
           </mat-form-field>
           <button mat-button (click)="cancelAddItem()">Hủy</button>
