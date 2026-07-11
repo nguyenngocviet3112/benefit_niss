@@ -13,5 +13,7 @@ namespace TimorINSSBackEnd.Models
         public virtual DbSet<ExpenditureAuthorization> ExpenditureAuthorization { get; set; }
         public virtual DbSet<ExpenditureAuthorizationPlurianualidade> ExpenditureAuthorizationPlurianualidade { get; set; }
         public virtual DbSet<Cabimento> Cabimento { get; set; }
+        public virtual DbSet<CompromissoDespesa> CompromissoDespesa { get; set; }
+        public virtual DbSet<CompromissoDespesaPlurianualidade> CompromissoDespesaPlurianualidade { get; set; }
     }
 }

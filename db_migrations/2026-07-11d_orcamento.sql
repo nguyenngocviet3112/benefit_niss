@@ -26,7 +26,7 @@ CREATE TABLE [dbo].[OrcamentoBatch](
 	[ApprovedAt] [datetime] NULL,
 	-- Preenchido quando Review/Approve rejeita — o batch volta para DRAFT
 	-- mas o motivo fica visível até à próxima submissão.
-	[LastRejectComment] [varchar](500) NULL,
+	[LastRejectComment] [nvarchar](500) NULL,
 	[LastRejectBy] [int] NULL,
 	[LastRejectAt] [datetime] NULL,
 	[IndActivo] [bit] NOT NULL,

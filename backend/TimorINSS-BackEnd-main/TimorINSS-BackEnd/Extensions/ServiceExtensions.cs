@@ -275,6 +275,7 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<IOrcamentoDataManager, OrcamentoDataManager>();
             services.AddScoped<IExpenditureAuthorizationDataManager, ExpenditureAuthorizationDataManager>();
             services.AddScoped<ICabimentoDataManager, CabimentoDataManager>();
+            services.AddScoped<ICompromissoDespesaDataManager, CompromissoDespesaDataManager>();
 
             //Misc
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

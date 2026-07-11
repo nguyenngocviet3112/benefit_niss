@@ -1,0 +1,155 @@
+<div class="comp-container">
+  <div class="comp-header">
+    <h2>Compromisso <span class="en">(cam kết chi — sinh từ Cabimento đã duyệt; luồng duyệt Diretor DF + DE)</span></h2>
+  </div>
+
+  <div class="comp-context-bar">
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>Ano</mat-label>
+      <input matInput type="number" [(ngModel)]="ano" name="ano" />
+    </mat-form-field>
+    <button mat-stroked-button (click)="load()">Tải lại</button>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button color="primary" (click)="openCabimentoPicker()">+ Tạo Compromisso từ Cabimento</button>
+  </div>
+
+  <div class="comp-list" *ngIf="!loading">
+    <div class="comp-row comp-row-header">
+      <span class="comp-col-num">N.º Compromisso</span>
+      <span class="comp-col-cab">Cabimento / AD</span>
+      <span class="comp-col-atividade">Atividade / Classificação Económica</span>
+      <span class="comp-col-valor">Valor revisto</span>
+      <span class="comp-col-estado">Trạng thái</span>
+    </div>
+
+    <ng-container *ngFor="let item of items">
+      <div class="comp-row comp-row-summary" (click)="toggleExpand(item)">
+        <span class="comp-col-num">{{ item.numero }}/{{ item.mes }}</span>
+        <span class="comp-col-cab">Cab {{ item.cabimentoNumero }} / AD {{ item.expenditureAuthorizationNumero }}</span>
+        <span class="comp-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
+        <span class="comp-col-valor">{{ item.valorRevisto | number:'1.2-2' }}</span>
+        <span class="comp-col-estado">
+          <span class="comp-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
+        </span>
+      </div>
+
+      <div class="comp-detail" *ngIf="expandedId === item.id">
+        <div class="comp-detail-grid">
+          <div class="comp-field">
+            <label>Descritivo <span class="itag type">Gõ tay</span></label>
+            <span>{{ item.descritivo || '—' }}</span>
+          </div>
+          <div class="comp-field">
+            <label>Valor Compromisso global (Plurianual) <span class="itag type">Gõ tay</span></label>
+            <span>{{ item.valorCompromissoGlobal | number:'1.2-2' }}</span>
+          </div>
+          <div class="comp-field">
+            <label>Compromisso no Ano <span class="itag type">Gõ tay</span></label>
+            <span>{{ item.valorCompromissoAno | number:'1.2-2' }}</span>
+          </div>
+          <div class="comp-field">
+            <label>Regularização</label>
+            <span>{{ item.regularizacao | number:'1.2-2' }}</span>
+          </div>
+          <div class="comp-field">
+            <label>Valor revisto <span class="itag auto">Tự động</span></label>
+            <span>{{ item.valorRevisto | number:'1.2-2' }}</span>
+          </div>
+          <div class="comp-field" *ngIf="item.lastRejectComment">
+            <label>Lý do từ chối gần nhất</label>
+            <span class="comp-reject-text">{{ item.lastRejectComment }}</span>
+          </div>
+        </div>
+
+        <div class="comp-pluri">
+          <h4>Plurianualidade</h4>
+          <div class="comp-pluri-row" *ngFor="let p of item.plurianualidade">
+            <span>{{ p.ano }}</span>
+            <span>{{ p.valor | number:'1.2-2' }}</span>
+          </div>
+          <div class="comp-pluri-add" *ngIf="item.estado === 'DRAFT'">
+            <input type="number" placeholder="Ano" [(ngModel)]="formPluriAno" name="formPluriAno{{item.id}}" class="comp-pluri-input-ano" />
+            <input type="number" placeholder="Valor" [(ngModel)]="formPluriValor" name="formPluriValor{{item.id}}" class="comp-pluri-input-valor" />
+            <button mat-button (click)="addPlurianualidade(item)">+ Thêm năm</button>
+          </div>
+        </div>
+
+        <div class="comp-actions-bar">
+          <button mat-raised-button color="primary" *ngIf="item.estado === 'DRAFT'" (click)="submitCompromisso(item)">Gửi duyệt</button>
+
+          <ng-container *ngIf="item.estado === 'PENDING_REVIEW'">
+            <button mat-raised-button color="primary" (click)="reviewApprove(item)">Xác nhận kiểm tra (Diretor DF)</button>
+            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'review')">Từ chối</button>
+          </ng-container>
+
+          <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
+            <button mat-raised-button color="primary" (click)="finalApprove(item)">Phê duyệt (DE)</button>
+            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'approve')">Từ chối</button>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="comp-empty" *ngIf="items.length === 0">Chưa có Compromisso nào cho năm này.</div>
+  </div>
+
+  <div class="comp-form-overlay" *ngIf="showCabimentoPicker">
+    <div class="comp-form comp-form-wide">
+      <h3>Tạo Compromisso từ Cabimento đã duyệt</h3>
+
+      <div class="comp-cab-list" *ngIf="!pickedCabimento">
+        <div class="comp-cab-row" *ngFor="let c of availableCabimentos" (click)="pickCabimento(c)">
+          <span>Cab {{ c.numero }} — {{ c.atividadeCodigo }} / {{ c.economicClassificationCodigo }}</span>
+          <span>{{ c.organizationNome }}</span>
+          <span>{{ c.valorCabimentado | number:'1.2-2' }}</span>
+        </div>
+        <div class="comp-empty" *ngIf="availableCabimentos.length === 0">Không có Cabimento nào đã duyệt.</div>
+      </div>
+
+      <div *ngIf="pickedCabimento">
+        <p><b>Cabimento:</b> {{ pickedCabimento.numero }} — {{ pickedCabimento.atividadeCodigo }} / {{ pickedCabimento.economicClassificationCodigo }} ({{ pickedCabimento.organizationNome }})</p>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descritivo <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Valor Compromisso global (Plurianual) <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput type="number" [(ngModel)]="formValorCompromissoGlobal" name="formValorCompromissoGlobal" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Compromisso no Ano <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput type="number" [(ngModel)]="formValorCompromissoAno" name="formValorCompromissoAno" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="small-field">
+          <mat-label>Mês</mat-label>
+          <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
+        </mat-form-field>
+      </div>
+
+      <div class="comp-form-actions">
+        <button mat-button (click)="cancelCabimentoPicker()">Hủy</button>
+        <button mat-raised-button color="primary" *ngIf="pickedCabimento" (click)="createCompromisso()">Tạo Compromisso</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="comp-form-overlay" *ngIf="showRejectPrompt">
+    <div class="comp-form">
+      <h3>Lý do từ chối</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ghi chú</mat-label>
+        <textarea matInput [(ngModel)]="rejectComment" name="rejectComment" rows="3"></textarea>
+      </mat-form-field>
+      <div class="comp-form-actions">
+        <button mat-button (click)="cancelReject()">Hủy</button>
+        <button mat-raised-button color="warn" (click)="confirmReject()">Xác nhận từ chối</button>
+      </div>
+    </div>
+  </div>
+</div>

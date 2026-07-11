@@ -48,7 +48,7 @@ export class ContabilidadeShellComponent implements OnInit {
       items: [
         { label: 'AD (Autorização de Despesa)', route: '/contabilidade/adCabimento' },
         { label: 'Cabimento (DIC)', route: '/contabilidade/cabimento' },
-        { label: 'Compromisso', comingSoon: true },
+        { label: 'Compromisso', route: '/contabilidade/compromissoDespesa' },
         { label: 'Obrigação', comingSoon: true },
         { label: 'Pagamento', comingSoon: true },
       ]

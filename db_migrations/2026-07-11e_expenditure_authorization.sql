@@ -11,7 +11,7 @@ CREATE TABLE [dbo].[ExpenditureAuthorization](
 	[Mes] [int] NOT NULL,
 	[Ano] [int] NOT NULL,
 	[OrcamentoLinhaFk] [int] NOT NULL,
-	[Descritivo] [varchar](500) NULL,
+	[Descritivo] [nvarchar](500) NULL,
 	[ValorAutorizado] [decimal](18, 2) NOT NULL,
 	[Regularizacao] [decimal](18, 2) NOT NULL,
 	-- DRAFT | PENDING_REVIEW | PENDING_APPROVAL | APPROVED
@@ -22,7 +22,7 @@ CREATE TABLE [dbo].[ExpenditureAuthorization](
 	[ReviewedAt] [datetime] NULL,
 	[ApprovedBy] [int] NULL,
 	[ApprovedAt] [datetime] NULL,
-	[LastRejectComment] [varchar](500) NULL,
+	[LastRejectComment] [nvarchar](500) NULL,
 	[LastRejectBy] [int] NULL,
 	[LastRejectAt] [datetime] NULL,
 	[IndActivo] [bit] NOT NULL,
@@ -75,3 +75,6 @@ GO
 CREATE UNIQUE INDEX [UX_ExpAuthPluri_Ano] ON [dbo].[ExpenditureAuthorizationPlurianualidade] ([ExpenditureAuthorizationFk], [Ano])
 	WHERE [IndActivo] = 1
 GO
+
+-- Fixed after finding Vietnamese text corruption (varchar doesn't support
+-- full Unicode) — Descritivo/LastRejectComment should be nvarchar.

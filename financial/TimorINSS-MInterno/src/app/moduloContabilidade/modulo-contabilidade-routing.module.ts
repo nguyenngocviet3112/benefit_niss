@@ -9,6 +9,7 @@ import { OrcamentoComponent } from './orcamento/orcamento.component';
 import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
 import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component';
 import { CabimentoComponent } from './cabimento/cabimento.component';
+import { CompromissoDespesaComponent } from './compromisso-despesa/compromisso-despesa.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
       { path: 'orcamento', component: OrcamentoComponent },
       { path: 'adCabimento', component: AdCabimentoComponent },
       { path: 'cabimento', component: CabimentoComponent },
+      { path: 'compromissoDespesa', component: CompromissoDespesaComponent },
       { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
       { path: '', redirectTo: 'estruturaProgramatica', pathMatch: 'full' },
     ]

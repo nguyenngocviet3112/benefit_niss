@@ -14,7 +14,7 @@ CREATE TABLE [dbo].[Cabimento](
 	[Mes] [int] NOT NULL,
 	[Ano] [int] NOT NULL,
 	[ExpenditureAuthorizationFk] [int] NOT NULL,
-	[Descritivo] [varchar](500) NULL,
+	[Descritivo] [nvarchar](500) NULL,
 	[ValorCabimentado] [decimal](18, 2) NOT NULL,
 	-- DRAFT | PENDING_APPROVAL | APPROVED (2-stage — Diretor DF only, no DE)
 	[Estado] [varchar](20) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE [dbo].[Cabimento](
 	[SubmittedAt] [datetime] NULL,
 	[ApprovedBy] [int] NULL,
 	[ApprovedAt] [datetime] NULL,
-	[LastRejectComment] [varchar](500) NULL,
+	[LastRejectComment] [nvarchar](500) NULL,
 	[LastRejectBy] [int] NULL,
 	[LastRejectAt] [datetime] NULL,
 	[IndActivo] [bit] NOT NULL,
@@ -49,3 +49,6 @@ GO
 CREATE UNIQUE INDEX [UX_Cabimento_Numero] ON [dbo].[Cabimento] ([Numero], [Mes], [Ano])
 	WHERE [IndActivo] = 1
 GO
+
+-- Fixed after finding Vietnamese text corruption (varchar doesn't support
+-- full Unicode) — Descritivo/LastRejectComment should be nvarchar.

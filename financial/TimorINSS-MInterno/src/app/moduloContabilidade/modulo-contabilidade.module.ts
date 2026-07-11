@@ -20,6 +20,7 @@ import { OrcamentoComponent } from './orcamento/orcamento.component';
 import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
 import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component';
 import { CabimentoComponent } from './cabimento/cabimento.component';
+import { CompromissoDespesaComponent } from './compromisso-despesa/compromisso-despesa.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { CabimentoComponent } from './cabimento/cabimento.component';
     OrcamentoComponent,
     AdCabimentoComponent,
     CeInssGlobalComponent,
-    CabimentoComponent
+    CabimentoComponent,
+    CompromissoDespesaComponent
   ],
   imports: [
     CommonModule,

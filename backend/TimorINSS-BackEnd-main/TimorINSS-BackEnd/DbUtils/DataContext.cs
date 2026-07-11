@@ -140,6 +140,30 @@ namespace TimorINSSBackEnd.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cabimento_ExpenditureAuthorization");
             });
+
+            modelBuilder.Entity<CompromissoDespesa>(entity =>
+            {
+                entity.Property(e => e.ValorCompromissoGlobal).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ValorCompromissoAno).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Regularizacao).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.CabimentoFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CabimentoFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CompromissoDespesa_Cabimento");
+            });
+
+            modelBuilder.Entity<CompromissoDespesaPlurianualidade>(entity =>
+            {
+                entity.Property(e => e.Valor).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.CompromissoDespesaFkNavigation)
+                    .WithMany(p => p.CompromissoDespesaPlurianualidade)
+                    .HasForeignKey(d => d.CompromissoDespesaFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CompDespPluri_CompDesp");
+            });
         }
 
         public TimorINSSModuloContribuicoesContext(string connectionString) : base(GetOptions(connectionString))
