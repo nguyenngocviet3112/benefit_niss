@@ -4,10 +4,7 @@
   </div>
 
   <div class="ce-context-bar">
-    <mat-form-field appearance="outline" class="small-field">
-      <mat-label>Kỳ ngân sách (Ano)</mat-label>
-      <input matInput type="number" [(ngModel)]="orcamentoConfigFk" name="orcamentoConfigFk" />
-    </mat-form-field>
+    <app-orcamento-config-select [value]="orcamentoConfigFk" (valueChange)="orcamentoConfigFk = $event; loadTree()"></app-orcamento-config-select>
     <button mat-stroked-button (click)="loadTree()">Tải lại</button>
 
     <span class="spacer"></span>

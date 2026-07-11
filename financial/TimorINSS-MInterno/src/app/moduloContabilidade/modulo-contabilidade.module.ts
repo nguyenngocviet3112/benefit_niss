@@ -27,6 +27,7 @@ import { IdiomaConfigComponent } from './settings/idioma-config/idioma-config.co
 import { KyNganSachComponent } from './settings/ky-ngan-sach/ky-ngan-sach.component';
 import { UserPermissionComponent } from './user-permission/user-permission.component';
 import { PaymentComponent } from './payment/payment.component';
+import { OrcamentoConfigSelectComponent } from './orcamento-config-select/orcamento-config-select.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { PaymentComponent } from './payment/payment.component';
     IdiomaConfigComponent,
     KyNganSachComponent,
     UserPermissionComponent,
-    PaymentComponent
+    PaymentComponent,
+    OrcamentoConfigSelectComponent
   ],
   imports: [
     CommonModule,

@@ -15,6 +15,15 @@ import { IdiomaConfigComponent } from './settings/idioma-config/idioma-config.co
 import { KyNganSachComponent } from './settings/ky-ngan-sach/ky-ngan-sach.component';
 import { UserPermissionComponent } from './user-permission/user-permission.component';
 import { PaymentComponent } from './payment/payment.component';
+// Kế thừa nguyên bản (BRD §9, "Đóng góp BHXH") — các component này đã khai
+// báo (declared) trong AppModule (root) từ trước; ở đây chỉ import CLASS để
+// route tới, KHÔNG khai báo lại trong ModuloContabilidadeModule (1 component
+// chỉ được declare ở đúng 1 NgModule — khai báo lại sẽ lỗi build). Route
+// dưới router-outlet của ContabilidadeShellComponent nên vẫn giữ nguyên
+// treebar/chrome mới, không rơi về "mode cũ" như khi trỏ ra route root cũ.
+import { ContribHomeSearchComponent } from '../moduloContribuicoes/modulo-contribuicoes-search-page/modulo-contribuicoes-main-search';
+import { ContribValidationHomeSearchComponent } from '../moduloContribuicoes/modulo-contribuicoes-validation-search-page/modulo-contribuicoes-validation-main-search';
+import { ConsultasSituacoesContributivasComponent } from '../moduloRelatorios/consultas/situacao-contributiva/consultas-situacao.component';
 
 const routes: Routes = [
   {
@@ -35,6 +44,9 @@ const routes: Routes = [
       { path: 'settings/idioma', component: IdiomaConfigComponent },
       { path: 'settings/kyNganSach', component: KyNganSachComponent },
       { path: 'userPermission', component: UserPermissionComponent },
+      { path: 'contribuicoes/entidade', component: ContribHomeSearchComponent },
+      { path: 'contribuicoes/guiaPagamento', component: ContribValidationHomeSearchComponent },
+      { path: 'contribuicoes/situacaoContributiva', component: ConsultasSituacoesContributivasComponent },
       { path: '', redirectTo: 'estruturaProgramatica', pathMatch: 'full' },
     ]
   },

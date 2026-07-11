@@ -66,18 +66,18 @@ export class ContabilidadeShellComponent implements OnInit {
       ]
     },
     {
-      // Kế thừa nguyên bản (BRD §9) — trỏ thẳng vào 3 màn hình cũ đã có sẵn ở
-      // root AppModule (KHÔNG nằm dưới /contabilidade), không build lại.
-      // Lưu ý: các route này ở ngoài prefix /contabilidade nên AppComponent sẽ
-      // coi là quay lại "mode cũ" (hiện lại menu/footer cũ) khi điều hướng tới
-      // — đúng như hành vi "kế thừa nguyên bản" của BRD, không phải lỗi.
+      // Kế thừa nguyên bản (BRD §9) — dùng lại NGUYÊN component cũ (không sửa 1
+      // dòng logic nào), chỉ route thêm dưới /contabilidade/* (xem
+      // modulo-contabilidade-routing.module.ts) để nó hiện trong treebar/chrome
+      // mới thay vì rơi về giao diện cũ. Component vẫn được declare duy nhất ở
+      // AppModule như trước — ở đây chỉ thêm 1 route thứ 2 trỏ tới cùng class.
       label: 'Đóng góp BHXH',
       icon: 'badge',
       expanded: false,
       items: [
-        { label: 'Tra cứu Entidade (theo NISS)', route: '/contribHomePage' },
-        { label: 'Guia Pagamento (Validação)', route: '/contribValidationHomePage' },
-        { label: 'Situação Contributiva', route: '/consultasSituacaoContributiva' },
+        { label: 'Tra cứu Entidade (theo NISS)', route: '/contabilidade/contribuicoes/entidade' },
+        { label: 'Guia Pagamento (Validação)', route: '/contabilidade/contribuicoes/guiaPagamento' },
+        { label: 'Situação Contributiva', route: '/contabilidade/contribuicoes/situacaoContributiva' },
       ]
     },
     {

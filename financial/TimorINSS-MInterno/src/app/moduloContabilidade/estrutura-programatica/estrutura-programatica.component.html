@@ -4,18 +4,12 @@
   </div>
 
   <div class="ep-context-bar">
-    <mat-form-field appearance="outline" class="small-field">
-      <mat-label>Kỳ ngân sách (Ano)</mat-label>
-      <input matInput type="number" [(ngModel)]="orcamentoConfigFk" name="orcamentoConfigFk" />
-    </mat-form-field>
+    <app-orcamento-config-select [value]="orcamentoConfigFk" (valueChange)="orcamentoConfigFk = $event; loadTree()"></app-orcamento-config-select>
     <button mat-stroked-button (click)="loadTree()">Tải lại</button>
 
     <span class="spacer"></span>
 
-    <mat-form-field appearance="outline" class="small-field">
-      <mat-label>Sao chép sang kỳ</mat-label>
-      <input matInput type="number" [(ngModel)]="copyTargetOrcamentoConfigFk" name="copyTarget" />
-    </mat-form-field>
+    <app-orcamento-config-select label="Sao chép sang kỳ" [(value)]="copyTargetOrcamentoConfigFk"></app-orcamento-config-select>
     <button mat-stroked-button (click)="copyFromCurrentYear()">⧉ Sao chép từ kỳ này</button>
 
     <app-master-data-import-button entityPath="programactivity" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadTree()"></app-master-data-import-button>
