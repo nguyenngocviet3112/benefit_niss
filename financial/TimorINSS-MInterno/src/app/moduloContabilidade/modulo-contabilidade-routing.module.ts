@@ -7,6 +7,7 @@ import { ContabilidadeShellComponent } from './contabilidade-shell/contabilidade
 import { ClassificacaoEconomicaComponent } from './classificacao-economica/classificacao-economica.component';
 import { OrcamentoComponent } from './orcamento/orcamento.component';
 import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
+import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
       { path: 'organization', component: OrganizationComponent },
       { path: 'orcamento', component: OrcamentoComponent },
       { path: 'adCabimento', component: AdCabimentoComponent },
+      { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
       { path: '', redirectTo: 'estruturaProgramatica', pathMatch: 'full' },
     ]
   },

@@ -1,0 +1,127 @@
+<div class="cg-container">
+  <div class="cg-header">
+    <h2>CE_INSS_Global <span class="en">(Báo cáo tổng toàn INSS — Despesa + Receita gộp)</span></h2>
+  </div>
+
+  <div class="cg-filterbar">
+    <mat-form-field appearance="outline" class="cg-field">
+      <mat-label>Ano</mat-label>
+      <mat-select [(ngModel)]="selectedYear" (selectionChange)="load()">
+        <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="cg-field">
+      <mat-label>Organization</mat-label>
+      <mat-select [(ngModel)]="selectedInstitution" (selectionChange)="load()">
+        <mat-option [value]="undefined">Cả 2 (Both) — INSS Global</mat-option>
+        <mat-option *ngFor="let inst of institutions" [value]="inst.id">{{ inst.nome }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="cg-loading" *ngIf="loading">Đang tải…</div>
+
+  <ng-container *ngIf="!loading && report">
+    <h3 class="cg-title">{{ report.organizationLabel }}</h3>
+
+    <div class="cg-kpis">
+      <div class="cg-kpi">
+        <label>Tổng Receita (corrigido) <span class="en">Total revenue</span></label>
+        <span class="cg-num">{{ report.totalReceitaCorrigido | number:'1.2-2' }}</span>
+      </div>
+      <div class="cg-kpi">
+        <label>Tổng Despesa (corrigido) <span class="en">Total expense</span></label>
+        <span class="cg-num">{{ report.totalDespesaCorrigido | number:'1.2-2' }}</span>
+      </div>
+      <div class="cg-kpi" [class.cg-ok]="report.saldoOrcamental === 0">
+        <label>Saldo Orçamental <span class="en">Budget balance</span></label>
+        <span class="cg-num">{{ report.saldoOrcamental | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <h4 class="cg-section">RECEITAS <span class="en">by Classificação Económica</span></h4>
+    <div class="cg-tbl-wrap">
+      <table class="cg-tbl">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Designação</th>
+            <th class="num">OSS inicial</th>
+            <th class="num">OSS corrigido</th>
+            <th class="num">Receita Liquidada</th>
+            <th class="num">Taxa Execução</th>
+            <th class="num">Saldo Execução</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of report.receitas">
+            <td class="mono">{{ row.codigo }}</td>
+            <td>{{ row.designacao }}</td>
+            <td class="num">{{ row.valorOrcamentoInicial | number:'1.2-2' }}</td>
+            <td class="num">{{ row.valorOrcamentado | number:'1.2-2' }}</td>
+            <td class="num">{{ row.totalExecucao | number:'1.2-2' }}</td>
+            <td class="num">{{ row.taxaExecucao | percent:'1.1-1' }}</td>
+            <td class="num">{{ row.saldoExecucao | number:'1.2-2' }}</td>
+          </tr>
+          <tr *ngIf="report.receitas.length === 0"><td colspan="7" class="cg-empty">Chưa có dữ liệu.</td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">TOTAL RECEITA</td>
+            <td class="num">{{ report.totalReceitaInicial | number:'1.2-2' }}</td>
+            <td class="num">{{ report.totalReceitaCorrigido | number:'1.2-2' }}</td>
+            <td colspan="3"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <h4 class="cg-section">DESPESAS <span class="en">by Classificação Económica</span></h4>
+    <div class="cg-tbl-wrap">
+      <table class="cg-tbl">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Designação</th>
+            <th class="num">OSS inicial</th>
+            <th class="num">OSS corrigido</th>
+            <th class="num">Cabimentos</th>
+            <th class="num">Compromissos</th>
+            <th class="num">Total Execução</th>
+            <th class="num">Taxa Execução</th>
+            <th class="num">Saldo Execução</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of report.despesas">
+            <td class="mono">{{ row.codigo }}</td>
+            <td>{{ row.designacao }}</td>
+            <td class="num">{{ row.valorOrcamentoInicial | number:'1.2-2' }}</td>
+            <td class="num">{{ row.valorOrcamentado | number:'1.2-2' }}</td>
+            <td class="num">{{ row.cabimentos | number:'1.2-2' }}</td>
+            <td class="num">{{ row.compromissos | number:'1.2-2' }}</td>
+            <td class="num">{{ row.totalExecucao | number:'1.2-2' }}</td>
+            <td class="num">{{ row.taxaExecucao | percent:'1.1-1' }}</td>
+            <td class="num">{{ row.saldoExecucao | number:'1.2-2' }}</td>
+          </tr>
+          <tr *ngIf="report.despesas.length === 0"><td colspan="9" class="cg-empty">Chưa có dữ liệu.</td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">TOTAL DESPESA</td>
+            <td class="num">{{ report.totalDespesaInicial | number:'1.2-2' }}</td>
+            <td class="num">{{ report.totalDespesaCorrigido | number:'1.2-2' }}</td>
+            <td colspan="5"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="cg-note" *ngIf="report.totalReceitaCorrigido === 0 && report.totalDespesaCorrigido === 0">
+      Danh mục mã kinh tế đã nạp đủ ({{ report.receitas.length + report.despesas.length }} mã) — các cột giá trị
+      đang bằng 0 vì màn hình Orçamento/Despesa/Receita chưa được nối vào danh mục mới này. Số liệu sẽ tự động
+      xuất hiện khi các màn hình đó hoàn tất, không cần sửa lại báo cáo.
+    </div>
+  </ng-container>
+</div>

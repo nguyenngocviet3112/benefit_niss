@@ -1,0 +1,137 @@
+.cg-container {
+  padding: 24px;
+  max-width: 1180px;
+}
+
+.cg-header {
+  margin-bottom: 16px;
+}
+
+.cg-header .en, .cg-tbl .en, .cg-kpi .en {
+  font-size: 12px;
+  font-style: italic;
+  color: #777;
+  font-weight: 400;
+}
+
+.cg-filterbar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.cg-field {
+  min-width: 220px;
+}
+
+.cg-loading {
+  padding: 24px;
+  color: #999;
+}
+
+.cg-title {
+  font-size: 15px;
+  color: #7c2d22;
+  margin: 4px 0 16px;
+}
+
+.cg-kpis {
+  display: flex;
+  gap: 28px;
+  padding: 14px 18px;
+  background: #f4f5f7;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 24px;
+}
+
+.cg-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cg-kpi label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8891a0;
+}
+
+.cg-num {
+  font-family: monospace;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.cg-kpi.cg-ok .cg-num {
+  color: #3d7a4f;
+}
+
+.cg-section {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #8891a0;
+  margin: 20px 0 8px;
+}
+
+.cg-tbl-wrap {
+  overflow-x: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.cg-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.cg-tbl th, .cg-tbl td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.cg-tbl th {
+  background: #f4f5f7;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8891a0;
+}
+
+.cg-tbl td.mono {
+  font-family: monospace;
+  color: #7c2d22;
+}
+
+.cg-tbl th.num, .cg-tbl td.num {
+  text-align: right;
+  font-family: monospace;
+}
+
+.cg-tbl tfoot td {
+  font-weight: 700;
+  border-top: 2px solid #ddd;
+  border-bottom: none;
+}
+
+.cg-empty {
+  text-align: center;
+  color: #999;
+  white-space: normal;
+}
+
+.cg-note {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: #f3e8d2;
+  border: 1px dashed #9c6b15;
+  border-radius: 5px;
+  font-size: 12.5px;
+  color: #6b5010;
+}

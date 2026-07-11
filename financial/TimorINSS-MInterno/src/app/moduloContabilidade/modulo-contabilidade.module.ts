@@ -18,6 +18,7 @@ import { ClassificacaoEconomicaComponent } from './classificacao-economica/class
 import { MasterDataImportButtonComponent } from './master-data-import-button/master-data-import-button.component';
 import { OrcamentoComponent } from './orcamento/orcamento.component';
 import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
+import { CeInssGlobalComponent } from './ce-inss-global/ce-inss-global.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { AdCabimentoComponent } from './ad-cabimento/ad-cabimento.component';
     ClassificacaoEconomicaComponent,
     MasterDataImportButtonComponent,
     OrcamentoComponent,
-    AdCabimentoComponent
+    AdCabimentoComponent,
+    CeInssGlobalComponent
   ],
   imports: [
     CommonModule,
