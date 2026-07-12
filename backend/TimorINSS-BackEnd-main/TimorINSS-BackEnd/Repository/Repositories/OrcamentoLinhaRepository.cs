@@ -60,12 +60,23 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public bool IsComboValid(OrcamentoLinha entity)
         {
+            // Trùng lặp chỉ tính trong CÙNG năm ngân sách (OrcamentoConfigFk) — cùng 1
+            // rúbrica (Atividade + Classificação Económica + Organization) hoàn toàn hợp
+            // lệ khi lặp lại ở năm ngân sách khác, đó là bản chất của ngân sách hàng năm.
+            // Trước đây check toàn cục (mọi batch/năm), gây lỗi "đã tồn tại" giả khi
+            // import lại 1 rúbrica đã có từ năm trước.
+            int orcamentoConfigFk = _moduloContribuicoesContext.OrcamentoBatch
+                .Where(b => b.Id == entity.OrcamentoBatchFk)
+                .Select(b => b.OrcamentoConfigFk)
+                .FirstOrDefault();
+
             int countSameCombo = _moduloContribuicoesContext.OrcamentoLinha
                 .Where(l => l.IndActivo
                     && l.AtividadeFk == entity.AtividadeFk
                     && l.EconomicClassificationFk == entity.EconomicClassificationFk
                     && l.OrganizationFk == entity.OrganizationFk
-                    && l.Id != entity.Id)
+                    && l.Id != entity.Id
+                    && l.OrcamentoBatchFkNavigation.OrcamentoConfigFk == orcamentoConfigFk)
                 .Count();
 
             return countSameCombo == 0;
