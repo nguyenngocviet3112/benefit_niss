@@ -42,8 +42,14 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 }
 
-                OrcamentoBatch batch = GetOrCreateDraftBatch(request.OrcamentoConfigFk);
-                response.Batch = MapBatch(batch);
+                // Chỉ để XEM — không tự tạo lô DRAFT mới. Trước đây gọi GetOrCreateDraftBatch
+                // ở đây, nên mỗi lần mở lại màn Orçamento SAU KHI 1 năm đã duyệt xong hoàn
+                // toàn (lô duy nhất đã APPROVED), hệ thống lại âm thầm tạo 1 lô DRAFT RỖNG
+                // mới và hiển thị danh sách trống — khiến các rúbrica đã duyệt "biến mất"
+                // khỏi màn hình dù vẫn còn nguyên trong DB (lô cũ). Việc tạo lô DRAFT mới
+                // chỉ nên xảy ra khi người dùng thật sự thêm/sửa rúbrica (xem SaveLinha).
+                OrcamentoBatch batch = _unitOfWork.OrcamentoBatchRepository.GetLatestBatch(request.OrcamentoConfigFk);
+                response.Batch = batch == null ? null : MapBatch(batch);
             }
             catch (Exception e)
             {

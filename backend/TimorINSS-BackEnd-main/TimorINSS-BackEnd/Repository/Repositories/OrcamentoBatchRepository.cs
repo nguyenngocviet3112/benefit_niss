@@ -21,6 +21,14 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .FirstOrDefault();
         }
 
+        public OrcamentoBatch GetLatestBatch(int orcamentoConfigFk)
+        {
+            return _moduloContribuicoesContext.OrcamentoBatch
+                .Where(b => b.IndActivo && b.OrcamentoConfigFk == orcamentoConfigFk)
+                .OrderByDescending(b => b.Id)
+                .FirstOrDefault();
+        }
+
         public OrcamentoBatch Get(int id)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
