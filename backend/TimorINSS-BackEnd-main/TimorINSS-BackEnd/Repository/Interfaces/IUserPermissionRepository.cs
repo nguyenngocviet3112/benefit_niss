@@ -20,6 +20,10 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         Utilizador GetInternalUser(int id);
         bool UsernameExists(string username);
 
+        // Cho màn "Đồng bộ User từ hệ thống cũ" — liệt kê user external
+        // (Interno = false hoặc null) chỉ để xem, không thao tác quyền gì.
+        List<Utilizador> GetAllExternalUsers();
+
         List<UserProfile> GetAllProfiles();
         UserProfile GetProfile(int utilizadorFk);
         void AddProfile(UserProfile entity);

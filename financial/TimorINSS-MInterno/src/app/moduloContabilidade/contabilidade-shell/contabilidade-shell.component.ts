@@ -199,6 +199,7 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Ngân hàng (Contas Bancárias)', route: '/contabilidade/settings/bankAccount' },
         { label: 'Cấu hình phòng ban', route: '/contabilidade/sistema/departamentos' },
         { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission' },
+        { label: 'Đồng bộ User (hệ thống cũ)', route: '/contabilidade/userSync' },
         { label: 'Cấu hình Email', comingSoon: true },
         { label: 'API Integration (Benefit)', comingSoon: true },
       ]

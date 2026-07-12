@@ -14,6 +14,7 @@ import { ObligationComponent } from './obligation/obligation.component';
 import { IdiomaConfigComponent } from './settings/idioma-config/idioma-config.component';
 import { KyNganSachComponent } from './settings/ky-ngan-sach/ky-ngan-sach.component';
 import { UserPermissionComponent } from './user-permission/user-permission.component';
+import { UserSyncComponent } from './user-sync/user-sync.component';
 import { PaymentComponent } from './payment/payment.component';
 // Kế thừa nguyên bản (BRD §9, "Đóng góp BHXH") — các component này đã khai
 // báo (declared) trong AppModule (root) từ trước; ở đây chỉ import CLASS để
@@ -63,6 +64,7 @@ const routes: Routes = [
       { path: 'settings/kyNganSach', component: KyNganSachComponent },
       { path: 'settings/bankAccount', component: BankAccountComponent },
       { path: 'userPermission', component: UserPermissionComponent },
+      { path: 'userSync', component: UserSyncComponent },
       { path: 'meuPerfil', component: MeuPerfilComponent },
       { path: 'contribuicoes/entidade', component: ContribHomeSearchComponent },
       { path: 'contribuicoes/guiaPagamento', component: ContribValidationHomeSearchComponent },

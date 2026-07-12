@@ -77,6 +77,14 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return _moduloContribuicoesContext.Utilizador.Any(u => u.Username == username);
         }
 
+        public List<Utilizador> GetAllExternalUsers()
+        {
+            return _moduloContribuicoesContext.Utilizador
+                .Where(u => u.Interno == false || u.Interno == null)
+                .OrderBy(u => u.Username)
+                .ToList();
+        }
+
         public List<UserProfile> GetAllProfiles()
         {
             return _moduloContribuicoesContext.UserProfile

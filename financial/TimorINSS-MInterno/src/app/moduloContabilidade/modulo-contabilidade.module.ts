@@ -28,6 +28,7 @@ import { ObligationComponent } from './obligation/obligation.component';
 import { IdiomaConfigComponent } from './settings/idioma-config/idioma-config.component';
 import { KyNganSachComponent } from './settings/ky-ngan-sach/ky-ngan-sach.component';
 import { UserPermissionComponent } from './user-permission/user-permission.component';
+import { UserSyncComponent } from './user-sync/user-sync.component';
 import { PaymentComponent } from './payment/payment.component';
 import { OrcamentoConfigSelectComponent } from './orcamento-config-select/orcamento-config-select.component';
 import { ReceitaPacComponent } from './receita-pac/receita-pac.component';
@@ -59,6 +60,7 @@ import { OrcamentoImportPreviewComponent } from './orcamento-import-preview/orca
     IdiomaConfigComponent,
     KyNganSachComponent,
     UserPermissionComponent,
+    UserSyncComponent,
     PaymentComponent,
     OrcamentoConfigSelectComponent,
     ReceitaPacComponent,

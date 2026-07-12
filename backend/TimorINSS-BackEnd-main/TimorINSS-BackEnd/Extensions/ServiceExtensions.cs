@@ -281,6 +281,7 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<ICompromissoDespesaDataManager, CompromissoDespesaDataManager>();
             services.AddScoped<IObligationDataManager, ObligationDataManager>();
             services.AddScoped<IUserPermissionDataManager, UserPermissionDataManager>();
+            services.AddScoped<IUserSyncDataManager, UserSyncDataManager>();
             services.AddScoped<ILanguageConfigDataManager, LanguageConfigDataManager>();
             services.AddScoped<IOrcamentoConfigDataManager, OrcamentoConfigDataManager>();
             services.AddScoped<IPaymentDataManager, PaymentDataManager>();

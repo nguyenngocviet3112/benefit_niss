@@ -1,0 +1,91 @@
+<div class="sync-container">
+  <div class="sync-header">
+    <h2>{{ 'userSync.header' | translate }} <span class="en">({{ 'userSync.headerGloss' | translate }})</span></h2>
+    <p class="sync-hint">{{ 'userSync.hint' | translate }}</p>
+  </div>
+
+  <div class="sync-tabs">
+    <button mat-stroked-button [class.active]="activeTab === 'internal'" (click)="selectTab('internal')">{{ 'userSync.tabInternal' | translate }}</button>
+    <button mat-stroked-button [class.active]="activeTab === 'external'" (click)="selectTab('external')">{{ 'userSync.tabExternal' | translate }}</button>
+    <span class="spacer"></span>
+    <button mat-stroked-button (click)="activeTab === 'internal' ? loadInternal() : loadExternal()">{{ 'userSync.reload' | translate }}</button>
+  </div>
+
+  <ng-container *ngIf="activeTab === 'internal'">
+    <div class="sync-list" *ngIf="!loading">
+      <div class="sync-row sync-row-header">
+        <span class="sync-col-username">{{ 'userSync.colUsername' | translate }}</span>
+        <span class="sync-col-status">{{ 'userSync.colStatus' | translate }}</span>
+        <span class="sync-col-nome">{{ 'userSync.colNome' | translate }}</span>
+        <span class="sync-col-email">{{ 'userSync.colEmail' | translate }}</span>
+        <span class="sync-col-departamento">{{ 'userSync.colDepartamento' | translate }}</span>
+        <span class="sync-col-actions"></span>
+      </div>
+      <div class="sync-row" *ngFor="let u of internalUsers">
+        <span class="sync-col-username">{{ u.username }}</span>
+        <span class="sync-col-status">
+          <span class="sync-badge" [ngClass]="u.hasNewModeAccess ? 'sync-badge-ok' : 'sync-badge-pending'">
+            {{ (u.hasNewModeAccess ? 'userSync.statusSynced' : 'userSync.statusNotSynced') | translate }}
+          </span>
+        </span>
+        <span class="sync-col-nome">{{ u.nome || '—' }}</span>
+        <span class="sync-col-email">{{ u.email || '—' }}</span>
+        <span class="sync-col-departamento">{{ u.departamentoNome || '—' }}</span>
+        <span class="sync-col-actions">
+          <button mat-button color="primary" (click)="openSyncForm(u)">
+            {{ (u.hasNewModeAccess ? 'userSync.editProfileButton' : 'userSync.syncButton') | translate }}
+          </button>
+        </span>
+      </div>
+      <div class="sync-empty" *ngIf="internalUsers.length === 0">{{ 'userSync.emptyInternal' | translate }}</div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="activeTab === 'external'">
+    <div class="sync-external-hint">{{ 'userSync.externalHint' | translate }}</div>
+    <div class="sync-list" *ngIf="!loading">
+      <div class="sync-row sync-row-header">
+        <span class="sync-col-username">{{ 'userSync.colUsername' | translate }}</span>
+        <span class="sync-col-status">{{ 'userSync.colEstado' | translate }}</span>
+      </div>
+      <div class="sync-row" *ngFor="let u of externalUsers">
+        <span class="sync-col-username">{{ u.username }}</span>
+        <span class="sync-col-status">
+          <span class="sync-badge" [ngClass]="u.indActivo ? 'sync-badge-ok' : 'sync-badge-pending'">
+            {{ (u.indActivo ? 'userSync.ativo' : 'userSync.inativo') | translate }}
+          </span>
+        </span>
+      </div>
+      <div class="sync-empty" *ngIf="externalUsers.length === 0">{{ 'userSync.emptyExternal' | translate }}</div>
+    </div>
+  </ng-container>
+
+  <div class="sync-form-overlay" *ngIf="syncTarget">
+    <div class="sync-form">
+      <h3>{{ 'userSync.formTitle' | translate }} — {{ syncTarget.username }}</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'userSync.fieldNome' | translate }} <span class="itag type">{{ 'userSync.typedTag' | translate }}</span></mat-label>
+        <input matInput [(ngModel)]="formNome" name="formNome" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'userSync.fieldEmail' | translate }} <span class="itag type">{{ 'userSync.typedOptionalTag' | translate }}</span></mat-label>
+        <input matInput [(ngModel)]="formEmail" name="formEmail" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'userSync.fieldDepartamento' | translate }} <span class="itag drop">{{ 'userSync.dropOptionalTag' | translate }}</span></mat-label>
+        <mat-select [(ngModel)]="formDepartamentoFk" name="formDepartamentoFk">
+          <mat-option [value]="null">{{ 'userSync.noneOption' | translate }}</mat-option>
+          <mat-option *ngFor="let d of departamentos" [value]="d.id">{{ d.nome }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="sync-form-actions">
+        <button mat-button (click)="cancelSyncForm()">{{ 'userSync.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="confirmSync()">{{ 'userSync.confirmSyncButton' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
