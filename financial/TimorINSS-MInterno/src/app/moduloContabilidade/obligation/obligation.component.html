@@ -1,26 +1,26 @@
 <div class="obr-container">
   <div class="obr-header">
-    <h2>Obrigação <span class="en">(nghĩa vụ phải trả — nhóm nhiều Compromisso vào 1 lần thanh toán; luồng duyệt Diretor DF)</span></h2>
+    <h2>{{ 'obligation.header' | translate }} <span class="en">({{ 'obligation.headerGloss' | translate }})</span></h2>
   </div>
 
   <div class="obr-context-bar">
     <mat-form-field appearance="outline" class="small-field">
-      <mat-label>Ano</mat-label>
+      <mat-label>{{ 'obligation.fieldAno' | translate }}</mat-label>
       <input matInput type="number" [(ngModel)]="ano" name="ano" />
     </mat-form-field>
-    <button mat-stroked-button (click)="load()">Tải lại</button>
+    <button mat-stroked-button (click)="load()">{{ 'obligation.reload' | translate }}</button>
 
     <span class="spacer"></span>
 
-    <button mat-raised-button color="primary" (click)="openCreateForm()">+ Tạo Obrigação</button>
+    <button mat-raised-button color="primary" (click)="openCreateForm()">{{ 'obligation.addButton' | translate }}</button>
   </div>
 
   <div class="obr-list" *ngIf="!loading">
     <div class="obr-row obr-row-header">
-      <span class="obr-col-num">N.º Obrigação</span>
-      <span class="obr-col-desc">Descritivo</span>
-      <span class="obr-col-valor">Valor</span>
-      <span class="obr-col-estado">Trạng thái</span>
+      <span class="obr-col-num">{{ 'obligation.colNumObrigacao' | translate }}</span>
+      <span class="obr-col-desc">{{ 'obligation.colDescritivo' | translate }}</span>
+      <span class="obr-col-valor">{{ 'obligation.colValor' | translate }}</span>
+      <span class="obr-col-estado">{{ 'obligation.colEstado' | translate }}</span>
     </div>
 
     <ng-container *ngFor="let item of items">
@@ -29,52 +29,52 @@
         <span class="obr-col-desc">{{ item.descritivoObrigacao || '—' }}</span>
         <span class="obr-col-valor">$ {{ item.valorObrigacao | number:'1.2-2' }}</span>
         <span class="obr-col-estado">
-          <span class="obr-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
+          <span class="obr-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] | translate }}</span>
         </span>
       </div>
 
       <div class="obr-detail" *ngIf="expandedId === item.id">
         <div class="obr-detail-grid" *ngIf="item.liquidacaoTipo || item.beneficiarioCategoria">
-          <div><span class="lbl">Liquidação de despesa relativa a <span class="itag drop">Chọn</span></span><span class="val">{{ (item.liquidacaoTipo && liquidacaoTipoLabels[item.liquidacaoTipo]) || '—' }}</span></div>
-          <div><span class="lbl">Categoria <span class="itag drop">Chọn</span></span><span class="val">{{ (item.beneficiarioCategoria && beneficiarioCategoriaLabels[item.beneficiarioCategoria]) || '—' }}</span></div>
+          <div><span class="lbl">{{ 'obligation.fieldLiquidacaoTipo' | translate }} <span class="itag drop">{{ 'obligation.dropTag' | translate }}</span></span><span class="val">{{ item.liquidacaoTipo ? (liquidacaoTipoLabels[item.liquidacaoTipo] | translate) : '—' }}</span></div>
+          <div><span class="lbl">{{ 'obligation.fieldCategoria' | translate }} <span class="itag drop">{{ 'obligation.dropTag' | translate }}</span></span><span class="val">{{ item.beneficiarioCategoria ? (beneficiarioCategoriaLabels[item.beneficiarioCategoria] | translate) : '—' }}</span></div>
         </div>
 
         <div class="obr-beneficiario-single" *ngIf="item.beneficiarioCategoria && !precisaLista(item.beneficiarioCategoria)">
-          <h4>Identificação do Beneficiário <span class="en">(mục 4-5 form gốc)</span></h4>
+          <h4>{{ 'obligation.beneficiarioTitle' | translate }} <span class="en">({{ 'obligation.beneficiarioGloss' | translate }})</span></h4>
           <div class="obr-detail-grid">
-            <div><span class="lbl">Nome</span><span class="val">{{ item.beneficiarioNome || '—' }}</span></div>
-            <div><span class="lbl">NISS</span><span class="val">{{ item.beneficiarioNiss || '—' }}</span></div>
-            <div><span class="lbl">Nome conta</span><span class="val">{{ item.beneficiarioNomeConta || '—' }}</span></div>
-            <div><span class="lbl">N.º conta</span><span class="val">{{ item.beneficiarioNumeroConta || '—' }}</span></div>
-            <div><span class="lbl">IBAN</span><span class="val">{{ item.beneficiarioIban || '—' }}</span></div>
-            <div><span class="lbl">Swift</span><span class="val">{{ item.beneficiarioSwift || '—' }}</span></div>
-            <div><span class="lbl">Banco</span><span class="val">{{ item.beneficiarioBanco || '—' }}</span></div>
-            <div><span class="lbl">Montante a pagar</span><span class="val">$ {{ item.beneficiarioMontanteAPagar | number:'1.2-2' }}</span></div>
+            <div><span class="lbl">{{ 'obligation.fieldNome' | translate }}</span><span class="val">{{ item.beneficiarioNome || '—' }}</span></div>
+            <div><span class="lbl">{{ 'obligation.fieldNiss' | translate }}</span><span class="val">{{ item.beneficiarioNiss || '—' }}</span></div>
+            <div><span class="lbl">{{ 'obligation.fieldNomeConta' | translate }}</span><span class="val">{{ item.beneficiarioNomeConta || '—' }}</span></div>
+            <div><span class="lbl">{{ 'obligation.fieldNumeroConta' | translate }}</span><span class="val">{{ item.beneficiarioNumeroConta || '—' }}</span></div>
+            <div><span class="lbl">{{ 'obligation.fieldIban' | translate }}</span><span class="val">{{ item.beneficiarioIban || '—' }}</span></div>
+            <div><span class="lbl">{{ 'obligation.fieldSwift' | translate }}</span><span class="val">{{ item.beneficiarioSwift || '—' }}</span></div>
+            <div><span class="lbl">{{ 'obligation.fieldBanco' | translate }}</span><span class="val">{{ item.beneficiarioBanco || '—' }}</span></div>
+            <div><span class="lbl">{{ 'obligation.fieldMontante' | translate }}</span><span class="val">$ {{ item.beneficiarioMontanteAPagar | number:'1.2-2' }}</span></div>
           </div>
         </div>
 
         <div class="obr-beneficiario-lista" *ngIf="item.beneficiarioCategoria && precisaLista(item.beneficiarioCategoria)">
           <h4>
-            Lista de Beneficiários
-            <span class="en">({{ item.beneficiarioCategoria === 'PESSOAL' ? 'ListaObrigação2 — Pessoal/salários' : 'ListaObrigação1 — Beneficiários/prestações' }})</span>
+            {{ 'obligation.listaTitle' | translate }}
+            <span class="en">({{ (item.beneficiarioCategoria === 'PESSOAL' ? 'obligation.listaPessoalGloss' : 'obligation.listaBeneficiarioGloss') | translate }})</span>
           </h4>
           <div class="obr-ben-row obr-ben-row-header" *ngIf="item.beneficiarioCategoria === 'PESSOAL'">
-            <span>NISS</span>
-            <span>Nome Contribuinte</span>
-            <span>Detalhes bancários</span>
-            <span>Salário ilíquido</span>
-            <span>Cotização 4%</span>
-            <span>Imposto 10%</span>
-            <span>Suplementos</span>
-            <span>Montante a pagar</span>
+            <span>{{ 'obligation.fieldNiss' | translate }}</span>
+            <span>{{ 'obligation.colNomeContribuinte' | translate }}</span>
+            <span>{{ 'obligation.colDetalhesBancarios' | translate }}</span>
+            <span>{{ 'obligation.colSalarioIliquido' | translate }}</span>
+            <span>{{ 'obligation.colCotizacao4' | translate }}</span>
+            <span>{{ 'obligation.colImposto10' | translate }}</span>
+            <span>{{ 'obligation.colSuplementos' | translate }}</span>
+            <span>{{ 'obligation.fieldMontante' | translate }}</span>
             <span *ngIf="item.estado === 'DRAFT'"></span>
           </div>
           <div class="obr-ben-row obr-ben-row-header" *ngIf="item.beneficiarioCategoria !== 'PESSOAL'">
-            <span>NISS</span>
-            <span>Nome Contribuinte</span>
-            <span>Nome Beneficiário</span>
-            <span>Detalhes bancários</span>
-            <span>Montante a pagar</span>
+            <span>{{ 'obligation.fieldNiss' | translate }}</span>
+            <span>{{ 'obligation.colNomeContribuinte' | translate }}</span>
+            <span>{{ 'obligation.colNomeBeneficiario' | translate }}</span>
+            <span>{{ 'obligation.colDetalhesBancarios' | translate }}</span>
+            <span>{{ 'obligation.fieldMontante' | translate }}</span>
             <span *ngIf="item.estado === 'DRAFT'"></span>
           </div>
           <div class="obr-ben-row" *ngFor="let b of item.beneficiaries" [class.obr-ben-row-pessoal]="item.beneficiarioCategoria === 'PESSOAL'">
@@ -96,86 +96,86 @@
               <span>$ {{ b.montanteAPagar | number:'1.2-2' }}</span>
             </ng-container>
             <span *ngIf="item.estado === 'DRAFT'">
-              <button mat-button (click)="removeBeneficiary(b.id)">Xóa</button>
+              <button mat-button (click)="removeBeneficiary(b.id)">{{ 'obligation.deleteButton' | translate }}</button>
             </span>
           </div>
-          <div class="obr-empty" *ngIf="item.beneficiaries.length === 0">Chưa có người thụ hưởng nào trong danh sách.</div>
+          <div class="obr-empty" *ngIf="item.beneficiaries.length === 0">{{ 'obligation.emptyBeneficiaries' | translate }}</div>
 
           <div class="obr-add-item" *ngIf="item.estado === 'DRAFT' && addBeneficiaryTarget?.id !== item.id">
-            <button mat-stroked-button (click)="openAddBeneficiary(item)">+ Thêm người thụ hưởng</button>
+            <button mat-stroked-button (click)="openAddBeneficiary(item)">{{ 'obligation.addBeneficiaryButton' | translate }}</button>
           </div>
 
           <div class="obr-add-ben-form" *ngIf="addBeneficiaryTarget?.id === item.id">
             <mat-form-field appearance="outline" class="small-field">
-              <mat-label>NISS <span class="itag type">Gõ tay</span></mat-label>
+              <mat-label>{{ 'obligation.fieldNiss' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
               <input matInput [(ngModel)]="formBenNiss" name="formBenNiss" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="medium-field">
-              <mat-label>Nome Contribuinte <span class="itag type">Gõ tay</span></mat-label>
+              <mat-label>{{ 'obligation.colNomeContribuinte' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
               <input matInput [(ngModel)]="formBenNomeContribuinte" name="formBenNomeContribuinte" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="medium-field" *ngIf="item.beneficiarioCategoria !== 'PESSOAL'">
-              <mat-label>Nome Beneficiário <span class="itag type">Gõ tay</span></mat-label>
+              <mat-label>{{ 'obligation.colNomeBeneficiario' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
               <input matInput [(ngModel)]="formBenNomeBeneficiario" name="formBenNomeBeneficiario" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="medium-field">
-              <mat-label>Nome conta <span class="itag type">Gõ tay</span></mat-label>
+              <mat-label>{{ 'obligation.fieldNomeConta' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
               <input matInput [(ngModel)]="formBenNomeConta" name="formBenNomeConta" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="medium-field">
-              <mat-label>N.º conta <span class="itag type">Gõ tay</span></mat-label>
+              <mat-label>{{ 'obligation.fieldNumeroConta' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
               <input matInput [(ngModel)]="formBenNumeroConta" name="formBenNumeroConta" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="small-field">
-              <mat-label>IBAN <span class="itag type">Gõ tay</span></mat-label>
+              <mat-label>{{ 'obligation.fieldIban' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
               <input matInput [(ngModel)]="formBenIban" name="formBenIban" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="small-field">
-              <mat-label>Swift <span class="itag type">Gõ tay</span></mat-label>
+              <mat-label>{{ 'obligation.fieldSwift' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
               <input matInput [(ngModel)]="formBenSwift" name="formBenSwift" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="medium-field">
-              <mat-label>Banco <span class="itag type">Gõ tay</span></mat-label>
+              <mat-label>{{ 'obligation.fieldBanco' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
               <input matInput [(ngModel)]="formBenBanco" name="formBenBanco" />
             </mat-form-field>
 
             <ng-container *ngIf="item.beneficiarioCategoria === 'PESSOAL'">
               <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Salário ilíquido <span class="itag type">Gõ tay</span></mat-label>
+                <mat-label>{{ 'obligation.colSalarioIliquido' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
                 <input matInput type="number" step="0.01" [(ngModel)]="formBenSalarioIliquido" name="formBenSalarioIliquido" />
               </mat-form-field>
               <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Cotização 4% <span class="itag type">Gõ tay</span></mat-label>
+                <mat-label>{{ 'obligation.colCotizacao4' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
                 <input matInput type="number" step="0.01" [(ngModel)]="formBenCotizacao4" name="formBenCotizacao4" />
               </mat-form-field>
               <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Imposto 10% <span class="itag type">Gõ tay</span></mat-label>
+                <mat-label>{{ 'obligation.colImposto10' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
                 <input matInput type="number" step="0.01" [(ngModel)]="formBenImposto10" name="formBenImposto10" />
               </mat-form-field>
               <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Salário líquido <span class="itag type">Gõ tay</span></mat-label>
+                <mat-label>{{ 'obligation.fieldSalarioLiquido' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
                 <input matInput type="number" step="0.01" [(ngModel)]="formBenSalarioLiquido" name="formBenSalarioLiquido" />
               </mat-form-field>
               <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Outros suplementos <span class="itag type">Gõ tay</span></mat-label>
+                <mat-label>{{ 'obligation.colSuplementos' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
                 <input matInput type="number" step="0.01" [(ngModel)]="formBenOutrosSuplementos" name="formBenOutrosSuplementos" />
               </mat-form-field>
             </ng-container>
 
             <mat-form-field appearance="outline" class="small-field">
-              <mat-label>Montante a pagar (USD) <span class="itag type">Gõ tay</span></mat-label>
+              <mat-label>{{ 'obligation.fieldMontanteUsd' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
               <input matInput type="number" step="0.01" [(ngModel)]="formBenMontanteAPagar" name="formBenMontanteAPagar" />
             </mat-form-field>
-            <button mat-button (click)="cancelAddBeneficiary()">Hủy</button>
-            <button mat-raised-button color="primary" (click)="confirmAddBeneficiary()">Thêm</button>
+            <button mat-button (click)="cancelAddBeneficiary()">{{ 'obligation.cancelButton' | translate }}</button>
+            <button mat-raised-button color="primary" (click)="confirmAddBeneficiary()">{{ 'obligation.addSubmitButton' | translate }}</button>
           </div>
         </div>
 
         <div class="obr-items">
           <div class="obr-item-row obr-item-row-header">
-            <span>N.º Compromisso</span>
-            <span>Atividade / Classificação Económica</span>
-            <span>Valor</span>
+            <span>{{ 'obligation.colNumCompromisso' | translate }}</span>
+            <span>{{ 'obligation.colAtividade' | translate }}</span>
+            <span>{{ 'obligation.colValor' | translate }}</span>
             <span *ngIf="item.estado === 'DRAFT'"></span>
           </div>
           <div class="obr-item-row" *ngFor="let i of item.items">
@@ -183,131 +183,131 @@
             <span>{{ i.atividadeCodigo }} — {{ i.economicClassificationCodigo }} {{ i.economicClassificationDesignacao }}</span>
             <span>$ {{ i.value | number:'1.2-2' }}</span>
             <span *ngIf="item.estado === 'DRAFT'">
-              <button mat-button (click)="removeItem(i.id)">Xóa</button>
+              <button mat-button (click)="removeItem(i.id)">{{ 'obligation.deleteButton' | translate }}</button>
             </span>
           </div>
-          <div class="obr-empty" *ngIf="item.items.length === 0">Chưa có dòng Compromisso nào.</div>
+          <div class="obr-empty" *ngIf="item.items.length === 0">{{ 'obligation.emptyItems' | translate }}</div>
         </div>
 
         <div class="obr-add-item" *ngIf="item.estado === 'DRAFT' && addItemTarget?.id !== item.id">
-          <button mat-stroked-button (click)="openAddItem(item)">+ Thêm dòng Compromisso</button>
+          <button mat-stroked-button (click)="openAddItem(item)">{{ 'obligation.addItemButton' | translate }}</button>
         </div>
 
         <div class="obr-add-item-form" *ngIf="addItemTarget?.id === item.id">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Compromisso <span class="itag drop">Chọn</span></mat-label>
+            <mat-label>{{ 'obligation.fieldCompromisso' | translate }} <span class="itag drop">{{ 'obligation.dropTag' | translate }}</span></mat-label>
             <mat-select [(ngModel)]="formCompromissoFk" name="formCompromissoFk">
               <mat-option *ngFor="let c of compromissosComSaldo" [value]="c.compromissoDespesaId">
-                Comp {{ c.numero }} — {{ c.atividadeCodigo }} / {{ c.economicClassificationCodigo }} (còn $ {{ c.saldoDisponivel | number:'1.2-2' }})
+                Comp {{ c.numero }} — {{ c.atividadeCodigo }} / {{ c.economicClassificationCodigo }} ({{ 'obligation.saldoRestante' | translate }} $ {{ c.saldoDisponivel | number:'1.2-2' }})
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="outline" class="small-field">
-            <mat-label>Giá trị (USD) <span class="itag type">Gõ tay</span></mat-label>
+            <mat-label>{{ 'obligation.fieldValorUsd' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
             <input matInput type="number" [(ngModel)]="formValue" name="formValue" />
           </mat-form-field>
-          <button mat-button (click)="cancelAddItem()">Hủy</button>
-          <button mat-raised-button color="primary" (click)="confirmAddItem()">Thêm</button>
+          <button mat-button (click)="cancelAddItem()">{{ 'obligation.cancelButton' | translate }}</button>
+          <button mat-raised-button color="primary" (click)="confirmAddItem()">{{ 'obligation.addSubmitButton' | translate }}</button>
         </div>
 
         <div class="obr-actions-bar">
-          <button mat-raised-button color="primary" *ngIf="item.estado === 'DRAFT'" [disabled]="item.items.length === 0" (click)="submitObligation(item)">Gửi duyệt</button>
+          <button mat-raised-button color="primary" *ngIf="item.estado === 'DRAFT'" [disabled]="item.items.length === 0" (click)="submitObligation(item)">{{ 'obligation.submitButton' | translate }}</button>
 
           <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
-            <button mat-raised-button color="primary" (click)="approve(item)">Duyệt (Diretor DF — Aprovação e Liquidação)</button>
-            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id)">Từ chối</button>
+            <button mat-raised-button color="primary" (click)="approve(item)">{{ 'obligation.approveButton' | translate }}</button>
+            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id)">{{ 'obligation.rejectButton' | translate }}</button>
           </ng-container>
         </div>
       </div>
     </ng-container>
 
-    <div class="obr-empty" *ngIf="items.length === 0">Chưa có Obrigação nào cho năm này.</div>
+    <div class="obr-empty" *ngIf="items.length === 0">{{ 'obligation.emptyList' | translate }}</div>
   </div>
 
   <div class="obr-form-overlay" *ngIf="showCreateForm">
     <div class="obr-form">
-      <h3>Tạo Obrigação mới</h3>
+      <h3>{{ 'obligation.createTitle' | translate }}</h3>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Descritivo da Obrigação <span class="itag type">Gõ tay (tùy chọn)</span></mat-label>
+        <mat-label>{{ 'obligation.fieldDescritivo' | translate }} <span class="itag type">{{ 'obligation.typedOptionalTag' | translate }}</span></mat-label>
         <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="medium-field">
-        <mat-label>Liquidação de despesa relativa a <span class="itag drop">Chọn</span></mat-label>
+        <mat-label>{{ 'obligation.fieldLiquidacaoTipo' | translate }} <span class="itag drop">{{ 'obligation.dropTag' | translate }}</span></mat-label>
         <mat-select [(ngModel)]="formLiquidacaoTipo" name="formLiquidacaoTipo">
-          <mat-option *ngFor="let key of liquidacaoTipoLabels | keyvalue" [value]="key.key">{{ key.value }}</mat-option>
+          <mat-option *ngFor="let key of liquidacaoTipoLabels | keyvalue" [value]="key.key">{{ key.value | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="medium-field">
-        <mat-label>Categoria do Beneficiário <span class="itag drop">Chọn</span></mat-label>
+        <mat-label>{{ 'obligation.fieldCategoriaBeneficiario' | translate }} <span class="itag drop">{{ 'obligation.dropTag' | translate }}</span></mat-label>
         <mat-select [(ngModel)]="formBeneficiarioCategoria" name="formBeneficiarioCategoria">
-          <mat-option *ngFor="let key of beneficiarioCategoriaLabels | keyvalue" [value]="key.key">{{ key.value }}</mat-option>
+          <mat-option *ngFor="let key of beneficiarioCategoriaLabels | keyvalue" [value]="key.key">{{ key.value | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <div class="obr-form-hint" *ngIf="precisaLista(formBeneficiarioCategoria)">
-        Categoria này dùng danh sách nhiều người thụ hưởng — sau khi tạo Obrigação, thêm từng người vào danh sách trong màn chi tiết.
+        {{ 'obligation.listaHint' | translate }}
       </div>
 
       <ng-container *ngIf="formBeneficiarioCategoria && !precisaLista(formBeneficiarioCategoria)">
         <mat-form-field appearance="outline" class="medium-field">
-          <mat-label>Nome <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'obligation.fieldNome' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formBeneficiarioNome" name="formBeneficiarioNome" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="small-field">
-          <mat-label>NISS <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'obligation.fieldNiss' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formBeneficiarioNiss" name="formBeneficiarioNiss" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="medium-field">
-          <mat-label>Nome conta <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'obligation.fieldNomeConta' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formBeneficiarioNomeConta" name="formBeneficiarioNomeConta" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="medium-field">
-          <mat-label>N.º conta <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'obligation.fieldNumeroConta' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formBeneficiarioNumeroConta" name="formBeneficiarioNumeroConta" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="small-field">
-          <mat-label>IBAN <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'obligation.fieldIban' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formBeneficiarioIban" name="formBeneficiarioIban" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="small-field">
-          <mat-label>Swift <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'obligation.fieldSwift' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formBeneficiarioSwift" name="formBeneficiarioSwift" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="medium-field">
-          <mat-label>Banco <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'obligation.fieldBanco' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formBeneficiarioBanco" name="formBeneficiarioBanco" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="small-field">
-          <mat-label>Montante a pagar (USD) <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'obligation.fieldMontanteUsd' | translate }} <span class="itag type">{{ 'obligation.typedTag' | translate }}</span></mat-label>
           <input matInput type="number" step="0.01" [(ngModel)]="formBeneficiarioMontanteAPagar" name="formBeneficiarioMontanteAPagar" />
         </mat-form-field>
       </ng-container>
 
       <mat-form-field appearance="outline" class="small-field">
-        <mat-label>Mês</mat-label>
+        <mat-label>{{ 'obligation.fieldMes' | translate }}</mat-label>
         <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
       </mat-form-field>
 
       <div class="obr-form-actions">
-        <button mat-button (click)="cancelCreateForm()">Hủy</button>
-        <button mat-raised-button color="primary" (click)="createObligation()">Tạo</button>
+        <button mat-button (click)="cancelCreateForm()">{{ 'obligation.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="createObligation()">{{ 'obligation.createButton' | translate }}</button>
       </div>
     </div>
   </div>
 
   <div class="obr-form-overlay" *ngIf="showRejectPrompt">
     <div class="obr-form">
-      <h3>Lý do từ chối</h3>
+      <h3>{{ 'obligation.rejectTitle' | translate }}</h3>
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Ghi chú</mat-label>
+        <mat-label>{{ 'obligation.fieldGhiChu' | translate }}</mat-label>
         <textarea matInput [(ngModel)]="rejectComment" name="rejectComment" rows="3"></textarea>
       </mat-form-field>
       <div class="obr-form-actions">
-        <button mat-button (click)="cancelReject()">Hủy</button>
-        <button mat-raised-button color="warn" (click)="confirmReject()">Xác nhận từ chối</button>
+        <button mat-button (click)="cancelReject()">{{ 'obligation.cancelButton' | translate }}</button>
+        <button mat-raised-button color="warn" (click)="confirmReject()">{{ 'obligation.confirmRejectButton' | translate }}</button>
       </div>
     </div>
   </div>

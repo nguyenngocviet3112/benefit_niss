@@ -1,28 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { ObligationService } from '../../services/obligation.service';
 import { CompromissoComSaldoDataContract, ObligationDataContract } from '../../response-models/obligation-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
-  DRAFT: 'Nháp',
-  PENDING_APPROVAL: 'Chờ phê duyệt',
-  APPROVED: 'Đã duyệt'
+  DRAFT: 'obligation.estadoDraft',
+  PENDING_APPROVAL: 'obligation.estadoPendingApproval',
+  APPROVED: 'obligation.estadoApproved'
 };
 
 const LIQUIDACAO_TIPO_LABELS: { [key: string]: string } = {
-  SALARIOS: 'Salários',
-  PENSOES: 'Pensões',
-  SUBSIDIOS_IMEDIATOS: 'Subsídios Imediatos',
-  DESPESAS_SEM_CONTRATO: 'Despesas sem contrato',
-  OUTRAS_DESPESAS_CONTRATO: 'Outras despesas associadas a contrato'
+  SALARIOS: 'obligation.liquidacaoSalarios',
+  PENSOES: 'obligation.liquidacaoPensoes',
+  SUBSIDIOS_IMEDIATOS: 'obligation.liquidacaoSubsidiosImediatos',
+  DESPESAS_SEM_CONTRATO: 'obligation.liquidacaoDespesasSemContrato',
+  OUTRAS_DESPESAS_CONTRATO: 'obligation.liquidacaoOutrasDespesasContrato'
 };
 
 const BENEFICIARIO_CATEGORIA_LABELS: { [key: string]: string } = {
-  FORNECEDOR: 'Fornecedor',
-  BENEFICIARIO: 'Beneficiário (prestações — usa danh sách)',
-  CONTRIBUINTE_EE: 'Contribuinte (EE)',
-  PESSOAL: 'Pessoal (salários — usa danh sách)',
-  OUTRO: 'Outro'
+  FORNECEDOR: 'obligation.categoriaFornecedor',
+  BENEFICIARIO: 'obligation.categoriaBeneficiario',
+  CONTRIBUINTE_EE: 'obligation.categoriaContribuinteEe',
+  PESSOAL: 'obligation.categoriaPessoal',
+  OUTRO: 'obligation.categoriaOutro'
 };
 
 // Categorias mà form gốc dùng danh sách nhiều người thụ hưởng đính kèm
@@ -85,7 +86,8 @@ export class ObligationComponent implements OnInit {
 
   constructor(
     private obligationService: ObligationService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -154,11 +156,11 @@ export class ObligationComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showCreateForm = false;
-        this.snackBar.open(`Đã tạo Obrigação số ${response.item.numero}.`, 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('obligation.createdSuccess', { numero: response.item.numero }), this.translate.instant('general.close'), { duration: 3000 });
         this.load();
       },
       err => this.showError(err)
@@ -183,7 +185,7 @@ export class ObligationComponent implements OnInit {
 
   public confirmAddItem(): void {
     if (!this.addItemTarget || !this.formCompromissoFk || !this.formValue) {
-      this.snackBar.open('Vui lòng chọn Compromisso và nhập Giá trị.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('obligation.errMissingItem'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -194,7 +196,7 @@ export class ObligationComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.addItemTarget = null;
@@ -208,7 +210,7 @@ export class ObligationComponent implements OnInit {
     this.obligationService.removeItem({ id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -241,7 +243,7 @@ export class ObligationComponent implements OnInit {
 
   public confirmAddBeneficiary(): void {
     if (!this.addBeneficiaryTarget || !this.formBenMontanteAPagar) {
-      this.snackBar.open('Vui lòng nhập Montante a pagar.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('obligation.errMissingMontante'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -264,7 +266,7 @@ export class ObligationComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.addBeneficiaryTarget = null;
@@ -278,7 +280,7 @@ export class ObligationComponent implements OnInit {
     this.obligationService.removeBeneficiary({ id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -288,11 +290,11 @@ export class ObligationComponent implements OnInit {
   }
 
   public submitObligation(item: ObligationDataContract): void {
-    if (!confirm(`Gửi duyệt Obrigação số ${item.numero}?`)) { return; }
+    if (!confirm(this.translate.instant('obligation.confirmSubmit', { numero: item.numero }))) { return; }
     this.obligationService.submit({ id: item.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -305,7 +307,7 @@ export class ObligationComponent implements OnInit {
     this.obligationService.approve({ id: item.id, approve: true }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -325,7 +327,7 @@ export class ObligationComponent implements OnInit {
     this.obligationService.approve({ id: this.rejectId, approve: false, comment: this.rejectComment }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showRejectPrompt = false;
@@ -340,7 +342,7 @@ export class ObligationComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('obligation.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
