@@ -31,6 +31,10 @@
   flex: 1;
 }
 
+.pc-search-field {
+  width: 240px;
+}
+
 .pc-tree {
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -55,6 +59,29 @@
 
 .pc-desig {
   flex: 1;
+}
+
+.pc-row-inactive {
+  background: #fafafa;
+  color: #999;
+}
+
+.pc-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.pc-status-active {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.pc-status-inactive {
+  background: #f1f1f1;
+  color: #888;
 }
 
 .pc-actions {

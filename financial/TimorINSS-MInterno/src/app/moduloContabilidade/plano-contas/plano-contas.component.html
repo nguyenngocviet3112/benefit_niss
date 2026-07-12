@@ -27,13 +27,21 @@
   </div>
 
   <ng-template #nodeTemplate let-node="node">
-    <div class="pc-row" [style.padding-left.px]="12 + (node.parentFk ? 24 : 0)">
+    <div class="pc-row" [class.pc-row-inactive]="!node.indActivo" [style.padding-left.px]="12 + (node.parentFk ? 24 : 0)">
       <span class="pc-code" [matTooltip]="'planoContas.localCodeTooltip' | translate: { codigo: node.codigo }">{{ node.fullCodigo }}</span>
       <span class="pc-desig">{{ node.designacao }}</span>
+      <span class="pc-status" [ngClass]="node.indActivo ? 'pc-status-active' : 'pc-status-inactive'">
+        {{ (node.indActivo ? 'planoContas.statusActive' : 'planoContas.statusInactive') | translate }}
+      </span>
       <span class="pc-actions">
-        <button mat-button (click)="openAddForm(node)">{{ 'planoContas.addChild' | translate }}</button>
-        <button mat-button (click)="openEditForm(node)">{{ 'planoContas.editButton' | translate }}</button>
-        <button mat-button (click)="deactivate(node)">{{ 'planoContas.deleteButton' | translate }}</button>
+        <ng-container *ngIf="node.indActivo; else inactiveActions">
+          <button mat-button (click)="openAddForm(node)">{{ 'planoContas.addChild' | translate }}</button>
+          <button mat-button (click)="openEditForm(node)">{{ 'planoContas.editButton' | translate }}</button>
+          <button mat-button (click)="deactivate(node)">{{ 'planoContas.deleteButton' | translate }}</button>
+        </ng-container>
+        <ng-template #inactiveActions>
+          <button mat-button color="primary" (click)="reactivate(node)">{{ 'planoContas.reactivateButton' | translate }}</button>
+        </ng-template>
       </span>
     </div>
     <ng-container *ngFor="let child of node.children">

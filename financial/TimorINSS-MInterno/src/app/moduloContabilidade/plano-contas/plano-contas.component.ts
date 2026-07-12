@@ -99,7 +99,8 @@ export class PlanoContasComponent implements OnInit {
   }
 
   private filterNode(node: CodigoContaRow, term: string): CodigoContaRow | null {
-    const selfMatches = node.codigo.toLowerCase().includes(term) || node.fullCodigo.toLowerCase().includes(term);
+    const selfMatches = node.codigo.toLowerCase().includes(term) || node.fullCodigo.toLowerCase().includes(term)
+      || (node.designacao || '').toLowerCase().includes(term);
     const filteredChildren = node.children
       .map(child => this.filterNode(child, term))
       .filter((child): child is CodigoContaRow => child !== null);
@@ -160,6 +161,32 @@ export class PlanoContasComponent implements OnInit {
     }
 
     this.codigoContaTreeService.deactivate({ id: item.id }).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+          return;
+        }
+        this.loadTree();
+      },
+      err => this.showError(err)
+    );
+  }
+
+  // Save() ở backend luôn set IndActivo=true bất kể tạo mới hay sửa — dùng
+  // lại đúng endpoint đó (gửi nguyên các field hiện có) để kích hoạt lại,
+  // không cần thêm API riêng.
+  public reactivate(item: CodigoContaTreeItemDataContract): void {
+    if (!confirm(this.translate.instant('planoContas.confirmReactivate', { codigo: item.codigo, designacao: item.designacao }))) {
+      return;
+    }
+
+    this.codigoContaTreeService.save({
+      id: item.id,
+      codigo: item.codigo,
+      designacao: item.designacao,
+      parentFk: item.parentFk,
+      orcamentoConfigFk: this.orcamentoConfigFk
+    }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
           this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });

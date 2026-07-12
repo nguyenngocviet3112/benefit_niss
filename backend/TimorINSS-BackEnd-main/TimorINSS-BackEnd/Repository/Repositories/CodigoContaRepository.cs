@@ -467,10 +467,14 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return countFilhos > 0;
         }
 
+        // 2026-07-12: bỏ filter IndActivo — màn quản lý Plano de Contas cần hiện
+        // CẢ tài khoản đang inactive (kèm trạng thái) để admin biết/khôi phục lại
+        // nếu cần, không ẩn hẳn như trước (chỉ các dropdown chọn tài khoản để dùng
+        // — vd GetAllActiveCodigoConta — mới lọc active-only, không đụng ở đây).
         public List<Codigoconta> GetTreeByOrcamentoConfig(int orcamentoConfigFk)
         {
             return _moduloContribuicoesContext.Codigoconta
-                .Where(a => a.IndActivo && a.OrcamentoConfigFk == orcamentoConfigFk)
+                .Where(a => a.OrcamentoConfigFk == orcamentoConfigFk)
                 .OrderBy(a => a.Codigo)
                 .ToList();
         }
