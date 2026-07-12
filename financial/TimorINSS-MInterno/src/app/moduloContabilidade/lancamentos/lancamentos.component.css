@@ -1,0 +1,85 @@
+.la-container {
+  padding: 24px;
+  max-width: 1200px;
+}
+
+.la-header h2 {
+  margin: 0 0 4px;
+}
+
+.la-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.la-hint {
+  margin: 0 0 16px;
+  color: #666;
+  font-size: 13px;
+}
+
+.la-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.la-field-ano, .la-field-mes {
+  width: 110px;
+}
+
+.la-field-origem {
+  width: 180px;
+}
+
+.la-table-wrap {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.la-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.la-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.la-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.la-code {
+  font-family: monospace;
+  color: #7c2d22;
+  margin-right: 6px;
+}
+
+.la-num {
+  text-align: right;
+}
+
+.la-empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+}
+
+.la-total-label {
+  text-align: right;
+  font-weight: 600;
+}
+
+.la-total-value {
+  font-weight: 600;
+}

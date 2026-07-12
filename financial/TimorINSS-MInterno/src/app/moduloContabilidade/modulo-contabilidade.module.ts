@@ -37,6 +37,7 @@ import { SaldosAberturaComponent } from './saldos-abertura/saldos-abertura.compo
 import { BankAccountComponent } from './settings/bank-account/bank-account.component';
 import { PlanoContasComponent } from './plano-contas/plano-contas.component';
 import { MapeamentoRubricasComponent } from './mapeamento-rubricas/mapeamento-rubricas.component';
+import { LancamentosComponent } from './lancamentos/lancamentos.component';
 import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/conciliacao-movimentos.component';
 
 @NgModule({
@@ -65,6 +66,7 @@ import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/concili
     BankAccountComponent,
     PlanoContasComponent,
     MapeamentoRubricasComponent,
+    LancamentosComponent,
     ConciliacaoMovimentosComponent
   ],
   imports: [

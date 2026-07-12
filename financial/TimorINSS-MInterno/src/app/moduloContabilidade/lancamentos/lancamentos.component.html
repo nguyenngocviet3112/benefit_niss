@@ -1,0 +1,67 @@
+<div class="la-container">
+  <div class="la-header">
+    <h2>Registo de Lançamentos <span class="en">(Sổ Nhật ký kế toán - Débito/Crédito)</span></h2>
+    <p class="la-hint">Bút toán được tự động sinh ra khi Pagamento thực hiện hoặc Receita xác nhận — không nhập tay tại đây.</p>
+  </div>
+
+  <div class="la-filter-bar">
+    <mat-form-field appearance="outline" class="la-field-ano">
+      <mat-label>Năm</mat-label>
+      <input matInput type="number" [(ngModel)]="ano" name="ano" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="la-field-mes">
+      <mat-label>Tháng</mat-label>
+      <input matInput type="number" min="1" max="12" [(ngModel)]="mes" name="mes" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="la-field-origem">
+      <mat-label>Nguồn gốc</mat-label>
+      <mat-select [(value)]="origemTipo">
+        <mat-option *ngFor="let opt of origemTipoOptions" [value]="opt.value">{{ opt.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="load()">Tìm kiếm</button>
+  </div>
+
+  <div class="la-table-wrap" *ngIf="!loading">
+    <table class="la-table">
+      <thead>
+        <tr>
+          <th>Ngày</th>
+          <th>Diễn giải</th>
+          <th>Tài khoản Nợ (Débito)</th>
+          <th>Tài khoản Có (Crédito)</th>
+          <th class="la-num">Giá trị (USD)</th>
+          <th>Nguồn gốc</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of pagedItems">
+          <td>{{ item.data | date:'dd/MM/yyyy' }}</td>
+          <td>{{ item.descricao }}</td>
+          <td><span class="la-code">{{ item.codigoContaDebitoCodigo }}</span> {{ item.codigoContaDebitoDesignacao }}</td>
+          <td><span class="la-code">{{ item.codigoContaCreditoCodigo }}</span> {{ item.codigoContaCreditoDesignacao }}</td>
+          <td class="la-num">{{ item.valor | number:'1.2-2' }}</td>
+          <td>{{ item.origemTipo === 'PaymentExecution' ? 'Pagamento' : (item.origemTipo === 'ReceitaPac' ? 'Receita' : item.origemTipo) }}</td>
+        </tr>
+        <tr *ngIf="pagedItems.length === 0">
+          <td colspan="6" class="la-empty">Chưa có bút toán nào cho bộ lọc này.</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="items.length > 0">
+        <tr>
+          <td colspan="4" class="la-total-label">Tổng cộng</td>
+          <td class="la-num la-total-value">{{ totalValor | number:'1.2-2' }}</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <mat-paginator *ngIf="items.length > 0"
+      [length]="items.length" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100]"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

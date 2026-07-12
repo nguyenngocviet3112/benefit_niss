@@ -14,15 +14,17 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUtilsDataManager _utils;
+        private readonly ILancamentoDataManager _lancamentoDataManager;
 
         private const string ESTADO_DRAFT = "DRAFT";
         private const string ESTADO_PENDING_APPROVAL = "PENDING_APPROVAL";
         private const string ESTADO_APPROVED = "APPROVED";
 
-        public PaymentDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils)
+        public PaymentDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils, ILancamentoDataManager lancamentoDataManager)
         {
             _unitOfWork = unitOfWork;
             _utils = utils;
+            _lancamentoDataManager = lancamentoDataManager;
         }
 
         private static decimal ValorObrigacao(Obligation obligation)
@@ -333,6 +335,20 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 };
                 entity = _utils.SetDetailsToEntity(entity);
                 _unitOfWork.PaymentExecutionRepository.Add(entity);
+                _unitOfWork.Commit(); // entity.Id (identity) chỉ có giá trị thật sau Commit
+
+                // Bút toán Débito/Crédito tự sinh ngay khi Pagamento thực hiện — dùng
+                // đúng 2 tài khoản đã lưu ở PaymentAuthorization (bước duyệt), không nhập
+                // tay riêng (xem memory lancamentos-conciliacao-link-design).
+                _lancamentoDataManager.GerarSeChuaCo(
+                    origemTipo: "PaymentExecution",
+                    origemId: entity.Id,
+                    data: request.DataPagamento,
+                    codigoContaDebitoFk: authorization.CodigoContaDebitoFk,
+                    codigoContaCreditoFk: authorization.CodigoContaCreditoFk,
+                    valor: authorization.ValorAutorizado,
+                    descricao: $"Pagamento Autorização Nº {authorization.Numero}/{authorization.Ano} - {authorization.Descritivo}");
+
                 _unitOfWork.Commit();
             }
             catch (Exception e)

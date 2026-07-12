@@ -29,5 +29,6 @@ namespace TimorINSSBackEnd.Models
         public virtual DbSet<OrcamentoSuplementar> OrcamentoSuplementar { get; set; }
         public virtual DbSet<OrcamentoSuplementarLinha> OrcamentoSuplementarLinha { get; set; }
         public virtual DbSet<BankStatementLine> BankStatementLine { get; set; }
+        public virtual DbSet<Lancamento> Lancamento { get; set; }
     }
 }

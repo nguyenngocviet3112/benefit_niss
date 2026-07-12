@@ -87,13 +87,15 @@ export class ContabilidadeShellComponent implements OnInit {
       // hoàn toàn khác với chu trình chấp hành ngân sách (Chu trình chi tiêu/
       // Thu) đã build — sổ Nợ/Có (Lançamentos/DB/CR) là dữ liệu giao dịch,
       // không phải báo cáo, nên tách nhóm riêng thay vì bỏ vào Báo cáo.
-      // Xem [[financial-statements-scope-gap]] — toàn bộ nhóm này comingSoon,
-      // chưa xác nhận có nằm trong phạm vi Change Request hay không.
+      // 2026-07-12: build xong — CHỈ XEM (không nhập tay), bút toán tự sinh
+      // từ Pagamento thực hiện (dùng Débito/Crédito đã lưu ở PaymentAuthorization)
+      // và Receita (follow-up, ReceitaPac chưa có cột Débito/Crédito — xem
+      // memory ce-inss-global-impl-status / financial-statements-scope-gap).
       label: 'Contabilidade Geral',
       icon: 'menu_book',
       expanded: false,
       items: [
-        { label: 'Registo de Lançamentos (Débito/Crédito)', comingSoon: true },
+        { label: 'Registo de Lançamentos (Débito/Crédito)', route: '/contabilidade/lancamentos' },
       ]
     },
     {
