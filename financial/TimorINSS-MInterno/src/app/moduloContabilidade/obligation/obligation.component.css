@@ -220,6 +220,21 @@
   gap: 8px;
 }
 
+.obr-reject-note {
+  display: flex;
+  gap: 6px;
+  font-size: 12px;
+  padding: 4px 0;
+}
+
+.obr-reject-note label {
+  color: #888;
+}
+
+.obr-reject-text {
+  color: #c62828;
+}
+
 .obr-empty {
   padding: 16px;
   text-align: center;

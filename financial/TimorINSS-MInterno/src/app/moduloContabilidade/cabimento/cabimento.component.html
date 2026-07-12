@@ -26,25 +26,31 @@
       <span class="cab-col-actions">{{ 'cabimento.colActions' | translate }}</span>
     </div>
 
-    <div class="cab-row" *ngFor="let item of items">
-      <span class="cab-col-num">{{ item.numero }}/{{ item.mes }}</span>
-      <span class="cab-col-ad">AD {{ item.expenditureAuthorizationNumero }}</span>
-      <span class="cab-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
-      <span class="cab-col-valor">$ {{ item.valorCabimentado | number:'1.2-2' }}</span>
-      <span class="cab-col-saldo" [ngClass]="item.saldoDisponivel < 0 ? 'cab-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
-      <span class="cab-col-estado">
-        <span class="cab-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] | translate }}</span>
-      </span>
-      <span class="cab-col-actions">
-        <ng-container *ngIf="item.estado === 'DRAFT'">
-          <button mat-button (click)="openEdit(item)">{{ 'cabimento.editButton' | translate }}</button>
-          <button mat-button (click)="submitCabimento(item)">{{ 'cabimento.submitButton' | translate }}</button>
-        </ng-container>
-        <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
-          <button mat-button color="primary" (click)="approve(item)">{{ 'cabimento.approveButton' | translate }}</button>
-          <button mat-button color="warn" (click)="openRejectPrompt(item.id)">{{ 'cabimento.rejectButton' | translate }}</button>
-        </ng-container>
-      </span>
+    <div *ngFor="let item of items">
+      <div class="cab-row">
+        <span class="cab-col-num">{{ item.numero }}/{{ item.mes }}</span>
+        <span class="cab-col-ad">AD {{ item.expenditureAuthorizationNumero }}/{{ item.expenditureAuthorizationMes }}</span>
+        <span class="cab-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
+        <span class="cab-col-valor">$ {{ item.valorCabimentado | number:'1.2-2' }}</span>
+        <span class="cab-col-saldo" [ngClass]="item.saldoDisponivel < 0 ? 'cab-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
+        <span class="cab-col-estado">
+          <span class="cab-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] | translate }}</span>
+        </span>
+        <span class="cab-col-actions">
+          <ng-container *ngIf="item.estado === 'DRAFT'">
+            <button mat-button (click)="openEdit(item)">{{ 'cabimento.editButton' | translate }}</button>
+            <button mat-button (click)="submitCabimento(item)">{{ 'cabimento.submitButton' | translate }}</button>
+          </ng-container>
+          <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
+            <button mat-button color="primary" (click)="approve(item)">{{ 'cabimento.approveButton' | translate }}</button>
+            <button mat-button color="warn" (click)="openRejectPrompt(item.id)">{{ 'cabimento.rejectButton' | translate }}</button>
+          </ng-container>
+        </span>
+      </div>
+      <div class="cab-reject-note" *ngIf="item.lastRejectComment">
+        <label>{{ 'cabimento.lastRejectComment' | translate }}</label>
+        <span class="cab-reject-text">{{ item.lastRejectComment }}</span>
+      </div>
     </div>
 
     <div class="cab-empty" *ngIf="items.length === 0">{{ 'cabimento.emptyList' | translate }}</div>
@@ -56,7 +62,7 @@
 
       <div class="cab-ad-list" *ngIf="!pickedAd">
         <div class="cab-ad-row" *ngFor="let ad of availableAds" (click)="pickAd(ad)">
-          <span>AD {{ ad.numero }} — {{ ad.atividadeCodigo }} / {{ ad.economicClassificationCodigo }}</span>
+          <span>AD {{ ad.numero }}/{{ ad.mes }} — {{ ad.atividadeCodigo }} / {{ ad.economicClassificationCodigo }}</span>
           <span>{{ ad.organizationNome }}</span>
           <span>$ {{ ad.valorRevisto | number:'1.2-2' }}</span>
         </div>
@@ -64,7 +70,7 @@
       </div>
 
       <div *ngIf="pickedAd">
-        <p><b>AD:</b> {{ pickedAd.numero }} — {{ pickedAd.atividadeCodigo }} / {{ pickedAd.economicClassificationCodigo }} ({{ pickedAd.organizationNome }})</p>
+        <p><b>AD:</b> {{ pickedAd.numero }}/{{ pickedAd.mes }} — {{ pickedAd.atividadeCodigo }} / {{ pickedAd.economicClassificationCodigo }} ({{ pickedAd.organizationNome }})</p>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>{{ 'cabimento.fieldDescritivo' | translate }} <span class="itag type">{{ 'cabimento.typedTag' | translate }}</span></mat-label>

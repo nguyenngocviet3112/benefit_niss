@@ -88,6 +88,21 @@
   color: #ef6c00;
 }
 
+.cab-reject-note {
+  display: flex;
+  gap: 6px;
+  font-size: 12px;
+  padding: 2px 12px 8px;
+}
+
+.cab-reject-note label {
+  color: #888;
+}
+
+.cab-reject-text {
+  color: #c62828;
+}
+
 .cab-empty {
   padding: 24px;
   text-align: center;
