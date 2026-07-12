@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { CompromissoDespesaService } from '../../services/compromisso-despesa.service';
 import { CabimentoDisponivelParaCompromissoDataContract, CompromissoDespesaDataContract } from '../../response-models/compromisso-despesa-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
-  DRAFT: 'Nháp',
-  PENDING_REVIEW: 'Chờ kiểm tra',
-  PENDING_APPROVAL: 'Chờ phê duyệt',
-  APPROVED: 'Đã duyệt'
+  DRAFT: 'compromisso.estadoDraft',
+  PENDING_REVIEW: 'compromisso.estadoPendingReview',
+  PENDING_APPROVAL: 'compromisso.estadoPendingApproval',
+  APPROVED: 'compromisso.estadoApproved'
 };
 
 const ASSUMIDO_COM_LABELS: { [key: string]: string } = {
-  CONTRATO: 'Contrato',
-  LISTA_BENEFICIARIOS: 'Listas Beneficiários (subsídios imediatos)',
-  OBRIGACAO: 'Obrigação'
+  CONTRATO: 'compromisso.assumidoContrato',
+  LISTA_BENEFICIARIOS: 'compromisso.assumidoListaBeneficiarios',
+  OBRIGACAO: 'compromisso.assumidoObrigacao'
 };
 
 @Component({
@@ -54,7 +55,8 @@ export class CompromissoDespesaComponent implements OnInit {
 
   constructor(
     private compromissoDespesaService: CompromissoDespesaService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -105,7 +107,7 @@ export class CompromissoDespesaComponent implements OnInit {
 
   public createCompromisso(): void {
     if (!this.pickedCabimento || !this.formValorCompromissoGlobal || !this.formValorCompromissoAno) {
-      this.snackBar.open('Vui lòng chọn Cabimento và nhập đủ Valor.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('compromisso.errMissingCabimento'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -120,12 +122,12 @@ export class CompromissoDespesaComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showCabimentoPicker = false;
         this.pickedCabimento = null;
-        this.snackBar.open(`Đã tạo Compromisso số ${response.item.numero}.`, 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('compromisso.createdSuccess', { numero: response.item.numero }), this.translate.instant('general.close'), { duration: 3000 });
         this.load();
       },
       err => this.showError(err)
@@ -134,7 +136,7 @@ export class CompromissoDespesaComponent implements OnInit {
 
   public addPlurianualidade(item: CompromissoDespesaDataContract): void {
     if (!this.formPluriAno || !this.formPluriValor) {
-      this.snackBar.open('Vui lòng nhập Ano và Valor.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('compromisso.errMissingPluri'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
     this.compromissoDespesaService.savePlurianualidade({
@@ -145,7 +147,7 @@ export class CompromissoDespesaComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.formPluriAno = null;
@@ -179,7 +181,7 @@ export class CompromissoDespesaComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.editId = null;
@@ -190,11 +192,11 @@ export class CompromissoDespesaComponent implements OnInit {
   }
 
   public submitCompromisso(item: CompromissoDespesaDataContract): void {
-    if (!confirm(`Gửi duyệt Compromisso số ${item.numero}?`)) { return; }
+    if (!confirm(this.translate.instant('compromisso.confirmSubmit', { numero: item.numero }))) { return; }
     this.compromissoDespesaService.submit({ id: item.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -207,7 +209,7 @@ export class CompromissoDespesaComponent implements OnInit {
     this.compromissoDespesaService.review({ id: item.id, approve: true }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -220,7 +222,7 @@ export class CompromissoDespesaComponent implements OnInit {
     this.compromissoDespesaService.approve({ id: item.id, approve: true }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -245,7 +247,7 @@ export class CompromissoDespesaComponent implements OnInit {
     call.subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showRejectPrompt = false;
@@ -260,7 +262,7 @@ export class CompromissoDespesaComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('compromisso.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }

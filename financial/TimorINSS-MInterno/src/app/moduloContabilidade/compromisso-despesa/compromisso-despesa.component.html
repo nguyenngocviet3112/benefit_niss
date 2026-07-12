@@ -1,28 +1,28 @@
 <div class="comp-container">
   <div class="comp-header">
-    <h2>Compromisso <span class="en">(cam kết chi — sinh từ Cabimento đã duyệt; luồng duyệt Diretor DF + DE)</span></h2>
+    <h2>{{ 'compromisso.header' | translate }} <span class="en">({{ 'compromisso.headerGloss' | translate }})</span></h2>
   </div>
 
   <div class="comp-context-bar">
     <mat-form-field appearance="outline" class="small-field">
-      <mat-label>Ano</mat-label>
+      <mat-label>{{ 'compromisso.fieldAno' | translate }}</mat-label>
       <input matInput type="number" [(ngModel)]="ano" name="ano" />
     </mat-form-field>
-    <button mat-stroked-button (click)="load()">Tải lại</button>
+    <button mat-stroked-button (click)="load()">{{ 'compromisso.reload' | translate }}</button>
 
     <span class="spacer"></span>
 
-    <button mat-raised-button color="primary" (click)="openCabimentoPicker()">+ Tạo Compromisso từ Cabimento</button>
+    <button mat-raised-button color="primary" (click)="openCabimentoPicker()">{{ 'compromisso.addFromCabimento' | translate }}</button>
   </div>
 
   <div class="comp-list" *ngIf="!loading">
     <div class="comp-row comp-row-header">
-      <span class="comp-col-num">N.º Compromisso</span>
-      <span class="comp-col-cab">Cabimento / AD</span>
-      <span class="comp-col-atividade">Atividade / Classificação Económica</span>
-      <span class="comp-col-valor">Valor revisto</span>
-      <span class="comp-col-saldo">Saldo disponível</span>
-      <span class="comp-col-estado">Trạng thái</span>
+      <span class="comp-col-num">{{ 'compromisso.colNumCompromisso' | translate }}</span>
+      <span class="comp-col-cab">{{ 'compromisso.colCabAd' | translate }}</span>
+      <span class="comp-col-atividade">{{ 'compromisso.colAtividade' | translate }}</span>
+      <span class="comp-col-valor">{{ 'compromisso.colValor' | translate }}</span>
+      <span class="comp-col-saldo">{{ 'compromisso.colSaldo' | translate }}</span>
+      <span class="comp-col-estado">{{ 'compromisso.colEstado' | translate }}</span>
     </div>
 
     <ng-container *ngFor="let item of items">
@@ -33,88 +33,88 @@
         <span class="comp-col-valor">$ {{ item.valorRevisto | number:'1.2-2' }}</span>
         <span class="comp-col-saldo" [ngClass]="item.saldoDisponivel < 0 ? 'comp-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
         <span class="comp-col-estado">
-          <span class="comp-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
+          <span class="comp-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] | translate }}</span>
         </span>
       </div>
 
       <div class="comp-detail" *ngIf="expandedId === item.id">
         <div class="comp-detail-grid">
           <div class="comp-field">
-            <label>Descritivo <span class="itag type">Gõ tay</span></label>
+            <label>{{ 'compromisso.fieldDescritivo' | translate }} <span class="itag type">{{ 'compromisso.typedTag' | translate }}</span></label>
             <span>{{ item.descritivo || '—' }}</span>
           </div>
           <div class="comp-field">
-            <label>Valor Compromisso global (Plurianual) <span class="itag type">Gõ tay</span></label>
+            <label>{{ 'compromisso.fieldValorGlobal' | translate }} <span class="itag type">{{ 'compromisso.typedTag' | translate }}</span></label>
             <span>$ {{ item.valorCompromissoGlobal | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field">
-            <label>Compromisso no Ano <span class="itag type">Gõ tay</span></label>
+            <label>{{ 'compromisso.fieldValorAno' | translate }} <span class="itag type">{{ 'compromisso.typedTag' | translate }}</span></label>
             <span>$ {{ item.valorCompromissoAno | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field">
-            <label>Regularização</label>
+            <label>{{ 'compromisso.fieldRegularizacao' | translate }}</label>
             <span>$ {{ item.regularizacao | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field">
-            <label>Compromisso assumido com <span class="itag drop">Chọn</span></label>
-            <span>{{ (item.assumidoCom && assumidoComLabels[item.assumidoCom]) || '—' }}</span>
+            <label>{{ 'compromisso.fieldAssumidoCom' | translate }} <span class="itag drop">{{ 'compromisso.dropTag' | translate }}</span></label>
+            <span>{{ (item.assumidoCom ? (assumidoComLabels[item.assumidoCom] | translate) : '—') }}</span>
           </div>
           <div class="comp-field">
-            <label>Valor revisto <span class="itag auto">Tự động</span></label>
+            <label>{{ 'compromisso.fieldValorRevisto' | translate }} <span class="itag auto">{{ 'compromisso.autoTag' | translate }}</span></label>
             <span>$ {{ item.valorRevisto | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field">
-            <label>Đã có Obrigação (comprometido) <span class="itag auto">Tự động</span></label>
+            <label>{{ 'compromisso.fieldObrigado' | translate }} <span class="itag auto">{{ 'compromisso.autoTag' | translate }}</span></label>
             <span>$ {{ item.valorObrigado | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field">
-            <label>Saldo disponível <span class="itag auto">Tự động</span></label>
+            <label>{{ 'compromisso.fieldSaldoDisponivel' | translate }} <span class="itag auto">{{ 'compromisso.autoTag' | translate }}</span></label>
             <span [ngClass]="item.saldoDisponivel < 0 ? 'comp-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field" *ngIf="item.lastRejectComment">
-            <label>Lý do từ chối gần nhất</label>
+            <label>{{ 'compromisso.lastRejectComment' | translate }}</label>
             <span class="comp-reject-text">{{ item.lastRejectComment }}</span>
           </div>
         </div>
 
         <div class="comp-pluri">
-          <h4>Plurianualidade</h4>
+          <h4>{{ 'compromisso.pluriTitle' | translate }}</h4>
           <div class="comp-pluri-row" *ngFor="let p of item.plurianualidade">
             <span>{{ p.ano }}</span>
             <span>$ {{ p.valor | number:'1.2-2' }}</span>
           </div>
           <div class="comp-pluri-add" *ngIf="item.estado === 'DRAFT'">
-            <input type="number" placeholder="Ano" [(ngModel)]="formPluriAno" name="formPluriAno{{item.id}}" class="comp-pluri-input-ano" />
-            <input type="number" placeholder="Valor" [(ngModel)]="formPluriValor" name="formPluriValor{{item.id}}" class="comp-pluri-input-valor" />
-            <button mat-button (click)="addPlurianualidade(item)">+ Thêm năm</button>
+            <input type="number" [placeholder]="'compromisso.fieldAno' | translate" [(ngModel)]="formPluriAno" name="formPluriAno{{item.id}}" class="comp-pluri-input-ano" />
+            <input type="number" [placeholder]="'compromisso.placeholderValor' | translate" [(ngModel)]="formPluriValor" name="formPluriValor{{item.id}}" class="comp-pluri-input-valor" />
+            <button mat-button (click)="addPlurianualidade(item)">{{ 'compromisso.addYearButton' | translate }}</button>
           </div>
         </div>
 
         <div class="comp-actions-bar">
           <ng-container *ngIf="item.estado === 'DRAFT'">
-            <button mat-stroked-button (click)="openEdit(item)">Sửa</button>
-            <button mat-raised-button color="primary" (click)="submitCompromisso(item)">Gửi duyệt</button>
+            <button mat-stroked-button (click)="openEdit(item)">{{ 'compromisso.editButton' | translate }}</button>
+            <button mat-raised-button color="primary" (click)="submitCompromisso(item)">{{ 'compromisso.submitButton' | translate }}</button>
           </ng-container>
 
           <ng-container *ngIf="item.estado === 'PENDING_REVIEW'">
-            <button mat-raised-button color="primary" (click)="reviewApprove(item)">Xác nhận kiểm tra (Diretor DF)</button>
-            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'review')">Từ chối</button>
+            <button mat-raised-button color="primary" (click)="reviewApprove(item)">{{ 'compromisso.reviewApproveButton' | translate }}</button>
+            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'review')">{{ 'compromisso.rejectButton' | translate }}</button>
           </ng-container>
 
           <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
-            <button mat-raised-button color="primary" (click)="finalApprove(item)">Phê duyệt (DE)</button>
-            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'approve')">Từ chối</button>
+            <button mat-raised-button color="primary" (click)="finalApprove(item)">{{ 'compromisso.finalApproveButton' | translate }}</button>
+            <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'approve')">{{ 'compromisso.rejectButton' | translate }}</button>
           </ng-container>
         </div>
       </div>
     </ng-container>
 
-    <div class="comp-empty" *ngIf="items.length === 0">Chưa có Compromisso nào cho năm này.</div>
+    <div class="comp-empty" *ngIf="items.length === 0">{{ 'compromisso.emptyList' | translate }}</div>
   </div>
 
   <div class="comp-form-overlay" *ngIf="showCabimentoPicker">
     <div class="comp-form comp-form-wide">
-      <h3>Tạo Compromisso từ Cabimento đã duyệt</h3>
+      <h3>{{ 'compromisso.pickerTitle' | translate }}</h3>
 
       <div class="comp-cab-list" *ngIf="!pickedCabimento">
         <div class="comp-cab-row" *ngFor="let c of availableCabimentos" (click)="pickCabimento(c)">
@@ -122,94 +122,94 @@
           <span>{{ c.organizationNome }}</span>
           <span>$ {{ c.valorCabimentado | number:'1.2-2' }}</span>
         </div>
-        <div class="comp-empty" *ngIf="availableCabimentos.length === 0">Không có Cabimento nào đã duyệt.</div>
+        <div class="comp-empty" *ngIf="availableCabimentos.length === 0">{{ 'compromisso.noCabimentoAvailable' | translate }}</div>
       </div>
 
       <div *ngIf="pickedCabimento">
-        <p><b>Cabimento:</b> {{ pickedCabimento.numero }} — {{ pickedCabimento.atividadeCodigo }} / {{ pickedCabimento.economicClassificationCodigo }} ({{ pickedCabimento.organizationNome }})</p>
+        <p><b>{{ 'compromisso.cabimentoLabel' | translate }}</b> {{ pickedCabimento.numero }} — {{ pickedCabimento.atividadeCodigo }} / {{ pickedCabimento.economicClassificationCodigo }} ({{ pickedCabimento.organizationNome }})</p>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Descritivo <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'compromisso.fieldDescritivo' | translate }} <span class="itag type">{{ 'compromisso.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Valor Compromisso global (Plurianual) (USD) <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'compromisso.fieldValorGlobalUsd' | translate }} <span class="itag type">{{ 'compromisso.typedTag' | translate }}</span></mat-label>
           <input matInput type="number" [(ngModel)]="formValorCompromissoGlobal" name="formValorCompromissoGlobal" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Compromisso no Ano (USD) <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'compromisso.fieldValorAnoUsd' | translate }} <span class="itag type">{{ 'compromisso.typedTag' | translate }}</span></mat-label>
           <input matInput type="number" [(ngModel)]="formValorCompromissoAno" name="formValorCompromissoAno" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="medium-field">
-          <mat-label>Compromisso assumido com <span class="itag drop">Chọn</span></mat-label>
+          <mat-label>{{ 'compromisso.fieldAssumidoCom' | translate }} <span class="itag drop">{{ 'compromisso.dropTag' | translate }}</span></mat-label>
           <mat-select [(ngModel)]="formAssumidoCom" name="formAssumidoCom">
-            <mat-option value="CONTRATO">Contrato</mat-option>
-            <mat-option value="LISTA_BENEFICIARIOS">Listas Beneficiários (subsídios imediatos)</mat-option>
-            <mat-option value="OBRIGACAO">Obrigação</mat-option>
+            <mat-option value="CONTRATO">{{ 'compromisso.assumidoContrato' | translate }}</mat-option>
+            <mat-option value="LISTA_BENEFICIARIOS">{{ 'compromisso.assumidoListaBeneficiarios' | translate }}</mat-option>
+            <mat-option value="OBRIGACAO">{{ 'compromisso.assumidoObrigacao' | translate }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="small-field">
-          <mat-label>Mês</mat-label>
+          <mat-label>{{ 'compromisso.fieldMes' | translate }}</mat-label>
           <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
         </mat-form-field>
       </div>
 
       <div class="comp-form-actions">
-        <button mat-button (click)="cancelCabimentoPicker()">Hủy</button>
-        <button mat-raised-button color="primary" *ngIf="pickedCabimento" (click)="createCompromisso()">Tạo Compromisso</button>
+        <button mat-button (click)="cancelCabimentoPicker()">{{ 'compromisso.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" *ngIf="pickedCabimento" (click)="createCompromisso()">{{ 'compromisso.createButton' | translate }}</button>
       </div>
     </div>
   </div>
 
   <div class="comp-form-overlay" *ngIf="editId !== null">
     <div class="comp-form">
-      <h3>Sửa Compromisso</h3>
+      <h3>{{ 'compromisso.editTitle' | translate }}</h3>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Descritivo <span class="itag type">Gõ tay</span></mat-label>
+        <mat-label>{{ 'compromisso.fieldDescritivo' | translate }} <span class="itag type">{{ 'compromisso.typedTag' | translate }}</span></mat-label>
         <input matInput [(ngModel)]="editDescritivo" name="editDescritivo" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Valor Compromisso global (Plurianual) (USD) <span class="itag type">Gõ tay</span></mat-label>
+        <mat-label>{{ 'compromisso.fieldValorGlobalUsd' | translate }} <span class="itag type">{{ 'compromisso.typedTag' | translate }}</span></mat-label>
         <input matInput type="number" [(ngModel)]="editValorCompromissoGlobal" name="editValorCompromissoGlobal" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Compromisso no Ano (USD) <span class="itag type">Gõ tay</span></mat-label>
+        <mat-label>{{ 'compromisso.fieldValorAnoUsd' | translate }} <span class="itag type">{{ 'compromisso.typedTag' | translate }}</span></mat-label>
         <input matInput type="number" [(ngModel)]="editValorCompromissoAno" name="editValorCompromissoAno" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="medium-field">
-        <mat-label>Compromisso assumido com <span class="itag drop">Chọn</span></mat-label>
+        <mat-label>{{ 'compromisso.fieldAssumidoCom' | translate }} <span class="itag drop">{{ 'compromisso.dropTag' | translate }}</span></mat-label>
         <mat-select [(ngModel)]="editAssumidoCom" name="editAssumidoCom">
-          <mat-option value="CONTRATO">Contrato</mat-option>
-          <mat-option value="LISTA_BENEFICIARIOS">Listas Beneficiários (subsídios imediatos)</mat-option>
-          <mat-option value="OBRIGACAO">Obrigação</mat-option>
+          <mat-option value="CONTRATO">{{ 'compromisso.assumidoContrato' | translate }}</mat-option>
+          <mat-option value="LISTA_BENEFICIARIOS">{{ 'compromisso.assumidoListaBeneficiarios' | translate }}</mat-option>
+          <mat-option value="OBRIGACAO">{{ 'compromisso.assumidoObrigacao' | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <div class="comp-form-actions">
-        <button mat-button (click)="cancelEdit()">Hủy</button>
-        <button mat-raised-button color="primary" (click)="saveEdit()">Lưu</button>
+        <button mat-button (click)="cancelEdit()">{{ 'compromisso.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="saveEdit()">{{ 'compromisso.saveButton' | translate }}</button>
       </div>
     </div>
   </div>
 
   <div class="comp-form-overlay" *ngIf="showRejectPrompt">
     <div class="comp-form">
-      <h3>Lý do từ chối</h3>
+      <h3>{{ 'compromisso.rejectTitle' | translate }}</h3>
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Ghi chú</mat-label>
+        <mat-label>{{ 'compromisso.fieldGhiChu' | translate }}</mat-label>
         <textarea matInput [(ngModel)]="rejectComment" name="rejectComment" rows="3"></textarea>
       </mat-form-field>
       <div class="comp-form-actions">
-        <button mat-button (click)="cancelReject()">Hủy</button>
-        <button mat-raised-button color="warn" (click)="confirmReject()">Xác nhận từ chối</button>
+        <button mat-button (click)="cancelReject()">{{ 'compromisso.cancelButton' | translate }}</button>
+        <button mat-raised-button color="warn" (click)="confirmReject()">{{ 'compromisso.confirmRejectButton' | translate }}</button>
       </div>
     </div>
   </div>
