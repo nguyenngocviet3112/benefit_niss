@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
+import { TranslateService } from '@ngx-translate/core';
 import { CodigoContaOpeningBalanceService } from '../../services/codigo-conta-opening-balance.service';
 import { CodigoContaOpeningBalanceDataContract } from '../../response-models/codigo-conta-opening-balance-response';
 import { ReceitaPacService } from '../../services/receita-pac.service';
@@ -54,7 +55,8 @@ export class SaldosAberturaComponent implements OnInit {
     private programActivityService: ProgramActivityService,
     private economicClassificationService: EconomicClassificationService,
     private institutionService: InstitutionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -110,10 +112,10 @@ export class SaldosAberturaComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
-        this.snackBar.open(`Đã lưu giá trị đầu kỳ cho ${c.codigo}.`, 'Đóng', { duration: 2500 });
+        this.snackBar.open(this.translate.instant('saldosAbertura.glSavedSuccess', { codigo: c.codigo }), this.translate.instant('general.close'), { duration: 2500 });
       },
       err => this.showError(err)
     );
@@ -135,7 +137,7 @@ export class SaldosAberturaComponent implements OnInit {
         const found = (response.items ?? []).find(e => e.codigo === SALDO_GERENCIA_CODIGO);
         this.economicClassification408Id = found ? found.id : null;
         if (!found) {
-          this.snackBar.open('Không tìm thấy Classificação Económica 408 - Saldo de Gerência. Kiểm tra lại master data.', 'Đóng', { duration: 5000 });
+          this.snackBar.open(this.translate.instant('saldosAbertura.errMissing408'), this.translate.instant('general.close'), { duration: 5000 });
         }
       },
       err => this.showError(err)
@@ -167,11 +169,11 @@ export class SaldosAberturaComponent implements OnInit {
 
   public addSaldoEntry(): void {
     if (!this.economicClassification408Id) {
-      this.snackBar.open('Không tìm thấy Classificação Económica 408, không thể lưu.', 'Đóng', { duration: 4000 });
+      this.snackBar.open(this.translate.instant('saldosAbertura.errNo408'), this.translate.instant('general.close'), { duration: 4000 });
       return;
     }
     if (!this.formRegimeFk || !this.formOrganizationFk || !this.formDescritivo || !this.formValor) {
-      this.snackBar.open('Vui lòng nhập đủ Regime, Organization, Descritivo và Valor.', 'Đóng', { duration: 3500 });
+      this.snackBar.open(this.translate.instant('saldosAbertura.errMissingFields'), this.translate.instant('general.close'), { duration: 3500 });
       return;
     }
 
@@ -191,14 +193,14 @@ export class SaldosAberturaComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.formRegimeFk = null;
         this.formOrganizationFk = null;
         this.formDescritivo = '';
         this.formValor = null;
-        this.snackBar.open('Đã ghi nhận saldo chuyển tiếp.', 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('saldosAbertura.savedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
         this.loadExistingSaldoEntries();
       },
       err => this.showError(err)
@@ -206,7 +208,7 @@ export class SaldosAberturaComponent implements OnInit {
   }
 
   public removeSaldoEntry(item: ReceitaPacDataContract): void {
-    if (!confirm(`Xoá saldo chuyển tiếp "${item.descritivo}"?`)) { return; }
+    if (!confirm(this.translate.instant('saldosAbertura.confirmDelete', { descritivo: item.descritivo }))) { return; }
     this.receitaPacService.deactivate({ id: item.id }).subscribe(
       () => this.loadExistingSaldoEntries(),
       err => this.showError(err)
@@ -214,7 +216,7 @@ export class SaldosAberturaComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('saldosAbertura.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }

@@ -1,25 +1,25 @@
 <div class="ab-container">
   <div class="ab-header">
-    <h2>Saldos de Abertura <span class="en">(Cut-over — chỉ dùng khi thiết lập lần đầu hoặc cần điều chỉnh; không phải nghiệp vụ thường xuyên)</span></h2>
+    <h2>{{ 'saldosAbertura.header' | translate }} <span class="en">({{ 'saldosAbertura.headerGloss' | translate }})</span></h2>
   </div>
 
   <!-- Seção A — GL opening balance -->
   <div class="ab-section">
-    <h3>1. Tài khoản GL (Codigoconta) — Giá trị đầu kỳ</h3>
-    <p class="ab-hint">Nhập giá trị đầu kỳ (Débito/Crédito) cho từng tài khoản kế toán. Chỉ cần nhập những tài khoản có số dư đầu kỳ khác 0.</p>
+    <h3>{{ 'saldosAbertura.sectionATitle' | translate }}</h3>
+    <p class="ab-hint">{{ 'saldosAbertura.sectionAHint' | translate }}</p>
 
     <mat-form-field appearance="outline" class="ab-search-field">
-      <mat-label>Tìm theo mã hoặc tên tài khoản</mat-label>
+      <mat-label>{{ 'saldosAbertura.searchLabel' | translate }}</mat-label>
       <input matInput [(ngModel)]="glSearch" name="glSearch" (ngModelChange)="onGlSearchChange()" />
     </mat-form-field>
 
     <div class="ab-gl-table" *ngIf="!loadingGl">
       <div class="ab-gl-row ab-gl-row-header">
-        <span class="ab-gl-col-codigo">Código</span>
-        <span class="ab-gl-col-designacao">Designação</span>
-        <span class="ab-gl-col-valor">Giá trị đầu kỳ (USD)</span>
-        <span class="ab-gl-col-tipo">Débito/Crédito</span>
-        <span class="ab-gl-col-data">Ngày</span>
+        <span class="ab-gl-col-codigo">{{ 'saldosAbertura.colCodigo' | translate }}</span>
+        <span class="ab-gl-col-designacao">{{ 'saldosAbertura.colDesignacao' | translate }}</span>
+        <span class="ab-gl-col-valor">{{ 'saldosAbertura.colValorInicial' | translate }}</span>
+        <span class="ab-gl-col-tipo">{{ 'saldosAbertura.colDebitoCredito' | translate }}</span>
+        <span class="ab-gl-col-data">{{ 'saldosAbertura.colData' | translate }}</span>
         <span class="ab-gl-col-actions"></span>
       </div>
       <div class="ab-gl-row" *ngFor="let c of pagedGlAccounts">
@@ -30,18 +30,18 @@
         </span>
         <span class="ab-gl-col-tipo">
           <mat-select [(ngModel)]="c.isCredit" [name]="'glCredit' + c.id" class="ab-gl-select">
-            <mat-option [value]="false">Débito</mat-option>
-            <mat-option [value]="true">Crédito</mat-option>
+            <mat-option [value]="false">{{ 'saldosAbertura.debito' | translate }}</mat-option>
+            <mat-option [value]="true">{{ 'saldosAbertura.credito' | translate }}</mat-option>
           </mat-select>
         </span>
         <span class="ab-gl-col-data">
           <input matInput type="date" [(ngModel)]="c.initialValueDate" [name]="'glDate' + c.id" class="ab-gl-input" />
         </span>
         <span class="ab-gl-col-actions">
-          <button mat-button color="primary" (click)="saveGlAccount(c)">Lưu</button>
+          <button mat-button color="primary" (click)="saveGlAccount(c)">{{ 'saldosAbertura.saveButton' | translate }}</button>
         </span>
       </div>
-      <div class="ab-empty" *ngIf="filteredGlAccounts.length === 0">Không tìm thấy tài khoản.</div>
+      <div class="ab-empty" *ngIf="filteredGlAccounts.length === 0">{{ 'saldosAbertura.noAccountFound' | translate }}</div>
     </div>
 
     <mat-paginator *ngIf="filteredGlAccounts.length > 0"
@@ -52,47 +52,47 @@
 
   <!-- Seção B — Saldo chuyển tiếp (408) -->
   <div class="ab-section">
-    <h3>2. Saldo chuyển tiếp ngân hàng/quỹ <span class="en">(408 - Saldo de Gerência — ghi nhận như Receita PAC)</span></h3>
-    <p class="ab-hint">Mỗi dòng = số dư chuyển từ kỳ trước sang, theo Regime × Organization. Đối với năm đầu triển khai hệ thống, chỉ có cách nhập tay từ đầu (chưa có dữ liệu năm trước trong hệ thống để tự động lấy).</p>
+    <h3>{{ 'saldosAbertura.sectionBTitle' | translate }} <span class="en">({{ 'saldosAbertura.sectionBGloss' | translate }})</span></h3>
+    <p class="ab-hint">{{ 'saldosAbertura.sectionBHint' | translate }}</p>
 
     <div class="ab-saldo-form">
       <mat-form-field appearance="outline" class="small-field">
-        <mat-label>Ano</mat-label>
+        <mat-label>{{ 'saldosAbertura.fieldAno' | translate }}</mat-label>
         <input matInput type="number" [(ngModel)]="ano" name="ano" (ngModelChange)="loadExistingSaldoEntries()" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="small-field">
-        <mat-label>Mês</mat-label>
+        <mat-label>{{ 'saldosAbertura.fieldMes' | translate }}</mat-label>
         <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="medium-field">
-        <mat-label>Regime <span class="itag drop">Chọn</span></mat-label>
+        <mat-label>Regime <span class="itag drop">{{ 'saldosAbertura.dropTag' | translate }}</span></mat-label>
         <mat-select [(ngModel)]="formRegimeFk" name="formRegimeFk">
           <mat-option *ngFor="let r of regimes" [value]="r.id">{{ r.codigo }} - {{ r.designacao }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline" class="medium-field">
-        <mat-label>Organization <span class="itag drop">Chọn</span></mat-label>
+        <mat-label>Organization <span class="itag drop">{{ 'saldosAbertura.dropTag' | translate }}</span></mat-label>
         <mat-select [(ngModel)]="formOrganizationFk" name="formOrganizationFk">
           <mat-option *ngFor="let o of institutions" [value]="o.id">{{ o.nome }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline" class="wide-field">
-        <mat-label>Descritivo <span class="itag type">Gõ tay (vd: Integração saldo 2026 - BNU)</span></mat-label>
+        <mat-label>{{ 'saldosAbertura.fieldDescritivo' | translate }} <span class="itag type">{{ 'saldosAbertura.descritivoHint' | translate }}</span></mat-label>
         <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="small-field">
-        <mat-label>Valor (USD) <span class="itag type">Gõ tay</span></mat-label>
+        <mat-label>{{ 'saldosAbertura.fieldValorUsd' | translate }} <span class="itag type">{{ 'saldosAbertura.typedTag' | translate }}</span></mat-label>
         <input matInput type="number" step="0.01" [(ngModel)]="formValor" name="formValor" />
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="addSaldoEntry()">+ Thêm saldo</button>
+      <button mat-raised-button color="primary" (click)="addSaldoEntry()">{{ 'saldosAbertura.addButton' | translate }}</button>
     </div>
 
     <div class="ab-saldo-table" *ngIf="!loadingSaldo">
       <div class="ab-saldo-row ab-saldo-row-header">
-        <span class="ab-saldo-col-desc">Descritivo</span>
+        <span class="ab-saldo-col-desc">{{ 'saldosAbertura.fieldDescritivo' | translate }}</span>
         <span class="ab-saldo-col-regime">Regime</span>
         <span class="ab-saldo-col-org">Organization</span>
-        <span class="ab-saldo-col-valor">Valor</span>
+        <span class="ab-saldo-col-valor">{{ 'saldosAbertura.colValor' | translate }}</span>
         <span class="ab-saldo-col-actions"></span>
       </div>
       <div class="ab-saldo-row" *ngFor="let s of existingSaldoEntries">
@@ -101,14 +101,14 @@
         <span class="ab-saldo-col-org">{{ s.organizationNome }}</span>
         <span class="ab-saldo-col-valor">$ {{ s.valorPac | number:'1.2-2' }}</span>
         <span class="ab-saldo-col-actions">
-          <button mat-button (click)="removeSaldoEntry(s)">Xóa</button>
+          <button mat-button (click)="removeSaldoEntry(s)">{{ 'saldosAbertura.deleteButton' | translate }}</button>
         </span>
       </div>
-      <div class="ab-empty" *ngIf="existingSaldoEntries.length === 0">Chưa có saldo chuyển tiếp nào cho năm này.</div>
+      <div class="ab-empty" *ngIf="existingSaldoEntries.length === 0">{{ 'saldosAbertura.emptyList' | translate }}</div>
     </div>
 
     <div class="ab-saldo-total" *ngIf="existingSaldoEntries.length > 0">
-      Tổng saldo chuyển tiếp: <b>$ {{ totalSaldoTransferido | number:'1.2-2' }}</b>
+      {{ 'saldosAbertura.totalLabel' | translate }} <b>$ {{ totalSaldoTransferido | number:'1.2-2' }}</b>
     </div>
   </div>
 </div>
