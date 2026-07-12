@@ -78,7 +78,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'account_balance',
       expanded: false,
       items: [
-        { label: 'Conciliação de Movimentos', comingSoon: true },
+        { label: 'Conciliação de Movimentos', route: '/contabilidade/conciliacaoMovimentos' },
       ]
     },
     {
