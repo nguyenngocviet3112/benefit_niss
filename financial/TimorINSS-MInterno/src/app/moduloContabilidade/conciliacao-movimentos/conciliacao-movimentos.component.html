@@ -34,7 +34,6 @@
   <div class="con-table" *ngIf="!loading">
     <div class="con-row con-row-header">
       <span class="con-col-data">Data Valor</span>
-      <span class="con-col-data">Data Transação</span>
       <span class="con-col-desc">Descrição</span>
       <span class="con-col-credito">Crédito</span>
       <span class="con-col-debito">Débito</span>
@@ -44,7 +43,6 @@
     <ng-container *ngFor="let l of lines">
       <div class="con-row con-row-summary" (click)="toggleExpand(l)">
         <span class="con-col-data">{{ l.dataValor | date:'dd/MM/yyyy' }}</span>
-        <span class="con-col-data">{{ l.dataTransacao ? (l.dataTransacao | date:'dd/MM/yyyy') : '—' }}</span>
         <span class="con-col-desc">{{ l.descricao || '—' }}</span>
         <span class="con-col-credito">{{ l.credito > 0 ? ('$ ' + (l.credito | number:'1.2-2')) : '—' }}</span>
         <span class="con-col-debito">{{ l.debito > 0 ? ('$ ' + (l.debito | number:'1.2-2')) : '—' }}</span>
@@ -107,12 +105,6 @@
           <mat-label>Data Valor <span class="itag type">Gõ tay</span></mat-label>
           <input matInput type="date" [(ngModel)]="formDataValor" name="formDataValor" />
           <mat-hint>Ngày ngân hàng ghi nhận giá trị (value date)</mat-hint>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Data Transação <span class="itag type">Gõ tay</span></mat-label>
-          <input matInput type="date" [(ngModel)]="formDataTransacao" name="formDataTransacao" />
-          <mat-hint>Ngày giao dịch thực tế diễn ra</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline">

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
@@ -121,6 +122,18 @@ namespace TimorINSSBackEnd.Repository.Repositories
             // Privado) via a mapping confirmed with the user 2026-07-11 — see GetValorCobradoGpPorCodigo.
             var valorCobradoGpPorCodigo = GetValorCobradoGpPorCodigo(request.year, orcamentoConfigFk);
 
+            // Despesa side (2026-07-12) — M3 (AD/Cabimento/Compromisso/Obligation/Pagamento) is now
+            // built, so Cabimentos/Compromissos/Execução can be wired for real instead of the earlier
+            // placeholder (saldoExecucao hardcoded = valor). Each stage counts only its own APPROVED
+            // rows for the given year (mirrors Orçamento only counting APPROVED batches and Receita GP
+            // only counting IndPago==1 — "not yet officially final" doesn't count as executed here
+            // either), traced back to Classificação Económica via each stage's own chain up to
+            // OrcamentoLinha. See GetCabimentosPorCodigo/GetCompromissosPorCodigo/
+            // GetExecucaoDespesaPorCodigo below for the exact join paths.
+            var cabimentosPorCodigo = GetCabimentosPorCodigo(request.year, offPerimeterAtividadeIds, request.institution);
+            var compromissosPorCodigo = GetCompromissosPorCodigo(request.year, offPerimeterAtividadeIds, request.institution);
+            var valorExecutadoDespesaPorCodigo = GetExecucaoDespesaPorCodigo(request.year, offPerimeterAtividadeIds, request.institution);
+
             foreach (var root in roots)
             {
                 var codeIds = GetSelfAndDescendants(root, childrenByParentId).Select(n => n.Id).ToList();
@@ -144,6 +157,10 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 }
                 else
                 {
+                    var cabimentos = codeIds.Sum(id => cabimentosPorCodigo.TryGetValue(id, out var v) ? v : 0);
+                    var compromissos = codeIds.Sum(id => compromissosPorCodigo.TryGetValue(id, out var v) ? v : 0);
+                    var executado = codeIds.Sum(id => valorExecutadoDespesaPorCodigo.TryGetValue(id, out var v) ? v : 0);
+
                     response.despesas.Add(new CeInssGlobalDataContract
                     {
                         agrupamentoId = root.Id,
@@ -151,7 +168,13 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         designacao = root.Designacao,
                         valorOrcamentoInicial = valor,
                         valorOrcamentado = valor,
-                        saldoExecucao = valor // Cabimentos/Compromissos/Execução still 0 pending M3 (AD/Compromisso/Pagamento)
+                        cabimentos = cabimentos,
+                        compromissos = compromissos,
+                        totalExecucao = executado,
+                        taxaExecucao = valor == 0 ? 0 : executado / valor,
+                        saldoExecucao = valor - executado,
+                        saldoComprometidoNaoLiquidado = compromissos - executado,
+                        saldoCabimentadoNaoComprometido = cabimentos - compromissos
                     });
                 }
             }
@@ -218,6 +241,89 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 Add(publico ? "401.03.03" : "401.03.04", conta.ValorTrabalhador);
             }
 
+            return result;
+        }
+
+        // Cabimentos — sum of Cabimento.ValorCabimentado for APPROVED cabimentos in the given year,
+        // traced back to Classificação Económica via ExpenditureAuthorization -> OrcamentoLinha (the
+        // same rúbrica the AD/Cabimento was generated from, 1:1 both steps).
+        private Dictionary<int, decimal> GetCabimentosPorCodigo(int year, HashSet<int> offPerimeterAtividadeIds, int? institution)
+        {
+            var cabimentos = _context.Cabimento
+                .Include(c => c.ExpenditureAuthorizationFkNavigation).ThenInclude(a => a.OrcamentoLinhaFkNavigation)
+                .Where(c => c.IndActivo && c.Ano == year && c.Estado == "APPROVED")
+                .ToList();
+
+            var result = new Dictionary<int, decimal>();
+            foreach (var c in cabimentos)
+            {
+                var rubrica = c.ExpenditureAuthorizationFkNavigation?.OrcamentoLinhaFkNavigation;
+                if (rubrica == null || offPerimeterAtividadeIds.Contains(rubrica.AtividadeFk)) continue;
+                if (institution.HasValue && rubrica.OrganizationFk != institution.Value) continue;
+
+                result[rubrica.EconomicClassificationFk] = result.TryGetValue(rubrica.EconomicClassificationFk, out var existing)
+                    ? existing + c.ValorCabimentado
+                    : c.ValorCabimentado;
+            }
+            return result;
+        }
+
+        // Compromissos — sum of CompromissoDespesa's "Valor revisto" (ValorCompromissoAno +
+        // Regularizacao, this year's committed portion) for APPROVED compromissos, traced back via
+        // Cabimento -> ExpenditureAuthorization -> OrcamentoLinha (one Cabimento can have MANY
+        // Compromissos, e.g. one per staff member on a shared salary line).
+        private Dictionary<int, decimal> GetCompromissosPorCodigo(int year, HashSet<int> offPerimeterAtividadeIds, int? institution)
+        {
+            var compromissos = _context.CompromissoDespesa
+                .Include(cp => cp.CabimentoFkNavigation).ThenInclude(c => c.ExpenditureAuthorizationFkNavigation).ThenInclude(a => a.OrcamentoLinhaFkNavigation)
+                .Where(cp => cp.IndActivo && cp.Ano == year && cp.Estado == "APPROVED")
+                .ToList();
+
+            var result = new Dictionary<int, decimal>();
+            foreach (var cp in compromissos)
+            {
+                var rubrica = cp.CabimentoFkNavigation?.ExpenditureAuthorizationFkNavigation?.OrcamentoLinhaFkNavigation;
+                if (rubrica == null || offPerimeterAtividadeIds.Contains(rubrica.AtividadeFk)) continue;
+                if (institution.HasValue && rubrica.OrganizationFk != institution.Value) continue;
+
+                var valorRevisto = cp.ValorCompromissoAno + cp.Regularizacao;
+                result[rubrica.EconomicClassificationFk] = result.TryGetValue(rubrica.EconomicClassificationFk, out var existing)
+                    ? existing + valorRevisto
+                    : valorRevisto;
+            }
+            return result;
+        }
+
+        // Execução (paid) — the actual money-out event. Distributed at ObligationItem granularity
+        // (not PaymentAuthorization.ValorAutorizado as a lump sum) because one Obligation can group
+        // Compromissos from DIFFERENT rúbricas/Classificação Económica codes (that's the whole point of
+        // Obligation's N:N via ObligationItem) — only counting a PaymentAuthorization whose
+        // PaymentExecution actually exists (Realização do Pagamento done, not just Autorização
+        // APPROVED) matches "already paid", mirroring Receita's ValorCobradoBanco+Caixa (collected) vs
+        // ValorPac (billed) distinction on the other side of the ledger.
+        private Dictionary<int, decimal> GetExecucaoDespesaPorCodigo(int year, HashSet<int> offPerimeterAtividadeIds, int? institution)
+        {
+            var executedAuthorizations = _context.PaymentAuthorization
+                .Include(pa => pa.PaymentExecution)
+                .Include(pa => pa.ObligationFkNavigation).ThenInclude(o => o.ObligationItem).ThenInclude(oi => oi.CompromissoDespesaFkNavigation).ThenInclude(c => c.CabimentoFkNavigation).ThenInclude(cab => cab.ExpenditureAuthorizationFkNavigation).ThenInclude(ad => ad.OrcamentoLinhaFkNavigation)
+                .Where(pa => pa.IndActivo && pa.Ano == year && pa.PaymentExecution != null)
+                .ToList();
+
+            var result = new Dictionary<int, decimal>();
+            foreach (var pa in executedAuthorizations)
+            {
+                var items = pa.ObligationFkNavigation?.ObligationItem?.Where(oi => oi.IndActivo) ?? Enumerable.Empty<ObligationItem>();
+                foreach (var item in items)
+                {
+                    var rubrica = item.CompromissoDespesaFkNavigation?.CabimentoFkNavigation?.ExpenditureAuthorizationFkNavigation?.OrcamentoLinhaFkNavigation;
+                    if (rubrica == null || offPerimeterAtividadeIds.Contains(rubrica.AtividadeFk)) continue;
+                    if (institution.HasValue && rubrica.OrganizationFk != institution.Value) continue;
+
+                    result[rubrica.EconomicClassificationFk] = result.TryGetValue(rubrica.EconomicClassificationFk, out var existing)
+                        ? existing + item.Value
+                        : item.Value;
+                }
+            }
             return result;
         }
 
