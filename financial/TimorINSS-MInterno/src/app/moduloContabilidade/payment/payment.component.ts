@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { PaymentService } from '../../services/payment.service';
 import {
   CodigoContaOptionDataContract,
@@ -9,9 +10,9 @@ import {
 } from '../../response-models/payment-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
-  DRAFT: 'Nháp',
-  PENDING_APPROVAL: 'Chờ phê duyệt',
-  APPROVED: 'Đã duyệt'
+  DRAFT: 'payment.estadoDraft',
+  PENDING_APPROVAL: 'payment.estadoPendingApproval',
+  APPROVED: 'payment.estadoApproved'
 };
 
 @Component({
@@ -50,7 +51,8 @@ export class PaymentComponent implements OnInit {
 
   constructor(
     private paymentService: PaymentService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -108,7 +110,7 @@ export class PaymentComponent implements OnInit {
 
   public createAuthorization(): void {
     if (!this.formObligationFk || !this.formValorAutorizado) {
-      this.snackBar.open('Vui lòng chọn Obrigação và nhập Giá trị.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('payment.errMissingObligation'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -123,11 +125,11 @@ export class PaymentComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showCreateForm = false;
-        this.snackBar.open(`Đã tạo Autorização de Pagamento số ${response.item.numero}.`, 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('payment.createdSuccess', { numero: response.item.numero }), this.translate.instant('general.close'), { duration: 3000 });
         this.load();
       },
       err => this.showError(err)
@@ -135,11 +137,11 @@ export class PaymentComponent implements OnInit {
   }
 
   public submitAuthorization(item: PaymentAuthorizationDataContract): void {
-    if (!confirm(`Gửi duyệt Autorização de Pagamento số ${item.numero}?`)) { return; }
+    if (!confirm(this.translate.instant('payment.confirmSubmit', { numero: item.numero }))) { return; }
     this.paymentService.submit({ id: item.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -152,7 +154,7 @@ export class PaymentComponent implements OnInit {
     this.paymentService.approve({ id: item.id, approve: true }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -172,7 +174,7 @@ export class PaymentComponent implements OnInit {
     this.paymentService.approve({ id: this.rejectId, approve: false, comment: this.rejectComment }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showRejectPrompt = false;
@@ -205,7 +207,7 @@ export class PaymentComponent implements OnInit {
 
   public confirmExecute(): void {
     if (!this.executeTarget || !this.formDataPagamento) {
-      this.snackBar.open('Vui lòng nhập Ngày thanh toán.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('payment.errMissingDataPagamento'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -218,11 +220,11 @@ export class PaymentComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.executeTarget = null;
-        this.snackBar.open('Đã thực hiện chi trả (Realização do Pagamento).', 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('payment.executedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
         this.load();
       },
       err => this.showError(err)
@@ -230,7 +232,7 @@ export class PaymentComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('payment.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
