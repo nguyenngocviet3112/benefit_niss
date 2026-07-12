@@ -1,0 +1,121 @@
+<div class="sup-container" *ngIf="batch">
+  <div class="sup-header">
+    <h2>Suplementar <span class="en">(bổ sung/điều chỉnh giá trị rúbrica đã duyệt — có thể tăng hoặc giảm, không yêu cầu cân bằng tổng)</span></h2>
+    <span class="sup-estado" [ngClass]="'estado-' + batch.estado">{{ estadoLabels[batch.estado] }}</span>
+  </div>
+
+  <div class="sup-context-bar">
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>Kỳ ngân sách (Ano)</mat-label>
+      <input matInput type="number" [(ngModel)]="orcamentoConfigFk" name="orcamentoConfigFk" />
+    </mat-form-field>
+    <button mat-stroked-button (click)="loadBatch(); loadRubricas()">Tải lại</button>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button color="primary" *ngIf="isDraft" (click)="openAddForm()">+ Thêm dòng điều chỉnh</button>
+  </div>
+
+  <div class="sup-reject-banner" *ngIf="batch.lastRejectComment && isDraft">
+    <b>Bị từ chối lần gần nhất:</b> {{ batch.lastRejectComment }}
+  </div>
+
+  <div class="sup-table">
+    <div class="sup-row sup-row-header">
+      <span class="sup-col-atividade">Atividade / Classificação Económica</span>
+      <span class="sup-col-org">Organization</span>
+      <span class="sup-col-old">Giá trị cũ</span>
+      <span class="sup-col-adj">Điều chỉnh</span>
+      <span class="sup-col-final">Giá trị mới</span>
+      <span class="sup-col-actions" *ngIf="isDraft">Ações</span>
+    </div>
+    <div class="sup-row" *ngFor="let l of batch.linhas">
+      <span class="sup-col-atividade">{{ l.atividadeCodigo }} — {{ l.economicClassificationCodigo }} {{ l.economicClassificationDesignacao }}</span>
+      <span class="sup-col-org">{{ l.organizationNome }}</span>
+      <span class="sup-col-old">$ {{ l.oldValue | number:'1.2-2' }}</span>
+      <span class="sup-col-adj" [ngClass]="l.adjustmentValue < 0 ? 'adj-negative' : 'adj-positive'">
+        {{ l.adjustmentValue >= 0 ? '+' : '' }}$ {{ l.adjustmentValue | number:'1.2-2' }}
+      </span>
+      <span class="sup-col-final">$ {{ l.finalValue | number:'1.2-2' }}</span>
+      <span class="sup-col-actions" *ngIf="isDraft">
+        <button mat-button (click)="openEditForm(l)">Sửa</button>
+        <button mat-button (click)="deleteLinha(l)">Xóa</button>
+      </span>
+    </div>
+    <div class="sup-empty" *ngIf="batch.linhas.length === 0">Chưa có dòng điều chỉnh nào.</div>
+  </div>
+
+  <div class="sup-summary">
+    <span>Tổng điều chỉnh: <b [ngClass]="batch.totalAdjustment < 0 ? 'adj-negative' : 'adj-positive'">{{ batch.totalAdjustment >= 0 ? '+' : '' }}{{ batch.totalAdjustment | number:'1.2-2' }}</b> USD ({{ batch.linhas.length }} dòng)</span>
+  </div>
+
+  <div class="sup-actions-bar">
+    <button mat-raised-button color="primary" *ngIf="batch.estado === 'DRAFT'" [disabled]="batch.linhas.length === 0" (click)="submitBatch()">Gửi duyệt</button>
+
+    <ng-container *ngIf="batch.estado === 'PENDING_REVIEW'">
+      <button mat-raised-button color="primary" (click)="reviewApprove()">Xác nhận kiểm tra</button>
+      <button mat-stroked-button color="warn" (click)="openRejectPrompt('review')">Từ chối</button>
+    </ng-container>
+
+    <ng-container *ngIf="batch.estado === 'PENDING_APPROVAL'">
+      <button mat-raised-button color="primary" (click)="finalApprove()">Phê duyệt</button>
+      <button mat-stroked-button color="warn" (click)="openRejectPrompt('approve')">Từ chối</button>
+    </ng-container>
+
+    <span class="sup-approved-note" *ngIf="batch.estado === 'APPROVED'">
+      Đã duyệt — giá trị mới đã áp dụng vào rúbrica. Thêm dòng điều chỉnh mới sẽ tự tạo đợt Suplementar tiếp theo cho cùng kỳ này.
+    </span>
+  </div>
+
+  <div class="sup-form-overlay" *ngIf="showForm">
+    <div class="sup-form">
+      <h3>{{ editingId ? 'Sửa' : 'Thêm' }} dòng điều chỉnh</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Rúbrica (Atividade / Classificação Económica) <span class="itag type">Gõ để tìm</span></mat-label>
+        <input matInput [(ngModel)]="rubricaSearch" name="rubricaSearchInput"
+               (ngModelChange)="onRubricaSearchChange()" [matAutocomplete]="autoRubrica" />
+        <mat-autocomplete #autoRubrica="matAutocomplete">
+          <mat-option *ngFor="let r of filteredRubricas" [value]="r" (onSelectionChange)="selectRubrica(r)">
+            {{ r.atividadeCodigo }} — {{ r.economicClassificationCodigo }} {{ r.economicClassificationDesignacao }} ({{ r.organizationNome }}) — hiện $ {{ r.valorAtual | number:'1.2-2' }}
+          </mat-option>
+          <mat-option *ngIf="filteredRubricas.length === 0" disabled>Không tìm thấy</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="small-field" *ngIf="formOldValue !== null">
+        <mat-label>Giá trị cũ <span class="itag auto">Tự động</span></mat-label>
+        <input matInput [value]="formOldValue | number:'1.2-2'" disabled />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="small-field">
+        <mat-label>Giá trị điều chỉnh (USD) <span class="itag type">Gõ tay, có thể âm</span></mat-label>
+        <input matInput type="number" step="0.01" [(ngModel)]="formAdjustmentValue" name="formAdjustmentValue" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="small-field" *ngIf="formOldValue !== null">
+        <mat-label>Giá trị mới <span class="itag auto">Tự động</span></mat-label>
+        <input matInput [value]="finalValuePreview | number:'1.2-2'" disabled />
+      </mat-form-field>
+
+      <div class="sup-form-actions">
+        <button mat-button (click)="cancelForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="saveLinha()">Lưu</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sup-form-overlay" *ngIf="showRejectPrompt">
+    <div class="sup-form">
+      <h3>Lý do từ chối</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ghi chú</mat-label>
+        <textarea matInput [(ngModel)]="rejectComment" name="rejectComment" rows="3"></textarea>
+      </mat-form-field>
+      <div class="sup-form-actions">
+        <button mat-button (click)="cancelReject()">Hủy</button>
+        <button mat-raised-button color="warn" (click)="confirmReject()">Xác nhận từ chối</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -107,6 +107,34 @@ namespace TimorINSSBackEnd.Models
                     .HasConstraintName("FK_OrcamentoLinha_Institution");
             });
 
+            modelBuilder.Entity<OrcamentoSuplementar>(entity =>
+            {
+                entity.HasOne(d => d.OrcamentoConfigFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.OrcamentoConfigFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrcamentoSuplementar_OrcamentoConfig");
+            });
+
+            modelBuilder.Entity<OrcamentoSuplementarLinha>(entity =>
+            {
+                entity.Property(e => e.OldValue).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.AdjustmentValue).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.FinalValue).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.OrcamentoSuplementarFkNavigation)
+                    .WithMany(p => p.OrcamentoSuplementarLinha)
+                    .HasForeignKey(d => d.OrcamentoSuplementarFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OSL_OrcamentoSuplementar");
+
+                entity.HasOne(d => d.OrcamentoLinhaFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.OrcamentoLinhaFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OSL_OrcamentoLinha");
+            });
+
             modelBuilder.Entity<ExpenditureAuthorization>(entity =>
             {
                 entity.Property(e => e.ValorAutorizado).HasColumnType("decimal(18, 2)");
@@ -332,6 +360,12 @@ namespace TimorINSSBackEnd.Models
                     .HasForeignKey(d => d.OrganizationFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ReceitaPac_Institution");
+
+                entity.HasOne(d => d.ContaBancariaFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.ContaBancariaFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceitaPac_ContaBancaria");
             });
         }
 

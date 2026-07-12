@@ -66,6 +66,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Any(a => a.IndActivo && a.OrcamentoLinhaFk == orcamentoLinhaFk);
         }
 
+        public ExpenditureAuthorization GetByRubrica(int orcamentoLinhaFk)
+        {
+            return _moduloContribuicoesContext.ExpenditureAuthorization
+                .FirstOrDefault(a => a.IndActivo && a.OrcamentoLinhaFk == orcamentoLinhaFk);
+        }
+
         public void AddPlurianualidade(ExpenditureAuthorizationPlurianualidade entity)
         {
             _moduloContribuicoesContext.ExpenditureAuthorizationPlurianualidade.Add(entity);

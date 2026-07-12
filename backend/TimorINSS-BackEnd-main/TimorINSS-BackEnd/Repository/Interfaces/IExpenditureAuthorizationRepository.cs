@@ -11,6 +11,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         void Update(ExpenditureAuthorization entity);
         int GetNextNumero(int mes, int ano);
         bool HasAuthorizationForRubrica(int orcamentoLinhaFk);
+        ExpenditureAuthorization GetByRubrica(int orcamentoLinhaFk);
 
         void AddPlurianualidade(ExpenditureAuthorizationPlurianualidade entity);
         void UpdatePlurianualidade(ExpenditureAuthorizationPlurianualidade entity);

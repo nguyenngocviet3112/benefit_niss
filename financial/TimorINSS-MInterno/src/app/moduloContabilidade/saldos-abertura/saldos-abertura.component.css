@@ -1,0 +1,147 @@
+.ab-container {
+  padding: 24px;
+  max-width: 1400px;
+}
+
+.ab-header h2 {
+  margin: 0 0 4px;
+}
+
+.en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.ab-section {
+  margin-bottom: 32px;
+  padding: 20px;
+  background: #fafbfc;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.ab-section h3 {
+  margin: 0 0 6px;
+}
+
+.ab-hint {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 16px;
+}
+
+.itag {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.itag.drop { background: #f3e5f5; color: #6a1b9a; }
+.itag.type { background: #fff3e0; color: #ef6c00; }
+
+.ab-search-field {
+  width: 320px;
+  margin-bottom: 12px;
+}
+
+.ab-gl-table {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ab-gl-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+}
+
+.ab-gl-row-header {
+  background: #f4f5f7;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.ab-gl-col-codigo { flex: 0.8; font-family: monospace; }
+.ab-gl-col-designacao { flex: 2.5; }
+.ab-gl-col-valor { flex: 1.2; }
+.ab-gl-col-tipo { flex: 1; }
+.ab-gl-col-data { flex: 1; }
+.ab-gl-col-actions { flex: 0.6; text-align: right; }
+
+.ab-gl-input {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 13px;
+}
+
+.ab-gl-select {
+  width: 100%;
+  font-size: 13px;
+}
+
+.ab-empty {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+  font-size: 13px;
+}
+
+.ab-saldo-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.small-field { width: 110px; }
+.medium-field { width: 220px; }
+.wide-field { width: 320px; }
+
+.ab-saldo-table {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  margin-bottom: 10px;
+}
+
+.ab-saldo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+}
+
+.ab-saldo-row-header {
+  background: #f4f5f7;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.ab-saldo-col-desc { flex: 2.5; }
+.ab-saldo-col-regime { flex: 1.5; }
+.ab-saldo-col-org { flex: 1; }
+.ab-saldo-col-valor { flex: 1; text-align: right; font-family: monospace; }
+.ab-saldo-col-actions { flex: 0.6; text-align: right; }
+
+.ab-saldo-total {
+  text-align: right;
+  font-size: 14px;
+}

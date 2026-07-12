@@ -26,5 +26,7 @@ namespace TimorINSSBackEnd.Models
         public virtual DbSet<PaymentExecution> PaymentExecution { get; set; }
         public virtual DbSet<UserProfile> UserProfile { get; set; }
         public virtual DbSet<ReceitaPac> ReceitaPac { get; set; }
+        public virtual DbSet<OrcamentoSuplementar> OrcamentoSuplementar { get; set; }
+        public virtual DbSet<OrcamentoSuplementarLinha> OrcamentoSuplementarLinha { get; set; }
     }
 }
