@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
+import { TranslateService } from '@ngx-translate/core';
 import { OrcamentoConfigService } from '../../../services/orcamento-config.service';
 import { OrcamentoConfigDataContract } from '../../../response-models/orcamento-config-response';
 
@@ -26,7 +27,8 @@ export class KyNganSachComponent implements OnInit {
 
   constructor(
     private orcamentoConfigService: OrcamentoConfigService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -81,7 +83,7 @@ export class KyNganSachComponent implements OnInit {
 
   public save(): void {
     if (!this.formAno || !this.formDataInicio) {
-      this.snackBar.open('Vui lòng nhập đủ Năm và Ngày bắt đầu.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('kyNganSach.errMissingFields'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -93,7 +95,7 @@ export class KyNganSachComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showForm = false;
@@ -104,14 +106,14 @@ export class KyNganSachComponent implements OnInit {
   }
 
   public deactivate(item: OrcamentoConfigDataContract): void {
-    if (!confirm(`Xoá kỳ ngân sách năm ${item.ano} (${item.tipo})?`)) {
+    if (!confirm(this.translate.instant('kyNganSach.confirmDelete', { ano: item.ano, tipo: item.tipo }))) {
       return;
     }
 
     this.orcamentoConfigService.deactivate({ id: item.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -121,7 +123,7 @@ export class KyNganSachComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('kyNganSach.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }

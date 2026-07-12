@@ -1,7 +1,7 @@
 <div class="lc-container">
   <div class="lc-header">
-    <h2>Cấu hình ngôn ngữ <span class="en">(Language / i18n config)</span></h2>
-    <p class="lc-hint">Bật/tắt ngôn ngữ hiển thị trong dropdown chọn ngôn ngữ (mode mới). Phải giữ lại ít nhất 1 ngôn ngữ đang bật.</p>
+    <h2>{{ 'idiomaConfig.header' | translate }} <span class="en">({{ 'idiomaConfig.headerGloss' | translate }})</span></h2>
+    <p class="lc-hint">{{ 'idiomaConfig.hint' | translate }}</p>
   </div>
 
   <div class="lc-list" *ngIf="!loading">
@@ -9,12 +9,12 @@
       <span class="lc-codigo">{{ lang.codigo }}</span>
       <span class="lc-nome">{{ lang.nome }}</span>
       <span class="lc-status" [class.inactive]="!lang.indActivo">
-        {{ lang.indActivo ? 'Đang bật' : 'Đang tắt' }}
+        {{ (lang.indActivo ? 'idiomaConfig.enabled' : 'idiomaConfig.disabled') | translate }}
       </span>
       <button mat-stroked-button (click)="toggle(lang)">
-        {{ lang.indActivo ? 'Tắt' : 'Bật' }}
+        {{ (lang.indActivo ? 'idiomaConfig.disableButton' : 'idiomaConfig.enableButton') | translate }}
       </button>
     </div>
-    <div class="lc-empty" *ngIf="languages.length === 0">Chưa có dữ liệu.</div>
+    <div class="lc-empty" *ngIf="languages.length === 0">{{ 'idiomaConfig.emptyList' | translate }}</div>
   </div>
 </div>

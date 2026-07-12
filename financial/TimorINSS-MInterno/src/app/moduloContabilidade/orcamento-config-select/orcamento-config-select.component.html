@@ -5,7 +5,7 @@
       {{ o.ano }}<span *ngIf="o.tipo && o.tipo !== 'PRINCIPAL'"> ({{ o.tipo }})</span>
     </mat-option>
     <mat-option *ngIf="options.length === 0" [value]="value" disabled>
-      Chưa có kỳ ngân sách nào — tạo ở Cấu hình hệ thống
+      {{ 'orcamentoConfigSelect.noOptions' | translate }}
     </mat-option>
   </mat-select>
 </mat-form-field>

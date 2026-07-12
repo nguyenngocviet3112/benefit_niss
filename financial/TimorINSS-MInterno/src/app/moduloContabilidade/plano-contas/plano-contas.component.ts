@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { CodigoContaTreeService } from '../../services/codigo-conta-tree.service';
 import { CodigoContaTreeItemDataContract } from '../../response-models/codigo-conta-tree-response';
 
@@ -31,7 +32,8 @@ export class PlanoContasComponent implements OnInit {
 
   constructor(
     private codigoContaTreeService: CodigoContaTreeService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -90,7 +92,7 @@ export class PlanoContasComponent implements OnInit {
 
   public save(): void {
     if (!this.formCodigo || !this.formDesignacao) {
-      this.snackBar.open('Vui lòng nhập đủ Mã và Tên gọi.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('planoContas.errMissingFields'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -103,7 +105,7 @@ export class PlanoContasComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showForm = false;
@@ -114,14 +116,14 @@ export class PlanoContasComponent implements OnInit {
   }
 
   public deactivate(item: CodigoContaTreeItemDataContract): void {
-    if (!confirm(`Xoá "${item.codigo} - ${item.designacao}"?`)) {
+    if (!confirm(this.translate.instant('planoContas.confirmDelete', { codigo: item.codigo, designacao: item.designacao }))) {
       return;
     }
 
     this.codigoContaTreeService.deactivate({ id: item.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.loadTree();
@@ -131,7 +133,7 @@ export class PlanoContasComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('planoContas.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }

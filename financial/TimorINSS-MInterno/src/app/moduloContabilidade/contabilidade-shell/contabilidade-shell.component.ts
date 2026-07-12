@@ -48,7 +48,7 @@ export class ContabilidadeShellComponent implements OnInit {
   // (expanded: false), user tự click để mở nhóm đang cần.
   public groups: TreebarGroup[] = [
     {
-      label: 'Chu trình chi tiêu',
+      label: 'shell.groupChiTieu',
       icon: 'sync_alt',
       expanded: false,
       items: [
@@ -60,7 +60,7 @@ export class ContabilidadeShellComponent implements OnInit {
       ]
     },
     {
-      label: 'Thu (Receita)',
+      label: 'shell.groupReceita',
       icon: 'payments',
       expanded: false,
       items: [
@@ -74,7 +74,7 @@ export class ContabilidadeShellComponent implements OnInit {
       ]
     },
     {
-      label: 'Ngân hàng',
+      label: 'shell.groupNganHang',
       icon: 'account_balance',
       expanded: false,
       items: [
@@ -91,7 +91,7 @@ export class ContabilidadeShellComponent implements OnInit {
       // từ Pagamento thực hiện (dùng Débito/Crédito đã lưu ở PaymentAuthorization)
       // và Receita (follow-up, ReceitaPac chưa có cột Débito/Crédito — xem
       // memory ce-inss-global-impl-status / financial-statements-scope-gap).
-      label: 'Contabilidade Geral',
+      label: 'shell.groupContabilidadeGeral',
       icon: 'menu_book',
       expanded: false,
       items: [
@@ -99,7 +99,7 @@ export class ContabilidadeShellComponent implements OnInit {
       ]
     },
     {
-      label: 'Ngân sách (Orçamento)',
+      label: 'shell.groupNganSach',
       icon: 'account_balance_wallet',
       expanded: false,
       items: [
@@ -117,7 +117,7 @@ export class ContabilidadeShellComponent implements OnInit {
       // dừng ở comingSoon, kể cả 6 báo cáo tài chính mới thêm bên dưới (phát
       // hiện 2026-07-11 từ SCFSSTL2024_VF.xlsm/FRSSVF.xlsm — 2 file khách
       // cung cấp mới nạp, trước đó chưa đọc qua). Xem [[financial-statements-scope-gap]].
-      label: 'Báo cáo',
+      label: 'shell.groupBaoCao',
       icon: 'summarize',
       expanded: false,
       items: [
@@ -150,7 +150,7 @@ export class ContabilidadeShellComponent implements OnInit {
       // mới thay vì rơi về giao diện cũ. Component vẫn được declare duy nhất ở
       // AppModule như trước — ở đây chỉ thêm 1 route thứ 2 trỏ tới cùng class.
       // Đặt dưới Báo cáo, trên Master Data theo yêu cầu user (2026-07-11).
-      label: 'Đóng góp BHXH',
+      label: 'shell.groupDongGopBHXH',
       icon: 'badge',
       expanded: false,
       items: [
@@ -160,7 +160,7 @@ export class ContabilidadeShellComponent implements OnInit {
       ]
     },
     {
-      label: 'Master Data',
+      label: 'shell.groupMasterData',
       icon: 'dns',
       expanded: false,
       items: [
@@ -190,7 +190,7 @@ export class ContabilidadeShellComponent implements OnInit {
       // Ngân hàng" nằm ở nhóm "Cấu hình hệ thống". Giờ chỉ còn 1 nhóm duy nhất.
       // "Quản lý User" cũng gộp vào đây 2026-07-12 (user yêu cầu không tách
       // riêng nữa) — không còn là nhóm top-level riêng.
-      label: 'Cấu hình hệ thống',
+      label: 'shell.groupCauHinh',
       icon: 'settings',
       expanded: false,
       items: [
@@ -208,7 +208,7 @@ export class ContabilidadeShellComponent implements OnInit {
       // "Cấu hình hệ thống" — khác với "Quản lý User" (admin quản lý user
       // KHÁC, RequirePerm), đây là tự phục vụ (self-service, mọi user đăng
       // nhập đều thấy, không cần quyền) nên đặt thành nhóm top-level độc lập.
-      label: 'Meu Perfil',
+      label: 'shell.groupMeuPerfil',
       icon: 'account_circle',
       expanded: false,
       items: [

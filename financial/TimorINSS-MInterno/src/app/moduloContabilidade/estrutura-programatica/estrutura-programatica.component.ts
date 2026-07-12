@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { ProgramActivityService } from '../../services/program-activity.service';
 import { ProgramActivityDataContract } from '../../response-models/program-activity-response';
 
@@ -30,7 +31,8 @@ export class EstruturaProgramaticaComponent implements OnInit {
 
   constructor(
     private programActivityService: ProgramActivityService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -91,7 +93,7 @@ export class EstruturaProgramaticaComponent implements OnInit {
 
   public save(): void {
     if (!this.formCodigo || !this.formDesignacao) {
-      this.snackBar.open('Vui lòng nhập đủ Mã và Tên gọi.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('estruturaProgramaticaScreen.errMissingFields'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -105,7 +107,7 @@ export class EstruturaProgramaticaComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showForm = false;
@@ -116,14 +118,14 @@ export class EstruturaProgramaticaComponent implements OnInit {
   }
 
   public deactivate(item: ProgramActivityDataContract): void {
-    if (!confirm(`Vô hiệu hoá "${item.codigo} - ${item.designacao}"?`)) {
+    if (!confirm(this.translate.instant('estruturaProgramaticaScreen.confirmDelete', { codigo: item.codigo, designacao: item.designacao }))) {
       return;
     }
 
     this.programActivityService.deactivate({ id: item.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.loadTree();
@@ -134,7 +136,7 @@ export class EstruturaProgramaticaComponent implements OnInit {
 
   public copyFromCurrentYear(): void {
     if (!this.copyTargetOrcamentoConfigFk) {
-      this.snackBar.open('Nhập Kỳ ngân sách đích trước khi sao chép.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('estruturaProgramaticaScreen.errMissingCopyTarget'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -144,17 +146,17 @@ export class EstruturaProgramaticaComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
-        this.snackBar.open('Đã sao chép cây sang kỳ ngân sách mới.', 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('estruturaProgramaticaScreen.copySuccess'), this.translate.instant('general.close'), { duration: 3000 });
       },
       err => this.showError(err)
     );
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('estruturaProgramaticaScreen.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }

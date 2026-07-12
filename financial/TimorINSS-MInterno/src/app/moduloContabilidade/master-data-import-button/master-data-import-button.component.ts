@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { MasterDataImportService } from '../../services/master-data-import.service';
 import { ImportMasterDataTreeResponse } from '../../response-models/master-data-import-response';
 
@@ -23,7 +24,8 @@ export class MasterDataImportButtonComponent {
 
   constructor(
     private masterDataImportService: MasterDataImportService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   public triggerFileSelect(): void {
@@ -43,7 +45,7 @@ export class MasterDataImportButtonComponent {
         this.importing = false;
         input.value = '';
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.lastResult = response;
@@ -53,8 +55,8 @@ export class MasterDataImportButtonComponent {
       err => {
         this.importing = false;
         input.value = '';
-        const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi khi import file.';
-        this.snackBar.open(message, 'Đóng', { duration: 4000 });
+        const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('masterDataImportButton.errGeneric');
+        this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
       }
     );
   }

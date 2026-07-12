@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { InstitutionService } from '../../services/institution.service';
 import { SelectDescription } from '../../models/utils';
 
@@ -15,7 +16,8 @@ export class OrganizationComponent implements OnInit {
 
   constructor(
     private institutionService: InstitutionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -31,8 +33,8 @@ export class OrganizationComponent implements OnInit {
       },
       err => {
         this.loading = false;
-        const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-        this.snackBar.open(message, 'Đóng', { duration: 4000 });
+        const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('organizationScreen.errGeneric');
+        this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
       }
     );
   }

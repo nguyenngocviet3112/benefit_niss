@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { CeInssGlobalService } from '../../services/ce-inss-global.service';
 import { InstitutionService } from '../../services/institution.service';
 import { CeInssGlobalResponse } from '../../response-models/ce-inss-global-response';
@@ -25,7 +26,8 @@ export class CeInssGlobalComponent implements OnInit {
   constructor(
     private ceInssGlobalService: CeInssGlobalService,
     private institutionService: InstitutionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -49,15 +51,15 @@ export class CeInssGlobalComponent implements OnInit {
       response => {
         this.loading = false;
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.report = response;
       },
       err => {
         this.loading = false;
-        const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-        this.snackBar.open(message, 'Đóng', { duration: 4000 });
+        const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('ceInssGlobal.errGeneric');
+        this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
       }
     );
   }

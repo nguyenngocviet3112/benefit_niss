@@ -1,23 +1,23 @@
 <div class="ce-container">
   <div class="ce-header">
-    <h2>Classificação Económica <span class="en">(Mã kinh tế ngân sách — Receita/Despesa)</span></h2>
+    <h2>{{ 'classificacaoEconomica.header' | translate }} <span class="en">({{ 'classificacaoEconomica.headerGloss' | translate }})</span></h2>
   </div>
 
   <div class="ce-context-bar">
     <app-orcamento-config-select [value]="orcamentoConfigFk" (valueChange)="orcamentoConfigFk = $event; loadTree()"></app-orcamento-config-select>
-    <button mat-stroked-button (click)="loadTree()">Tải lại</button>
+    <button mat-stroked-button (click)="loadTree()">{{ 'classificacaoEconomica.reload' | translate }}</button>
 
     <span class="spacer"></span>
 
     <app-master-data-import-button entityPath="economicclassification" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadTree()"></app-master-data-import-button>
-    <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm mã gốc</button>
+    <button mat-raised-button color="primary" (click)="openAddForm()">{{ 'classificacaoEconomica.addRoot' | translate }}</button>
   </div>
 
   <div class="ce-tree" *ngIf="!loading">
     <ng-container *ngFor="let root of tree">
       <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: root }"></ng-container>
     </ng-container>
-    <div class="ce-empty" *ngIf="tree.length === 0">Chưa có dữ liệu cho kỳ ngân sách này.</div>
+    <div class="ce-empty" *ngIf="tree.length === 0">{{ 'classificacaoEconomica.emptyList' | translate }}</div>
   </div>
 
   <ng-template #nodeTemplate let-node="node">
@@ -26,9 +26,9 @@
       <span class="ce-desig">{{ node.designacao }}</span>
       <span class="ce-tipo" *ngIf="node.tipo">{{ node.tipo }}</span>
       <span class="ce-actions">
-        <button mat-button (click)="openAddForm(node)">+ Con</button>
-        <button mat-button (click)="openEditForm(node)">Sửa</button>
-        <button mat-button (click)="deactivate(node)">Xóa</button>
+        <button mat-button (click)="openAddForm(node)">{{ 'classificacaoEconomica.addChild' | translate }}</button>
+        <button mat-button (click)="openEditForm(node)">{{ 'classificacaoEconomica.editButton' | translate }}</button>
+        <button mat-button (click)="deactivate(node)">{{ 'classificacaoEconomica.deleteButton' | translate }}</button>
       </span>
     </div>
     <ng-container *ngFor="let child of node.children">
@@ -38,30 +38,30 @@
 
   <div class="ce-form-overlay" *ngIf="showForm">
     <div class="ce-form">
-      <h3>{{ editingId ? 'Sửa' : 'Thêm' }} mã kinh tế</h3>
+      <h3>{{ (editingId ? 'classificacaoEconomica.formTitleEdit' : 'classificacaoEconomica.formTitleCreate') | translate }}</h3>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Mã (Código)</mat-label>
+        <mat-label>{{ 'classificacaoEconomica.fieldCodigo' | translate }}</mat-label>
         <input matInput [(ngModel)]="formCodigo" name="formCodigo" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Tên gọi (Designação)</mat-label>
+        <mat-label>{{ 'classificacaoEconomica.fieldDesignacao' | translate }}</mat-label>
         <input matInput [(ngModel)]="formDesignacao" name="formDesignacao" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Loại (Tipo)</mat-label>
+        <mat-label>{{ 'classificacaoEconomica.fieldTipo' | translate }}</mat-label>
         <mat-select [(ngModel)]="formTipo" name="formTipo">
-          <mat-option value="">—</mat-option>
-          <mat-option value="Receita">Receita (Thu)</mat-option>
-          <mat-option value="Despesa">Despesa (Chi)</mat-option>
+          <mat-option value="">{{ 'userPermission.noneOption' | translate }}</mat-option>
+          <mat-option value="Receita">{{ 'classificacaoEconomica.tipoReceita' | translate }}</mat-option>
+          <mat-option value="Despesa">{{ 'classificacaoEconomica.tipoDespesa' | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <div class="ce-form-actions">
-        <button mat-button (click)="cancelForm()">Hủy</button>
-        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+        <button mat-button (click)="cancelForm()">{{ 'classificacaoEconomica.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="save()">{{ 'classificacaoEconomica.saveButton' | translate }}</button>
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { SelectDescription } from '../../models/utils';
 import { DepartamentoConfigDataContract } from '../../response-models/departamento-config-response';
 import { DepartamentoConfigService } from '../../services/departamento-config.service';
@@ -24,7 +25,8 @@ export class DepartamentoConfigComponent implements OnInit {
   constructor(
     private departamentoConfigService: DepartamentoConfigService,
     private institutionService: InstitutionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -69,7 +71,7 @@ export class DepartamentoConfigComponent implements OnInit {
 
   public saveDepartamento(): void {
     if (!this.formNome.trim()) {
-      this.snackBar.open('Vui lòng nhập tên phòng ban.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('departamentoConfig.errMissingNome'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -80,11 +82,11 @@ export class DepartamentoConfigComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showForm = false;
-        this.snackBar.open('Đã lưu phòng ban.', 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('departamentoConfig.saved'), this.translate.instant('general.close'), { duration: 3000 });
         this.load();
       },
       err => this.showError(err)
@@ -92,7 +94,7 @@ export class DepartamentoConfigComponent implements OnInit {
   }
 
   public deactivate(item: DepartamentoConfigDataContract): void {
-    if (!confirm(`Vô hiệu hóa phòng ban "${item.nome}"?`)) { return; }
+    if (!confirm(this.translate.instant('departamentoConfig.confirmDelete', { nome: item.nome }))) { return; }
     this.departamentoConfigService.deactivate({ id: item.id }).subscribe(
       () => this.load(),
       err => this.showError(err)
@@ -100,7 +102,7 @@ export class DepartamentoConfigComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('departamentoConfig.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }

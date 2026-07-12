@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { FunctionalClassificationService } from '../../services/functional-classification.service';
 import { FunctionalClassificationDataContract } from '../../response-models/functional-classification-response';
 
@@ -25,7 +26,8 @@ export class ClassificacaoFuncionalComponent implements OnInit {
 
   constructor(
     private functionalClassificationService: FunctionalClassificationService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -83,7 +85,7 @@ export class ClassificacaoFuncionalComponent implements OnInit {
 
   public save(): void {
     if (!this.formCodigo || !this.formDesignacao) {
-      this.snackBar.open('Vui lòng nhập đủ Mã và Tên gọi.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('classificacaoFuncionalScreen.errMissingFields'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -95,7 +97,7 @@ export class ClassificacaoFuncionalComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showForm = false;
@@ -106,14 +108,14 @@ export class ClassificacaoFuncionalComponent implements OnInit {
   }
 
   public deactivate(item: FunctionalClassificationDataContract): void {
-    if (!confirm(`Vô hiệu hoá "${item.codigo} - ${item.designacao}"?`)) {
+    if (!confirm(this.translate.instant('classificacaoFuncionalScreen.confirmDelete', { codigo: item.codigo, designacao: item.designacao }))) {
       return;
     }
 
     this.functionalClassificationService.deactivate({ id: item.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -123,7 +125,7 @@ export class ClassificacaoFuncionalComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('classificacaoFuncionalScreen.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }

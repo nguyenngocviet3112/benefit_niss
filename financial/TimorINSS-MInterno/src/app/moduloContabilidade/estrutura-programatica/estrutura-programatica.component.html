@@ -1,26 +1,26 @@
 <div class="ep-container">
   <div class="ep-header">
-    <h2>Estrutura Programática <span class="en">(Cơ cấu Chương trình ngân sách)</span></h2>
+    <h2>{{ 'estruturaProgramaticaScreen.header' | translate }} <span class="en">({{ 'estruturaProgramaticaScreen.headerGloss' | translate }})</span></h2>
   </div>
 
   <div class="ep-context-bar">
     <app-orcamento-config-select [value]="orcamentoConfigFk" (valueChange)="orcamentoConfigFk = $event; loadTree()"></app-orcamento-config-select>
-    <button mat-stroked-button (click)="loadTree()">Tải lại</button>
+    <button mat-stroked-button (click)="loadTree()">{{ 'estruturaProgramaticaScreen.reload' | translate }}</button>
 
     <span class="spacer"></span>
 
-    <app-orcamento-config-select label="Sao chép sang kỳ" [(value)]="copyTargetOrcamentoConfigFk"></app-orcamento-config-select>
-    <button mat-stroked-button (click)="copyFromCurrentYear()">⧉ Sao chép từ kỳ này</button>
+    <app-orcamento-config-select [label]="'estruturaProgramaticaScreen.copyToLabel' | translate" [(value)]="copyTargetOrcamentoConfigFk"></app-orcamento-config-select>
+    <button mat-stroked-button (click)="copyFromCurrentYear()">{{ 'estruturaProgramaticaScreen.copyButton' | translate }}</button>
 
     <app-master-data-import-button entityPath="programactivity" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadTree()"></app-master-data-import-button>
-    <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm Programa</button>
+    <button mat-raised-button color="primary" (click)="openAddForm()">{{ 'estruturaProgramaticaScreen.addPrograma' | translate }}</button>
   </div>
 
   <div class="ep-tree" *ngIf="!loading">
     <ng-container *ngFor="let root of tree">
       <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: root }"></ng-container>
     </ng-container>
-    <div class="ep-empty" *ngIf="tree.length === 0">Chưa có dữ liệu cho kỳ ngân sách này.</div>
+    <div class="ep-empty" *ngIf="tree.length === 0">{{ 'estruturaProgramaticaScreen.emptyList' | translate }}</div>
   </div>
 
   <ng-template #nodeTemplate let-node="node">
@@ -28,9 +28,9 @@
       <span class="ep-code">{{ node.codigo }}</span>
       <span class="ep-desig">{{ node.designacao }}</span>
       <span class="ep-actions">
-        <button mat-button *ngIf="node.nivel < 3" (click)="openAddForm(node)">+ Con</button>
-        <button mat-button (click)="openEditForm(node)">Sửa</button>
-        <button mat-button (click)="deactivate(node)">Xóa</button>
+        <button mat-button *ngIf="node.nivel < 3" (click)="openAddForm(node)">{{ 'estruturaProgramaticaScreen.addChild' | translate }}</button>
+        <button mat-button (click)="openEditForm(node)">{{ 'estruturaProgramaticaScreen.editButton' | translate }}</button>
+        <button mat-button (click)="deactivate(node)">{{ 'estruturaProgramaticaScreen.deleteButton' | translate }}</button>
       </span>
     </div>
     <ng-container *ngFor="let child of node.children">
@@ -40,21 +40,21 @@
 
   <div class="ep-form-overlay" *ngIf="showForm">
     <div class="ep-form">
-      <h3>{{ editingId ? 'Sửa' : 'Thêm' }} — Cấp {{ formNivel }}</h3>
+      <h3>{{ (editingId ? 'estruturaProgramaticaScreen.formTitleEdit' : 'estruturaProgramaticaScreen.formTitleCreate') | translate }} — {{ 'estruturaProgramaticaScreen.nivelLabel' | translate }} {{ formNivel }}</h3>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Mã (Código)</mat-label>
+        <mat-label>{{ 'estruturaProgramaticaScreen.fieldCodigo' | translate }}</mat-label>
         <input matInput [(ngModel)]="formCodigo" name="formCodigo" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Tên gọi (Designação)</mat-label>
+        <mat-label>{{ 'estruturaProgramaticaScreen.fieldDesignacao' | translate }}</mat-label>
         <input matInput [(ngModel)]="formDesignacao" name="formDesignacao" />
       </mat-form-field>
 
       <div class="ep-form-actions">
-        <button mat-button (click)="cancelForm()">Hủy</button>
-        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+        <button mat-button (click)="cancelForm()">{{ 'estruturaProgramaticaScreen.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="save()">{{ 'estruturaProgramaticaScreen.saveButton' | translate }}</button>
       </div>
     </div>
   </div>

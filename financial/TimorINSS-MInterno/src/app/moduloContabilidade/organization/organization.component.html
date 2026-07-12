@@ -1,17 +1,17 @@
 <div class="org-container">
   <div class="org-header">
-    <h2>Organization <span class="en">(Tổ chức — INSS / FRSS)</span></h2>
+    <h2>{{ 'organizationScreen.header' | translate }} <span class="en">({{ 'organizationScreen.headerGloss' | translate }})</span></h2>
   </div>
 
   <div class="org-list" *ngIf="!loading">
     <div class="org-row" *ngFor="let inst of institutions">
       <span class="org-nome">{{ inst.nome }}</span>
       <span class="org-status" [class.inactive]="!inst.indActivo">
-        {{ inst.indActivo ? 'Ativo' : 'Inativo' }}
+        {{ (inst.indActivo ? 'organizationScreen.ativo' : 'organizationScreen.inativo') | translate }}
       </span>
     </div>
     <div class="org-empty" *ngIf="institutions.length === 0">
-      Chưa có dữ liệu — cần chạy script seed (db_migrations/2026-07-11_m1_master_data.sql).
+      {{ 'organizationScreen.emptyList' | translate }}
     </div>
   </div>
 </div>

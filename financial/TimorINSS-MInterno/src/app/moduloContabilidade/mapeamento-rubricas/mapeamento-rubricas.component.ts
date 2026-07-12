@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { AgrupamentoRubricaService } from '../../services/agrupamento-rubrica.service';
 import { AgrupamentoRubricaItemDataContract } from '../../response-models/agrupamento-rubrica-response';
 
@@ -33,7 +34,8 @@ export class MapeamentoRubricasComponent implements OnInit {
 
   constructor(
     private agrupamentoRubricaService: AgrupamentoRubricaService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -92,7 +94,7 @@ export class MapeamentoRubricasComponent implements OnInit {
 
   public save(): void {
     if (!this.formCodigo || !this.formDesignacao) {
-      this.snackBar.open('Vui lòng nhập đủ Mã và Tên gọi.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('mapeamentoRubricas.errMissingFields'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -106,7 +108,7 @@ export class MapeamentoRubricasComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showForm = false;
@@ -117,14 +119,14 @@ export class MapeamentoRubricasComponent implements OnInit {
   }
 
   public deactivate(item: AgrupamentoRubricaItemDataContract): void {
-    if (!confirm(`Xoá "${item.codigo} - ${item.designacao}"?`)) {
+    if (!confirm(this.translate.instant('mapeamentoRubricas.confirmDelete', { codigo: item.codigo, designacao: item.designacao }))) {
       return;
     }
 
     this.agrupamentoRubricaService.deactivate({ id: item.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.loadTree();
@@ -134,7 +136,7 @@ export class MapeamentoRubricasComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('mapeamentoRubricas.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }

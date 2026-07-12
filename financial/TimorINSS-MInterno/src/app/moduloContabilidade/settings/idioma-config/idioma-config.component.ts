@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { LanguageConfigService } from '../../../services/language-config.service';
 import { LanguageConfigDataContract } from '../../../response-models/language-config-response';
 
@@ -15,7 +16,8 @@ export class IdiomaConfigComponent implements OnInit {
 
   constructor(
     private languageConfigService: LanguageConfigService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -41,7 +43,7 @@ export class IdiomaConfigComponent implements OnInit {
     this.languageConfigService.toggle({ id: lang.id, indActivo: nextValue }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -51,7 +53,7 @@ export class IdiomaConfigComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('idiomaConfig.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
