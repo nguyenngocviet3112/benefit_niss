@@ -175,6 +175,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     user = _utils.SetDetailsToEntity(user);
                     _unitOfWork.UtilizadoresRepository.Add(user);
                     _unitOfWork.Commit();
+
+                    AssignPlaceholderPerfil(user.IdUtilizador);
                 }
 
                 SyncPermissions(user.IdUtilizador, explicitTokens, chosenPresets);
@@ -273,6 +275,36 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 profile = _utils.UpdateDetailsToEntity(profile);
                 _unitOfWork.UserPermissionRepository.UpdateProfile(profile);
             }
+            _unitOfWork.Commit();
+        }
+
+        // InternalLoginManager (old login path, untouched) rejects any non-"admin"
+        // login with zero active Relutilizadorperfil rows ("CurrentUserHasNoProfile").
+        // That check belongs to the old Perfil/Funcionalidade system, unrelated to
+        // this new UserPermission RBAC — accounts created here would otherwise be
+        // unable to log in at all. Link every new account to a fixed placeholder
+        // Perfil (db_migrations/2026-07-12d_placeholder_perfil.sql, zero
+        // Relperfilfuncionalidade rows so it grants no old-system capability) purely
+        // to satisfy that legacy gate.
+        private const string PlaceholderPerfilDescricao = "Conta Módulo Contabilidade (sem Perfil legado)";
+
+        private void AssignPlaceholderPerfil(int utilizadorId)
+        {
+            Perfil placeholder = _unitOfWork.PerfilRepository.GetAll()
+                .SingleOrDefault(p => p.Descricao == PlaceholderPerfilDescricao);
+            if (placeholder == null)
+            {
+                return;
+            }
+
+            Relutilizadorperfil rel = new Relutilizadorperfil
+            {
+                UtilizadorFk = utilizadorId,
+                PerfilFk = placeholder.Id,
+                IndActivo = true
+            };
+            rel = _utils.SetDetailsToEntity(rel);
+            _unitOfWork.RelUtilizadorPerfilRepository.Add(rel);
             _unitOfWork.Commit();
         }
 
