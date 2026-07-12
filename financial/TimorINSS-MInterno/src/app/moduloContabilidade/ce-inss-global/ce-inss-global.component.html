@@ -91,6 +91,8 @@
             <th class="num">Total Execução</th>
             <th class="num">Taxa Execução</th>
             <th class="num">Saldo Execução</th>
+            <th class="num">Saldo Cabimentado Não Comprometido</th>
+            <th class="num">Saldo Comprometido Não Liquidado</th>
           </tr>
         </thead>
         <tbody>
@@ -104,15 +106,17 @@
             <td class="num">{{ row.totalExecucao | number:'1.2-2' }}</td>
             <td class="num">{{ row.taxaExecucao | percent:'1.1-1' }}</td>
             <td class="num">{{ row.saldoExecucao | number:'1.2-2' }}</td>
+            <td class="num">{{ row.saldoCabimentadoNaoComprometido | number:'1.2-2' }}</td>
+            <td class="num">{{ row.saldoComprometidoNaoLiquidado | number:'1.2-2' }}</td>
           </tr>
-          <tr *ngIf="report.despesas.length === 0"><td colspan="9" class="cg-empty">Chưa có dữ liệu.</td></tr>
+          <tr *ngIf="report.despesas.length === 0"><td colspan="11" class="cg-empty">Chưa có dữ liệu.</td></tr>
         </tbody>
         <tfoot>
           <tr>
             <td colspan="2">TOTAL DESPESA</td>
             <td class="num">{{ report.totalDespesaInicial | number:'1.2-2' }}</td>
             <td class="num">{{ report.totalDespesaCorrigido | number:'1.2-2' }}</td>
-            <td colspan="5"></td>
+            <td colspan="7"></td>
           </tr>
         </tfoot>
       </table>
