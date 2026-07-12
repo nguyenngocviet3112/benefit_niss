@@ -5,10 +5,7 @@
   </div>
 
   <div class="sup-context-bar">
-    <mat-form-field appearance="outline" class="small-field">
-      <mat-label>{{ 'orcamentoSuplementar.fieldOrcamentoConfig' | translate }}</mat-label>
-      <input matInput type="number" [(ngModel)]="orcamentoConfigFk" name="orcamentoConfigFk" />
-    </mat-form-field>
+    <app-orcamento-config-select [value]="orcamentoConfigFk" (valueChange)="orcamentoConfigFk = $event; loadBatch(); loadRubricas()"></app-orcamento-config-select>
     <button mat-stroked-button (click)="loadBatch(); loadRubricas()">{{ 'orcamentoSuplementar.reload' | translate }}</button>
 
     <span class="spacer"></span>
