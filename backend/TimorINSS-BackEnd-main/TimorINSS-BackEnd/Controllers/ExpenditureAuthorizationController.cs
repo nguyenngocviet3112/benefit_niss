@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -72,6 +73,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Create")]
+        [RequirePerm("AD_SUBMIT")]
         public IActionResult Create(CreateExpenditureAuthorizationRequest request)
         {
             ExpenditureAuthorizationResponse response;
@@ -94,6 +96,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Save")]
+        [RequirePerm("AD_SUBMIT")]
         public IActionResult Save(SaveExpenditureAuthorizationRequest request)
         {
             ResponseBaseDataContract response;
@@ -116,6 +119,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("SavePlurianualidade")]
+        [RequirePerm("AD_SUBMIT")]
         public IActionResult SavePlurianualidade(SavePlurianualidadeRequest request)
         {
             ResponseBaseDataContract response;
@@ -138,6 +142,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("DeletePlurianualidade")]
+        [RequirePerm("AD_SUBMIT")]
         public IActionResult DeletePlurianualidade(DeletePlurianualidadeRequest request)
         {
             ResponseBaseDataContract response;
@@ -160,6 +165,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Submit")]
+        [RequirePerm("AD_SUBMIT")]
         public IActionResult Submit(SubmitExpenditureAuthorizationRequest request)
         {
             ResponseBaseDataContract response;
@@ -182,6 +188,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Review")]
+        [RequirePerm("AD_REVIEW")]
         public IActionResult Review(ReviewExpenditureAuthorizationRequest request)
         {
             ResponseBaseDataContract response;
@@ -204,6 +211,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Approve")]
+        [RequirePerm("AD_APPROVE")]
         public IActionResult Approve(ApproveExpenditureAuthorizationRequest request)
         {
             ResponseBaseDataContract response;

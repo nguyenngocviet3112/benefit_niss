@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -72,6 +73,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("SaveLinha")]
+        [RequirePerm("ORC_SUBMIT")]
         public IActionResult SaveLinha(SaveOrcamentoSuplementarLinhaRequest request)
         {
             ResponseBaseDataContract response;
@@ -94,6 +96,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("DeleteLinha")]
+        [RequirePerm("ORC_SUBMIT")]
         public IActionResult DeleteLinha(DeleteOrcamentoSuplementarLinhaRequest request)
         {
             ResponseBaseDataContract response;
@@ -116,6 +119,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Submit")]
+        [RequirePerm("ORC_SUBMIT")]
         public IActionResult Submit(SubmitOrcamentoSuplementarRequest request)
         {
             ResponseBaseDataContract response;
@@ -138,6 +142,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Review")]
+        [RequirePerm("ORC_REVIEW")]
         public IActionResult Review(ReviewOrcamentoSuplementarRequest request)
         {
             ResponseBaseDataContract response;
@@ -160,6 +165,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Approve")]
+        [RequirePerm("ORC_APPROVE")]
         public IActionResult Approve(ApproveOrcamentoSuplementarRequest request)
         {
             ResponseBaseDataContract response;

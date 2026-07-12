@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -72,6 +73,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Create")]
+        [RequirePerm("CABIMENTO_SUBMIT")]
         public IActionResult Create(CreateCabimentoRequest request)
         {
             CabimentoResponse response;
@@ -94,6 +96,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Submit")]
+        [RequirePerm("CABIMENTO_SUBMIT")]
         public IActionResult Submit(SubmitCabimentoRequest request)
         {
             ResponseBaseDataContract response;
@@ -116,6 +119,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Approve")]
+        [RequirePerm("CABIMENTO_APPROVE")]
         public IActionResult Approve(ApproveCabimentoRequest request)
         {
             ResponseBaseDataContract response;

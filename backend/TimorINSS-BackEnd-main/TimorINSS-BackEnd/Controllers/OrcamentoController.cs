@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -49,6 +50,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("SaveLinha")]
+        [RequirePerm("ORC_SUBMIT")]
         public IActionResult SaveLinha(SaveOrcamentoLinhaRequest request)
         {
             ResponseBaseDataContract response;
@@ -71,6 +73,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("DeleteLinha")]
+        [RequirePerm("ORC_SUBMIT")]
         public IActionResult DeleteLinha(DeleteOrcamentoLinhaRequest request)
         {
             ResponseBaseDataContract response;
@@ -93,6 +96,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Submit")]
+        [RequirePerm("ORC_SUBMIT")]
         public IActionResult Submit(SubmitOrcamentoBatchRequest request)
         {
             ResponseBaseDataContract response;
@@ -115,6 +119,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Review")]
+        [RequirePerm("ORC_REVIEW")]
         public IActionResult Review(ReviewOrcamentoBatchRequest request)
         {
             ResponseBaseDataContract response;
@@ -137,6 +142,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Approve")]
+        [RequirePerm("ORC_APPROVE")]
         public IActionResult Approve(ApproveOrcamentoBatchRequest request)
         {
             ResponseBaseDataContract response;
@@ -160,6 +166,7 @@ namespace TimorINSSBackEnd.Controllers
 
         [HttpPost("Import")]
         [RequestSizeLimit(20000000)]
+        [RequirePerm("ORC_SUBMIT")]
         public IActionResult Import([FromForm] ImportOrcamentoRequest request)
         {
             ImportMasterDataTreeResponse response;

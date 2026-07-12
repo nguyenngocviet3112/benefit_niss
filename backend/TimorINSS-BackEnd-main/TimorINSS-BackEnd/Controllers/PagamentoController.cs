@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -112,6 +113,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Create")]
+        [RequirePerm("PAG_SUBMIT")]
         public IActionResult Create(CreatePaymentAuthorizationRequest request)
         {
             PaymentAuthorizationResponse response;
@@ -134,6 +136,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Submit")]
+        [RequirePerm("PAG_SUBMIT")]
         public IActionResult Submit(SubmitPaymentAuthorizationRequest request)
         {
             ResponseBaseDataContract response;
@@ -156,6 +159,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Approve")]
+        [RequirePerm("PAG_APPROVE")]
         public IActionResult Approve(ApprovePaymentAuthorizationRequest request)
         {
             ResponseBaseDataContract response;
@@ -178,6 +182,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Execute")]
+        [RequirePerm("PAG_EXECUTE")]
         public IActionResult Execute(ExecutePaymentRequest request)
         {
             ResponseBaseDataContract response;

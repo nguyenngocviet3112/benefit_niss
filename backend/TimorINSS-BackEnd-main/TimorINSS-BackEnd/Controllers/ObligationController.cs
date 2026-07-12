@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -72,6 +73,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Create")]
+        [RequirePerm("OBRIGACAO_SUBMIT")]
         public IActionResult Create(CreateObligationRequest request)
         {
             ObligationResponse response;
@@ -94,6 +96,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("AddItem")]
+        [RequirePerm("OBRIGACAO_SUBMIT")]
         public IActionResult AddItem(AddObligationItemRequest request)
         {
             ResponseBaseDataContract response;
@@ -116,6 +119,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("RemoveItem")]
+        [RequirePerm("OBRIGACAO_SUBMIT")]
         public IActionResult RemoveItem(RemoveObligationItemRequest request)
         {
             ResponseBaseDataContract response;
@@ -138,6 +142,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("AddBeneficiary")]
+        [RequirePerm("OBRIGACAO_SUBMIT")]
         public IActionResult AddBeneficiary(AddObligationBeneficiaryRequest request)
         {
             ResponseBaseDataContract response;
@@ -160,6 +165,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("RemoveBeneficiary")]
+        [RequirePerm("OBRIGACAO_SUBMIT")]
         public IActionResult RemoveBeneficiary(RemoveObligationBeneficiaryRequest request)
         {
             ResponseBaseDataContract response;
@@ -182,6 +188,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Submit")]
+        [RequirePerm("OBRIGACAO_SUBMIT")]
         public IActionResult Submit(SubmitObligationRequest request)
         {
             ResponseBaseDataContract response;
@@ -204,6 +211,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Approve")]
+        [RequirePerm("OBRIGACAO_APPROVE")]
         public IActionResult Approve(ApproveObligationRequest request)
         {
             ResponseBaseDataContract response;

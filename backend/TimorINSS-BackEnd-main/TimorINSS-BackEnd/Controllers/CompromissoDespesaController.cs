@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -72,6 +73,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Create")]
+        [RequirePerm("COMPROMISSO_SUBMIT")]
         public IActionResult Create(CreateCompromissoDespesaRequest request)
         {
             CompromissoDespesaResponse response;
@@ -94,6 +96,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("SavePlurianualidade")]
+        [RequirePerm("COMPROMISSO_SUBMIT")]
         public IActionResult SavePlurianualidade(SaveCompromissoDespesaPlurianualidadeRequest request)
         {
             ResponseBaseDataContract response;
@@ -116,6 +119,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Submit")]
+        [RequirePerm("COMPROMISSO_SUBMIT")]
         public IActionResult Submit(SubmitCompromissoDespesaRequest request)
         {
             ResponseBaseDataContract response;
@@ -138,6 +142,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Review")]
+        [RequirePerm("COMPROMISSO_REVIEW")]
         public IActionResult Review(ReviewCompromissoDespesaRequest request)
         {
             ResponseBaseDataContract response;
@@ -160,6 +165,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Approve")]
+        [RequirePerm("COMPROMISSO_APPROVE")]
         public IActionResult Approve(ApproveCompromissoDespesaRequest request)
         {
             ResponseBaseDataContract response;
