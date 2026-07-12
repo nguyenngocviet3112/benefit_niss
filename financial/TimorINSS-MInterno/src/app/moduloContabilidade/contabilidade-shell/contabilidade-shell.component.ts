@@ -164,11 +164,15 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Classificação Funcional', route: '/contabilidade/classificacaoFuncional' },
         { label: 'Classificação Económica', route: '/contabilidade/classificacaoEconomica' },
         { label: 'Organization', route: '/contabilidade/organization' },
-        // Novos, 2026-07-11 (do phạm vi kế toán kép mới phát hiện — xem
-        // [[financial-statements-scope-gap]]): Plano de Contas là bảng gốc,
-        // Mapeamento Rubricas ánh xạ Plano Contas -> dòng Balanço/DR.
-        { label: 'Plano de Contas (Chart of Accounts)', comingSoon: true },
-        { label: 'Mapeamento Rubricas ↔ Plano de Contas', comingSoon: true },
+        // 2026-07-12 (user corrected): Plano de Contas + Mapeamento Rubricas KHÔNG
+        // phải bảng/data mới — đã tồn tại từ trước là Codigoconta (cây tài khoản,
+        // đã có InitialValue/IsCredit cho số dư đầu kỳ) + Agrupamentoconfig +
+        // Relcodigocontaagrupamentoconfig (bảng quan hệ ánh xạ) — cả 2 đang được
+        // dùng làm dropdown thật trong componente-despesa/receita/pop-up-executar-
+        // pagamentos (mode cũ). Còn comingSoon chỉ vì CHƯA CÓ MÀN QUẢN LÝ ở mode
+        // MỚI — không phải thiếu schema/dữ liệu. Xem [[financial-statements-scope-gap]].
+        { label: 'Plano de Contas (Codigoconta — đã có data, cần màn mode mới)', comingSoon: true },
+        { label: 'Mapeamento Rubricas (Agrupamentoconfig — đã có data, cần màn mode mới)', comingSoon: true },
         { label: 'Fornecedores / Clientes', comingSoon: true },
       ]
     },
