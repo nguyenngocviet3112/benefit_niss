@@ -1,28 +1,28 @@
 <div class="rec-container">
   <div class="rec-header">
-    <h2>Receita <span class="en">(RECEITAS_PAC — juros bancários, saldo de gerência, etc.; sem cổng duyệt, chỉ đăng ký)</span></h2>
+    <h2>{{ 'receitaPac.header' | translate }} <span class="en">({{ 'receitaPac.headerGloss' | translate }})</span></h2>
   </div>
 
   <div class="rec-context-bar">
     <mat-form-field appearance="outline" class="small-field">
-      <mat-label>Ano</mat-label>
+      <mat-label>{{ 'receitaPac.fieldAno' | translate }}</mat-label>
       <input matInput type="number" [(ngModel)]="ano" name="ano" />
     </mat-form-field>
-    <button mat-stroked-button (click)="load()">Tải lại</button>
+    <button mat-stroked-button (click)="load()">{{ 'receitaPac.reload' | translate }}</button>
 
     <span class="spacer"></span>
 
-    <button mat-raised-button color="primary" (click)="openCreateForm()">+ Nhập Receita (PAC)</button>
+    <button mat-raised-button color="primary" (click)="openCreateForm()">{{ 'receitaPac.addButton' | translate }}</button>
   </div>
 
   <div class="rec-list" *ngIf="!loading">
     <div class="rec-row rec-row-header">
-      <span class="rec-col-num">N.º PAC</span>
+      <span class="rec-col-num">{{ 'receitaPac.colNumPac' | translate }}</span>
       <span class="rec-col-regime">Regime</span>
       <span class="rec-col-ec">Classificação Económica</span>
-      <span class="rec-col-descritivo">Descritivo</span>
-      <span class="rec-col-valor">Valor PAC</span>
-      <span class="rec-col-valor">Saldo por cobrar</span>
+      <span class="rec-col-descritivo">{{ 'receitaPac.colDescritivo' | translate }}</span>
+      <span class="rec-col-valor">{{ 'receitaPac.colValorPac' | translate }}</span>
+      <span class="rec-col-valor">{{ 'receitaPac.colSaldoPorCobrar' | translate }}</span>
     </div>
 
     <ng-container *ngFor="let item of items">
@@ -38,164 +38,162 @@
       <div class="rec-detail" *ngIf="expandedId === item.id">
         <div class="rec-detail-grid">
           <div class="rec-field">
-            <label>NISS <span class="itag type">Gõ tay</span></label>
+            <label>{{ 'receitaPac.fieldNiss' | translate }} <span class="itag type">{{ 'receitaPac.typedTag' | translate }}</span></label>
             <span>{{ item.niss || '—' }}</span>
           </div>
           <div class="rec-field">
-            <label>Atividade <span class="itag drop">Chọn</span></label>
+            <label>Atividade <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></label>
             <span>{{ item.atividadeCodigo ? (item.atividadeCodigo + ' — ' + item.atividadeDesignacao) : '—' }}</span>
           </div>
           <div class="rec-field">
-            <label>Organization <span class="itag drop">Chọn</span></label>
+            <label>Organization <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></label>
             <span>{{ item.organizationNome }}</span>
           </div>
           <div class="rec-field">
-            <label>Valor cobrado (banco) <span class="itag type">Gõ tay</span></label>
+            <label>{{ 'receitaPac.fieldValorCobradoBanco' | translate }} <span class="itag type">{{ 'receitaPac.typedTag' | translate }}</span></label>
             <span>{{ item.valorCobradoBanco | number:'1.2-2' }}</span>
           </div>
           <div class="rec-field" *ngIf="item.valorCobradoBanco > 0">
-            <label>Ngân hàng đã nhận <span class="itag drop">Chọn</span></label>
+            <label>{{ 'receitaPac.fieldBancoRecebido' | translate }} <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></label>
             <span>{{ item.contaBancariaNome || '—' }}</span>
           </div>
           <div class="rec-field">
-            <label>Valor cobrado (caixa) <span class="itag type">Gõ tay</span></label>
+            <label>{{ 'receitaPac.fieldValorCobradoCaixa' | translate }} <span class="itag type">{{ 'receitaPac.typedTag' | translate }}</span></label>
             <span>{{ item.valorCobradoCaixa | number:'1.2-2' }}</span>
           </div>
           <div class="rec-field">
-            <label>Valor cobrado (total) <span class="itag auto">Tự động</span></label>
+            <label>{{ 'receitaPac.fieldValorCobradoTotal' | translate }} <span class="itag auto">{{ 'receitaPac.autoTag' | translate }}</span></label>
             <span>{{ item.valorCobradoTotal | number:'1.2-2' }}</span>
           </div>
           <div class="rec-field">
-            <label>Saldo liquidado por cobrar <span class="itag auto">Tự động</span></label>
+            <label>{{ 'receitaPac.fieldSaldoPorCobrar' | translate }} <span class="itag auto">{{ 'receitaPac.autoTag' | translate }}</span></label>
             <span>{{ item.saldoPorCobrar | number:'1.2-2' }}</span>
           </div>
           <div class="rec-field">
-            <label>Tài khoản Nợ (Débito) <span class="itag drop">Chọn</span></label>
+            <label>{{ 'receitaPac.fieldContaDebito' | translate }} <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></label>
             <span>{{ item.codigoContaDebitoDesignacao || '—' }}</span>
           </div>
           <div class="rec-field">
-            <label>Tài khoản Có (Crédito) <span class="itag drop">Chọn</span></label>
+            <label>{{ 'receitaPac.fieldContaCredito' | translate }} <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></label>
             <span>{{ item.codigoContaCreditoDesignacao || '—' }}</span>
           </div>
         </div>
 
         <div class="rec-actions-bar">
-          <button mat-stroked-button (click)="openEditForm(item)">Sửa</button>
-          <button mat-stroked-button color="warn" (click)="deactivate(item)">Vô hiệu hóa</button>
+          <button mat-stroked-button (click)="openEditForm(item)">{{ 'receitaPac.editButton' | translate }}</button>
+          <button mat-stroked-button color="warn" (click)="deactivate(item)">{{ 'receitaPac.deactivateButton' | translate }}</button>
         </div>
       </div>
     </ng-container>
 
-    <div class="rec-empty" *ngIf="items.length === 0">Chưa có Receita (PAC) nào cho năm này.</div>
+    <div class="rec-empty" *ngIf="items.length === 0">{{ 'receitaPac.emptyList' | translate }}</div>
   </div>
 
   <div class="rec-form-overlay" *ngIf="showForm">
     <div class="rec-form">
-      <h3>{{ editingId ? 'Sửa Receita (PAC)' : 'Nhập Receita (PAC)' }}</h3>
+      <h3>{{ (editingId ? 'receitaPac.formTitleEdit' : 'receitaPac.formTitleCreate') | translate }}</h3>
 
       <div class="rec-form-grid">
         <mat-form-field appearance="outline" class="small-field">
-          <mat-label>Mês <span class="itag drop">Chọn</span></mat-label>
+          <mat-label>{{ 'receitaPac.fieldMes' | translate }} <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></mat-label>
           <mat-select [(ngModel)]="formMes" name="formMes">
             <mat-option *ngFor="let m of meses" [value]="m">{{ m }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>NISS (tùy chọn) <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'receitaPac.fieldNissOptional' | translate }} <span class="itag type">{{ 'receitaPac.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formNiss" name="formNiss" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Regime <span class="itag drop">Chọn</span></mat-label>
+          <mat-label>Regime <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></mat-label>
           <mat-select [(ngModel)]="formRegimeFk" name="formRegimeFk">
             <mat-option *ngFor="let r of regimes" [value]="r.id">{{ r.codigo }} — {{ r.designacao }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Atividade (tùy chọn) <span class="itag drop">Chọn</span></mat-label>
+          <mat-label>{{ 'receitaPac.fieldAtividadeOptional' | translate }} <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></mat-label>
           <mat-select [(ngModel)]="formAtividadeFk" name="formAtividadeFk">
-            <mat-option [value]="null">— Không chọn —</mat-option>
+            <mat-option [value]="null">{{ 'receitaPac.noneOption' | translate }}</mat-option>
             <mat-option *ngFor="let a of atividades" [value]="a.id" [style.paddingLeft]="indent(a.nivel)">{{ a.codigo }} — {{ a.designacao }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Classificação Económica <span class="itag drop">Chọn</span></mat-label>
+          <mat-label>Classificação Económica <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></mat-label>
           <mat-select [(ngModel)]="formEconomicClassificationFk" name="formEconomicClassificationFk">
             <mat-option *ngFor="let e of economicClassifications" [value]="e.id" [style.paddingLeft]="indent(e.nivel)">{{ e.codigo }} — {{ e.designacao }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Organization <span class="itag drop">Chọn</span></mat-label>
+          <mat-label>Organization <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></mat-label>
           <mat-select [(ngModel)]="formOrganizationFk" name="formOrganizationFk">
             <mat-option *ngFor="let inst of institutions" [value]="inst.id">{{ inst.nome }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="rec-form-span2">
-          <mat-label>Descritivo do movimento <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'receitaPac.fieldDescritivo' | translate }} <span class="itag type">{{ 'receitaPac.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="rec-form-span2">
-          <mat-label>Valor PAC (số tiền phải thu đã ghi nhận) <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'receitaPac.fieldValorPac' | translate }} <span class="itag type">{{ 'receitaPac.typedTag' | translate }}</span></mat-label>
           <input matInput type="number" min="0" step="0.01" [(ngModel)]="formValorPac" name="formValorPac" required />
         </mat-form-field>
 
         <div class="rec-form-span2">
           <div class="rec-hint">
-            Đã thực thu được bao nhiêu trong số Valor PAC ở trên — tách theo kênh. Phải nhập tay vì hệ thống
-            chưa nối với sao kê ngân hàng tự động (màn Conciliação de Movimentos chưa build); 0 nghĩa là chưa xác nhận về tài khoản/quỹ.
+            {{ 'receitaPac.hintValorPac' | translate }}
           </div>
         </div>
 
         <mat-form-field appearance="outline">
-          <mat-label>Đã thu qua ngân hàng <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'receitaPac.fieldValorCobradoBanco' | translate }} <span class="itag type">{{ 'receitaPac.typedTag' | translate }}</span></mat-label>
           <input matInput type="number" min="0" step="0.01" [(ngModel)]="formValorCobradoBanco" name="formValorCobradoBanco" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" *ngIf="formValorCobradoBanco > 0">
-          <mat-label>Thu qua ngân hàng nào <span class="itag drop">Chọn</span></mat-label>
+          <mat-label>{{ 'receitaPac.fieldQualBanco' | translate }} <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></mat-label>
           <mat-select [(ngModel)]="formContaBancariaFk" name="formContaBancariaFk">
             <mat-option *ngFor="let acc of bankAccounts" [value]="acc.id">{{ acc.entidadeBancaria }} — {{ acc.descricao }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Đã thu qua tiền mặt <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'receitaPac.fieldValorCobradoCaixa' | translate }} <span class="itag type">{{ 'receitaPac.typedTag' | translate }}</span></mat-label>
           <input matInput type="number" min="0" step="0.01" [(ngModel)]="formValorCobradoCaixa" name="formValorCobradoCaixa" />
         </mat-form-field>
 
         <div class="rec-form-span2">
           <div class="rec-hint">
-            Chọn 2 tài khoản kế toán để hệ thống tự sinh bút toán vào Registo de Lançamentos khi lưu Receita
-            này (Nợ tăng Tiền mặt/Ngân hàng, Có ghi nhận nguồn thu) — không nhập tay lại ở sổ nhật ký.
+            {{ 'receitaPac.hintContas' | translate }}
           </div>
         </div>
 
         <mat-form-field appearance="outline">
-          <mat-label>Tài khoản Nợ (Débito) <span class="itag drop">Chọn</span></mat-label>
+          <mat-label>{{ 'receitaPac.fieldContaDebito' | translate }} <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></mat-label>
           <mat-select [(ngModel)]="formCodigoContaDebitoFk" name="formCodigoContaDebitoFk">
-            <mat-option [value]="null">— Không chọn —</mat-option>
+            <mat-option [value]="null">{{ 'receitaPac.noneOption' | translate }}</mat-option>
             <mat-option *ngFor="let c of codigoContaOptions" [value]="c.id">{{ c.designacao }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Tài khoản Có (Crédito) <span class="itag drop">Chọn</span></mat-label>
+          <mat-label>{{ 'receitaPac.fieldContaCredito' | translate }} <span class="itag drop">{{ 'receitaPac.dropTag' | translate }}</span></mat-label>
           <mat-select [(ngModel)]="formCodigoContaCreditoFk" name="formCodigoContaCreditoFk">
-            <mat-option [value]="null">— Không chọn —</mat-option>
+            <mat-option [value]="null">{{ 'receitaPac.noneOption' | translate }}</mat-option>
             <mat-option *ngFor="let c of codigoContaOptions" [value]="c.id">{{ c.designacao }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
       <div class="rec-form-actions">
-        <button mat-button (click)="cancelForm()">Hủy</button>
-        <button mat-raised-button color="primary" (click)="saveReceita()">{{ editingId ? 'Lưu' : 'Tạo' }}</button>
+        <button mat-button (click)="cancelForm()">{{ 'receitaPac.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="saveReceita()">{{ (editingId ? 'receitaPac.saveButton' : 'receitaPac.createButton') | translate }}</button>
       </div>
     </div>
   </div>

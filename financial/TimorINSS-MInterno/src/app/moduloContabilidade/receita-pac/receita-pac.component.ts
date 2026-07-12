@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { EconomicClassificationDataContract } from '../../response-models/economic-classification-response';
 import { ProgramActivityDataContract } from '../../response-models/program-activity-response';
 import { ReceitaPacDataContract } from '../../response-models/receita-pac-response';
@@ -56,7 +57,8 @@ export class ReceitaPacComponent implements OnInit {
     private economicClassificationService: EconomicClassificationService,
     private institutionService: InstitutionService,
     private bankAccountService: BankAccountService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -179,11 +181,11 @@ export class ReceitaPacComponent implements OnInit {
 
   public saveReceita(): void {
     if (!this.formRegimeFk || !this.formEconomicClassificationFk || !this.formOrganizationFk || !this.formValorPac || !this.formDescritivo) {
-      this.snackBar.open('Vui lòng nhập đủ Regime, Classificação Económica, Organization, Descritivo và Valor PAC.', 'Đóng', { duration: 3500 });
+      this.snackBar.open(this.translate.instant('receitaPac.errMissingFields'), this.translate.instant('general.close'), { duration: 3500 });
       return;
     }
     if (this.formValorCobradoBanco > 0 && !this.formContaBancariaFk) {
-      this.snackBar.open('Đã thu qua ngân hàng thì phải chọn ngân hàng nào đã nhận tiền.', 'Đóng', { duration: 3500 });
+      this.snackBar.open(this.translate.instant('receitaPac.errMissingBankAccount'), this.translate.instant('general.close'), { duration: 3500 });
       return;
     }
 
@@ -206,11 +208,11 @@ export class ReceitaPacComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showForm = false;
-        this.snackBar.open(`Đã lưu PAC số ${response.item.numero}.`, 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('receitaPac.savedSuccess', { numero: response.item.numero }), this.translate.instant('general.close'), { duration: 3000 });
         this.load();
       },
       err => this.showError(err)
@@ -218,7 +220,7 @@ export class ReceitaPacComponent implements OnInit {
   }
 
   public deactivate(item: ReceitaPacDataContract): void {
-    if (!confirm(`Vô hiệu hóa PAC số ${item.numero}?`)) { return; }
+    if (!confirm(this.translate.instant('receitaPac.confirmDeactivate', { numero: item.numero }))) { return; }
     this.receitaPacService.deactivate({ id: item.id }).subscribe(
       () => this.load(),
       err => this.showError(err)
@@ -226,7 +228,7 @@ export class ReceitaPacComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('receitaPac.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
