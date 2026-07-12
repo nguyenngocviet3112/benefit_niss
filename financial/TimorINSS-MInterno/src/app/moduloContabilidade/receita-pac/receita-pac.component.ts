@@ -8,6 +8,7 @@ import { InstitutionService } from '../../services/institution.service';
 import { ProgramActivityService } from '../../services/program-activity.service';
 import { ReceitaPacService } from '../../services/receita-pac.service';
 import { SelectDescription } from '../../models/utils';
+import { BankAccountModel, BankAccountService } from '../../services/bank-account.service';
 
 @Component({
   selector: 'app-receita-pac',
@@ -29,6 +30,7 @@ export class ReceitaPacComponent implements OnInit {
   public atividades: ProgramActivityDataContract[] = [];
   public economicClassifications: EconomicClassificationDataContract[] = [];
   public institutions: SelectDescription[] = [];
+  public bankAccounts: BankAccountModel[] = [];
 
   public showForm = false;
   public editingId = 0;
@@ -42,12 +44,14 @@ export class ReceitaPacComponent implements OnInit {
   public formValorPac: number | null = null;
   public formValorCobradoBanco = 0;
   public formValorCobradoCaixa = 0;
+  public formContaBancariaFk: number | null = null;
 
   constructor(
     private receitaPacService: ReceitaPacService,
     private programActivityService: ProgramActivityService,
     private economicClassificationService: EconomicClassificationService,
     private institutionService: InstitutionService,
+    private bankAccountService: BankAccountService,
     private snackBar: MatSnackBar
   ) { }
 
@@ -105,6 +109,13 @@ export class ReceitaPacComponent implements OnInit {
       response => this.institutions = response.selects ?? [],
       err => this.showError(err)
     );
+
+    // Ngân hàng để chọn "thu qua ngân hàng nào" khi ValorCobradoBanco > 0 —
+    // lấy từ màn cấu hình "Cấu hình hệ thống > Ngân hàng" (user request 2026-07-11).
+    this.bankAccountService.getAll().subscribe(
+      response => this.bankAccounts = response.items ?? [],
+      err => this.showError(err)
+    );
   }
 
   public indent(nivel: number): string {
@@ -127,6 +138,7 @@ export class ReceitaPacComponent implements OnInit {
     this.formValorPac = null;
     this.formValorCobradoBanco = 0;
     this.formValorCobradoCaixa = 0;
+    this.formContaBancariaFk = null;
     this.showForm = true;
   }
 
@@ -142,6 +154,7 @@ export class ReceitaPacComponent implements OnInit {
     this.formValorPac = item.valorPac;
     this.formValorCobradoBanco = item.valorCobradoBanco;
     this.formValorCobradoCaixa = item.valorCobradoCaixa;
+    this.formContaBancariaFk = item.contaBancariaFk ?? null;
     this.showForm = true;
   }
 
@@ -152,6 +165,10 @@ export class ReceitaPacComponent implements OnInit {
   public saveReceita(): void {
     if (!this.formRegimeFk || !this.formEconomicClassificationFk || !this.formOrganizationFk || !this.formValorPac || !this.formDescritivo) {
       this.snackBar.open('Vui lòng nhập đủ Regime, Classificação Económica, Organization, Descritivo và Valor PAC.', 'Đóng', { duration: 3500 });
+      return;
+    }
+    if (this.formValorCobradoBanco > 0 && !this.formContaBancariaFk) {
+      this.snackBar.open('Đã thu qua ngân hàng thì phải chọn ngân hàng nào đã nhận tiền.', 'Đóng', { duration: 3500 });
       return;
     }
 
@@ -167,7 +184,8 @@ export class ReceitaPacComponent implements OnInit {
       descritivo: this.formDescritivo,
       valorPac: this.formValorPac,
       valorCobradoBanco: this.formValorCobradoBanco,
-      valorCobradoCaixa: this.formValorCobradoCaixa
+      valorCobradoCaixa: this.formValorCobradoCaixa,
+      contaBancariaFk: this.formContaBancariaFk ?? undefined
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {

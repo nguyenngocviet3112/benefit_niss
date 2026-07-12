@@ -47,6 +47,9 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
 
         [DataMember]
         public decimal ValorCobradoCaixa { get; set; }
+
+        [DataMember]
+        public int? ContaBancariaFk { get; set; }
     }
 
     [DataContract]

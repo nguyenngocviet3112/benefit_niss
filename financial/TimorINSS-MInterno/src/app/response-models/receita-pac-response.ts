@@ -18,6 +18,8 @@ export interface ReceitaPacDataContract {
   valorPac: number;
   valorCobradoBanco: number;
   valorCobradoCaixa: number;
+  contaBancariaFk?: number;
+  contaBancariaNome?: string;
   valorCobradoTotal: number;
   saldoPorCobrar: number;
 }

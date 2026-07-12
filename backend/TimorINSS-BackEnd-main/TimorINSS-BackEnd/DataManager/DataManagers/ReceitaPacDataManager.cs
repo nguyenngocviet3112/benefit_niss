@@ -45,6 +45,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 ValorPac = entity.ValorPac,
                 ValorCobradoBanco = entity.ValorCobradoBanco,
                 ValorCobradoCaixa = entity.ValorCobradoCaixa,
+                ContaBancariaFk = entity.ContaBancariaFk,
+                ContaBancariaNome = entity.ContaBancariaFkNavigation == null
+                    ? null
+                    : $"{entity.ContaBancariaFkNavigation.EntidadeBancaria} - {entity.ContaBancariaFkNavigation.Descricao}",
                 ValorCobradoTotal = total,
                 SaldoPorCobrar = entity.ValorPac - total
             };
@@ -127,6 +131,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 }
 
+                if (request.ContaBancariaFk.HasValue && _unitOfWork.ContaBancariaRepository.Get(request.ContaBancariaFk.Value) == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "REC-CONTABANCARIA-NOT-FOUND", ErrorMessage = "Không tìm thấy ngân hàng đã chọn." });
+                    return response;
+                }
+
                 ReceitaPac entity;
                 if (request.Id > 0)
                 {
@@ -145,6 +155,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     entity.ValorPac = request.ValorPac;
                     entity.ValorCobradoBanco = request.ValorCobradoBanco;
                     entity.ValorCobradoCaixa = request.ValorCobradoCaixa;
+                    entity.ContaBancariaFk = request.ContaBancariaFk;
                     entity = _utils.UpdateDetailsToEntity(entity);
                     _unitOfWork.ReceitaPacRepository.Update(entity);
                 }
@@ -165,6 +176,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                         ValorPac = request.ValorPac,
                         ValorCobradoBanco = request.ValorCobradoBanco,
                         ValorCobradoCaixa = request.ValorCobradoCaixa,
+                        ContaBancariaFk = request.ContaBancariaFk,
                         IndActivo = true
                     };
                     entity = _utils.SetDetailsToEntity(entity);

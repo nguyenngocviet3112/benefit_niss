@@ -53,6 +53,10 @@
             <label>Valor cobrado (banco) <span class="itag type">Gõ tay</span></label>
             <span>{{ item.valorCobradoBanco | number:'1.2-2' }}</span>
           </div>
+          <div class="rec-field" *ngIf="item.valorCobradoBanco > 0">
+            <label>Ngân hàng đã nhận <span class="itag drop">Chọn</span></label>
+            <span>{{ item.contaBancariaNome || '—' }}</span>
+          </div>
           <div class="rec-field">
             <label>Valor cobrado (caixa) <span class="itag type">Gõ tay</span></label>
             <span>{{ item.valorCobradoCaixa | number:'1.2-2' }}</span>
@@ -143,6 +147,13 @@
         <mat-form-field appearance="outline">
           <mat-label>Đã thu qua ngân hàng <span class="itag type">Gõ tay</span></mat-label>
           <input matInput type="number" min="0" step="0.01" [(ngModel)]="formValorCobradoBanco" name="formValorCobradoBanco" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="formValorCobradoBanco > 0">
+          <mat-label>Thu qua ngân hàng nào <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formContaBancariaFk" name="formContaBancariaFk">
+            <mat-option *ngFor="let acc of bankAccounts" [value]="acc.id">{{ acc.entidadeBancaria }} — {{ acc.descricao }}</mat-option>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">

@@ -21,7 +21,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Include(r => r.RegimeFkNavigation)
                 .Include(r => r.AtividadeFkNavigation)
                 .Include(r => r.EconomicClassificationFkNavigation)
-                .Include(r => r.OrganizationFkNavigation);
+                .Include(r => r.OrganizationFkNavigation)
+                .Include(r => r.ContaBancariaFkNavigation);
         }
 
         public List<ReceitaPac> GetByAno(int ano)
