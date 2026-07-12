@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DataManager.Interfaces;
@@ -23,6 +24,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpGet("GetCatalog")]
+        [RequirePerm("USER_MANAGE")]
         public IActionResult GetCatalog()
         {
             PermissionCatalogResponse response;
@@ -43,6 +45,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpGet("GetUsers")]
+        [RequirePerm("USER_MANAGE")]
         public IActionResult GetUsers()
         {
             UserPermissionListResponse response;
@@ -63,6 +66,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpGet("GetUser/{id}")]
+        [RequirePerm("USER_MANAGE")]
         public IActionResult GetUser(int id)
         {
             UserPermissionDetailResponse response;
@@ -86,6 +90,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("SaveUser")]
+        [RequirePerm("USER_MANAGE")]
         public IActionResult SaveUser(SaveUserPermissionRequest request)
         {
             SaveUserPermissionResponse response;
