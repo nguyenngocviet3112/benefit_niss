@@ -16,6 +16,16 @@
   color: #777;
 }
 
+.cf-context-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cf-search-field {
+  width: 240px;
+}
+
 .cf-tree {
   border: 1px solid #ddd;
   border-radius: 6px;

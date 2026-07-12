@@ -20,6 +20,8 @@ export class ClassificacaoEconomicaComponent implements OnInit {
   public tree: EconomicClassificationRow[] = [];
   public loading = false;
 
+  public searchCodigo = '';
+
   public editingId: number | null = null;
   public formParentFk: number | undefined;
   public formNivel = 1;
@@ -66,6 +68,29 @@ export class ClassificacaoEconomicaComponent implements OnInit {
       }
     });
     return roots;
+  }
+
+  // Lọc cây theo Mã (Código) gõ vào ô tìm — giữ lại đường dẫn (ancestor) của
+  // các nút khớp để không mất ngữ cảnh phân cấp, không phải chỉ hiện đúng 1 dòng.
+  public get filteredTree(): EconomicClassificationRow[] {
+    const term = this.searchCodigo.trim().toLowerCase();
+    if (!term) {
+      return this.tree;
+    }
+    return this.tree
+      .map(node => this.filterNode(node, term))
+      .filter((node): node is EconomicClassificationRow => node !== null);
+  }
+
+  private filterNode(node: EconomicClassificationRow, term: string): EconomicClassificationRow | null {
+    const selfMatches = node.codigo.toLowerCase().includes(term);
+    const filteredChildren = node.children
+      .map(child => this.filterNode(child, term))
+      .filter((child): child is EconomicClassificationRow => child !== null);
+    if (selfMatches || filteredChildren.length > 0) {
+      return { ...node, children: filteredChildren };
+    }
+    return null;
   }
 
   public openAddForm(parent?: EconomicClassificationDataContract): void {

@@ -25,6 +25,10 @@
   flex: 1;
 }
 
+.ce-search-field {
+  width: 240px;
+}
+
 .small-field {
   width: 160px;
 }

@@ -7,6 +7,11 @@
     <app-orcamento-config-select [value]="orcamentoConfigFk" (valueChange)="orcamentoConfigFk = $event; loadTree()"></app-orcamento-config-select>
     <button mat-stroked-button (click)="loadTree()">{{ 'classificacaoEconomica.reload' | translate }}</button>
 
+    <mat-form-field appearance="outline" class="ce-search-field">
+      <mat-label>{{ 'classificacaoEconomica.searchLabel' | translate }}</mat-label>
+      <input matInput [(ngModel)]="searchCodigo" [placeholder]="'classificacaoEconomica.searchPlaceholder' | translate" />
+    </mat-form-field>
+
     <span class="spacer"></span>
 
     <app-master-data-import-button entityPath="economicclassification" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadTree()"></app-master-data-import-button>
@@ -14,10 +19,11 @@
   </div>
 
   <div class="ce-tree" *ngIf="!loading">
-    <ng-container *ngFor="let root of tree">
+    <ng-container *ngFor="let root of filteredTree">
       <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: root }"></ng-container>
     </ng-container>
     <div class="ce-empty" *ngIf="tree.length === 0">{{ 'classificacaoEconomica.emptyList' | translate }}</div>
+    <div class="ce-empty" *ngIf="tree.length > 0 && filteredTree.length === 0">{{ 'classificacaoEconomica.searchNoMatch' | translate }}</div>
   </div>
 
   <ng-template #nodeTemplate let-node="node">

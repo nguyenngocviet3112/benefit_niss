@@ -5,11 +5,19 @@
     <button mat-raised-button color="primary" (click)="openAddForm()">{{ 'classificacaoFuncionalScreen.addDivisao' | translate }}</button>
   </div>
 
+  <div class="cf-context-bar">
+    <mat-form-field appearance="outline" class="cf-search-field">
+      <mat-label>{{ 'classificacaoFuncionalScreen.searchLabel' | translate }}</mat-label>
+      <input matInput [(ngModel)]="searchCodigo" [placeholder]="'classificacaoFuncionalScreen.searchPlaceholder' | translate" />
+    </mat-form-field>
+  </div>
+
   <div class="cf-tree" *ngIf="!loading">
-    <ng-container *ngFor="let root of tree">
+    <ng-container *ngFor="let root of filteredTree">
       <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: root }"></ng-container>
     </ng-container>
     <div class="cf-empty" *ngIf="tree.length === 0">{{ 'classificacaoFuncionalScreen.emptyList' | translate }}</div>
+    <div class="cf-empty" *ngIf="tree.length > 0 && filteredTree.length === 0">{{ 'classificacaoFuncionalScreen.searchNoMatch' | translate }}</div>
   </div>
 
   <ng-template #nodeTemplate let-node="node">
