@@ -150,6 +150,15 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
             },
             new PermissionGroupDataContract
             {
+                Codigo = "DASH",
+                Nome = "Dashboard",
+                Tokens = new List<PermissionTokenDataContract>
+                {
+                    new PermissionTokenDataContract { Token = "DASHBOARD_VIEW", Label = "Xem Dashboard tổng quan" },
+                }
+            },
+            new PermissionGroupDataContract
+            {
                 Codigo = "SYS",
                 Nome = "Hệ thống",
                 Tokens = new List<PermissionTokenDataContract>

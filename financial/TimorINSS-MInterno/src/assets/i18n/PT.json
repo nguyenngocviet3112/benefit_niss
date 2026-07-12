@@ -1895,7 +1895,6 @@
     "errGeneric": "Ocorreu um erro."
   },
   "shell": {
-    "groupDashboard": "Dashboard",
     "groupChiTieu": "Ciclo da Despesa",
     "groupReceita": "Receita",
     "groupNganHang": "Banco",

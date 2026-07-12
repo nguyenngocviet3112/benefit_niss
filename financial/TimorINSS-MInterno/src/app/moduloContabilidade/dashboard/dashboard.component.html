@@ -1,0 +1,66 @@
+<div class="dash-container">
+  <div class="dash-header">
+    <h2>{{ 'dashboard.header' | translate }} <span class="en">({{ 'dashboard.headerGloss' | translate }})</span></h2>
+  </div>
+
+  <ng-container *ngIf="hasAccess; else blankTpl">
+    <div class="dash-loading" *ngIf="loading">{{ 'general.loading' | translate }}</div>
+
+    <div class="dash-content" *ngIf="!loading && summary">
+      <div class="dash-grid">
+        <div class="dash-card" *ngFor="let tile of processTiles">
+          <div class="dash-card-head">
+            <mat-icon class="dash-card-icon">{{ tile.icon }}</mat-icon>
+            <span class="dash-card-title">{{ tile.labelKey | translate }}</span>
+          </div>
+          <div class="dash-card-total">{{ tile.data.total }}</div>
+          <div class="dash-bar">
+            <span class="dash-bar-approved" [style.width.%]="percentApproved(tile.data)"></span>
+          </div>
+          <div class="dash-card-legend">
+            <span class="dash-legend-item">
+              <span class="dash-dot dash-dot-progress"></span>
+              {{ 'dashboard.emProcessamento' | translate }} <b>{{ tile.data.emProcessamento }}</b>
+            </span>
+            <span class="dash-legend-item">
+              <span class="dash-dot dash-dot-approved"></span>
+              {{ 'dashboard.aprovado' | translate }} <b>{{ tile.data.aprovado }}</b>
+            </span>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <div class="dash-card-head">
+            <mat-icon class="dash-card-icon">paid</mat-icon>
+            <span class="dash-card-title">{{ 'dashboard.processPagamentoExecutado' | translate }}</span>
+          </div>
+          <div class="dash-card-total">{{ summary.pagamentoExecutado }}</div>
+          <div class="dash-card-note">{{ 'dashboard.pagamentoExecutadoHint' | translate }}</div>
+        </div>
+
+        <div class="dash-card">
+          <div class="dash-card-head">
+            <mat-icon class="dash-card-icon">account_balance</mat-icon>
+            <span class="dash-card-title">{{ 'dashboard.bankTitle' | translate }}</span>
+          </div>
+          <div class="dash-card-total">{{ summary.bancoConciliado + summary.bancoPendente }}</div>
+          <div class="dash-bar">
+            <span class="dash-bar-approved" [style.width.%]="percentOf(summary.bancoConciliado, summary.bancoConciliado + summary.bancoPendente)"></span>
+          </div>
+          <div class="dash-card-legend">
+            <span class="dash-legend-item">
+              <span class="dash-dot dash-dot-progress"></span>
+              {{ 'dashboard.bankPendente' | translate }} <b>{{ summary.bancoPendente }}</b>
+            </span>
+            <span class="dash-legend-item">
+              <span class="dash-dot dash-dot-approved"></span>
+              {{ 'dashboard.bankConciliado' | translate }} <b>{{ summary.bancoConciliado }}</b>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #blankTpl></ng-template>
+</div>

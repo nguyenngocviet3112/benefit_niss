@@ -81,19 +81,10 @@ export class ContabilidadeShellComponent implements OnInit {
   // User không còn là nhóm top-level riêng — gộp vào Cấu hình hệ thống
   // (2026-07-12, theo yêu cầu user). Tất cả nhóm mặc định collapse
   // (expanded: false), user tự click để mở nhóm đang cần.
+  // Dashboard KHÔNG có mục menu riêng (2026-07-12, user yêu cầu) — chỉ là màn
+  // mặc định khi đăng nhập qua redirect (xem modulo-contabilidade-routing.module.ts,
+  // route '' redirectTo 'dashboard'), không xuất hiện trong treebar.
   public groups: TreebarGroup[] = [
-    {
-      // Màn mặc định khi đăng nhập (xem modulo-contabilidade-routing.module.ts,
-      // route '' redirectTo 'dashboard') — luôn hiện trong menu (không gắn
-      // permTokens) dù nội dung bên trong có bị trống nếu user chưa được gán
-      // DASHBOARD_VIEW (2026-07-12, theo yêu cầu user).
-      label: 'shell.groupDashboard',
-      icon: 'dashboard',
-      expanded: false,
-      items: [
-        { label: 'Dashboard', route: '/contabilidade/dashboard' },
-      ]
-    },
     {
       label: 'shell.groupChiTieu',
       icon: 'sync_alt',

@@ -1896,7 +1896,6 @@
     "errGeneric": "Something went wrong."
   },
   "shell": {
-    "groupDashboard": "Dashboard",
     "groupChiTieu": "Expenditure Cycle",
     "groupReceita": "Revenue (Receita)",
     "groupNganHang": "Bank",
