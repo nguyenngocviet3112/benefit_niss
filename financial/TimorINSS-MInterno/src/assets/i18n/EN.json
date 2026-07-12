@@ -2494,6 +2494,9 @@
     "origemTodos": "All",
     "origemPagamento": "Pagamento",
     "origemReceita": "Receita",
+    "origemReceitaCaixa": "Receita PAC (cash)",
+    "origemReceitaBanco": "Receita PAC (bank)",
+    "origemGuiaPagamento": "Guia Pagamento (contributions)",
     "searchButton": "Search",
     "colData": "Date",
     "colDescricao": "Description",
@@ -2574,7 +2577,15 @@
     "confirmButton": "Confirm (mark as Paid)",
     "confirmMatch": "Confirm this reconciliation? The selected Guia(s) will be marked Paid/Partial Paid.",
     "matchSuccess": "Reconciliation confirmed.",
-    "errGeneric": "Something went wrong."
+    "errGeneric": "Something went wrong.",
+    "viewButton": "View uploaded document",
+    "comprovativoTitle": "Uploaded proof of payment",
+    "dataUpload": "Uploaded on:",
+    "dataPagamento": "Declared payment date:",
+    "bankCode": "Bank paid into:",
+    "valorPagoLabel": "Declared amount:",
+    "noFile": "No document was uploaded for this Guia.",
+    "downloadButton": "Download"
   },
   "guiaPagamentoContaConfig": {
     "header": "Guia Pagamento accounting accounts (Débito/Crédito)",

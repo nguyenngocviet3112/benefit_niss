@@ -2494,6 +2494,9 @@
     "origemTodos": "Tất cả",
     "origemPagamento": "Pagamento",
     "origemReceita": "Receita",
+    "origemReceitaCaixa": "Receita PAC (tiền mặt)",
+    "origemReceitaBanco": "Receita PAC (ngân hàng)",
+    "origemGuiaPagamento": "Guia Pagamento (đóng góp BHXH)",
     "searchButton": "Tìm kiếm",
     "colData": "Ngày",
     "colDescricao": "Diễn giải",
@@ -2574,7 +2577,15 @@
     "confirmButton": "Xác nhận (đánh dấu Đã thanh toán)",
     "confirmMatch": "Xác nhận đối chiếu này? (Các) Guia đã chọn sẽ được đánh dấu Đã thanh toán/Thanh toán một phần.",
     "matchSuccess": "Đã xác nhận đối chiếu.",
-    "errGeneric": "Đã xảy ra lỗi."
+    "errGeneric": "Đã xảy ra lỗi.",
+    "viewButton": "Xem file đã tải lên",
+    "comprovativoTitle": "Chứng từ thanh toán đã tải lên",
+    "dataUpload": "Ngày tải lên:",
+    "dataPagamento": "Ngày trả tiền (tự khai):",
+    "bankCode": "Ngân hàng đã trả vào:",
+    "valorPagoLabel": "Số tiền tự khai:",
+    "noFile": "Guia này chưa có file nào được tải lên.",
+    "downloadButton": "Tải xuống"
   },
   "guiaPagamentoContaConfig": {
     "header": "Tài khoản kế toán cho Guia Pagamento (Nợ/Có)",

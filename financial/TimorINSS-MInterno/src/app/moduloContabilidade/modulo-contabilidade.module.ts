@@ -12,6 +12,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslateModule } from '@ngx-translate/core';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { ModuloContabilidadeRoutingModule } from './modulo-contabilidade-routing.module';
 import { EstruturaProgramaticaComponent } from './estrutura-programatica/estrutura-programatica.component';
@@ -98,7 +99,8 @@ import { CicloDespesaComponent } from './ciclo-despesa/ciclo-despesa.component';
     MatPaginatorModule,
     MatAutocompleteModule,
     MatCheckboxModule,
-    TranslateModule
+    TranslateModule,
+    PdfViewerModule
   ]
 })
 export class ModuloContabilidadeModule { }

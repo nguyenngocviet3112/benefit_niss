@@ -1,0 +1,107 @@
+<div class="gc-container">
+  <div class="gc-header">
+    <h2>{{ 'guiaConciliacao.header' | translate }} <span class="en">({{ 'guiaConciliacao.headerGloss' | translate }})</span></h2>
+    <button mat-stroked-button (click)="load()">{{ 'guiaConciliacao.reload' | translate }}</button>
+  </div>
+
+  <div class="gc-hint">
+    {{ 'guiaConciliacao.hint' | translate }}
+  </div>
+
+  <div class="gc-panels" *ngIf="!loading; else loadingTpl">
+    <div class="gc-panel">
+      <h3>{{ 'guiaConciliacao.panelGuias' | translate }} ({{ guias.length }})</h3>
+      <div class="gc-table">
+        <div class="gc-row gc-row-header">
+          <span class="gc-col-check"></span>
+          <span class="gc-col-doc">{{ 'guiaConciliacao.colDocumento' | translate }}</span>
+          <span class="gc-col-desc">{{ 'guiaConciliacao.colDescricao' | translate }}</span>
+          <span class="gc-col-valor">{{ 'guiaConciliacao.colValorDeclarado' | translate }}</span>
+          <span class="gc-col-view"></span>
+        </div>
+        <div class="gc-row" *ngFor="let g of guias" [class.gc-row-selected]="selectedGuiaIds.has(g.idGuia)" (click)="toggleGuia(g.idGuia)">
+          <span class="gc-col-check"><mat-checkbox [checked]="selectedGuiaIds.has(g.idGuia)" (click)="$event.stopPropagation(); toggleGuia(g.idGuia)"></mat-checkbox></span>
+          <span class="gc-col-doc">{{ g.numDocumento }}</span>
+          <span class="gc-col-desc">{{ g.descricao }} <span class="gc-sub">{{ g.niss }}</span></span>
+          <span class="gc-col-valor">$ {{ g.valorPago | number:'1.2-2' }}</span>
+          <span class="gc-col-view">
+            <button mat-icon-button [matTooltip]="'guiaConciliacao.viewButton' | translate" (click)="viewComprovativo(g.idGuia, $event)">
+              <mat-icon>description</mat-icon>
+            </button>
+          </span>
+        </div>
+        <div class="gc-empty" *ngIf="guias.length === 0">{{ 'guiaConciliacao.emptyGuias' | translate }}</div>
+      </div>
+    </div>
+
+    <div class="gc-panel">
+      <h3>{{ 'guiaConciliacao.panelMovimentos' | translate }} ({{ movimentos.length }})</h3>
+      <div class="gc-table">
+        <div class="gc-row gc-row-header">
+          <span class="gc-col-check"></span>
+          <span class="gc-col-data">{{ 'guiaConciliacao.colData' | translate }}</span>
+          <span class="gc-col-desc">{{ 'guiaConciliacao.colDescricao' | translate }}</span>
+          <span class="gc-col-valor">{{ 'guiaConciliacao.colValorBanco' | translate }}</span>
+        </div>
+        <div class="gc-row" *ngFor="let m of movimentos" [class.gc-row-selected]="selectedMovimentoIds.has(m.id)" (click)="toggleMovimento(m.id)">
+          <span class="gc-col-check"><mat-checkbox [checked]="selectedMovimentoIds.has(m.id)" (click)="$event.stopPropagation(); toggleMovimento(m.id)"></mat-checkbox></span>
+          <span class="gc-col-data">{{ m.dataValor | date:'dd/MM/yyyy' }}</span>
+          <span class="gc-col-desc">{{ m.descricao || '—' }}</span>
+          <span class="gc-col-valor">$ {{ valorMovimento(m) | number:'1.2-2' }}</span>
+        </div>
+        <div class="gc-empty" *ngIf="movimentos.length === 0">{{ 'guiaConciliacao.emptyMovimentos' | translate }}</div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTpl>
+    <div class="gc-loading">{{ 'general.loading' | translate }}</div>
+  </ng-template>
+
+  <div class="gc-footer" *ngIf="!loading">
+    <div class="gc-totals">
+      <span>{{ 'guiaConciliacao.totalGuiasLabel' | translate }} <b>$ {{ totalGuias | number:'1.2-2' }}</b> ({{ selectedGuiaIds.size }})</span>
+      <span class="gc-vs">↔</span>
+      <span>{{ 'guiaConciliacao.totalMovimentosLabel' | translate }} <b>$ {{ totalMovimentos | number:'1.2-2' }}</b> ({{ selectedMovimentoIds.size }})</span>
+      <span class="gc-match" [ngClass]="valoresIguais ? 'gc-match-ok' : 'gc-match-bad'" *ngIf="selectedGuiaIds.size > 0 || selectedMovimentoIds.size > 0">
+        {{ (valoresIguais ? 'guiaConciliacao.matchOk' : 'guiaConciliacao.matchBad') | translate }}
+      </span>
+    </div>
+    <button mat-raised-button color="primary" [disabled]="!selecaoValida || conciliando" (click)="confirmar()">
+      {{ 'guiaConciliacao.confirmButton' | translate }}
+    </button>
+  </div>
+
+  <div class="gc-form-overlay" *ngIf="loadingComprovativo || viewingGuia">
+    <div class="gc-form">
+      <div class="gc-loading" *ngIf="loadingComprovativo">{{ 'general.loading' | translate }}</div>
+
+      <ng-container *ngIf="!loadingComprovativo && viewingGuia">
+        <div class="gc-form-header">
+          <h3>{{ 'guiaConciliacao.comprovativoTitle' | translate }} — {{ viewingGuia.numDocumento }}</h3>
+          <button mat-icon-button (click)="closeComprovativo()"><mat-icon>close</mat-icon></button>
+        </div>
+
+        <div class="gc-comprovativo-meta">
+          <span><b>{{ 'guiaConciliacao.dataUpload' | translate }}</b> {{ (viewingGuia.dataUpload | date:'dd/MM/yyyy HH:mm') || '—' }}</span>
+          <span><b>{{ 'guiaConciliacao.dataPagamento' | translate }}</b> {{ (viewingGuia.dataPagamento | date:'dd/MM/yyyy') || '—' }}</span>
+          <span><b>{{ 'guiaConciliacao.bankCode' | translate }}</b> {{ viewingGuia.bankCode || '—' }}</span>
+          <span><b>{{ 'guiaConciliacao.valorPagoLabel' | translate }}</b> $ {{ viewingGuia.valorPago | number:'1.2-2' }}</span>
+        </div>
+
+        <div class="gc-comprovativo-pdf" *ngIf="viewingPdfSrc; else noFileTpl">
+          <pdf-viewer [src]="viewingPdfSrc" [render-text]="true" [show-all]="true" style="width: 100%; height: 100%;"></pdf-viewer>
+        </div>
+        <ng-template #noFileTpl>
+          <div class="gc-empty">{{ 'guiaConciliacao.noFile' | translate }}</div>
+        </ng-template>
+
+        <div class="gc-form-actions">
+          <button mat-stroked-button [disabled]="!viewingPdfSrc" (click)="downloadComprovativo()">
+            <mat-icon>download</mat-icon> {{ 'guiaConciliacao.downloadButton' | translate }}
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

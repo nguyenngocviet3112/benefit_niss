@@ -2493,6 +2493,9 @@
     "origemTodos": "Todos",
     "origemPagamento": "Pagamento",
     "origemReceita": "Receita",
+    "origemReceitaCaixa": "Receita PAC (caixa)",
+    "origemReceitaBanco": "Receita PAC (banco)",
+    "origemGuiaPagamento": "Guia Pagamento (contribuições)",
     "searchButton": "Pesquisar",
     "colData": "Data",
     "colDescricao": "Descrição",
@@ -2573,7 +2576,15 @@
     "confirmButton": "Confirmar (marcar como Paga)",
     "confirmMatch": "Confirmar esta conciliação? A(s) Guia(s) selecionada(s) será(ão) marcada(s) como Paga/Parcialmente Paga.",
     "matchSuccess": "Conciliação confirmada.",
-    "errGeneric": "Ocorreu um erro."
+    "errGeneric": "Ocorreu um erro.",
+    "viewButton": "Ver documento enviado",
+    "comprovativoTitle": "Comprovativo de pagamento enviado",
+    "dataUpload": "Enviado em:",
+    "dataPagamento": "Data de pagamento declarada:",
+    "bankCode": "Banco onde pagou:",
+    "valorPagoLabel": "Valor declarado:",
+    "noFile": "Nenhum documento foi enviado para esta Guia.",
+    "downloadButton": "Descarregar"
   },
   "guiaPagamentoContaConfig": {
     "header": "Contas contabilísticas do Guia Pagamento (Débito/Crédito)",
