@@ -20,11 +20,11 @@ namespace TimorINSSBackEnd.Models
 
             modelBuilder.Entity<ProgramActivity>(entity =>
             {
-                entity.HasOne(d => d.OrcamentoConfigFkNavigation)
+                entity.HasOne(d => d.BudgetPeriodFkNavigation)
                     .WithMany()
-                    .HasForeignKey(d => d.OrcamentoConfigFk)
+                    .HasForeignKey(d => d.BudgetPeriodFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProgramActivity_OrcamentoConfig");
+                    .HasConstraintName("FK_ProgramActivity_BudgetPeriod");
 
                 entity.HasOne(d => d.ParentFkNavigation)
                     .WithMany(p => p.InverseParentFkNavigation)
@@ -42,11 +42,11 @@ namespace TimorINSSBackEnd.Models
 
             modelBuilder.Entity<EconomicClassification>(entity =>
             {
-                entity.HasOne(d => d.OrcamentoConfigFkNavigation)
+                entity.HasOne(d => d.BudgetPeriodFkNavigation)
                     .WithMany()
-                    .HasForeignKey(d => d.OrcamentoConfigFk)
+                    .HasForeignKey(d => d.BudgetPeriodFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EconomicClassification_OrcamentoConfig");
+                    .HasConstraintName("FK_EconomicClassification_BudgetPeriod");
 
                 entity.HasOne(d => d.ParentFkNavigation)
                     .WithMany(p => p.InverseParentFkNavigation)
@@ -65,11 +65,11 @@ namespace TimorINSSBackEnd.Models
 
             modelBuilder.Entity<OrcamentoBatch>(entity =>
             {
-                entity.HasOne(d => d.OrcamentoConfigFkNavigation)
+                entity.HasOne(d => d.BudgetPeriodFkNavigation)
                     .WithMany()
-                    .HasForeignKey(d => d.OrcamentoConfigFk)
+                    .HasForeignKey(d => d.BudgetPeriodFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrcamentoBatch_OrcamentoConfig");
+                    .HasConstraintName("FK_OrcamentoBatch_BudgetPeriod");
             });
 
             modelBuilder.Entity<OrcamentoLinha>(entity =>
@@ -109,11 +109,11 @@ namespace TimorINSSBackEnd.Models
 
             modelBuilder.Entity<OrcamentoSuplementar>(entity =>
             {
-                entity.HasOne(d => d.OrcamentoConfigFkNavigation)
+                entity.HasOne(d => d.BudgetPeriodFkNavigation)
                     .WithMany()
-                    .HasForeignKey(d => d.OrcamentoConfigFk)
+                    .HasForeignKey(d => d.BudgetPeriodFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrcamentoSuplementar_OrcamentoConfig");
+                    .HasConstraintName("FK_OrcamentoSuplementar_BudgetPeriod");
             });
 
             modelBuilder.Entity<OrcamentoSuplementarLinha>(entity =>
@@ -314,23 +314,6 @@ namespace TimorINSSBackEnd.Models
                     .HasConstraintName("FK_PaymentExecution_ContaBancaria");
             });
 
-            // ORCAMENTOCONFIG pre-existed (old app) with explicit Fluent config in the
-            // generated context using lowercase-first column names — Ano/Tipo are new
-            // columns added on top (see db_migrations/2026-07-11i_system_settings.sql),
-            // so they need the same explicit HasColumnName here (EF convention alone
-            // would look for "Ano"/"Tipo", not "ano"/"tipo"). Relocated here from
-            // TimorINSSModuloContribuicoesContext.Contabilidade.cs — a partial method
-            // can only have one implementing body, and this file already owns it.
-            modelBuilder.Entity<Orcamentoconfig>(entity =>
-            {
-                entity.Property(e => e.Ano).HasColumnName("ano");
-
-                entity.Property(e => e.Tipo)
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("tipo");
-            });
-
             modelBuilder.Entity<ReceitaPac>(entity =>
             {
                 entity.Property(e => e.ValorPac).HasColumnType("decimal(18, 2)");
@@ -419,6 +402,21 @@ namespace TimorINSSBackEnd.Models
                     .HasForeignKey(d => d.CodigoContaCreditoFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Lancamento_CodigoContaCredito");
+            });
+
+            modelBuilder.Entity<GuiaPagamentoContaConfig>(entity =>
+            {
+                entity.HasOne(d => d.CodigoContaDebitoFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CodigoContaDebitoFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GuiaPagamentoContaConfig_CodigoContaDebito");
+
+                entity.HasOne(d => d.CodigoContaCreditoFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CodigoContaCreditoFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GuiaPagamentoContaConfig_CodigoContaCredito");
             });
         }
 

@@ -11,20 +11,19 @@ using TimorINSSBackEnd.DataManager.Interfaces;
 
 namespace TimorINSSBackEnd.Controllers
 {
-    // Manages OrcamentoConfig itself (kỳ/năm ngân sách — System Settings).
-    // Deliberately separate from OrcamentoController (api/orcamento), which
-    // manages OrcamentoBatch/OrcamentoLinha (rúbrica orçamental, M2) and is
-    // not touched by this feature.
+    // Manages BudgetPeriod (Kỳ ngân sách — System Settings), new-mode-only.
+    // Replaces the old-mode-shared OrcamentoConfigController/[Orcamentoconfig] for
+    // this purpose — see db_migrations/2026-07-12f_budget_period.sql.
     [Authorize]
-    [Route("api/orcamentoconfig")]
+    [Route("api/budgetPeriod")]
     [ApiController]
-    public class OrcamentoConfigController : ControllerBase
+    public class BudgetPeriodController : ControllerBase
     {
-        private readonly IOrcamentoConfigDataManager _dataManager;
+        private readonly IBudgetPeriodDataManager _dataManager;
         public readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ICacheProvider _cache;
 
-        public OrcamentoConfigController(IOrcamentoConfigDataManager dataManager, ICacheProvider memoryCache)
+        public BudgetPeriodController(IBudgetPeriodDataManager dataManager, ICacheProvider memoryCache)
         {
             _dataManager = dataManager;
             _cache = memoryCache;
@@ -33,14 +32,14 @@ namespace TimorINSSBackEnd.Controllers
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
-            OrcamentoConfigListResponse response;
+            BudgetPeriodListResponse response;
             try
             {
                 response = _dataManager.GetAll();
             }
             catch (Exception e)
             {
-                response = new OrcamentoConfigListResponse();
+                response = new BudgetPeriodListResponse();
                 response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
             }
 
@@ -52,7 +51,7 @@ namespace TimorINSSBackEnd.Controllers
 
         [HttpPost("Save")]
         [RequirePerm("MASTERDATA_MANAGE")]
-        public IActionResult Save(SaveOrcamentoConfigRequest request)
+        public IActionResult Save(SaveBudgetPeriodRequest request)
         {
             ResponseBaseDataContract response;
             try
@@ -75,7 +74,7 @@ namespace TimorINSSBackEnd.Controllers
 
         [HttpPost("Deactivate")]
         [RequirePerm("MASTERDATA_MANAGE")]
-        public IActionResult Deactivate(DeactivateOrcamentoConfigRequest request)
+        public IActionResult Deactivate(DeactivateBudgetPeriodRequest request)
         {
             ResponseBaseDataContract response;
             try

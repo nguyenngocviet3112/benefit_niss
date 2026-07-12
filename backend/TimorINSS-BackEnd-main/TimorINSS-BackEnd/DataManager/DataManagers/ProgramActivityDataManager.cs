@@ -37,7 +37,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     Designacao = a.Designacao,
                     Nivel = a.Nivel,
                     ParentFk = a.ParentFk,
-                    OrcamentoConfigFk = a.OrcamentoConfigFk,
+                    OrcamentoConfigFk = a.BudgetPeriodFk,
                     IndActivo = a.IndActivo,
                     IsOssPerimeter = a.IsOssPerimeter,
                     HasKids = parentIds.Contains(a.Id)
@@ -62,7 +62,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     Designacao = request.Designacao,
                     Nivel = request.Nivel,
                     ParentFk = request.ParentFk,
-                    OrcamentoConfigFk = request.OrcamentoConfigFk,
+                    BudgetPeriodFk = request.OrcamentoConfigFk,
                     IndActivo = true
                 };
 
@@ -144,7 +144,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                             Designacao = original.Designacao,
                             Nivel = original.Nivel,
                             ParentFk = newParentFk,
-                            OrcamentoConfigFk = request.TargetOrcamentoConfigFk,
+                            BudgetPeriodFk = request.TargetOrcamentoConfigFk,
                             IndActivo = true
                         };
                         copy = _utils.SetDetailsToEntity(copy);
@@ -224,7 +224,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                             Designacao = designacao,
                             Nivel = nivel,
                             ParentFk = parentId,
-                            OrcamentoConfigFk = request.OrcamentoConfigFk,
+                            BudgetPeriodFk = request.OrcamentoConfigFk,
                             IndActivo = true
                         };
 

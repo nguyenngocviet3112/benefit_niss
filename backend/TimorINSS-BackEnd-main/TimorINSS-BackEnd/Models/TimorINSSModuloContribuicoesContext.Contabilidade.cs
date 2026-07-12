@@ -30,5 +30,7 @@ namespace TimorINSSBackEnd.Models
         public virtual DbSet<OrcamentoSuplementarLinha> OrcamentoSuplementarLinha { get; set; }
         public virtual DbSet<BankStatementLine> BankStatementLine { get; set; }
         public virtual DbSet<Lancamento> Lancamento { get; set; }
+        public virtual DbSet<BudgetPeriod> BudgetPeriod { get; set; }
+        public virtual DbSet<GuiaPagamentoContaConfig> GuiaPagamentoContaConfig { get; set; }
     }
 }

@@ -111,7 +111,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     response.Errors.Add(new Error { ErrorCode = "REC-EC-NOT-FOUND", ErrorMessage = "Không tìm thấy Classificação Económica." });
                     return response;
                 }
-                List<EconomicClassification> ecTree = _unitOfWork.EconomicClassificationRepository.GetTreeByOrcamentoConfig(ec.OrcamentoConfigFk);
+                List<EconomicClassification> ecTree = _unitOfWork.EconomicClassificationRepository.GetTreeByOrcamentoConfig(ec.BudgetPeriodFk);
                 EconomicClassification ecRoot = GetRoot(ec, ecTree);
                 if (ecRoot.Tipo != "Receita")
                 {

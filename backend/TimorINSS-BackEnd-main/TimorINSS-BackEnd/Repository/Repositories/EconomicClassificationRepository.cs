@@ -17,7 +17,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         public List<EconomicClassification> GetTreeByOrcamentoConfig(int orcamentoConfigFk)
         {
             return _moduloContribuicoesContext.EconomicClassification
-                .Where(a => a.IndActivo && a.OrcamentoConfigFk == orcamentoConfigFk)
+                .Where(a => a.IndActivo && a.BudgetPeriodFk == orcamentoConfigFk)
                 .OrderBy(a => a.Nivel)
                 .ThenBy(a => a.Codigo)
                 .ToList();
@@ -46,7 +46,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         {
             int countSameCode = _moduloContribuicoesContext.EconomicClassification
                 .Where(a => a.IndActivo
-                    && a.OrcamentoConfigFk == entity.OrcamentoConfigFk
+                    && a.BudgetPeriodFk == entity.BudgetPeriodFk
                     && a.Codigo == entity.Codigo
                     && a.Id != entity.Id)
                 .Count();

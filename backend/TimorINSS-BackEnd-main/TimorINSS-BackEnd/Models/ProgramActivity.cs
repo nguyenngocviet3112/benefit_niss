@@ -17,7 +17,7 @@ namespace TimorINSSBackEnd.Models
         public string Designacao { get; set; }
         public int Nivel { get; set; }
         public int? ParentFk { get; set; }
-        public int OrcamentoConfigFk { get; set; }
+        public int BudgetPeriodFk { get; set; }
         // False = outside the OSS budget perimeter (e.g. A08 Regime Contributivo de
         // Capitalização, per OSS_Global_2026_FINAL_livro.xlsx) — the record still exists
         // fully in the system, it's just excluded from CE_OSS_Global's totals.
@@ -30,7 +30,7 @@ namespace TimorINSSBackEnd.Models
         public string Ipv6 { get; set; }
 
         public virtual ProgramActivity ParentFkNavigation { get; set; }
-        public virtual Orcamentoconfig OrcamentoConfigFkNavigation { get; set; }
+        public virtual BudgetPeriod BudgetPeriodFkNavigation { get; set; }
         public virtual ICollection<ProgramActivity> InverseParentFkNavigation { get; set; }
     }
 }

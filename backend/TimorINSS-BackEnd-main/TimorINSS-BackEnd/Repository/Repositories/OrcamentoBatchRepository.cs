@@ -16,7 +16,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         public OrcamentoBatch GetActiveDraftBatch(int orcamentoConfigFk)
         {
             return _moduloContribuicoesContext.OrcamentoBatch
-                .Where(b => b.IndActivo && b.OrcamentoConfigFk == orcamentoConfigFk && b.Estado != "APPROVED")
+                .Where(b => b.IndActivo && b.BudgetPeriodFk == orcamentoConfigFk && b.Estado != "APPROVED")
                 .OrderByDescending(b => b.Id)
                 .FirstOrDefault();
         }
@@ -24,7 +24,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         public OrcamentoBatch GetLatestBatch(int orcamentoConfigFk)
         {
             return _moduloContribuicoesContext.OrcamentoBatch
-                .Where(b => b.IndActivo && b.OrcamentoConfigFk == orcamentoConfigFk)
+                .Where(b => b.IndActivo && b.BudgetPeriodFk == orcamentoConfigFk)
                 .OrderByDescending(b => b.Id)
                 .FirstOrDefault();
         }

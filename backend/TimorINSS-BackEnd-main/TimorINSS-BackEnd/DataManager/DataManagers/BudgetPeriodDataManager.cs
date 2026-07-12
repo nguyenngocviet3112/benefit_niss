@@ -9,26 +9,27 @@ using TimorINSSBackEnd.Repository.Interfaces;
 
 namespace TimorINSSBackEnd.DataManager.DataManagers
 {
-    // New DataManager for managing OrcamentoConfig itself (kỳ/năm ngân sách) —
-    // separate from IOrcamentoDataManager/OrcamentoController, which manages
-    // OrcamentoBatch/OrcamentoLinha (rúbrica orçamental) and is left untouched.
-    public class OrcamentoConfigDataManager : IOrcamentoConfigDataManager
+    // Kỳ ngân sách (System Settings), new-mode-only entity — split off from the
+    // pre-existing [Orcamentoconfig] on 2026-07-12 so new-mode never has to touch
+    // a table old-mode also depends on (Codigoconta/CentroCusto/ComponenteOrcamentoRegisto
+    // year-versioning). See db_migrations/2026-07-12f_budget_period.sql.
+    public class BudgetPeriodDataManager : IBudgetPeriodDataManager
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUtilsDataManager _utils;
 
-        public OrcamentoConfigDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils)
+        public BudgetPeriodDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils)
         {
             _unitOfWork = unitOfWork;
             _utils = utils;
         }
 
-        public OrcamentoConfigListResponse GetAll()
+        public BudgetPeriodListResponse GetAll()
         {
-            OrcamentoConfigListResponse response = new OrcamentoConfigListResponse();
+            BudgetPeriodListResponse response = new BudgetPeriodListResponse();
             try
             {
-                response.Items = _unitOfWork.OrcamentoConfigRepository.GetAll()
+                response.Items = _unitOfWork.BudgetPeriodRepository.GetAll()
                     .OrderByDescending(a => a.Ano)
                     .Select(ToDataContract)
                     .ToList();
@@ -40,52 +41,45 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
-        public ResponseBaseDataContract Save(SaveOrcamentoConfigRequest request)
+        public ResponseBaseDataContract Save(SaveBudgetPeriodRequest request)
         {
             ResponseBaseDataContract response = new ResponseBaseDataContract { RequestId = request.RequestId };
             try
             {
                 if (request.DataFim.HasValue && request.DataFim.Value < request.DataInicio)
                 {
-                    response.Errors.Add(new Error { ErrorCode = "OC-INVALID-RANGE", ErrorMessage = "Ngày kết thúc phải sau ngày bắt đầu." });
+                    response.Errors.Add(new Error { ErrorCode = "BP-INVALID-RANGE", ErrorMessage = "Ngày kết thúc phải sau ngày bắt đầu." });
                     return response;
                 }
 
-                Orcamentoconfig entity = new Orcamentoconfig
+                BudgetPeriod entity = new BudgetPeriod
                 {
                     Id = request.Id,
                     Ano = request.Ano,
                     // Only Principal (kỳ chính) creation is supported by this screen —
-                    // Suplementar (điều chỉnh ngân sách giữa năm) is deferred, see
-                    // db_migrations/2026-07-11i_system_settings.sql.
+                    // Suplementar (điều chỉnh ngân sách giữa năm) is deferred, matches
+                    // the behaviour this was split from (2026-07-11i_system_settings.sql).
                     Tipo = "PRINCIPAL",
                     DataInicio = request.DataInicio,
                     DataFim = request.DataFim,
                     IndActivo = true
                 };
 
-                if (!_unitOfWork.OrcamentoConfigRepository.IsAnoTipoValid(entity))
+                if (!_unitOfWork.BudgetPeriodRepository.IsAnoTipoValid(entity))
                 {
-                    response.Errors.Add(new Error { ErrorCode = "OC-DUP-ANO", ErrorMessage = $"Đã có kỳ ngân sách Principal cho năm {request.Ano}." });
-                    return response;
-                }
-
-                Error overlapError = _unitOfWork.OrcamentoConfigRepository.IsOrcamentoValid(entity);
-                if (overlapError != null)
-                {
-                    response.Errors.Add(overlapError);
+                    response.Errors.Add(new Error { ErrorCode = "BP-DUP-ANO", ErrorMessage = $"Đã có kỳ ngân sách Principal cho năm {request.Ano}." });
                     return response;
                 }
 
                 if (entity.Id > 0)
                 {
                     entity = _utils.UpdateDetailsToEntity(entity);
-                    _unitOfWork.OrcamentoConfigRepository.Update(entity);
+                    _unitOfWork.BudgetPeriodRepository.Update(entity);
                 }
                 else
                 {
                     entity = _utils.SetDetailsToEntity(entity);
-                    _unitOfWork.OrcamentoConfigRepository.Add(entity);
+                    _unitOfWork.BudgetPeriodRepository.Add(entity);
                 }
 
                 _unitOfWork.Commit();
@@ -97,33 +91,27 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
-        public ResponseBaseDataContract Deactivate(DeactivateOrcamentoConfigRequest request)
+        public ResponseBaseDataContract Deactivate(DeactivateBudgetPeriodRequest request)
         {
             ResponseBaseDataContract response = new ResponseBaseDataContract { RequestId = request.RequestId };
             try
             {
-                Orcamentoconfig entity = _unitOfWork.OrcamentoConfigRepository.Get(request.Id);
+                BudgetPeriod entity = _unitOfWork.BudgetPeriodRepository.Get(request.Id);
                 if (entity == null)
                 {
-                    response.Errors.Add(new Error { ErrorCode = "OC-NOT-FOUND", ErrorMessage = "Không tìm thấy kỳ ngân sách." });
+                    response.Errors.Add(new Error { ErrorCode = "BP-NOT-FOUND", ErrorMessage = "Không tìm thấy kỳ ngân sách." });
                     return response;
                 }
 
-                if (_unitOfWork.OrcamentoConfigRepository.HasOrcamentoBatch(entity.Id))
+                if (_unitOfWork.BudgetPeriodRepository.HasOrcamentoBatch(entity.Id) || _unitOfWork.BudgetPeriodRepository.HasDependents(entity.Id))
                 {
-                    response.Errors.Add(new Error { ErrorCode = "OC-HAS-BATCH", ErrorMessage = "Không thể xoá — đã có dữ liệu Orçamento (batch) gắn với kỳ này." });
-                    return response;
-                }
-
-                if (!_unitOfWork.OrcamentoConfigRepository.IsOrcamentoDeleteValid(entity))
-                {
-                    response.Errors.Add(new Error { ErrorCode = "OC-HAS-DATA", ErrorMessage = "Không thể xoá — vẫn còn dữ liệu liên quan tới kỳ ngân sách này." });
+                    response.Errors.Add(new Error { ErrorCode = "BP-HAS-DATA", ErrorMessage = "Không thể xoá — vẫn còn dữ liệu (Orçamento, Atividade, Classificação Económica...) gắn với kỳ này." });
                     return response;
                 }
 
                 entity.IndActivo = false;
                 entity = _utils.UpdateDetailsToEntity(entity);
-                _unitOfWork.OrcamentoConfigRepository.Update(entity);
+                _unitOfWork.BudgetPeriodRepository.Update(entity);
                 _unitOfWork.Commit();
             }
             catch (Exception e)
@@ -133,9 +121,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
-        private static OrcamentoConfigDataContract ToDataContract(Orcamentoconfig entity)
+        private static BudgetPeriodDataContract ToDataContract(BudgetPeriod entity)
         {
-            return new OrcamentoConfigDataContract
+            return new BudgetPeriodDataContract
             {
                 Id = entity.Id,
                 Ano = entity.Ano,

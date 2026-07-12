@@ -36,7 +36,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 // gõ số tay và bị hiểu nhầm là Id (đã sửa dùng app-orcamento-config-select
                 // ở frontend) — nhưng vẫn validate ở đây để không crash SqlException/FK
                 // constraint nếu có API call nào khác truyền Id không tồn tại.
-                if (_unitOfWork.OrcamentoConfigRepository.Get(request.OrcamentoConfigFk) == null)
+                if (_unitOfWork.BudgetPeriodRepository.Get(request.OrcamentoConfigFk) == null)
                 {
                     response.Errors.Add(new Error { ErrorCode = "ORC-CONFIG-NOT-FOUND", ErrorMessage = "Kỳ ngân sách không tồn tại." });
                     return response;
@@ -68,7 +68,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             OrcamentoBatchResponse response = new OrcamentoBatchResponse();
             try
             {
-                if (_unitOfWork.OrcamentoConfigRepository.Get(request.OrcamentoConfigFk) == null)
+                if (_unitOfWork.BudgetPeriodRepository.Get(request.OrcamentoConfigFk) == null)
                 {
                     response.Errors.Add(new Error { ErrorCode = "ORC-CONFIG-NOT-FOUND", ErrorMessage = "Kỳ ngân sách không tồn tại." });
                     return response;
@@ -92,7 +92,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             batch = new OrcamentoBatch
             {
-                OrcamentoConfigFk = orcamentoConfigFk,
+                BudgetPeriodFk = orcamentoConfigFk,
                 Estado = ESTADO_DRAFT,
                 IndActivo = true
             };
@@ -109,7 +109,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             OrcamentoBatchDataContract dto = new OrcamentoBatchDataContract
             {
                 Id = batch.Id,
-                OrcamentoConfigFk = batch.OrcamentoConfigFk,
+                OrcamentoConfigFk = batch.BudgetPeriodFk,
                 Estado = batch.Estado,
                 SubmittedAt = batch.SubmittedAt,
                 ReviewedAt = batch.ReviewedAt,

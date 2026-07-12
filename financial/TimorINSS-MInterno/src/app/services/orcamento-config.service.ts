@@ -14,14 +14,14 @@ export class OrcamentoConfigService {
   constructor(private http: HttpClient) { }
 
   public getAll(): Observable<OrcamentoConfigListResponse> {
-    return this.http.get<OrcamentoConfigListResponse>(`${environment.apiUrl}/orcamentoconfig/GetAll`);
+    return this.http.get<OrcamentoConfigListResponse>(`${environment.apiUrl}/budgetPeriod/GetAll`);
   }
 
   public save(request: SaveOrcamentoConfigRequest): Observable<ResponseBase> {
-    return this.http.post<ResponseBase>(`${environment.apiUrl}/orcamentoconfig/Save`, request);
+    return this.http.post<ResponseBase>(`${environment.apiUrl}/budgetPeriod/Save`, request);
   }
 
   public deactivate(request: DeactivateOrcamentoConfigRequest): Observable<ResponseBase> {
-    return this.http.post<ResponseBase>(`${environment.apiUrl}/orcamentoconfig/Deactivate`, request);
+    return this.http.post<ResponseBase>(`${environment.apiUrl}/budgetPeriod/Deactivate`, request);
   }
 }

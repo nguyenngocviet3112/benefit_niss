@@ -1994,25 +1994,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             else
                 entity = _utils.SetDetailsToEntity(entity);
 
-            Orcamentoconfig result = Utils.MappClassFromDto<OrcamentoConfigDto, Orcamentoconfig>(entity);
-
-            // OrcamentoConfigDto never got Ano/Tipo added (those are new-mode-only additive
-            // columns, now NOT NULL) — without this, Update() would blindly overwrite an
-            // existing row's Ano/Tipo to 0/NULL via UpdateClassWithoutVirtuals, and a new row
-            // would fail the NOT NULL constraint on Tipo outright.
-            if (valorCampo.Id > 0)
-            {
-                Orcamentoconfig existing = _unitOfWork.OrcamentoConfigRepository.Get(valorCampo.Id);
-                result.Ano = existing.Ano;
-                result.Tipo = existing.Tipo;
-            }
-            else
-            {
-                result.Ano = dataInicio.Year;
-                result.Tipo = "PRINCIPAL";
-            }
-
-            return result;
+            return Utils.MappClassFromDto<OrcamentoConfigDto, Orcamentoconfig>(entity);
         }
 
         private Classificacao BuildClassificacaoObject(ValorCamposEditaveis valorCampo)

@@ -49,7 +49,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             batch = new OrcamentoSuplementar
             {
-                OrcamentoConfigFk = orcamentoConfigFk,
+                BudgetPeriodFk = orcamentoConfigFk,
                 Estado = ESTADO_DRAFT,
                 IndActivo = true
             };
@@ -66,7 +66,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return new OrcamentoSuplementarBatchDataContract
             {
                 Id = batch.Id,
-                OrcamentoConfigFk = batch.OrcamentoConfigFk,
+                OrcamentoConfigFk = batch.BudgetPeriodFk,
                 Estado = batch.Estado,
                 SubmittedAt = batch.SubmittedAt,
                 ReviewedAt = batch.ReviewedAt,

@@ -59,7 +59,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     response.organizationLabel = institution.Nome;
             }
 
-            var orcamentoConfigFk = _context.Orcamentoconfig
+            var orcamentoConfigFk = _context.BudgetPeriod
                 .Where(o => o.IndActivo && o.DataInicio.Year <= request.year && (o.DataFim == null || o.DataFim.Value.Year >= request.year))
                 .Select(o => o.Id)
                 .FirstOrDefault();
@@ -72,7 +72,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             // and a depth-limited Include silently drops deeper leaves (found via live-data verification:
             // 39,526,303 of the real 170,399,205 approved total was missing until this was fixed).
             var allCodes = _context.EconomicClassification
-                .Where(e => e.IndActivo && e.OrcamentoConfigFk == orcamentoConfigFk)
+                .Where(e => e.IndActivo && e.BudgetPeriodFk == orcamentoConfigFk)
                 .ToList();
             var childrenByParentId = allCodes
                 .Where(e => e.ParentFk.HasValue)
@@ -89,7 +89,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             var valorAprovadoPorCodigo = _context.OrcamentoLinha
                 .Where(l => l.IndActivo
                     && l.OrcamentoBatchFkNavigation.Estado == "APPROVED"
-                    && l.OrcamentoBatchFkNavigation.OrcamentoConfigFk == orcamentoConfigFk
+                    && l.OrcamentoBatchFkNavigation.BudgetPeriodFk == orcamentoConfigFk
                     && (!request.institution.HasValue || l.OrganizationFk == request.institution))
                 .Select(l => new { l.EconomicClassificationFk, l.AtividadeFk, l.Valor })
                 .ToList()
@@ -223,7 +223,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             // unique WITHIN one OrcamentoConfigFk (see IsCodeValid), so a plain Codigo lookup across all
             // periods would crash ToDictionary on a duplicate key once a 2nd period's catalog exists.
             var codigoIdByCodigo = _context.EconomicClassification
-                .Where(e => e.IndActivo && e.OrcamentoConfigFk == orcamentoConfigFk
+                .Where(e => e.IndActivo && e.BudgetPeriodFk == orcamentoConfigFk
                     && new[] { "401.03.01", "401.03.02", "401.03.03", "401.03.04" }.Contains(e.Codigo))
                 .ToDictionary(e => e.Codigo, e => e.Id);
 
@@ -332,7 +332,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private HashSet<int> GetOffPerimeterAtividadeIds(int orcamentoConfigFk)
         {
             var allActivities = _context.ProgramActivity
-                .Where(a => a.IndActivo && a.OrcamentoConfigFk == orcamentoConfigFk)
+                .Where(a => a.IndActivo && a.BudgetPeriodFk == orcamentoConfigFk)
                 .ToList();
 
             var childrenByParentId = allActivities

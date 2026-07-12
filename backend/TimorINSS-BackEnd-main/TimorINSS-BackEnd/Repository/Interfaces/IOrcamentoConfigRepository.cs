@@ -21,12 +21,5 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public Orcamentoconfig GetOrcamentoConfigCurrentDate();
 
         public bool IsOrcamentoDeleteValid(Orcamentoconfig orcamento);
-
-        // Added 2026-07-11 for the new Kỳ ngân sách (System Settings) admin CRUD —
-        // see OrcamentoConfigController/OrcamentoConfigDataManager (new files, separate
-        // from the pre-existing OrcamentoController which manages OrcamentoLinha/M2).
-        public bool IsAnoTipoValid(Orcamentoconfig orcamento);
-
-        public bool HasOrcamentoBatch(int id);
     }
 }

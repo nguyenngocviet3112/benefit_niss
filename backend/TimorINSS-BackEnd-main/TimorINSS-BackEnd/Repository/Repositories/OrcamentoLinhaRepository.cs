@@ -34,7 +34,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Include(l => l.OrganizationFkNavigation)
                 .Include(l => l.OrcamentoBatchFkNavigation)
                 .Where(l => l.IndActivo
-                    && l.OrcamentoBatchFkNavigation.OrcamentoConfigFk == orcamentoConfigFk
+                    && l.OrcamentoBatchFkNavigation.BudgetPeriodFk == orcamentoConfigFk
                     && l.OrcamentoBatchFkNavigation.Estado == "APPROVED")
                 .ToList();
         }
@@ -67,7 +67,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             // import lại 1 rúbrica đã có từ năm trước.
             int orcamentoConfigFk = _moduloContribuicoesContext.OrcamentoBatch
                 .Where(b => b.Id == entity.OrcamentoBatchFk)
-                .Select(b => b.OrcamentoConfigFk)
+                .Select(b => b.BudgetPeriodFk)
                 .FirstOrDefault();
 
             int countSameCombo = _moduloContribuicoesContext.OrcamentoLinha
@@ -76,7 +76,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     && l.EconomicClassificationFk == entity.EconomicClassificationFk
                     && l.OrganizationFk == entity.OrganizationFk
                     && l.Id != entity.Id
-                    && l.OrcamentoBatchFkNavigation.OrcamentoConfigFk == orcamentoConfigFk)
+                    && l.OrcamentoBatchFkNavigation.BudgetPeriodFk == orcamentoConfigFk)
                 .Count();
 
             return countSameCombo == 0;
@@ -90,7 +90,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     && l.AtividadeFk == atividadeFk
                     && l.EconomicClassificationFk == economicClassificationFk
                     && l.OrganizationFk == organizationFk
-                    && l.OrcamentoBatchFkNavigation.OrcamentoConfigFk == orcamentoConfigFk);
+                    && l.OrcamentoBatchFkNavigation.BudgetPeriodFk == orcamentoConfigFk);
         }
     }
 }

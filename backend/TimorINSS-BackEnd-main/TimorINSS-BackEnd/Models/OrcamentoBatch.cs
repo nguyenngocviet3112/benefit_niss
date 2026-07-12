@@ -13,7 +13,7 @@ namespace TimorINSSBackEnd.Models
         }
 
         public int Id { get; set; }
-        public int OrcamentoConfigFk { get; set; }
+        public int BudgetPeriodFk { get; set; }
         public string Estado { get; set; }
         public int? SubmittedBy { get; set; }
         public DateTime? SubmittedAt { get; set; }
@@ -31,7 +31,7 @@ namespace TimorINSSBackEnd.Models
         public DateTime? DataAlteracao { get; set; }
         public string Ipv6 { get; set; }
 
-        public virtual Orcamentoconfig OrcamentoConfigFkNavigation { get; set; }
+        public virtual BudgetPeriod BudgetPeriodFkNavigation { get; set; }
         public virtual ICollection<OrcamentoLinha> OrcamentoLinha { get; set; }
     }
 }

@@ -1,10 +1,10 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace TimorINSSBackEnd.DataContracts.RequestDataContract
+namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 {
     [DataContract]
-    public class SaveOrcamentoConfigRequest : RequestBaseDataContract
+    public class BudgetPeriodDataContract
     {
         [DataMember]
         public int Id { get; set; }
@@ -13,16 +13,15 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public int Ano { get; set; }
 
         [DataMember]
+        public string Tipo { get; set; }
+
+        [DataMember]
         public DateTime DataInicio { get; set; }
 
         [DataMember]
         public DateTime? DataFim { get; set; }
-    }
 
-    [DataContract]
-    public class DeactivateOrcamentoConfigRequest : RequestBaseDataContract
-    {
         [DataMember]
-        public int Id { get; set; }
+        public bool IndActivo { get; set; }
     }
 }

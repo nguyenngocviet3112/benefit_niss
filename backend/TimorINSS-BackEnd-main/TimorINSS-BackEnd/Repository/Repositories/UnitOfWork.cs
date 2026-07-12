@@ -57,6 +57,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IRelUtilizadorPerfilRepository _relUtilizadorPerfilRepository;
         private IRelUtilizadorDepartamentoRepository _relUtilizadorDepartamentoRepository;
         private IOrcamentoConfigRepository _orcamentoConfigRepository;
+        private IBudgetPeriodRepository _budgetPeriodRepository;
         private IComponenteRepository _componenteRepository;
         private ITarefaRepository _tarefaRepository;
         private IClassificacaoRepository _classificacaoRepository;
@@ -118,6 +119,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IOrcamentoSuplementarRepository _orcamentoSuplementarRepository;
         private IBankStatementLineRepository _bankStatementLineRepository;
         private ILancamentoRepository _lancamentoRepository;
+        private IGuiaPagamentoContaConfigRepository _guiaPagamentoContaConfigRepository;
 
 
         public UnitOfWork(TimorINSSModuloContribuicoesContext moduloContribuicoesContext, IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResource> localizer)
@@ -183,6 +185,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public ILancamentoRepository LancamentoRepository
         { get { return _lancamentoRepository ??= new LancamentoRepository(_moduloContribuicoesContext); } }
+
+        public IGuiaPagamentoContaConfigRepository GuiaPagamentoContaConfigRepository
+        { get { return _guiaPagamentoContaConfigRepository ??= new GuiaPagamentoContaConfigRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository
@@ -266,6 +271,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
         { get { return _relUtilizadorDepartamentoRepository ??= new RelUtilizadorDepartamentoRepository(_moduloContribuicoesContext); } }
         public IOrcamentoConfigRepository OrcamentoConfigRepository
         { get { return _orcamentoConfigRepository ??= new OrcamentoConfigRepository(_moduloContribuicoesContext); } }
+
+        public IBudgetPeriodRepository BudgetPeriodRepository
+        { get { return _budgetPeriodRepository ??= new BudgetPeriodRepository(_moduloContribuicoesContext); } }
         public IComponenteRepository ComponenteRepository
         { get { return _componenteRepository ??= new ComponenteRepository(_moduloContribuicoesContext); } }
         public ITarefaRepository TarefaRepository

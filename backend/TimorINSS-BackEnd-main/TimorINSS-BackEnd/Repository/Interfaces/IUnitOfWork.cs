@@ -45,6 +45,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IRelPerfilFuncionalidadeRepository RelPerfilFuncionalidadeRepository { get; }
         IRelUtilizadorDepartamentoRepository RelUtilizadorDepartamentoRepository { get; }
         IOrcamentoConfigRepository OrcamentoConfigRepository { get; }
+        IBudgetPeriodRepository BudgetPeriodRepository { get; }
         IComponenteRepository ComponenteRepository { get; }
         ITarefaRepository TarefaRepository { get; }
         IClassificacaoRepository ClassificacaoRepository { get; }
@@ -108,6 +109,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IOrcamentoSuplementarRepository OrcamentoSuplementarRepository { get; }
         IBankStatementLineRepository BankStatementLineRepository { get; }
         ILancamentoRepository LancamentoRepository { get; }
+        IGuiaPagamentoContaConfigRepository GuiaPagamentoContaConfigRepository { get; }
 
         void Commit();
 

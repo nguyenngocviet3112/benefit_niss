@@ -18,7 +18,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         public OrcamentoSuplementar GetActiveDraftBatch(int orcamentoConfigFk)
         {
             return _moduloContribuicoesContext.OrcamentoSuplementar
-                .Where(b => b.IndActivo && b.OrcamentoConfigFk == orcamentoConfigFk && b.Estado != "APPROVED")
+                .Where(b => b.IndActivo && b.BudgetPeriodFk == orcamentoConfigFk && b.Estado != "APPROVED")
                 .OrderByDescending(b => b.Id)
                 .FirstOrDefault();
         }
