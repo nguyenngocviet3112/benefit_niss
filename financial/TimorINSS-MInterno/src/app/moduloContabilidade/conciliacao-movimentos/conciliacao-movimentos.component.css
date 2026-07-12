@@ -186,9 +186,23 @@
   width: 100%;
 }
 
+.con-form-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 4px 20px;
+}
+
+.con-form-fields mat-form-field {
+  width: 100%;
+}
+
+.con-field-full {
+  grid-column: 1 / -1;
+}
+
 .con-form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 16px;
 }

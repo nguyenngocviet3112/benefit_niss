@@ -102,35 +102,41 @@
     <div class="con-form">
       <h3>Thêm dòng sao kê ngân hàng</h3>
 
-      <mat-form-field appearance="outline" class="small-field">
-        <mat-label>Data Valor <span class="itag type">Gõ tay</span></mat-label>
-        <input matInput type="date" [(ngModel)]="formDataValor" name="formDataValor" />
-      </mat-form-field>
+      <div class="con-form-fields">
+        <mat-form-field appearance="outline">
+          <mat-label>Data Valor <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput type="date" [(ngModel)]="formDataValor" name="formDataValor" />
+          <mat-hint>Ngày ngân hàng ghi nhận giá trị (value date)</mat-hint>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="small-field">
-        <mat-label>Data Transação <span class="itag type">Gõ tay</span></mat-label>
-        <input matInput type="date" [(ngModel)]="formDataTransacao" name="formDataTransacao" />
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Data Transação <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput type="date" [(ngModel)]="formDataTransacao" name="formDataTransacao" />
+          <mat-hint>Ngày giao dịch thực tế diễn ra</mat-hint>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="medium-field">
-        <mat-label>Mã giao dịch ngân hàng <span class="itag type">Gõ tay (tùy chọn)</span></mat-label>
-        <input matInput [(ngModel)]="formCodigoTransacaoBancaria" name="formCodigoTransacaoBancaria" />
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Mã giao dịch ngân hàng <span class="itag type">Gõ tay (tùy chọn)</span></mat-label>
+          <input matInput [(ngModel)]="formCodigoTransacaoBancaria" name="formCodigoTransacaoBancaria" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Descrição <span class="itag type">Gõ tay</span></mat-label>
-        <input matInput [(ngModel)]="formDescricao" name="formDescricao" />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="con-field-full">
+          <mat-label>Descrição <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput [(ngModel)]="formDescricao" name="formDescricao" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="small-field">
-        <mat-label>Crédito (USD) <span class="itag type">Gõ tay</span></mat-label>
-        <input matInput type="number" step="0.01" [(ngModel)]="formCredito" name="formCredito" />
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Crédito (USD) <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput type="number" step="0.01" [(ngModel)]="formCredito" name="formCredito" />
+          <mat-hint>Tiền vào tài khoản</mat-hint>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="small-field">
-        <mat-label>Débito (USD) <span class="itag type">Gõ tay</span></mat-label>
-        <input matInput type="number" step="0.01" [(ngModel)]="formDebito" name="formDebito" />
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Débito (USD) <span class="itag type">Gõ tay</span></mat-label>
+          <input matInput type="number" step="0.01" [(ngModel)]="formDebito" name="formDebito" />
+          <mat-hint>Tiền ra khỏi tài khoản</mat-hint>
+        </mat-form-field>
+      </div>
 
       <div class="con-form-actions">
         <button mat-button (click)="cancelAddForm()">Hủy</button>
