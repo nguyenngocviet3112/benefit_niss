@@ -8,6 +8,23 @@
     {{ 'guiaConciliacao.hint' | translate }}
   </div>
 
+  <div class="gc-filter">
+    <mat-form-field appearance="outline" class="gc-filter-date">
+      <mat-label>{{ 'guiaConciliacao.dateFrom' | translate }}</mat-label>
+      <input matInput [matDatepicker]="pickerFrom" [(ngModel)]="dateFrom">
+      <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFrom></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="gc-filter-date">
+      <mat-label>{{ 'guiaConciliacao.dateTo' | translate }}</mat-label>
+      <input matInput [matDatepicker]="pickerTo" [(ngModel)]="dateTo">
+      <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTo></mat-datepicker>
+    </mat-form-field>
+    <button mat-stroked-button color="primary" (click)="applyFilter()">{{ 'guiaConciliacao.applyFilter' | translate }}</button>
+    <button mat-button (click)="clearFilter()">{{ 'guiaConciliacao.clearFilter' | translate }}</button>
+  </div>
+
   <div class="gc-panels" *ngIf="!loading; else loadingTpl">
     <div class="gc-panel">
       <h3>{{ 'guiaConciliacao.panelGuias' | translate }} ({{ guias.length }})</h3>

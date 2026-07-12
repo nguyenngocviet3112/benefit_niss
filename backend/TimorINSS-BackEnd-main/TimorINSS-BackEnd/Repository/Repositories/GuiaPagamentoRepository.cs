@@ -305,8 +305,17 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Where(u => u.IndActivo == true);
             //.Where(u => u.GuiaEntidadeFk == request.idEntidade && u.IndActivo == true);
 
-            // Filtrar por data
-            if (filter.dateFilterBegin != null)
+            // Filtrar por data — khoảng ngày thật (MesAno >= inicio && <= fim) khi cả 2 đầu
+            // được truyền (màn Guia Conciliação mới, 2026-07-13); giữ nguyên hành vi cũ
+            // (đúng 1 tháng/năm) khi chỉ có dateFilterBegin, để không đổi hành vi các nơi
+            // gọi cũ (mode cũ) chỉ truyền 1 mốc.
+            if (filter.dateFilterBegin != null && filter.dateFilterEnd != null)
+            {
+                var rangeStart = new DateTime(filter.dateFilterBegin.Value.Year, filter.dateFilterBegin.Value.Month, 1);
+                var rangeEnd = new DateTime(filter.dateFilterEnd.Value.Year, filter.dateFilterEnd.Value.Month, 1);
+                query = query.Where(u => u.MesAno >= rangeStart && u.MesAno <= rangeEnd);
+            }
+            else if (filter.dateFilterBegin != null)
             {
                 query = query.Where(u => u.MesAno.Month == filter.dateFilterBegin.Value.Month && u.MesAno.Year == filter.dateFilterBegin.Value.Year);
             }

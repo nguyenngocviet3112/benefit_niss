@@ -35,6 +35,13 @@ export class GuiaConciliacaoComponent implements OnInit {
   public viewingPdfSrc: Uint8Array | null = null;
   public loadingComprovativo = false;
 
+  // Lọc theo khoảng ngày — cả 2 danh sách (Guia chờ xác nhận + sao kê ngân hàng
+  // khả dụng) đều tích lũy dần theo thời gian nên cần lọc để tránh màn nặng dần
+  // (2026-07-13, user yêu cầu). Mặc định 3 tháng gần nhất — đủ rộng để không bỏ
+  // sót backlog chưa đối chiếu, vẫn giới hạn khối lượng tải mỗi lần mở màn.
+  public dateFrom: Date | null = null;
+  public dateTo: Date | null = null;
+
   constructor(
     private guiaConciliacaoService: GuiaConciliacaoService,
     private snackBar: MatSnackBar,
@@ -42,6 +49,9 @@ export class GuiaConciliacaoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const today = new Date();
+    this.dateFrom = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+    this.dateTo = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     this.load();
   }
 
@@ -50,7 +60,9 @@ export class GuiaConciliacaoComponent implements OnInit {
     this.selectedGuiaIds.clear();
     this.selectedMovimentoIds.clear();
 
-    this.guiaConciliacaoService.getGuiasPendentesValidacao({ filter: { index: 0, rows: 500 } }).subscribe(
+    this.guiaConciliacaoService.getGuiasPendentesValidacao({
+      filter: { index: 0, rows: 500, dateFilterBegin: this.dateFrom ?? undefined, dateFilterEnd: this.dateTo ?? undefined }
+    }).subscribe(
       response => {
         this.guias = (response.guias ?? []).filter(g => g.estadoPagamento === ESTADO_VALIDACAO || g.estadoPagamento === ESTADO_VALIDACAO_PARCIAL);
         this.loading = false;
@@ -58,12 +70,25 @@ export class GuiaConciliacaoComponent implements OnInit {
       err => { this.loading = false; this.showError(err); }
     );
 
-    this.guiaConciliacaoService.getMovimentosBancariosDisponiveis({ tarefaAtivoId: 0, filter: { index: 0, rows: 500 } }).subscribe(
+    this.guiaConciliacaoService.getMovimentosBancariosDisponiveis({
+      tarefaAtivoId: 0,
+      filter: { index: 0, rows: 500, dateFilterBegin: this.dateFrom ?? undefined, dateFilterEnd: this.dateTo ?? undefined }
+    }).subscribe(
       response => {
         this.movimentos = (response.movimentos ?? []).filter(m => !m.conciliado);
       },
       err => this.showError(err)
     );
+  }
+
+  public applyFilter(): void {
+    this.load();
+  }
+
+  public clearFilter(): void {
+    this.dateFrom = null;
+    this.dateTo = null;
+    this.load();
   }
 
   public toggleGuia(id: number): void {
