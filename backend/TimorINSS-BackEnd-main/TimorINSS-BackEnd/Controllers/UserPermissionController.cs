@@ -24,7 +24,6 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpGet("GetCatalog")]
-        [RequirePerm("USER_MANAGE")]
         public IActionResult GetCatalog()
         {
             PermissionCatalogResponse response;
