@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -92,6 +93,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("AddLine")]
+        [RequirePerm("BANCO_CONCILIAR")]
         public IActionResult AddLine(AddBankStatementLineRequest request)
         {
             ResponseBaseDataContract response;
@@ -114,6 +116,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("DeleteLine")]
+        [RequirePerm("BANCO_CONCILIAR")]
         public IActionResult DeleteLine(DeleteBankStatementLineRequest request)
         {
             ResponseBaseDataContract response;
@@ -136,6 +139,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("MatchReceita")]
+        [RequirePerm("BANCO_CONCILIAR")]
         public IActionResult MatchReceita(MatchReceitaRequest request)
         {
             ResponseBaseDataContract response;
@@ -158,6 +162,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("MatchPagamento")]
+        [RequirePerm("BANCO_CONCILIAR")]
         public IActionResult MatchPagamento(MatchPagamentoRequest request)
         {
             ResponseBaseDataContract response;
@@ -180,6 +185,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Unmatch")]
+        [RequirePerm("BANCO_CONCILIAR")]
         public IActionResult Unmatch(UnmatchRequest request)
         {
             ResponseBaseDataContract response;

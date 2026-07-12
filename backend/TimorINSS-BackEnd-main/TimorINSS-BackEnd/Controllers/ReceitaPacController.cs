@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -49,6 +50,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Save")]
+        [RequirePerm("REC_SUBMIT")]
         public IActionResult Save(SaveReceitaPacRequest request)
         {
             ReceitaPacResponse response;
@@ -71,6 +73,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Deactivate")]
+        [RequirePerm("REC_SUBMIT")]
         public IActionResult Deactivate(DeactivateReceitaPacRequest request)
         {
             ResponseBaseDataContract response;
