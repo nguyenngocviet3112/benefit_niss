@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { BankAccountModel, BankAccountService } from '../../../services/bank-account.service';
 
 @Component({
@@ -22,7 +23,8 @@ export class BankAccountComponent implements OnInit {
 
   constructor(
     private bankAccountService: BankAccountService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -69,7 +71,7 @@ export class BankAccountComponent implements OnInit {
 
   public save(): void {
     if (!this.formEntidadeBancaria.trim() || !this.formIban.trim()) {
-      this.snackBar.open('Vui lòng nhập Tên ngân hàng và IBAN.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('bankAccount.errMissingFields'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -83,7 +85,7 @@ export class BankAccountComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showForm = false;
@@ -94,7 +96,7 @@ export class BankAccountComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('bankAccount.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }

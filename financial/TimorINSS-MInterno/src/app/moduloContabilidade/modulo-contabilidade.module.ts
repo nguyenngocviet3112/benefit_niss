@@ -10,6 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { ModuloContabilidadeRoutingModule } from './modulo-contabilidade-routing.module';
 import { EstruturaProgramaticaComponent } from './estrutura-programatica/estrutura-programatica.component';
@@ -78,7 +79,8 @@ import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/concili
     MatSnackBarModule,
     MatTooltipModule,
     MatPaginatorModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    TranslateModule
   ]
 })
 export class ModuloContabilidadeModule { }

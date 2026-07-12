@@ -1,18 +1,18 @@
 <div class="ba-container">
   <div class="ba-header">
-    <h2>Ngân hàng <span class="en">(Contas Bancárias)</span></h2>
-    <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm ngân hàng</button>
+    <h2>{{ 'bankAccount.title' | translate }} <span class="en">(Contas Bancárias)</span></h2>
+    <button mat-raised-button color="primary" (click)="openAddForm()">{{ 'bankAccount.addButton' | translate }}</button>
   </div>
 
   <div class="ba-list" *ngIf="!loading">
     <table class="ba-table">
       <thead>
         <tr>
-          <th>Tên ngân hàng</th>
-          <th>Mô tả tài khoản</th>
-          <th>Swift</th>
-          <th>IBAN</th>
-          <th>Số tài khoản</th>
+          <th>{{ 'bankAccount.colBankName' | translate }}</th>
+          <th>{{ 'bankAccount.colDescricao' | translate }}</th>
+          <th>{{ 'bankAccount.colSwift' | translate }}</th>
+          <th>{{ 'bankAccount.colIban' | translate }}</th>
+          <th>{{ 'bankAccount.colNumero' | translate }}</th>
           <th></th>
         </tr>
       </thead>
@@ -24,11 +24,11 @@
           <td>{{ acc.iban }}</td>
           <td>{{ acc.numero || '—' }}</td>
           <td>
-            <button mat-button (click)="openEditForm(acc)">Sửa</button>
+            <button mat-button (click)="openEditForm(acc)">{{ 'bankAccount.editButton' | translate }}</button>
           </td>
         </tr>
         <tr *ngIf="accounts.length === 0">
-          <td colspan="6" class="ba-empty">Chưa có tài khoản ngân hàng nào — bấm "+ Thêm ngân hàng" để tạo.</td>
+          <td colspan="6" class="ba-empty">{{ 'bankAccount.emptyList' | translate }}</td>
         </tr>
       </tbody>
     </table>
@@ -36,38 +36,38 @@
 
   <div class="ba-form-overlay" *ngIf="showForm">
     <div class="ba-form">
-      <h3>{{ editingId ? 'Sửa ngân hàng' : 'Thêm ngân hàng mới' }}</h3>
+      <h3>{{ (editingId ? 'bankAccount.formTitleEdit' : 'bankAccount.formTitleCreate') | translate }}</h3>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Tên ngân hàng (Entidade Bancária)</mat-label>
+        <mat-label>{{ 'bankAccount.fieldEntidadeBancaria' | translate }}</mat-label>
         <input matInput [(ngModel)]="formEntidadeBancaria" name="formEntidadeBancaria" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Mô tả tài khoản (VD: Conta Subsídios)</mat-label>
+        <mat-label>{{ 'bankAccount.fieldDescricao' | translate }}</mat-label>
         <input matInput [(ngModel)]="formDescricao" name="formDescricao" />
       </mat-form-field>
 
       <div class="ba-form-row">
         <mat-form-field appearance="outline" class="ba-field">
-          <mat-label>Swift</mat-label>
+          <mat-label>{{ 'bankAccount.fieldSwift' | translate }}</mat-label>
           <input matInput [(ngModel)]="formSwift" name="formSwift" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="ba-field">
-          <mat-label>Số tài khoản</mat-label>
+          <mat-label>{{ 'bankAccount.fieldNumero' | translate }}</mat-label>
           <input matInput [(ngModel)]="formNumero" name="formNumero" />
         </mat-form-field>
       </div>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>IBAN</mat-label>
+        <mat-label>{{ 'bankAccount.fieldIban' | translate }}</mat-label>
         <input matInput [(ngModel)]="formIban" name="formIban" />
       </mat-form-field>
 
       <div class="ba-form-actions">
-        <button mat-button (click)="cancelForm()">Hủy</button>
-        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+        <button mat-button (click)="cancelForm()">{{ 'bankAccount.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="save()">{{ 'bankAccount.saveButton' | translate }}</button>
       </div>
     </div>
   </div>

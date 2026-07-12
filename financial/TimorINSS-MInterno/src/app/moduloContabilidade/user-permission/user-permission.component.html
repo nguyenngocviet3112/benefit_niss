@@ -1,20 +1,20 @@
 <div class="up-container">
   <div class="up-header">
-    <h2>Quản lý User & Phân quyền <span class="en">(User Management & Permissions)</span></h2>
-    <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm User</button>
+    <h2>{{ 'userPermission.title' | translate }}</h2>
+    <button mat-raised-button color="primary" (click)="openAddForm()">{{ 'userPermission.addButton' | translate }}</button>
   </div>
 
   <div class="up-list" *ngIf="!loading">
     <table class="up-table">
       <thead>
         <tr>
-          <th>Username</th>
-          <th>Tên</th>
+          <th>{{ 'userPermission.colUsername' | translate }}</th>
+          <th>{{ 'userPermission.fieldNome' | translate }}</th>
           <th>Email</th>
-          <th>Phòng ban</th>
-          <th>Trạng thái</th>
-          <th>Preset</th>
-          <th>Số quyền</th>
+          <th>{{ 'userPermission.fieldDepartamento' | translate }}</th>
+          <th>{{ 'userPermission.colStatus' | translate }}</th>
+          <th>{{ 'userPermission.colPreset' | translate }}</th>
+          <th>{{ 'userPermission.colTokenCount' | translate }}</th>
           <th></th>
         </tr>
       </thead>
@@ -26,9 +26,9 @@
           <td>{{ user.departamentoNome || '—' }}</td>
           <td>
             <span class="up-badge" [class.inactive]="!user.indActivo">
-              {{ user.indActivo ? 'Ativo' : 'Inativo' }}
+              {{ (user.indActivo ? 'userPermission.statusActive' : 'userPermission.statusInactive') | translate }}
             </span>
-            <span class="up-badge locked" *ngIf="user.locked">Locked</span>
+            <span class="up-badge locked" *ngIf="user.locked">{{ 'userPermission.statusLocked' | translate }}</span>
           </td>
           <td>
             <span class="up-chip" *ngFor="let codigo of user.presetCodigos">{{ codigo }}</span>
@@ -36,11 +36,11 @@
           </td>
           <td>{{ user.tokens.length }}</td>
           <td>
-            <button mat-button (click)="openEditForm(user)">Sửa</button>
+            <button mat-button (click)="openEditForm(user)">{{ 'userPermission.editButton' | translate }}</button>
           </td>
         </tr>
         <tr *ngIf="users.length === 0">
-          <td colspan="8" class="up-empty">Chưa có user nào trong hệ thống mới.</td>
+          <td colspan="8" class="up-empty">{{ 'userPermission.emptyList' | translate }}</td>
         </tr>
       </tbody>
     </table>
@@ -48,46 +48,46 @@
 
   <div class="up-form-overlay" *ngIf="showForm">
     <div class="up-form">
-      <h3>{{ editingId ? 'Sửa User' : 'Thêm User mới' }}</h3>
+      <h3>{{ (editingId ? 'userPermission.formTitleEdit' : 'userPermission.formTitleCreate') | translate }}</h3>
 
       <div class="up-form-row">
         <mat-form-field appearance="outline" class="up-field">
-          <mat-label>Username</mat-label>
+          <mat-label>{{ 'userPermission.fieldUsername' | translate }}</mat-label>
           <input matInput [(ngModel)]="formUsername" name="formUsername" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="up-field">
-          <mat-label>{{ editingId ? 'Password mới (để trống nếu không đổi)' : 'Password' }}</mat-label>
+          <mat-label>{{ (editingId ? 'userPermission.fieldPasswordEdit' : 'userPermission.fieldPasswordCreate') | translate }}</mat-label>
           <input matInput type="password" [(ngModel)]="formPassword" name="formPassword" />
         </mat-form-field>
 
         <label class="up-checkbox-inline">
           <input type="checkbox" [(ngModel)]="formIndActivo" name="formIndActivo" />
-          Ativo
+          {{ 'userPermission.fieldActive' | translate }}
         </label>
       </div>
 
       <div class="up-form-row">
         <mat-form-field appearance="outline" class="up-field">
-          <mat-label>Tên (Nome)</mat-label>
+          <mat-label>{{ 'userPermission.fieldNome' | translate }}</mat-label>
           <input matInput [(ngModel)]="formNome" name="formNome" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="up-field">
-          <mat-label>Email (dùng để reset password)</mat-label>
+          <mat-label>{{ 'userPermission.fieldEmail' | translate }}</mat-label>
           <input matInput type="email" [(ngModel)]="formEmail" name="formEmail" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="up-field">
-          <mat-label>Phòng ban (Departamento)</mat-label>
+          <mat-label>{{ 'userPermission.fieldDepartamento' | translate }}</mat-label>
           <mat-select [(ngModel)]="formDepartamentoFk" name="formDepartamentoFk">
-            <mat-option [value]="null">—</mat-option>
+            <mat-option [value]="null">{{ 'userPermission.noneOption' | translate }}</mat-option>
             <mat-option *ngFor="let d of departamentos" [value]="d.id">{{ d.nome }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
-      <h4>Preset (nhóm quyền có sẵn)</h4>
+      <h4>{{ 'userPermission.presetSectionTitle' | translate }}</h4>
       <div class="up-preset-list">
         <label class="up-checkbox" *ngFor="let preset of presets">
           <input type="checkbox" [checked]="isPresetChecked(preset)" (change)="togglePreset(preset)" />
@@ -95,7 +95,7 @@
         </label>
       </div>
 
-      <h4>Quyền chi tiết (Permission tokens)</h4>
+      <h4>{{ 'userPermission.tokenSectionTitle' | translate }}</h4>
       <div class="up-token-groups">
         <div class="up-token-group" *ngFor="let group of groups">
           <div class="up-token-group-title">{{ group.nome }}</div>
@@ -107,8 +107,8 @@
       </div>
 
       <div class="up-form-actions">
-        <button mat-button (click)="cancelForm()">Hủy</button>
-        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+        <button mat-button (click)="cancelForm()">{{ 'userPermission.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="save()">{{ 'userPermission.saveButton' | translate }}</button>
       </div>
     </div>
   </div>

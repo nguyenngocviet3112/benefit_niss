@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { forkJoin } from 'rxjs';
 import {
   PermissionGroupModel,
@@ -39,7 +40,8 @@ export class UserPermissionComponent implements OnInit {
 
   constructor(
     private permissionService: PermissionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -130,11 +132,11 @@ export class UserPermissionComponent implements OnInit {
 
   public save(): void {
     if (!this.formUsername.trim()) {
-      this.snackBar.open('Vui lòng nhập Username.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('userPermission.errMissingUsername'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
     if (!this.editingId && !this.formPassword.trim()) {
-      this.snackBar.open('Vui lòng nhập Password cho user mới.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('userPermission.errMissingPassword'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -151,7 +153,7 @@ export class UserPermissionComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showForm = false;
@@ -162,7 +164,7 @@ export class UserPermissionComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('userPermission.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
