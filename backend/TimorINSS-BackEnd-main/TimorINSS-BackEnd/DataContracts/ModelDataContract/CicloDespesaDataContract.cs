@@ -13,6 +13,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         [DataMember]
         public int adId { get; set; }
 
+        // Plain running number, matching the source Excel's "N.º AD" column exactly (E9:E.. in
+        // Ciclo_Despesa) — NOT the "Numero/Mes" code shown on the AD entry screen (that screen's
+        // own Numero resets every month; the Excel report column is just a flat sequence).
         [DataMember]
         public int numeroAd { get; set; }
 
