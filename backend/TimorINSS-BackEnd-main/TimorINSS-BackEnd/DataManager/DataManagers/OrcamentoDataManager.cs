@@ -58,6 +58,32 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
+        // Nút "+ Bắt đầu lô điều chỉnh mới" trên UI — chỉ hiện khi lô mới nhất đã
+        // APPROVED. Gọi tường minh GetOrCreateDraftBatch (thay vì để nó tự chạy ngầm
+        // mỗi lần GetActiveBatch — đó chính là bug đã sửa ở orcamento-view-batch-fix).
+        // Idempotent: nếu đã có sẵn 1 lô DRAFT dở dang thì trả về đúng lô đó, không
+        // tạo thêm lô thứ 2.
+        public OrcamentoBatchResponse StartNewBatch(StartNewOrcamentoBatchRequest request)
+        {
+            OrcamentoBatchResponse response = new OrcamentoBatchResponse();
+            try
+            {
+                if (_unitOfWork.OrcamentoConfigRepository.Get(request.OrcamentoConfigFk) == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "ORC-CONFIG-NOT-FOUND", ErrorMessage = "Kỳ ngân sách không tồn tại." });
+                    return response;
+                }
+
+                OrcamentoBatch batch = GetOrCreateDraftBatch(request.OrcamentoConfigFk);
+                response.Batch = MapBatch(batch);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
         private OrcamentoBatch GetOrCreateDraftBatch(int orcamentoConfigFk)
         {
             OrcamentoBatch batch = _unitOfWork.OrcamentoBatchRepository.GetActiveDraftBatch(orcamentoConfigFk);

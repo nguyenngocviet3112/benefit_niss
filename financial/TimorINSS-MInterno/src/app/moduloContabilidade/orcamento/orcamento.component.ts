@@ -138,6 +138,20 @@ export class OrcamentoComponent implements OnInit {
     return this.batch?.estado === 'DRAFT';
   }
 
+  public startNewBatch(): void {
+    this.loading = true;
+    this.orcamentoService.startNewBatch(this.orcamentoConfigFk).subscribe(
+      response => {
+        this.batch = response.batch;
+        this.loading = false;
+      },
+      err => {
+        this.loading = false;
+        this.showError(err);
+      }
+    );
+  }
+
   public openAddForm(): void {
     this.editingId = null;
     this.formAtividadeFk = null;

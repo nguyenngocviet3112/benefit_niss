@@ -2196,6 +2196,7 @@
     "headerGloss": "Budget — rúbrica Atividade × Economic Classification × Organization",
     "reload": "Reload",
     "addButton": "+ Add rúbrica",
+    "startNewBatchButton": "+ Start new adjustment batch",
     "noBatchError": "Could not load data for this budget period. Check the \"Budget Period\" selection above.",
     "estadoDraft": "Draft",
     "estadoPendingReview": "Pending review",

@@ -6,6 +6,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
     public interface IOrcamentoDataManager
     {
         OrcamentoBatchResponse GetActiveBatch(GetActiveOrcamentoBatchRequest request);
+        OrcamentoBatchResponse StartNewBatch(StartNewOrcamentoBatchRequest request);
         ResponseBaseDataContract SaveLinha(SaveOrcamentoLinhaRequest request);
         ResponseBaseDataContract DeleteLinha(DeleteOrcamentoLinhaRequest request);
         ResponseBaseDataContract Submit(SubmitOrcamentoBatchRequest request);

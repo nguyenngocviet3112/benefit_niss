@@ -2192,6 +2192,7 @@
     "headerGloss": "rúbrica Atividade × Classificação Económica × Organization",
     "reload": "Recarregar",
     "addButton": "+ Adicionar rúbrica",
+    "startNewBatchButton": "+ Iniciar novo lote de ajuste",
     "noBatchError": "Não foi possível carregar dados para este período orçamental. Verifique a seleção de \"Período Orçamental\" acima.",
     "estadoDraft": "Rascunho",
     "estadoPendingReview": "Aguarda verificação",

@@ -12,6 +12,13 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     }
 
     [DataContract]
+    public class StartNewOrcamentoBatchRequest : RequestBaseDataContract
+    {
+        [DataMember]
+        public int OrcamentoConfigFk { get; set; }
+    }
+
+    [DataContract]
     public class SaveOrcamentoLinhaRequest : RequestBaseDataContract
     {
         [DataMember]

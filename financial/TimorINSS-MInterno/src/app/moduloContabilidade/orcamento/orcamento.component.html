@@ -13,6 +13,7 @@
     <ng-container *ngIf="batch">
       <app-orcamento-import-preview *ngIf="isDraft" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadBatch()"></app-orcamento-import-preview>
       <button mat-raised-button color="primary" *ngIf="isDraft" (click)="openAddForm()">{{ 'orcamento.addButton' | translate }}</button>
+      <button mat-stroked-button color="primary" *ngIf="batch.estado === 'APPROVED'" (click)="startNewBatch()">{{ 'orcamento.startNewBatchButton' | translate }}</button>
     </ng-container>
   </div>
 

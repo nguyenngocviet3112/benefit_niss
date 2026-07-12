@@ -2196,6 +2196,7 @@
     "headerGloss": "Ngân sách — rúbrica Atividade × Classificação Económica × Organization",
     "reload": "Tải lại",
     "addButton": "+ Thêm rúbrica",
+    "startNewBatchButton": "+ Bắt đầu lô điều chỉnh mới",
     "noBatchError": "Không tải được dữ liệu cho kỳ ngân sách này. Kiểm tra lại lựa chọn \"Kỳ ngân sách\" ở trên.",
     "estadoDraft": "Nháp",
     "estadoPendingReview": "Chờ kiểm tra",

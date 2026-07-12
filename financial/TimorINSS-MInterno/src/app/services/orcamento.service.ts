@@ -23,6 +23,10 @@ export class OrcamentoService {
     return this.http.get<OrcamentoBatchResponse>(`${environment.apiUrl}/orcamento/GetActiveBatch/${orcamentoConfigFk}`);
   }
 
+  public startNewBatch(orcamentoConfigFk: number): Observable<OrcamentoBatchResponse> {
+    return this.http.post<OrcamentoBatchResponse>(`${environment.apiUrl}/orcamento/StartNewBatch`, { OrcamentoConfigFk: orcamentoConfigFk });
+  }
+
   public saveLinha(request: SaveOrcamentoLinhaRequest): Observable<ResponseBase> {
     return this.http.post<ResponseBase>(`${environment.apiUrl}/orcamento/SaveLinha`, request);
   }

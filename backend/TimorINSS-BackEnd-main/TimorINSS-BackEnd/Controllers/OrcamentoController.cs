@@ -49,6 +49,29 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
+        [HttpPost("StartNewBatch")]
+        [RequirePerm("ORC_SUBMIT")]
+        public IActionResult StartNewBatch(StartNewOrcamentoBatchRequest request)
+        {
+            OrcamentoBatchResponse response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.StartNewBatch(request);
+            }
+            catch (Exception e)
+            {
+                response = new OrcamentoBatchResponse();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("StartNewBatch", Log, request))
+                return BadRequest(response);
+
+            _cache.Reset();
+            return Ok(response);
+        }
+
         [HttpPost("SaveLinha")]
         [RequirePerm("ORC_SUBMIT")]
         public IActionResult SaveLinha(SaveOrcamentoLinhaRequest request)
