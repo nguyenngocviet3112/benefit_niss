@@ -1,0 +1,66 @@
+<div class="mr-container">
+  <div class="mr-header">
+    <h2>Mapeamento Rubricas <span class="en">(Nhóm Rubrica ánh xạ Tài khoản kế toán)</span></h2>
+    <p class="mr-hint">Quản lý nhóm Rubrica dùng để ánh xạ Plano de Contas vào các dòng Balanço/Demonstração de Resultados. Không bao gồm Actidade/Funcional (đã có màn Cơ cấu Chương trình / Phân loại Chức năng riêng).</p>
+  </div>
+
+  <div class="mr-context-bar">
+    <app-orcamento-config-select [value]="orcamentoConfigFk" (valueChange)="orcamentoConfigFk = $event; loadTree()"></app-orcamento-config-select>
+
+    <mat-form-field appearance="outline" class="mr-tipo-select">
+      <mat-label>Loại (TipoConta)</mat-label>
+      <mat-select [(value)]="tipoConta" (selectionChange)="loadTree()">
+        <mat-option *ngFor="let opt of tipoContaOptions" [value]="opt">{{ opt }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-stroked-button (click)="loadTree()">Tải lại</button>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm nhóm gốc</button>
+  </div>
+
+  <div class="mr-tree" *ngIf="!loading">
+    <ng-container *ngFor="let root of tree">
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: root }"></ng-container>
+    </ng-container>
+    <div class="mr-empty" *ngIf="tree.length === 0">Chưa có dữ liệu cho loại/kỳ ngân sách này.</div>
+  </div>
+
+  <ng-template #nodeTemplate let-node="node">
+    <div class="mr-row" [style.padding-left.px]="12 + (node.parentFk ? 24 : 0)">
+      <span class="mr-code">{{ node.codigo }}</span>
+      <span class="mr-desig">{{ node.designacao }}</span>
+      <span class="mr-actions">
+        <button mat-button (click)="openAddForm(node)">+ Con</button>
+        <button mat-button (click)="openEditForm(node)">Sửa</button>
+        <button mat-button (click)="deactivate(node)">Xóa</button>
+      </span>
+    </div>
+    <ng-container *ngFor="let child of node.children">
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: child }"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <div class="mr-form-overlay" *ngIf="showForm">
+    <div class="mr-form">
+      <h3>{{ editingId ? 'Sửa' : 'Thêm' }} nhóm Rubrica</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mã (Código)</mat-label>
+        <input matInput [(ngModel)]="formCodigo" name="formCodigo" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tên gọi (Designação)</mat-label>
+        <input matInput [(ngModel)]="formDesignacao" name="formDesignacao" />
+      </mat-form-field>
+
+      <div class="mr-form-actions">
+        <button mat-button (click)="cancelForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>

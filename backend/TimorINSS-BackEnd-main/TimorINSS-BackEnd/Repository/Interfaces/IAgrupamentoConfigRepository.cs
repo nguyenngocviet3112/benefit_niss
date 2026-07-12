@@ -37,5 +37,14 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public string ExecucaoOrcamentalExcel(RelatorioExecucaoOrcamentalListagemRequest request, List<ExecucaoOrcamentalDataContract> lista);
         public List<AgrupamentoConfigDataContract> GetAlllActivAgrupamentoConfigByOrcamentoConfigTipoConta(int? orcamentoId, int tipoContaFK);
 
+        // Thêm 2026-07-12 cho màn "Mapeamento Rubricas" (mode mới) — chỉ phục vụ 4 loại
+        // TipoConta Receita/Despesa/Neutro Receita/Neutro Despesa (mapping Balanço/DR),
+        // KHÔNG đụng tới Actidade/Funcional (dữ liệu cũ trùng lặp ProgramActivity/
+        // FunctionalClassification — xem AgrupamentoRubricaController).
+        public List<Agrupamentoconfig> GetRubricaTreeByOrcamentoConfig(int orcamentoConfigFk, string tipoConta);
+
+        public int GetOrCreateReltipoDeContaOrcamentoConfig(int orcamentoConfigFk, string tipoConta, int userId);
+
+        public bool IsRubricaCodeValid(Agrupamentoconfig agrupamento, int reltipoDeContaOrcamentoConfigFk);
     }
 }

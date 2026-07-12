@@ -171,13 +171,13 @@ export class ContabilidadeShellComponent implements OnInit {
         // đã có InitialValue/IsCredit cho số dư đầu kỳ) + Agrupamentoconfig +
         // Relcodigocontaagrupamentoconfig (bảng quan hệ ánh xạ) — cả 2 đang được
         // dùng làm dropdown thật trong componente-despesa/receita/pop-up-executar-
-        // pagamentos (mode cũ). Plano de Contas nay đã có màn quản lý mode mới
-        // (backend CodigoContaTreeController đã có sẵn GetTree/Save/Deactivate,
-        // chỉ cần build frontend). Mapeamento Rubricas (Agrupamentoconfig) vẫn
-        // comingSoon vì backend CHƯA có CRUD đầy đủ (chỉ có 1 API filter cũ).
-        // Xem [[financial-statements-scope-gap]].
+        // pagamentos (mode cũ). Cả 2 nay đã có màn quản lý mode mới với CRUD riêng
+        // (CodigoContaTreeController + AgrupamentoRubricaController, giới hạn 4
+        // TipoConta Receita/Despesa/Neutro Receita/Neutro Despesa — không đụng tới
+        // Actidade/Funcional, dữ liệu cũ trùng lặp Programa/Atividade và Classificação
+        // Funcional). Xem [[financial-statements-scope-gap]].
         { label: 'Plano de Contas (Codigoconta)', route: '/contabilidade/planoContas' },
-        { label: 'Mapeamento Rubricas (Agrupamentoconfig)', comingSoon: true },
+        { label: 'Mapeamento Rubricas (Agrupamentoconfig)', route: '/contabilidade/mapeamentoRubricas' },
         { label: 'Fornecedores / Clientes', comingSoon: true },
       ]
     },

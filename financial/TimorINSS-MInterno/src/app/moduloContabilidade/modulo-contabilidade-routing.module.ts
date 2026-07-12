@@ -30,6 +30,7 @@ import { OrcamentoSuplementarComponent } from './orcamento-suplementar/orcamento
 import { SaldosAberturaComponent } from './saldos-abertura/saldos-abertura.component';
 import { BankAccountComponent } from './settings/bank-account/bank-account.component';
 import { PlanoContasComponent } from './plano-contas/plano-contas.component';
+import { MapeamentoRubricasComponent } from './mapeamento-rubricas/mapeamento-rubricas.component';
 import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/conciliacao-movimentos.component';
 
 const routes: Routes = [
@@ -42,6 +43,7 @@ const routes: Routes = [
       { path: 'classificacaoEconomica', component: ClassificacaoEconomicaComponent },
       { path: 'organization', component: OrganizationComponent },
       { path: 'planoContas', component: PlanoContasComponent },
+      { path: 'mapeamentoRubricas', component: MapeamentoRubricasComponent },
       { path: 'orcamento', component: OrcamentoComponent },
       { path: 'orcamentoSuplementar', component: OrcamentoSuplementarComponent },
       { path: 'saldosAbertura', component: SaldosAberturaComponent },

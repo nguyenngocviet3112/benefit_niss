@@ -709,5 +709,69 @@ namespace TimorINSSBackEnd.Repository.Repositories
             // Conversão do documento excel em base64
             return excelDocument.GetFileString();
         }
+
+        // === Mapeamento Rubricas (mode mới, thêm 2026-07-12) ===
+        // Chỉ 4 mã Dominio này là "Rubrica" thật phục vụ mapping Codigoconta -> Balanço/DR
+        // (đã verify qua DB thật: idDominio 70/71/72/73 = "Receita"/"Despesa"/"Neutro
+        // Receita"/"Neutro Despesa"). "Actidade" (1221) và "Funcional" (1223) bị loại vì
+        // là dữ liệu cũ trùng lặp ProgramActivity/FunctionalClassification — xem
+        // AgrupamentoRubricaController để biết lý do đầy đủ.
+        private static readonly Dictionary<string, int> RubricaTipoContaDominioId = new Dictionary<string, int>
+        {
+            { "Receita", 70 },
+            { "Despesa", 71 },
+            { "Neutro Receita", 72 },
+            { "Neutro Despesa", 73 },
+        };
+
+        public List<Agrupamentoconfig> GetRubricaTreeByOrcamentoConfig(int orcamentoConfigFk, string tipoConta)
+        {
+            if (!RubricaTipoContaDominioId.TryGetValue(tipoConta, out var tipoContaDominioId))
+                return new List<Agrupamentoconfig>();
+
+            return _moduloContribuicoesContext.Agrupamentoconfig
+                .Where(a => a.IndActivo
+                    && a.ReltipoDeContaOrcamentoConfigFkNavigation.OrcamentoConfigFk == orcamentoConfigFk
+                    && a.ReltipoDeContaOrcamentoConfigFkNavigation.TipoContaFk == tipoContaDominioId)
+                .OrderBy(a => a.Codigo)
+                .ToList();
+        }
+
+        public int GetOrCreateReltipoDeContaOrcamentoConfig(int orcamentoConfigFk, string tipoConta, int userId)
+        {
+            if (!RubricaTipoContaDominioId.TryGetValue(tipoConta, out var tipoContaDominioId))
+                throw new ArgumentException($"TipoConta '{tipoConta}' không hợp lệ cho Mapeamento Rubricas.");
+
+            var existing = _moduloContribuicoesContext.Reltipodecontaorcamentoconfig
+                .FirstOrDefault(r => r.OrcamentoConfigFk == orcamentoConfigFk && r.TipoContaFk == tipoContaDominioId);
+            if (existing != null)
+                return existing.Id;
+
+            var novo = new Reltipodecontaorcamentoconfig
+            {
+                OrcamentoConfigFk = orcamentoConfigFk,
+                TipoContaFk = tipoContaDominioId,
+                IndActivo = true,
+                UtilizadorCriacao = userId,
+                DataCriacao = DateTime.Now
+            };
+            _moduloContribuicoesContext.Reltipodecontaorcamentoconfig.Add(novo);
+            _moduloContribuicoesContext.SaveChanges();
+
+            return novo.Id;
+        }
+
+        public bool IsRubricaCodeValid(Agrupamentoconfig agrupamento, int reltipoDeContaOrcamentoConfigFk)
+        {
+            int countSameCode = _moduloContribuicoesContext.Agrupamentoconfig
+                .Where(a => a.IndActivo
+                    && a.Id != agrupamento.Id
+                    && a.ReltipoDeContaOrcamentoConfigFk == reltipoDeContaOrcamentoConfigFk
+                    && a.Codigo == agrupamento.Codigo
+                    && a.ParentFk == agrupamento.ParentFk)
+                .Count();
+
+            return countSameCode == 0;
+        }
     }
 }
