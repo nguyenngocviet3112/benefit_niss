@@ -40,6 +40,7 @@ import { MapeamentoRubricasComponent } from './mapeamento-rubricas/mapeamento-ru
 import { LancamentosComponent } from './lancamentos/lancamentos.component';
 import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/conciliacao-movimentos.component';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
+import { OrcamentoImportPreviewComponent } from './orcamento-import-preview/orcamento-import-preview.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
     MapeamentoRubricasComponent,
     LancamentosComponent,
     ConciliacaoMovimentosComponent,
-    MeuPerfilComponent
+    MeuPerfilComponent,
+    OrcamentoImportPreviewComponent
   ],
   imports: [
     CommonModule,

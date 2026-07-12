@@ -187,5 +187,52 @@ namespace TimorINSSBackEnd.Controllers
             _cache.Reset();
             return Ok(response);
         }
+
+        // Luồng preview → confirm (CLAUDE.md §6) — ImportPreview KHÔNG ghi DB.
+        [HttpPost("ImportPreview")]
+        [RequestSizeLimit(20000000)]
+        [RequirePerm("ORC_SUBMIT")]
+        public IActionResult ImportPreview([FromForm] ImportOrcamentoPreviewRequest request)
+        {
+            ImportOrcamentoPreviewResponse response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.ImportPreview(request);
+            }
+            catch (Exception e)
+            {
+                response = new ImportOrcamentoPreviewResponse();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("ImportPreview", Log, null))
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpPost("ConfirmImport")]
+        [RequirePerm("ORC_SUBMIT")]
+        public IActionResult ConfirmImport(ConfirmOrcamentoImportRequest request)
+        {
+            ImportMasterDataTreeResponse response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.ConfirmImport(request);
+            }
+            catch (Exception e)
+            {
+                response = new ImportMasterDataTreeResponse();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("ConfirmImport", Log, request))
+                return BadRequest(response);
+
+            _cache.Reset();
+            return Ok(response);
+        }
     }
 }

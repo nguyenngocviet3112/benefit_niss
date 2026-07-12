@@ -12,5 +12,10 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         ResponseBaseDataContract Review(ReviewOrcamentoBatchRequest request);
         ResponseBaseDataContract Approve(ApproveOrcamentoBatchRequest request);
         ImportMasterDataTreeResponse Import(ImportOrcamentoRequest request);
+
+        // Luồng preview → confirm (CLAUDE.md §6) — thay dần cho Import() cũ
+        // (single-shot). ImportPreview KHÔNG ghi DB.
+        ImportOrcamentoPreviewResponse ImportPreview(ImportOrcamentoPreviewRequest request);
+        ImportMasterDataTreeResponse ConfirmImport(ConfirmOrcamentoImportRequest request);
     }
 }

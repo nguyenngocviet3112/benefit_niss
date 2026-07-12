@@ -406,5 +406,206 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
             return response;
         }
+
+        // Bước 1/2 (CLAUDE.md §6) — đọc + đối chiếu, KHÔNG ghi DB. Trả về
+        // đúng dữ liệu FE cần để hiện preview và để Confirm dùng lại (không
+        // phải upload file lần 2).
+        public ImportOrcamentoPreviewResponse ImportPreview(ImportOrcamentoPreviewRequest request)
+        {
+            ImportOrcamentoPreviewResponse response = new ImportOrcamentoPreviewResponse();
+            try
+            {
+                OrcamentoBatch batch = GetOrCreateDraftBatch(request.OrcamentoConfigFk);
+                if (batch.Estado != ESTADO_DRAFT)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "ORC-NOT-DRAFT", ErrorMessage = "Lô ngân sách đang chờ duyệt, không thể import thêm." });
+                    return response;
+                }
+
+                List<Dictionary<string, string>> rows = MasterDataTreeExcelReader.ReadDataSheet(request.File);
+                List<ProgramActivity> atividades = _unitOfWork.ProgramActivityRepository.GetTreeByOrcamentoConfig(request.OrcamentoConfigFk);
+                List<EconomicClassification> ecs = _unitOfWork.EconomicClassificationRepository.GetTreeByOrcamentoConfig(request.OrcamentoConfigFk);
+                List<Institution> institutions = _unitOfWork.InstitutionRepository.GetAll().ToList();
+
+                for (int idx = 0; idx < rows.Count; idx++)
+                {
+                    int rowNum = idx + 3;
+                    Dictionary<string, string> row = rows[idx];
+
+                    row.TryGetValue("Atividade Código", out string atividadeCodigo);
+                    row.TryGetValue("Classificação Económica Código", out string ecCodigo);
+                    row.TryGetValue("Organization", out string organizationNome);
+                    row.TryGetValue("Valor Orçamento Anual (USD)", out string valorTexto);
+
+                    atividadeCodigo = atividadeCodigo?.Trim();
+                    ecCodigo = ecCodigo?.Trim();
+                    organizationNome = organizationNome?.Trim();
+
+                    OrcamentoImportRowDataContract line = new OrcamentoImportRowDataContract
+                    {
+                        RowNum = rowNum,
+                        AtividadeCodigo = atividadeCodigo,
+                        EconomicClassificationCodigo = ecCodigo,
+                        OrganizationNome = organizationNome
+                    };
+
+                    if (string.IsNullOrWhiteSpace(atividadeCodigo) || string.IsNullOrWhiteSpace(ecCodigo)
+                        || string.IsNullOrWhiteSpace(organizationNome) || string.IsNullOrWhiteSpace(valorTexto))
+                    {
+                        line.Status = "Error";
+                        line.ErrorMessage = "Thiếu Atividade/Classificação Económica/Organization/Valor.";
+                        response.TotalErrors++;
+                        response.Rows.Add(line);
+                        continue;
+                    }
+
+                    if (!decimal.TryParse(valorTexto, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal valor))
+                    {
+                        line.Status = "Error";
+                        line.ErrorMessage = $"Valor '{valorTexto}' không hợp lệ.";
+                        response.TotalErrors++;
+                        response.Rows.Add(line);
+                        continue;
+                    }
+                    line.Valor = valor;
+
+                    ProgramActivity atividade = atividades.FirstOrDefault(a => a.Codigo == atividadeCodigo);
+                    if (atividade == null)
+                    {
+                        line.Status = "Error";
+                        line.ErrorMessage = $"Không tìm thấy Atividade '{atividadeCodigo}'.";
+                        response.TotalErrors++;
+                        response.Rows.Add(line);
+                        continue;
+                    }
+                    line.AtividadeDesignacao = atividade.Designacao;
+                    line.AtividadeFk = atividade.Id;
+
+                    EconomicClassification econ = ecs.FirstOrDefault(e => e.Codigo == ecCodigo);
+                    if (econ == null)
+                    {
+                        line.Status = "Error";
+                        line.ErrorMessage = $"Không tìm thấy Classificação Económica '{ecCodigo}'.";
+                        response.TotalErrors++;
+                        response.Rows.Add(line);
+                        continue;
+                    }
+                    line.EconomicClassificationDesignacao = econ.Designacao;
+                    line.EconomicClassificationFk = econ.Id;
+
+                    Institution organization = institutions.FirstOrDefault(i => string.Equals(i.Nome, organizationNome, StringComparison.OrdinalIgnoreCase));
+                    if (organization == null)
+                    {
+                        line.Status = "Error";
+                        line.ErrorMessage = $"Không tìm thấy Organization '{organizationNome}'.";
+                        response.TotalErrors++;
+                        response.Rows.Add(line);
+                        continue;
+                    }
+                    line.OrganizationFk = organization.Id;
+
+                    OrcamentoLinha existing = _unitOfWork.OrcamentoLinhaRepository.FindExistingCombo(
+                        request.OrcamentoConfigFk, atividade.Id, econ.Id, organization.Id);
+                    if (existing != null)
+                    {
+                        line.Status = "Exists";
+                        line.ExistingOrcamentoLinhaId = existing.Id;
+                        line.ExistingValor = existing.Valor;
+                        response.TotalExists++;
+                        response.Rows.Add(line);
+                        continue;
+                    }
+
+                    line.Status = "New";
+                    response.TotalNew++;
+                    response.Rows.Add(line);
+                }
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
+        // Bước 2/2 — áp dụng đúng Action (Insert/Overwrite/Skip) người dùng đã
+        // chọn cho từng dòng ở bước preview. Re-validate tồn tại/trùng ngay
+        // tại đây (không tin tưởng tuyệt đối dữ liệu FE gửi lên) để tránh
+        // trường hợp dữ liệu đổi giữa lúc preview và lúc confirm.
+        public ImportMasterDataTreeResponse ConfirmImport(ConfirmOrcamentoImportRequest request)
+        {
+            ImportMasterDataTreeResponse response = new ImportMasterDataTreeResponse { RequestId = request.RequestId };
+            try
+            {
+                OrcamentoBatch batch = GetOrCreateDraftBatch(request.OrcamentoConfigFk);
+                if (batch.Estado != ESTADO_DRAFT)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "ORC-NOT-DRAFT", ErrorMessage = "Lô ngân sách đang chờ duyệt, không thể import thêm." });
+                    return response;
+                }
+
+                response.Total = request.Rows?.Count ?? 0;
+
+                foreach (OrcamentoImportRowConfirmRequest row in request.Rows ?? new List<OrcamentoImportRowConfirmRequest>())
+                {
+                    if (row.Action == "Skip")
+                        continue;
+
+                    if (row.Action == "Insert")
+                    {
+                        OrcamentoLinha existing = _unitOfWork.OrcamentoLinhaRepository.FindExistingCombo(
+                            request.OrcamentoConfigFk, row.AtividadeFk, row.EconomicClassificationFk, row.OrganizationFk);
+                        if (existing != null)
+                        {
+                            response.Failed++;
+                            response.RowErrors.Add(new ImportRowError { Row = row.RowNum, Message = "Rúbrica này đã tồn tại (thay đổi từ lúc xem trước tới lúc lưu)." });
+                            continue;
+                        }
+
+                        OrcamentoLinha entity = new OrcamentoLinha
+                        {
+                            OrcamentoBatchFk = batch.Id,
+                            AtividadeFk = row.AtividadeFk,
+                            EconomicClassificationFk = row.EconomicClassificationFk,
+                            OrganizationFk = row.OrganizationFk,
+                            Valor = row.Valor,
+                            IndActivo = true
+                        };
+                        entity = (OrcamentoLinha)_utils.SetDetailsToEntity(entity);
+                        _unitOfWork.OrcamentoLinhaRepository.Add(entity);
+                        response.Success++;
+                    }
+                    else if (row.Action == "Overwrite")
+                    {
+                        if (!row.ExistingOrcamentoLinhaId.HasValue)
+                        {
+                            response.Failed++;
+                            response.RowErrors.Add(new ImportRowError { Row = row.RowNum, Message = "Thiếu bản ghi gốc để ghi đè." });
+                            continue;
+                        }
+
+                        OrcamentoLinha entity = _unitOfWork.OrcamentoLinhaRepository.Get(row.ExistingOrcamentoLinhaId.Value);
+                        if (entity == null)
+                        {
+                            response.Failed++;
+                            response.RowErrors.Add(new ImportRowError { Row = row.RowNum, Message = "Không tìm thấy bản ghi gốc để ghi đè." });
+                            continue;
+                        }
+
+                        entity.Valor = row.Valor;
+                        entity = (OrcamentoLinha)_utils.UpdateDetailsToEntity(entity);
+                        _unitOfWork.OrcamentoLinhaRepository.Update(entity);
+                        response.Success++;
+                    }
+                }
+
+                _unitOfWork.Commit();
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
     }
 }

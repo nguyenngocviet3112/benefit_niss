@@ -81,5 +81,16 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             return countSameCombo == 0;
         }
+
+        public OrcamentoLinha FindExistingCombo(int orcamentoConfigFk, int atividadeFk, int economicClassificationFk, int organizationFk)
+        {
+            return _moduloContribuicoesContext.OrcamentoLinha
+                .Include(l => l.OrcamentoBatchFkNavigation)
+                .SingleOrDefault(l => l.IndActivo
+                    && l.AtividadeFk == atividadeFk
+                    && l.EconomicClassificationFk == economicClassificationFk
+                    && l.OrganizationFk == organizationFk
+                    && l.OrcamentoBatchFkNavigation.OrcamentoConfigFk == orcamentoConfigFk);
+        }
     }
 }

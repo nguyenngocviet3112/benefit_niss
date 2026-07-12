@@ -1,0 +1,69 @@
+<input #fileInput type="file" accept=".xlsx" style="display:none" (change)="onFileSelected($event)" />
+<button mat-stroked-button color="primary" [disabled]="loading" (click)="triggerFileSelect()">
+  {{ (loading ? 'orcamentoImportPreview.loading' : 'orcamentoImportPreview.importButton') | translate }}
+</button>
+
+<div class="oip-overlay" *ngIf="showPreview">
+  <div class="oip-dialog">
+    <h3>{{ 'orcamentoImportPreview.title' | translate }}</h3>
+
+    <div class="oip-summary">
+      <span class="oip-badge oip-badge-new">{{ 'orcamentoImportPreview.summaryNew' | translate: { count: totalNew } }}</span>
+      <span class="oip-badge oip-badge-exists">{{ 'orcamentoImportPreview.summaryExists' | translate: { count: totalExists } }}</span>
+      <span class="oip-badge oip-badge-error">{{ 'orcamentoImportPreview.summaryError' | translate: { count: totalErrors } }}</span>
+
+      <span class="spacer"></span>
+
+      <button mat-button *ngIf="totalExists > 0" (click)="setActionForAllExists('Overwrite')">{{ 'orcamentoImportPreview.overwriteAll' | translate }}</button>
+      <button mat-button *ngIf="totalExists > 0" (click)="setActionForAllExists('Skip')">{{ 'orcamentoImportPreview.skipAll' | translate }}</button>
+    </div>
+
+    <div class="oip-table-wrap">
+      <table class="oip-table">
+        <thead>
+          <tr>
+            <th>{{ 'orcamentoImportPreview.colRow' | translate }}</th>
+            <th>{{ 'orcamentoImportPreview.colAtividade' | translate }}</th>
+            <th>{{ 'orcamentoImportPreview.colEc' | translate }}</th>
+            <th>{{ 'orcamentoImportPreview.colOrg' | translate }}</th>
+            <th class="oip-num">{{ 'orcamentoImportPreview.colValor' | translate }}</th>
+            <th>{{ 'orcamentoImportPreview.colStatus' | translate }}</th>
+            <th>{{ 'orcamentoImportPreview.colAction' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of rows" [class.oip-row-error]="r.status === 'Error'">
+            <td>{{ r.rowNum }}</td>
+            <td>{{ r.atividadeCodigo }} <span *ngIf="r.atividadeDesignacao">- {{ r.atividadeDesignacao }}</span></td>
+            <td>{{ r.economicClassificationCodigo }} <span *ngIf="r.economicClassificationDesignacao">- {{ r.economicClassificationDesignacao }}</span></td>
+            <td>{{ r.organizationNome }}</td>
+            <td class="oip-num">
+              {{ r.valor | number:'1.2-2' }}
+              <span class="oip-existing-value" *ngIf="r.status === 'Exists'">({{ 'orcamentoImportPreview.currentValue' | translate }}: {{ r.existingValor | number:'1.2-2' }})</span>
+            </td>
+            <td>
+              <span class="oip-badge" [ngClass]="'oip-badge-' + r.status.toLowerCase()">
+                {{ ('orcamentoImportPreview.status' + r.status) | translate }}
+              </span>
+            </td>
+            <td>
+              <span *ngIf="r.status === 'New'">{{ 'orcamentoImportPreview.actionInsert' | translate }}</span>
+              <span *ngIf="r.status === 'Error'">{{ r.errorMessage }}</span>
+              <mat-select *ngIf="r.status === 'Exists'" [(ngModel)]="r.action" class="oip-action-select">
+                <mat-option value="Overwrite">{{ 'orcamentoImportPreview.actionOverwrite' | translate }}</mat-option>
+                <mat-option value="Skip">{{ 'orcamentoImportPreview.actionSkip' | translate }}</mat-option>
+              </mat-select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="oip-actions">
+      <button mat-button (click)="closePreview()">{{ 'orcamentoImportPreview.cancelButton' | translate }}</button>
+      <button mat-raised-button color="primary" [disabled]="saving || actionableCount === 0" (click)="confirmImport()">
+        {{ 'orcamentoImportPreview.saveButton' | translate: { count: actionableCount } }}
+      </button>
+    </div>
+  </div>
+</div>
