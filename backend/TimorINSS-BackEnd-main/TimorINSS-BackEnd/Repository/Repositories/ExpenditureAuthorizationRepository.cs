@@ -64,6 +64,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         {
             return _moduloContribuicoesContext.Cabimento
                 .Where(c => c.IndActivo && adIds.Contains(c.ExpenditureAuthorizationFk))
+                .ToList()
                 .GroupBy(c => c.ExpenditureAuthorizationFk)
                 .ToDictionary(g => g.Key, g => g.Sum(c => c.ValorCabimentado));
         }
