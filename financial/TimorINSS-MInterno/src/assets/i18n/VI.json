@@ -1654,7 +1654,10 @@
     "saveButton": "Lưu",
     "errMissingFields": "Vui lòng nhập đủ Mã và Tên gọi.",
     "errGeneric": "Có lỗi xảy ra.",
-    "confirmDelete": "Xoá \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Xoá \"{{codigo}} - {{designacao}}\"?",
+    "searchLabel": "Tìm theo Mã",
+    "searchPlaceholder": "Nhập mã để lọc cây...",
+    "searchNoMatch": "Không tìm thấy mã nào khớp."
   },
   "classificacaoFuncionalScreen": {
     "header": "Classificação Funcional",
@@ -1672,7 +1675,10 @@
     "saveButton": "Lưu",
     "errMissingFields": "Vui lòng nhập đủ Mã và Tên gọi.",
     "errGeneric": "Có lỗi xảy ra.",
-    "confirmDelete": "Vô hiệu hoá \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Vô hiệu hoá \"{{codigo}} - {{designacao}}\"?",
+    "searchLabel": "Tìm theo Mã",
+    "searchPlaceholder": "Nhập mã để lọc cây...",
+    "searchNoMatch": "Không tìm thấy mã nào khớp."
   },
   "estruturaProgramaticaScreen": {
     "header": "Estrutura Programática",
@@ -1696,7 +1702,10 @@
     "errMissingCopyTarget": "Nhập Kỳ ngân sách đích trước khi sao chép.",
     "copySuccess": "Đã sao chép cây sang kỳ ngân sách mới.",
     "errGeneric": "Có lỗi xảy ra.",
-    "confirmDelete": "Vô hiệu hoá \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Vô hiệu hoá \"{{codigo}} - {{designacao}}\"?",
+    "searchLabel": "Tìm theo Mã",
+    "searchPlaceholder": "Nhập mã để lọc cây...",
+    "searchNoMatch": "Không tìm thấy mã nào khớp."
   },
   "mapeamentoRubricas": {
     "header": "Mapeamento Rubricas",
@@ -1717,7 +1726,11 @@
     "saveButton": "Lưu",
     "errMissingFields": "Vui lòng nhập đủ Mã và Tên gọi.",
     "errGeneric": "Có lỗi xảy ra.",
-    "confirmDelete": "Xoá \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Xoá \"{{codigo}} - {{designacao}}\"?",
+    "localCodeTooltip": "Mã cục bộ ở cấp này: {{codigo}}",
+    "searchLabel": "Tìm theo Mã",
+    "searchPlaceholder": "Nhập mã (cục bộ hoặc đầy đủ) để lọc cây...",
+    "searchNoMatch": "Không tìm thấy mã nào khớp."
   },
   "planoContas": {
     "header": "Plano de Contas",
@@ -1737,7 +1750,11 @@
     "saveButton": "Lưu",
     "errMissingFields": "Vui lòng nhập đủ Mã và Tên gọi.",
     "errGeneric": "Có lỗi xảy ra.",
-    "confirmDelete": "Xoá \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Xoá \"{{codigo}} - {{designacao}}\"?",
+    "localCodeTooltip": "Mã cục bộ ở cấp này: {{codigo}}",
+    "searchLabel": "Tìm theo Mã",
+    "searchPlaceholder": "Nhập mã (cục bộ hoặc đầy đủ) để lọc cây...",
+    "searchNoMatch": "Không tìm thấy mã nào khớp."
   },
   "orcamentoConfigSelect": {
     "noOptions": "Chưa có kỳ ngân sách nào — tạo ở Cấu hình hệ thống"

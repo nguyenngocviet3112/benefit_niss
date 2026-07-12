@@ -6,6 +6,7 @@ import { CodigoContaTreeItemDataContract } from '../../response-models/codigo-co
 
 interface CodigoContaRow extends CodigoContaTreeItemDataContract {
   children: CodigoContaRow[];
+  fullCodigo: string;
 }
 
 // Plano de Contas — tái dùng bảng Codigoconta đã có sẵn (mode cũ:
@@ -23,6 +24,8 @@ export class PlanoContasComponent implements OnInit {
   public flatItems: CodigoContaTreeItemDataContract[] = [];
   public tree: CodigoContaRow[] = [];
   public loading = false;
+
+  public searchCodigo = '';
 
   public editingId: number | null = null;
   public formParentFk: number | undefined;
@@ -57,7 +60,7 @@ export class PlanoContasComponent implements OnInit {
 
   private buildTree(items: CodigoContaTreeItemDataContract[]): CodigoContaRow[] {
     const rowsById = new Map<number, CodigoContaRow>();
-    items.forEach(i => rowsById.set(i.id, { ...i, children: [] }));
+    items.forEach(i => rowsById.set(i.id, { ...i, children: [], fullCodigo: i.codigo }));
 
     const roots: CodigoContaRow[] = [];
     rowsById.forEach(row => {
@@ -67,7 +70,43 @@ export class PlanoContasComponent implements OnInit {
         roots.push(row);
       }
     });
+
+    // Mã trong DB chỉ là 1 chữ số cục bộ theo từng cấp (vd "1" dưới "Caixa" và
+    // "1" dưới "Depósitos à ordem" là 2 tài khoản KHÁC NHAU) — phải NỐI LIỀN
+    // (không dấu chấm) từ gốc xuống mới ra đúng mã thật, đúng convention gốc
+    // của khách (file Excel "Plano Contas": 1 → 11 → 111/118, 12 → 121 →
+    // 1211, 122 → 1221/1222/... cho từng ngân hàng) — verify khớp 100% với
+    // dữ liệu DB hiện tại khi nối theo cách này.
+    const computeFullCodigo = (node: CodigoContaRow, parentFullCodigo: string): void => {
+      node.fullCodigo = `${parentFullCodigo}${node.codigo}`;
+      node.children.forEach(child => computeFullCodigo(child, node.fullCodigo));
+    };
+    roots.forEach(root => computeFullCodigo(root, ''));
+
     return roots;
+  }
+
+  // Khớp theo cả mã cục bộ (codigo) và mã ghép đầy đủ (fullCodigo) — người
+  // dùng thường nhớ/gõ mã đầy đủ (vd "1211"), không phải mã cục bộ 1 chữ số.
+  public get filteredTree(): CodigoContaRow[] {
+    const term = this.searchCodigo.trim().toLowerCase();
+    if (!term) {
+      return this.tree;
+    }
+    return this.tree
+      .map(node => this.filterNode(node, term))
+      .filter((node): node is CodigoContaRow => node !== null);
+  }
+
+  private filterNode(node: CodigoContaRow, term: string): CodigoContaRow | null {
+    const selfMatches = node.codigo.toLowerCase().includes(term) || node.fullCodigo.toLowerCase().includes(term);
+    const filteredChildren = node.children
+      .map(child => this.filterNode(child, term))
+      .filter((child): child is CodigoContaRow => child !== null);
+    if (selfMatches || filteredChildren.length > 0) {
+      return { ...node, children: filteredChildren };
+    }
+    return null;
   }
 
   public openAddForm(parent?: CodigoContaTreeItemDataContract): void {

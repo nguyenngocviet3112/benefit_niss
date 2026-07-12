@@ -16,21 +16,27 @@
 
     <button mat-stroked-button (click)="loadTree()">{{ 'mapeamentoRubricas.reload' | translate }}</button>
 
+    <mat-form-field appearance="outline" class="mr-search-field">
+      <mat-label>{{ 'mapeamentoRubricas.searchLabel' | translate }}</mat-label>
+      <input matInput [(ngModel)]="searchCodigo" [placeholder]="'mapeamentoRubricas.searchPlaceholder' | translate" />
+    </mat-form-field>
+
     <span class="spacer"></span>
 
     <button mat-raised-button color="primary" (click)="openAddForm()">{{ 'mapeamentoRubricas.addRoot' | translate }}</button>
   </div>
 
   <div class="mr-tree" *ngIf="!loading">
-    <ng-container *ngFor="let root of tree">
+    <ng-container *ngFor="let root of filteredTree">
       <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: root }"></ng-container>
     </ng-container>
     <div class="mr-empty" *ngIf="tree.length === 0">{{ 'mapeamentoRubricas.emptyList' | translate }}</div>
+    <div class="mr-empty" *ngIf="tree.length > 0 && filteredTree.length === 0">{{ 'mapeamentoRubricas.searchNoMatch' | translate }}</div>
   </div>
 
   <ng-template #nodeTemplate let-node="node">
     <div class="mr-row" [style.padding-left.px]="12 + (node.parentFk ? 24 : 0)">
-      <span class="mr-code">{{ node.codigo }}</span>
+      <span class="mr-code" [matTooltip]="'mapeamentoRubricas.localCodeTooltip' | translate: { codigo: node.codigo }">{{ node.fullCodigo }}</span>
       <span class="mr-desig">{{ node.designacao }}</span>
       <span class="mr-actions">
         <button mat-button (click)="openAddForm(node)">{{ 'mapeamentoRubricas.addChild' | translate }}</button>

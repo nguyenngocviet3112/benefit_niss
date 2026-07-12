@@ -1654,7 +1654,10 @@
     "saveButton": "Save",
     "errMissingFields": "Please fill in Code and Designation.",
     "errGeneric": "Something went wrong.",
-    "confirmDelete": "Delete \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Delete \"{{codigo}} - {{designacao}}\"?",
+    "searchLabel": "Search by code",
+    "searchPlaceholder": "Type a code to filter the tree...",
+    "searchNoMatch": "No matching code found."
   },
   "classificacaoFuncionalScreen": {
     "header": "Classificação Funcional",
@@ -1672,7 +1675,10 @@
     "saveButton": "Save",
     "errMissingFields": "Please fill in Code and Designation.",
     "errGeneric": "Something went wrong.",
-    "confirmDelete": "Deactivate \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Deactivate \"{{codigo}} - {{designacao}}\"?",
+    "searchLabel": "Search by code",
+    "searchPlaceholder": "Type a code to filter the tree...",
+    "searchNoMatch": "No matching code found."
   },
   "estruturaProgramaticaScreen": {
     "header": "Estrutura Programática",
@@ -1717,13 +1723,20 @@
     "saveButton": "Save",
     "errMissingFields": "Please fill in Code and Designation.",
     "errGeneric": "Something went wrong.",
-    "confirmDelete": "Delete \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Delete \"{{codigo}} - {{designacao}}\"?",
+    "localCodeTooltip": "Local code at this level: {{codigo}}",
+    "searchLabel": "Search by code",
+    "searchPlaceholder": "Type a code (local or full) to filter the tree...",
+    "searchNoMatch": "No matching code found."
   },
   "planoContas": {
     "header": "Plano de Contas",
     "headerGloss": "Chart of accounts",
     "hint": "Chart of accounts shared across the whole system (already in use by the old-mode Pagamento/Receita screens) — this is the management screen for the new mode.",
     "reload": "Reload",
+    "searchLabel": "Search by code",
+    "searchPlaceholder": "Type a code to filter the tree...",
+    "searchNoMatch": "No matching code found.",
     "addRoot": "+ Add root account",
     "emptyList": "No data for this budget period yet.",
     "addChild": "+ Child",
@@ -1737,7 +1750,8 @@
     "saveButton": "Save",
     "errMissingFields": "Please fill in Code and Designation.",
     "errGeneric": "Something went wrong.",
-    "confirmDelete": "Delete \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Delete \"{{codigo}} - {{designacao}}\"?",
+    "localCodeTooltip": "Local code at this level: {{codigo}}"
   },
   "orcamentoConfigSelect": {
     "noOptions": "No budget period yet — create one in System Settings"

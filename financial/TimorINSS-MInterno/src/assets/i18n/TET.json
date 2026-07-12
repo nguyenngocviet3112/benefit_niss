@@ -1650,7 +1650,10 @@
     "saveButton": "Gravar",
     "errMissingFields": "Por favor preencha o Código e a Designação.",
     "errGeneric": "Ocorreu um erro.",
-    "confirmDelete": "Eliminar \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Eliminar \"{{codigo}} - {{designacao}}\"?",
+    "searchLabel": "Pesquisar por código",
+    "searchPlaceholder": "Digite um código para filtrar a árvore...",
+    "searchNoMatch": "Nenhum código correspondente encontrado."
   },
   "classificacaoFuncionalScreen": {
     "header": "Classificação Funcional",
@@ -1668,7 +1671,10 @@
     "saveButton": "Gravar",
     "errMissingFields": "Por favor preencha o Código e a Designação.",
     "errGeneric": "Ocorreu um erro.",
-    "confirmDelete": "Inativar \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Inativar \"{{codigo}} - {{designacao}}\"?",
+    "searchLabel": "Pesquisar por código",
+    "searchPlaceholder": "Digite um código para filtrar a árvore...",
+    "searchNoMatch": "Nenhum código correspondente encontrado."
   },
   "estruturaProgramaticaScreen": {
     "header": "Estrutura Programática",
@@ -1692,7 +1698,10 @@
     "errMissingCopyTarget": "Selecione o período orçamental de destino antes de copiar.",
     "copySuccess": "Árvore copiada para o novo período orçamental.",
     "errGeneric": "Ocorreu um erro.",
-    "confirmDelete": "Inativar \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Inativar \"{{codigo}} - {{designacao}}\"?",
+    "searchLabel": "Pesquisar por código",
+    "searchPlaceholder": "Digite um código para filtrar a árvore...",
+    "searchNoMatch": "Nenhum código correspondente encontrado."
   },
   "mapeamentoRubricas": {
     "header": "Mapeamento Rubricas",
@@ -1713,13 +1722,20 @@
     "saveButton": "Gravar",
     "errMissingFields": "Por favor preencha o Código e a Designação.",
     "errGeneric": "Ocorreu um erro.",
-    "confirmDelete": "Eliminar \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Eliminar \"{{codigo}} - {{designacao}}\"?",
+    "localCodeTooltip": "Código local neste nível: {{codigo}}",
+    "searchLabel": "Pesquisar por código",
+    "searchPlaceholder": "Digite um código (local ou completo) para filtrar a árvore...",
+    "searchNoMatch": "Nenhum código correspondente encontrado."
   },
   "planoContas": {
     "header": "Plano de Contas",
     "headerGloss": "Sistema de contas contabilísticas",
     "hint": "Plano de Contas partilhado por todo o sistema (já existente, usado no modo antigo Pagamento/Receita) — este é o ecrã de gestão no novo modo.",
     "reload": "Recarregar",
+    "searchLabel": "Pesquisar por código",
+    "searchPlaceholder": "Digite um código para filtrar a árvore...",
+    "searchNoMatch": "Nenhum código correspondente encontrado.",
     "addRoot": "+ Adicionar conta raiz",
     "emptyList": "Ainda não há dados para este período orçamental.",
     "addChild": "+ Filho",
@@ -1733,7 +1749,8 @@
     "saveButton": "Gravar",
     "errMissingFields": "Por favor preencha o Código e a Designação.",
     "errGeneric": "Ocorreu um erro.",
-    "confirmDelete": "Eliminar \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Eliminar \"{{codigo}} - {{designacao}}\"?",
+    "localCodeTooltip": "Código local neste nível: {{codigo}}"
   },
   "orcamentoConfigSelect": {
     "noOptions": "Ainda não há período orçamental — criar em Configuração do Sistema"

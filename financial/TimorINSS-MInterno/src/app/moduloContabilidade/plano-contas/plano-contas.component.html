@@ -8,21 +8,27 @@
     <app-orcamento-config-select [value]="orcamentoConfigFk" (valueChange)="orcamentoConfigFk = $event; loadTree()"></app-orcamento-config-select>
     <button mat-stroked-button (click)="loadTree()">{{ 'planoContas.reload' | translate }}</button>
 
+    <mat-form-field appearance="outline" class="pc-search-field">
+      <mat-label>{{ 'planoContas.searchLabel' | translate }}</mat-label>
+      <input matInput [(ngModel)]="searchCodigo" [placeholder]="'planoContas.searchPlaceholder' | translate" />
+    </mat-form-field>
+
     <span class="spacer"></span>
 
     <button mat-raised-button color="primary" (click)="openAddForm()">{{ 'planoContas.addRoot' | translate }}</button>
   </div>
 
   <div class="pc-tree" *ngIf="!loading">
-    <ng-container *ngFor="let root of tree">
+    <ng-container *ngFor="let root of filteredTree">
       <ng-container *ngTemplateOutlet="nodeTemplate; context: { node: root }"></ng-container>
     </ng-container>
     <div class="pc-empty" *ngIf="tree.length === 0">{{ 'planoContas.emptyList' | translate }}</div>
+    <div class="pc-empty" *ngIf="tree.length > 0 && filteredTree.length === 0">{{ 'planoContas.searchNoMatch' | translate }}</div>
   </div>
 
   <ng-template #nodeTemplate let-node="node">
     <div class="pc-row" [style.padding-left.px]="12 + (node.parentFk ? 24 : 0)">
-      <span class="pc-code">{{ node.codigo }}</span>
+      <span class="pc-code" [matTooltip]="'planoContas.localCodeTooltip' | translate: { codigo: node.codigo }">{{ node.fullCodigo }}</span>
       <span class="pc-desig">{{ node.designacao }}</span>
       <span class="pc-actions">
         <button mat-button (click)="openAddForm(node)">{{ 'planoContas.addChild' | translate }}</button>
