@@ -1,5 +1,6 @@
 {
   "general": {
+    "loading": "Đang tải…",
     "inssCore": "INSS Core - An sinh Xã hội",
     "close": "Đóng",
     "pesquisarEntidade": "Search Employer",
@@ -164,7 +165,7 @@
     "invoiceATCO": "Amount payable by TCO",
     "invoiceSSS": "Social Security Services",
     "invoiceSAS": "Signature and stamp",
-    "period":"Period"
+    "period": "Period"
   },
   "login_form": {
     "title": "Authentication",
@@ -1838,6 +1839,29 @@
     "errGeneric": "Có lỗi xảy ra.",
     "zeroNote": "Danh mục mã kinh tế đã nạp đủ ({{count}} mã) — các cột giá trị đang bằng 0 vì màn hình Orçamento/Despesa/Receita chưa được nối vào danh mục mới này. Số liệu sẽ tự động xuất hiện khi các màn hình đó hoàn tất, không cần sửa lại báo cáo."
   },
+  "cicloDespesa": {
+    "header": "Ciclo da Despesa",
+    "headerGloss": "Chu trình chi tiêu — 1 dòng/AD",
+    "hint": "Theo dõi từng AD (Autorização de Despesa/Ủy quyền chi tiêu) qua Cabimento -> Compromisso -> Obrigação -> Pagamento, kèm saldo còn lại ở từng bước.",
+    "fieldAno": "Ano",
+    "bothOption": "Tất cả Organization",
+    "loading": "Đang tải…",
+    "colRegime": "Regime",
+    "colAtividade": "Atividade",
+    "colClassEconomica": "Classificação Económica",
+    "colClassFuncional": "Classificação Funcional",
+    "colNumeroAd": "N.º AD",
+    "colCabimentos": "Cabimentos",
+    "colCompromissos": "Compromissos",
+    "colSaldo1": "Saldo1 (Cab-Comp)",
+    "colObrigacoes": "Obrigações",
+    "colSaldo2": "Saldo2 (Comp-Ob)",
+    "colPagamentos": "Pagamentos",
+    "colSaldo3": "Saldo3 (Ob-Pag)",
+    "emptyList": "Không có AD nào cho năm này.",
+    "totalLabel": "TỔNG CỘNG",
+    "errGeneric": "Có lỗi xảy ra."
+  },
   "kyNganSach": {
     "header": "Kỳ ngân sách",
     "headerGloss": "Orçamento Config — budget period",
@@ -1872,6 +1896,7 @@
     "errGeneric": "Có lỗi xảy ra."
   },
   "shell": {
+    "groupDashboard": "Dashboard",
     "groupChiTieu": "Chu trình chi tiêu",
     "groupReceita": "Thu (Receita)",
     "groupNganHang": "Ngân hàng",
@@ -1883,6 +1908,22 @@
     "groupCauHinh": "Cấu hình hệ thống",
     "groupMeuPerfil": "Meu Perfil",
     "comingSoon": "Sắp có"
+  },
+  "dashboard": {
+    "header": "Dashboard",
+    "headerGloss": "tổng quan hồ sơ đang xử lý so với đã duyệt, và tình trạng đối soát ngân hàng",
+    "processAd": "AD (Autorização de Despesa)",
+    "processCabimento": "Cabimento (DIC)",
+    "processCompromisso": "Compromisso",
+    "processObrigacao": "Obrigação",
+    "processPagamento": "Autorização de Pagamento",
+    "processPagamentoExecutado": "Realização de Pagamento",
+    "pagamentoExecutadoHint": "Số khoản đã thực chi (tiền đã được thanh toán ra)",
+    "emProcessamento": "Đang xử lý:",
+    "aprovado": "Đã duyệt:",
+    "bankTitle": "Đối soát ngân hàng",
+    "bankConciliado": "Đã đối soát:",
+    "bankPendente": "Chưa đối soát:"
   },
   "adCabimento": {
     "header": "AD",
@@ -2439,6 +2480,7 @@
     "matchPagamentoButton": "Đối chiếu với Pagamento",
     "deleteLineButton": "Xóa dòng",
     "pickReceitaTitle": "Chọn Receita để đối chiếu",
+    "amountMustMatchHint": "Chỉ có thể đối chiếu với Receita có giá trị thu qua ngân hàng đã khai đúng bằng Crédito của dòng sao kê này — các dòng khớp số được tô sáng bên dưới.",
     "noReceitaAvailable": "Không còn Receita nào chưa đối chiếu cho năm này.",
     "cancelButton": "Hủy",
     "pickPagamentoTitle": "Chọn Pagamento để đối chiếu",
@@ -2458,6 +2500,43 @@
     "errMissingValue": "Vui lòng nhập Crédito hoặc Débito.",
     "confirmDeleteLine": "Xoá dòng sao kê \"{{descricao}}\"?",
     "confirmUnmatch": "Hủy đối chiếu dòng này?",
+    "errGeneric": "Có lỗi xảy ra."
+  },
+  "guiaConciliacao": {
+    "header": "Duyệt Guia Pagamento (đối chiếu ngân hàng)",
+    "headerGloss": "khớp các Guia đã khai báo với dòng sao kê ngân hàng thật trước khi đánh dấu Đã thanh toán — thay thế cho việc duyệt chỉ dựa vào chứng từ",
+    "reload": "Tải lại",
+    "hint": "Chọn 1 hoặc nhiều Guia đang chờ xác nhận bên trái và (các) dòng sao kê ngân hàng khớp bên phải sao cho tổng tiền bằng nhau, sau đó xác nhận. Đây là bước thực sự chuyển Guia sang trạng thái Đã thanh toán/Thanh toán một phần — không còn duyệt chỉ dựa vào việc xem chứng từ đã tải lên.",
+    "panelGuias": "Guia đang chờ xác nhận",
+    "panelMovimentos": "Dòng sao kê ngân hàng khả dụng",
+    "colDocumento": "Số chứng từ",
+    "colDescricao": "Mô tả",
+    "colValorDeclarado": "Số tiền khai báo",
+    "colData": "Ngày",
+    "colValorBanco": "Số tiền ngân hàng",
+    "emptyGuias": "Không có Guia nào đang chờ xác nhận.",
+    "emptyMovimentos": "Không có dòng sao kê ngân hàng chưa đối chiếu.",
+    "totalGuiasLabel": "Tổng Guia:",
+    "totalMovimentosLabel": "Tổng ngân hàng:",
+    "matchOk": "Số tiền khớp",
+    "matchBad": "Số tiền không khớp",
+    "confirmButton": "Xác nhận (đánh dấu Đã thanh toán)",
+    "confirmMatch": "Xác nhận đối chiếu này? (Các) Guia đã chọn sẽ được đánh dấu Đã thanh toán/Thanh toán một phần.",
+    "matchSuccess": "Đã xác nhận đối chiếu.",
+    "errGeneric": "Đã xảy ra lỗi."
+  },
+  "guiaPagamentoContaConfig": {
+    "header": "Tài khoản kế toán cho Guia Pagamento (Nợ/Có)",
+    "headerGloss": "cặp tài khoản dùng để tự sinh bút toán (Lançamento) mỗi khi 1 Guia Pagamento được đối chiếu ngân hàng thành công",
+    "hint": "Chọn 1 lần cặp tài khoản Nợ/Có sẽ được tự động ghi sổ mỗi khi 1 Guia Pagamento được xác nhận khớp với dòng sao kê ngân hàng thật. Nếu chưa cấu hình, việc đối chiếu ngân hàng vẫn hoạt động bình thường, chỉ là chưa sinh bút toán kế toán.",
+    "currentLabel": "Đang cấu hình:",
+    "notConfigured": "Chưa cấu hình — các lần đối chiếu ngân hàng sẽ chưa sinh bút toán cho tới khi thiết lập xong.",
+    "fieldDebito": "Tài khoản Nợ (Débito)",
+    "fieldCredito": "Tài khoản Có (Crédito)",
+    "searchToTypeTag": "Gõ để tìm",
+    "noneFound": "Không tìm thấy tài khoản.",
+    "saveButton": "Lưu",
+    "savedSuccess": "Đã lưu cấu hình.",
     "errGeneric": "Có lỗi xảy ra."
   },
   "userSync": {

@@ -34,13 +34,18 @@ import { PlanoContasComponent } from './plano-contas/plano-contas.component';
 import { MapeamentoRubricasComponent } from './mapeamento-rubricas/mapeamento-rubricas.component';
 import { LancamentosComponent } from './lancamentos/lancamentos.component';
 import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/conciliacao-movimentos.component';
+import { GuiaConciliacaoComponent } from './guia-conciliacao/guia-conciliacao.component';
+import { GuiaPagamentoContaConfigComponent } from './settings/guia-pagamento-conta-config/guia-pagamento-conta-config.component';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { CicloDespesaComponent } from './ciclo-despesa/ciclo-despesa.component';
 
 const routes: Routes = [
   {
     path: '',
     component: ContabilidadeShellComponent,
     children: [
+      { path: 'dashboard', component: DashboardComponent },
       { path: 'estruturaProgramatica', component: EstruturaProgramaticaComponent },
       { path: 'classificacaoFuncional', component: ClassificacaoFuncionalComponent },
       { path: 'classificacaoEconomica', component: ClassificacaoEconomicaComponent },
@@ -57,19 +62,22 @@ const routes: Routes = [
       { path: 'obligation', component: ObligationComponent },
       { path: 'payment', component: PaymentComponent },
       { path: 'receita', component: ReceitaPacComponent },
+      { path: 'receita/guiaConciliacao', component: GuiaConciliacaoComponent },
       { path: 'conciliacaoMovimentos', component: ConciliacaoMovimentosComponent },
       { path: 'sistema/departamentos', component: DepartamentoConfigComponent },
       { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
+      { path: 'relatorios/cicloDespesa', component: CicloDespesaComponent },
       { path: 'settings/idioma', component: IdiomaConfigComponent },
       { path: 'settings/kyNganSach', component: KyNganSachComponent },
       { path: 'settings/bankAccount', component: BankAccountComponent },
+      { path: 'settings/guiaPagamentoContaConfig', component: GuiaPagamentoContaConfigComponent },
       { path: 'userPermission', component: UserPermissionComponent },
       { path: 'userSync', component: UserSyncComponent },
       { path: 'meuPerfil', component: MeuPerfilComponent },
       { path: 'contribuicoes/entidade', component: ContribHomeSearchComponent },
       { path: 'contribuicoes/guiaPagamento', component: ContribValidationHomeSearchComponent },
       { path: 'contribuicoes/situacaoContributiva', component: ConsultasSituacoesContributivasComponent },
-      { path: '', redirectTo: 'estruturaProgramatica', pathMatch: 'full' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ]
   },
 ];

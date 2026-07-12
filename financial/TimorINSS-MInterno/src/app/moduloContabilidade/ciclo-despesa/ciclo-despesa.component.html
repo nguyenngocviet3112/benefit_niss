@@ -1,0 +1,86 @@
+<div class="cd-container">
+  <div class="cd-header">
+    <h2>{{ 'cicloDespesa.header' | translate }} <span class="en">({{ 'cicloDespesa.headerGloss' | translate }})</span></h2>
+    <p class="cd-hint">{{ 'cicloDespesa.hint' | translate }}</p>
+  </div>
+
+  <div class="cd-filter-bar">
+    <mat-form-field appearance="outline" class="cd-field-ano">
+      <mat-label>{{ 'cicloDespesa.fieldAno' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedYear" (selectionChange)="load()">
+        <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="cd-field-org">
+      <mat-label>Organization</mat-label>
+      <mat-select [(ngModel)]="selectedInstitution" (selectionChange)="load()">
+        <mat-option [value]="undefined">{{ 'cicloDespesa.bothOption' | translate }}</mat-option>
+        <mat-option *ngFor="let inst of institutions" [value]="inst.id">{{ inst.nome }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="cd-loading" *ngIf="loading">{{ 'cicloDespesa.loading' | translate }}</div>
+
+  <div class="cd-table-wrap" *ngIf="!loading">
+    <table class="cd-table">
+      <thead>
+        <tr>
+          <th>{{ 'cicloDespesa.colRegime' | translate }}</th>
+          <th>{{ 'cicloDespesa.colAtividade' | translate }}</th>
+          <th>{{ 'cicloDespesa.colClassEconomica' | translate }}</th>
+          <th>{{ 'cicloDespesa.colClassFuncional' | translate }}</th>
+          <th class="cd-num">{{ 'cicloDespesa.colNumeroAd' | translate }}</th>
+          <th class="cd-num">{{ 'cicloDespesa.colCabimentos' | translate }}</th>
+          <th class="cd-num">{{ 'cicloDespesa.colCompromissos' | translate }}</th>
+          <th class="cd-num">{{ 'cicloDespesa.colSaldo1' | translate }}</th>
+          <th class="cd-num">{{ 'cicloDespesa.colObrigacoes' | translate }}</th>
+          <th class="cd-num">{{ 'cicloDespesa.colSaldo2' | translate }}</th>
+          <th class="cd-num">{{ 'cicloDespesa.colPagamentos' | translate }}</th>
+          <th class="cd-num">{{ 'cicloDespesa.colSaldo3' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of pagedItems">
+          <td>{{ row.regimeCodigo }} <span class="cd-designacao">{{ row.regimeDesignacao }}</span></td>
+          <td><span class="cd-code">{{ row.atividadeCodigo }}</span> {{ row.atividadeDesignacao }}</td>
+          <td><span class="cd-code">{{ row.classificacaoEconomicaCodigo }}</span> {{ row.classificacaoEconomicaDesignacao }}</td>
+          <td>
+            <ng-container *ngIf="row.classificacaoFuncionalCodigo">
+              <span class="cd-code">{{ row.classificacaoFuncionalCodigo }}</span> {{ row.classificacaoFuncionalDesignacao }}
+            </ng-container>
+          </td>
+          <td class="cd-num">{{ row.numeroAd }}</td>
+          <td class="cd-num">{{ row.cabimentos | number:'1.2-2' }}</td>
+          <td class="cd-num">{{ row.compromissos | number:'1.2-2' }}</td>
+          <td class="cd-num">{{ row.saldo1 | number:'1.2-2' }}</td>
+          <td class="cd-num">{{ row.obrigacoes | number:'1.2-2' }}</td>
+          <td class="cd-num">{{ row.saldo2 | number:'1.2-2' }}</td>
+          <td class="cd-num">{{ row.pagamentos | number:'1.2-2' }}</td>
+          <td class="cd-num">{{ row.saldo3 | number:'1.2-2' }}</td>
+        </tr>
+        <tr *ngIf="pagedItems.length === 0">
+          <td colspan="12" class="cd-empty">{{ 'cicloDespesa.emptyList' | translate }}</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="items.length > 0">
+        <tr>
+          <td colspan="5" class="cd-total-label">{{ 'cicloDespesa.totalLabel' | translate }}</td>
+          <td class="cd-num cd-total-value">{{ totalCabimentos | number:'1.2-2' }}</td>
+          <td class="cd-num cd-total-value">{{ totalCompromissos | number:'1.2-2' }}</td>
+          <td></td>
+          <td class="cd-num cd-total-value">{{ totalObrigacoes | number:'1.2-2' }}</td>
+          <td></td>
+          <td class="cd-num cd-total-value">{{ totalPagamentos | number:'1.2-2' }}</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <mat-paginator *ngIf="items.length > 0"
+      [length]="items.length" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100]"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

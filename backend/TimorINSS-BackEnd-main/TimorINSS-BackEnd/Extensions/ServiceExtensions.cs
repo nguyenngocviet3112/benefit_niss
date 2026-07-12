@@ -259,6 +259,7 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<IDestinatarioDataManager, DestinatarioDataManager>();
             services.AddScoped<IPagamentoExecutadoDataManager, PagamentoExecutadoDataManager>();
             services.AddScoped<ICeInssGlobalDataManager, CeInssGlobalDataManager>();
+            services.AddScoped<ICicloDespesaDataManager, CicloDespesaDataManager>();
             services.AddScoped<IMovimentosPorConciliarDataManager, MovimentosPorConciliarDataManager>();
             services.AddScoped<IComponenteReceitaConfigDataManager, ComponenteReceitaConfigDataManager>();
             services.AddScoped<IMovimentosBancariosDataManager, MovimentosBancariosDataManager>();
@@ -284,6 +285,7 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<IUserSyncDataManager, UserSyncDataManager>();
             services.AddScoped<ILanguageConfigDataManager, LanguageConfigDataManager>();
             services.AddScoped<IBudgetPeriodDataManager, BudgetPeriodDataManager>();
+            services.AddScoped<IDashboardDataManager, DashboardDataManager>();
             services.AddScoped<IPaymentDataManager, PaymentDataManager>();
             services.AddScoped<IReceitaPacDataManager, ReceitaPacDataManager>();
             services.AddScoped<IOrcamentoSuplementarDataManager, OrcamentoSuplementarDataManager>();

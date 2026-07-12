@@ -76,6 +76,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IComponenteTextoRegistoRepository ComponenteTextoRegistoRepository { get; }
         IPagamentosExecutadosRepository PagamentosExecutadosRepository { get; }
         ICeInssGlobalRepository CeInssGlobalRepository { get; }
+        ICicloDespesaRepository CicloDespesaRepository { get; }
         IComponenteDocumentosRegistoRepository ComponenteDocumentosRegistoRepository { get; }
         IComponenteClassificacaoSubClassificRegistoRepository ComponenteClassificacaoSubClassificRegistoRepository { get; }
         IDestinatarioRepository DestinatarioRepository { get; }
@@ -110,6 +111,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IBankStatementLineRepository BankStatementLineRepository { get; }
         ILancamentoRepository LancamentoRepository { get; }
         IGuiaPagamentoContaConfigRepository GuiaPagamentoContaConfigRepository { get; }
+        IDashboardRepository DashboardRepository { get; }
 
         void Commit();
 

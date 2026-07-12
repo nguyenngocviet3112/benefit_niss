@@ -1,5 +1,6 @@
 {
   "general": {
+    "loading": "Carregando…",
     "inssCore": "INSS Core - Segurança Social",
     "close": "Fechar",
     "pesquisarEntidade": "Pesquisar Entidade Empregadora",
@@ -164,7 +165,7 @@
     "invoiceATCO": "Amount payable by TCO",
     "invoiceSSS": "Social Security Services",
     "invoiceSAS": "Signature and stamp",
-    "period":"Period"
+    "period": "Period"
   },
   "login_form": {
     "title": "Autenticação",
@@ -223,17 +224,17 @@
     "TaxaEntidade": "Taxa Entidade",
     "TaxaTrabalhador": "Taxa Trabalhador",
     "DiaVencimento": "Dia de Vencimento",
-    "goToParent" : "Ir para ",
-    "Descricao" : "Descrição",
-    "TipoMovimento" : "Tipo de Movimento",
-    "CodigoTotal" : "Código Total",
-    "Agrupamento" : "Agrupamento",
-    "NConta" : "Número de Conta",
-    "IBAN" : "IBAN",
-    "EntidadeBancaria" : "Entidade Bancária",
-    "SWIFT" : "SWIFT",
-    "confirmDelete" : "Tem a certeza que deseja apagar o Campo?",
-    "DataValorInicial" : "Data de Valor Inicial",
+    "goToParent": "Ir para ",
+    "Descricao": "Descrição",
+    "TipoMovimento": "Tipo de Movimento",
+    "CodigoTotal": "Código Total",
+    "Agrupamento": "Agrupamento",
+    "NConta": "Número de Conta",
+    "IBAN": "IBAN",
+    "EntidadeBancaria": "Entidade Bancária",
+    "SWIFT": "SWIFT",
+    "confirmDelete": "Tem a certeza que deseja apagar o Campo?",
+    "DataValorInicial": "Data de Valor Inicial",
     "ValorInicial": "Valor Inicial"
   },
   "error": {
@@ -439,8 +440,8 @@
     "edicao": "Editável",
     "componenteDespesa": "Despesa",
     "registarDespesa": "Registar Despesa",
-    "visualizarDespesaRegistParaAutorizacao":"Visualizar Despesas Registadas para Autorização",
-    "visualizarDespesaAutorizadasParaCabimentacao":"Visualizar Despesas Autorizadas para Cabimentação",
+    "visualizarDespesaRegistParaAutorizacao": "Visualizar Despesas Registadas para Autorização",
+    "visualizarDespesaAutorizadasParaCabimentacao": "Visualizar Despesas Autorizadas para Cabimentação",
     "visualizarDespesaRegistada": "Visualizar Despesas Registadas",
     "visualiazarDespesaAutorizada": "Visualizar Despesas Autorizadas",
     "visualiazarDespesaCabimentada": "Visualizar Despesas Cabimentadas",
@@ -471,7 +472,7 @@
     "movimentoValor": "Valor",
     "movimentoTipoDocumento": "Tipo de Documento",
     "movimentoNumeroDocumento": "Número de Documento",
-    "componenteReceita":"Receita",
+    "componenteReceita": "Receita",
     "classificarMovSelecionados": "Classificar movimentos selecionados",
     "selecionarMovRecebidosParaRegisto": "Selecionar Valores Recebidos para Registo",
     "verificarExecucaoOrcamentoEditarSelecao": "Verificar a execução do orçamento e editar seleção",
@@ -485,7 +486,7 @@
     "comprovativoPagamento": "Comprovativo de Pagamento",
     "numeroPagamento_guia": "N.º Pagamento/Guia",
     "desfazerConciliacoes": "Desfazer Conciliações",
-    "emitirOrdemPagaamento":"Emitir Ordem Pagamento",
+    "emitirOrdemPagaamento": "Emitir Ordem Pagamento",
     "apenasMovimentosProcesso": "Apenas movimentos do processo",
     "visualizarDespesasCompromisso": "Visualizar Despesas com Compromisso"
   },
@@ -505,10 +506,10 @@
     "valorExecutado": "Valor Executado",
     "valorCabimentado": "Valor Cabimentado",
     "valorAutorizado": "Valor Autorizado",
-    "descricaoDespesaRegistada": "Despesa Registada" ,
+    "descricaoDespesaRegistada": "Despesa Registada",
     "codigoContabilistico": "Código Contabilistico",
     "codigoOSS": "Código OSS",
-    "valor":"Valor",
+    "valor": "Valor",
     "despesaAutorizada": "Despesa Autorizada",
     "despesaCabimentada": "Despesa Cabimentada",
     "buttonRegistarEditarDespesa": "Registar/Editar",
@@ -521,7 +522,7 @@
     "moradaDestinatario": "Morada",
     "ibanDestinatario": "IBAN",
     "pagamento": "Pagamento",
-    "executarPagamentos":"Executar Pagamentos",
+    "executarPagamentos": "Executar Pagamentos",
     "listaPagamentosExcel": "Lista dos Pagamentos(Excel)",
     "novoDestinatario": "Novo Destinatario",
     "associarDespesa": "Associar Despesa",
@@ -557,8 +558,6 @@
     "verificarExecucaoOrcamento": "Verificar Execução Orçamento",
     "naoExisteOrcamentoAprovado": "Não há Orçamento Aprovado para o período – Não é possível registar Receitas"
   },
-
-
   "responsavel_legal": {
     "title": "INSCRIÇÃO NOVO RESPONSÁVEL LEGAL",
     "editTitle": "EDIÇÃO RESPONSÁVEL LEGAL",
@@ -794,7 +793,7 @@
     "warningMsg2": ", deseja usar para pagar a sua dívida?",
     "comprovativo": "Comprovativo"
   },
-  "componenteOrcamento" : {
+  "componenteOrcamento": {
     "editarOrcamentoValor": "Editar Valor de Orçamento",
     "valor": "Valor do Registo",
     "datasHeader": "Período do Orçamento",
@@ -1409,7 +1408,6 @@
     "amountsSelectedInTransactions": "Valor de movimentos selecionados",
     "difference": "Diferença"
   },
-
   "pagamentosExecutados": {
     "tin_nome_niss": "TIN / Nome / NISS",
     "estado": "Estado",
@@ -1427,7 +1425,6 @@
     "pagamentosExecutados": "Pagamentos executados",
     "valorNaoSuperiorError": "O valor a executar não deve ser superior ao valor falta executar da despesa selecionada"
   },
-
   "guiasPagamento": {
     "numeroGuia": "Nº de Guia",
     "niss": "NISS",
@@ -1440,7 +1437,6 @@
     "valorDivida": "Valor em Dívida",
     "internalUser": "Internal User"
   },
-
   "execucaoOrcamental": {
     "contaOGE": "Conta OGE",
     "centroCusto": "Centro de Custo",
@@ -1468,7 +1464,6 @@
     "relatoriosExecucaoOrcamental": "Relatórios - Execução Orçamental",
     "tipoConta": "Tipo de Conta"
   },
-
   "extratosbancarios": {
     "conta": "Conta bancária",
     "consultasExtratos": "Consultas - Extratos Bancários",
@@ -1483,7 +1478,6 @@
     "numeroConta": "Número de conta",
     "ordenacaoData": "Ordenação de data"
   },
-
   "despesas": {
     "consultasDespesas": "Consultas - Despesas",
     "estado": "Estado de Despesa",
@@ -1511,7 +1505,6 @@
     "utilizador-5": "Utilizador que executou",
     "registarCompromisso": "Registar Compromisso"
   },
-
   "receitas": {
     "consultasReceitas": "Consultas - Receitas",
     "departamento": "Departamento INSS",
@@ -1524,7 +1517,6 @@
     "numeroProcesso": "N.º processo",
     "utilizador": "Utilizador"
   },
-
   "receitasNaoConciliadas": {
     "consultasReceitasNaoConciliadas": "Consultas - Receitas não conciliadas",
     "tin": "TIN",
@@ -1533,7 +1525,6 @@
     "valor": "Valor",
     "data": "Data"
   },
-
   "classificacaoContabilistica": {
     "consultasClassificacaoContabilistica": "Consultas - Classificação contabilística",
     "data": "Data",
@@ -1551,7 +1542,6 @@
     "execucao": "Execução",
     "fase": "Fase"
   },
-
   "fornecedores": {
     "consultasFornecedores": "Consultas - Fornecedores",
     "niss": "NISS",
@@ -1563,7 +1553,6 @@
     "data": "Data obrigação",
     "conciliado": "Conciliado"
   },
-
   "balanco": {
     "consultasBalanco": "Consultas - Balanço",
     "nivel": "Nível",
@@ -1574,7 +1563,6 @@
     "sim": "Sim",
     "nao": "Não"
   },
-
   "excelImports": {
     "downloadExcel": "Download de excel com colunas",
     "selectedDestinatarios": "Destinatários selecionados",
@@ -1850,6 +1838,29 @@
     "errGeneric": "Ocorreu um erro.",
     "zeroNote": "O catálogo de códigos económicos já está totalmente carregado ({{count}} códigos) — as colunas de valores estão a zero porque os ecrãs de Orçamento/Despesa/Receita ainda não estão ligados a este novo catálogo. Os valores aparecerão automaticamente quando esses ecrãs estiverem concluídos, sem necessidade de alterar este relatório."
   },
+  "cicloDespesa": {
+    "header": "Ciclo da Despesa",
+    "headerGloss": "Ciclo da Despesa — 1 linha por AD",
+    "hint": "Acompanha cada AD (Autorização de Despesa) através de Cabimento -> Compromisso -> Obrigação -> Pagamento, com o saldo remanescente em cada etapa.",
+    "fieldAno": "Ano",
+    "bothOption": "Todas as Organizations",
+    "loading": "A carregar…",
+    "colRegime": "Regime",
+    "colAtividade": "Atividade",
+    "colClassEconomica": "Classificação Económica",
+    "colClassFuncional": "Classificação Funcional",
+    "colNumeroAd": "N.º AD",
+    "colCabimentos": "Cabimentos",
+    "colCompromissos": "Compromissos",
+    "colSaldo1": "Saldo1 (Cab-Comp)",
+    "colObrigacoes": "Obrigações",
+    "colSaldo2": "Saldo2 (Comp-Ob)",
+    "colPagamentos": "Pagamentos",
+    "colSaldo3": "Saldo3 (Ob-Pag)",
+    "emptyList": "Nenhum AD encontrado para este ano.",
+    "totalLabel": "TOTAL",
+    "errGeneric": "Ocorreu um erro."
+  },
   "kyNganSach": {
     "header": "Período Orçamental",
     "headerGloss": "Orçamento Config — período orçamental",
@@ -1884,6 +1895,7 @@
     "errGeneric": "Ocorreu um erro."
   },
   "shell": {
+    "groupDashboard": "Dashboard",
     "groupChiTieu": "Ciclo da Despesa",
     "groupReceita": "Receita",
     "groupNganHang": "Banco",
@@ -1895,6 +1907,22 @@
     "groupCauHinh": "Configuração do Sistema",
     "groupMeuPerfil": "Meu Perfil",
     "comingSoon": "Brevemente"
+  },
+  "dashboard": {
+    "header": "Dashboard",
+    "headerGloss": "visão geral dos processos em andamento vs. aprovados, e situação da conciliação bancária",
+    "processAd": "AD (Autorização de Despesa)",
+    "processCabimento": "Cabimento (DIC)",
+    "processCompromisso": "Compromisso",
+    "processObrigacao": "Obrigação",
+    "processPagamento": "Autorização de Pagamento",
+    "processPagamentoExecutado": "Realização de Pagamento",
+    "pagamentoExecutadoHint": "Pagamentos efetivamente realizados (dinheiro pago)",
+    "emProcessamento": "Em processamento:",
+    "aprovado": "Aprovado:",
+    "bankTitle": "Conciliação Bancária",
+    "bankConciliado": "Conciliado:",
+    "bankPendente": "Pendente:"
   },
   "adCabimento": {
     "header": "AD",
@@ -2451,6 +2479,7 @@
     "matchPagamentoButton": "Reconciliar com Pagamento",
     "deleteLineButton": "Eliminar linha",
     "pickReceitaTitle": "Selecionar Receita para reconciliar",
+    "amountMustMatchHint": "Só é possível reconciliar com uma Receita cujo valor declarado (banco) seja exatamente igual ao Crédito desta linha — os valores correspondentes estão destacados abaixo.",
     "noReceitaAvailable": "Não há Receita por reconciliar para este ano.",
     "cancelButton": "Cancelar",
     "pickPagamentoTitle": "Selecionar Pagamento para reconciliar",
@@ -2470,6 +2499,43 @@
     "errMissingValue": "Por favor insira Crédito ou Débito.",
     "confirmDeleteLine": "Eliminar linha de extrato \"{{descricao}}\"?",
     "confirmUnmatch": "Desfazer reconciliação desta linha?",
+    "errGeneric": "Ocorreu um erro."
+  },
+  "guiaConciliacao": {
+    "header": "Aprovar Guia de Pagamento (conciliação bancária)",
+    "headerGloss": "concilia as guias de pagamento declaradas com linhas reais do extrato bancário antes de marcar como Paga — substitui a aprovação baseada apenas no documento",
+    "reload": "Recarregar",
+    "hint": "Selecione uma ou mais Guias pendentes à esquerda e a(s) linha(s) do extrato bancário correspondente(s) à direita, de forma que os totais coincidam, depois confirme. É isto que efetivamente promove uma Guia a Paga/Parcialmente Paga — a aprovação baseada apenas no documento enviado deixou de ser permitida.",
+    "panelGuias": "Guias pendentes de validação",
+    "panelMovimentos": "Movimentos bancários disponíveis",
+    "colDocumento": "Nº Documento",
+    "colDescricao": "Descrição",
+    "colValorDeclarado": "Valor declarado",
+    "colData": "Data",
+    "colValorBanco": "Valor bancário",
+    "emptyGuias": "Nenhuma Guia pendente de validação.",
+    "emptyMovimentos": "Nenhum movimento bancário por conciliar.",
+    "totalGuiasLabel": "Total Guias:",
+    "totalMovimentosLabel": "Total Banco:",
+    "matchOk": "Valores coincidem",
+    "matchBad": "Valores não coincidem",
+    "confirmButton": "Confirmar (marcar como Paga)",
+    "confirmMatch": "Confirmar esta conciliação? A(s) Guia(s) selecionada(s) será(ão) marcada(s) como Paga/Parcialmente Paga.",
+    "matchSuccess": "Conciliação confirmada.",
+    "errGeneric": "Ocorreu um erro."
+  },
+  "guiaPagamentoContaConfig": {
+    "header": "Contas contabilísticas do Guia Pagamento (Débito/Crédito)",
+    "headerGloss": "o par de contas usado para gerar automaticamente um Lançamento sempre que um Guia Pagamento é reconciliado com o banco",
+    "hint": "Defina uma vez qual o par de contas Débito/Crédito a lançar automaticamente sempre que um Guia Pagamento for confirmado com uma linha real do extrato bancário. Enquanto não estiver configurado, as reconciliações bancárias continuam a funcionar, mas nenhum Lançamento contabilístico é gerado.",
+    "currentLabel": "Configuração atual:",
+    "notConfigured": "Ainda não configurado — as reconciliações bancárias não vão gerar Lançamentos até isto ser definido.",
+    "fieldDebito": "Conta Débito",
+    "fieldCredito": "Conta Crédito",
+    "searchToTypeTag": "Digite para pesquisar",
+    "noneFound": "Nenhuma conta encontrada.",
+    "saveButton": "Guardar",
+    "savedSuccess": "Configuração guardada.",
     "errGeneric": "Ocorreu um erro."
   },
   "userSync": {

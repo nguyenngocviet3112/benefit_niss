@@ -2,6 +2,7 @@
   "general": {
     "inssCore": "INSS Core - Social Security",
     "close": "Close",
+    "loading": "Loading…",
     "pesquisarEntidade": "Search Employer",
     "insertNiss": "Insert NISS",
     "disclaimer": "National Institute of Social Security - Timor-Leste",
@@ -164,7 +165,7 @@
     "invoiceATCO": "Amount payable by TCO",
     "invoiceSSS": "Social Security Services",
     "invoiceSAS": "Signature and stamp",
-    "period":"Period"
+    "period": "Period"
   },
   "login_form": {
     "title": "Authentication",
@@ -1838,6 +1839,29 @@
     "errGeneric": "Something went wrong.",
     "zeroNote": "The economic code catalog is fully loaded ({{count}} codes) — the value columns are zero because the Orçamento/Despesa/Receita screens are not yet wired to this new catalog. Figures will appear automatically once those screens are complete, no report changes needed."
   },
+  "cicloDespesa": {
+    "header": "Ciclo da Despesa",
+    "headerGloss": "Expenditure Cycle — one row per AD",
+    "hint": "Tracks each AD (Expenditure Authorization) through Cabimento -> Compromisso -> Obrigação -> Pagamento, with the balance remaining at each stage.",
+    "fieldAno": "Year",
+    "bothOption": "All Organizations",
+    "loading": "Loading…",
+    "colRegime": "Regime",
+    "colAtividade": "Atividade",
+    "colClassEconomica": "Economic Classification",
+    "colClassFuncional": "Functional Classification",
+    "colNumeroAd": "AD No.",
+    "colCabimentos": "Commitments reserved",
+    "colCompromissos": "Commitments",
+    "colSaldo1": "Balance 1 (Cab-Comp)",
+    "colObrigacoes": "Obligations",
+    "colSaldo2": "Balance 2 (Comp-Ob)",
+    "colPagamentos": "Payments",
+    "colSaldo3": "Balance 3 (Ob-Pag)",
+    "emptyList": "No AD found for this year.",
+    "totalLabel": "TOTAL",
+    "errGeneric": "Something went wrong."
+  },
   "kyNganSach": {
     "header": "Budget Period",
     "headerGloss": "Orçamento Config — budget period",
@@ -1872,6 +1896,7 @@
     "errGeneric": "Something went wrong."
   },
   "shell": {
+    "groupDashboard": "Dashboard",
     "groupChiTieu": "Expenditure Cycle",
     "groupReceita": "Revenue (Receita)",
     "groupNganHang": "Bank",
@@ -1883,6 +1908,22 @@
     "groupCauHinh": "System Settings",
     "groupMeuPerfil": "My Profile (Meu Perfil)",
     "comingSoon": "Coming soon"
+  },
+  "dashboard": {
+    "header": "Dashboard",
+    "headerGloss": "overview of records in progress vs. approved, and bank reconciliation status",
+    "processAd": "AD (Autorização de Despesa)",
+    "processCabimento": "Cabimento (DIC)",
+    "processCompromisso": "Compromisso",
+    "processObrigacao": "Obrigação",
+    "processPagamento": "Autorização de Pagamento",
+    "processPagamentoExecutado": "Realização de Pagamento",
+    "pagamentoExecutadoHint": "Payments actually executed (money paid out)",
+    "emProcessamento": "In progress:",
+    "aprovado": "Approved:",
+    "bankTitle": "Bank Reconciliation",
+    "bankConciliado": "Reconciled:",
+    "bankPendente": "Pending:"
   },
   "adCabimento": {
     "header": "AD",
@@ -2439,6 +2480,7 @@
     "matchPagamentoButton": "Reconcile with Pagamento",
     "deleteLineButton": "Delete line",
     "pickReceitaTitle": "Select a Receita to reconcile",
+    "amountMustMatchHint": "Only a Receita whose declared bank amount exactly matches this line's Crédito can be reconciled — matching amounts are highlighted below.",
     "noReceitaAvailable": "No unreconciled Receita left for this year.",
     "cancelButton": "Cancel",
     "pickPagamentoTitle": "Select a Pagamento to reconcile",
@@ -2458,6 +2500,43 @@
     "errMissingValue": "Please enter Credit or Debit.",
     "confirmDeleteLine": "Delete statement line \"{{descricao}}\"?",
     "confirmUnmatch": "Undo reconciliation for this line?",
+    "errGeneric": "Something went wrong."
+  },
+  "guiaConciliacao": {
+    "header": "Approve Guia Pagamento (bank reconciliation)",
+    "headerGloss": "match declared payment guides against real bank statement lines before marking Paid — replaces document-only approval",
+    "reload": "Reload",
+    "hint": "Select one or more pending Guias on the left and matching bank statement line(s) on the right so their totals match, then confirm. This is what actually promotes a Guia to Paid/Partial Paid — approval based only on the uploaded document is no longer allowed.",
+    "panelGuias": "Guias pending validation",
+    "panelMovimentos": "Available bank statement lines",
+    "colDocumento": "Document No.",
+    "colDescricao": "Description",
+    "colValorDeclarado": "Declared amount",
+    "colData": "Date",
+    "colValorBanco": "Bank amount",
+    "emptyGuias": "No Guia pending validation.",
+    "emptyMovimentos": "No unreconciled bank statement line.",
+    "totalGuiasLabel": "Guias total:",
+    "totalMovimentosLabel": "Bank total:",
+    "matchOk": "Amounts match",
+    "matchBad": "Amounts do not match",
+    "confirmButton": "Confirm (mark as Paid)",
+    "confirmMatch": "Confirm this reconciliation? The selected Guia(s) will be marked Paid/Partial Paid.",
+    "matchSuccess": "Reconciliation confirmed.",
+    "errGeneric": "Something went wrong."
+  },
+  "guiaPagamentoContaConfig": {
+    "header": "Guia Pagamento accounting accounts (Débito/Crédito)",
+    "headerGloss": "the account pair used to auto-generate a Lançamento (journal entry) whenever a Guia Pagamento is bank-reconciled",
+    "hint": "Set once which Débito/Crédito account pair should be booked automatically every time a Guia Pagamento is confirmed against a real bank statement line. Until this is configured, bank-verified reconciliations still work, but no accounting entry (Lançamento) is generated.",
+    "currentLabel": "Currently configured:",
+    "notConfigured": "Not configured yet — bank reconciliations will not generate accounting entries until this is set.",
+    "fieldDebito": "Débito account",
+    "fieldCredito": "Crédito account",
+    "searchToTypeTag": "Type to search",
+    "noneFound": "No account found.",
+    "saveButton": "Save",
+    "savedSuccess": "Configuration saved.",
     "errGeneric": "Something went wrong."
   },
   "userSync": {

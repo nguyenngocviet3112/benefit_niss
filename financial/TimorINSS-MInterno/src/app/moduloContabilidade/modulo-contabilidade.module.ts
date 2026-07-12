@@ -10,6 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { ModuloContabilidadeRoutingModule } from './modulo-contabilidade-routing.module';
@@ -42,9 +43,14 @@ import { LancamentosComponent } from './lancamentos/lancamentos.component';
 import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/conciliacao-movimentos.component';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 import { OrcamentoImportPreviewComponent } from './orcamento-import-preview/orcamento-import-preview.component';
+import { GuiaConciliacaoComponent } from './guia-conciliacao/guia-conciliacao.component';
+import { GuiaPagamentoContaConfigComponent } from './settings/guia-pagamento-conta-config/guia-pagamento-conta-config.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { CicloDespesaComponent } from './ciclo-despesa/ciclo-despesa.component';
 
 @NgModule({
   declarations: [
+    DashboardComponent,
     EstruturaProgramaticaComponent,
     ClassificacaoFuncionalComponent,
     OrganizationComponent,
@@ -73,7 +79,10 @@ import { OrcamentoImportPreviewComponent } from './orcamento-import-preview/orca
     LancamentosComponent,
     ConciliacaoMovimentosComponent,
     MeuPerfilComponent,
-    OrcamentoImportPreviewComponent
+    OrcamentoImportPreviewComponent,
+    GuiaConciliacaoComponent,
+    GuiaPagamentoContaConfigComponent,
+    CicloDespesaComponent
   ],
   imports: [
     CommonModule,
@@ -88,6 +97,7 @@ import { OrcamentoImportPreviewComponent } from './orcamento-import-preview/orca
     MatTooltipModule,
     MatPaginatorModule,
     MatAutocompleteModule,
+    MatCheckboxModule,
     TranslateModule
   ]
 })

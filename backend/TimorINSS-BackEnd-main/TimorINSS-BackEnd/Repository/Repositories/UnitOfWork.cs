@@ -88,6 +88,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IComponenteTextoRegistoRepository _componenteTextoRegistoRepository;
         private IPagamentosExecutadosRepository _pagamentosExecutadosRepository;
         private ICeInssGlobalRepository _ceInssGlobalRepository;
+        private ICicloDespesaRepository _cicloDespesaRepository;
         private IComponenteDocumentosRegistoRepository _componenteDocumentosRegistoRepository;
         private IComponenteClassificacaoSubClassificRegistoRepository _componenteClassificacaoSubClassificRegistoRepository;
         private IDestinatarioRepository _destinatarioRepository;
@@ -120,6 +121,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IBankStatementLineRepository _bankStatementLineRepository;
         private ILancamentoRepository _lancamentoRepository;
         private IGuiaPagamentoContaConfigRepository _guiaPagamentoContaConfigRepository;
+        private IDashboardRepository _dashboardRepository;
 
 
         public UnitOfWork(TimorINSSModuloContribuicoesContext moduloContribuicoesContext, IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResource> localizer)
@@ -188,6 +190,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public IGuiaPagamentoContaConfigRepository GuiaPagamentoContaConfigRepository
         { get { return _guiaPagamentoContaConfigRepository ??= new GuiaPagamentoContaConfigRepository(_moduloContribuicoesContext); } }
+
+        public IDashboardRepository DashboardRepository
+        { get { return _dashboardRepository ??= new DashboardRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository
@@ -339,6 +344,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
         { get { return _pagamentosExecutadosRepository ??= new PagamentosExecutadosRepository(_moduloContribuicoesContext, _localizer); } }
         public ICeInssGlobalRepository CeInssGlobalRepository
         { get { return _ceInssGlobalRepository ??= new CeInssGlobalRepository(_moduloContribuicoesContext); } }
+        public ICicloDespesaRepository CicloDespesaRepository
+        { get { return _cicloDespesaRepository ??= new CicloDespesaRepository(_moduloContribuicoesContext); } }
         public IComponenteDocumentosRegistoRepository ComponenteDocumentosRegistoRepository
         { get { return _componenteDocumentosRegistoRepository ??= new ComponenteDocumentosRegistoRepository(_moduloContribuicoesContext); } }
         public IComponenteClassificacaoSubClassificRegistoRepository ComponenteClassificacaoSubClassificRegistoRepository

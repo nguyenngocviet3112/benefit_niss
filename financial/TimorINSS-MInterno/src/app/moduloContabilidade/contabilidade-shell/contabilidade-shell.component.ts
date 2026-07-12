@@ -29,6 +29,14 @@ export class ContabilidadeShellComponent implements OnInit {
 
   private currentPerms: string[] = [];
 
+  // Tính 1 LẦN trong ngOnInit, không phải getter — một getter gọi lại mỗi
+  // vòng change-detection và tạo object mới mỗi lần sẽ khiến *ngFor coi danh
+  // sách là "khác hoàn toàn" mỗi vòng, hủy/tạo lại toàn bộ DOM (kể cả
+  // routerLinkActive) — routerLinkActive lại tự kích thêm 1 vòng CD khi được
+  // tạo mới, tạo thành vòng lặp vô hạn ngay lúc điều hướng (treo tab khi
+  // click menu, phát hiện 2026-07-12 với account không phải ADMIN).
+  public visibleGroups: TreebarGroup[] = [];
+
   constructor(
     private tokenStorage: TokenStorageService,
     private permissionService: PermissionService,
@@ -43,6 +51,9 @@ export class ContabilidadeShellComponent implements OnInit {
       this.router.navigate(['/login']);
     }
     this.currentPerms = this.permissionService.getCurrentPerms();
+    this.visibleGroups = this.groups
+      .map(group => ({ ...group, items: group.items.filter(item => this.canSee(item)) }))
+      .filter(group => group.items.length > 0);
   }
 
   // Ẩn/hiện mục menu theo quyền hiện có (2026-07-12, user yêu cầu) — chỉ là
@@ -60,12 +71,6 @@ export class ContabilidadeShellComponent implements OnInit {
     return item.permTokens.some(t => this.currentPerms.includes(t));
   }
 
-  public get visibleGroups(): TreebarGroup[] {
-    return this.groups
-      .map(group => ({ ...group, items: group.items.filter(item => this.canSee(item)) }))
-      .filter(group => group.items.length > 0);
-  }
-
   // Cây menu tĩnh (hardcoded) — KHÔNG tính toán động theo permissions như menu cũ.
   // Cấu trúc phản ánh đầy đủ wireframe M0-M4; các mục chưa code xong đánh dấu comingSoon.
   // Thứ tự nhóm theo yêu cầu (2026-07-11, cập nhật 2026-07-12): Chi tiêu → Thu
@@ -77,6 +82,18 @@ export class ContabilidadeShellComponent implements OnInit {
   // (2026-07-12, theo yêu cầu user). Tất cả nhóm mặc định collapse
   // (expanded: false), user tự click để mở nhóm đang cần.
   public groups: TreebarGroup[] = [
+    {
+      // Màn mặc định khi đăng nhập (xem modulo-contabilidade-routing.module.ts,
+      // route '' redirectTo 'dashboard') — luôn hiện trong menu (không gắn
+      // permTokens) dù nội dung bên trong có bị trống nếu user chưa được gán
+      // DASHBOARD_VIEW (2026-07-12, theo yêu cầu user).
+      label: 'shell.groupDashboard',
+      icon: 'dashboard',
+      expanded: false,
+      items: [
+        { label: 'Dashboard', route: '/contabilidade/dashboard' },
+      ]
+    },
     {
       label: 'shell.groupChiTieu',
       icon: 'sync_alt',
@@ -146,17 +163,17 @@ export class ContabilidadeShellComponent implements OnInit {
       // Danh sách đầy đủ báo cáo cần ra, gộp 43 sheet gốc của Excel thành các
       // report có filter (vd: 1 report "Execução por Atividade" bao 22 sheet
       // Programa/SubPrograma/Atividade/CE_Regime* thay vì 22 màn riêng biệt).
-      // Liệt kê hết ở đây trước — làm dần từng cái theo comingSoon. CHỈ
-      // CE_OSS_Global có route thật (ưu tiên #1, 2026-07-11) — mọi mục khác
-      // dừng ở comingSoon, kể cả 6 báo cáo tài chính mới thêm bên dưới (phát
-      // hiện 2026-07-11 từ SCFSSTL2024_VF.xlsm/FRSSVF.xlsm — 2 file khách
-      // cung cấp mới nạp, trước đó chưa đọc qua). Xem [[financial-statements-scope-gap]].
+      // Liệt kê hết ở đây trước — làm dần từng cái theo comingSoon. CE_OSS_Global
+      // (ưu tiên #1, 2026-07-11) và Ciclo da Despesa (2026-07-12) đã có route
+      // thật — mọi mục khác dừng ở comingSoon, kể cả 6 báo cáo tài chính mới
+      // thêm bên dưới (phát hiện 2026-07-11 từ SCFSSTL2024_VF.xlsm/FRSSVF.xlsm —
+      // 2 file khách cung cấp mới nạp, trước đó chưa đọc qua). Xem [[financial-statements-scope-gap]].
       label: 'shell.groupBaoCao',
       icon: 'summarize',
       expanded: false,
       items: [
         { label: 'CE_OSS_Global', route: '/contabilidade/relatorios/ceInssGlobal', permTokens: ['REPORT_VIEW'] },
-        { label: 'Ciclo da Despesa', comingSoon: true },
+        { label: 'Ciclo da Despesa', route: '/contabilidade/relatorios/cicloDespesa', permTokens: ['REPORT_VIEW'] },
         { label: 'Síntese Programas', comingSoon: true },
         { label: 'Classificação Funcional (relatório)', comingSoon: true },
         { label: 'Execução por Atividade / Programa / Regime (4 regimes: Contributivo/Não Contributivo/Administração/Capitalização FRSS)', comingSoon: true },
@@ -233,6 +250,7 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Ngôn ngữ (Idioma)', route: '/contabilidade/settings/idioma', permTokens: ['MASTERDATA_MANAGE'] },
         { label: 'Kỳ ngân sách (Orçamento Config)', route: '/contabilidade/settings/kyNganSach', permTokens: ['MASTERDATA_MANAGE'] },
         { label: 'Ngân hàng (Contas Bancárias)', route: '/contabilidade/settings/bankAccount', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'Tài khoản Nợ/Có cho Guia Pagamento', route: '/contabilidade/settings/guiaPagamentoContaConfig', permTokens: ['MASTERDATA_MANAGE'] },
         { label: 'Cấu hình phòng ban', route: '/contabilidade/sistema/departamentos', permTokens: ['MASTERDATA_MANAGE'] },
         { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission', permTokens: ['USER_MANAGE'] },
         { label: 'Đồng bộ User (hệ thống cũ)', route: '/contabilidade/userSync', permTokens: ['USER_MANAGE'] },
@@ -254,13 +272,10 @@ export class ContabilidadeShellComponent implements OnInit {
     },
   ];
 
-  // "group" đến từ visibleGroups (bản copy do getter tạo mỗi lần CD chạy) —
-  // phải toggle trên object GỐC trong this.groups, nếu không expanded sẽ bị
-  // getter tạo copy mới ghi đè về false ngay sau click (không thấy đổi trạng thái).
+  // visibleGroups giờ là mảng tính 1 lần, tham chiếu ổn định qua mọi vòng CD
+  // (không phải getter nữa) — nên toggle thẳng trên "group" nhận được là đủ,
+  // không cần tìm lại object gốc trong this.groups như trước.
   public toggleGroup(group: TreebarGroup): void {
-    const original = this.groups.find(g => g.label === group.label);
-    if (original) {
-      original.expanded = !original.expanded;
-    }
+    group.expanded = !group.expanded;
   }
 }
