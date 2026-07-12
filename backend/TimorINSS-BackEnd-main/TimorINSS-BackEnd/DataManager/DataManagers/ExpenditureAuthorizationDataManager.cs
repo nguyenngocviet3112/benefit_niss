@@ -124,6 +124,18 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 }
 
+                OrcamentoLinha rubrica = _unitOfWork.OrcamentoLinhaRepository.Get(request.OrcamentoLinhaFk);
+                if (rubrica == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "AD-RUBRICA-NOT-FOUND", ErrorMessage = "Không tìm thấy rúbrica." });
+                    return response;
+                }
+                if (request.ValorAutorizado > rubrica.Valor)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "AD-EXCEEDS-RUBRICA", ErrorMessage = $"Valor Autorizado vượt quá giá trị rúbrica ({rubrica.Valor:N2})." });
+                    return response;
+                }
+
                 int numero = _unitOfWork.ExpenditureAuthorizationRepository.GetNextNumero(request.Mes, request.Ano);
 
                 ExpenditureAuthorization entity = new ExpenditureAuthorization

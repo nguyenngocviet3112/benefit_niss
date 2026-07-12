@@ -127,6 +127,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 }
 
+                decimal valorRevistoAd = ad.ValorAutorizado + ad.Regularizacao;
+                if (request.ValorCabimentado > valorRevistoAd)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "CAB-EXCEEDS-AD", ErrorMessage = $"Valor Cabimentado vượt quá saldo còn lại của AD ({valorRevistoAd:N2})." });
+                    return response;
+                }
+
                 int numero = _unitOfWork.CabimentoRepository.GetNextNumero(request.Mes, request.Ano);
 
                 Cabimento entity = new Cabimento
@@ -147,6 +154,45 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
                 Cabimento created = _unitOfWork.CabimentoRepository.Get(entity.Id);
                 response.Item = MapEntity(created);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
+        public ResponseBaseDataContract Save(SaveCabimentoRequest request)
+        {
+            ResponseBaseDataContract response = new ResponseBaseDataContract { RequestId = request.RequestId };
+            try
+            {
+                Cabimento entity = _unitOfWork.CabimentoRepository.Get(request.Id);
+                if (entity == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "CAB-NOT-FOUND", ErrorMessage = "Không tìm thấy Cabimento." });
+                    return response;
+                }
+                if (entity.Estado != ESTADO_DRAFT)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "CAB-NOT-DRAFT", ErrorMessage = "Cabimento đang chờ duyệt, không thể sửa." });
+                    return response;
+                }
+
+                ExpenditureAuthorization ad = entity.ExpenditureAuthorizationFkNavigation;
+                decimal valorRevistoAd = ad != null ? ad.ValorAutorizado + ad.Regularizacao : 0;
+                if (request.ValorCabimentado > valorRevistoAd)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "CAB-EXCEEDS-AD", ErrorMessage = $"Valor Cabimentado vượt quá saldo còn lại của AD ({valorRevistoAd:N2})." });
+                    return response;
+                }
+
+                entity.Descritivo = request.Descritivo;
+                entity.ValorCabimentado = request.ValorCabimentado;
+                entity.ProcessoAprovisionamentoPrevio = request.ProcessoAprovisionamentoPrevio;
+                entity = _utils.UpdateDetailsToEntity(entity);
+                _unitOfWork.CabimentoRepository.Update(entity);
+                _unitOfWork.Commit();
             }
             catch (Exception e)
             {

@@ -39,6 +39,22 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     }
 
     [DataContract]
+    public class SaveCabimentoRequest : RequestBaseDataContract
+    {
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public string Descritivo { get; set; }
+
+        [DataMember]
+        public decimal ValorCabimentado { get; set; }
+
+        [DataMember]
+        public bool? ProcessoAprovisionamentoPrevio { get; set; }
+    }
+
+    [DataContract]
     public class SubmitCabimentoRequest : RequestBaseDataContract
     {
         [DataMember]

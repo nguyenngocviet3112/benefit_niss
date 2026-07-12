@@ -8,6 +8,14 @@ export interface CreateCompromissoDespesaRequest {
   ano: number;
 }
 
+export interface SaveCompromissoDespesaRequest {
+  id: number;
+  descritivo: string;
+  valorCompromissoGlobal: number;
+  valorCompromissoAno: number;
+  assumidoCom?: 'CONTRATO' | 'LISTA_BENEFICIARIOS' | 'OBRIGACAO';
+}
+
 export interface SaveCompromissoDespesaPlurianualidadeRequest {
   id: number;
   compromissoDespesaFk: number;

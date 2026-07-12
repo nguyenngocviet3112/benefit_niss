@@ -36,7 +36,10 @@
         <span class="cab-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
       </span>
       <span class="cab-col-actions">
-        <button mat-button *ngIf="item.estado === 'DRAFT'" (click)="submitCabimento(item)">Gửi duyệt</button>
+        <ng-container *ngIf="item.estado === 'DRAFT'">
+          <button mat-button (click)="openEdit(item)">Sửa</button>
+          <button mat-button (click)="submitCabimento(item)">Gửi duyệt</button>
+        </ng-container>
         <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
           <button mat-button color="primary" (click)="approve(item)">Duyệt (Diretor DF)</button>
           <button mat-button color="warn" (click)="openRejectPrompt(item.id)">Từ chối</button>
@@ -90,6 +93,35 @@
       <div class="cab-form-actions">
         <button mat-button (click)="cancelAdPicker()">Hủy</button>
         <button mat-raised-button color="primary" *ngIf="pickedAd" (click)="createCabimento()">Tạo Cabimento</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cab-form-overlay" *ngIf="editId !== null">
+    <div class="cab-form">
+      <h3>Sửa Cabimento</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descritivo <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput [(ngModel)]="editDescritivo" name="editDescritivo" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Valor Cabimentado (USD) <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput type="number" [(ngModel)]="editValorCabimentado" name="editValorCabimentado" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="medium-field">
+        <mat-label>Processo aprovisionamento prévio? <span class="itag drop">Chọn</span></mat-label>
+        <mat-select [(ngModel)]="editProcessoAprovisionamentoPrevio" name="editProcessoAprovisionamentoPrevio">
+          <mat-option [value]="true">Sim</mat-option>
+          <mat-option [value]="false">Não</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="cab-form-actions">
+        <button mat-button (click)="cancelEdit()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="saveEdit()">Lưu</button>
       </div>
     </div>
   </div>

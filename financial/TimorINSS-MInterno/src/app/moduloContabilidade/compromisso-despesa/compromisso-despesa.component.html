@@ -91,7 +91,10 @@
         </div>
 
         <div class="comp-actions-bar">
-          <button mat-raised-button color="primary" *ngIf="item.estado === 'DRAFT'" (click)="submitCompromisso(item)">Gửi duyệt</button>
+          <ng-container *ngIf="item.estado === 'DRAFT'">
+            <button mat-stroked-button (click)="openEdit(item)">Sửa</button>
+            <button mat-raised-button color="primary" (click)="submitCompromisso(item)">Gửi duyệt</button>
+          </ng-container>
 
           <ng-container *ngIf="item.estado === 'PENDING_REVIEW'">
             <button mat-raised-button color="primary" (click)="reviewApprove(item)">Xác nhận kiểm tra (Diretor DF)</button>
@@ -158,6 +161,41 @@
       <div class="comp-form-actions">
         <button mat-button (click)="cancelCabimentoPicker()">Hủy</button>
         <button mat-raised-button color="primary" *ngIf="pickedCabimento" (click)="createCompromisso()">Tạo Compromisso</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="comp-form-overlay" *ngIf="editId !== null">
+    <div class="comp-form">
+      <h3>Sửa Compromisso</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descritivo <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput [(ngModel)]="editDescritivo" name="editDescritivo" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Valor Compromisso global (Plurianual) (USD) <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput type="number" [(ngModel)]="editValorCompromissoGlobal" name="editValorCompromissoGlobal" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Compromisso no Ano (USD) <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput type="number" [(ngModel)]="editValorCompromissoAno" name="editValorCompromissoAno" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="medium-field">
+        <mat-label>Compromisso assumido com <span class="itag drop">Chọn</span></mat-label>
+        <mat-select [(ngModel)]="editAssumidoCom" name="editAssumidoCom">
+          <mat-option value="CONTRATO">Contrato</mat-option>
+          <mat-option value="LISTA_BENEFICIARIOS">Listas Beneficiários (subsídios imediatos)</mat-option>
+          <mat-option value="OBRIGACAO">Obrigação</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="comp-form-actions">
+        <button mat-button (click)="cancelEdit()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="saveEdit()">Lưu</button>
       </div>
     </div>
   </div>

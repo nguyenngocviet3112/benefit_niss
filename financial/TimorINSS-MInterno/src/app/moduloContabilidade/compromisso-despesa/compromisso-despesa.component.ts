@@ -46,6 +46,12 @@ export class CompromissoDespesaComponent implements OnInit {
   public rejectComment = '';
   public rejectAction: { id: number; action: 'review' | 'approve' } | null = null;
 
+  public editId: number | null = null;
+  public editDescritivo = '';
+  public editValorCompromissoGlobal: number | null = null;
+  public editValorCompromissoAno: number | null = null;
+  public editAssumidoCom: 'CONTRATO' | 'LISTA_BENEFICIARIOS' | 'OBRIGACAO' = 'CONTRATO';
+
   constructor(
     private compromissoDespesaService: CompromissoDespesaService,
     private snackBar: MatSnackBar
@@ -144,6 +150,39 @@ export class CompromissoDespesaComponent implements OnInit {
         }
         this.formPluriAno = null;
         this.formPluriValor = null;
+        this.load();
+      },
+      err => this.showError(err)
+    );
+  }
+
+  public openEdit(item: CompromissoDespesaDataContract): void {
+    this.editId = item.id;
+    this.editDescritivo = item.descritivo;
+    this.editValorCompromissoGlobal = item.valorCompromissoGlobal;
+    this.editValorCompromissoAno = item.valorCompromissoAno;
+    this.editAssumidoCom = item.assumidoCom ?? 'CONTRATO';
+  }
+
+  public cancelEdit(): void {
+    this.editId = null;
+  }
+
+  public saveEdit(): void {
+    if (this.editId == null || !this.editValorCompromissoGlobal || !this.editValorCompromissoAno) { return; }
+    this.compromissoDespesaService.save({
+      id: this.editId,
+      descritivo: this.editDescritivo,
+      valorCompromissoGlobal: this.editValorCompromissoGlobal,
+      valorCompromissoAno: this.editValorCompromissoAno,
+      assumidoCom: this.editAssumidoCom
+    }).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          return;
+        }
+        this.editId = null;
         this.load();
       },
       err => this.showError(err)

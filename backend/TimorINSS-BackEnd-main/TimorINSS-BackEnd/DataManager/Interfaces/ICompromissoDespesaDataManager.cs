@@ -8,6 +8,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         CompromissoDespesaListResponse GetByAno(GetCompromissoDespesaListRequest request);
         CabimentosDisponiveisResponse GetCabimentosDisponiveis(GetCabimentosDisponiveisRequest request);
         CompromissoDespesaResponse Create(CreateCompromissoDespesaRequest request);
+        ResponseBaseDataContract Save(SaveCompromissoDespesaRequest request);
         ResponseBaseDataContract SavePlurianualidade(SaveCompromissoDespesaPlurianualidadeRequest request);
         ResponseBaseDataContract Submit(SubmitCompromissoDespesaRequest request);
         ResponseBaseDataContract Review(ReviewCompromissoDespesaRequest request);

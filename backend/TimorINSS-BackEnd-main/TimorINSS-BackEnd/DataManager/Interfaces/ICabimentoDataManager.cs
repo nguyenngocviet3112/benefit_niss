@@ -8,6 +8,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         CabimentoListResponse GetByAno(GetCabimentoListRequest request);
         AdsDisponiveisParaCabimentoResponse GetAdsDisponiveis(GetAdsDisponiveisParaCabimentoRequest request);
         CabimentoResponse Create(CreateCabimentoRequest request);
+        ResponseBaseDataContract Save(SaveCabimentoRequest request);
         ResponseBaseDataContract Submit(SubmitCabimentoRequest request);
         ResponseBaseDataContract Approve(ApproveCabimentoRequest request);
     }

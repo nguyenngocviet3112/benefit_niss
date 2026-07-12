@@ -7,6 +7,13 @@ export interface CreateCabimentoRequest {
   ano: number;
 }
 
+export interface SaveCabimentoRequest {
+  id: number;
+  descritivo: string;
+  valorCabimentado: number;
+  processoAprovisionamentoPrevio?: boolean;
+}
+
 export interface SubmitCabimentoRequest {
   id: number;
 }

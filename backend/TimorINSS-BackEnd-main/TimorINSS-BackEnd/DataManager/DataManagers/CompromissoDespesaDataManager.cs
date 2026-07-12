@@ -129,6 +129,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 }
 
+                Dictionary<int, decimal> jaComprometidoPorCabimento = _unitOfWork.CabimentoRepository
+                    .GetComprometidoByCabimentoIds(new List<int> { cabimento.Id });
+                decimal jaComprometido = jaComprometidoPorCabimento.TryGetValue(cabimento.Id, out var v) ? v : 0;
+                decimal saldoCabimento = cabimento.ValorCabimentado - jaComprometido;
+                if (request.ValorCompromissoAno > saldoCabimento)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "COMP-EXCEEDS-CABIMENTO", ErrorMessage = $"Compromisso no Ano vượt quá saldo còn lại của Cabimento ({saldoCabimento:N2})." });
+                    return response;
+                }
+
                 int numero = _unitOfWork.CompromissoDespesaRepository.GetNextNumero(request.Mes, request.Ano);
 
                 CompromissoDespesa entity = new CompromissoDespesa
@@ -151,6 +161,50 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
                 CompromissoDespesa created = _unitOfWork.CompromissoDespesaRepository.Get(entity.Id);
                 response.Item = MapEntity(created);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
+        public ResponseBaseDataContract Save(SaveCompromissoDespesaRequest request)
+        {
+            ResponseBaseDataContract response = new ResponseBaseDataContract { RequestId = request.RequestId };
+            try
+            {
+                CompromissoDespesa entity = _unitOfWork.CompromissoDespesaRepository.Get(request.Id);
+                if (entity == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "COMP-NOT-FOUND", ErrorMessage = "Không tìm thấy Compromisso." });
+                    return response;
+                }
+                if (entity.Estado != ESTADO_DRAFT)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "COMP-NOT-DRAFT", ErrorMessage = "Compromisso đang chờ duyệt, không thể sửa." });
+                    return response;
+                }
+
+                Cabimento cabimento = entity.CabimentoFkNavigation;
+                Dictionary<int, decimal> jaComprometidoPorCabimento = _unitOfWork.CabimentoRepository
+                    .GetComprometidoByCabimentoIds(new List<int> { entity.CabimentoFk });
+                decimal jaComprometidoTotal = jaComprometidoPorCabimento.TryGetValue(entity.CabimentoFk, out var v) ? v : 0;
+                decimal outrosComprometido = jaComprometidoTotal - (entity.ValorCompromissoAno + entity.Regularizacao);
+                decimal saldoCabimento = (cabimento?.ValorCabimentado ?? 0) - outrosComprometido;
+                if (request.ValorCompromissoAno + entity.Regularizacao > saldoCabimento)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "COMP-EXCEEDS-CABIMENTO", ErrorMessage = $"Compromisso no Ano vượt quá saldo còn lại của Cabimento ({saldoCabimento:N2})." });
+                    return response;
+                }
+
+                entity.Descritivo = request.Descritivo;
+                entity.ValorCompromissoGlobal = request.ValorCompromissoGlobal;
+                entity.ValorCompromissoAno = request.ValorCompromissoAno;
+                entity.AssumidoCom = request.AssumidoCom;
+                entity = _utils.UpdateDetailsToEntity(entity);
+                _unitOfWork.CompromissoDespesaRepository.Update(entity);
+                _unitOfWork.Commit();
             }
             catch (Exception e)
             {

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ApproveCabimentoRequest, CreateCabimentoRequest, SubmitCabimentoRequest } from '../request-models/cabimento-request';
+import { ApproveCabimentoRequest, CreateCabimentoRequest, SaveCabimentoRequest, SubmitCabimentoRequest } from '../request-models/cabimento-request';
 import { AdsDisponiveisParaCabimentoResponse, CabimentoListResponse, CabimentoResponse } from '../response-models/cabimento-response';
 import { ResponseBase } from '../response-models/utils-response';
 
@@ -23,6 +23,10 @@ export class CabimentoService {
 
   public create(request: CreateCabimentoRequest): Observable<CabimentoResponse> {
     return this.http.post<CabimentoResponse>(`${environment.apiUrl}/cabimento/Create`, request);
+  }
+
+  public save(request: SaveCabimentoRequest): Observable<ResponseBase> {
+    return this.http.post<ResponseBase>(`${environment.apiUrl}/cabimento/Save`, request);
   }
 
   public submit(request: SubmitCabimentoRequest): Observable<ResponseBase> {

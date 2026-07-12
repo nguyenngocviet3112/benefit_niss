@@ -33,6 +33,11 @@ export class CabimentoComponent implements OnInit {
   public rejectComment = '';
   public rejectId: number | null = null;
 
+  public editId: number | null = null;
+  public editDescritivo = '';
+  public editValorCabimentado: number | null = null;
+  public editProcessoAprovisionamentoPrevio = false;
+
   constructor(
     private cabimentoService: CabimentoService,
     private snackBar: MatSnackBar
@@ -101,6 +106,37 @@ export class CabimentoComponent implements OnInit {
         this.showAdPicker = false;
         this.pickedAd = null;
         this.snackBar.open(`Đã tạo Cabimento số ${response.item.numero}.`, 'Đóng', { duration: 3000 });
+        this.load();
+      },
+      err => this.showError(err)
+    );
+  }
+
+  public openEdit(item: CabimentoDataContract): void {
+    this.editId = item.id;
+    this.editDescritivo = item.descritivo;
+    this.editValorCabimentado = item.valorCabimentado;
+    this.editProcessoAprovisionamentoPrevio = !!item.processoAprovisionamentoPrevio;
+  }
+
+  public cancelEdit(): void {
+    this.editId = null;
+  }
+
+  public saveEdit(): void {
+    if (this.editId == null || !this.editValorCabimentado) { return; }
+    this.cabimentoService.save({
+      id: this.editId,
+      descritivo: this.editDescritivo,
+      valorCabimentado: this.editValorCabimentado,
+      processoAprovisionamentoPrevio: this.editProcessoAprovisionamentoPrevio
+    }).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          return;
+        }
+        this.editId = null;
         this.load();
       },
       err => this.showError(err)

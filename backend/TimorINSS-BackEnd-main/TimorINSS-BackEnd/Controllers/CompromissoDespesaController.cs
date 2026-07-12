@@ -95,6 +95,29 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
+        [HttpPost("Save")]
+        [RequirePerm("COMPROMISSO_SUBMIT")]
+        public IActionResult Save(SaveCompromissoDespesaRequest request)
+        {
+            ResponseBaseDataContract response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.Save(request);
+            }
+            catch (Exception e)
+            {
+                response = new ResponseBaseDataContract();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("Save", Log, request))
+                return BadRequest(response);
+
+            _cache.Reset();
+            return Ok(response);
+        }
+
         [HttpPost("SavePlurianualidade")]
         [RequirePerm("COMPROMISSO_SUBMIT")]
         public IActionResult SavePlurianualidade(SaveCompromissoDespesaPlurianualidadeRequest request)

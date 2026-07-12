@@ -42,6 +42,25 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     }
 
     [DataContract]
+    public class SaveCompromissoDespesaRequest : RequestBaseDataContract
+    {
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public string Descritivo { get; set; }
+
+        [DataMember]
+        public decimal ValorCompromissoGlobal { get; set; }
+
+        [DataMember]
+        public decimal ValorCompromissoAno { get; set; }
+
+        [DataMember]
+        public string AssumidoCom { get; set; }
+    }
+
+    [DataContract]
     public class SaveCompromissoDespesaPlurianualidadeRequest : RequestBaseDataContract
     {
         [DataMember]

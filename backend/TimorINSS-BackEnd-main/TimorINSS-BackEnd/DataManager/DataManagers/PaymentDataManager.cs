@@ -198,6 +198,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 }
 
+                decimal valorObrigacao = ValorObrigacao(obligation);
+                if (request.ValorAutorizado > valorObrigacao)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "PAG-EXCEEDS-OBR", ErrorMessage = $"Valor Autorizado vượt quá giá trị Obrigação ({valorObrigacao:N2})." });
+                    return response;
+                }
+
                 int numero = _unitOfWork.PaymentAuthorizationRepository.GetNextNumero(request.Mes, request.Ano);
 
                 PaymentAuthorization entity = new PaymentAuthorization

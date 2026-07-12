@@ -7,6 +7,7 @@ import {
   CreateCompromissoDespesaRequest,
   ReviewCompromissoDespesaRequest,
   SaveCompromissoDespesaPlurianualidadeRequest,
+  SaveCompromissoDespesaRequest,
   SubmitCompromissoDespesaRequest
 } from '../request-models/compromisso-despesa-request';
 import {
@@ -33,6 +34,10 @@ export class CompromissoDespesaService {
 
   public create(request: CreateCompromissoDespesaRequest): Observable<CompromissoDespesaResponse> {
     return this.http.post<CompromissoDespesaResponse>(`${environment.apiUrl}/compromissodespesa/Create`, request);
+  }
+
+  public save(request: SaveCompromissoDespesaRequest): Observable<ResponseBase> {
+    return this.http.post<ResponseBase>(`${environment.apiUrl}/compromissodespesa/Save`, request);
   }
 
   public savePlurianualidade(request: SaveCompromissoDespesaPlurianualidadeRequest): Observable<ResponseBase> {

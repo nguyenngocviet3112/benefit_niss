@@ -95,6 +95,29 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
+        [HttpPost("Save")]
+        [RequirePerm("CABIMENTO_SUBMIT")]
+        public IActionResult Save(SaveCabimentoRequest request)
+        {
+            ResponseBaseDataContract response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.Save(request);
+            }
+            catch (Exception e)
+            {
+                response = new ResponseBaseDataContract();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("Save", Log, request))
+                return BadRequest(response);
+
+            _cache.Reset();
+            return Ok(response);
+        }
+
         [HttpPost("Submit")]
         [RequirePerm("CABIMENTO_SUBMIT")]
         public IActionResult Submit(SubmitCabimentoRequest request)
