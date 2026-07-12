@@ -122,6 +122,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private ILancamentoRepository _lancamentoRepository;
         private IGuiaPagamentoContaConfigRepository _guiaPagamentoContaConfigRepository;
         private IDashboardRepository _dashboardRepository;
+        private IAttachmentConfigRepository _attachmentConfigRepository;
+        private IAttachmentRepository _attachmentRepository;
 
 
         public UnitOfWork(TimorINSSModuloContribuicoesContext moduloContribuicoesContext, IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResource> localizer)
@@ -193,6 +195,10 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public IDashboardRepository DashboardRepository
         { get { return _dashboardRepository ??= new DashboardRepository(_moduloContribuicoesContext); } }
+        public IAttachmentConfigRepository AttachmentConfigRepository
+        { get { return _attachmentConfigRepository ??= new AttachmentConfigRepository(_moduloContribuicoesContext); } }
+        public IAttachmentRepository AttachmentRepository
+        { get { return _attachmentRepository ??= new AttachmentRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository

@@ -32,5 +32,7 @@ namespace TimorINSSBackEnd.Models
         public virtual DbSet<Lancamento> Lancamento { get; set; }
         public virtual DbSet<BudgetPeriod> BudgetPeriod { get; set; }
         public virtual DbSet<GuiaPagamentoContaConfig> GuiaPagamentoContaConfig { get; set; }
+        public virtual DbSet<Attachment> Attachment { get; set; }
+        public virtual DbSet<AttachmentConfig> AttachmentConfig { get; set; }
     }
 }

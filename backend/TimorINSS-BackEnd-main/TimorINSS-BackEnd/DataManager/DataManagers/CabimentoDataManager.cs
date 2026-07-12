@@ -217,6 +217,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     response.Errors.Add(new Error { ErrorCode = "CAB-NOT-DRAFT", ErrorMessage = "Cabimento không ở trạng thái nháp." });
                     return response;
                 }
+                var attachmentConfig = _unitOfWork.AttachmentConfigRepository.Get();
+                if (attachmentConfig.CabimentoObrigatorio && !_unitOfWork.AttachmentRepository.ExistsForEntity("CABIMENTO", entity.Id))
+                {
+                    response.Errors.Add(new Error { ErrorCode = "CAB-ATTACHMENT-REQUIRED", ErrorMessage = "Bắt buộc đính kèm file trước khi submit Cabimento." });
+                    return response;
+                }
 
                 entity.Estado = ESTADO_PENDING_APPROVAL;
                 entity.SubmittedBy = request.UserId;

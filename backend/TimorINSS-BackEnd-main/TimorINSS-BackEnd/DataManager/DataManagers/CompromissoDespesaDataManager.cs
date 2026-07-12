@@ -274,6 +274,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     response.Errors.Add(new Error { ErrorCode = "COMP-NOT-DRAFT", ErrorMessage = "Compromisso không ở trạng thái nháp." });
                     return response;
                 }
+                var attachmentConfig = _unitOfWork.AttachmentConfigRepository.Get();
+                if (attachmentConfig.CompromissoObrigatorio && !_unitOfWork.AttachmentRepository.ExistsForEntity("COMPROMISSO", entity.Id))
+                {
+                    response.Errors.Add(new Error { ErrorCode = "COMP-ATTACHMENT-REQUIRED", ErrorMessage = "Bắt buộc đính kèm file trước khi submit Compromisso." });
+                    return response;
+                }
 
                 entity.Estado = ESTADO_PENDING_REVIEW;
                 entity.SubmittedBy = request.UserId;

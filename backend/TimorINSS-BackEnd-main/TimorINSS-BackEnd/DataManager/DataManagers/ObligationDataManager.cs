@@ -386,6 +386,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     response.Errors.Add(new Error { ErrorCode = "OBR-EMPTY", ErrorMessage = "Chưa có dòng Compromisso nào để gửi duyệt." });
                     return response;
                 }
+                var attachmentConfig = _unitOfWork.AttachmentConfigRepository.Get();
+                if (attachmentConfig.ObrigacaoObrigatorio && !_unitOfWork.AttachmentRepository.ExistsForEntity("OBRIGACAO", entity.Id))
+                {
+                    response.Errors.Add(new Error { ErrorCode = "OBR-ATTACHMENT-REQUIRED", ErrorMessage = "Bắt buộc đính kèm file trước khi submit Obrigação." });
+                    return response;
+                }
 
                 entity.Estado = ESTADO_PENDING_APPROVAL;
                 entity.SubmittedBy = request.UserId;

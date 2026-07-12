@@ -250,6 +250,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     response.Errors.Add(new Error { ErrorCode = "PAG-NOT-DRAFT", ErrorMessage = "Autorização de Pagamento không ở trạng thái nháp." });
                     return response;
                 }
+                var attachmentConfig = _unitOfWork.AttachmentConfigRepository.Get();
+                if (attachmentConfig.PagamentoObrigatorio && !_unitOfWork.AttachmentRepository.ExistsForEntity("PAGAMENTO", entity.Id))
+                {
+                    response.Errors.Add(new Error { ErrorCode = "PAG-ATTACHMENT-REQUIRED", ErrorMessage = "Bắt buộc đính kèm file trước khi submit Pagamento." });
+                    return response;
+                }
 
                 entity.Estado = ESTADO_PENDING_APPROVAL;
                 entity.SubmittedBy = request.UserId;

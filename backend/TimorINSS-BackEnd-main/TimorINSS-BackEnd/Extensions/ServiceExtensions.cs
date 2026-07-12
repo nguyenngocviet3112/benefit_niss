@@ -286,6 +286,8 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<ILanguageConfigDataManager, LanguageConfigDataManager>();
             services.AddScoped<IBudgetPeriodDataManager, BudgetPeriodDataManager>();
             services.AddScoped<IDashboardDataManager, DashboardDataManager>();
+            services.AddScoped<IAttachmentConfigDataManager, AttachmentConfigDataManager>();
+            services.AddScoped<IAttachmentDataManager, AttachmentDataManager>();
             services.AddScoped<IPaymentDataManager, PaymentDataManager>();
             services.AddScoped<IReceitaPacDataManager, ReceitaPacDataManager>();
             services.AddScoped<IOrcamentoSuplementarDataManager, OrcamentoSuplementarDataManager>();

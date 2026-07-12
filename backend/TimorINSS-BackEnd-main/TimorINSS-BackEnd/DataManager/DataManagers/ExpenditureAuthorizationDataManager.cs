@@ -284,6 +284,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     response.Errors.Add(new Error { ErrorCode = "AD-NOT-DRAFT", ErrorMessage = "AD không ở trạng thái nháp." });
                     return response;
                 }
+                var attachmentConfig = _unitOfWork.AttachmentConfigRepository.Get();
+                if (attachmentConfig.AdObrigatorio && !_unitOfWork.AttachmentRepository.ExistsForEntity("AD", entity.Id))
+                {
+                    response.Errors.Add(new Error { ErrorCode = "AD-ATTACHMENT-REQUIRED", ErrorMessage = "Bắt buộc đính kèm file trước khi submit AD." });
+                    return response;
+                }
 
                 entity.Estado = ESTADO_PENDING_REVIEW;
                 entity.SubmittedBy = request.UserId;
