@@ -90,11 +90,11 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'sync_alt',
       expanded: false,
       items: [
-        { label: 'AD (Autorização de Despesa)', route: '/contabilidade/adCabimento', permTokens: ['AD_SUBMIT', 'AD_REVIEW', 'AD_APPROVE'] },
-        { label: 'Cabimento (DIC)', route: '/contabilidade/cabimento', permTokens: ['CABIMENTO_SUBMIT', 'CABIMENTO_APPROVE'] },
-        { label: 'Compromisso', route: '/contabilidade/compromissoDespesa', permTokens: ['COMPROMISSO_SUBMIT', 'COMPROMISSO_REVIEW', 'COMPROMISSO_APPROVE'] },
-        { label: 'Obrigação', route: '/contabilidade/obligation', permTokens: ['OBRIGACAO_SUBMIT', 'OBRIGACAO_APPROVE'] },
-        { label: 'Pagamento', route: '/contabilidade/payment', permTokens: ['PAG_SUBMIT', 'PAG_APPROVE', 'PAG_EXECUTE'] },
+        { label: 'shell.itemAd', route: '/contabilidade/adCabimento', permTokens: ['AD_SUBMIT', 'AD_REVIEW', 'AD_APPROVE'] },
+        { label: 'shell.itemCabimento', route: '/contabilidade/cabimento', permTokens: ['CABIMENTO_SUBMIT', 'CABIMENTO_APPROVE'] },
+        { label: 'shell.itemCompromisso', route: '/contabilidade/compromissoDespesa', permTokens: ['COMPROMISSO_SUBMIT', 'COMPROMISSO_REVIEW', 'COMPROMISSO_APPROVE'] },
+        { label: 'shell.itemObrigacao', route: '/contabilidade/obligation', permTokens: ['OBRIGACAO_SUBMIT', 'OBRIGACAO_APPROVE'] },
+        { label: 'shell.itemPagamento', route: '/contabilidade/payment', permTokens: ['PAG_SUBMIT', 'PAG_APPROVE', 'PAG_EXECUTE'] },
       ]
     },
     {
@@ -102,7 +102,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'payments',
       expanded: false,
       items: [
-        { label: 'Receita PAC (Outras)', route: '/contabilidade/receita', permTokens: ['REC_SUBMIT'] },
+        { label: 'shell.itemReceitaPac', route: '/contabilidade/receita', permTokens: ['REC_SUBMIT'] },
         // Receita GP (contribuições) — 2026-07-12, thay thế: màn "Guia Pagamento
         // (Validação)" cũ (mode cũ, dưới nhóm Đóng góp BHXH) chỉ có tác dụng
         // xem — Duyệt ở đó set Paid/Partial Paid chỉ dựa vào officer đọc chứng từ,
@@ -111,7 +111,7 @@ export class ContabilidadeShellComponent implements OnInit {
         // dòng sao kê ngân hàng thật trước khi set Paid — dùng chung permTokens
         // 'BANCO_CONCILIAR' vì cùng hoạt động đối chiếu ngân hàng, chỉ khác
         // nguồn tiền vào (GuiaPagamento thay vì ReceitaPac/PaymentExecution).
-        { label: 'Duyệt Guia Pagamento (đối chiếu ngân hàng)', route: '/contabilidade/receita/guiaConciliacao', permTokens: ['BANCO_CONCILIAR'] },
+        { label: 'shell.itemGuiaConciliacao', route: '/contabilidade/receita/guiaConciliacao', permTokens: ['BANCO_CONCILIAR'] },
       ]
     },
     {
@@ -119,7 +119,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'account_balance',
       expanded: false,
       items: [
-        { label: 'Conciliação de Movimentos', route: '/contabilidade/conciliacaoMovimentos', permTokens: ['BANCO_CONCILIAR'] },
+        { label: 'shell.itemConciliacaoMovimentos', route: '/contabilidade/conciliacaoMovimentos', permTokens: ['BANCO_CONCILIAR'] },
       ]
     },
     {
@@ -137,7 +137,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'menu_book',
       expanded: false,
       items: [
-        { label: 'Registo de Lançamentos (Débito/Crédito)', route: '/contabilidade/lancamentos' },
+        { label: 'shell.itemLancamentos', route: '/contabilidade/lancamentos' },
       ]
     },
     {
@@ -145,9 +145,9 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'account_balance_wallet',
       expanded: false,
       items: [
-        { label: 'Orçamento', route: '/contabilidade/orcamento', permTokens: ['ORC_SUBMIT', 'ORC_REVIEW', 'ORC_APPROVE'] },
-        { label: 'Suplementar', route: '/contabilidade/orcamentoSuplementar', permTokens: ['ORC_SUBMIT', 'ORC_REVIEW', 'ORC_APPROVE'] },
-        { label: 'Saldos de Abertura (Cut-over)', route: '/contabilidade/saldosAbertura', permTokens: ['ABE_SUBMIT', 'REC_SUBMIT'] },
+        { label: 'shell.itemOrcamento', route: '/contabilidade/orcamento', permTokens: ['ORC_SUBMIT', 'ORC_REVIEW', 'ORC_APPROVE'] },
+        { label: 'shell.itemSuplementar', route: '/contabilidade/orcamentoSuplementar', permTokens: ['ORC_SUBMIT', 'ORC_REVIEW', 'ORC_APPROVE'] },
+        { label: 'shell.itemSaldosAbertura', route: '/contabilidade/saldosAbertura', permTokens: ['ABE_SUBMIT', 'REC_SUBMIT'] },
       ]
     },
     {
@@ -163,26 +163,26 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'summarize',
       expanded: false,
       items: [
-        { label: 'CE_OSS_Global', route: '/contabilidade/relatorios/ceInssGlobal', permTokens: ['REPORT_VIEW'] },
-        { label: 'Ciclo da Despesa', route: '/contabilidade/relatorios/cicloDespesa', permTokens: ['REPORT_VIEW'] },
-        { label: 'Síntese Programas', comingSoon: true },
-        { label: 'Classificação Funcional (relatório)', comingSoon: true },
-        { label: 'Execução por Atividade / Programa / Regime (4 regimes: Contributivo/Não Contributivo/Administração/Capitalização FRSS)', comingSoon: true },
-        { label: 'Registo AD', comingSoon: true },
-        { label: 'Registo Cabimentos', comingSoon: true },
-        { label: 'Registo Compromissos', comingSoon: true },
-        { label: 'Registo Obrigação', comingSoon: true },
-        { label: 'Receitas GP (Contribuições)', comingSoon: true },
-        { label: 'Receitas PAC (Outras)', comingSoon: true },
-        { label: 'Controlo', comingSoon: true },
-        { label: 'Extratos Bancários (8 contas)', comingSoon: true },
-        { label: 'INTERFACE (Ledger contábil)', comingSoon: true },
-        { label: 'Mapa de Transferências OE', comingSoon: true },
-        { label: 'Balanço (Bảng cân đối kế toán)', comingSoon: true },
-        { label: 'Demonstração de Resultados (DR)', comingSoon: true },
-        { label: 'Fluxos de Caixa (mensal/anual)', comingSoon: true },
-        { label: 'Balancete (Bảng cân đối thử)', comingSoon: true },
-        { label: 'Extrato de Conta Corrente', comingSoon: true },
+        { label: 'shell.itemCeOssGlobal', route: '/contabilidade/relatorios/ceInssGlobal', permTokens: ['REPORT_VIEW'] },
+        { label: 'shell.itemCicloDespesa', route: '/contabilidade/relatorios/cicloDespesa', permTokens: ['REPORT_VIEW'] },
+        { label: 'shell.itemSinteseProgramas', comingSoon: true },
+        { label: 'shell.itemClassificacaoFuncionalRelatorio', comingSoon: true },
+        { label: 'shell.itemExecucaoAtividade', comingSoon: true },
+        { label: 'shell.itemRegistoAd', comingSoon: true },
+        { label: 'shell.itemRegistoCabimentos', comingSoon: true },
+        { label: 'shell.itemRegistoCompromissos', comingSoon: true },
+        { label: 'shell.itemRegistoObrigacao', comingSoon: true },
+        { label: 'shell.itemReceitasGp', comingSoon: true },
+        { label: 'shell.itemReceitasPac', comingSoon: true },
+        { label: 'shell.itemControlo', comingSoon: true },
+        { label: 'shell.itemExtratosBancarios', comingSoon: true },
+        { label: 'shell.itemInterfaceLedger', comingSoon: true },
+        { label: 'shell.itemMapaTransferenciasOe', comingSoon: true },
+        { label: 'shell.itemBalanco', comingSoon: true },
+        { label: 'shell.itemDemonstracaoResultados', comingSoon: true },
+        { label: 'shell.itemFluxosCaixa', comingSoon: true },
+        { label: 'shell.itemBalancete', comingSoon: true },
+        { label: 'shell.itemExtratoContaCorrente', comingSoon: true },
       ]
     },
     {
@@ -197,9 +197,9 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'badge',
       expanded: false,
       items: [
-        { label: 'Tra cứu Entidade (theo NISS)', route: '/contabilidade/contribuicoes/entidade' },
-        { label: 'Guia Pagamento (Validação)', route: '/contabilidade/contribuicoes/guiaPagamento' },
-        { label: 'Situação Contributiva', route: '/contabilidade/contribuicoes/situacaoContributiva' },
+        { label: 'shell.itemTraCuscaEntidade', route: '/contabilidade/contribuicoes/entidade' },
+        { label: 'shell.itemGuiaPagamentoValidacao', route: '/contabilidade/contribuicoes/guiaPagamento' },
+        { label: 'shell.itemSituacaoContributiva', route: '/contabilidade/contribuicoes/situacaoContributiva' },
       ]
     },
     {
@@ -207,11 +207,11 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'dns',
       expanded: false,
       items: [
-        { label: 'Estrutura Programática', route: '/contabilidade/estruturaProgramatica', permTokens: ['MASTERDATA_MANAGE'] },
-        { label: 'Classificação Funcional', route: '/contabilidade/classificacaoFuncional', permTokens: ['MASTERDATA_MANAGE'] },
-        { label: 'Classificação Económica', route: '/contabilidade/classificacaoEconomica', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemEstruturaProgramatica', route: '/contabilidade/estruturaProgramatica', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemClassificacaoFuncional', route: '/contabilidade/classificacaoFuncional', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemClassificacaoEconomica', route: '/contabilidade/classificacaoEconomica', permTokens: ['MASTERDATA_MANAGE'] },
         // Organization (InstitutionController) không có RequirePerm — chỉ xem.
-        { label: 'Organization', route: '/contabilidade/organization' },
+        { label: 'shell.itemOrganization', route: '/contabilidade/organization' },
         // 2026-07-12 (user corrected): Plano de Contas + Mapeamento Rubricas KHÔNG
         // phải bảng/data mới — đã tồn tại từ trước là Codigoconta (cây tài khoản,
         // đã có InitialValue/IsCredit cho số dư đầu kỳ) + Agrupamentoconfig +
@@ -222,9 +222,9 @@ export class ContabilidadeShellComponent implements OnInit {
         // TipoConta Receita/Despesa/Neutro Receita/Neutro Despesa — không đụng tới
         // Actidade/Funcional, dữ liệu cũ trùng lặp Programa/Atividade và Classificação
         // Funcional). Xem [[financial-statements-scope-gap]].
-        { label: 'Plano de Contas (Codigoconta)', route: '/contabilidade/planoContas', permTokens: ['MASTERDATA_MANAGE'] },
-        { label: 'Mapeamento Rubricas (Agrupamentoconfig)', route: '/contabilidade/mapeamentoRubricas', permTokens: ['MASTERDATA_MANAGE'] },
-        { label: 'Fornecedores / Clientes', comingSoon: true },
+        { label: 'shell.itemPlanoContas', route: '/contabilidade/planoContas', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemMapeamentoRubricas', route: '/contabilidade/mapeamentoRubricas', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemFornecedoresClientes', comingSoon: true },
       ]
     },
     {
@@ -238,15 +238,15 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'settings',
       expanded: false,
       items: [
-        { label: 'Ngôn ngữ (Idioma)', route: '/contabilidade/settings/idioma', permTokens: ['MASTERDATA_MANAGE'] },
-        { label: 'Kỳ ngân sách (Orçamento Config)', route: '/contabilidade/settings/kyNganSach', permTokens: ['MASTERDATA_MANAGE'] },
-        { label: 'Ngân hàng (Contas Bancárias)', route: '/contabilidade/settings/bankAccount', permTokens: ['MASTERDATA_MANAGE'] },
-        { label: 'Tài khoản Nợ/Có cho Guia Pagamento', route: '/contabilidade/settings/guiaPagamentoContaConfig', permTokens: ['MASTERDATA_MANAGE'] },
-        { label: 'Cấu hình phòng ban', route: '/contabilidade/sistema/departamentos', permTokens: ['MASTERDATA_MANAGE'] },
-        { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission', permTokens: ['USER_MANAGE'] },
-        { label: 'Đồng bộ User (hệ thống cũ)', route: '/contabilidade/userSync', permTokens: ['USER_MANAGE'] },
-        { label: 'Cấu hình Email', comingSoon: true },
-        { label: 'API Integration (Benefit)', comingSoon: true },
+        { label: 'shell.itemIdioma', route: '/contabilidade/settings/idioma', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemKyNganSach', route: '/contabilidade/settings/kyNganSach', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemBankAccount', route: '/contabilidade/settings/bankAccount', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemGuiaPagamentoContaConfig', route: '/contabilidade/settings/guiaPagamentoContaConfig', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemDepartamentos', route: '/contabilidade/sistema/departamentos', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemUserPermission', route: '/contabilidade/userPermission', permTokens: ['USER_MANAGE'] },
+        { label: 'shell.itemUserSync', route: '/contabilidade/userSync', permTokens: ['USER_MANAGE'] },
+        { label: 'shell.itemEmailConfig', comingSoon: true },
+        { label: 'shell.itemApiIntegration', comingSoon: true },
       ]
     },
     {
@@ -258,7 +258,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'account_circle',
       expanded: false,
       items: [
-        { label: 'Hồ sơ cá nhân / Đổi mật khẩu', route: '/contabilidade/meuPerfil' },
+        { label: 'shell.itemMeuPerfil', route: '/contabilidade/meuPerfil' },
       ]
     },
   ];

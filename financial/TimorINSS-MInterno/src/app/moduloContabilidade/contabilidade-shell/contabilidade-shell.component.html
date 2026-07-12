@@ -14,10 +14,10 @@
         <ul class="tree-items" *ngIf="group.expanded">
           <li *ngFor="let item of group.items">
             <a *ngIf="!item.comingSoon" [routerLink]="item.route" routerLinkActive="active" class="tree-item">
-              {{ item.label }}
+              {{ item.label | translate }}
             </a>
             <span *ngIf="item.comingSoon" class="tree-item disabled" [matTooltip]="'shell.comingSoon' | translate">
-              {{ item.label }}
+              {{ item.label | translate }}
             </span>
           </li>
         </ul>
