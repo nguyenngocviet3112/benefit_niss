@@ -14,11 +14,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUtilsDataManager _utils;
+        private readonly ILancamentoDataManager _lancamentoDataManager;
 
-        public ReceitaPacDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils)
+        public ReceitaPacDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils, ILancamentoDataManager lancamentoDataManager)
         {
             _unitOfWork = unitOfWork;
             _utils = utils;
+            _lancamentoDataManager = lancamentoDataManager;
         }
 
         private ReceitaPacDataContract MapEntity(ReceitaPac entity)
@@ -49,6 +51,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 ContaBancariaNome = entity.ContaBancariaFkNavigation == null
                     ? null
                     : $"{entity.ContaBancariaFkNavigation.EntidadeBancaria} - {entity.ContaBancariaFkNavigation.Descricao}",
+                CodigoContaDebitoFk = entity.CodigoContaDebitoFk,
+                CodigoContaDebitoDesignacao = entity.CodigoContaDebitoFkNavigation?.Designacao,
+                CodigoContaCreditoFk = entity.CodigoContaCreditoFk,
+                CodigoContaCreditoDesignacao = entity.CodigoContaCreditoFkNavigation?.Designacao,
                 ValorCobradoTotal = total,
                 SaldoPorCobrar = entity.ValorPac - total
             };
@@ -156,6 +162,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     entity.ValorCobradoBanco = request.ValorCobradoBanco;
                     entity.ValorCobradoCaixa = request.ValorCobradoCaixa;
                     entity.ContaBancariaFk = request.ContaBancariaFk;
+                    entity.CodigoContaDebitoFk = request.CodigoContaDebitoFk;
+                    entity.CodigoContaCreditoFk = request.CodigoContaCreditoFk;
                     entity = _utils.UpdateDetailsToEntity(entity);
                     _unitOfWork.ReceitaPacRepository.Update(entity);
                 }
@@ -177,11 +185,32 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                         ValorCobradoBanco = request.ValorCobradoBanco,
                         ValorCobradoCaixa = request.ValorCobradoCaixa,
                         ContaBancariaFk = request.ContaBancariaFk,
+                        CodigoContaDebitoFk = request.CodigoContaDebitoFk,
+                        CodigoContaCreditoFk = request.CodigoContaCreditoFk,
                         IndActivo = true
                     };
                     entity = _utils.SetDetailsToEntity(entity);
                     _unitOfWork.ReceitaPacRepository.Add(entity);
                 }
+                _unitOfWork.Commit(); // entity.Id (identity) chỉ có giá trị thật sau Commit
+
+                // Bút toán Débito/Crédito tự sinh ngay khi Receita được lưu — Receita
+                // không có bước duyệt riêng (execution-only, xem memory
+                // receita-approval-decision) nên không có chỗ nào khác để tách bước
+                // như bên Pagamento (Autorização/Realização). Idempotent theo
+                // GerarSeChuaCo's ExistsForOrigem — sửa lại 1 Receita đã có Lançamento
+                // sẽ không tạo dòng thứ 2, nhưng cũng không cập nhật giá trị dòng cũ
+                // nếu Valor thay đổi sau đó — cùng giới hạn với bên Pagamento hiện tại.
+                decimal totalCobrado = request.ValorCobradoBanco + request.ValorCobradoCaixa;
+                _lancamentoDataManager.GerarSeChuaCo(
+                    origemTipo: "ReceitaPac",
+                    origemId: entity.Id,
+                    data: new DateTime(request.Ano, request.Mes, 1),
+                    codigoContaDebitoFk: request.CodigoContaDebitoFk,
+                    codigoContaCreditoFk: request.CodigoContaCreditoFk,
+                    valor: totalCobrado,
+                    descricao: $"Receita PAC Nº {entity.Numero}/{entity.Ano} - {entity.Descritivo}");
+
                 _unitOfWork.Commit();
 
                 ReceitaPac saved = _unitOfWork.ReceitaPacRepository.Get(entity.Id);

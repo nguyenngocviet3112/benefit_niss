@@ -366,6 +366,18 @@ namespace TimorINSSBackEnd.Models
                     .HasForeignKey(d => d.ContaBancariaFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ReceitaPac_ContaBancaria");
+
+                entity.HasOne(d => d.CodigoContaDebitoFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CodigoContaDebitoFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceitaPac_CodigoContaDebito");
+
+                entity.HasOne(d => d.CodigoContaCreditoFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CodigoContaCreditoFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceitaPac_CodigoContaCredito");
             });
 
             modelBuilder.Entity<BankStatementLine>(entity =>

@@ -69,6 +69,14 @@
             <label>Saldo liquidado por cobrar <span class="itag auto">Tự động</span></label>
             <span>{{ item.saldoPorCobrar | number:'1.2-2' }}</span>
           </div>
+          <div class="rec-field">
+            <label>Tài khoản Nợ (Débito) <span class="itag drop">Chọn</span></label>
+            <span>{{ item.codigoContaDebitoDesignacao || '—' }}</span>
+          </div>
+          <div class="rec-field">
+            <label>Tài khoản Có (Crédito) <span class="itag drop">Chọn</span></label>
+            <span>{{ item.codigoContaCreditoDesignacao || '—' }}</span>
+          </div>
         </div>
 
         <div class="rec-actions-bar">
@@ -159,6 +167,29 @@
         <mat-form-field appearance="outline">
           <mat-label>Đã thu qua tiền mặt <span class="itag type">Gõ tay</span></mat-label>
           <input matInput type="number" min="0" step="0.01" [(ngModel)]="formValorCobradoCaixa" name="formValorCobradoCaixa" />
+        </mat-form-field>
+
+        <div class="rec-form-span2">
+          <div class="rec-hint">
+            Chọn 2 tài khoản kế toán để hệ thống tự sinh bút toán vào Registo de Lançamentos khi lưu Receita
+            này (Nợ tăng Tiền mặt/Ngân hàng, Có ghi nhận nguồn thu) — không nhập tay lại ở sổ nhật ký.
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tài khoản Nợ (Débito) <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formCodigoContaDebitoFk" name="formCodigoContaDebitoFk">
+            <mat-option [value]="null">— Không chọn —</mat-option>
+            <mat-option *ngFor="let c of codigoContaOptions" [value]="c.id">{{ c.designacao }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tài khoản Có (Crédito) <span class="itag drop">Chọn</span></mat-label>
+          <mat-select [(ngModel)]="formCodigoContaCreditoFk" name="formCodigoContaCreditoFk">
+            <mat-option [value]="null">— Không chọn —</mat-option>
+            <mat-option *ngFor="let c of codigoContaOptions" [value]="c.id">{{ c.designacao }}</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
 

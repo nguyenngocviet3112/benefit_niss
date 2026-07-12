@@ -12,6 +12,8 @@ export interface SaveReceitaPacRequest {
   valorCobradoBanco: number;
   valorCobradoCaixa: number;
   contaBancariaFk?: number | null;
+  codigoContaDebitoFk?: number | null;
+  codigoContaCreditoFk?: number | null;
 }
 
 export interface DeactivateReceitaPacRequest {

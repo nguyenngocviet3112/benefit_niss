@@ -9,6 +9,7 @@ import { ProgramActivityService } from '../../services/program-activity.service'
 import { ReceitaPacService } from '../../services/receita-pac.service';
 import { SelectDescription } from '../../models/utils';
 import { BankAccountModel, BankAccountService } from '../../services/bank-account.service';
+import { CodigoContaOptionDataContract } from '../../response-models/payment-response';
 
 @Component({
   selector: 'app-receita-pac',
@@ -31,6 +32,7 @@ export class ReceitaPacComponent implements OnInit {
   public economicClassifications: EconomicClassificationDataContract[] = [];
   public institutions: SelectDescription[] = [];
   public bankAccounts: BankAccountModel[] = [];
+  public codigoContaOptions: CodigoContaOptionDataContract[] = [];
 
   public showForm = false;
   public editingId = 0;
@@ -45,6 +47,8 @@ export class ReceitaPacComponent implements OnInit {
   public formValorCobradoBanco = 0;
   public formValorCobradoCaixa = 0;
   public formContaBancariaFk: number | null = null;
+  public formCodigoContaDebitoFk: number | null = null;
+  public formCodigoContaCreditoFk: number | null = null;
 
   constructor(
     private receitaPacService: ReceitaPacService,
@@ -116,6 +120,13 @@ export class ReceitaPacComponent implements OnInit {
       response => this.bankAccounts = response.items ?? [],
       err => this.showError(err)
     );
+
+    // Tài khoản Nợ/Có để tự sinh Lançamento — dùng chung Plano de Contas với
+    // Pagamento (xem memory lancamentos-conciliacao-link-design).
+    this.receitaPacService.getCodigoContaOptions().subscribe(
+      response => this.codigoContaOptions = response.items ?? [],
+      err => this.showError(err)
+    );
   }
 
   public indent(nivel: number): string {
@@ -139,6 +150,8 @@ export class ReceitaPacComponent implements OnInit {
     this.formValorCobradoBanco = 0;
     this.formValorCobradoCaixa = 0;
     this.formContaBancariaFk = null;
+    this.formCodigoContaDebitoFk = null;
+    this.formCodigoContaCreditoFk = null;
     this.showForm = true;
   }
 
@@ -155,6 +168,8 @@ export class ReceitaPacComponent implements OnInit {
     this.formValorCobradoBanco = item.valorCobradoBanco;
     this.formValorCobradoCaixa = item.valorCobradoCaixa;
     this.formContaBancariaFk = item.contaBancariaFk ?? null;
+    this.formCodigoContaDebitoFk = item.codigoContaDebitoFk ?? null;
+    this.formCodigoContaCreditoFk = item.codigoContaCreditoFk ?? null;
     this.showForm = true;
   }
 
@@ -185,7 +200,9 @@ export class ReceitaPacComponent implements OnInit {
       valorPac: this.formValorPac,
       valorCobradoBanco: this.formValorCobradoBanco,
       valorCobradoCaixa: this.formValorCobradoCaixa,
-      contaBancariaFk: this.formContaBancariaFk ?? undefined
+      contaBancariaFk: this.formContaBancariaFk ?? undefined,
+      codigoContaDebitoFk: this.formCodigoContaDebitoFk ?? undefined,
+      codigoContaCreditoFk: this.formCodigoContaCreditoFk ?? undefined
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {

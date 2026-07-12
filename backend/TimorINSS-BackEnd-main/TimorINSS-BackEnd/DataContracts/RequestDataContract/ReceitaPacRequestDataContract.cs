@@ -50,6 +50,12 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
 
         [DataMember]
         public int? ContaBancariaFk { get; set; }
+
+        [DataMember]
+        public int? CodigoContaDebitoFk { get; set; }
+
+        [DataMember]
+        public int? CodigoContaCreditoFk { get; set; }
     }
 
     [DataContract]

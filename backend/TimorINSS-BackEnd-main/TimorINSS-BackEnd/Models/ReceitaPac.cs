@@ -20,6 +20,8 @@ namespace TimorINSSBackEnd.Models
         public decimal ValorCobradoBanco { get; set; }
         public decimal ValorCobradoCaixa { get; set; }
         public int? ContaBancariaFk { get; set; }
+        public int? CodigoContaDebitoFk { get; set; }
+        public int? CodigoContaCreditoFk { get; set; }
         public bool IndActivo { get; set; }
         public int UtilizadorCriacao { get; set; }
         public DateTime DataCriacao { get; set; }
@@ -32,5 +34,7 @@ namespace TimorINSSBackEnd.Models
         public virtual EconomicClassification EconomicClassificationFkNavigation { get; set; }
         public virtual Institution OrganizationFkNavigation { get; set; }
         public virtual Contabancaria ContaBancariaFkNavigation { get; set; }
+        public virtual Codigoconta CodigoContaDebitoFkNavigation { get; set; }
+        public virtual Codigoconta CodigoContaCreditoFkNavigation { get; set; }
     }
 }

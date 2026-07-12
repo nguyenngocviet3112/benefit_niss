@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DeactivateReceitaPacRequest, SaveReceitaPacRequest } from '../request-models/receita-pac-request';
 import { ReceitaPacListResponse, ReceitaPacResponse } from '../response-models/receita-pac-response';
+import { CodigoContaOptionsResponse } from '../response-models/payment-response';
 import { ResponseBase } from '../response-models/utils-response';
 
 @Injectable({
@@ -23,5 +24,9 @@ export class ReceitaPacService {
 
   public deactivate(request: DeactivateReceitaPacRequest): Observable<ResponseBase> {
     return this.http.post<ResponseBase>(`${environment.apiUrl}/receitapac/Deactivate`, request);
+  }
+
+  public getCodigoContaOptions(): Observable<CodigoContaOptionsResponse> {
+    return this.http.get<CodigoContaOptionsResponse>(`${environment.apiUrl}/pagamento/GetCodigoContaOptions`);
   }
 }
