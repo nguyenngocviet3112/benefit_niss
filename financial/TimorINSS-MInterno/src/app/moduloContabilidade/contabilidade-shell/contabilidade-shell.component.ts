@@ -189,14 +189,11 @@ export class ContabilidadeShellComponent implements OnInit {
       // Integration" nằm ở nhóm "Hệ thống" riêng, còn "Ngôn ngữ/Kỳ ngân sách/
       // Ngân hàng" nằm ở nhóm "Cấu hình hệ thống". Giờ chỉ còn 1 nhóm duy nhất.
       // "Quản lý User" cũng gộp vào đây 2026-07-12 (user yêu cầu không tách
-      // riêng nữa) — không còn là nhóm top-level riêng. "Meu Perfil" (tự
-      // phục vụ — mọi user, không cần RequirePerm) cũng thêm vào đây cùng
-      // ngày, đặt đầu danh sách vì dùng thường xuyên hơn các mục admin còn lại.
+      // riêng nữa) — không còn là nhóm top-level riêng.
       label: 'Cấu hình hệ thống',
       icon: 'settings',
       expanded: false,
       items: [
-        { label: 'Meu Perfil (Hồ sơ cá nhân)', route: '/contabilidade/meuPerfil' },
         { label: 'Ngôn ngữ (Idioma)', route: '/contabilidade/settings/idioma' },
         { label: 'Kỳ ngân sách (Orçamento Config)', route: '/contabilidade/settings/kyNganSach' },
         { label: 'Ngân hàng (Contas Bancárias)', route: '/contabilidade/settings/bankAccount' },
@@ -204,6 +201,18 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission' },
         { label: 'Cấu hình Email', comingSoon: true },
         { label: 'API Integration (Benefit)', comingSoon: true },
+      ]
+    },
+    {
+      // 2026-07-12 (user yêu cầu): "Meu Perfil" tách RIÊNG, không nằm dưới
+      // "Cấu hình hệ thống" — khác với "Quản lý User" (admin quản lý user
+      // KHÁC, RequirePerm), đây là tự phục vụ (self-service, mọi user đăng
+      // nhập đều thấy, không cần quyền) nên đặt thành nhóm top-level độc lập.
+      label: 'Meu Perfil',
+      icon: 'account_circle',
+      expanded: false,
+      items: [
+        { label: 'Hồ sơ cá nhân / Đổi mật khẩu', route: '/contabilidade/meuPerfil' },
       ]
     },
   ];
