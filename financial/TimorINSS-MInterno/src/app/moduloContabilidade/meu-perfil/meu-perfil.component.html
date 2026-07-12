@@ -12,6 +12,18 @@
   </div>
 
   <div class="mp-section">
+    <h3>Quyền hiện có (mode mới)</h3>
+    <div class="mp-perm-admin" *ngIf="isAdmin">Quản trị viên (ADMIN) — có toàn quyền hệ thống.</div>
+    <ng-container *ngIf="!isAdmin">
+      <div class="mp-perm-group" *ngFor="let g of myPermGroups">
+        <span class="mp-perm-group-title">{{ g.nome }}</span>
+        <span class="mp-perm-chip" *ngFor="let t of g.tokens">{{ t }}</span>
+      </div>
+      <p class="mp-hint" *ngIf="myPermGroups.length === 0">Chưa được gán quyền nào ở mode mới — liên hệ quản trị viên nếu cần dùng chức năng nào đó.</p>
+    </ng-container>
+  </div>
+
+  <div class="mp-section">
     <h3>Email</h3>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Email</mat-label>

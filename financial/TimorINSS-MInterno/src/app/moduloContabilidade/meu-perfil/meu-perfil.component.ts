@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MeuPerfilService } from '../../services/meu-perfil.service';
+import { PermissionGroupModel, PermissionService } from '../../services/permission.service';
+
+interface MyPermGroup {
+  nome: string;
+  tokens: string[];
+}
 
 // Meu Perfil — tự phục vụ: mỗi user chỉ xem/sửa hồ sơ của CHÍNH MÌNH.
 // Nome/Departamento chỉ hiển thị (do admin quản lý ở "Quản lý User &
@@ -25,13 +31,40 @@ export class MeuPerfilComponent implements OnInit {
   public formConfirmarSenhaNova = '';
   public savingSenha = false;
 
+  public isAdmin = false;
+  public myPermGroups: MyPermGroup[] = [];
+
   constructor(
     private meuPerfilService: MeuPerfilService,
+    private permissionService: PermissionService,
     private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
     this.load();
+    this.loadMyPermissions();
+  }
+
+  // Quyền (mode mới) của chính user đang đăng nhập — đọc từ JWT phía client
+  // (getCurrentPerms, không cần gọi API riêng) rồi đối chiếu với catalog để
+  // ra tên hiển thị, gom theo nhóm nghiệp vụ cho dễ đọc. Không hiện token
+  // "ADMIN" như 1 dòng bth — hiện thông báo riêng vì nó có nghĩa "toàn quyền".
+  public loadMyPermissions(): void {
+    const perms = this.permissionService.getCurrentPerms();
+    this.isAdmin = perms.includes('ADMIN');
+    if (this.isAdmin) {
+      return;
+    }
+
+    this.permissionService.getCatalog().subscribe(response => {
+      const groups: PermissionGroupModel[] = response.groups ?? [];
+      this.myPermGroups = groups
+        .map(g => ({
+          nome: g.nome,
+          tokens: g.tokens.filter(t => perms.includes(t.token)).map(t => t.label)
+        }))
+        .filter(g => g.tokens.length > 0);
+    });
   }
 
   public load(): void {

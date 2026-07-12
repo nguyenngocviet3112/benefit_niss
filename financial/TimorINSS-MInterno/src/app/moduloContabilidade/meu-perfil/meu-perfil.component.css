@@ -45,3 +45,35 @@
 .full-width {
   width: 100%;
 }
+
+.mp-perm-admin {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: #e1eee4;
+  color: #3d7a4f;
+  font-weight: 600;
+}
+
+.mp-perm-group {
+  margin-bottom: 8px;
+}
+
+.mp-perm-group-title {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  color: #7c2d22;
+  margin-bottom: 4px;
+}
+
+.mp-perm-chip {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: #eef0f5;
+  color: #444;
+  margin: 2px 4px 2px 0;
+}

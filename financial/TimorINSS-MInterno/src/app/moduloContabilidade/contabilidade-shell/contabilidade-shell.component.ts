@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../../services/token-storage.service';
+import { PermissionService } from '../../services/permission.service';
 
 interface TreebarLeaf {
   label: string;
   route?: string;
   comingSoon?: boolean;
+  // Token nào trong danh sách này mà user có là đủ để thấy mục — để trống
+  // (undefined) nghĩa là ai đăng nhập cũng thấy (không cần quyền riêng),
+  // vd Meu Perfil hoặc các màn Đóng góp BHXH tái dùng nguyên bản mode cũ.
+  permTokens?: string[];
 }
 
 interface TreebarGroup {
@@ -22,8 +27,11 @@ interface TreebarGroup {
 })
 export class ContabilidadeShellComponent implements OnInit {
 
+  private currentPerms: string[] = [];
+
   constructor(
     private tokenStorage: TokenStorageService,
+    private permissionService: PermissionService,
     private router: Router
   ) { }
 
@@ -34,6 +42,28 @@ export class ContabilidadeShellComponent implements OnInit {
     if (!this.tokenStorage.getToken()) {
       this.router.navigate(['/login']);
     }
+    this.currentPerms = this.permissionService.getCurrentPerms();
+  }
+
+  // Ẩn/hiện mục menu theo quyền hiện có (2026-07-12, user yêu cầu) — chỉ là
+  // dọn giao diện, KHÔNG phải lớp bảo mật mới: backend vẫn là nơi chặn thật
+  // qua [RequirePerm] trên các hành động ghi/sửa (xem RBAC enforcement).
+  // Hầu hết endpoint GET/xem không bị chặn — nên mục không có permTokens
+  // (undefined) mặc định LUÔN hiện.
+  private canSee(item: TreebarLeaf): boolean {
+    if (!item.permTokens || item.permTokens.length === 0) {
+      return true;
+    }
+    if (this.currentPerms.includes('ADMIN')) {
+      return true;
+    }
+    return item.permTokens.some(t => this.currentPerms.includes(t));
+  }
+
+  public get visibleGroups(): TreebarGroup[] {
+    return this.groups
+      .map(group => ({ ...group, items: group.items.filter(item => this.canSee(item)) }))
+      .filter(group => group.items.length > 0);
   }
 
   // Cây menu tĩnh (hardcoded) — KHÔNG tính toán động theo permissions như menu cũ.
@@ -52,11 +82,11 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'sync_alt',
       expanded: false,
       items: [
-        { label: 'AD (Autorização de Despesa)', route: '/contabilidade/adCabimento' },
-        { label: 'Cabimento (DIC)', route: '/contabilidade/cabimento' },
-        { label: 'Compromisso', route: '/contabilidade/compromissoDespesa' },
-        { label: 'Obrigação', route: '/contabilidade/obligation' },
-        { label: 'Pagamento', route: '/contabilidade/payment' },
+        { label: 'AD (Autorização de Despesa)', route: '/contabilidade/adCabimento', permTokens: ['AD_SUBMIT', 'AD_REVIEW', 'AD_APPROVE'] },
+        { label: 'Cabimento (DIC)', route: '/contabilidade/cabimento', permTokens: ['CABIMENTO_SUBMIT', 'CABIMENTO_APPROVE'] },
+        { label: 'Compromisso', route: '/contabilidade/compromissoDespesa', permTokens: ['COMPROMISSO_SUBMIT', 'COMPROMISSO_REVIEW', 'COMPROMISSO_APPROVE'] },
+        { label: 'Obrigação', route: '/contabilidade/obligation', permTokens: ['OBRIGACAO_SUBMIT', 'OBRIGACAO_APPROVE'] },
+        { label: 'Pagamento', route: '/contabilidade/payment', permTokens: ['PAG_SUBMIT', 'PAG_APPROVE', 'PAG_EXECUTE'] },
       ]
     },
     {
@@ -64,13 +94,16 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'payments',
       expanded: false,
       items: [
-        { label: 'Receita PAC (Outras)', route: '/contabilidade/receita' },
-        // Receita GP (contribuições) — 2026-07-11, user-stated: nên có trong tab
-        // Receita, không chỉ Receita PAC. Dữ liệu GP đã được nhập/validado qua
-        // module Contribuições cũ (ContaCorrente/GuiaPagamento) — tái dùng màn
-        // "Guia Pagamento (Validação)" có sẵn (route dưới nhóm Đóng góp BHXH)
-        // thay vì xây màn nhập mới, để tránh 2 nơi nhập trùng dữ liệu.
-        { label: 'Receita GP (Contribuições)', route: '/contabilidade/contribuicoes/guiaPagamento' },
+        { label: 'Receita PAC (Outras)', route: '/contabilidade/receita', permTokens: ['REC_SUBMIT'] },
+        // Receita GP (contribuições) — 2026-07-12, thay thế: màn "Guia Pagamento
+        // (Validação)" cũ (mode cũ, dưới nhóm Đóng góp BHXH) chỉ có tác dụng
+        // xem — Duyệt ở đó set Paid/Partial Paid chỉ dựa vào officer đọc chứng từ,
+        // không đối chiếu với sao kê ngân hàng thật (gap user chỉ ra 2026-07-12).
+        // Màn mới "Duyệt Guia Pagamento (đối chiếu ngân hàng)" bắt buộc chọn khớp
+        // dòng sao kê ngân hàng thật trước khi set Paid — dùng chung permTokens
+        // 'BANCO_CONCILIAR' vì cùng hoạt động đối chiếu ngân hàng, chỉ khác
+        // nguồn tiền vào (GuiaPagamento thay vì ReceitaPac/PaymentExecution).
+        { label: 'Duyệt Guia Pagamento (đối chiếu ngân hàng)', route: '/contabilidade/receita/guiaConciliacao', permTokens: ['BANCO_CONCILIAR'] },
       ]
     },
     {
@@ -78,7 +111,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'account_balance',
       expanded: false,
       items: [
-        { label: 'Conciliação de Movimentos', route: '/contabilidade/conciliacaoMovimentos' },
+        { label: 'Conciliação de Movimentos', route: '/contabilidade/conciliacaoMovimentos', permTokens: ['BANCO_CONCILIAR'] },
       ]
     },
     {
@@ -91,6 +124,7 @@ export class ContabilidadeShellComponent implements OnInit {
       // từ Pagamento thực hiện (dùng Débito/Crédito đã lưu ở PaymentAuthorization)
       // và Receita (follow-up, ReceitaPac chưa có cột Débito/Crédito — xem
       // memory ce-inss-global-impl-status / financial-statements-scope-gap).
+      // Màn chỉ xem, không có RequirePerm nào cả — không gắn permTokens.
       label: 'shell.groupContabilidadeGeral',
       icon: 'menu_book',
       expanded: false,
@@ -103,9 +137,9 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'account_balance_wallet',
       expanded: false,
       items: [
-        { label: 'Orçamento', route: '/contabilidade/orcamento' },
-        { label: 'Suplementar', route: '/contabilidade/orcamentoSuplementar' },
-        { label: 'Saldos de Abertura (Cut-over)', route: '/contabilidade/saldosAbertura' },
+        { label: 'Orçamento', route: '/contabilidade/orcamento', permTokens: ['ORC_SUBMIT', 'ORC_REVIEW', 'ORC_APPROVE'] },
+        { label: 'Suplementar', route: '/contabilidade/orcamentoSuplementar', permTokens: ['ORC_SUBMIT', 'ORC_REVIEW', 'ORC_APPROVE'] },
+        { label: 'Saldos de Abertura (Cut-over)', route: '/contabilidade/saldosAbertura', permTokens: ['ABE_SUBMIT', 'REC_SUBMIT'] },
       ]
     },
     {
@@ -121,7 +155,7 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'summarize',
       expanded: false,
       items: [
-        { label: 'CE_OSS_Global', route: '/contabilidade/relatorios/ceInssGlobal' },
+        { label: 'CE_OSS_Global', route: '/contabilidade/relatorios/ceInssGlobal', permTokens: ['REPORT_VIEW'] },
         { label: 'Ciclo da Despesa', comingSoon: true },
         { label: 'Síntese Programas', comingSoon: true },
         { label: 'Classificação Funcional (relatório)', comingSoon: true },
@@ -150,6 +184,7 @@ export class ContabilidadeShellComponent implements OnInit {
       // mới thay vì rơi về giao diện cũ. Component vẫn được declare duy nhất ở
       // AppModule như trước — ở đây chỉ thêm 1 route thứ 2 trỏ tới cùng class.
       // Đặt dưới Báo cáo, trên Master Data theo yêu cầu user (2026-07-11).
+      // Backend cũ không có RequirePerm — mở cho mọi internal, không gắn permTokens.
       label: 'shell.groupDongGopBHXH',
       icon: 'badge',
       expanded: false,
@@ -164,9 +199,10 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'dns',
       expanded: false,
       items: [
-        { label: 'Estrutura Programática', route: '/contabilidade/estruturaProgramatica' },
-        { label: 'Classificação Funcional', route: '/contabilidade/classificacaoFuncional' },
-        { label: 'Classificação Económica', route: '/contabilidade/classificacaoEconomica' },
+        { label: 'Estrutura Programática', route: '/contabilidade/estruturaProgramatica', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'Classificação Funcional', route: '/contabilidade/classificacaoFuncional', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'Classificação Económica', route: '/contabilidade/classificacaoEconomica', permTokens: ['MASTERDATA_MANAGE'] },
+        // Organization (InstitutionController) không có RequirePerm — chỉ xem.
         { label: 'Organization', route: '/contabilidade/organization' },
         // 2026-07-12 (user corrected): Plano de Contas + Mapeamento Rubricas KHÔNG
         // phải bảng/data mới — đã tồn tại từ trước là Codigoconta (cây tài khoản,
@@ -178,8 +214,8 @@ export class ContabilidadeShellComponent implements OnInit {
         // TipoConta Receita/Despesa/Neutro Receita/Neutro Despesa — không đụng tới
         // Actidade/Funcional, dữ liệu cũ trùng lặp Programa/Atividade và Classificação
         // Funcional). Xem [[financial-statements-scope-gap]].
-        { label: 'Plano de Contas (Codigoconta)', route: '/contabilidade/planoContas' },
-        { label: 'Mapeamento Rubricas (Agrupamentoconfig)', route: '/contabilidade/mapeamentoRubricas' },
+        { label: 'Plano de Contas (Codigoconta)', route: '/contabilidade/planoContas', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'Mapeamento Rubricas (Agrupamentoconfig)', route: '/contabilidade/mapeamentoRubricas', permTokens: ['MASTERDATA_MANAGE'] },
         { label: 'Fornecedores / Clientes', comingSoon: true },
       ]
     },
@@ -194,12 +230,12 @@ export class ContabilidadeShellComponent implements OnInit {
       icon: 'settings',
       expanded: false,
       items: [
-        { label: 'Ngôn ngữ (Idioma)', route: '/contabilidade/settings/idioma' },
-        { label: 'Kỳ ngân sách (Orçamento Config)', route: '/contabilidade/settings/kyNganSach' },
-        { label: 'Ngân hàng (Contas Bancárias)', route: '/contabilidade/settings/bankAccount' },
-        { label: 'Cấu hình phòng ban', route: '/contabilidade/sistema/departamentos' },
-        { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission' },
-        { label: 'Đồng bộ User (hệ thống cũ)', route: '/contabilidade/userSync' },
+        { label: 'Ngôn ngữ (Idioma)', route: '/contabilidade/settings/idioma', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'Kỳ ngân sách (Orçamento Config)', route: '/contabilidade/settings/kyNganSach', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'Ngân hàng (Contas Bancárias)', route: '/contabilidade/settings/bankAccount', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'Cấu hình phòng ban', route: '/contabilidade/sistema/departamentos', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission', permTokens: ['USER_MANAGE'] },
+        { label: 'Đồng bộ User (hệ thống cũ)', route: '/contabilidade/userSync', permTokens: ['USER_MANAGE'] },
         { label: 'Cấu hình Email', comingSoon: true },
         { label: 'API Integration (Benefit)', comingSoon: true },
       ]
@@ -218,7 +254,13 @@ export class ContabilidadeShellComponent implements OnInit {
     },
   ];
 
+  // "group" đến từ visibleGroups (bản copy do getter tạo mỗi lần CD chạy) —
+  // phải toggle trên object GỐC trong this.groups, nếu không expanded sẽ bị
+  // getter tạo copy mới ghi đè về false ngay sau click (không thấy đổi trạng thái).
   public toggleGroup(group: TreebarGroup): void {
-    group.expanded = !group.expanded;
+    const original = this.groups.find(g => g.label === group.label);
+    if (original) {
+      original.expanded = !original.expanded;
+    }
   }
 }
