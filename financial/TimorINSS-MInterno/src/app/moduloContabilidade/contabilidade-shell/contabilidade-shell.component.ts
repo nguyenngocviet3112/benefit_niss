@@ -38,11 +38,13 @@ export class ContabilidadeShellComponent implements OnInit {
 
   // Cây menu tĩnh (hardcoded) — KHÔNG tính toán động theo permissions như menu cũ.
   // Cấu trúc phản ánh đầy đủ wireframe M0-M4; các mục chưa code xong đánh dấu comingSoon.
-  // Thứ tự nhóm theo yêu cầu (2026-07-11): Chi tiêu → Thu → Ngân hàng
-  // → Ngân sách (gồm cả Cut-over/Saldos de Abertura) → Báo cáo → Đóng góp BHXH
-  // → Master Data → Quản lý User → Cấu hình hệ thống (cuối cùng). Cut-over gộp
-  // chung vào Ngân sách — không còn là nhóm riêng. Đóng góp BHXH đặt dưới Báo
-  // cáo, trên Master Data (theo yêu cầu user). Tất cả nhóm mặc định collapse
+  // Thứ tự nhóm theo yêu cầu (2026-07-11, cập nhật 2026-07-12): Chi tiêu → Thu
+  // → Ngân hàng → Ngân sách (gồm cả Cut-over/Saldos de Abertura) → Báo cáo
+  // → Đóng góp BHXH → Master Data → Cấu hình hệ thống (cuối cùng, gồm cả
+  // Quản lý User & Phân quyền). Cut-over gộp chung vào Ngân sách — không còn
+  // là nhóm riêng. Đóng góp BHXH đặt dưới Báo cáo, trên Master Data. Quản lý
+  // User không còn là nhóm top-level riêng — gộp vào Cấu hình hệ thống
+  // (2026-07-12, theo yêu cầu user). Tất cả nhóm mặc định collapse
   // (expanded: false), user tự click để mở nhóm đang cần.
   public groups: TreebarGroup[] = [
     {
@@ -169,19 +171,14 @@ export class ContabilidadeShellComponent implements OnInit {
         // đã có InitialValue/IsCredit cho số dư đầu kỳ) + Agrupamentoconfig +
         // Relcodigocontaagrupamentoconfig (bảng quan hệ ánh xạ) — cả 2 đang được
         // dùng làm dropdown thật trong componente-despesa/receita/pop-up-executar-
-        // pagamentos (mode cũ). Còn comingSoon chỉ vì CHƯA CÓ MÀN QUẢN LÝ ở mode
-        // MỚI — không phải thiếu schema/dữ liệu. Xem [[financial-statements-scope-gap]].
-        { label: 'Plano de Contas (Codigoconta — đã có data, cần màn mode mới)', comingSoon: true },
-        { label: 'Mapeamento Rubricas (Agrupamentoconfig — đã có data, cần màn mode mới)', comingSoon: true },
+        // pagamentos (mode cũ). Plano de Contas nay đã có màn quản lý mode mới
+        // (backend CodigoContaTreeController đã có sẵn GetTree/Save/Deactivate,
+        // chỉ cần build frontend). Mapeamento Rubricas (Agrupamentoconfig) vẫn
+        // comingSoon vì backend CHƯA có CRUD đầy đủ (chỉ có 1 API filter cũ).
+        // Xem [[financial-statements-scope-gap]].
+        { label: 'Plano de Contas (Codigoconta)', route: '/contabilidade/planoContas' },
+        { label: 'Mapeamento Rubricas (Agrupamentoconfig)', comingSoon: true },
         { label: 'Fornecedores / Clientes', comingSoon: true },
-      ]
-    },
-    {
-      label: 'Quản lý User',
-      icon: 'group',
-      expanded: false,
-      items: [
-        { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission' },
       ]
     },
     {
@@ -189,6 +186,8 @@ export class ContabilidadeShellComponent implements OnInit {
       // thống" trùng ý nhau) — trước đó "Cấu hình phòng ban/Email/API
       // Integration" nằm ở nhóm "Hệ thống" riêng, còn "Ngôn ngữ/Kỳ ngân sách/
       // Ngân hàng" nằm ở nhóm "Cấu hình hệ thống". Giờ chỉ còn 1 nhóm duy nhất.
+      // "Quản lý User" cũng gộp vào đây 2026-07-12 (user yêu cầu không tách
+      // riêng nữa) — không còn là nhóm top-level riêng.
       label: 'Cấu hình hệ thống',
       icon: 'settings',
       expanded: false,
@@ -197,6 +196,7 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'Kỳ ngân sách (Orçamento Config)', route: '/contabilidade/settings/kyNganSach' },
         { label: 'Ngân hàng (Contas Bancárias)', route: '/contabilidade/settings/bankAccount' },
         { label: 'Cấu hình phòng ban', route: '/contabilidade/sistema/departamentos' },
+        { label: 'Quản lý User & Phân quyền', route: '/contabilidade/userPermission' },
         { label: 'Cấu hình Email', comingSoon: true },
         { label: 'API Integration (Benefit)', comingSoon: true },
       ]

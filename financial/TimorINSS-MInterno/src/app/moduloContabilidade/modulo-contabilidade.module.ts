@@ -34,6 +34,7 @@ import { DepartamentoConfigComponent } from './departamento-config/departamento-
 import { OrcamentoSuplementarComponent } from './orcamento-suplementar/orcamento-suplementar.component';
 import { SaldosAberturaComponent } from './saldos-abertura/saldos-abertura.component';
 import { BankAccountComponent } from './settings/bank-account/bank-account.component';
+import { PlanoContasComponent } from './plano-contas/plano-contas.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { BankAccountComponent } from './settings/bank-account/bank-account.compo
     DepartamentoConfigComponent,
     OrcamentoSuplementarComponent,
     SaldosAberturaComponent,
-    BankAccountComponent
+    BankAccountComponent,
+    PlanoContasComponent
   ],
   imports: [
     CommonModule,
