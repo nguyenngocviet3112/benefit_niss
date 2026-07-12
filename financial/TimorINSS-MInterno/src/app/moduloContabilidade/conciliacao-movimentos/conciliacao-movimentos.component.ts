@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { BankStatementLineService } from '../../services/bank-statement-line.service';
 import { BankAccountService, BankAccountModel } from '../../services/bank-account.service';
 import {
@@ -39,7 +40,8 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   constructor(
     private bankStatementLineService: BankStatementLineService,
     private bankAccountService: BankAccountService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -104,7 +106,7 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   public addLine(): void {
     if (!this.contaBancariaFk) { return; }
     if ((!this.formCredito || this.formCredito <= 0) && (!this.formDebito || this.formDebito <= 0)) {
-      this.snackBar.open('Vui lòng nhập Crédito hoặc Débito.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('conciliacao.errMissingValue'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -118,7 +120,7 @@ export class ConciliacaoMovimentosComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showAddForm = false;
@@ -129,11 +131,11 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   }
 
   public deleteLine(line: BankStatementLineDataContract): void {
-    if (!confirm(`Xoá dòng sao kê "${line.descricao || line.dataValor}"?`)) { return; }
+    if (!confirm(this.translate.instant('conciliacao.confirmDeleteLine', { descricao: line.descricao || line.dataValor }))) { return; }
     this.bankStatementLineService.deleteLine({ id: line.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -170,7 +172,7 @@ export class ConciliacaoMovimentosComponent implements OnInit {
     this.bankStatementLineService.matchReceita({ id: this.matchTarget.id, receitaPacFk: receita.receitaPacId }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.matchTarget = null;
@@ -186,7 +188,7 @@ export class ConciliacaoMovimentosComponent implements OnInit {
     this.bankStatementLineService.matchPagamento({ id: this.matchTarget.id, paymentExecutionFk: pagamento.paymentExecutionId }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.matchTarget = null;
@@ -198,11 +200,11 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   }
 
   public unmatch(line: BankStatementLineDataContract): void {
-    if (!confirm('Hủy đối chiếu dòng này?')) { return; }
+    if (!confirm(this.translate.instant('conciliacao.confirmUnmatch'))) { return; }
     this.bankStatementLineService.unmatch({ id: line.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -212,7 +214,7 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('conciliacao.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
