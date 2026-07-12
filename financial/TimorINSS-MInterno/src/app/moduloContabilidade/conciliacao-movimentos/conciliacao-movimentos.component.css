@@ -109,6 +109,12 @@
   border-bottom: 1px solid #eee;
 }
 
+.con-detail-ref {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
 .con-detail-matched {
   display: flex;
   align-items: center;

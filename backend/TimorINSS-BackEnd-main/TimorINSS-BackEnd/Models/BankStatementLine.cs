@@ -9,6 +9,8 @@ namespace TimorINSSBackEnd.Models
         public int Id { get; set; }
         public int ContaBancariaFk { get; set; }
         public DateTime DataValor { get; set; }
+        public DateTime? DataTransacao { get; set; }
+        public string CodigoTransacaoBancaria { get; set; }
         public string Descricao { get; set; }
         public decimal Credito { get; set; }
         public decimal Debito { get; set; }

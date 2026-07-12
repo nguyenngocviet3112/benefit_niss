@@ -1,6 +1,8 @@
 export interface AddBankStatementLineRequest {
   contaBancariaFk: number;
   dataValor: string;
+  dataTransacao?: string;
+  codigoTransacaoBancaria?: string;
   descricao?: string;
   credito: number;
   debito: number;

@@ -5,6 +5,8 @@ export interface BankStatementLineDataContract {
   contaBancariaFk: number;
   contaBancariaNome: string;
   dataValor: string;
+  dataTransacao?: string;
+  codigoTransacaoBancaria?: string;
   descricao?: string;
   credito: number;
   debito: number;

@@ -19,6 +19,12 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public DateTime DataValor { get; set; }
 
         [DataMember]
+        public DateTime? DataTransacao { get; set; }
+
+        [DataMember]
+        public string CodigoTransacaoBancaria { get; set; }
+
+        [DataMember]
         public string Descricao { get; set; }
 
         [DataMember]

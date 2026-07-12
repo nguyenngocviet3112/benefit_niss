@@ -31,6 +31,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     ? $"{entity.ContaBancariaFkNavigation.EntidadeBancaria} ({entity.ContaBancariaFkNavigation.Numero})"
                     : null,
                 DataValor = entity.DataValor,
+                DataTransacao = entity.DataTransacao,
+                CodigoTransacaoBancaria = entity.CodigoTransacaoBancaria,
                 Descricao = entity.Descricao,
                 Credito = entity.Credito,
                 Debito = entity.Debito,
@@ -128,6 +130,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 {
                     ContaBancariaFk = request.ContaBancariaFk,
                     DataValor = request.DataValor,
+                    DataTransacao = request.DataTransacao,
+                    CodigoTransacaoBancaria = request.CodigoTransacaoBancaria,
                     Descricao = request.Descricao,
                     Credito = request.Credito,
                     Debito = request.Debito,

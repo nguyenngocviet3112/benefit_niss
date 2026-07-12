@@ -34,6 +34,7 @@
   <div class="con-table" *ngIf="!loading">
     <div class="con-row con-row-header">
       <span class="con-col-data">Data Valor</span>
+      <span class="con-col-data">Data Transação</span>
       <span class="con-col-desc">Descrição</span>
       <span class="con-col-credito">Crédito</span>
       <span class="con-col-debito">Débito</span>
@@ -43,6 +44,7 @@
     <ng-container *ngFor="let l of lines">
       <div class="con-row con-row-summary" (click)="toggleExpand(l)">
         <span class="con-col-data">{{ l.dataValor | date:'dd/MM/yyyy' }}</span>
+        <span class="con-col-data">{{ l.dataTransacao ? (l.dataTransacao | date:'dd/MM/yyyy') : '—' }}</span>
         <span class="con-col-desc">{{ l.descricao || '—' }}</span>
         <span class="con-col-credito">{{ l.credito > 0 ? ('$ ' + (l.credito | number:'1.2-2')) : '—' }}</span>
         <span class="con-col-debito">{{ l.debito > 0 ? ('$ ' + (l.debito | number:'1.2-2')) : '—' }}</span>
@@ -54,6 +56,10 @@
       </div>
 
       <div class="con-detail" *ngIf="expandedId === l.id">
+        <div class="con-detail-ref" *ngIf="l.codigoTransacaoBancaria">
+          Mã giao dịch ngân hàng: <b>{{ l.codigoTransacaoBancaria }}</b>
+        </div>
+
         <div class="con-detail-matched" *ngIf="l.isConciliado">
           <span *ngIf="l.receitaPacDescricao">Khớp với: <b>{{ l.receitaPacDescricao }}</b></span>
           <span *ngIf="l.paymentExecutionDescricao">Khớp với: <b>{{ l.paymentExecutionDescricao }}</b></span>
@@ -99,6 +105,16 @@
       <mat-form-field appearance="outline" class="small-field">
         <mat-label>Data Valor <span class="itag type">Gõ tay</span></mat-label>
         <input matInput type="date" [(ngModel)]="formDataValor" name="formDataValor" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="small-field">
+        <mat-label>Data Transação <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput type="date" [(ngModel)]="formDataTransacao" name="formDataTransacao" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="medium-field">
+        <mat-label>Mã giao dịch ngân hàng <span class="itag type">Gõ tay (tùy chọn)</span></mat-label>
+        <input matInput [(ngModel)]="formCodigoTransacaoBancaria" name="formCodigoTransacaoBancaria" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">

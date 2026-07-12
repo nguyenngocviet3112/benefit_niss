@@ -26,6 +26,8 @@ export class ConciliacaoMovimentosComponent implements OnInit {
 
   public showAddForm = false;
   public formDataValor = new Date().toISOString().substring(0, 10);
+  public formDataTransacao = new Date().toISOString().substring(0, 10);
+  public formCodigoTransacaoBancaria = '';
   public formDescricao = '';
   public formCredito: number | null = null;
   public formDebito: number | null = null;
@@ -89,6 +91,8 @@ export class ConciliacaoMovimentosComponent implements OnInit {
 
   public openAddForm(): void {
     this.formDataValor = new Date().toISOString().substring(0, 10);
+    this.formDataTransacao = new Date().toISOString().substring(0, 10);
+    this.formCodigoTransacaoBancaria = '';
     this.formDescricao = '';
     this.formCredito = null;
     this.formDebito = null;
@@ -109,6 +113,8 @@ export class ConciliacaoMovimentosComponent implements OnInit {
     this.bankStatementLineService.addLine({
       contaBancariaFk: this.contaBancariaFk,
       dataValor: this.formDataValor,
+      dataTransacao: this.formDataTransacao || undefined,
+      codigoTransacaoBancaria: this.formCodigoTransacaoBancaria || undefined,
       descricao: this.formDescricao || undefined,
       credito: this.formCredito ?? 0,
       debito: this.formDebito ?? 0
