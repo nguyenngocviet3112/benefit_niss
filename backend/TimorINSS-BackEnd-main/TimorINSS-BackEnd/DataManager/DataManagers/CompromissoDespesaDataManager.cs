@@ -26,11 +26,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             _utils = utils;
         }
 
-        private CompromissoDespesaDataContract MapEntity(CompromissoDespesa entity)
+        private CompromissoDespesaDataContract MapEntity(CompromissoDespesa entity, decimal valorObrigado = 0)
         {
             Cabimento cabimento = entity.CabimentoFkNavigation;
             ExpenditureAuthorization ad = cabimento?.ExpenditureAuthorizationFkNavigation;
             OrcamentoLinha rubrica = ad?.OrcamentoLinhaFkNavigation;
+            decimal valorRevisto = entity.ValorCompromissoAno + entity.Regularizacao;
 
             return new CompromissoDespesaDataContract
             {
@@ -51,7 +52,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 ValorCompromissoGlobal = entity.ValorCompromissoGlobal,
                 ValorCompromissoAno = entity.ValorCompromissoAno,
                 Regularizacao = entity.Regularizacao,
-                ValorRevisto = entity.ValorCompromissoAno + entity.Regularizacao,
+                ValorRevisto = valorRevisto,
+                ValorObrigado = valorObrigado,
+                SaldoDisponivel = valorRevisto - valorObrigado,
                 AssumidoCom = entity.AssumidoCom,
                 Estado = entity.Estado,
                 SubmittedAt = entity.SubmittedAt,
@@ -72,8 +75,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             CompromissoDespesaListResponse response = new CompromissoDespesaListResponse();
             try
             {
-                response.Items = _unitOfWork.CompromissoDespesaRepository.GetByAno(request.Ano)
-                    .Select(MapEntity)
+                List<CompromissoDespesa> items = _unitOfWork.CompromissoDespesaRepository.GetByAno(request.Ano);
+                Dictionary<int, decimal> obrigadoPorCompromisso = _unitOfWork.CompromissoDespesaRepository
+                    .GetObrigadoByCompromissoIds(items.Select(c => c.Id).ToList());
+
+                response.Items = items
+                    .Select(c => MapEntity(c, obrigadoPorCompromisso.TryGetValue(c.Id, out var v) ? v : 0))
                     .ToList();
             }
             catch (Exception e)

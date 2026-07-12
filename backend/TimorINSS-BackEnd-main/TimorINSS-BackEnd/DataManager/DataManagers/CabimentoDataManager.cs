@@ -25,7 +25,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             _utils = utils;
         }
 
-        private CabimentoDataContract MapEntity(Cabimento entity)
+        private CabimentoDataContract MapEntity(Cabimento entity, decimal valorComprometido = 0)
         {
             OrcamentoLinha rubrica = entity.ExpenditureAuthorizationFkNavigation?.OrcamentoLinhaFkNavigation;
             return new CabimentoDataContract
@@ -46,6 +46,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     : 0,
                 Descritivo = entity.Descritivo,
                 ValorCabimentado = entity.ValorCabimentado,
+                ValorComprometido = valorComprometido,
+                SaldoDisponivel = entity.ValorCabimentado - valorComprometido,
                 ProcessoAprovisionamentoPrevio = entity.ProcessoAprovisionamentoPrevio,
                 Estado = entity.Estado,
                 SubmittedAt = entity.SubmittedAt,
@@ -60,8 +62,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             CabimentoListResponse response = new CabimentoListResponse();
             try
             {
-                response.Items = _unitOfWork.CabimentoRepository.GetByAno(request.Ano)
-                    .Select(MapEntity)
+                List<Cabimento> items = _unitOfWork.CabimentoRepository.GetByAno(request.Ano);
+                Dictionary<int, decimal> comprometidoPorCabimento = _unitOfWork.CabimentoRepository
+                    .GetComprometidoByCabimentoIds(items.Select(c => c.Id).ToList());
+
+                response.Items = items
+                    .Select(c => MapEntity(c, comprometidoPorCabimento.TryGetValue(c.Id, out var v) ? v : 0))
                     .ToList();
             }
             catch (Exception e)

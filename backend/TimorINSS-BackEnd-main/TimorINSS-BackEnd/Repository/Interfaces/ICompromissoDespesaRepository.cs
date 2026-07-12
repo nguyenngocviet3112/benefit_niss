@@ -10,6 +10,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         void Add(CompromissoDespesa entity);
         void Update(CompromissoDespesa entity);
         int GetNextNumero(int mes, int ano);
+        Dictionary<int, decimal> GetObrigadoByCompromissoIds(List<int> compromissoIds);
 
         void AddPlurianualidade(CompromissoDespesaPlurianualidade entity);
         void UpdatePlurianualidade(CompromissoDespesaPlurianualidade entity);

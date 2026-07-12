@@ -21,6 +21,7 @@
       <span class="ad-col-atividade">Atividade / Classificação Económica</span>
       <span class="ad-col-org">Org.</span>
       <span class="ad-col-valor">Valor revisto</span>
+      <span class="ad-col-saldo">Saldo disponível</span>
       <span class="ad-col-estado">Trạng thái</span>
     </div>
 
@@ -30,6 +31,7 @@
         <span class="ad-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
         <span class="ad-col-org">{{ item.organizationNome }}</span>
         <span class="ad-col-valor">$ {{ item.valorRevisto | number:'1.2-2' }}</span>
+        <span class="ad-col-saldo" [ngClass]="item.saldoDisponivel < 0 ? 'ad-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
         <span class="ad-col-estado">
           <span class="ad-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
         </span>
@@ -64,6 +66,14 @@
           <div class="ad-field">
             <label>Valor revisto <span class="itag auto">Tự động</span></label>
             <span>$ {{ item.valorRevisto | number:'1.2-2' }}</span>
+          </div>
+          <div class="ad-field">
+            <label>Đã có Cabimento <span class="itag auto">Tự động</span></label>
+            <span>$ {{ item.valorCabimentado | number:'1.2-2' }}</span>
+          </div>
+          <div class="ad-field">
+            <label>Saldo disponível <span class="itag auto">Tự động</span></label>
+            <span [ngClass]="item.saldoDisponivel < 0 ? 'ad-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
           </div>
           <div class="ad-field" *ngIf="item.lastRejectComment">
             <label>Lý do từ chối gần nhất</label>

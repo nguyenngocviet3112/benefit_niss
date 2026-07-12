@@ -60,6 +60,17 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return (max ?? 0) + 1;
         }
 
+        public Dictionary<int, decimal> GetObrigadoByCompromissoIds(List<int> compromissoIds)
+        {
+            // Same definition as ObligationDataManager.SaldoDisponivel()/ObligationRepository.GetTotalCommittedForCompromisso:
+            // any active ObligationItem counts as "já comprometido", regardless of payment status.
+            return _moduloContribuicoesContext.ObligationItem
+                .Where(oi => oi.IndActivo && compromissoIds.Contains(oi.CompromissoDespesaFk))
+                .ToList()
+                .GroupBy(oi => oi.CompromissoDespesaFk)
+                .ToDictionary(g => g.Key, g => g.Sum(oi => oi.Value));
+        }
+
         public void AddPlurianualidade(CompromissoDespesaPlurianualidade entity)
         {
             _moduloContribuicoesContext.CompromissoDespesaPlurianualidade.Add(entity);

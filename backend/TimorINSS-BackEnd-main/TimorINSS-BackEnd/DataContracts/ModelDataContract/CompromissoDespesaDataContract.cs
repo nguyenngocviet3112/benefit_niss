@@ -75,6 +75,12 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public decimal ValorRevisto { get; set; }
 
         [DataMember]
+        public decimal ValorObrigado { get; set; }
+
+        [DataMember]
+        public decimal SaldoDisponivel { get; set; }
+
+        [DataMember]
         public string AssumidoCom { get; set; }
 
         [DataMember]

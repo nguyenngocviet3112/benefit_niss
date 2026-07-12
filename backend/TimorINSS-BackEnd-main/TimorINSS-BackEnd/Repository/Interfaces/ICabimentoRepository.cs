@@ -11,5 +11,6 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         void Update(Cabimento entity);
         int GetNextNumero(int mes, int ano);
         bool HasCabimentoForAd(int expenditureAuthorizationFk);
+        Dictionary<int, decimal> GetComprometidoByCabimentoIds(List<int> cabimentoIds);
     }
 }

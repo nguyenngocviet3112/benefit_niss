@@ -68,7 +68,10 @@
 .comp-col-cab { flex: 1; color: #777; font-size: 12px; }
 .comp-col-atividade { flex: 2.4; }
 .comp-col-valor { flex: 1; text-align: right; font-family: monospace; }
+.comp-col-saldo { flex: 1; text-align: right; font-family: monospace; }
 .comp-col-estado { flex: 1; text-align: right; }
+
+.comp-saldo-negativo { color: #c62828; font-weight: 600; }
 
 .comp-estado {
   font-size: 11px;

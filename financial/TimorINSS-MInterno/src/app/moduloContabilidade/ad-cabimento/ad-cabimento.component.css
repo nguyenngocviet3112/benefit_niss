@@ -68,7 +68,10 @@
 .ad-col-atividade { flex: 3; }
 .ad-col-org { flex: 0.6; }
 .ad-col-valor { flex: 1; text-align: right; font-family: monospace; }
+.ad-col-saldo { flex: 1; text-align: right; font-family: monospace; }
 .ad-col-estado { flex: 1; text-align: right; }
+
+.ad-saldo-negativo { color: #c62828; font-weight: 600; }
 
 .ad-estado {
   font-size: 11px;

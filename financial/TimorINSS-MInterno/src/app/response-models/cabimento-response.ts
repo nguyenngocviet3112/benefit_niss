@@ -15,6 +15,8 @@ export interface CabimentoDataContract {
   valorAutorizadoAd: number;
   descritivo: string;
   valorCabimentado: number;
+  valorComprometido: number;
+  saldoDisponivel: number;
   processoAprovisionamentoPrevio?: boolean;
   estado: 'DRAFT' | 'PENDING_APPROVAL' | 'APPROVED';
   submittedAt?: string;

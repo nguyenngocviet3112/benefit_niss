@@ -21,6 +21,7 @@
       <span class="comp-col-cab">Cabimento / AD</span>
       <span class="comp-col-atividade">Atividade / Classificação Económica</span>
       <span class="comp-col-valor">Valor revisto</span>
+      <span class="comp-col-saldo">Saldo disponível</span>
       <span class="comp-col-estado">Trạng thái</span>
     </div>
 
@@ -30,6 +31,7 @@
         <span class="comp-col-cab">Cab {{ item.cabimentoNumero }} / AD {{ item.expenditureAuthorizationNumero }}</span>
         <span class="comp-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
         <span class="comp-col-valor">$ {{ item.valorRevisto | number:'1.2-2' }}</span>
+        <span class="comp-col-saldo" [ngClass]="item.saldoDisponivel < 0 ? 'comp-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
         <span class="comp-col-estado">
           <span class="comp-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
         </span>
@@ -60,6 +62,14 @@
           <div class="comp-field">
             <label>Valor revisto <span class="itag auto">Tự động</span></label>
             <span>$ {{ item.valorRevisto | number:'1.2-2' }}</span>
+          </div>
+          <div class="comp-field">
+            <label>Đã có Obrigação (comprometido) <span class="itag auto">Tự động</span></label>
+            <span>$ {{ item.valorObrigado | number:'1.2-2' }}</span>
+          </div>
+          <div class="comp-field">
+            <label>Saldo disponível <span class="itag auto">Tự động</span></label>
+            <span [ngClass]="item.saldoDisponivel < 0 ? 'comp-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field" *ngIf="item.lastRejectComment">
             <label>Lý do từ chối gần nhất</label>

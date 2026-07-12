@@ -12,6 +12,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         int GetNextNumero(int mes, int ano);
         bool HasAuthorizationForRubrica(int orcamentoLinhaFk);
         ExpenditureAuthorization GetByRubrica(int orcamentoLinhaFk);
+        Dictionary<int, decimal> GetCabimentadoByAdIds(List<int> adIds);
 
         void AddPlurianualidade(ExpenditureAuthorizationPlurianualidade entity);
         void UpdatePlurianualidade(ExpenditureAuthorizationPlurianualidade entity);

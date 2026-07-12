@@ -25,6 +25,8 @@ export interface CompromissoDespesaDataContract {
   valorCompromissoAno: number;
   regularizacao: number;
   valorRevisto: number;
+  valorObrigado: number;
+  saldoDisponivel: number;
   assumidoCom?: 'CONTRATO' | 'LISTA_BENEFICIARIOS' | 'OBRIGACAO';
   estado: 'DRAFT' | 'PENDING_REVIEW' | 'PENDING_APPROVAL' | 'APPROVED';
   submittedAt?: string;

@@ -21,6 +21,7 @@
       <span class="cab-col-ad">AD gốc</span>
       <span class="cab-col-atividade">Atividade / Classificação Económica</span>
       <span class="cab-col-valor">Valor cabimentado</span>
+      <span class="cab-col-saldo">Saldo disponível</span>
       <span class="cab-col-estado">Trạng thái</span>
       <span class="cab-col-actions">Hành động</span>
     </div>
@@ -30,6 +31,7 @@
       <span class="cab-col-ad">AD {{ item.expenditureAuthorizationNumero }}</span>
       <span class="cab-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
       <span class="cab-col-valor">$ {{ item.valorCabimentado | number:'1.2-2' }}</span>
+      <span class="cab-col-saldo" [ngClass]="item.saldoDisponivel < 0 ? 'cab-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
       <span class="cab-col-estado">
         <span class="cab-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
       </span>

@@ -60,6 +60,14 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return (max ?? 0) + 1;
         }
 
+        public Dictionary<int, decimal> GetCabimentadoByAdIds(List<int> adIds)
+        {
+            return _moduloContribuicoesContext.Cabimento
+                .Where(c => c.IndActivo && adIds.Contains(c.ExpenditureAuthorizationFk))
+                .GroupBy(c => c.ExpenditureAuthorizationFk)
+                .ToDictionary(g => g.Key, g => g.Sum(c => c.ValorCabimentado));
+        }
+
         public bool HasAuthorizationForRubrica(int orcamentoLinhaFk)
         {
             return _moduloContribuicoesContext.ExpenditureAuthorization

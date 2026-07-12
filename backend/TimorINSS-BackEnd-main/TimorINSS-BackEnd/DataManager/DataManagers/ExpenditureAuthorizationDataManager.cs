@@ -26,9 +26,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             _utils = utils;
         }
 
-        private ExpenditureAuthorizationDataContract MapEntity(ExpenditureAuthorization entity)
+        private ExpenditureAuthorizationDataContract MapEntity(ExpenditureAuthorization entity, decimal valorCabimentado = 0)
         {
             OrcamentoLinha rubrica = entity.OrcamentoLinhaFkNavigation;
+            decimal valorRevisto = entity.ValorAutorizado + entity.Regularizacao;
             return new ExpenditureAuthorizationDataContract
             {
                 Id = entity.Id,
@@ -45,7 +46,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Descritivo = entity.Descritivo,
                 ValorAutorizado = entity.ValorAutorizado,
                 Regularizacao = entity.Regularizacao,
-                ValorRevisto = entity.ValorAutorizado + entity.Regularizacao,
+                ValorRevisto = valorRevisto,
+                ValorCabimentado = valorCabimentado,
+                SaldoDisponivel = valorRevisto - valorCabimentado,
                 TipoDespesa = entity.TipoDespesa,
                 SolicitaAberturaAprovisionamento = entity.SolicitaAberturaAprovisionamento,
                 Estado = entity.Estado,
@@ -67,8 +70,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             ExpenditureAuthorizationListResponse response = new ExpenditureAuthorizationListResponse();
             try
             {
-                response.Items = _unitOfWork.ExpenditureAuthorizationRepository.GetByAno(request.Ano)
-                    .Select(MapEntity)
+                List<ExpenditureAuthorization> items = _unitOfWork.ExpenditureAuthorizationRepository.GetByAno(request.Ano);
+                Dictionary<int, decimal> cabimentadoPorAd = _unitOfWork.ExpenditureAuthorizationRepository
+                    .GetCabimentadoByAdIds(items.Select(a => a.Id).ToList());
+
+                response.Items = items
+                    .Select(a => MapEntity(a, cabimentadoPorAd.TryGetValue(a.Id, out var v) ? v : 0))
                     .ToList();
             }
             catch (Exception e)
