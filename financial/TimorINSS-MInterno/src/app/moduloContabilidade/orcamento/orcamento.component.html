@@ -1,27 +1,27 @@
 <div class="orc-container">
   <div class="orc-header">
-    <h2>Orçamento <span class="en">(Ngân sách — rúbrica Atividade × Classificação Económica × Organization)</span></h2>
-    <span class="orc-estado" *ngIf="batch" [ngClass]="'estado-' + batch.estado">{{ estadoLabels[batch.estado] }}</span>
+    <h2>{{ 'orcamento.header' | translate }} <span class="en">({{ 'orcamento.headerGloss' | translate }})</span></h2>
+    <span class="orc-estado" *ngIf="batch" [ngClass]="'estado-' + batch.estado">{{ estadoLabels[batch.estado] | translate }}</span>
   </div>
 
   <div class="orc-context-bar">
     <app-orcamento-config-select [value]="orcamentoConfigFk" (valueChange)="orcamentoConfigFk = $event; loadPickers(); loadBatch()"></app-orcamento-config-select>
-    <button mat-stroked-button (click)="loadBatch()">Tải lại</button>
+    <button mat-stroked-button (click)="loadBatch()">{{ 'orcamento.reload' | translate }}</button>
 
     <span class="spacer"></span>
 
     <ng-container *ngIf="batch">
       <app-master-data-import-button *ngIf="isDraft" entityPath="orcamento" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadBatch()"></app-master-data-import-button>
-      <button mat-raised-button color="primary" *ngIf="isDraft" (click)="openAddForm()">+ Thêm rúbrica</button>
+      <button mat-raised-button color="primary" *ngIf="isDraft" (click)="openAddForm()">{{ 'orcamento.addButton' | translate }}</button>
     </ng-container>
   </div>
 
-  <div class="orc-empty" *ngIf="!batch && !loading">Không tải được dữ liệu cho kỳ ngân sách này. Kiểm tra lại lựa chọn "Kỳ ngân sách" ở trên.</div>
+  <div class="orc-empty" *ngIf="!batch && !loading">{{ 'orcamento.noBatchError' | translate }}</div>
 
   <ng-container *ngIf="batch">
 
   <div class="orc-reject-banner" *ngIf="batch.lastRejectComment && isDraft">
-    <b>Bị từ chối lần gần nhất:</b> {{ batch.lastRejectComment }}
+    <b>{{ 'orcamento.lastRejectComment' | translate }}</b> {{ batch.lastRejectComment }}
   </div>
 
   <div class="orc-table">
@@ -29,8 +29,8 @@
       <span class="orc-col-atividade">Atividade</span>
       <span class="orc-col-ec">Classificação Económica</span>
       <span class="orc-col-org">Organization</span>
-      <span class="orc-col-valor">Valor (USD)</span>
-      <span class="orc-col-actions" *ngIf="isDraft">Ações</span>
+      <span class="orc-col-valor">{{ 'orcamento.colValor' | translate }}</span>
+      <span class="orc-col-actions" *ngIf="isDraft">{{ 'orcamento.colActions' | translate }}</span>
     </div>
     <div class="orc-row" *ngFor="let l of batch.linhas">
       <span class="orc-col-atividade">{{ l.atividadeCodigo }} - {{ l.atividadeDesignacao }}</span>
@@ -38,32 +38,32 @@
       <span class="orc-col-org">{{ l.organizationNome }}</span>
       <span class="orc-col-valor">{{ l.valor | number:'1.2-2' }}</span>
       <span class="orc-col-actions" *ngIf="isDraft">
-        <button mat-button (click)="openEditForm(l)">Sửa</button>
-        <button mat-button (click)="deleteLinha(l)">Xóa</button>
+        <button mat-button (click)="openEditForm(l)">{{ 'orcamento.editButton' | translate }}</button>
+        <button mat-button (click)="deleteLinha(l)">{{ 'orcamento.deleteButton' | translate }}</button>
       </span>
     </div>
-    <div class="orc-empty" *ngIf="batch.linhas.length === 0">Chưa có rúbrica nào.</div>
+    <div class="orc-empty" *ngIf="batch.linhas.length === 0">{{ 'orcamento.emptyList' | translate }}</div>
   </div>
 
   <div class="orc-summary">
-    <span>Tổng: <b>{{ batch.totalValor | number:'1.2-2' }}</b> USD ({{ batch.linhas.length }} rúbrica)</span>
+    <span>{{ 'orcamento.totalLabel' | translate }} <b>{{ batch.totalValor | number:'1.2-2' }}</b> USD ({{ batch.linhas.length }} {{ 'orcamento.rubricaWord' | translate }})</span>
   </div>
 
   <div class="orc-actions-bar">
-    <button mat-raised-button color="primary" *ngIf="batch.estado === 'DRAFT'" [disabled]="batch.linhas.length === 0" (click)="submitBatch()">Gửi duyệt</button>
+    <button mat-raised-button color="primary" *ngIf="batch.estado === 'DRAFT'" [disabled]="batch.linhas.length === 0" (click)="submitBatch()">{{ 'orcamento.submitButton' | translate }}</button>
 
     <ng-container *ngIf="batch.estado === 'PENDING_REVIEW'">
-      <button mat-raised-button color="primary" (click)="reviewApprove()">Xác nhận kiểm tra</button>
-      <button mat-stroked-button color="warn" (click)="openRejectPrompt('review')">Từ chối</button>
+      <button mat-raised-button color="primary" (click)="reviewApprove()">{{ 'orcamento.reviewApproveButton' | translate }}</button>
+      <button mat-stroked-button color="warn" (click)="openRejectPrompt('review')">{{ 'orcamento.rejectButton' | translate }}</button>
     </ng-container>
 
     <ng-container *ngIf="batch.estado === 'PENDING_APPROVAL'">
-      <button mat-raised-button color="primary" (click)="finalApprove()">Phê duyệt</button>
-      <button mat-stroked-button color="warn" (click)="openRejectPrompt('approve')">Từ chối</button>
+      <button mat-raised-button color="primary" (click)="finalApprove()">{{ 'orcamento.finalApproveButton' | translate }}</button>
+      <button mat-stroked-button color="warn" (click)="openRejectPrompt('approve')">{{ 'orcamento.rejectButton' | translate }}</button>
     </ng-container>
 
     <span class="orc-approved-note" *ngIf="batch.estado === 'APPROVED'">
-      Đã duyệt. Thêm rúbrica mới sẽ tự tạo lô ngân sách tiếp theo cho cùng kỳ này.
+      {{ 'orcamento.approvedNote' | translate }}
     </span>
   </div>
 
@@ -71,66 +71,66 @@
 
   <div class="orc-form-overlay" *ngIf="showForm">
     <div class="orc-form">
-      <h3>{{ editingId ? 'Sửa' : 'Thêm' }} rúbrica</h3>
+      <h3>{{ (editingId ? 'orcamento.formTitleEdit' : 'orcamento.formTitleCreate') | translate }}</h3>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Atividade <span class="itag type">Gõ để tìm</span></mat-label>
+        <mat-label>Atividade <span class="itag type">{{ 'orcamento.searchToTypeTag' | translate }}</span></mat-label>
         <input matInput [(ngModel)]="atividadeSearch" name="atividadeSearchInput"
                (ngModelChange)="onAtividadeSearchChange()" [matAutocomplete]="autoAtividade" />
         <mat-autocomplete #autoAtividade="matAutocomplete">
           <mat-option *ngFor="let a of filteredAtividades" [value]="a" (onSelectionChange)="selectAtividade(a)">
             {{ a.codigo }} - {{ a.designacao }}
           </mat-option>
-          <mat-option *ngIf="filteredAtividades.length === 0" disabled>Không tìm thấy</mat-option>
+          <mat-option *ngIf="filteredAtividades.length === 0" disabled>{{ 'orcamento.noneFound' | translate }}</mat-option>
         </mat-autocomplete>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Classificação Económica <span class="itag type">Gõ để tìm</span></mat-label>
+        <mat-label>Classificação Económica <span class="itag type">{{ 'orcamento.searchToTypeTag' | translate }}</span></mat-label>
         <input matInput [(ngModel)]="economicClassificationSearch" name="ecSearchInput"
                (ngModelChange)="onEconomicClassificationSearchChange()" [matAutocomplete]="autoEc" />
         <mat-autocomplete #autoEc="matAutocomplete">
           <mat-option *ngFor="let e of filteredEconomicClassifications" [value]="e" (onSelectionChange)="selectEconomicClassification(e)">
             {{ e.codigo }} - {{ e.designacao }}
           </mat-option>
-          <mat-option *ngIf="filteredEconomicClassifications.length === 0" disabled>Không tìm thấy</mat-option>
+          <mat-option *ngIf="filteredEconomicClassifications.length === 0" disabled>{{ 'orcamento.noneFound' | translate }}</mat-option>
         </mat-autocomplete>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Organization <span class="itag type">Gõ để tìm</span></mat-label>
+        <mat-label>Organization <span class="itag type">{{ 'orcamento.searchToTypeTag' | translate }}</span></mat-label>
         <input matInput [(ngModel)]="organizationSearch" name="orgSearchInput"
                (ngModelChange)="onOrganizationSearchChange()" [matAutocomplete]="autoOrg" />
         <mat-autocomplete #autoOrg="matAutocomplete">
           <mat-option *ngFor="let o of filteredOrganizations" [value]="o" (onSelectionChange)="selectOrganization(o)">
             {{ o.nome }}
           </mat-option>
-          <mat-option *ngIf="filteredOrganizations.length === 0" disabled>Không tìm thấy</mat-option>
+          <mat-option *ngIf="filteredOrganizations.length === 0" disabled>{{ 'orcamento.noneFound' | translate }}</mat-option>
         </mat-autocomplete>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Valor (USD)</mat-label>
+        <mat-label>{{ 'orcamento.fieldValorUsd' | translate }}</mat-label>
         <input matInput type="number" [(ngModel)]="formValor" name="formValor" />
       </mat-form-field>
 
       <div class="orc-form-actions">
-        <button mat-button (click)="cancelForm()">Hủy</button>
-        <button mat-raised-button color="primary" (click)="saveLinha()">Lưu</button>
+        <button mat-button (click)="cancelForm()">{{ 'orcamento.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="saveLinha()">{{ 'orcamento.saveButton' | translate }}</button>
       </div>
     </div>
   </div>
 
   <div class="orc-form-overlay" *ngIf="showRejectPrompt">
     <div class="orc-form">
-      <h3>Lý do từ chối</h3>
+      <h3>{{ 'orcamento.rejectTitle' | translate }}</h3>
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Ghi chú</mat-label>
+        <mat-label>{{ 'orcamento.fieldGhiChu' | translate }}</mat-label>
         <textarea matInput [(ngModel)]="rejectComment" name="rejectComment" rows="3"></textarea>
       </mat-form-field>
       <div class="orc-form-actions">
-        <button mat-button (click)="cancelReject()">Hủy</button>
-        <button mat-raised-button color="warn" (click)="confirmReject()">Xác nhận từ chối</button>
+        <button mat-button (click)="cancelReject()">{{ 'orcamento.cancelButton' | translate }}</button>
+        <button mat-raised-button color="warn" (click)="confirmReject()">{{ 'orcamento.confirmRejectButton' | translate }}</button>
       </div>
     </div>
   </div>

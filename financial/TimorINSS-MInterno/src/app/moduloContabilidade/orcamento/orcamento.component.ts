@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { OrcamentoService } from '../../services/orcamento.service';
 import { ProgramActivityService } from '../../services/program-activity.service';
 import { EconomicClassificationService } from '../../services/economic-classification.service';
@@ -10,10 +11,10 @@ import { EconomicClassificationDataContract } from '../../response-models/econom
 import { SelectDescription } from '../../models/utils';
 
 const ESTADO_LABELS: { [key: string]: string } = {
-  DRAFT: 'Nháp',
-  PENDING_REVIEW: 'Chờ kiểm tra',
-  PENDING_APPROVAL: 'Chờ phê duyệt',
-  APPROVED: 'Đã duyệt'
+  DRAFT: 'orcamento.estadoDraft',
+  PENDING_REVIEW: 'orcamento.estadoPendingReview',
+  PENDING_APPROVAL: 'orcamento.estadoPendingApproval',
+  APPROVED: 'orcamento.estadoApproved'
 };
 
 @Component({
@@ -59,7 +60,8 @@ export class OrcamentoComponent implements OnInit {
     private programActivityService: ProgramActivityService,
     private economicClassificationService: EconomicClassificationService,
     private institutionService: InstitutionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -172,7 +174,7 @@ export class OrcamentoComponent implements OnInit {
 
   public saveLinha(): void {
     if (!this.formAtividadeFk || !this.formEconomicClassificationFk || !this.formOrganizationFk || !this.formValor) {
-      this.snackBar.open('Vui lòng nhập đủ Atividade, Classificação Económica, Organization và Valor.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('orcamento.errMissingFields'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -186,7 +188,7 @@ export class OrcamentoComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showForm = false;
@@ -197,13 +199,13 @@ export class OrcamentoComponent implements OnInit {
   }
 
   public deleteLinha(linha: OrcamentoLinhaDataContract): void {
-    if (!confirm(`Xoá rúbrica "${linha.atividadeCodigo} / ${linha.economicClassificationCodigo}"?`)) {
+    if (!confirm(this.translate.instant('orcamento.confirmDelete', { atividade: linha.atividadeCodigo, ec: linha.economicClassificationCodigo }))) {
       return;
     }
     this.orcamentoService.deleteLinha({ id: linha.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.loadBatch();
@@ -213,16 +215,16 @@ export class OrcamentoComponent implements OnInit {
   }
 
   public submitBatch(): void {
-    if (!confirm('Gửi duyệt toàn bộ danh sách rúbrica hiện tại?')) {
+    if (!confirm(this.translate.instant('orcamento.confirmSubmitBatch'))) {
       return;
     }
     this.orcamentoService.submit({ orcamentoConfigFk: this.orcamentoConfigFk }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
-        this.snackBar.open('Đã gửi duyệt.', 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('orcamento.submittedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
         this.loadBatch();
       },
       err => this.showError(err)
@@ -234,10 +236,10 @@ export class OrcamentoComponent implements OnInit {
     this.orcamentoService.review({ batchId: this.batch.id, approve: true }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
-        this.snackBar.open('Đã chuyển sang chờ phê duyệt.', 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('orcamento.reviewedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
         this.loadBatch();
       },
       err => this.showError(err)
@@ -249,10 +251,10 @@ export class OrcamentoComponent implements OnInit {
     this.orcamentoService.approve({ batchId: this.batch.id, approve: true }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
-        this.snackBar.open('Đã phê duyệt ngân sách.', 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('orcamento.approvedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
         this.loadBatch();
         this.loadPickers();
       },
@@ -275,11 +277,11 @@ export class OrcamentoComponent implements OnInit {
     call.subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showRejectPrompt = false;
-        this.snackBar.open('Đã từ chối — quay lại trạng thái Nháp.', 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('orcamento.rejectedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
         this.loadBatch();
       },
       err => this.showError(err)
@@ -291,7 +293,7 @@ export class OrcamentoComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('orcamento.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
