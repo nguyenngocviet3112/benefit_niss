@@ -1,40 +1,40 @@
 <div class="la-container">
   <div class="la-header">
-    <h2>Registo de Lançamentos <span class="en">(Sổ Nhật ký kế toán - Débito/Crédito)</span></h2>
-    <p class="la-hint">Bút toán được tự động sinh ra khi Pagamento thực hiện hoặc Receita xác nhận — không nhập tay tại đây.</p>
+    <h2>{{ 'lancamentos.header' | translate }} <span class="en">({{ 'lancamentos.headerGloss' | translate }})</span></h2>
+    <p class="la-hint">{{ 'lancamentos.hint' | translate }}</p>
   </div>
 
   <div class="la-filter-bar">
     <mat-form-field appearance="outline" class="la-field-ano">
-      <mat-label>Năm</mat-label>
+      <mat-label>{{ 'lancamentos.fieldAno' | translate }}</mat-label>
       <input matInput type="number" [(ngModel)]="ano" name="ano" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="la-field-mes">
-      <mat-label>Tháng</mat-label>
+      <mat-label>{{ 'lancamentos.fieldMes' | translate }}</mat-label>
       <input matInput type="number" min="1" max="12" [(ngModel)]="mes" name="mes" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="la-field-origem">
-      <mat-label>Nguồn gốc</mat-label>
+      <mat-label>{{ 'lancamentos.fieldOrigem' | translate }}</mat-label>
       <mat-select [(value)]="origemTipo">
-        <mat-option *ngFor="let opt of origemTipoOptions" [value]="opt.value">{{ opt.label }}</mat-option>
+        <mat-option *ngFor="let opt of origemTipoOptions" [value]="opt.value">{{ opt.label | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="load()">Tìm kiếm</button>
+    <button mat-raised-button color="primary" (click)="load()">{{ 'lancamentos.searchButton' | translate }}</button>
   </div>
 
   <div class="la-table-wrap" *ngIf="!loading">
     <table class="la-table">
       <thead>
         <tr>
-          <th>Ngày</th>
-          <th>Diễn giải</th>
-          <th>Tài khoản Nợ (Débito)</th>
-          <th>Tài khoản Có (Crédito)</th>
-          <th class="la-num">Giá trị (USD)</th>
-          <th>Nguồn gốc</th>
+          <th>{{ 'lancamentos.colData' | translate }}</th>
+          <th>{{ 'lancamentos.colDescricao' | translate }}</th>
+          <th>{{ 'lancamentos.colContaDebito' | translate }}</th>
+          <th>{{ 'lancamentos.colContaCredito' | translate }}</th>
+          <th class="la-num">{{ 'lancamentos.colValorUsd' | translate }}</th>
+          <th>{{ 'lancamentos.fieldOrigem' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -44,15 +44,15 @@
           <td><span class="la-code">{{ item.codigoContaDebitoCodigo }}</span> {{ item.codigoContaDebitoDesignacao }}</td>
           <td><span class="la-code">{{ item.codigoContaCreditoCodigo }}</span> {{ item.codigoContaCreditoDesignacao }}</td>
           <td class="la-num">{{ item.valor | number:'1.2-2' }}</td>
-          <td>{{ item.origemTipo === 'PaymentExecution' ? 'Pagamento' : (item.origemTipo === 'ReceitaPac' ? 'Receita' : item.origemTipo) }}</td>
+          <td>{{ (item.origemTipo === 'PaymentExecution' ? 'lancamentos.origemPagamento' : (item.origemTipo === 'ReceitaPac' ? 'lancamentos.origemReceita' : '')) | translate }}{{ item.origemTipo !== 'PaymentExecution' && item.origemTipo !== 'ReceitaPac' ? item.origemTipo : '' }}</td>
         </tr>
         <tr *ngIf="pagedItems.length === 0">
-          <td colspan="6" class="la-empty">Chưa có bút toán nào cho bộ lọc này.</td>
+          <td colspan="6" class="la-empty">{{ 'lancamentos.emptyList' | translate }}</td>
         </tr>
       </tbody>
       <tfoot *ngIf="items.length > 0">
         <tr>
-          <td colspan="4" class="la-total-label">Tổng cộng</td>
+          <td colspan="4" class="la-total-label">{{ 'lancamentos.totalLabel' | translate }}</td>
           <td class="la-num la-total-value">{{ totalValor | number:'1.2-2' }}</td>
           <td></td>
         </tr>

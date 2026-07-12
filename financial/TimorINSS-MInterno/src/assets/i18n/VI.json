@@ -2361,5 +2361,25 @@
     "savedSuccess": "Đã ghi nhận saldo chuyển tiếp.",
     "confirmDelete": "Xoá saldo chuyển tiếp \"{{descritivo}}\"?",
     "errGeneric": "Có lỗi xảy ra."
+  },
+  "lancamentos": {
+    "header": "Registo de Lançamentos",
+    "headerGloss": "Sổ Nhật ký kế toán - Débito/Crédito",
+    "hint": "Bút toán được tự động sinh ra khi Pagamento thực hiện hoặc Receita xác nhận — không nhập tay tại đây.",
+    "fieldAno": "Năm",
+    "fieldMes": "Tháng",
+    "fieldOrigem": "Nguồn gốc",
+    "origemTodos": "Tất cả",
+    "origemPagamento": "Pagamento",
+    "origemReceita": "Receita",
+    "searchButton": "Tìm kiếm",
+    "colData": "Ngày",
+    "colDescricao": "Diễn giải",
+    "colContaDebito": "Tài khoản Nợ (Débito)",
+    "colContaCredito": "Tài khoản Có (Crédito)",
+    "colValorUsd": "Giá trị (USD)",
+    "emptyList": "Chưa có bút toán nào cho bộ lọc này.",
+    "totalLabel": "Tổng cộng",
+    "errGeneric": "Có lỗi xảy ra."
   }
 }

@@ -2358,5 +2358,25 @@
     "savedSuccess": "Carry-over balance recorded.",
     "confirmDelete": "Delete carry-over balance \"{{descritivo}}\"?",
     "errGeneric": "Something went wrong."
+  },
+  "lancamentos": {
+    "header": "Registo de Lançamentos",
+    "headerGloss": "Accounting Journal - Debit/Credit",
+    "hint": "Entries are automatically generated when a Pagamento is executed or a Receita is confirmed — not typed here.",
+    "fieldAno": "Year",
+    "fieldMes": "Month",
+    "fieldOrigem": "Source",
+    "origemTodos": "All",
+    "origemPagamento": "Pagamento",
+    "origemReceita": "Receita",
+    "searchButton": "Search",
+    "colData": "Date",
+    "colDescricao": "Description",
+    "colContaDebito": "Debit Account (Débito)",
+    "colContaCredito": "Credit Account (Crédito)",
+    "colValorUsd": "Value (USD)",
+    "emptyList": "No entries yet for this filter.",
+    "totalLabel": "Total",
+    "errGeneric": "Something went wrong."
   }
 }

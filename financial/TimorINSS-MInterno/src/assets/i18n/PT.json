@@ -2373,5 +2373,25 @@
     "savedSuccess": "Saldo transitado registado.",
     "confirmDelete": "Eliminar saldo transitado \"{{descritivo}}\"?",
     "errGeneric": "Ocorreu um erro."
+  },
+  "lancamentos": {
+    "header": "Registo de Lançamentos",
+    "headerGloss": "Diário Contabilístico - Débito/Crédito",
+    "hint": "Os lançamentos são gerados automaticamente quando um Pagamento é executado ou uma Receita é confirmada — não são inseridos manualmente aqui.",
+    "fieldAno": "Ano",
+    "fieldMes": "Mês",
+    "fieldOrigem": "Origem",
+    "origemTodos": "Todos",
+    "origemPagamento": "Pagamento",
+    "origemReceita": "Receita",
+    "searchButton": "Pesquisar",
+    "colData": "Data",
+    "colDescricao": "Descrição",
+    "colContaDebito": "Conta Débito",
+    "colContaCredito": "Conta Crédito",
+    "colValorUsd": "Valor (USD)",
+    "emptyList": "Ainda não há lançamentos para este filtro.",
+    "totalLabel": "Total",
+    "errGeneric": "Ocorreu um erro."
   }
 }

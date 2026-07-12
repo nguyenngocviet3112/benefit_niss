@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
+import { TranslateService } from '@ngx-translate/core';
 import { LancamentoService } from '../../services/lancamento.service';
 import { LancamentoDataContract } from '../../response-models/lancamento-response';
 
@@ -19,9 +20,9 @@ export class LancamentosComponent implements OnInit {
   public mes: number | null = null;
   public origemTipo = '';
   public origemTipoOptions = [
-    { value: '', label: 'Tất cả' },
-    { value: 'PaymentExecution', label: 'Pagamento' },
-    { value: 'ReceitaPac', label: 'Receita' }
+    { value: '', label: 'lancamentos.origemTodos' },
+    { value: 'PaymentExecution', label: 'lancamentos.origemPagamento' },
+    { value: 'ReceitaPac', label: 'lancamentos.origemReceita' }
   ];
 
   public items: LancamentoDataContract[] = [];
@@ -32,7 +33,8 @@ export class LancamentosComponent implements OnInit {
 
   constructor(
     private lancamentoService: LancamentoService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -71,7 +73,7 @@ export class LancamentosComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('lancamentos.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
