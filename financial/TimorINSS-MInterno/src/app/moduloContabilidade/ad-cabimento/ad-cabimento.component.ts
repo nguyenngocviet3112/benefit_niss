@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { ExpenditureAuthorizationService } from '../../services/expenditure-authorization.service';
 import { ExpenditureAuthorizationDataContract, RubricaDisponivelDataContract } from '../../response-models/expenditure-authorization-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
-  DRAFT: 'Nháp',
-  PENDING_REVIEW: 'Chờ kiểm tra',
-  PENDING_APPROVAL: 'Chờ phê duyệt',
-  APPROVED: 'Đã duyệt'
+  DRAFT: 'adCabimento.estadoDraft',
+  PENDING_REVIEW: 'adCabimento.estadoPendingReview',
+  PENDING_APPROVAL: 'adCabimento.estadoPendingApproval',
+  APPROVED: 'adCabimento.estadoApproved'
 };
 
 @Component({
@@ -45,7 +46,8 @@ export class AdCabimentoComponent implements OnInit {
 
   constructor(
     private expenditureAuthorizationService: ExpenditureAuthorizationService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -97,7 +99,7 @@ export class AdCabimentoComponent implements OnInit {
 
   public createAd(): void {
     if (!this.pickedRubrica || !this.formValorAutorizado) {
-      this.snackBar.open('Vui lòng chọn rúbrica và nhập Valor Autorizado.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('adCabimento.errMissingRubrica'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -112,12 +114,12 @@ export class AdCabimentoComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showRubricaPicker = false;
         this.pickedRubrica = null;
-        this.snackBar.open(`Đã tạo AD số ${response.item.numero}.`, 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('adCabimento.createdSuccess', { numero: response.item.numero }), this.translate.instant('general.close'), { duration: 3000 });
         this.load();
       },
       err => this.showError(err)
@@ -133,7 +135,7 @@ export class AdCabimentoComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -144,7 +146,7 @@ export class AdCabimentoComponent implements OnInit {
 
   public addPlurianualidade(item: ExpenditureAuthorizationDataContract): void {
     if (!this.formPluriAno || !this.formPluriValor) {
-      this.snackBar.open('Vui lòng nhập Ano và Valor.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('adCabimento.errMissingPluri'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
     this.expenditureAuthorizationService.savePlurianualidade({
@@ -155,7 +157,7 @@ export class AdCabimentoComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.formPluriAno = null;
@@ -174,11 +176,11 @@ export class AdCabimentoComponent implements OnInit {
   }
 
   public submitAd(item: ExpenditureAuthorizationDataContract): void {
-    if (!confirm(`Gửi duyệt AD số ${item.numero}?`)) { return; }
+    if (!confirm(this.translate.instant('adCabimento.confirmSubmit', { numero: item.numero }))) { return; }
     this.expenditureAuthorizationService.submit({ id: item.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -191,7 +193,7 @@ export class AdCabimentoComponent implements OnInit {
     this.expenditureAuthorizationService.review({ id: item.id, approve: true }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -204,7 +206,7 @@ export class AdCabimentoComponent implements OnInit {
     this.expenditureAuthorizationService.approve({ id: item.id, approve: true }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -229,7 +231,7 @@ export class AdCabimentoComponent implements OnInit {
     call.subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showRejectPrompt = false;
@@ -244,7 +246,7 @@ export class AdCabimentoComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('adCabimento.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
