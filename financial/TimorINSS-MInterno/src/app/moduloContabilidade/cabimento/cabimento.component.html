@@ -1,29 +1,29 @@
 <div class="cab-container">
   <div class="cab-header">
-    <h2>Cabimento <span class="en">(DIC — Declaração de Inscrição e Cabimento, tách biệt pháp lý khỏi AD, chỉ cần Diretor DF duyệt)</span></h2>
+    <h2>{{ 'cabimento.header' | translate }} <span class="en">({{ 'cabimento.headerGloss' | translate }})</span></h2>
   </div>
 
   <div class="cab-context-bar">
     <mat-form-field appearance="outline" class="small-field">
-      <mat-label>Ano</mat-label>
+      <mat-label>{{ 'cabimento.fieldAno' | translate }}</mat-label>
       <input matInput type="number" [(ngModel)]="ano" name="ano" />
     </mat-form-field>
-    <button mat-stroked-button (click)="load()">Tải lại</button>
+    <button mat-stroked-button (click)="load()">{{ 'cabimento.reload' | translate }}</button>
 
     <span class="spacer"></span>
 
-    <button mat-raised-button color="primary" (click)="openAdPicker()">+ Tạo Cabimento từ AD</button>
+    <button mat-raised-button color="primary" (click)="openAdPicker()">{{ 'cabimento.addFromAd' | translate }}</button>
   </div>
 
   <div class="cab-list" *ngIf="!loading">
     <div class="cab-row cab-row-header">
-      <span class="cab-col-num">N.º Cabimento</span>
-      <span class="cab-col-ad">AD gốc</span>
-      <span class="cab-col-atividade">Atividade / Classificação Económica</span>
-      <span class="cab-col-valor">Valor cabimentado</span>
-      <span class="cab-col-saldo">Saldo disponível</span>
-      <span class="cab-col-estado">Trạng thái</span>
-      <span class="cab-col-actions">Hành động</span>
+      <span class="cab-col-num">{{ 'cabimento.colNumCabimento' | translate }}</span>
+      <span class="cab-col-ad">{{ 'cabimento.colAdOrigem' | translate }}</span>
+      <span class="cab-col-atividade">{{ 'cabimento.colAtividade' | translate }}</span>
+      <span class="cab-col-valor">{{ 'cabimento.colValorCabimentado' | translate }}</span>
+      <span class="cab-col-saldo">{{ 'cabimento.colSaldo' | translate }}</span>
+      <span class="cab-col-estado">{{ 'cabimento.colEstado' | translate }}</span>
+      <span class="cab-col-actions">{{ 'cabimento.colActions' | translate }}</span>
     </div>
 
     <div class="cab-row" *ngFor="let item of items">
@@ -33,26 +33,26 @@
       <span class="cab-col-valor">$ {{ item.valorCabimentado | number:'1.2-2' }}</span>
       <span class="cab-col-saldo" [ngClass]="item.saldoDisponivel < 0 ? 'cab-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
       <span class="cab-col-estado">
-        <span class="cab-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] }}</span>
+        <span class="cab-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] | translate }}</span>
       </span>
       <span class="cab-col-actions">
         <ng-container *ngIf="item.estado === 'DRAFT'">
-          <button mat-button (click)="openEdit(item)">Sửa</button>
-          <button mat-button (click)="submitCabimento(item)">Gửi duyệt</button>
+          <button mat-button (click)="openEdit(item)">{{ 'cabimento.editButton' | translate }}</button>
+          <button mat-button (click)="submitCabimento(item)">{{ 'cabimento.submitButton' | translate }}</button>
         </ng-container>
         <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
-          <button mat-button color="primary" (click)="approve(item)">Duyệt (Diretor DF)</button>
-          <button mat-button color="warn" (click)="openRejectPrompt(item.id)">Từ chối</button>
+          <button mat-button color="primary" (click)="approve(item)">{{ 'cabimento.approveButton' | translate }}</button>
+          <button mat-button color="warn" (click)="openRejectPrompt(item.id)">{{ 'cabimento.rejectButton' | translate }}</button>
         </ng-container>
       </span>
     </div>
 
-    <div class="cab-empty" *ngIf="items.length === 0">Chưa có Cabimento nào cho năm này.</div>
+    <div class="cab-empty" *ngIf="items.length === 0">{{ 'cabimento.emptyList' | translate }}</div>
   </div>
 
   <div class="cab-form-overlay" *ngIf="showAdPicker">
     <div class="cab-form cab-form-wide">
-      <h3>Tạo Cabimento từ AD đã duyệt</h3>
+      <h3>{{ 'cabimento.pickerTitle' | translate }}</h3>
 
       <div class="cab-ad-list" *ngIf="!pickedAd">
         <div class="cab-ad-row" *ngFor="let ad of availableAds" (click)="pickAd(ad)">
@@ -60,82 +60,82 @@
           <span>{{ ad.organizationNome }}</span>
           <span>$ {{ ad.valorRevisto | number:'1.2-2' }}</span>
         </div>
-        <div class="cab-empty" *ngIf="availableAds.length === 0">Không còn AD nào chưa có Cabimento.</div>
+        <div class="cab-empty" *ngIf="availableAds.length === 0">{{ 'cabimento.noAdAvailable' | translate }}</div>
       </div>
 
       <div *ngIf="pickedAd">
         <p><b>AD:</b> {{ pickedAd.numero }} — {{ pickedAd.atividadeCodigo }} / {{ pickedAd.economicClassificationCodigo }} ({{ pickedAd.organizationNome }})</p>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Descritivo <span class="itag type">Gõ tay</span></mat-label>
+          <mat-label>{{ 'cabimento.fieldDescritivo' | translate }} <span class="itag type">{{ 'cabimento.typedTag' | translate }}</span></mat-label>
           <input matInput [(ngModel)]="formDescritivo" name="formDescritivo" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Valor Cabimentado (USD) <span class="itag type">Gõ tay (mặc định = Valor revisto AD)</span></mat-label>
+          <mat-label>{{ 'cabimento.fieldValorCabimentadoUsd' | translate }} <span class="itag type">{{ 'cabimento.valorCabimentadoHint' | translate }}</span></mat-label>
           <input matInput type="number" [(ngModel)]="formValorCabimentado" name="formValorCabimentado" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="medium-field">
-          <mat-label>Processo aprovisionamento prévio? <span class="itag drop">Chọn</span></mat-label>
+          <mat-label>{{ 'cabimento.fieldProcessoPrevio' | translate }} <span class="itag drop">{{ 'cabimento.dropTag' | translate }}</span></mat-label>
           <mat-select [(ngModel)]="formProcessoAprovisionamentoPrevio" name="formProcessoAprovisionamentoPrevio">
-            <mat-option [value]="true">Sim</mat-option>
-            <mat-option [value]="false">Não</mat-option>
+            <mat-option [value]="true">{{ 'cabimento.simOption' | translate }}</mat-option>
+            <mat-option [value]="false">{{ 'cabimento.naoOption' | translate }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="small-field">
-          <mat-label>Mês</mat-label>
+          <mat-label>{{ 'cabimento.fieldMes' | translate }}</mat-label>
           <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
         </mat-form-field>
       </div>
 
       <div class="cab-form-actions">
-        <button mat-button (click)="cancelAdPicker()">Hủy</button>
-        <button mat-raised-button color="primary" *ngIf="pickedAd" (click)="createCabimento()">Tạo Cabimento</button>
+        <button mat-button (click)="cancelAdPicker()">{{ 'cabimento.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" *ngIf="pickedAd" (click)="createCabimento()">{{ 'cabimento.createButton' | translate }}</button>
       </div>
     </div>
   </div>
 
   <div class="cab-form-overlay" *ngIf="editId !== null">
     <div class="cab-form">
-      <h3>Sửa Cabimento</h3>
+      <h3>{{ 'cabimento.editTitle' | translate }}</h3>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Descritivo <span class="itag type">Gõ tay</span></mat-label>
+        <mat-label>{{ 'cabimento.fieldDescritivo' | translate }} <span class="itag type">{{ 'cabimento.typedTag' | translate }}</span></mat-label>
         <input matInput [(ngModel)]="editDescritivo" name="editDescritivo" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Valor Cabimentado (USD) <span class="itag type">Gõ tay</span></mat-label>
+        <mat-label>{{ 'cabimento.fieldValorCabimentadoUsd' | translate }} <span class="itag type">{{ 'cabimento.typedTag' | translate }}</span></mat-label>
         <input matInput type="number" [(ngModel)]="editValorCabimentado" name="editValorCabimentado" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="medium-field">
-        <mat-label>Processo aprovisionamento prévio? <span class="itag drop">Chọn</span></mat-label>
+        <mat-label>{{ 'cabimento.fieldProcessoPrevio' | translate }} <span class="itag drop">{{ 'cabimento.dropTag' | translate }}</span></mat-label>
         <mat-select [(ngModel)]="editProcessoAprovisionamentoPrevio" name="editProcessoAprovisionamentoPrevio">
-          <mat-option [value]="true">Sim</mat-option>
-          <mat-option [value]="false">Não</mat-option>
+          <mat-option [value]="true">{{ 'cabimento.simOption' | translate }}</mat-option>
+          <mat-option [value]="false">{{ 'cabimento.naoOption' | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <div class="cab-form-actions">
-        <button mat-button (click)="cancelEdit()">Hủy</button>
-        <button mat-raised-button color="primary" (click)="saveEdit()">Lưu</button>
+        <button mat-button (click)="cancelEdit()">{{ 'cabimento.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="saveEdit()">{{ 'cabimento.saveButton' | translate }}</button>
       </div>
     </div>
   </div>
 
   <div class="cab-form-overlay" *ngIf="showRejectPrompt">
     <div class="cab-form">
-      <h3>Lý do từ chối</h3>
+      <h3>{{ 'cabimento.rejectTitle' | translate }}</h3>
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Ghi chú</mat-label>
+        <mat-label>{{ 'cabimento.fieldGhiChu' | translate }}</mat-label>
         <textarea matInput [(ngModel)]="rejectComment" name="rejectComment" rows="3"></textarea>
       </mat-form-field>
       <div class="cab-form-actions">
-        <button mat-button (click)="cancelReject()">Hủy</button>
-        <button mat-raised-button color="warn" (click)="confirmReject()">Xác nhận từ chối</button>
+        <button mat-button (click)="cancelReject()">{{ 'cabimento.cancelButton' | translate }}</button>
+        <button mat-raised-button color="warn" (click)="confirmReject()">{{ 'cabimento.confirmRejectButton' | translate }}</button>
       </div>
     </div>
   </div>

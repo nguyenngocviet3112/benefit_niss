@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { CabimentoService } from '../../services/cabimento.service';
 import { AdDisponivelParaCabimentoDataContract, CabimentoDataContract } from '../../response-models/cabimento-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
-  DRAFT: 'Nháp',
-  PENDING_APPROVAL: 'Chờ phê duyệt',
-  APPROVED: 'Đã duyệt'
+  DRAFT: 'cabimento.estadoDraft',
+  PENDING_APPROVAL: 'cabimento.estadoPendingApproval',
+  APPROVED: 'cabimento.estadoApproved'
 };
 
 @Component({
@@ -40,7 +41,8 @@ export class CabimentoComponent implements OnInit {
 
   constructor(
     private cabimentoService: CabimentoService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -86,7 +88,7 @@ export class CabimentoComponent implements OnInit {
 
   public createCabimento(): void {
     if (!this.pickedAd || !this.formValorCabimentado) {
-      this.snackBar.open('Vui lòng chọn AD và nhập Valor Cabimentado.', 'Đóng', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('cabimento.errMissingAd'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
@@ -100,12 +102,12 @@ export class CabimentoComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showAdPicker = false;
         this.pickedAd = null;
-        this.snackBar.open(`Đã tạo Cabimento số ${response.item.numero}.`, 'Đóng', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('cabimento.createdSuccess', { numero: response.item.numero }), this.translate.instant('general.close'), { duration: 3000 });
         this.load();
       },
       err => this.showError(err)
@@ -133,7 +135,7 @@ export class CabimentoComponent implements OnInit {
     }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.editId = null;
@@ -144,11 +146,11 @@ export class CabimentoComponent implements OnInit {
   }
 
   public submitCabimento(item: CabimentoDataContract): void {
-    if (!confirm(`Gửi duyệt Cabimento số ${item.numero}?`)) { return; }
+    if (!confirm(this.translate.instant('cabimento.confirmSubmit', { numero: item.numero }))) { return; }
     this.cabimentoService.submit({ id: item.id }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -161,7 +163,7 @@ export class CabimentoComponent implements OnInit {
     this.cabimentoService.approve({ id: item.id, approve: true }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.load();
@@ -181,7 +183,7 @@ export class CabimentoComponent implements OnInit {
     this.cabimentoService.approve({ id: this.rejectId, approve: false, comment: this.rejectComment }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, 'Đóng', { duration: 4000 });
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.showRejectPrompt = false;
@@ -196,7 +198,7 @@ export class CabimentoComponent implements OnInit {
   }
 
   private showError(err: any): void {
-    const message = err?.error?.errors?.[0]?.errorMessage ?? 'Có lỗi xảy ra.';
-    this.snackBar.open(message, 'Đóng', { duration: 4000 });
+    const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('cabimento.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
