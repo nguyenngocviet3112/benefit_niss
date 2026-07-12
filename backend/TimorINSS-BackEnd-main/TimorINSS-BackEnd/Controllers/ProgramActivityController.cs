@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -49,6 +50,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Save")]
+        [RequirePerm("MASTERDATA_MANAGE")]
         public IActionResult Save(SaveProgramActivityRequest request)
         {
             ResponseBaseDataContract response;
@@ -71,6 +73,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Deactivate")]
+        [RequirePerm("MASTERDATA_MANAGE")]
         public IActionResult Deactivate(DeactivateProgramActivityRequest request)
         {
             ResponseBaseDataContract response;
@@ -93,6 +96,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("CopyYear")]
+        [RequirePerm("MASTERDATA_MANAGE")]
         public IActionResult CopyYear(CopyProgramActivityYearRequest request)
         {
             ResponseBaseDataContract response;
@@ -116,6 +120,7 @@ namespace TimorINSSBackEnd.Controllers
 
         [HttpPost("Import")]
         [RequestSizeLimit(20000000)]
+        [RequirePerm("MASTERDATA_MANAGE")]
         public IActionResult Import([FromForm] ImportMasterDataTreeRequest request)
         {
             ImportMasterDataTreeResponse response;

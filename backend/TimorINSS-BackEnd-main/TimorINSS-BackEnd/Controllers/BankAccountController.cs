@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DataManager.Interfaces;
@@ -43,6 +44,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Save")]
+        [RequirePerm("MASTERDATA_MANAGE")]
         public IActionResult Save(SaveBankAccountRequest request)
         {
             SaveBankAccountResponse response;

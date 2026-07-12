@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -50,6 +51,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Save")]
+        [RequirePerm("MASTERDATA_MANAGE")]
         public IActionResult Save(SaveOrcamentoConfigRequest request)
         {
             ResponseBaseDataContract response;
@@ -72,6 +74,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Deactivate")]
+        [RequirePerm("MASTERDATA_MANAGE")]
         public IActionResult Deactivate(DeactivateOrcamentoConfigRequest request)
         {
             ResponseBaseDataContract response;

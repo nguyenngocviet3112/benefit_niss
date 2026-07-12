@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DataManager.Interfaces;
@@ -25,6 +26,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("GetReport")]
+        [RequirePerm("REPORT_VIEW")]
         public IActionResult GetReport(CeInssGlobalRequest request)
         {
             CeInssGlobalResponse response = new CeInssGlobalResponse();

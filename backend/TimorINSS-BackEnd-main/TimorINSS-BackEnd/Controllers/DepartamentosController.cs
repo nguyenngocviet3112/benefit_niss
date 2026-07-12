@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -75,6 +76,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("SaveConfig")]
+        [RequirePerm("MASTERDATA_MANAGE")]
         public IActionResult SaveConfig(SaveDepartamentoConfigRequest request)
         {
             DepartamentoConfigResponse response;
@@ -97,6 +99,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("DeactivateConfig")]
+        [RequirePerm("MASTERDATA_MANAGE")]
         public IActionResult DeactivateConfig(DeactivateDepartamentoConfigRequest request)
         {
             ResponseBaseDataContract response;

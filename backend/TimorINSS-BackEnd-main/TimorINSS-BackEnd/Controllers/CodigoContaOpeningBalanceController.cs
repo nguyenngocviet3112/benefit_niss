@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -46,6 +47,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("Update")]
+        [RequirePerm("ABE_SUBMIT")]
         public IActionResult Update(UpdateCodigoContaOpeningBalanceRequest request)
         {
             ResponseBaseDataContract response;
