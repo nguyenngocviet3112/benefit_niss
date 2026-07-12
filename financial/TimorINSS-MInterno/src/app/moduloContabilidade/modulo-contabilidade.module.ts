@@ -39,6 +39,7 @@ import { PlanoContasComponent } from './plano-contas/plano-contas.component';
 import { MapeamentoRubricasComponent } from './mapeamento-rubricas/mapeamento-rubricas.component';
 import { LancamentosComponent } from './lancamentos/lancamentos.component';
 import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/conciliacao-movimentos.component';
+import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/concili
     PlanoContasComponent,
     MapeamentoRubricasComponent,
     LancamentosComponent,
-    ConciliacaoMovimentosComponent
+    ConciliacaoMovimentosComponent,
+    MeuPerfilComponent
   ],
   imports: [
     CommonModule,

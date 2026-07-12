@@ -273,6 +273,7 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<ICodigoContaTreeDataManager, CodigoContaTreeDataManager>();
             services.AddScoped<IAgrupamentoRubricaDataManager, AgrupamentoRubricaDataManager>();
             services.AddScoped<ILancamentoDataManager, LancamentoDataManager>();
+            services.AddScoped<IMeuPerfilDataManager, MeuPerfilDataManager>();
             services.AddScoped<IEconomicClassificationDataManager, EconomicClassificationDataManager>();
             services.AddScoped<IOrcamentoDataManager, OrcamentoDataManager>();
             services.AddScoped<IExpenditureAuthorizationDataManager, ExpenditureAuthorizationDataManager>();

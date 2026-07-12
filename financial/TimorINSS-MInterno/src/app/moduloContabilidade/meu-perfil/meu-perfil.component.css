@@ -1,0 +1,47 @@
+.mp-container {
+  padding: 24px;
+  max-width: 520px;
+}
+
+.mp-header h2 {
+  margin: 0 0 16px;
+}
+
+.mp-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.mp-section {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.mp-section h3 {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+
+.mp-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.mp-info-label {
+  color: #666;
+}
+
+.mp-hint {
+  margin: 0 0 12px;
+  color: #888;
+  font-size: 12px;
+}
+
+.full-width {
+  width: 100%;
+}

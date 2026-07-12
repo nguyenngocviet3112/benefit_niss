@@ -189,11 +189,14 @@ export class ContabilidadeShellComponent implements OnInit {
       // Integration" nằm ở nhóm "Hệ thống" riêng, còn "Ngôn ngữ/Kỳ ngân sách/
       // Ngân hàng" nằm ở nhóm "Cấu hình hệ thống". Giờ chỉ còn 1 nhóm duy nhất.
       // "Quản lý User" cũng gộp vào đây 2026-07-12 (user yêu cầu không tách
-      // riêng nữa) — không còn là nhóm top-level riêng.
+      // riêng nữa) — không còn là nhóm top-level riêng. "Meu Perfil" (tự
+      // phục vụ — mọi user, không cần RequirePerm) cũng thêm vào đây cùng
+      // ngày, đặt đầu danh sách vì dùng thường xuyên hơn các mục admin còn lại.
       label: 'Cấu hình hệ thống',
       icon: 'settings',
       expanded: false,
       items: [
+        { label: 'Meu Perfil (Hồ sơ cá nhân)', route: '/contabilidade/meuPerfil' },
         { label: 'Ngôn ngữ (Idioma)', route: '/contabilidade/settings/idioma' },
         { label: 'Kỳ ngân sách (Orçamento Config)', route: '/contabilidade/settings/kyNganSach' },
         { label: 'Ngân hàng (Contas Bancárias)', route: '/contabilidade/settings/bankAccount' },

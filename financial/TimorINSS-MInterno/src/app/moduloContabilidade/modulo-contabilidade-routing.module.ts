@@ -33,6 +33,7 @@ import { PlanoContasComponent } from './plano-contas/plano-contas.component';
 import { MapeamentoRubricasComponent } from './mapeamento-rubricas/mapeamento-rubricas.component';
 import { LancamentosComponent } from './lancamentos/lancamentos.component';
 import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/conciliacao-movimentos.component';
+import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 
 const routes: Routes = [
   {
@@ -62,6 +63,7 @@ const routes: Routes = [
       { path: 'settings/kyNganSach', component: KyNganSachComponent },
       { path: 'settings/bankAccount', component: BankAccountComponent },
       { path: 'userPermission', component: UserPermissionComponent },
+      { path: 'meuPerfil', component: MeuPerfilComponent },
       { path: 'contribuicoes/entidade', component: ContribHomeSearchComponent },
       { path: 'contribuicoes/guiaPagamento', component: ContribValidationHomeSearchComponent },
       { path: 'contribuicoes/situacaoContributiva', component: ConsultasSituacoesContributivasComponent },
