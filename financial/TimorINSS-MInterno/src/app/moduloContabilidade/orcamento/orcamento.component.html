@@ -1,21 +1,24 @@
-<div class="orc-container" *ngIf="batch">
+<div class="orc-container">
   <div class="orc-header">
     <h2>Orçamento <span class="en">(Ngân sách — rúbrica Atividade × Classificação Económica × Organization)</span></h2>
-    <span class="orc-estado" [ngClass]="'estado-' + batch.estado">{{ estadoLabels[batch.estado] }}</span>
+    <span class="orc-estado" *ngIf="batch" [ngClass]="'estado-' + batch.estado">{{ estadoLabels[batch.estado] }}</span>
   </div>
 
   <div class="orc-context-bar">
-    <mat-form-field appearance="outline" class="small-field">
-      <mat-label>Kỳ ngân sách (Ano)</mat-label>
-      <input matInput type="number" [(ngModel)]="orcamentoConfigFk" name="orcamentoConfigFk" />
-    </mat-form-field>
+    <app-orcamento-config-select [value]="orcamentoConfigFk" (valueChange)="orcamentoConfigFk = $event; loadPickers(); loadBatch()"></app-orcamento-config-select>
     <button mat-stroked-button (click)="loadBatch()">Tải lại</button>
 
     <span class="spacer"></span>
 
-    <app-master-data-import-button *ngIf="isDraft" entityPath="orcamento" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadBatch()"></app-master-data-import-button>
-    <button mat-raised-button color="primary" *ngIf="isDraft" (click)="openAddForm()">+ Thêm rúbrica</button>
+    <ng-container *ngIf="batch">
+      <app-master-data-import-button *ngIf="isDraft" entityPath="orcamento" [orcamentoConfigFk]="orcamentoConfigFk" (imported)="loadBatch()"></app-master-data-import-button>
+      <button mat-raised-button color="primary" *ngIf="isDraft" (click)="openAddForm()">+ Thêm rúbrica</button>
+    </ng-container>
   </div>
+
+  <div class="orc-empty" *ngIf="!batch && !loading">Không tải được dữ liệu cho kỳ ngân sách này. Kiểm tra lại lựa chọn "Kỳ ngân sách" ở trên.</div>
+
+  <ng-container *ngIf="batch">
 
   <div class="orc-reject-banner" *ngIf="batch.lastRejectComment && isDraft">
     <b>Bị từ chối lần gần nhất:</b> {{ batch.lastRejectComment }}
@@ -63,6 +66,8 @@
       Đã duyệt. Thêm rúbrica mới sẽ tự tạo lô ngân sách tiếp theo cho cùng kỳ này.
     </span>
   </div>
+
+  </ng-container>
 
   <div class="orc-form-overlay" *ngIf="showForm">
     <div class="orc-form">

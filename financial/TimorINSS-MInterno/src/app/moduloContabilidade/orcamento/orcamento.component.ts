@@ -67,7 +67,7 @@ export class OrcamentoComponent implements OnInit {
     this.loadBatch();
   }
 
-  private loadPickers(): void {
+  public loadPickers(): void {
     this.programActivityService.getTree(this.orcamentoConfigFk).subscribe(response => {
       this.atividades = (response.items ?? []).filter(a => !a.hasKids);
       this.filteredAtividades = this.atividades;

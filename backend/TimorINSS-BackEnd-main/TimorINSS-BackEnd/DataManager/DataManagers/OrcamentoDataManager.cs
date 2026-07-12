@@ -32,6 +32,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             OrcamentoBatchResponse response = new OrcamentoBatchResponse();
             try
             {
+                // Bug tìm thấy 2026-07-12: field "Kỳ ngân sách (Ano)" ở frontend từng cho
+                // gõ số tay và bị hiểu nhầm là Id (đã sửa dùng app-orcamento-config-select
+                // ở frontend) — nhưng vẫn validate ở đây để không crash SqlException/FK
+                // constraint nếu có API call nào khác truyền Id không tồn tại.
+                if (_unitOfWork.OrcamentoConfigRepository.Get(request.OrcamentoConfigFk) == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "ORC-CONFIG-NOT-FOUND", ErrorMessage = "Kỳ ngân sách không tồn tại." });
+                    return response;
+                }
+
                 OrcamentoBatch batch = GetOrCreateDraftBatch(request.OrcamentoConfigFk);
                 response.Batch = MapBatch(batch);
             }
