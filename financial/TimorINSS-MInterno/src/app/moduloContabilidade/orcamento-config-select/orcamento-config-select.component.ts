@@ -15,7 +15,13 @@ export class OrcamentoConfigSelectComponent implements OnInit {
   @Input() value: number | null = null;
   @Output() valueChange = new EventEmitter<number>();
 
-  @Input() label = 'Kỳ ngân sách (Ano)';
+  // Giá trị mặc định là 1 translation KEY (không phải text hiển thị) — HTML
+  // dùng `{{ label | translate }}` để label vẫn đổi ngôn ngữ đúng ngay cả khi
+  // caller không tự truyền [label] riêng (vd Classificação Económica, Plano
+  // de Contas, Mapeamento Rubricas). Nếu caller cần label khác, chỉ cần
+  // truyền tên KEY (không phải chuỗi đã dịch sẵn) — xem cách dùng ở
+  // Estrutura Programática (label "Sao chép sang kỳ").
+  @Input() label = 'orcamentoConfigSelect.defaultLabel';
 
   public options: OrcamentoConfigDataContract[] = [];
 

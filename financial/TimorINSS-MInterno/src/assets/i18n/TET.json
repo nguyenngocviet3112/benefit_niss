@@ -1757,6 +1757,7 @@
     "confirmReactivate": "Reativar \"{{codigo}} - {{designacao}}\"?"
   },
   "orcamentoConfigSelect": {
+    "defaultLabel": "Período Orçamental (Ano)",
     "noOptions": "Ainda não há período orçamental — criar em Configuração do Sistema"
   },
   "departamentoConfig": {

@@ -1761,6 +1761,7 @@
     "confirmReactivate": "Kích hoạt lại \"{{codigo}} - {{designacao}}\"?"
   },
   "orcamentoConfigSelect": {
+    "defaultLabel": "Kỳ ngân sách (Ano)",
     "noOptions": "Chưa có kỳ ngân sách nào — tạo ở Cấu hình hệ thống"
   },
   "departamentoConfig": {

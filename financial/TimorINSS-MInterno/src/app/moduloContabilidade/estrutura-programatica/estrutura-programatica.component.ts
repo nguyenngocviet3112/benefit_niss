@@ -20,6 +20,8 @@ export class EstruturaProgramaticaComponent implements OnInit {
   public tree: ProgramActivityRow[] = [];
   public loading = false;
 
+  public searchCodigo = '';
+
   public editingId: number | null = null;
   public formParentFk: number | undefined;
   public formNivel = 1;
@@ -67,6 +69,27 @@ export class EstruturaProgramaticaComponent implements OnInit {
       }
     });
     return roots;
+  }
+
+  public get filteredTree(): ProgramActivityRow[] {
+    const term = this.searchCodigo.trim().toLowerCase();
+    if (!term) {
+      return this.tree;
+    }
+    return this.tree
+      .map(node => this.filterNode(node, term))
+      .filter((node): node is ProgramActivityRow => node !== null);
+  }
+
+  private filterNode(node: ProgramActivityRow, term: string): ProgramActivityRow | null {
+    const selfMatches = node.codigo.toLowerCase().includes(term);
+    const filteredChildren = node.children
+      .map(child => this.filterNode(child, term))
+      .filter((child): child is ProgramActivityRow => child !== null);
+    if (selfMatches || filteredChildren.length > 0) {
+      return { ...node, children: filteredChildren };
+    }
+    return null;
   }
 
   public openAddForm(parent?: ProgramActivityDataContract): void {

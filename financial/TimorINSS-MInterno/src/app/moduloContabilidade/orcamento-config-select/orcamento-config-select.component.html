@@ -1,5 +1,5 @@
 <mat-form-field appearance="outline" class="ocs-field">
-  <mat-label>{{ label }}</mat-label>
+  <mat-label>{{ label | translate }}</mat-label>
   <mat-select [value]="value" (selectionChange)="select($event.value)">
     <mat-option *ngFor="let o of options" [value]="o.id">
       {{ o.ano }}<span *ngIf="o.tipo && o.tipo !== 'PRINCIPAL'"> ({{ o.tipo }})</span>

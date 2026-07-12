@@ -1702,7 +1702,10 @@
     "errMissingCopyTarget": "Select a target budget period before copying.",
     "copySuccess": "Tree copied to the new budget period.",
     "errGeneric": "Something went wrong.",
-    "confirmDelete": "Deactivate \"{{codigo}} - {{designacao}}\"?"
+    "confirmDelete": "Deactivate \"{{codigo}} - {{designacao}}\"?",
+    "searchLabel": "Search by code",
+    "searchPlaceholder": "Type a code to filter the tree...",
+    "searchNoMatch": "No matching code found."
   },
   "mapeamentoRubricas": {
     "header": "Mapeamento Rubricas",
@@ -1758,6 +1761,7 @@
     "confirmReactivate": "Reactivate \"{{codigo}} - {{designacao}}\"?"
   },
   "orcamentoConfigSelect": {
+    "defaultLabel": "Budget Period (Ano)",
     "noOptions": "No budget period yet — create one in System Settings"
   },
   "departamentoConfig": {

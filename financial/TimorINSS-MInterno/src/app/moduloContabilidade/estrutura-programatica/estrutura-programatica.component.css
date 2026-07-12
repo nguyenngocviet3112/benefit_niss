@@ -25,6 +25,10 @@
   flex: 1;
 }
 
+.ep-search-field {
+  width: 240px;
+}
+
 .small-field {
   width: 160px;
 }
