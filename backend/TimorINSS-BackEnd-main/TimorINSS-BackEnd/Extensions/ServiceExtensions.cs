@@ -285,6 +285,7 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<IOrcamentoSuplementarDataManager, OrcamentoSuplementarDataManager>();
             services.AddScoped<ICodigoContaOpeningBalanceDataManager, CodigoContaOpeningBalanceDataManager>();
             services.AddScoped<IBankAccountDataManager, BankAccountDataManager>();
+            services.AddScoped<IBankStatementLineDataManager, BankStatementLineDataManager>();
 
             //Misc
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

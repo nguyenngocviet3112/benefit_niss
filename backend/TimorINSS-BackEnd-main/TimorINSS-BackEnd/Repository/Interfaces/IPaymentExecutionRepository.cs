@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TimorINSSBackEnd.Models;
 
 namespace TimorINSSBackEnd.Repository.Interfaces
@@ -6,5 +7,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
     {
         void Add(PaymentExecution entity);
         bool HasExecutionForAuthorization(int paymentAuthorizationFk);
+        List<PaymentExecution> GetAll();
+        PaymentExecution Get(int id);
     }
 }

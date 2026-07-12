@@ -367,6 +367,30 @@ namespace TimorINSSBackEnd.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ReceitaPac_ContaBancaria");
             });
+
+            modelBuilder.Entity<BankStatementLine>(entity =>
+            {
+                entity.Property(e => e.Credito).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Debito).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.ContaBancariaFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.ContaBancariaFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BankStatementLine_ContaBancaria");
+
+                entity.HasOne(d => d.ReceitaPacFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.ReceitaPacFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BankStatementLine_ReceitaPac");
+
+                entity.HasOne(d => d.PaymentExecutionFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.PaymentExecutionFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BankStatementLine_PaymentExecution");
+            });
         }
 
         public TimorINSSModuloContribuicoesContext(string connectionString) : base(GetOptions(connectionString))

@@ -30,6 +30,7 @@ import { OrcamentoSuplementarComponent } from './orcamento-suplementar/orcamento
 import { SaldosAberturaComponent } from './saldos-abertura/saldos-abertura.component';
 import { BankAccountComponent } from './settings/bank-account/bank-account.component';
 import { PlanoContasComponent } from './plano-contas/plano-contas.component';
+import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/conciliacao-movimentos.component';
 
 const routes: Routes = [
   {
@@ -50,6 +51,7 @@ const routes: Routes = [
       { path: 'obligation', component: ObligationComponent },
       { path: 'payment', component: PaymentComponent },
       { path: 'receita', component: ReceitaPacComponent },
+      { path: 'conciliacaoMovimentos', component: ConciliacaoMovimentosComponent },
       { path: 'sistema/departamentos', component: DepartamentoConfigComponent },
       { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
       { path: 'settings/idioma', component: IdiomaConfigComponent },

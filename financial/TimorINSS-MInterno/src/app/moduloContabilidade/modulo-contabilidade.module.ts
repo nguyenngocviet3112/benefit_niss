@@ -35,6 +35,7 @@ import { OrcamentoSuplementarComponent } from './orcamento-suplementar/orcamento
 import { SaldosAberturaComponent } from './saldos-abertura/saldos-abertura.component';
 import { BankAccountComponent } from './settings/bank-account/bank-account.component';
 import { PlanoContasComponent } from './plano-contas/plano-contas.component';
+import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/conciliacao-movimentos.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { PlanoContasComponent } from './plano-contas/plano-contas.component';
     OrcamentoSuplementarComponent,
     SaldosAberturaComponent,
     BankAccountComponent,
-    PlanoContasComponent
+    PlanoContasComponent,
+    ConciliacaoMovimentosComponent
   ],
   imports: [
     CommonModule,

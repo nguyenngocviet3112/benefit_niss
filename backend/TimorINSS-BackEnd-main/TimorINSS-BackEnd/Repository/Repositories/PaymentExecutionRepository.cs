@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using TimorINSSBackEnd.Models;
 using TimorINSSBackEnd.Repository.Interfaces;
@@ -13,6 +15,13 @@ namespace TimorINSSBackEnd.Repository.Repositories
             _moduloContribuicoesContext = storeContext;
         }
 
+        private IQueryable<PaymentExecution> BaseQuery()
+        {
+            return _moduloContribuicoesContext.PaymentExecution
+                .Include(e => e.ContaBancariaFkNavigation)
+                .Include(e => e.PaymentAuthorizationFkNavigation).ThenInclude(a => a.ObligationFkNavigation);
+        }
+
         public void Add(PaymentExecution entity)
         {
             _moduloContribuicoesContext.PaymentExecution.Add(entity);
@@ -22,6 +31,19 @@ namespace TimorINSSBackEnd.Repository.Repositories
         {
             return _moduloContribuicoesContext.PaymentExecution
                 .Any(e => e.IndActivo && e.PaymentAuthorizationFk == paymentAuthorizationFk);
+        }
+
+        public List<PaymentExecution> GetAll()
+        {
+            return BaseQuery()
+                .Where(e => e.IndActivo)
+                .OrderByDescending(e => e.DataPagamento)
+                .ToList();
+        }
+
+        public PaymentExecution Get(int id)
+        {
+            return BaseQuery().SingleOrDefault(e => e.Id == id);
         }
     }
 }

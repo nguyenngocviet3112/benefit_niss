@@ -1,0 +1,125 @@
+<div class="con-container">
+  <div class="con-header">
+    <h2>Conciliação de Movimentos <span class="en">(đối chiếu sao kê ngân hàng với Receita/Pagamento đã ghi nhận — chạy sau khi đã có dữ liệu 2 chu trình)</span></h2>
+  </div>
+
+  <div class="con-context-bar">
+    <mat-form-field appearance="outline" class="medium-field">
+      <mat-label>Conta Bancária <span class="itag drop">Chọn</span></mat-label>
+      <mat-select [(ngModel)]="contaBancariaFk" name="contaBancariaFk" (selectionChange)="load()">
+        <mat-option *ngFor="let c of contas" [value]="c.id">{{ c.entidadeBancaria }} ({{ c.numero }})</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>Ano (cho Receita)</mat-label>
+      <input matInput type="number" [(ngModel)]="ano" name="ano" />
+    </mat-form-field>
+    <button mat-stroked-button (click)="load()">Tải lại</button>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button color="primary" (click)="openAddForm()">+ Thêm dòng sao kê</button>
+  </div>
+
+  <div class="con-hint">
+    Nhập tay từng dòng sao kê ngân hàng (chưa có import Excel hàng loạt), sau đó đối chiếu từng dòng với 1 Receita hoặc 1 Pagamento đã ghi nhận trong hệ thống.
+  </div>
+
+  <div class="con-summary" *ngIf="!loading">
+    <span>Tổng Crédito: <b>$ {{ totalCredito | number:'1.2-2' }}</b></span>
+    <span>Tổng Débito: <b>$ {{ totalDebito | number:'1.2-2' }}</b></span>
+    <span>Chưa đối chiếu: <b [ngClass]="totalNaoConciliado > 0 ? 'con-warn' : ''">{{ totalNaoConciliado }}</b> / {{ lines.length }}</span>
+  </div>
+
+  <div class="con-table" *ngIf="!loading">
+    <div class="con-row con-row-header">
+      <span class="con-col-data">Data Valor</span>
+      <span class="con-col-desc">Descrição</span>
+      <span class="con-col-credito">Crédito</span>
+      <span class="con-col-debito">Débito</span>
+      <span class="con-col-estado">Đối chiếu</span>
+    </div>
+
+    <ng-container *ngFor="let l of lines">
+      <div class="con-row con-row-summary" (click)="toggleExpand(l)">
+        <span class="con-col-data">{{ l.dataValor | date:'dd/MM/yyyy' }}</span>
+        <span class="con-col-desc">{{ l.descricao || '—' }}</span>
+        <span class="con-col-credito">{{ l.credito > 0 ? ('$ ' + (l.credito | number:'1.2-2')) : '—' }}</span>
+        <span class="con-col-debito">{{ l.debito > 0 ? ('$ ' + (l.debito | number:'1.2-2')) : '—' }}</span>
+        <span class="con-col-estado">
+          <span class="con-badge" [ngClass]="l.isConciliado ? 'con-badge-ok' : 'con-badge-pending'">
+            {{ l.isConciliado ? 'Đã đối chiếu' : 'Chưa đối chiếu' }}
+          </span>
+        </span>
+      </div>
+
+      <div class="con-detail" *ngIf="expandedId === l.id">
+        <div class="con-detail-matched" *ngIf="l.isConciliado">
+          <span *ngIf="l.receitaPacDescricao">Khớp với: <b>{{ l.receitaPacDescricao }}</b></span>
+          <span *ngIf="l.paymentExecutionDescricao">Khớp với: <b>{{ l.paymentExecutionDescricao }}</b></span>
+          <span class="con-detail-date">lúc {{ l.conciliadoAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          <button mat-stroked-button color="warn" (click)="unmatch(l)">Hủy đối chiếu</button>
+        </div>
+
+        <div class="con-detail-actions" *ngIf="!l.isConciliado && matchTarget?.id !== l.id">
+          <button mat-stroked-button (click)="openMatchReceita(l)" [disabled]="l.credito <= 0">Đối chiếu với Receita</button>
+          <button mat-stroked-button (click)="openMatchPagamento(l)" [disabled]="l.debito <= 0">Đối chiếu với Pagamento</button>
+          <button mat-button color="warn" (click)="deleteLine(l)">Xóa dòng</button>
+        </div>
+
+        <div class="con-match-picker" *ngIf="matchTarget?.id === l.id && matchMode === 'receita'">
+          <h4>Chọn Receita để đối chiếu</h4>
+          <div class="con-pick-row" *ngFor="let r of receitasDisponiveis" (click)="confirmMatchReceita(r)">
+            <span>Receita {{ r.numero }}/{{ r.mes }} — {{ r.descritivo }}</span>
+            <span>$ {{ r.valorPac | number:'1.2-2' }}</span>
+          </div>
+          <div class="con-empty" *ngIf="receitasDisponiveis.length === 0">Không còn Receita nào chưa đối chiếu cho năm này.</div>
+          <button mat-button (click)="cancelMatch()">Hủy</button>
+        </div>
+
+        <div class="con-match-picker" *ngIf="matchTarget?.id === l.id && matchMode === 'pagamento'">
+          <h4>Chọn Pagamento để đối chiếu</h4>
+          <div class="con-pick-row" *ngFor="let p of pagamentosDisponiveis" (click)="confirmMatchPagamento(p)">
+            <span>Obr {{ p.obligationNumero }} — {{ p.obligationDescritivo }} ({{ p.dataPagamento | date:'dd/MM/yyyy' }})</span>
+            <span>$ {{ p.valorAutorizado | number:'1.2-2' }}</span>
+          </div>
+          <div class="con-empty" *ngIf="pagamentosDisponiveis.length === 0">Không còn Pagamento nào chưa đối chiếu.</div>
+          <button mat-button (click)="cancelMatch()">Hủy</button>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="con-empty" *ngIf="lines.length === 0">Chưa có dòng sao kê nào cho tài khoản này.</div>
+  </div>
+
+  <div class="con-form-overlay" *ngIf="showAddForm">
+    <div class="con-form">
+      <h3>Thêm dòng sao kê ngân hàng</h3>
+
+      <mat-form-field appearance="outline" class="small-field">
+        <mat-label>Data Valor <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput type="date" [(ngModel)]="formDataValor" name="formDataValor" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descrição <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput [(ngModel)]="formDescricao" name="formDescricao" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="small-field">
+        <mat-label>Crédito (USD) <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput type="number" step="0.01" [(ngModel)]="formCredito" name="formCredito" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="small-field">
+        <mat-label>Débito (USD) <span class="itag type">Gõ tay</span></mat-label>
+        <input matInput type="number" step="0.01" [(ngModel)]="formDebito" name="formDebito" />
+      </mat-form-field>
+
+      <div class="con-form-actions">
+        <button mat-button (click)="cancelAddForm()">Hủy</button>
+        <button mat-raised-button color="primary" (click)="addLine()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
