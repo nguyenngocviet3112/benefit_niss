@@ -32,6 +32,12 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         public bool? ProcessoAprovisionamentoPrevio { get; set; }
 
         [DataMember]
+        public string Proposta { get; set; }
+
+        [DataMember]
+        public string FundamentacaoLegal { get; set; }
+
+        [DataMember]
         public int Mes { get; set; }
 
         [DataMember]

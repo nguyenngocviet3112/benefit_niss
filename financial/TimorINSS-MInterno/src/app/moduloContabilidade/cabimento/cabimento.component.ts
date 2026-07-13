@@ -31,7 +31,13 @@ export class CabimentoComponent implements OnInit {
   public formDescritivo = '';
   public formValorCabimentado: number | null = null;
   public formProcessoAprovisionamentoPrevio = false;
+  public formProposta = '';
+  public formFundamentacaoLegal = '';
   public formMes = 1;
+
+  public showApprovePrompt = false;
+  public approveComment = '';
+  public approveId: number | null = null;
 
   public showRejectPrompt = false;
   public rejectComment = '';
@@ -90,6 +96,8 @@ export class CabimentoComponent implements OnInit {
     this.formDescritivo = '';
     this.formValorCabimentado = ad.valorRevisto;
     this.formProcessoAprovisionamentoPrevio = false;
+    this.formProposta = '';
+    this.formFundamentacaoLegal = '';
     this.formMes = new Date().getMonth() + 1;
   }
 
@@ -109,6 +117,8 @@ export class CabimentoComponent implements OnInit {
       descritivo: this.formDescritivo,
       valorCabimentado: this.formValorCabimentado,
       processoAprovisionamentoPrevio: this.formProcessoAprovisionamentoPrevio,
+      proposta: this.formProposta || undefined,
+      fundamentacaoLegal: this.formFundamentacaoLegal || undefined,
       mes: this.formMes,
       ano: this.ano
     }).subscribe(
@@ -171,17 +181,29 @@ export class CabimentoComponent implements OnInit {
     );
   }
 
-  public approve(item: CabimentoDataContract): void {
-    this.cabimentoService.approve({ id: item.id, approve: true }).subscribe(
+  public openApprovePrompt(id: number): void {
+    this.approveId = id;
+    this.approveComment = '';
+    this.showApprovePrompt = true;
+  }
+
+  public confirmApprove(): void {
+    if (!this.approveId) { return; }
+    this.cabimentoService.approve({ id: this.approveId, approve: true, comment: this.approveComment || undefined }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
           this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
+        this.showApprovePrompt = false;
         this.load();
       },
       err => this.showError(err)
     );
+  }
+
+  public cancelApprove(): void {
+    this.showApprovePrompt = false;
   }
 
   public openRejectPrompt(id: number): void {

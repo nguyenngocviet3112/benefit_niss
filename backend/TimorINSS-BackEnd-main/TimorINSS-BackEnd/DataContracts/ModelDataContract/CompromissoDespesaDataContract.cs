@@ -39,7 +39,13 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public int CabimentoNumero { get; set; }
 
         [DataMember]
+        public int CabimentoMes { get; set; }
+
+        [DataMember]
         public int ExpenditureAuthorizationNumero { get; set; }
+
+        [DataMember]
+        public int ExpenditureAuthorizationMes { get; set; }
 
         [DataMember]
         public string AtividadeCodigo { get; set; }
@@ -52,6 +58,12 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public string EconomicClassificationDesignacao { get; set; }
+
+        [DataMember]
+        public string FunctionalClassificationCodigo { get; set; }
+
+        [DataMember]
+        public string FunctionalClassificationDesignacao { get; set; }
 
         [DataMember]
         public string OrganizationNome { get; set; }
@@ -93,7 +105,13 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public DateTime? ReviewedAt { get; set; }
 
         [DataMember]
+        public string ReviewComment { get; set; }
+
+        [DataMember]
         public DateTime? ApprovedAt { get; set; }
+
+        [DataMember]
+        public string ApproveComment { get; set; }
 
         [DataMember]
         public string LastRejectComment { get; set; }
@@ -113,6 +131,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public int Numero { get; set; }
+
+        [DataMember]
+        public int Mes { get; set; }
 
         [DataMember]
         public string AtividadeCodigo { get; set; }

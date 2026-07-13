@@ -26,10 +26,17 @@ export interface ExpenditureAuthorizationDataContract {
   saldoDisponivel: number;
   tipoDespesa?: 'UNICA' | 'CONJUNTO';
   solicitaAberturaAprovisionamento?: boolean;
+  proposta?: string;
+  fundamentacaoLegal?: string;
+  objetivoDespesa?: string;
+  functionalClassificationCodigo?: string;
+  functionalClassificationDesignacao?: string;
   estado: 'DRAFT' | 'PENDING_REVIEW' | 'PENDING_APPROVAL' | 'APPROVED';
   submittedAt?: string;
   reviewedAt?: string;
+  reviewComment?: string;
   approvedAt?: string;
+  approveComment?: string;
   lastRejectComment?: string;
   lastRejectAt?: string;
   plurianualidade: ExpenditureAuthorizationPlurianualidadeDataContract[];

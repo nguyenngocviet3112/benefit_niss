@@ -56,7 +56,7 @@
             <span>{{ (item.solicitaAberturaAprovisionamento ? 'adCabimento.simOption' : 'adCabimento.naoOption') | translate }}</span>
           </div>
           <div class="ad-field">
-            <label>{{ 'adCabimento.fieldClassificacaoFuncional' | translate }} <span class="itag drop">{{ 'adCabimento.dropTag' | translate }}</span></label>
+            <label>{{ 'adCabimento.fieldClassificacaoFuncional' | translate }} <span class="itag auto">{{ 'adCabimento.autoTag' | translate }}</span></label>
             <span>{{ item.functionalClassificationCodigo ? (item.functionalClassificationCodigo + ' - ' + item.functionalClassificationDesignacao) : '—' }}</span>
           </div>
           <div class="ad-field ad-field-wide">
@@ -188,18 +188,6 @@
             <mat-option [value]="true">{{ 'adCabimento.simOption' | translate }}</mat-option>
             <mat-option [value]="false">{{ 'adCabimento.naoOption' | translate }}</mat-option>
           </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>{{ 'adCabimento.fieldClassificacaoFuncional' | translate }} <span class="itag drop">{{ 'adCabimento.searchToTypeTag' | translate }}</span></mat-label>
-          <input matInput [(ngModel)]="functionalClassificationSearch" name="functionalClassificationSearch"
-                 (ngModelChange)="onFunctionalClassificationSearchChange()" [matAutocomplete]="autoFuncional" />
-          <mat-autocomplete #autoFuncional="matAutocomplete">
-            <mat-option *ngFor="let f of filteredFunctionalClassifications" [value]="f.codigo + ' - ' + f.designacao" (onSelectionChange)="selectFunctionalClassification(f)">
-              {{ f.codigo }} - {{ f.designacao }}
-            </mat-option>
-            <mat-option *ngIf="filteredFunctionalClassifications.length === 0" disabled>{{ 'adCabimento.noneFound' | translate }}</mat-option>
-          </mat-autocomplete>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">

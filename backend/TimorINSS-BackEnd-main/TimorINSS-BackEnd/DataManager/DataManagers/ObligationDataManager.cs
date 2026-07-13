@@ -45,6 +45,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                         Id = i.Id,
                         CompromissoDespesaFk = i.CompromissoDespesaFk,
                         CompromissoDespesaNumero = comp?.Numero ?? 0,
+                        CompromissoDespesaMes = comp?.Mes ?? 0,
                         AtividadeCodigo = rubrica?.AtividadeFkNavigation?.Codigo,
                         EconomicClassificationCodigo = rubrica?.EconomicClassificationFkNavigation?.Codigo,
                         EconomicClassificationDesignacao = rubrica?.EconomicClassificationFkNavigation?.Designacao,
@@ -138,6 +139,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                         {
                             CompromissoDespesaId = c.Id,
                             Numero = c.Numero,
+                            Mes = c.Mes,
                             AtividadeCodigo = rubrica?.AtividadeFkNavigation?.Codigo,
                             AtividadeDesignacao = rubrica?.AtividadeFkNavigation?.Designacao,
                             EconomicClassificationCodigo = rubrica?.EconomicClassificationFkNavigation?.Codigo,

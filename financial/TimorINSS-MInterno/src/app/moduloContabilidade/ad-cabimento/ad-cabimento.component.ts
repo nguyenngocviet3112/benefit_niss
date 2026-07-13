@@ -6,8 +6,6 @@ import { ExpenditureAuthorizationDataContract, RubricaDisponivelDataContract } f
 import { AttachmentConfigService } from '../../services/attachment-config.service';
 import { AttachmentConfigItem } from '../../response-models/attachment-config-response';
 import { AttachmentItem } from '../../response-models/attachment-response';
-import { FunctionalClassificationService } from '../../services/functional-classification.service';
-import { FunctionalClassificationDataContract } from '../../response-models/functional-classification-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
   DRAFT: 'adCabimento.estadoDraft',
@@ -43,11 +41,6 @@ export class AdCabimentoComponent implements OnInit {
   public formObjetivoDespesa = '';
   public formMes = 1;
 
-  public functionalClassificationOptions: FunctionalClassificationDataContract[] = [];
-  public functionalClassificationSearch = '';
-  public filteredFunctionalClassifications: FunctionalClassificationDataContract[] = [];
-  public formFunctionalClassificationFk: number | null = null;
-
   public showApprovePrompt = false;
   public approveComment = '';
   public approveAction: { adId: number; action: 'review' | 'approve' } | null = null;
@@ -71,7 +64,6 @@ export class AdCabimentoComponent implements OnInit {
   constructor(
     private expenditureAuthorizationService: ExpenditureAuthorizationService,
     private attachmentConfigService: AttachmentConfigService,
-    private functionalClassificationService: FunctionalClassificationService,
     private snackBar: MatSnackBar,
     private translate: TranslateService
   ) { }
@@ -79,25 +71,6 @@ export class AdCabimentoComponent implements OnInit {
   ngOnInit(): void {
     this.load();
     this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
-    this.functionalClassificationService.getAllActive().subscribe(response => {
-      this.functionalClassificationOptions = response.items ?? [];
-      this.filteredFunctionalClassifications = this.functionalClassificationOptions;
-    });
-  }
-
-  private normalize(value: string): string {
-    return (value || '').toLowerCase();
-  }
-
-  public onFunctionalClassificationSearchChange(): void {
-    const term = this.normalize(this.functionalClassificationSearch);
-    this.filteredFunctionalClassifications = this.functionalClassificationOptions.filter(f =>
-      this.normalize(f.codigo).includes(term) || this.normalize(f.designacao).includes(term));
-  }
-
-  public selectFunctionalClassification(f: FunctionalClassificationDataContract): void {
-    this.formFunctionalClassificationFk = f.id;
-    this.functionalClassificationSearch = `${f.codigo} - ${f.designacao}`;
   }
 
   public load(): void {
@@ -138,9 +111,6 @@ export class AdCabimentoComponent implements OnInit {
     this.formProposta = '';
     this.formFundamentacaoLegal = '';
     this.formObjetivoDespesa = '';
-    this.formFunctionalClassificationFk = null;
-    this.functionalClassificationSearch = '';
-    this.filteredFunctionalClassifications = this.functionalClassificationOptions;
     this.formMes = new Date().getMonth() + 1;
   }
 
@@ -164,7 +134,6 @@ export class AdCabimentoComponent implements OnInit {
       proposta: this.formProposta || undefined,
       fundamentacaoLegal: this.formFundamentacaoLegal || undefined,
       objetivoDespesa: this.formObjetivoDespesa || undefined,
-      functionalClassificationFk: this.formFunctionalClassificationFk ?? undefined,
       mes: this.formMes,
       ano: this.ano
     }).subscribe(

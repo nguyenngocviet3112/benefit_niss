@@ -46,6 +46,10 @@ export class CompromissoDespesaComponent implements OnInit {
   public formPluriAno: number | null = null;
   public formPluriValor: number | null = null;
 
+  public showApprovePrompt = false;
+  public approveComment = '';
+  public approveAction: { id: number; action: 'review' | 'approve' } | null = null;
+
   public showRejectPrompt = false;
   public rejectComment = '';
   public rejectAction: { id: number; action: 'review' | 'approve' } | null = null;
@@ -217,30 +221,34 @@ export class CompromissoDespesaComponent implements OnInit {
     );
   }
 
-  public reviewApprove(item: CompromissoDespesaDataContract): void {
-    this.compromissoDespesaService.review({ id: item.id, approve: true }).subscribe(
+  public openApprovePrompt(id: number, action: 'review' | 'approve'): void {
+    this.approveAction = { id, action };
+    this.approveComment = '';
+    this.showApprovePrompt = true;
+  }
+
+  public confirmApprove(): void {
+    if (!this.approveAction) { return; }
+    const { id, action } = this.approveAction;
+    const call = action === 'review'
+      ? this.compromissoDespesaService.review({ id, approve: true, comment: this.approveComment || undefined })
+      : this.compromissoDespesaService.approve({ id, approve: true, comment: this.approveComment || undefined });
+
+    call.subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
           this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
+        this.showApprovePrompt = false;
         this.load();
       },
       err => this.showError(err)
     );
   }
 
-  public finalApprove(item: CompromissoDespesaDataContract): void {
-    this.compromissoDespesaService.approve({ id: item.id, approve: true }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.load();
-      },
-      err => this.showError(err)
-    );
+  public cancelApprove(): void {
+    this.showApprovePrompt = false;
   }
 
   public openRejectPrompt(id: number, action: 'review' | 'approve'): void {

@@ -27,8 +27,10 @@ namespace TimorINSSBackEnd.Models
         public DateTime? SubmittedAt { get; set; }
         public int? ReviewedBy { get; set; }
         public DateTime? ReviewedAt { get; set; }
+        public string ReviewComment { get; set; }
         public int? ApprovedBy { get; set; }
         public DateTime? ApprovedAt { get; set; }
+        public string ApproveComment { get; set; }
         public string LastRejectComment { get; set; }
         public int? LastRejectBy { get; set; }
         public DateTime? LastRejectAt { get; set; }

@@ -22,13 +22,18 @@ namespace TimorINSSBackEnd.Models
         public decimal Regularizacao { get; set; }
         public string TipoDespesa { get; set; }
         public bool? SolicitaAberturaAprovisionamento { get; set; }
+        public string Proposta { get; set; }
+        public string FundamentacaoLegal { get; set; }
+        public string ObjetivoDespesa { get; set; }
         public string Estado { get; set; }
         public int? SubmittedBy { get; set; }
         public DateTime? SubmittedAt { get; set; }
         public int? ReviewedBy { get; set; }
         public DateTime? ReviewedAt { get; set; }
+        public string ReviewComment { get; set; }
         public int? ApprovedBy { get; set; }
         public DateTime? ApprovedAt { get; set; }
+        public string ApproveComment { get; set; }
         public string LastRejectComment { get; set; }
         public int? LastRejectBy { get; set; }
         public DateTime? LastRejectAt { get; set; }

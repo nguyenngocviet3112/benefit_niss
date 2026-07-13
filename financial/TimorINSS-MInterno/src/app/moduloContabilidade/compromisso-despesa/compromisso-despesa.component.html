@@ -56,6 +56,10 @@
             <span>$ {{ item.regularizacao | number:'1.2-2' }}</span>
           </div>
           <div class="comp-field">
+            <label>{{ 'compromisso.fieldClassificacaoFuncional' | translate }} <span class="itag auto">{{ 'compromisso.autoTag' | translate }}</span></label>
+            <span>{{ item.functionalClassificationCodigo ? (item.functionalClassificationCodigo + ' — ' + item.functionalClassificationDesignacao) : '—' }}</span>
+          </div>
+          <div class="comp-field">
             <label>{{ 'compromisso.fieldAssumidoCom' | translate }} <span class="itag drop">{{ 'compromisso.dropTag' | translate }}</span></label>
             <span>{{ (item.assumidoCom ? (assumidoComLabels[item.assumidoCom] | translate) : '—') }}</span>
           </div>
@@ -70,6 +74,14 @@
           <div class="comp-field">
             <label>{{ 'compromisso.fieldSaldoDisponivel' | translate }} <span class="itag auto">{{ 'compromisso.autoTag' | translate }}</span></label>
             <span [ngClass]="item.saldoDisponivel < 0 ? 'comp-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
+          </div>
+          <div class="comp-field" *ngIf="item.reviewComment">
+            <label>{{ 'compromisso.fieldReviewComment' | translate }}</label>
+            <span>{{ item.reviewComment }}</span>
+          </div>
+          <div class="comp-field" *ngIf="item.approveComment">
+            <label>{{ 'compromisso.fieldApproveComment' | translate }}</label>
+            <span>{{ item.approveComment }}</span>
           </div>
           <div class="comp-field" *ngIf="item.lastRejectComment">
             <label>{{ 'compromisso.lastRejectComment' | translate }}</label>
@@ -105,12 +117,12 @@
           </ng-container>
 
           <ng-container *ngIf="item.estado === 'PENDING_REVIEW'">
-            <button mat-raised-button color="primary" (click)="reviewApprove(item)">{{ 'compromisso.reviewApproveButton' | translate }}</button>
+            <button mat-raised-button color="primary" (click)="openApprovePrompt(item.id, 'review')">{{ 'compromisso.reviewApproveButton' | translate }}</button>
             <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'review')">{{ 'compromisso.rejectButton' | translate }}</button>
           </ng-container>
 
           <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
-            <button mat-raised-button color="primary" (click)="finalApprove(item)">{{ 'compromisso.finalApproveButton' | translate }}</button>
+            <button mat-raised-button color="primary" (click)="openApprovePrompt(item.id, 'approve')">{{ 'compromisso.finalApproveButton' | translate }}</button>
             <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'approve')">{{ 'compromisso.rejectButton' | translate }}</button>
           </ng-container>
         </div>
@@ -204,6 +216,20 @@
       <div class="comp-form-actions">
         <button mat-button (click)="cancelEdit()">{{ 'compromisso.cancelButton' | translate }}</button>
         <button mat-raised-button color="primary" (click)="saveEdit()">{{ 'compromisso.saveButton' | translate }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="comp-form-overlay" *ngIf="showApprovePrompt">
+    <div class="comp-form">
+      <h3>{{ 'compromisso.approveTitle' | translate }}</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'compromisso.fieldParecer' | translate }} <span class="itag type">{{ 'compromisso.typedOptionalTag' | translate }}</span></mat-label>
+        <textarea matInput [(ngModel)]="approveComment" name="approveComment" rows="3"></textarea>
+      </mat-form-field>
+      <div class="comp-form-actions">
+        <button mat-button (click)="cancelApprove()">{{ 'compromisso.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="confirmApprove()">{{ 'compromisso.confirmApproveButton' | translate }}</button>
       </div>
     </div>
   </div>

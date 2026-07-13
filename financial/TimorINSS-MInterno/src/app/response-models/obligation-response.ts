@@ -4,6 +4,7 @@ export interface ObligationItemDataContract {
   id: number;
   compromissoDespesaFk: number;
   compromissoDespesaNumero: number;
+  compromissoDespesaMes: number;
   atividadeCodigo: string;
   economicClassificationCodigo: string;
   economicClassificationDesignacao: string;
@@ -62,6 +63,7 @@ export interface ObligationDataContract {
 export interface CompromissoComSaldoDataContract {
   compromissoDespesaId: number;
   numero: number;
+  mes: number;
   atividadeCodigo: string;
   atividadeDesignacao: string;
   economicClassificationCodigo: string;

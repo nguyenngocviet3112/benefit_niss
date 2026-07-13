@@ -3,6 +3,8 @@ export interface CreateCabimentoRequest {
   descritivo: string;
   valorCabimentado: number;
   processoAprovisionamentoPrevio?: boolean;
+  proposta?: string;
+  fundamentacaoLegal?: string;
   mes: number;
   ano: number;
 }

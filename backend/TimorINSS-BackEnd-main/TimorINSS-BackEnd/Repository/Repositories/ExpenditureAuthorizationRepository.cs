@@ -20,6 +20,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return _moduloContribuicoesContext.ExpenditureAuthorization
                 .Include(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.AtividadeFkNavigation)
                 .Include(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.EconomicClassificationFkNavigation)
+                .Include(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.FunctionalClassificationFkNavigation)
                 .Include(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.OrganizationFkNavigation)
                 .Include(a => a.ExpenditureAuthorizationPlurianualidade)
                 .Where(a => a.IndActivo && a.Ano == ano)
@@ -32,6 +33,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return _moduloContribuicoesContext.ExpenditureAuthorization
                 .Include(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.AtividadeFkNavigation)
                 .Include(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.EconomicClassificationFkNavigation)
+                .Include(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.FunctionalClassificationFkNavigation)
                 .Include(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.OrganizationFkNavigation)
                 .Include(a => a.ExpenditureAuthorizationPlurianualidade)
                 .SingleOrDefault(a => a.Id == id);

@@ -17,6 +17,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public int CompromissoDespesaNumero { get; set; }
 
         [DataMember]
+        public int CompromissoDespesaMes { get; set; }
+
+        [DataMember]
         public string AtividadeCodigo { get; set; }
 
         [DataMember]
@@ -165,6 +168,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public int Numero { get; set; }
+
+        [DataMember]
+        public int Mes { get; set; }
 
         [DataMember]
         public string AtividadeCodigo { get; set; }

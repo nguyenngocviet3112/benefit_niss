@@ -51,10 +51,17 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 SaldoDisponivel = valorRevisto - valorCabimentado,
                 TipoDespesa = entity.TipoDespesa,
                 SolicitaAberturaAprovisionamento = entity.SolicitaAberturaAprovisionamento,
+                Proposta = entity.Proposta,
+                FundamentacaoLegal = entity.FundamentacaoLegal,
+                ObjetivoDespesa = entity.ObjetivoDespesa,
+                FunctionalClassificationCodigo = rubrica?.FunctionalClassificationFkNavigation?.Codigo,
+                FunctionalClassificationDesignacao = rubrica?.FunctionalClassificationFkNavigation?.Designacao,
                 Estado = entity.Estado,
                 SubmittedAt = entity.SubmittedAt,
                 ReviewedAt = entity.ReviewedAt,
+                ReviewComment = entity.ReviewComment,
                 ApprovedAt = entity.ApprovedAt,
+                ApproveComment = entity.ApproveComment,
                 LastRejectComment = entity.LastRejectComment,
                 LastRejectAt = entity.LastRejectAt,
                 Plurianualidade = (entity.ExpenditureAuthorizationPlurianualidade ?? new List<ExpenditureAuthorizationPlurianualidade>())
@@ -135,7 +142,6 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     response.Errors.Add(new Error { ErrorCode = "AD-EXCEEDS-RUBRICA", ErrorMessage = $"Valor Autorizado vượt quá giá trị rúbrica ({rubrica.Valor:N2})." });
                     return response;
                 }
-
                 int numero = _unitOfWork.ExpenditureAuthorizationRepository.GetNextNumero(request.Mes, request.Ano);
 
                 ExpenditureAuthorization entity = new ExpenditureAuthorization
@@ -149,6 +155,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     Regularizacao = 0,
                     TipoDespesa = request.TipoDespesa,
                     SolicitaAberturaAprovisionamento = request.SolicitaAberturaAprovisionamento,
+                    Proposta = request.Proposta,
+                    FundamentacaoLegal = request.FundamentacaoLegal,
+                    ObjetivoDespesa = request.ObjetivoDespesa,
                     Estado = ESTADO_DRAFT,
                     IndActivo = true
                 };
@@ -327,6 +336,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     entity.Estado = ESTADO_PENDING_APPROVAL;
                     entity.ReviewedBy = request.UserId;
                     entity.ReviewedAt = DateTime.Now;
+                    entity.ReviewComment = request.Comment;
                 }
                 else
                 {
@@ -369,6 +379,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     entity.Estado = ESTADO_APPROVED;
                     entity.ApprovedBy = request.UserId;
                     entity.ApprovedAt = DateTime.Now;
+                    entity.ApproveComment = request.Comment;
                 }
                 else
                 {

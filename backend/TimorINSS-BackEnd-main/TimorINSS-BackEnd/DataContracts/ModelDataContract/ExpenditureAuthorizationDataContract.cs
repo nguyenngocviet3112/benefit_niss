@@ -78,6 +78,21 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public bool? SolicitaAberturaAprovisionamento { get; set; }
 
         [DataMember]
+        public string Proposta { get; set; }
+
+        [DataMember]
+        public string FundamentacaoLegal { get; set; }
+
+        [DataMember]
+        public string ObjetivoDespesa { get; set; }
+
+        [DataMember]
+        public string FunctionalClassificationCodigo { get; set; }
+
+        [DataMember]
+        public string FunctionalClassificationDesignacao { get; set; }
+
+        [DataMember]
         public string Estado { get; set; }
 
         [DataMember]
@@ -87,7 +102,13 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public DateTime? ReviewedAt { get; set; }
 
         [DataMember]
+        public string ReviewComment { get; set; }
+
+        [DataMember]
         public DateTime? ApprovedAt { get; set; }
+
+        [DataMember]
+        public string ApproveComment { get; set; }
 
         [DataMember]
         public string LastRejectComment { get; set; }

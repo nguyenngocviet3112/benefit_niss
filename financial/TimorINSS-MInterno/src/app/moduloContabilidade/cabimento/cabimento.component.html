@@ -44,15 +44,31 @@
               (click)="submitCabimento(item)">{{ 'cabimento.submitButton' | translate }}</button>
           </ng-container>
           <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
-            <button mat-button color="primary" (click)="approve(item)">{{ 'cabimento.approveButton' | translate }}</button>
+            <button mat-button color="primary" (click)="openApprovePrompt(item.id)">{{ 'cabimento.approveButton' | translate }}</button>
             <button mat-button color="warn" (click)="openRejectPrompt(item.id)">{{ 'cabimento.rejectButton' | translate }}</button>
           </ng-container>
         </span>
+      </div>
+      <div class="cab-reject-note" *ngIf="item.functionalClassificationCodigo">
+        <label>{{ 'cabimento.fieldClassificacaoFuncional' | translate }} <span class="itag auto">{{ 'cabimento.autoTag' | translate }}</span></label>
+        <span class="cab-reject-text">{{ item.functionalClassificationCodigo }} - {{ item.functionalClassificationDesignacao }}</span>
+      </div>
+      <div class="cab-reject-note" *ngIf="item.proposta">
+        <label>{{ 'cabimento.fieldProposta' | translate }}</label>
+        <span class="cab-reject-text">{{ item.proposta }}</span>
+      </div>
+      <div class="cab-reject-note" *ngIf="item.fundamentacaoLegal">
+        <label>{{ 'cabimento.fieldFundamentacaoLegal' | translate }}</label>
+        <span class="cab-reject-text">{{ item.fundamentacaoLegal }}</span>
       </div>
       <app-attachment-upload *ngIf="item.estado === 'DRAFT'" entityType="CABIMENTO" [entityId]="item.id"
         (itemsLoaded)="onAttachmentsLoaded(item.id, $event)"></app-attachment-upload>
       <div class="cab-attach-hint" *ngIf="item.estado === 'DRAFT' && attachmentConfig?.cabimentoObrigatorio && !cabimentoHasAttachment[item.id]">
         {{ 'attachmentUpload.requiredHint' | translate }}
+      </div>
+      <div class="cab-reject-note" *ngIf="item.approveComment">
+        <label>{{ 'cabimento.fieldApproveComment' | translate }}</label>
+        <span class="cab-reject-text">{{ item.approveComment }}</span>
       </div>
       <div class="cab-reject-note" *ngIf="item.lastRejectComment">
         <label>{{ 'cabimento.lastRejectComment' | translate }}</label>
@@ -97,6 +113,16 @@
           </mat-select>
         </mat-form-field>
 
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'cabimento.fieldProposta' | translate }} <span class="itag type">{{ 'cabimento.typedOptionalTag' | translate }}</span></mat-label>
+          <textarea matInput [(ngModel)]="formProposta" name="formProposta" rows="2"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'cabimento.fieldFundamentacaoLegal' | translate }} <span class="itag type">{{ 'cabimento.typedOptionalTag' | translate }}</span></mat-label>
+          <textarea matInput [(ngModel)]="formFundamentacaoLegal" name="formFundamentacaoLegal" rows="2"></textarea>
+        </mat-form-field>
+
         <mat-form-field appearance="outline" class="small-field">
           <mat-label>{{ 'cabimento.fieldMes' | translate }}</mat-label>
           <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
@@ -135,6 +161,20 @@
       <div class="cab-form-actions">
         <button mat-button (click)="cancelEdit()">{{ 'cabimento.cancelButton' | translate }}</button>
         <button mat-raised-button color="primary" (click)="saveEdit()">{{ 'cabimento.saveButton' | translate }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cab-form-overlay" *ngIf="showApprovePrompt">
+    <div class="cab-form">
+      <h3>{{ 'cabimento.approveTitle' | translate }}</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'cabimento.fieldParecer' | translate }} <span class="itag type">{{ 'cabimento.typedOptionalTag' | translate }}</span></mat-label>
+        <textarea matInput [(ngModel)]="approveComment" name="approveComment" rows="3"></textarea>
+      </mat-form-field>
+      <div class="cab-form-actions">
+        <button mat-button (click)="cancelApprove()">{{ 'cabimento.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="confirmApprove()">{{ 'cabimento.confirmApproveButton' | translate }}</button>
       </div>
     </div>
   </div>

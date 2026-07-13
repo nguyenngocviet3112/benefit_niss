@@ -36,10 +36,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Ano = entity.Ano,
                 ExpenditureAuthorizationFk = entity.ExpenditureAuthorizationFk,
                 ExpenditureAuthorizationNumero = entity.ExpenditureAuthorizationFkNavigation?.Numero ?? 0,
+                ExpenditureAuthorizationMes = entity.ExpenditureAuthorizationFkNavigation?.Mes ?? 0,
                 AtividadeCodigo = rubrica?.AtividadeFkNavigation?.Codigo,
                 AtividadeDesignacao = rubrica?.AtividadeFkNavigation?.Designacao,
                 EconomicClassificationCodigo = rubrica?.EconomicClassificationFkNavigation?.Codigo,
                 EconomicClassificationDesignacao = rubrica?.EconomicClassificationFkNavigation?.Designacao,
+                FunctionalClassificationCodigo = rubrica?.FunctionalClassificationFkNavigation?.Codigo,
+                FunctionalClassificationDesignacao = rubrica?.FunctionalClassificationFkNavigation?.Designacao,
                 OrganizationNome = rubrica?.OrganizationFkNavigation?.Nome,
                 ValorAutorizadoAd = entity.ExpenditureAuthorizationFkNavigation != null
                     ? entity.ExpenditureAuthorizationFkNavigation.ValorAutorizado + entity.ExpenditureAuthorizationFkNavigation.Regularizacao
@@ -49,9 +52,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 ValorComprometido = valorComprometido,
                 SaldoDisponivel = entity.ValorCabimentado - valorComprometido,
                 ProcessoAprovisionamentoPrevio = entity.ProcessoAprovisionamentoPrevio,
+                Proposta = entity.Proposta,
+                FundamentacaoLegal = entity.FundamentacaoLegal,
                 Estado = entity.Estado,
                 SubmittedAt = entity.SubmittedAt,
                 ApprovedAt = entity.ApprovedAt,
+                ApproveComment = entity.ApproveComment,
                 LastRejectComment = entity.LastRejectComment,
                 LastRejectAt = entity.LastRejectAt
             };
@@ -93,6 +99,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     {
                         ExpenditureAuthorizationId = a.Id,
                         Numero = a.Numero,
+                        Mes = a.Mes,
                         AtividadeCodigo = a.OrcamentoLinhaFkNavigation?.AtividadeFkNavigation?.Codigo,
                         AtividadeDesignacao = a.OrcamentoLinhaFkNavigation?.AtividadeFkNavigation?.Designacao,
                         EconomicClassificationCodigo = a.OrcamentoLinhaFkNavigation?.EconomicClassificationFkNavigation?.Codigo,
@@ -145,6 +152,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     Descritivo = request.Descritivo,
                     ValorCabimentado = request.ValorCabimentado,
                     ProcessoAprovisionamentoPrevio = request.ProcessoAprovisionamentoPrevio,
+                    Proposta = request.Proposta,
+                    FundamentacaoLegal = request.FundamentacaoLegal,
                     Estado = ESTADO_DRAFT,
                     IndActivo = true
                 };
@@ -260,6 +269,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     entity.Estado = ESTADO_APPROVED;
                     entity.ApprovedBy = request.UserId;
                     entity.ApprovedAt = DateTime.Now;
+                    entity.ApproveComment = request.Comment;
                 }
                 else
                 {

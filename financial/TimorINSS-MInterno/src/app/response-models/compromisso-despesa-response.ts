@@ -13,11 +13,15 @@ export interface CompromissoDespesaDataContract {
   ano: number;
   cabimentoFk: number;
   cabimentoNumero: number;
+  cabimentoMes: number;
   expenditureAuthorizationNumero: number;
+  expenditureAuthorizationMes: number;
   atividadeCodigo: string;
   atividadeDesignacao: string;
   economicClassificationCodigo: string;
   economicClassificationDesignacao: string;
+  functionalClassificationCodigo?: string;
+  functionalClassificationDesignacao?: string;
   organizationNome: string;
   valorCabimentado: number;
   descritivo: string;
@@ -31,7 +35,9 @@ export interface CompromissoDespesaDataContract {
   estado: 'DRAFT' | 'PENDING_REVIEW' | 'PENDING_APPROVAL' | 'APPROVED';
   submittedAt?: string;
   reviewedAt?: string;
+  reviewComment?: string;
   approvedAt?: string;
+  approveComment?: string;
   lastRejectComment?: string;
   lastRejectAt?: string;
   plurianualidade: CompromissoDespesaPlurianualidadeDataContract[];
@@ -40,6 +46,7 @@ export interface CompromissoDespesaDataContract {
 export interface CabimentoDisponivelParaCompromissoDataContract {
   cabimentoId: number;
   numero: number;
+  mes: number;
   atividadeCodigo: string;
   atividadeDesignacao: string;
   economicClassificationCodigo: string;

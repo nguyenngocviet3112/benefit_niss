@@ -21,6 +21,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Include(c => c.CompromissoDespesaPlurianualidade)
                 .Include(c => c.CabimentoFkNavigation).ThenInclude(cab => cab.ExpenditureAuthorizationFkNavigation).ThenInclude(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.AtividadeFkNavigation)
                 .Include(c => c.CabimentoFkNavigation).ThenInclude(cab => cab.ExpenditureAuthorizationFkNavigation).ThenInclude(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.EconomicClassificationFkNavigation)
+                .Include(c => c.CabimentoFkNavigation).ThenInclude(cab => cab.ExpenditureAuthorizationFkNavigation).ThenInclude(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.FunctionalClassificationFkNavigation)
                 .Include(c => c.CabimentoFkNavigation).ThenInclude(cab => cab.ExpenditureAuthorizationFkNavigation).ThenInclude(a => a.OrcamentoLinhaFkNavigation).ThenInclude(l => l.OrganizationFkNavigation);
         }
 

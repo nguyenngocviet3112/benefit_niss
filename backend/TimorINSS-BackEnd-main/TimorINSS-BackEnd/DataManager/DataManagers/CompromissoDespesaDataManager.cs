@@ -41,11 +41,15 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Ano = entity.Ano,
                 CabimentoFk = entity.CabimentoFk,
                 CabimentoNumero = cabimento?.Numero ?? 0,
+                CabimentoMes = cabimento?.Mes ?? 0,
                 ExpenditureAuthorizationNumero = ad?.Numero ?? 0,
+                ExpenditureAuthorizationMes = ad?.Mes ?? 0,
                 AtividadeCodigo = rubrica?.AtividadeFkNavigation?.Codigo,
                 AtividadeDesignacao = rubrica?.AtividadeFkNavigation?.Designacao,
                 EconomicClassificationCodigo = rubrica?.EconomicClassificationFkNavigation?.Codigo,
                 EconomicClassificationDesignacao = rubrica?.EconomicClassificationFkNavigation?.Designacao,
+                FunctionalClassificationCodigo = rubrica?.FunctionalClassificationFkNavigation?.Codigo,
+                FunctionalClassificationDesignacao = rubrica?.FunctionalClassificationFkNavigation?.Designacao,
                 OrganizationNome = rubrica?.OrganizationFkNavigation?.Nome,
                 ValorCabimentado = cabimento?.ValorCabimentado ?? 0,
                 Descritivo = entity.Descritivo,
@@ -59,7 +63,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Estado = entity.Estado,
                 SubmittedAt = entity.SubmittedAt,
                 ReviewedAt = entity.ReviewedAt,
+                ReviewComment = entity.ReviewComment,
                 ApprovedAt = entity.ApprovedAt,
+                ApproveComment = entity.ApproveComment,
                 LastRejectComment = entity.LastRejectComment,
                 LastRejectAt = entity.LastRejectAt,
                 Plurianualidade = (entity.CompromissoDespesaPlurianualidade ?? new List<CompromissoDespesaPlurianualidade>())
@@ -101,6 +107,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     {
                         CabimentoId = c.Id,
                         Numero = c.Numero,
+                        Mes = c.Mes,
                         AtividadeCodigo = c.ExpenditureAuthorizationFkNavigation?.OrcamentoLinhaFkNavigation?.AtividadeFkNavigation?.Codigo,
                         AtividadeDesignacao = c.ExpenditureAuthorizationFkNavigation?.OrcamentoLinhaFkNavigation?.AtividadeFkNavigation?.Designacao,
                         EconomicClassificationCodigo = c.ExpenditureAuthorizationFkNavigation?.OrcamentoLinhaFkNavigation?.EconomicClassificationFkNavigation?.Codigo,
@@ -317,6 +324,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     entity.Estado = ESTADO_PENDING_APPROVAL;
                     entity.ReviewedBy = request.UserId;
                     entity.ReviewedAt = DateTime.Now;
+                    entity.ReviewComment = request.Comment;
                 }
                 else
                 {
@@ -359,6 +367,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     entity.Estado = ESTADO_APPROVED;
                     entity.ApprovedBy = request.UserId;
                     entity.ApprovedAt = DateTime.Now;
+                    entity.ApproveComment = request.Comment;
                 }
                 else
                 {

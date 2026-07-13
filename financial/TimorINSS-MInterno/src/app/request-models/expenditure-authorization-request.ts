@@ -4,6 +4,9 @@ export interface CreateExpenditureAuthorizationRequest {
   valorAutorizado: number;
   tipoDespesa?: 'UNICA' | 'CONJUNTO';
   solicitaAberturaAprovisionamento?: boolean;
+  proposta?: string;
+  fundamentacaoLegal?: string;
+  objetivoDespesa?: string;
   mes: number;
   ano: number;
 }
