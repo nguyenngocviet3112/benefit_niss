@@ -208,20 +208,6 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     response.Errors.Add(new Error { ErrorCode = "REC-NOT-FOUND", ErrorMessage = "Không tìm thấy Receita." });
                     return response;
                 }
-                // Chặn hẳn việc đối chiếu nếu Receita chưa cấu hình Tài khoản Nợ/Có,
-                // thay vì cho đối chiếu xong rồi mới cảnh báo thiếu bút toán (2026-07-13,
-                // user yêu cầu — phải cấu hình xong mới cho đối chiếu, tránh để đối chiếu
-                // "treo" ở trạng thái thiếu sổ sách). ErrorCode riêng để frontend hiện
-                // link thẳng tới màn Receita PAC.
-                if (receita.CodigoContaDebitoFk == null || receita.CodigoContaCreditoFk == null)
-                {
-                    response.Errors.Add(new Error
-                    {
-                        ErrorCode = "REC-MISSING-CONTA-CONFIG",
-                        ErrorMessage = $"Receita PAC Nº {receita.Numero}/{receita.Ano} chưa cấu hình Tài khoản Nợ/Có — vào màn Receita PAC để bổ sung 2 trường Tài khoản trước khi đối chiếu."
-                    });
-                    return response;
-                }
                 if (entity.Credito <= 0)
                 {
                     response.Errors.Add(new Error { ErrorCode = "BSL-NOT-CREDITO", ErrorMessage = "Dòng sao kê này không phải khoản Có (tiền vào) — không thể đối chiếu với Receita." });
@@ -248,9 +234,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 // công — đây là bước "tiền đã thực sự về" nên đúng chỗ để ghi sổ, thay
                 // vì ghi ngay lúc Receita được nhập (số tự khai, chưa kiểm chứng) — xem
                 // memory guia-pagamento-lancamento-wiring (cùng nguyên tắc áp dụng cho
-                // Guia Pagamento trước đó). Tài khoản Nợ/Có đã được đảm bảo tồn tại ở
-                // bước chặn phía trên nên GerarSeChuaCo ở đây luôn ghi được (không còn
-                // nhánh FaltaConfiguracao khả dĩ nữa).
+                // Guia Pagamento trước đó). Cấu hình Tài khoản Nợ/Có là TÙY CHỌN, không
+                // bắt buộc — quy tắc chung chốt 2026-07-13 (từ phiên màn cấu hình tài
+                // khoản kế toán): mọi cấu hình phục vụ tự sinh Lançamento (Tài khoản Phải
+                // trả, Tài khoản Nợ/Có Guia Pagamento, Tài khoản Nợ/Có Receita...) không
+                // được chặn nghiệp vụ chính — thiếu thì GerarSeChuaCo tự bỏ qua việc ghi
+                // sổ và báo warning, KHÔNG chặn đối chiếu.
                 var lancResult = _lancamentoDataManager.GerarSeChuaCo(
                     origemTipo: "ReceitaPacBanco",
                     origemId: receita.Id,
@@ -260,7 +249,11 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     valor: entity.Credito,
                     descricao: $"Receita PAC Nº {receita.Numero}/{receita.Ano} - {receita.Descritivo} (đối chiếu ngân hàng)");
 
-                if (lancResult.Gerado)
+                if (lancResult.FaltaConfiguracao)
+                {
+                    response.Warnings.Add($"Đối chiếu đã ghi nhận, nhưng chưa ghi được bút toán kế toán cho phần Banco của Receita Nº {receita.Numero}/{receita.Ano} vì thiếu Tài khoản Nợ/Có — vào màn Receita PAC, sửa dòng này để bổ sung 2 trường Tài khoản, rồi gỡ đối chiếu và làm lại để hệ thống tự ghi sổ (không bắt buộc, chỉ ảnh hưởng tới sổ sách kế toán).");
+                }
+                else if (lancResult.Gerado)
                 {
                     response.Warnings.Add($"Đã tự động ghi bút toán kế toán cho phần Banco của Receita Nº {receita.Numero}/{receita.Ano}. Kiểm tra tại Registo de Lançamentos nếu cần điều chỉnh.");
                 }

@@ -198,7 +198,7 @@ export class ConciliacaoMovimentosComponent implements OnInit {
     this.bankStatementLineService.matchReceita({ id: this.matchTarget.id, receitaPacFk: receita.receitaPacId }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.showErrorWithConfigLink(response.errors[0].errorCode, response.errors[0].errorMessage);
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
         this.matchTarget = null;
@@ -229,9 +229,18 @@ export class ConciliacaoMovimentosComponent implements OnInit {
 
   // Bút toán tự sinh (hoặc bị bỏ qua vì thiếu cấu hình) — luôn thông báo, để
   // kế toán biết mà kiểm tra/cấu hình lại nếu cần (2026-07-13, user yêu cầu).
+  // Đối chiếu VẪN được ghi nhận dù thiếu cấu hình — cấu hình tài khoản chỉ
+  // phục vụ tự sinh Lançamento, KHÔNG được chặn nghiệp vụ chính (quy tắc
+  // chung chốt 2026-07-13, áp dụng cho mọi màn cấu hình tài khoản kế toán).
   private showSuccessWithWarnings(baseMessage: string, warnings: string[] | undefined): void {
     const hasWarnings = warnings && warnings.length > 0;
     const message = hasWarnings ? `${baseMessage} ${(warnings ?? []).join(' ')}` : baseMessage;
+    const missingConfig = (warnings ?? []).some(w => w.includes('chưa cấu hình'));
+    if (missingConfig) {
+      const ref = this.snackBar.open(message, this.translate.instant('conciliacao.goToReceitaConfig'), { duration: 12000 });
+      ref.onAction().subscribe(() => this.router.navigate(['/contabilidade/receita']));
+      return;
+    }
     this.snackBar.open(message, this.translate.instant('general.close'), { duration: hasWarnings ? 12000 : 3000 });
   }
 
@@ -254,15 +263,4 @@ export class ConciliacaoMovimentosComponent implements OnInit {
     this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 
-  // Backend chặn hẳn việc đối chiếu khi Receita chưa cấu hình Tài khoản Nợ/Có
-  // (2026-07-13, user yêu cầu) — thay vì chỉ đóng snackbar, đưa thẳng link
-  // sang màn Receita PAC để sửa ngay, đỡ phải tự đi tìm.
-  private showErrorWithConfigLink(errorCode: string, message: string): void {
-    if (errorCode === 'REC-MISSING-CONTA-CONFIG') {
-      const ref = this.snackBar.open(message, this.translate.instant('conciliacao.goToReceitaConfig'), { duration: 10000 });
-      ref.onAction().subscribe(() => this.router.navigate(['/contabilidade/receita']));
-      return;
-    }
-    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
-  }
 }
