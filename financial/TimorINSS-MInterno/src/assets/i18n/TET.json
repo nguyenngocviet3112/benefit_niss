@@ -775,7 +775,8 @@
       "MANDIRI": "MANDIRI",
       "BNCTL": "BNCTL",
       "BNTL": "BNTL",
-      "BRI": "BRI"
+      "BRI": "BRI",
+      "ANZ": "ANZ"
     },
     "chooseReason": "Hili rázon ida",
     "reason": {
@@ -2653,6 +2654,7 @@
     "panelMovimentos": "Movimentos bancários disponíveis",
     "colDocumento": "Nº Documento",
     "colDescricao": "Descrição",
+    "colBanco": "Banco",
     "colValorDeclarado": "Valor declarado",
     "colData": "Data",
     "colValorBanco": "Valor bancário",

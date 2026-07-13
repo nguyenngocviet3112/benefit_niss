@@ -778,7 +778,8 @@
       "MANDIRI": "MANDIRI",
       "BNCTL": "BNCTL",
       "BNTL": "BNTL",
-      "BRI": "BRI"
+      "BRI": "BRI",
+      "ANZ": "ANZ"
     },
     "chooseReason": "Choose a reason",
     "reason": {
@@ -2657,6 +2658,7 @@
     "panelMovimentos": "Dòng sao kê ngân hàng khả dụng",
     "colDocumento": "Số chứng từ",
     "colDescricao": "Mô tả",
+    "colBanco": "Ngân hàng",
     "colValorDeclarado": "Số tiền khai báo",
     "colData": "Ngày",
     "colValorBanco": "Số tiền ngân hàng",

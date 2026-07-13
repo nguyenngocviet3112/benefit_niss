@@ -778,7 +778,8 @@
       "MANDIRI": "MANDIRI",
       "BNCTL": "BNCTL",
       "BNTL": "BNTL",
-      "BRI": "BRI"
+      "BRI": "BRI",
+      "ANZ": "ANZ"
     },
     "chooseReason": "Choose a reason",
     "reason": {
@@ -2657,6 +2658,7 @@
     "panelMovimentos": "Available bank statement lines",
     "colDocumento": "Document No.",
     "colDescricao": "Description",
+    "colBanco": "Bank",
     "colValorDeclarado": "Declared amount",
     "colData": "Date",
     "colValorBanco": "Bank amount",
