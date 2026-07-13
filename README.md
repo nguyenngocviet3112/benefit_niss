@@ -1,47 +1,50 @@
 # TimorINSS — Local Development Setup
 
-Hệ thống gồm 3 phần chạy độc lập qua Docker (không cần cài Node/.NET/SQL Server trực tiếp lên máy):
+The system has 4 parts, each running independently via Docker (no need to install Node/.NET/SQL Server directly on the host machine):
 
 | Service | Container name | Image | Port (host) |
 |---|---|---|---|
 | Database (SQL Server) | `inss-db` | `mcr.microsoft.com/mssql/server:2022-latest` | 1433 |
 | Backend API (.NET Core 3.1) | `inss-backend` | `mcr.microsoft.com/dotnet/sdk:3.1` | 5000 |
-| Frontend Interno (Angular 11) | `inss_interno` | `node:14` | 4300 |
+| Internal Frontend / Finance Module (Angular 11) | `inss_interno` | `node:14` | 4300 |
+| Enterprise Portal — external self-service (ModuloContribuicoes, Angular) | `inss_contrib` | `node:14` | 4200 |
 
-**Lý do dùng Docker cho frontend/backend:** máy dev đang cài Node/.NET bản mới hơn nhiều so với bản mà project này yêu cầu (Angular 11 cần Node ≤16, .NET project build với SDK 3.1) — chạy trực tiếp bằng `ng serve`/`dotnet run` trên máy sẽ lỗi (vd Node 18+ gây lỗi `No such module: http_parser`). Container cô lập đúng runtime version cần thiết, không phải cài lại môi trường mỗi lần.
+**Why Docker for frontend/backend:** the dev machine has much newer Node/.NET versions installed than this project requires (Angular 11 needs Node ≤16, the .NET project builds with SDK 3.1) — running directly with `ng serve`/`dotnet run` on the host will fail (e.g. Node 18+ causes a `No such module: http_parser` error). The container isolates the exact runtime version needed, so you don't have to reinstall your environment every time.
 
-File cấu hình: **`docker-compose.yml`** ở gốc repo — chứa đúng config (image/port/mount/env/network) của cả 3 service.
+Config file: **`docker-compose.yml`** at the repo root — holds the config (image/port/mount/env/network) for all 4 services.
 
-> **Lưu ý:** nếu 3 container `inss-db`/`inss-backend`/`inss_interno` đang chạy sẵn (tạo thủ công bằng `docker run`, không phải qua compose), thì `docker compose up` sẽ báo lỗi "container name already in use". Trường hợp đó chỉ cần `docker start <tên container>` (xem mục dưới) — `docker-compose.yml` chỉ dùng khi cần **tạo lại từ đầu** (sau `docker rm`) hoặc trên máy khác chưa có container nào.
+> **Note:** if the containers `inss-db`/`inss-backend`/`inss_interno`/`inss_contrib` are already running (created manually via `docker run`, not through compose), `docker compose up` will error with "container name already in use". In that case just use `docker start <container name>` (see below) — `docker-compose.yml` is only needed when **recreating from scratch** (after `docker rm`) or on a machine that has no containers yet.
 
 ```bash
 docker compose up -d
 ```
 
-## Khởi động nhanh (khi container đã tồn tại)
+## Quick start (when containers already exist)
 
 ```bash
-# 1. Mở Docker Desktop (nếu chưa chạy)
+# 1. Open Docker Desktop (if not already running)
 open -a Docker
 
-# 2. Start theo đúng thứ tự: DB trước (đợi healthy) → backend → frontend
+# 2. Start in order: DB first (wait for healthy) → backend → frontends
 docker start inss-db
-# đợi vài giây tới khi "healthy":
+# wait a few seconds until "healthy":
 docker inspect --format='{{.State.Health.Status}}' inss-db
 
 docker start inss-backend
 docker start inss_interno
+docker start inss_contrib
 ```
 
-Kiểm tra đã lên chưa:
+Check everything is up:
 ```bash
 docker ps --filter "name=inss" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
-curl -s -o /dev/null -w "frontend: %{http_code}\n" http://localhost:4300/
-curl -s -o /dev/null -w "backend:  %{http_code}\n" http://localhost:5000/
+curl -s -o /dev/null -w "finance module (interno): %{http_code}\n" http://localhost:4300/
+curl -s -o /dev/null -w "enterprise portal:        %{http_code}\n" http://localhost:4200/
+curl -s -o /dev/null -w "backend:                   %{http_code}\n" http://localhost:5000/
 ```
-Mở **http://localhost:4300/** để dùng app. Backend trả `404` ở `/` là bình thường (API không có route gốc) — miễn không phải "connection refused" là server đã chạy.
+Open **http://localhost:4300/** for the Finance Module (internal app, Módulo Contabilidade and the rest). Open **http://localhost:4200/** for the Enterprise Portal (external self-service portal — companies/entidades submit declarations, register workers, etc.). Backend returning `404` at `/` is normal (the API has no root route) — as long as it's not "connection refused," the server is running.
 
-## Nếu container bị xoá — lệnh tạo lại từ đầu
+## If a container was deleted — commands to recreate it from scratch
 
 **Database:**
 ```bash
@@ -55,7 +58,7 @@ docker run -d \
   mcr.microsoft.com/mssql/server:2022-latest
 ```
 
-**Backend** (yêu cầu đã build sẵn — repo này có sẵn `bin/Release/netcoreapp3.1/...` nên chạy được `--no-build` ngay, không cần build lại):
+**Backend** (requires a pre-built output — this repo ships with `bin/Release/netcoreapp3.1/...` already built, so it can run with `--no-build` right away, no rebuild needed):
 ```bash
 docker run -d \
   --name inss-backend \
@@ -73,7 +76,7 @@ docker run -d \
   bash -c "dotnet run -c Release --no-build --no-launch-profile"
 ```
 
-**Frontend Interno:**
+**Internal Frontend / Finance Module:**
 ```bash
 docker run -d \
   --name inss_interno \
@@ -83,24 +86,37 @@ docker run -d \
   node:14 \
   bash -c "npm install --legacy-peer-deps 2>&1 | tail -5 && npx ng serve --host 0.0.0.0 --port 4300 --disable-host-check"
 ```
-Lần đầu chạy sẽ mất vài phút để `npm install`. Theo dõi log tới khi thấy `Compiled successfully`:
+
+**Enterprise Portal (external self-service — ModuloContribuicoes):**
+```bash
+docker run -d \
+  --name inss_contrib \
+  -p 4200:4200 \
+  -v "$(pwd)/contribution/ModuloContribuicoes:/app" \
+  -w /app \
+  node:14 \
+  bash -c "npm install --legacy-peer-deps 2>&1 | tail -5 && npx ng serve --host 0.0.0.0 --port 4200 --disable-host-check"
+```
+
+Both frontend containers take a few minutes on first run for `npm install`. Watch the logs until you see `Compiled successfully`:
 ```bash
 docker logs -f inss_interno
+docker logs -f inss_contrib
 ```
 
-> `$(pwd)` giả định đang đứng ở thư mục gốc repo (`inss_contrib_finance`). Nếu chạy từ chỗ khác, thay bằng đường dẫn tuyệt đối tới repo.
+> `$(pwd)` assumes you're standing in the repo root (`inss_contrib_finance`). If running from elsewhere, use the absolute path to the repo instead.
 
-## Lưu ý quan trọng — mount path
+## Important note — mount path
 
-Container **phải mount đúng vào thư mục repo hiện tại** (`inss_contrib_finance/...`), không phải một thư mục tên cũ khác (`benefit_niss/...` — tên repo trước khi đổi tên local). Nếu thấy container start xong rồi exit ngay với lỗi kiểu:
-- Frontend: `Cannot find module`, hoặc trang trắng không load được `src/`
+Containers **must be mounted to the current repo directory** (`inss_contrib_finance/...`), not an old differently-named directory (`benefit_niss/...` — the repo's name before the local rename). If a container starts and then exits immediately with an error like:
+- Frontend: `Cannot find module`, or a blank page that can't load `src/`
 - Backend: `Couldn't find a project to run. Ensure a project exists in /src/TimorINSS-BackEnd`
 
-→ nghĩa là mount đang trỏ sai thư mục (thường do Docker tự tạo thư mục rỗng khi mount source không tồn tại). Cách sửa: `docker rm <container>` rồi chạy lại đúng lệnh `docker run` ở trên với `-v` trỏ về thư mục repo thật.
+→ this means the mount is pointing at the wrong directory (usually because Docker auto-creates an empty directory when the mount source doesn't exist). Fix: `docker rm <container>` then re-run the correct `docker run` command above with `-v` pointing at the real repo directory.
 
-## Dừng lại khi xong việc
+## Stopping when done
 
 ```bash
-docker stop inss_interno inss-backend inss-db
+docker stop inss_interno inss_contrib inss-backend inss-db
 ```
-(Dùng `stop` chứ không `rm` — giữ lại container để lần sau chỉ cần `docker start`, không phải cài `npm install`/tạo lại từ đầu.)
+(Use `stop`, not `rm` — this keeps the container around so next time you only need `docker start`, not `npm install`/recreate from scratch.)
