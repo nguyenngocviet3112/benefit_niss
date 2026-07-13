@@ -22,7 +22,9 @@ export class LancamentosComponent implements OnInit {
   public origemTipoOptions = [
     { value: '', label: 'lancamentos.origemTodos' },
     { value: 'PaymentExecution', label: 'lancamentos.origemPagamento' },
-    { value: 'ReceitaPac', label: 'lancamentos.origemReceita' }
+    { value: 'ReceitaPacCaixa', label: 'lancamentos.origemReceitaCaixa' },
+    { value: 'ReceitaPacBanco', label: 'lancamentos.origemReceitaBanco' },
+    { value: 'GuiaPagamento', label: 'lancamentos.origemGuiaPagamento' }
   ];
 
   public items: LancamentoDataContract[] = [];
@@ -70,6 +72,11 @@ export class LancamentosComponent implements OnInit {
 
   public get totalValor(): number {
     return this.items.reduce((sum, i) => sum + i.valor, 0);
+  }
+
+  public origemLabel(origemTipo: string): string {
+    const opt = this.origemTipoOptions.find(o => o.value === origemTipo);
+    return opt ? this.translate.instant(opt.label) : origemTipo;
   }
 
   private showError(err: any): void {

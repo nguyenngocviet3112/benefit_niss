@@ -44,7 +44,7 @@
           <td><span class="la-code">{{ item.codigoContaDebitoCodigo }}</span> {{ item.codigoContaDebitoDesignacao }}</td>
           <td><span class="la-code">{{ item.codigoContaCreditoCodigo }}</span> {{ item.codigoContaCreditoDesignacao }}</td>
           <td class="la-num">{{ item.valor | number:'1.2-2' }}</td>
-          <td>{{ (item.origemTipo === 'PaymentExecution' ? 'lancamentos.origemPagamento' : (item.origemTipo === 'ReceitaPac' ? 'lancamentos.origemReceita' : '')) | translate }}{{ item.origemTipo !== 'PaymentExecution' && item.origemTipo !== 'ReceitaPac' ? item.origemTipo : '' }}</td>
+          <td>{{ origemLabel(item.origemTipo) }}</td>
         </tr>
         <tr *ngIf="pagedItems.length === 0">
           <td colspan="6" class="la-empty">{{ 'lancamentos.emptyList' | translate }}</td>

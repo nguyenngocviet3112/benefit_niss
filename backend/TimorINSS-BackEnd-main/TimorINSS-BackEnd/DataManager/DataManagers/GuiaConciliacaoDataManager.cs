@@ -5,6 +5,7 @@ using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DataManager.Interfaces;
+using TimorINSSBackEnd.Models;
 using TimorINSSBackEnd.Repository.Interfaces;
 
 namespace TimorINSSBackEnd.DataManager.DataManagers
@@ -28,6 +29,20 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             _unitOfWork = unitOfWork;
             _utils = utils;
             _lancamentoDataManager = lancamentoDataManager;
+        }
+
+        // Sổ sách thật (SCFSSTL2024_VF.xlsm "Lançamentos") dùng 2 tài khoản Crédito
+        // khác nhau tùy khu vực (Setor) của Entidade đóng góp: "2133114 Setor Privado
+        // - Guias Emitidas" (đa số) và "2133112 Setor Público - Guias Emitidas"
+        // (thiểu số, có thật). Phân loại dựa vào Sectoractividade.Descricao — mọi
+        // dòng seed hiện có (2026-07-13) đều đặt tên bắt đầu bằng "Setor Público"
+        // cho các nhánh chính phủ (Governo/FFDTL/PNTL/Municípios/...), còn lại
+        // ("Setor Privado", "Parceria Público-Privada (PPP)", hoặc thiếu dữ liệu)
+        // coi là Privado — khớp đa số thực tế, không có ví dụ PPP riêng trong sổ.
+        private static bool IsSetorPublico(Guiapagamento guia)
+        {
+            var descricao = guia?.GuiaEntidadeFkNavigation?.EntidadeSectorActFkNavigation?.Descricao;
+            return descricao != null && descricao.StartsWith("Setor Público", StringComparison.OrdinalIgnoreCase);
         }
 
         public ResponseBaseDataContract ConciliarGuiaPagamento(ConciliarGuiaPagamentoRequest request)
@@ -118,9 +133,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             // sách thật 2024 (SCFSSTL2024_VF.xlsm "Lançamentos": mọi bút toán thu GP Nợ
             // đúng ngân hàng cụ thể, không phải 1 tài khoản cố định — 2026-07-13, sửa lại
             // sau khi đối chiếu, xem memory guia-pagamento-lancamento-wiring). Crédito lấy
-            // từ cấu hình admin (GuiaPagamentoContaConfig, chỉ còn 1 trường). Thiếu bất kỳ
-            // phần nào (dòng sao kê ghi qua Caixa không phải Conta, ContaBancaria chưa map
-            // Codigoconta, hoặc Crédito chưa cấu hình) — bỏ qua lặng lẽ, không chặn việc
+            // từ cấu hình admin (GuiaPagamentoContaConfig) NHƯNG khác nhau theo Setor
+            // (Público/Privado) của Entidade đóng góp của TỪNG Guia — không còn 1 giá trị
+            // chung nữa (2026-07-13, sửa sau khi user chỉ ra có nhiều loại công ty khác
+            // nhau — xác nhận đúng qua sổ sách thật, xem memory
+            // gp-setor-publico-privado-credito-split). Thiếu bất kỳ phần nào (dòng sao kê
+            // ghi qua Caixa không phải Conta, ContaBancaria chưa map Codigoconta, hoặc
+            // Crédito của Setor tương ứng chưa cấu hình) — bỏ qua lặng lẽ, không chặn việc
             // đối chiếu (GerarSeChuaCo tự bỏ qua khi thiếu debitoFk/creditoFk).
             var contaConfig = _unitOfWork.GuiaPagamentoContaConfigRepository.GetActive();
             var movimentosBancarios = _unitOfWork.MovimentosbancariosRepository.GetByIds(request.MovimentosBancarios);
@@ -133,14 +152,27 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             foreach (var guia in guiasPagamento)
             {
-                _lancamentoDataManager.GerarSeChuaCo(
+                var creditoFk = IsSetorPublico(guia)
+                    ? contaConfig?.CodigoContaCreditoPublicoFk
+                    : contaConfig?.CodigoContaCreditoPrivadoFk;
+
+                var lancResult = _lancamentoDataManager.GerarSeChuaCo(
                     origemTipo: "GuiaPagamento",
                     origemId: guia.IdGuia,
                     data: DateTime.Now,
                     codigoContaDebitoFk: debitoContaBancariaFk,
-                    codigoContaCreditoFk: contaConfig?.CodigoContaCreditoFk,
+                    codigoContaCreditoFk: creditoFk,
                     valor: guia.ValorComprovPag ?? guia.Valor,
                     descricao: $"Guia Pagamento Nº {guia.NumDocumento} - đối chiếu ngân hàng");
+
+                if (lancResult.FaltaConfiguracao)
+                {
+                    response.Warnings.Add($"Đối chiếu đã ghi nhận, nhưng chưa ghi được bút toán kế toán cho Guia {guia.NumDocumento} vì thiếu ánh xạ Tài khoản Ngân hàng (Cấu hình > Ánh xạ Tài khoản Ngân hàng) hoặc Tài khoản Có {(IsSetorPublico(guia) ? "Setor Público" : "Setor Privado")} (Cấu hình > Cấu hình Tài khoản Guia Pagamento) — bổ sung cấu hình rồi thử đối chiếu lại.");
+                }
+                else if (lancResult.Gerado)
+                {
+                    response.Warnings.Add($"Đã tự động ghi bút toán kế toán cho Guia {guia.NumDocumento}. Kiểm tra tại Registo de Lançamentos nếu cần điều chỉnh.");
+                }
             }
 
             try

@@ -39,8 +39,8 @@
         </div>
         <div class="gc-row" *ngFor="let g of guias" [class.gc-row-selected]="selectedGuiaIds.has(g.idGuia)" (click)="toggleGuia(g.idGuia)">
           <span class="gc-col-check"><mat-checkbox [checked]="selectedGuiaIds.has(g.idGuia)" (click)="$event.stopPropagation(); toggleGuia(g.idGuia)"></mat-checkbox></span>
-          <span class="gc-col-doc">{{ g.numDocumento }}</span>
-          <span class="gc-col-desc">{{ g.descricao }} <span class="gc-sub">{{ g.niss }}</span></span>
+          <span class="gc-col-doc gc-col-clickable" [matTooltip]="'guiaConciliacao.viewButton' | translate" (click)="viewComprovativo(g.idGuia, $event)">{{ g.numDocumento }}</span>
+          <span class="gc-col-desc gc-col-clickable" [matTooltip]="'guiaConciliacao.viewButton' | translate" (click)="viewComprovativo(g.idGuia, $event)">{{ g.descricao }} <span class="gc-sub">{{ g.niss }}</span></span>
           <span class="gc-col-valor">$ {{ g.valorPago | number:'1.2-2' }}</span>
           <span class="gc-col-view">
             <button mat-icon-button [matTooltip]="'guiaConciliacao.viewButton' | translate" (click)="viewComprovativo(g.idGuia, $event)">
@@ -104,6 +104,7 @@
       <span class="gc-match" [ngClass]="valoresIguais ? 'gc-match-ok' : 'gc-match-bad'" *ngIf="selectedGuiaIds.size > 0 || selectedMovimentoIds.size > 0">
         {{ (valoresIguais ? 'guiaConciliacao.matchOk' : 'guiaConciliacao.matchBad') | translate }}
       </span>
+      <span class="gc-disabled-reason" *ngIf="disabledReason">{{ disabledReason | translate }}</span>
     </div>
     <button mat-raised-button color="primary" [disabled]="!selecaoValida || conciliando" (click)="confirmar()">
       {{ 'guiaConciliacao.confirmButton' | translate }}

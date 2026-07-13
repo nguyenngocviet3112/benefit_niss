@@ -114,6 +114,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IDashboardRepository DashboardRepository { get; }
         IAttachmentConfigRepository AttachmentConfigRepository { get; }
         IAttachmentRepository AttachmentRepository { get; }
+        ILiquidacaoContaConfigRepository LiquidacaoContaConfigRepository { get; }
 
         void Commit();
 

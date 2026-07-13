@@ -24,7 +24,9 @@ namespace TimorINSSBackEnd.Models
         public DateTime? DataAlteracao { get; set; }
         public string Ipv6 { get; set; }
         public int? CampoPaiFk { get; set; }
+        public int? CodigoContaFk { get; set; }
 
+        public virtual Codigoconta CodigoContaFkNavigation { get; set; }
         public virtual ICollection<Movimentosbancarios> Movimentosbancarios { get; set; }
     }
 }

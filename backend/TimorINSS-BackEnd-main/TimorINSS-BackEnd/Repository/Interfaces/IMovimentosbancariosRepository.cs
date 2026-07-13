@@ -19,6 +19,11 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public List<decimal> GetValores(List<int> ids);
 
+        // Full entities (incl. conta_fk) cho 1 danh sách Id — dùng khi cần tra
+        // "dòng sao kê này thuộc tài khoản ngân hàng nào" (vd để tự sinh bút
+        // toán Débito đúng ngân hàng thật đã nhận tiền).
+        public List<Movimentosbancarios> GetByIds(List<int> ids);
+
         public decimal? GetCreditoConciliados(int? contaId, int? caixaId);
 
         public decimal? GetDebitoConciliados(int? contaId, int? caixaId);

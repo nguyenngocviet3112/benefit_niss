@@ -452,7 +452,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public List<Guiapagamento> GetGuiasByIds(List<int> idGuias)
         {
-            return _moduloContribuicoesContext.Guiapagamento.Where(u => idGuias.Contains(u.IdGuia) && u.IndActivo).ToList();
+            return _moduloContribuicoesContext.Guiapagamento
+                .Include(u => u.GuiaEntidadeFkNavigation).ThenInclude(e => e.EntidadeSectorActFkNavigation)
+                .Where(u => idGuias.Contains(u.IdGuia) && u.IndActivo).ToList();
         }
 
         public RelatorioGuiaPagamentoListagemResponse GetGuiasPagamentoRelatorios(RelatorioGuiaPagamentoListagemRequest request)

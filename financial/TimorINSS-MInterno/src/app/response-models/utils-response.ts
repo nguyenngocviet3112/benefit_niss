@@ -12,5 +12,8 @@ export interface ResponseError {
 
 export interface ResponseBase {
     errors?: ResponseError[];
+    // Không chặn hành động (khác errors) — thông báo bút toán kế toán vừa được
+    // tự sinh (kiểm tra lại nếu sai) hoặc bị bỏ qua vì thiếu cấu hình (2026-07-13).
+    warnings?: string[];
     requestId?: string;
 }

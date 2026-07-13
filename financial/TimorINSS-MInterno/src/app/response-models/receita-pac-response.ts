@@ -35,4 +35,5 @@ export interface ReceitaPacListResponse {
 export interface ReceitaPacResponse {
   item: ReceitaPacDataContract;
   errors?: { errorCode: string; errorMessage: string }[];
+  warnings?: string[];
 }

@@ -17,6 +17,12 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         [DataMember]
         public List<Error> Errors { get; set; } = new List<Error>();
 
+        // Không chặn hành động (khác Errors) — dùng để báo cho người dùng biết 1
+        // bút toán kế toán vừa được hệ thống tự sinh (để kiểm tra lại nếu sai),
+        // hoặc bị bỏ qua vì thiếu cấu hình tài khoản Nợ/Có (2026-07-13).
+        [DataMember]
+        public List<string> Warnings { get; set; } = new List<string>();
+
         [DataMember]
         public string RequestId { get; set; }
 

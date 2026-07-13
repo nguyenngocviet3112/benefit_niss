@@ -1,0 +1,87 @@
+.lcc-container {
+  padding: 1rem 1.5rem;
+  max-width: 50rem;
+}
+
+.lcc-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.lcc-header .en {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #666;
+}
+
+.lcc-hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0.5rem 0 1rem;
+}
+
+.itag {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.itag.type { background: #fff3e0; color: #ef6c00; }
+
+.lcc-loading {
+  padding: 3rem;
+  text-align: center;
+  color: #999;
+}
+
+.lcc-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lcc-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: #fafbfc;
+  border: 1px solid #eee;
+  border-radius: 0.375rem;
+}
+
+.lcc-row-label {
+  width: 12rem;
+  flex-shrink: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding-top: 0.9rem;
+}
+
+.lcc-field-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.lcc-field {
+  width: 100%;
+}
+
+.lcc-suggestion {
+  font-size: 0.78rem;
+  color: #999;
+  font-style: italic;
+  margin-top: -0.5rem;
+}
+
+.lcc-suggestion-prefilled {
+  color: #9c6b15;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.lcc-row button {
+  margin-top: 0.4rem;
+}

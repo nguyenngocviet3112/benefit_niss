@@ -1,0 +1,42 @@
+<div class="lcc-container">
+  <div class="lcc-header">
+    <h2>{{ 'liquidacaoContaConfig.header' | translate }} <span class="en">({{ 'liquidacaoContaConfig.headerGloss' | translate }})</span></h2>
+  </div>
+
+  <div class="lcc-hint">
+    {{ 'liquidacaoContaConfig.hint' | translate }}
+  </div>
+
+  <div class="lcc-loading" *ngIf="loading">{{ 'general.loading' | translate }}</div>
+
+  <div class="lcc-rows" *ngIf="!loading">
+    <div class="lcc-row" *ngFor="let row of rows">
+      <div class="lcc-row-label">{{ row.categoriaLabel | translate }}</div>
+
+      <div class="lcc-field-col">
+        <mat-form-field appearance="outline" class="lcc-field">
+          <mat-label>{{ 'liquidacaoContaConfig.fieldConta' | translate }} <span class="itag type">{{ 'liquidacaoContaConfig.searchToTypeTag' | translate }}</span></mat-label>
+          <input matInput [(ngModel)]="row.search" [name]="'search_' + row.categoria"
+                 [placeholder]="row.placeholderKey ? (row.placeholderKey | translate) : ''"
+                 (ngModelChange)="onSearchChange(row)" [matAutocomplete]="auto" />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let c of row.filtered" [value]="c.designacao" (onSelectionChange)="selectConta(row, c)">
+              {{ c.designacao }}
+            </mat-option>
+            <mat-option *ngIf="row.filtered.length === 0" disabled>{{ 'liquidacaoContaConfig.noneFound' | translate }}</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div class="lcc-suggestion lcc-suggestion-prefilled" *ngIf="row.isSuggested">
+          {{ 'liquidacaoContaConfig.prefilledNote' | translate }}
+        </div>
+        <div class="lcc-suggestion" *ngIf="row.placeholderKey && !row.isSuggested">
+          {{ 'liquidacaoContaConfig.suggestionLabel' | translate }} {{ row.placeholderKey | translate }}
+        </div>
+      </div>
+
+      <button mat-raised-button color="primary" [disabled]="!row.selectedFk || savingCategoria === row.categoria" (click)="save(row)">
+        {{ 'liquidacaoContaConfig.saveButton' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

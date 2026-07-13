@@ -194,22 +194,35 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 }
                 _unitOfWork.Commit(); // entity.Id (identity) chỉ có giá trị thật sau Commit
 
-                // Bút toán Débito/Crédito tự sinh ngay khi Receita được lưu — Receita
-                // không có bước duyệt riêng (execution-only, xem memory
-                // receita-approval-decision) nên không có chỗ nào khác để tách bước
-                // như bên Pagamento (Autorização/Realização). Idempotent theo
-                // GerarSeChuaCo's ExistsForOrigem — sửa lại 1 Receita đã có Lançamento
-                // sẽ không tạo dòng thứ 2, nhưng cũng không cập nhật giá trị dòng cũ
-                // nếu Valor thay đổi sau đó — cùng giới hạn với bên Pagamento hiện tại.
-                decimal totalCobrado = request.ValorCobradoBanco + request.ValorCobradoCaixa;
-                _lancamentoDataManager.GerarSeChuaCo(
-                    origemTipo: "ReceitaPac",
+                // Chỉ phần Caixa (thu tiền mặt) ghi sổ NGAY ở đây — không có sao kê
+                // ngân hàng nào để đối chiếu tiền mặt, nên không có cách xác minh độc
+                // lập nào khác ngoài chính bước nhập liệu này.
+                // Phần Banco (thu qua ngân hàng) KHÔNG ghi sổ ở đây nữa (2026-07-12,
+                // theo cùng nguyên tắc đã áp dụng cho Guia Pagamento — xem memory
+                // guia-pagamento-lancamento-wiring): ValorCobradoBanco là số cán bộ tự
+                // gõ, chưa được kiểm chứng với dữ liệu ngân hàng thật. Bút toán phần
+                // Banco giờ chỉ sinh khi BankStatementLineDataManager.MatchReceita xác
+                // nhận khớp với 1 dòng sao kê ngân hàng thật (origemTipo="ReceitaPacBanco").
+                // Idempotent theo GerarSeChuaCo's ExistsForOrigem — sửa lại 1 Receita đã
+                // có Lançamento sẽ không tạo dòng thứ 2, nhưng cũng không cập nhật giá trị
+                // dòng cũ nếu Valor thay đổi sau đó — cùng giới hạn với bên Pagamento.
+                var lancResult = _lancamentoDataManager.GerarSeChuaCo(
+                    origemTipo: "ReceitaPacCaixa",
                     origemId: entity.Id,
                     data: new DateTime(request.Ano, request.Mes, 1),
                     codigoContaDebitoFk: request.CodigoContaDebitoFk,
                     codigoContaCreditoFk: request.CodigoContaCreditoFk,
-                    valor: totalCobrado,
-                    descricao: $"Receita PAC Nº {entity.Numero}/{entity.Ano} - {entity.Descritivo}");
+                    valor: request.ValorCobradoCaixa,
+                    descricao: $"Receita PAC Nº {entity.Numero}/{entity.Ano} - {entity.Descritivo} (Caixa)");
+
+                if (lancResult.FaltaConfiguracao)
+                {
+                    response.Warnings.Add($"Chưa ghi được bút toán kế toán cho phần Caixa của Receita Nº {entity.Numero}/{entity.Ano} vì thiếu Tài khoản Nợ/Có — bổ sung 2 trường này ngay trên dòng Receita rồi lưu lại.");
+                }
+                else if (lancResult.Gerado)
+                {
+                    response.Warnings.Add($"Đã tự động ghi bút toán kế toán cho phần Caixa của Receita Nº {entity.Numero}/{entity.Ano}. Kiểm tra tại Registo de Lançamentos nếu cần điều chỉnh.");
+                }
 
                 _unitOfWork.Commit();
 

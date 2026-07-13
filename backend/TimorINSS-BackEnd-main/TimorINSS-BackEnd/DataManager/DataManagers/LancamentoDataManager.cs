@@ -55,14 +55,26 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
-        public void GerarSeChuaCo(string origemTipo, int origemId, DateTime data, int? codigoContaDebitoFk,
+        public LancamentoGerarResult GerarSeChuaCo(string origemTipo, int origemId, DateTime data, int? codigoContaDebitoFk,
             int? codigoContaCreditoFk, decimal valor, string descricao)
         {
-            if (!codigoContaDebitoFk.HasValue || !codigoContaCreditoFk.HasValue || valor <= 0)
-                return;
+            var result = new LancamentoGerarResult();
 
+            // Đã có Lançamento active cho origem này rồi — không phải sự kiện mới,
+            // không cần thông báo lại (tránh làm phiền người dùng ở mọi lần load).
             if (_unitOfWork.LancamentoRepository.ExistsForOrigem(origemTipo, origemId))
-                return;
+                return result;
+
+            // Valor <= 0 nghĩa là không có gì để ghi sổ (vd Receita không có phần
+            // Caixa) — KHÔNG phải thiếu cấu hình, không nên báo warning.
+            if (valor <= 0)
+                return result;
+
+            if (!codigoContaDebitoFk.HasValue || !codigoContaCreditoFk.HasValue)
+            {
+                result.FaltaConfiguracao = true;
+                return result;
+            }
 
             Lancamento entity = new Lancamento
             {
@@ -77,6 +89,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             };
             entity = _utils.SetDetailsToEntity(entity);
             _unitOfWork.LancamentoRepository.Add(entity);
+            result.Gerado = true;
+            return result;
+        }
+
+        public void DesfazerSeExiste(string origemTipo, int origemId)
+        {
+            _unitOfWork.LancamentoRepository.DeactivateForOrigem(origemTipo, origemId);
         }
     }
 }

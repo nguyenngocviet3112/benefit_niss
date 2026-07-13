@@ -192,6 +192,17 @@
   text-align: right;
 }
 
+.gc-col-clickable:hover {
+  text-decoration: underline;
+  color: #1a56db;
+  cursor: pointer;
+}
+
+.gc-disabled-reason {
+  font-size: 0.8rem;
+  color: #c0392b;
+}
+
 .gc-form-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;

@@ -208,6 +208,16 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return _moduloContribuicoesContext.Movimentosbancarios.Where(e => e.IndActivo && ids.Any(a => a == e.Id)).Select(e => e.Credito ?? e.Debito.Value).ToList();
         }
 
+        public List<Movimentosbancarios> GetByIds(List<int> ids)
+        {
+            if (ids == null || ids.Count == 0) return new List<Movimentosbancarios>();
+
+            return _moduloContribuicoesContext.Movimentosbancarios
+                .Include(e => e.ContaFkNavigation)
+                .Where(e => ids.Any(a => a == e.Id))
+                .ToList();
+        }
+
         public decimal? GetCreditoConciliados(int? contaId, int? caixaId)
         {
             return _moduloContribuicoesContext.Movimentosbancarios

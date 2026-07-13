@@ -72,6 +72,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public decimal ValorPac { get; set; }
+
+        [DataMember]
+        public decimal ValorCobradoBanco { get; set; }
     }
 
     [DataContract]

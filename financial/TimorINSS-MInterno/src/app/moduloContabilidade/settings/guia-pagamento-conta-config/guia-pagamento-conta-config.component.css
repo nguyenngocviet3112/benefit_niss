@@ -1,0 +1,79 @@
+.gpcc-container {
+  padding: 1rem 1.5rem;
+  max-width: 40rem;
+}
+
+.gpcc-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.gpcc-header .en {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #666;
+}
+
+.gpcc-hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0.5rem 0 1rem;
+}
+
+.gpcc-current {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  background: #f0f6ff;
+  border: 1px solid #d5e5ff;
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+}
+
+.gpcc-current-label {
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.gpcc-current-value {
+  font-weight: 600;
+}
+
+.gpcc-current-empty {
+  background: #fff8e1;
+  border-color: #ffe0a3;
+  color: #8a6d00;
+}
+
+.gpcc-debito-note {
+  font-size: 0.82rem;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.gpcc-suggestion {
+  font-size: 0.78rem;
+  color: #999;
+  font-style: italic;
+  margin-top: -0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.gpcc-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.gpcc-loading {
+  padding: 3rem;
+  text-align: center;
+  color: #999;
+}

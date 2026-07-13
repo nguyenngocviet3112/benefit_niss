@@ -25,6 +25,7 @@ export interface ReceitaDisponivelParaConciliacaoDataContract {
   ano: number;
   descritivo: string;
   valorPac: number;
+  valorCobradoBanco: number;
 }
 
 export interface PagamentoDisponivelParaConciliacaoDataContract {

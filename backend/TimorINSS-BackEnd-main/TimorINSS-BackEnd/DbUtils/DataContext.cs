@@ -404,19 +404,37 @@ namespace TimorINSSBackEnd.Models
                     .HasConstraintName("FK_Lancamento_CodigoContaCredito");
             });
 
+            modelBuilder.Entity<Contabancaria>(entity =>
+            {
+                entity.HasOne(d => d.CodigoContaFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CodigoContaFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ContaBancaria_CodigoConta");
+            });
+
             modelBuilder.Entity<GuiaPagamentoContaConfig>(entity =>
             {
-                entity.HasOne(d => d.CodigoContaDebitoFkNavigation)
+                entity.HasOne(d => d.CodigoContaCreditoPrivadoFkNavigation)
                     .WithMany()
-                    .HasForeignKey(d => d.CodigoContaDebitoFk)
+                    .HasForeignKey(d => d.CodigoContaCreditoPrivadoFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GuiaPagamentoContaConfig_CodigoContaDebito");
+                    .HasConstraintName("FK_GuiaPagamentoContaConfig_CodigoContaCreditoPrivado");
 
-                entity.HasOne(d => d.CodigoContaCreditoFkNavigation)
+                entity.HasOne(d => d.CodigoContaCreditoPublicoFkNavigation)
                     .WithMany()
-                    .HasForeignKey(d => d.CodigoContaCreditoFk)
+                    .HasForeignKey(d => d.CodigoContaCreditoPublicoFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GuiaPagamentoContaConfig_CodigoContaCredito");
+                    .HasConstraintName("FK_GuiaPagamentoContaConfig_CodigoContaCreditoPublico");
+            });
+
+            modelBuilder.Entity<LiquidacaoContaConfig>(entity =>
+            {
+                entity.HasOne(d => d.CodigoContaFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CodigoContaFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_LiquidacaoContaConfig_CodigoConta");
             });
         }
 

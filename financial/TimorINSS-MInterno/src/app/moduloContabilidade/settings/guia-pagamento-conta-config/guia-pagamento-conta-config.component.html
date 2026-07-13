@@ -1,0 +1,63 @@
+<div class="gpcc-container">
+  <div class="gpcc-header">
+    <h2>{{ 'guiaPagamentoContaConfig.header' | translate }} <span class="en">({{ 'guiaPagamentoContaConfig.headerGloss' | translate }})</span></h2>
+  </div>
+
+  <div class="gpcc-hint">
+    {{ 'guiaPagamentoContaConfig.hint' | translate }}
+  </div>
+
+  <div class="gpcc-current" *ngIf="!loading && current && (current.codigoContaCreditoPrivadoFk || current.codigoContaCreditoPublicoFk)">
+    <span class="gpcc-current-label">{{ 'guiaPagamentoContaConfig.currentLabel' | translate }}</span>
+    <span class="gpcc-current-value" *ngIf="current.codigoContaCreditoPrivadoFk">{{ 'guiaPagamentoContaConfig.categoriaPrivado' | translate }}: {{ current.codigoContaCreditoPrivadoDesignacao }}</span>
+    <span class="gpcc-current-value" *ngIf="current.codigoContaCreditoPublicoFk">{{ 'guiaPagamentoContaConfig.categoriaPublico' | translate }}: {{ current.codigoContaCreditoPublicoDesignacao }}</span>
+  </div>
+  <div class="gpcc-current gpcc-current-empty" *ngIf="!loading && (!current || (!current.codigoContaCreditoPrivadoFk && !current.codigoContaCreditoPublicoFk))">
+    {{ 'guiaPagamentoContaConfig.notConfigured' | translate }}
+  </div>
+
+  <div class="gpcc-debito-note">{{ 'guiaPagamentoContaConfig.debitoAutoNote' | translate }}</div>
+  <div class="gpcc-debito-note">{{ 'guiaPagamentoContaConfig.setorSplitNote' | translate }}</div>
+
+  <div class="gpcc-form" *ngIf="!loading">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'guiaPagamentoContaConfig.fieldCreditoPrivado' | translate }} <span class="itag type">{{ 'guiaPagamentoContaConfig.searchToTypeTag' | translate }}</span></mat-label>
+      <input matInput [(ngModel)]="creditoPrivadoSearch" name="creditoPrivadoSearchInput"
+             [placeholder]="'guiaPagamentoContaConfig.placeholderCreditoPrivado' | translate"
+             (ngModelChange)="onCreditoPrivadoSearchChange()" [matAutocomplete]="autoCreditoPrivado" />
+      <mat-autocomplete #autoCreditoPrivado="matAutocomplete">
+        <mat-option *ngFor="let c of filteredCreditoPrivado" [value]="c.designacao" (onSelectionChange)="selectCreditoPrivado(c)">
+          {{ c.designacao }}
+        </mat-option>
+        <mat-option *ngIf="filteredCreditoPrivado.length === 0" disabled>{{ 'guiaPagamentoContaConfig.noneFound' | translate }}</mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <div class="gpcc-suggestion">
+      {{ 'guiaPagamentoContaConfig.suggestionLabel' | translate }} {{ 'guiaPagamentoContaConfig.placeholderCreditoPrivado' | translate }}
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'guiaPagamentoContaConfig.fieldCreditoPublico' | translate }} <span class="itag type">{{ 'guiaPagamentoContaConfig.searchToTypeTag' | translate }}</span></mat-label>
+      <input matInput [(ngModel)]="creditoPublicoSearch" name="creditoPublicoSearchInput"
+             [placeholder]="'guiaPagamentoContaConfig.placeholderCreditoPublico' | translate"
+             (ngModelChange)="onCreditoPublicoSearchChange()" [matAutocomplete]="autoCreditoPublico" />
+      <mat-autocomplete #autoCreditoPublico="matAutocomplete">
+        <mat-option *ngFor="let c of filteredCreditoPublico" [value]="c.designacao" (onSelectionChange)="selectCreditoPublico(c)">
+          {{ c.designacao }}
+        </mat-option>
+        <mat-option *ngIf="filteredCreditoPublico.length === 0" disabled>{{ 'guiaPagamentoContaConfig.noneFound' | translate }}</mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <div class="gpcc-suggestion">
+      {{ 'guiaPagamentoContaConfig.suggestionLabel' | translate }} {{ 'guiaPagamentoContaConfig.placeholderCreditoPublico' | translate }}
+    </div>
+
+    <div class="gpcc-form-actions">
+      <button mat-raised-button color="primary" [disabled]="!canSave || saving" (click)="save()">
+        {{ 'guiaPagamentoContaConfig.saveButton' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="gpcc-loading" *ngIf="loading">{{ 'general.loading' | translate }}</div>
+</div>
