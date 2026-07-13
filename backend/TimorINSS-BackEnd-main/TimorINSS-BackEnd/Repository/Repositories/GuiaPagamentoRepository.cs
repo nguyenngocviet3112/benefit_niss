@@ -70,15 +70,26 @@ namespace TimorINSSBackEnd.Repository.Repositories
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
             int numDocumento = 0;
             int anoDocumento = 0;
-            Guiapagamento guiaPagamento = _moduloContribuicoesContext.Guiapagamento.OrderByDescending(p => p.IdGuia).FirstOrDefault();
 
-            if (guiaPagamento != null)
+            // O formato do documento é numero/ano (ex: 1/2020). Pega as últimas linhas por
+            // IdGuia e usa a primeira que respeite esse formato — protege contra uma linha
+            // fora do padrão (teste manual, import, etc.) quebrar a geração de número para
+            // TODAS as entidades daqui em diante (incidente real 2026-07-13: uma linha de
+            // teste "GP-TEST-002" travou int.Parse aqui e derrubou "Gerar Guia" no sistema
+            // inteiro até a linha ser removida).
+            string ultimoNumDocumentoValido = _moduloContribuicoesContext.Guiapagamento
+                .OrderByDescending(p => p.IdGuia)
+                .Select(p => p.NumDocumento)
+                .Take(50)
+                .AsEnumerable()
+                .FirstOrDefault(IsNumDocumentoNoFormatoEsperado);
+
+            if (ultimoNumDocumentoValido != null)
             {
-                // O formato do documento é numero/ano. ex: 1/2020
                 // Substring para obter apenas o número do documento
-                numDocumento = int.Parse(guiaPagamento.NumDocumento[0..^5]) + 1;
+                numDocumento = int.Parse(ultimoNumDocumentoValido[0..^5]) + 1;
                 // Substring para obter apenas o ano do documento
-                anoDocumento = int.Parse(guiaPagamento.NumDocumento.Substring(guiaPagamento.NumDocumento.Length - 4, 4));
+                anoDocumento = int.Parse(ultimoNumDocumentoValido.Substring(ultimoNumDocumentoValido.Length - 4, 4));
             }
 
             string numDocumentoFinal = numDocumento.ToString() + "/" + DateTime.Now.Year.ToString();
@@ -89,6 +100,19 @@ namespace TimorINSSBackEnd.Repository.Repositories
             }
 
             return numDocumentoFinal;
+        }
+
+        private static bool IsNumDocumentoNoFormatoEsperado(string numDocumento)
+        {
+            if (string.IsNullOrEmpty(numDocumento) || numDocumento.Length <= 5)
+            {
+                return false;
+            }
+            string parteNumero = numDocumento[0..^5];
+            string parteAno = numDocumento.Substring(numDocumento.Length - 4, 4);
+            return numDocumento[numDocumento.Length - 5] == '/'
+                && int.TryParse(parteNumero, out _)
+                && int.TryParse(parteAno, out _);
         }
 
        
