@@ -7,12 +7,25 @@
     <mat-form-field appearance="outline" class="medium-field">
       <mat-label>{{ 'conciliacao.fieldContaBancaria' | translate }} <span class="itag drop">{{ 'conciliacao.dropTag' | translate }}</span></mat-label>
       <mat-select [(ngModel)]="contaBancariaFk" name="contaBancariaFk" (selectionChange)="load()">
+        <mat-option [value]="null">{{ 'conciliacao.allBanksOption' | translate }}</mat-option>
         <mat-option *ngFor="let c of contas" [value]="c.id">{{ c.entidadeBancaria }} ({{ c.numero }})</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="outline" class="small-field">
       <mat-label>{{ 'conciliacao.fieldAno' | translate }}</mat-label>
       <input matInput type="number" [(ngModel)]="ano" name="ano" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>{{ 'conciliacao.fieldDataInicio' | translate }}</mat-label>
+      <input matInput [matDatepicker]="pickerDataInicio" [(ngModel)]="dataInicio" name="dataInicio" (dateChange)="load()">
+      <mat-datepicker-toggle matSuffix [for]="pickerDataInicio"></mat-datepicker-toggle>
+      <mat-datepicker #pickerDataInicio></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>{{ 'conciliacao.fieldDataFim' | translate }}</mat-label>
+      <input matInput [matDatepicker]="pickerDataFim" [(ngModel)]="dataFim" name="dataFim" (dateChange)="load()">
+      <mat-datepicker-toggle matSuffix [for]="pickerDataFim"></mat-datepicker-toggle>
+      <mat-datepicker #pickerDataFim></mat-datepicker>
     </mat-form-field>
     <button mat-stroked-button (click)="load()">{{ 'conciliacao.reload' | translate }}</button>
 
@@ -33,6 +46,7 @@
 
   <div class="con-table" *ngIf="!loading">
     <div class="con-row con-row-header">
+      <span class="con-col-banco">{{ 'conciliacao.colContaBancaria' | translate }}</span>
       <span class="con-col-data">{{ 'conciliacao.colDataValor' | translate }}</span>
       <span class="con-col-desc">{{ 'conciliacao.colDescricao' | translate }}</span>
       <span class="con-col-credito">{{ 'conciliacao.colCredito' | translate }}</span>
@@ -42,6 +56,7 @@
 
     <ng-container *ngFor="let l of lines">
       <div class="con-row con-row-summary" (click)="toggleExpand(l)">
+        <span class="con-col-banco">{{ l.contaBancariaNome || '—' }}</span>
         <span class="con-col-data">{{ l.dataValor | date:'dd/MM/yyyy' }}</span>
         <span class="con-col-desc">{{ l.descricao || '—' }}</span>
         <span class="con-col-credito">{{ l.credito > 0 ? ('$ ' + (l.credito | number:'1.2-2')) : '—' }}</span>
@@ -73,9 +88,11 @@
 
         <div class="con-match-picker" *ngIf="matchTarget?.id === l.id && matchMode === 'receita'">
           <h4>{{ 'conciliacao.pickReceitaTitle' | translate }}</h4>
-          <div class="con-pick-row" *ngFor="let r of receitasDisponiveis" (click)="confirmMatchReceita(r)">
+          <div class="con-match-hint">{{ 'conciliacao.amountMustMatchHint' | translate }}</div>
+          <div class="con-pick-row" *ngFor="let r of receitasDisponiveis" (click)="confirmMatchReceita(r)"
+               [class.con-pick-row-match]="r.valorCobradoBanco === l.credito">
             <span>Receita {{ r.numero }}/{{ r.mes }} — {{ r.descritivo }}</span>
-            <span>$ {{ r.valorPac | number:'1.2-2' }}</span>
+            <span>$ {{ r.valorCobradoBanco | number:'1.2-2' }}</span>
           </div>
           <div class="con-empty" *ngIf="receitasDisponiveis.length === 0">{{ 'conciliacao.noReceitaAvailable' | translate }}</div>
           <button mat-button (click)="cancelMatch()">{{ 'conciliacao.cancelButton' | translate }}</button>
@@ -102,6 +119,13 @@
 
       <div class="con-form-fields">
         <mat-form-field appearance="outline">
+          <mat-label>{{ 'conciliacao.fieldContaBancaria' | translate }} <span class="itag drop">{{ 'conciliacao.dropTag' | translate }}</span></mat-label>
+          <mat-select [(ngModel)]="formContaBancariaFk" name="formContaBancariaFk">
+            <mat-option *ngFor="let c of contas" [value]="c.id">{{ c.entidadeBancaria }} ({{ c.numero }})</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'conciliacao.fieldDataValor' | translate }} <span class="itag type">{{ 'conciliacao.typedTag' | translate }}</span></mat-label>
           <input matInput type="date" [(ngModel)]="formDataValor" name="formDataValor" />
           <mat-hint>{{ 'conciliacao.dataValorHint' | translate }}</mat-hint>
@@ -119,13 +143,17 @@
 
         <mat-form-field appearance="outline">
           <mat-label>{{ 'conciliacao.fieldCreditoUsd' | translate }} <span class="itag type">{{ 'conciliacao.typedTag' | translate }}</span></mat-label>
-          <input matInput type="number" step="0.01" [(ngModel)]="formCredito" name="formCredito" />
+          <span matPrefix>$&nbsp;</span>
+          <input matInput type="number" step="0.01" [(ngModel)]="formCredito" name="formCredito"
+                 (ngModelChange)="onFormCreditoChange()" [disabled]="!!formDebito && formDebito > 0" />
           <mat-hint>{{ 'conciliacao.creditoHint' | translate }}</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>{{ 'conciliacao.fieldDebitoUsd' | translate }} <span class="itag type">{{ 'conciliacao.typedTag' | translate }}</span></mat-label>
-          <input matInput type="number" step="0.01" [(ngModel)]="formDebito" name="formDebito" />
+          <span matPrefix>$&nbsp;</span>
+          <input matInput type="number" step="0.01" [(ngModel)]="formDebito" name="formDebito"
+                 (ngModelChange)="onFormDebitoChange()" [disabled]="!!formCredito && formCredito > 0" />
           <mat-hint>{{ 'conciliacao.debitoHint' | translate }}</mat-hint>
         </mat-form-field>
       </div>

@@ -23,8 +23,14 @@ export class BankStatementLineService {
 
   constructor(private http: HttpClient) { }
 
-  public getByContaBancaria(contaBancariaFk: number): Observable<BankStatementLineListResponse> {
-    return this.http.get<BankStatementLineListResponse>(`${environment.apiUrl}/bankstatementline/GetByContaBancaria/${contaBancariaFk}`);
+  public getByContaBancaria(contaBancariaFk: number | null, dataInicio?: string, dataFim?: string): Observable<BankStatementLineListResponse> {
+    const url = contaBancariaFk
+      ? `${environment.apiUrl}/bankstatementline/GetByContaBancaria/${contaBancariaFk}`
+      : `${environment.apiUrl}/bankstatementline/GetByContaBancaria`;
+    const params: { [key: string]: string } = {};
+    if (dataInicio) { params.dataInicio = dataInicio; }
+    if (dataFim) { params.dataFim = dataFim; }
+    return this.http.get<BankStatementLineListResponse>(url, { params });
   }
 
   public getReceitasDisponiveis(ano: number): Observable<ReceitasDisponiveisParaConciliacaoResponse> {

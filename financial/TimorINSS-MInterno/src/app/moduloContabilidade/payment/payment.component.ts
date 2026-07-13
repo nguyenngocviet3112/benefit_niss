@@ -169,6 +169,7 @@ export class PaymentComponent implements OnInit {
           this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
+        this.showSuccessWithWarnings(this.translate.instant('payment.approveSuccess'), response.warnings);
         this.load();
       },
       err => this.showError(err)
@@ -236,7 +237,7 @@ export class PaymentComponent implements OnInit {
           return;
         }
         this.executeTarget = null;
-        this.snackBar.open(this.translate.instant('payment.executedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
+        this.showSuccessWithWarnings(this.translate.instant('payment.executedSuccess'), response.warnings);
         this.load();
       },
       err => this.showError(err)
@@ -246,5 +247,13 @@ export class PaymentComponent implements OnInit {
   private showError(err: any): void {
     const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('payment.errGeneric');
     this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
+  }
+
+  // Bút toán tự sinh (hoặc bị bỏ qua vì thiếu cấu hình) — luôn thông báo, để
+  // kế toán biết mà kiểm tra/cấu hình lại nếu cần (2026-07-13, user yêu cầu).
+  private showSuccessWithWarnings(baseMessage: string, warnings: string[] | undefined): void {
+    const hasWarnings = warnings && warnings.length > 0;
+    const message = hasWarnings ? `${baseMessage} ${(warnings ?? []).join(' ')}` : baseMessage;
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: hasWarnings ? 12000 : 3000 });
   }
 }

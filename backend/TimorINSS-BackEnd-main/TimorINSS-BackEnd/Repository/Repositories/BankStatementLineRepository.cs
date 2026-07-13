@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TimorINSSBackEnd.Models;
@@ -23,10 +24,13 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Include(l => l.PaymentExecutionFkNavigation).ThenInclude(e => e.PaymentAuthorizationFkNavigation).ThenInclude(a => a.ObligationFkNavigation);
         }
 
-        public List<BankStatementLine> GetByContaBancaria(int contaBancariaFk)
+        public List<BankStatementLine> GetByContaBancaria(int? contaBancariaFk, DateTime? dataInicio, DateTime? dataFim)
         {
             return BaseQuery()
-                .Where(l => l.IndActivo && l.ContaBancariaFk == contaBancariaFk)
+                .Where(l => l.IndActivo
+                    && (contaBancariaFk == null || l.ContaBancariaFk == contaBancariaFk)
+                    && (dataInicio == null || l.DataValor >= dataInicio)
+                    && (dataFim == null || l.DataValor <= dataFim))
                 .OrderByDescending(l => l.DataValor)
                 .ToList();
         }

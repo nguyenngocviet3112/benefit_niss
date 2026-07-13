@@ -14,11 +14,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUtilsDataManager _utils;
+        private readonly ILancamentoDataManager _lancamentoDataManager;
 
-        public BankStatementLineDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils)
+        public BankStatementLineDataManager(IUnitOfWork unitOfWork, IUtilsDataManager utils, ILancamentoDataManager lancamentoDataManager)
         {
             _unitOfWork = unitOfWork;
             _utils = utils;
+            _lancamentoDataManager = lancamentoDataManager;
         }
 
         private BankStatementLineDataContract MapEntity(BankStatementLine entity)
@@ -54,7 +56,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             BankStatementLineListResponse response = new BankStatementLineListResponse();
             try
             {
-                response.Items = _unitOfWork.BankStatementLineRepository.GetByContaBancaria(request.ContaBancariaFk)
+                response.Items = _unitOfWork.BankStatementLineRepository.GetByContaBancaria(request.ContaBancariaFk, request.DataInicio, request.DataFim)
                     .Select(MapEntity)
                     .ToList();
             }
@@ -79,7 +81,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                         Mes = r.Mes,
                         Ano = r.Ano,
                         Descritivo = r.Descritivo,
-                        ValorPac = r.ValorPac
+                        ValorPac = r.ValorPac,
+                        ValorCobradoBanco = r.ValorCobradoBanco
                     })
                     .ToList();
             }
@@ -199,11 +202,58 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 }
 
+                ReceitaPac receita = _unitOfWork.ReceitaPacRepository.Get(request.ReceitaPacFk);
+                if (receita == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "REC-NOT-FOUND", ErrorMessage = "Không tìm thấy Receita." });
+                    return response;
+                }
+                if (entity.Credito <= 0)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "BSL-NOT-CREDITO", ErrorMessage = "Dòng sao kê này không phải khoản Có (tiền vào) — không thể đối chiếu với Receita." });
+                    return response;
+                }
+                if (receita.ValorCobradoBanco <= 0)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "BSL-RECEITA-NO-VALOR-BANCO", ErrorMessage = "Receita này chưa khai giá trị thu qua ngân hàng." });
+                    return response;
+                }
+                if (entity.Credito != receita.ValorCobradoBanco)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "BSL-AMOUNT-MISMATCH", ErrorMessage = "Giá trị dòng sao kê không khớp với giá trị thu qua ngân hàng đã khai báo trên Receita." });
+                    return response;
+                }
+
                 entity.ReceitaPacFk = request.ReceitaPacFk;
                 entity.ConciliadoBy = request.UserId;
                 entity.ConciliadoAt = DateTime.Now;
                 entity = (BankStatementLine)_utils.UpdateDetailsToEntity(entity);
                 _unitOfWork.BankStatementLineRepository.Update(entity);
+
+                // Bút toán Débito/Crédito tự sinh ngay khi đối chiếu ngân hàng thành
+                // công — đây là bước "tiền đã thực sự về" nên đúng chỗ để ghi sổ, thay
+                // vì ghi ngay lúc Receita được nhập (số tự khai, chưa kiểm chứng) — xem
+                // memory guia-pagamento-lancamento-wiring (cùng nguyên tắc áp dụng cho
+                // Guia Pagamento trước đó). Chỉ ghi khi Receita đã có cấu hình tài khoản
+                // Nợ/Có (GerarSeChuaCo tự bỏ qua nếu chưa cấu hình).
+                var lancResult = _lancamentoDataManager.GerarSeChuaCo(
+                    origemTipo: "ReceitaPacBanco",
+                    origemId: receita.Id,
+                    data: entity.DataValor,
+                    codigoContaDebitoFk: receita.CodigoContaDebitoFk,
+                    codigoContaCreditoFk: receita.CodigoContaCreditoFk,
+                    valor: entity.Credito,
+                    descricao: $"Receita PAC Nº {receita.Numero}/{receita.Ano} - {receita.Descritivo} (đối chiếu ngân hàng)");
+
+                if (lancResult.FaltaConfiguracao)
+                {
+                    response.Warnings.Add($"Đối chiếu đã ghi nhận, nhưng chưa ghi được bút toán kế toán cho phần Banco của Receita Nº {receita.Numero}/{receita.Ano} vì thiếu Tài khoản Nợ/Có — vào màn Receita GP, sửa dòng này để bổ sung 2 trường Tài khoản, rồi thử đối chiếu lại (hoặc gỡ đối chiếu rồi làm lại) để hệ thống tự ghi sổ.");
+                }
+                else if (lancResult.Gerado)
+                {
+                    response.Warnings.Add($"Đã tự động ghi bút toán kế toán cho phần Banco của Receita Nº {receita.Numero}/{receita.Ano}. Kiểm tra tại Registo de Lançamentos nếu cần điều chỉnh.");
+                }
+
                 _unitOfWork.Commit();
             }
             catch (Exception e)
@@ -261,12 +311,25 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 }
 
+                int? receitaPacFk = entity.ReceitaPacFk;
+
                 entity.ReceitaPacFk = null;
                 entity.PaymentExecutionFk = null;
                 entity.ConciliadoBy = null;
                 entity.ConciliadoAt = null;
                 entity = (BankStatementLine)_utils.UpdateDetailsToEntity(entity);
                 _unitOfWork.BankStatementLineRepository.Update(entity);
+
+                // Hủy đối chiếu Receita thì bút toán đã sinh từ lần đối chiếu đó không
+                // còn đúng nữa — tắt đi để lần đối chiếu kế tiếp (khớp dòng sao kê khác)
+                // sinh lại bút toán mới đúng số liệu. PaymentExecution không cần xử lý
+                // tương tự vì bút toán bên đó sinh ngay lúc Thực hiện chi trả (không
+                // gắn với bước đối chiếu ở đây).
+                if (receitaPacFk.HasValue)
+                {
+                    _lancamentoDataManager.DesfazerSeExiste("ReceitaPacBanco", receitaPacFk.Value);
+                }
+
                 _unitOfWork.Commit();
             }
             catch (Exception e)

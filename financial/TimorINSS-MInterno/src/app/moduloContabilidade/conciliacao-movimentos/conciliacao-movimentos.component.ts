@@ -20,12 +20,18 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   public loading = false;
 
   public contas: BankAccountModel[] = [];
+  // null = "Tất cả ngân hàng" (mặc định, 2026-07-13 theo yêu cầu user) — trước
+  // đây tự chọn ngân hàng đầu tiên trong danh sách, gây thiếu sót nếu có giao
+  // dịch ở nhiều ngân hàng khác nhau cùng lúc.
   public contaBancariaFk: number | null = null;
+  public dataInicio: Date | null = null;
+  public dataFim: Date | null = null;
 
   public lines: BankStatementLineDataContract[] = [];
   public expandedId: number | null = null;
 
   public showAddForm = false;
+  public formContaBancariaFk: number | null = null;
   public formDataValor = new Date().toISOString().substring(0, 10);
   public formCodigoTransacaoBancaria = '';
   public formDescricao = '';
@@ -46,21 +52,17 @@ export class ConciliacaoMovimentosComponent implements OnInit {
 
   ngOnInit(): void {
     this.bankAccountService.getAll().subscribe(
-      response => {
-        this.contas = response.items ?? [];
-        if (this.contas.length > 0) {
-          this.contaBancariaFk = this.contas[0].id;
-          this.load();
-        }
-      },
+      response => this.contas = response.items ?? [],
       err => this.showError(err)
     );
+    this.load();
   }
 
   public load(): void {
-    if (!this.contaBancariaFk) { return; }
     this.loading = true;
-    this.bankStatementLineService.getByContaBancaria(this.contaBancariaFk).subscribe(
+    const dataInicioStr = this.dataInicio ? this.dataInicio.toISOString().substring(0, 10) : undefined;
+    const dataFimStr = this.dataFim ? this.dataFim.toISOString().substring(0, 10) : undefined;
+    this.bankStatementLineService.getByContaBancaria(this.contaBancariaFk, dataInicioStr, dataFimStr).subscribe(
       response => {
         this.lines = response.items ?? [];
         this.loading = false;
@@ -91,6 +93,7 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   }
 
   public openAddForm(): void {
+    this.formContaBancariaFk = this.contaBancariaFk ?? (this.contas.length > 0 ? this.contas[0].id : null);
     this.formDataValor = new Date().toISOString().substring(0, 10);
     this.formCodigoTransacaoBancaria = '';
     this.formDescricao = '';
@@ -103,15 +106,36 @@ export class ConciliacaoMovimentosComponent implements OnInit {
     this.showAddForm = false;
   }
 
+  public onFormCreditoChange(): void {
+    if (this.formCredito && this.formCredito > 0) {
+      this.formDebito = null;
+    }
+  }
+
+  public onFormDebitoChange(): void {
+    if (this.formDebito && this.formDebito > 0) {
+      this.formCredito = null;
+    }
+  }
+
   public addLine(): void {
-    if (!this.contaBancariaFk) { return; }
-    if ((!this.formCredito || this.formCredito <= 0) && (!this.formDebito || this.formDebito <= 0)) {
+    if (!this.formContaBancariaFk) {
+      this.snackBar.open(this.translate.instant('conciliacao.errMissingBank'), this.translate.instant('general.close'), { duration: 3000 });
+      return;
+    }
+    const hasCredito = !!this.formCredito && this.formCredito > 0;
+    const hasDebito = !!this.formDebito && this.formDebito > 0;
+    if (!hasCredito && !hasDebito) {
       this.snackBar.open(this.translate.instant('conciliacao.errMissingValue'), this.translate.instant('general.close'), { duration: 3000 });
+      return;
+    }
+    if (hasCredito && hasDebito) {
+      this.snackBar.open(this.translate.instant('conciliacao.errBothValues'), this.translate.instant('general.close'), { duration: 3000 });
       return;
     }
 
     this.bankStatementLineService.addLine({
-      contaBancariaFk: this.contaBancariaFk,
+      contaBancariaFk: this.formContaBancariaFk,
       dataValor: this.formDataValor,
       codigoTransacaoBancaria: this.formCodigoTransacaoBancaria || undefined,
       descricao: this.formDescricao || undefined,
@@ -177,6 +201,7 @@ export class ConciliacaoMovimentosComponent implements OnInit {
         }
         this.matchTarget = null;
         this.matchMode = null;
+        this.showSuccessWithWarnings(this.translate.instant('conciliacao.matchSuccess'), response.warnings);
         this.load();
       },
       err => this.showError(err)
@@ -193,10 +218,19 @@ export class ConciliacaoMovimentosComponent implements OnInit {
         }
         this.matchTarget = null;
         this.matchMode = null;
+        this.showSuccessWithWarnings(this.translate.instant('conciliacao.matchSuccess'), response.warnings);
         this.load();
       },
       err => this.showError(err)
     );
+  }
+
+  // Bút toán tự sinh (hoặc bị bỏ qua vì thiếu cấu hình) — luôn thông báo, để
+  // kế toán biết mà kiểm tra/cấu hình lại nếu cần (2026-07-13, user yêu cầu).
+  private showSuccessWithWarnings(baseMessage: string, warnings: string[] | undefined): void {
+    const hasWarnings = warnings && warnings.length > 0;
+    const message = hasWarnings ? `${baseMessage} ${(warnings ?? []).join(' ')}` : baseMessage;
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: hasWarnings ? 12000 : 3000 });
   }
 
   public unmatch(line: BankStatementLineDataContract): void {

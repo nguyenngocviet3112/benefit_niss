@@ -13,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
@@ -110,6 +111,7 @@ import { LiquidacaoContaConfigComponent } from './settings/liquidacao-conta-conf
     MatAutocompleteModule,
     MatCheckboxModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     TranslateModule,
     PdfViewerModule
   ]

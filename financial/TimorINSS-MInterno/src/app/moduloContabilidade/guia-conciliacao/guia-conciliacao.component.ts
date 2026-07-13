@@ -149,6 +149,19 @@ export class GuiaConciliacaoComponent implements OnInit {
     return this.valoresIguais && (this.selectedMovimentoIds.size === 1 || this.selectedGuiaIds.size === 1);
   }
 
+  // Nút "Xác nhận" chỉ disable âm thầm — không giải thích lý do, người dùng tưởng
+  // bấm không có phản hồi gì (2026-07-13, user report). Hiển thị lý do cụ thể.
+  public get disabledReason(): string | null {
+    if (this.selectedGuiaIds.size === 0 || this.selectedMovimentoIds.size === 0) { return null; }
+    if (this.selectedGuiaIds.size > 1 && this.selectedMovimentoIds.size > 1) {
+      return 'guiaConciliacao.errMultiMulti';
+    }
+    if (!this.valoresIguais) {
+      return 'guiaConciliacao.errValoresDiferentes';
+    }
+    return null;
+  }
+
   public confirmar(): void {
     if (!this.selecaoValida) { return; }
     if (!confirm(this.translate.instant('guiaConciliacao.confirmMatch'))) { return; }
@@ -164,11 +177,19 @@ export class GuiaConciliacaoComponent implements OnInit {
           this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 5000 });
           return;
         }
-        this.snackBar.open(this.translate.instant('guiaConciliacao.matchSuccess'), this.translate.instant('general.close'), { duration: 3000 });
+        this.showSuccessWithWarnings(this.translate.instant('guiaConciliacao.matchSuccess'), response.warnings);
         this.load();
       },
       err => { this.conciliando = false; this.showError(err); }
     );
+  }
+
+  // Bút toán tự sinh (hoặc bị bỏ qua vì thiếu cấu hình) — luôn thông báo, để
+  // kế toán biết mà kiểm tra/cấu hình lại nếu cần (2026-07-13, user yêu cầu).
+  private showSuccessWithWarnings(baseMessage: string, warnings: string[] | undefined): void {
+    const hasWarnings = warnings && warnings.length > 0;
+    const message = hasWarnings ? `${baseMessage} ${(warnings ?? []).join(' ')}` : baseMessage;
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: hasWarnings ? 12000 : 3000 });
   }
 
   private showError(err: any): void {

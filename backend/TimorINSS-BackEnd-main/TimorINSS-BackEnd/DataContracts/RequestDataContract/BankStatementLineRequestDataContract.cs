@@ -7,7 +7,13 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     public class GetBankStatementLinesRequest : RequestBaseDataContract
     {
         [DataMember]
-        public int ContaBancariaFk { get; set; }
+        public int? ContaBancariaFk { get; set; }
+
+        [DataMember]
+        public DateTime? DataInicio { get; set; }
+
+        [DataMember]
+        public DateTime? DataFim { get; set; }
     }
 
     [DataContract]

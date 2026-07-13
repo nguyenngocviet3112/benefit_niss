@@ -26,8 +26,8 @@ namespace TimorINSSBackEnd.Controllers
             _cache = memoryCache;
         }
 
-        [HttpGet("GetByContaBancaria/{contaBancariaFk}")]
-        public IActionResult GetByContaBancaria(int contaBancariaFk)
+        [HttpGet("GetByContaBancaria/{contaBancariaFk?}")]
+        public IActionResult GetByContaBancaria(int? contaBancariaFk, [FromQuery] DateTime? dataInicio, [FromQuery] DateTime? dataFim)
         {
             BankStatementLineListResponse response;
             try
@@ -35,6 +35,8 @@ namespace TimorINSSBackEnd.Controllers
                 GetBankStatementLinesRequest request = new GetBankStatementLinesRequest();
                 request.GetHeaderInfo(Request.Headers);
                 request.ContaBancariaFk = contaBancariaFk;
+                request.DataInicio = dataInicio;
+                request.DataFim = dataFim;
                 response = _dataManager.GetByContaBancaria(request);
             }
             catch (Exception e)

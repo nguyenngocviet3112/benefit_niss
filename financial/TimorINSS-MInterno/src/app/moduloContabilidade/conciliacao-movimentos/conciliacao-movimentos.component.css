@@ -86,6 +86,7 @@
   background: #f9fafb;
 }
 
+.con-col-banco { flex: 1.2; }
 .con-col-data { flex: 0.8; font-family: monospace; }
 .con-col-desc { flex: 2.5; }
 .con-col-credito { flex: 1; text-align: right; font-family: monospace; color: #2e7d32; }
@@ -155,6 +156,16 @@
 
 .con-pick-row:hover {
   background: #f3e5f5;
+}
+
+.con-pick-row-match {
+  border-left: 3px solid #1e7e34;
+}
+
+.con-match-hint {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 8px;
 }
 
 .con-empty {
