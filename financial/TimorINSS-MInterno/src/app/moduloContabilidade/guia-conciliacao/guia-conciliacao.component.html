@@ -8,27 +8,28 @@
     {{ 'guiaConciliacao.hint' | translate }}
   </div>
 
-  <div class="gc-filter">
-    <mat-form-field appearance="outline" class="gc-filter-date">
-      <mat-label>{{ 'guiaConciliacao.dateFrom' | translate }}</mat-label>
-      <input matInput [matDatepicker]="pickerFrom" [(ngModel)]="dateFrom">
-      <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-      <mat-datepicker #pickerFrom></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="gc-filter-date">
-      <mat-label>{{ 'guiaConciliacao.dateTo' | translate }}</mat-label>
-      <input matInput [matDatepicker]="pickerTo" [(ngModel)]="dateTo">
-      <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-      <mat-datepicker #pickerTo></mat-datepicker>
-    </mat-form-field>
-    <button mat-stroked-button color="primary" (click)="applyFilter()">{{ 'guiaConciliacao.applyFilter' | translate }}</button>
-    <button mat-button (click)="clearFilter()">{{ 'guiaConciliacao.clearFilter' | translate }}</button>
-  </div>
-
-  <div class="gc-panels" *ngIf="!loading; else loadingTpl">
+  <div class="gc-panels">
     <div class="gc-panel">
       <h3>{{ 'guiaConciliacao.panelGuias' | translate }} ({{ guias.length }})</h3>
-      <div class="gc-table">
+
+      <div class="gc-filter">
+        <mat-form-field appearance="outline" class="gc-filter-date">
+          <mat-label>{{ 'guiaConciliacao.dateFrom' | translate }}</mat-label>
+          <input matInput [matDatepicker]="pickerGuiaFrom" [(ngModel)]="guiaDateFrom">
+          <mat-datepicker-toggle matSuffix [for]="pickerGuiaFrom"></mat-datepicker-toggle>
+          <mat-datepicker #pickerGuiaFrom></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="gc-filter-date">
+          <mat-label>{{ 'guiaConciliacao.dateTo' | translate }}</mat-label>
+          <input matInput [matDatepicker]="pickerGuiaTo" [(ngModel)]="guiaDateTo">
+          <mat-datepicker-toggle matSuffix [for]="pickerGuiaTo"></mat-datepicker-toggle>
+          <mat-datepicker #pickerGuiaTo></mat-datepicker>
+        </mat-form-field>
+        <button mat-stroked-button color="primary" (click)="applyFilterGuias()">{{ 'guiaConciliacao.applyFilter' | translate }}</button>
+        <button mat-button (click)="clearFilterGuias()">{{ 'guiaConciliacao.clearFilter' | translate }}</button>
+      </div>
+
+      <div class="gc-table" *ngIf="!loadingGuias; else loadingGuiasTpl">
         <div class="gc-row gc-row-header">
           <span class="gc-col-check"></span>
           <span class="gc-col-doc">{{ 'guiaConciliacao.colDocumento' | translate }}</span>
@@ -49,11 +50,32 @@
         </div>
         <div class="gc-empty" *ngIf="guias.length === 0">{{ 'guiaConciliacao.emptyGuias' | translate }}</div>
       </div>
+      <ng-template #loadingGuiasTpl>
+        <div class="gc-loading">{{ 'general.loading' | translate }}</div>
+      </ng-template>
     </div>
 
     <div class="gc-panel">
       <h3>{{ 'guiaConciliacao.panelMovimentos' | translate }} ({{ movimentos.length }})</h3>
-      <div class="gc-table">
+
+      <div class="gc-filter">
+        <mat-form-field appearance="outline" class="gc-filter-date">
+          <mat-label>{{ 'guiaConciliacao.dateFrom' | translate }}</mat-label>
+          <input matInput [matDatepicker]="pickerMovFrom" [(ngModel)]="movDateFrom">
+          <mat-datepicker-toggle matSuffix [for]="pickerMovFrom"></mat-datepicker-toggle>
+          <mat-datepicker #pickerMovFrom></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="gc-filter-date">
+          <mat-label>{{ 'guiaConciliacao.dateTo' | translate }}</mat-label>
+          <input matInput [matDatepicker]="pickerMovTo" [(ngModel)]="movDateTo">
+          <mat-datepicker-toggle matSuffix [for]="pickerMovTo"></mat-datepicker-toggle>
+          <mat-datepicker #pickerMovTo></mat-datepicker>
+        </mat-form-field>
+        <button mat-stroked-button color="primary" (click)="applyFilterMovimentos()">{{ 'guiaConciliacao.applyFilter' | translate }}</button>
+        <button mat-button (click)="clearFilterMovimentos()">{{ 'guiaConciliacao.clearFilter' | translate }}</button>
+      </div>
+
+      <div class="gc-table" *ngIf="!loadingMovimentos; else loadingMovTpl">
         <div class="gc-row gc-row-header">
           <span class="gc-col-check"></span>
           <span class="gc-col-data">{{ 'guiaConciliacao.colData' | translate }}</span>
@@ -68,14 +90,13 @@
         </div>
         <div class="gc-empty" *ngIf="movimentos.length === 0">{{ 'guiaConciliacao.emptyMovimentos' | translate }}</div>
       </div>
+      <ng-template #loadingMovTpl>
+        <div class="gc-loading">{{ 'general.loading' | translate }}</div>
+      </ng-template>
     </div>
   </div>
 
-  <ng-template #loadingTpl>
-    <div class="gc-loading">{{ 'general.loading' | translate }}</div>
-  </ng-template>
-
-  <div class="gc-footer" *ngIf="!loading">
+  <div class="gc-footer" *ngIf="!loadingGuias && !loadingMovimentos">
     <div class="gc-totals">
       <span>{{ 'guiaConciliacao.totalGuiasLabel' | translate }} <b>$ {{ totalGuias | number:'1.2-2' }}</b> ({{ selectedGuiaIds.size }})</span>
       <span class="gc-vs">↔</span>

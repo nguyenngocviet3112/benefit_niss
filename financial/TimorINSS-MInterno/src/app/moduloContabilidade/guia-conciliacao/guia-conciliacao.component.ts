@@ -20,7 +20,8 @@ const ESTADO_VALIDACAO_PARCIAL = 4;
 })
 export class GuiaConciliacaoComponent implements OnInit {
 
-  public loading = false;
+  public loadingGuias = false;
+  public loadingMovimentos = false;
   public conciliando = false;
 
   public guias: GuiaListagem[] = [];
@@ -37,10 +38,13 @@ export class GuiaConciliacaoComponent implements OnInit {
 
   // Lọc theo khoảng ngày — cả 2 danh sách (Guia chờ xác nhận + sao kê ngân hàng
   // khả dụng) đều tích lũy dần theo thời gian nên cần lọc để tránh màn nặng dần
-  // (2026-07-13, user yêu cầu). Mặc định 3 tháng gần nhất — đủ rộng để không bỏ
-  // sót backlog chưa đối chiếu, vẫn giới hạn khối lượng tải mỗi lần mở màn.
-  public dateFrom: Date | null = null;
-  public dateTo: Date | null = null;
+  // (2026-07-13, user yêu cầu). Mỗi bên có filter riêng, áp dụng độc lập — lọc bên
+  // Guias không được reload/reset bên Movimentos và ngược lại (2026-07-13, user
+  // yêu cầu rõ). Mặc định 3 tháng gần nhất mỗi bên.
+  public guiaDateFrom: Date | null = null;
+  public guiaDateTo: Date | null = null;
+  public movDateFrom: Date | null = null;
+  public movDateTo: Date | null = null;
 
   constructor(
     private guiaConciliacaoService: GuiaConciliacaoService,
@@ -50,45 +54,69 @@ export class GuiaConciliacaoComponent implements OnInit {
 
   ngOnInit(): void {
     const today = new Date();
-    this.dateFrom = new Date(today.getFullYear(), today.getMonth() - 2, 1);
-    this.dateTo = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    const defaultFrom = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+    const defaultTo = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    this.guiaDateFrom = defaultFrom;
+    this.guiaDateTo = defaultTo;
+    this.movDateFrom = new Date(defaultFrom);
+    this.movDateTo = new Date(defaultTo);
     this.load();
   }
 
   public load(): void {
-    this.loading = true;
+    this.loadGuias();
+    this.loadMovimentos();
+  }
+
+  public loadGuias(): void {
+    this.loadingGuias = true;
     this.selectedGuiaIds.clear();
-    this.selectedMovimentoIds.clear();
 
     this.guiaConciliacaoService.getGuiasPendentesValidacao({
-      filter: { index: 0, rows: 500, dateFilterBegin: this.dateFrom ?? undefined, dateFilterEnd: this.dateTo ?? undefined }
+      filter: { index: 0, rows: 500, dateFilterBegin: this.guiaDateFrom ?? undefined, dateFilterEnd: this.guiaDateTo ?? undefined }
     }).subscribe(
       response => {
         this.guias = (response.guias ?? []).filter(g => g.estadoPagamento === ESTADO_VALIDACAO || g.estadoPagamento === ESTADO_VALIDACAO_PARCIAL);
-        this.loading = false;
+        this.loadingGuias = false;
       },
-      err => { this.loading = false; this.showError(err); }
+      err => { this.loadingGuias = false; this.showError(err); }
     );
+  }
+
+  public loadMovimentos(): void {
+    this.loadingMovimentos = true;
+    this.selectedMovimentoIds.clear();
 
     this.guiaConciliacaoService.getMovimentosBancariosDisponiveis({
       tarefaAtivoId: 0,
-      filter: { index: 0, rows: 500, dateFilterBegin: this.dateFrom ?? undefined, dateFilterEnd: this.dateTo ?? undefined }
+      filter: { index: 0, rows: 500, dateFilterBegin: this.movDateFrom ?? undefined, dateFilterEnd: this.movDateTo ?? undefined }
     }).subscribe(
       response => {
         this.movimentos = (response.movimentos ?? []).filter(m => !m.conciliado);
+        this.loadingMovimentos = false;
       },
-      err => this.showError(err)
+      err => { this.loadingMovimentos = false; this.showError(err); }
     );
   }
 
-  public applyFilter(): void {
-    this.load();
+  public applyFilterGuias(): void {
+    this.loadGuias();
   }
 
-  public clearFilter(): void {
-    this.dateFrom = null;
-    this.dateTo = null;
-    this.load();
+  public clearFilterGuias(): void {
+    this.guiaDateFrom = null;
+    this.guiaDateTo = null;
+    this.loadGuias();
+  }
+
+  public applyFilterMovimentos(): void {
+    this.loadMovimentos();
+  }
+
+  public clearFilterMovimentos(): void {
+    this.movDateFrom = null;
+    this.movDateTo = null;
+    this.loadMovimentos();
   }
 
   public toggleGuia(id: number): void {

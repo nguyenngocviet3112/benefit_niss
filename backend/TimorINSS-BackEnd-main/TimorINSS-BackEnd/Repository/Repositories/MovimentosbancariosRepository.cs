@@ -164,7 +164,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     (request.ConciliadoCom.HasValue ? e.RelMovimentosporconciliarMovimentos.Any(a => a.IndActivo.Value && ((request.ConciliadoComType == MovimentosPorConciliarListagemType.MovimentoAConciliar && request.ConciliadoCom == a.MovimentoPorConciliarFk) ||
                                                                                                                            (request.ConciliadoComType == MovimentosPorConciliarListagemType.PagamentoExecutado && request.ConciliadoCom == a.PagamentosExecutadosFk))) :
                     // Se o ConciliadoCom for null, só se devolve os movimentos que não têm outros movimentos relacionados com o movimento bancário
-                    (e.RelMovimentosporconciliarMovimentos.Count > 1 || e.RelMovimentosporconciliarMovimentos.Any(a => a.IndActivo.Value && ((a.MovimentoPorConciliarFk.HasValue && a.MovimentoPorConciliarFkNavigation.RelMovimentosporconciliarMovimentos.Count == 1) ||
+                    (!e.RelMovimentosporconciliarMovimentos.Any(a => a.IndActivo.Value) ||
+                     e.RelMovimentosporconciliarMovimentos.Count > 1 || e.RelMovimentosporconciliarMovimentos.Any(a => a.IndActivo.Value && ((a.MovimentoPorConciliarFk.HasValue && a.MovimentoPorConciliarFkNavigation.RelMovimentosporconciliarMovimentos.Count == 1) ||
                                                                                                                                             (a.PagamentosExecutadosFk.HasValue && a.PagamentosExecutadosFkNavigation.RelMovimentosporconciliarMovimentos.Count == 1))))) &&
                     // Filtrar por datas
                     (beginDate.HasValue && endDate.HasValue ? e.DataValor >= beginDate && e.DataValor <= endDate :
