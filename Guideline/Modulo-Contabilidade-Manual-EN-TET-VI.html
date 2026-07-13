@@ -1,0 +1,1204 @@
+<title>Módulo Contabilidade — User Manual</title>
+<style>
+  :root{
+    --bg:#faf8f4; --surface:#ffffff; --surface-2:#f2efe8;
+    --text:#20242c; --text-muted:#5d6270; --border:#e4e0d6;
+    --accent:#1f5c73; --accent-soft:#e8f1f0;
+    --tet:#7a5a1e; --vi-c:#6d6f78;
+    --draft:#767c88; --draft-bg:#eef0f2;
+    --pending:#9a6a17; --pending-bg:#fbf1de;
+    --approved:#1c7a4d; --approved-bg:#e6f4ec;
+    --rejected:#b03b32; --rejected-bg:#fbe9e7;
+    --code-bg:#f0ede4;
+    --shadow: 0 1px 2px rgba(20,20,10,0.06), 0 4px 14px rgba(20,20,10,0.05);
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161d; --surface:#171c25; --surface-2:#1e2530;
+    --text:#e6e4de; --text-muted:#98a0ad; --border:#2a3140;
+    --accent:#5fa8bd; --accent-soft:#1b2e33;
+    --tet:#d9ae5e; --vi-c:#9aa0ad;
+    --draft:#9aa0ad; --draft-bg:#232830;
+    --pending:#dba847; --pending-bg:#332a16;
+    --approved:#5fc590; --approved-bg:#16301f;
+    --rejected:#e78277; --rejected-bg:#3a1d1a;
+    --code-bg:#1c222c;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 18px rgba(0,0,0,0.35);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161d; --surface:#171c25; --surface-2:#1e2530;
+      --text:#e6e4de; --text-muted:#98a0ad; --border:#2a3140;
+      --accent:#5fa8bd; --accent-soft:#1b2e33;
+      --tet:#d9ae5e; --vi-c:#9aa0ad;
+      --draft:#9aa0ad; --draft-bg:#232830;
+      --pending:#dba847; --pending-bg:#332a16;
+      --approved:#5fc590; --approved-bg:#16301f;
+      --rejected:#e78277; --rejected-bg:#3a1d1a;
+      --code-bg:#1c222c;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 18px rgba(0,0,0,0.35);
+    }
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .layout{ display:flex; min-height:100vh; }
+
+  /* ---------- Sidebar ---------- */
+  nav.toc{
+    width:280px; flex:0 0 280px; background:var(--surface);
+    border-right:1px solid var(--border); padding:28px 20px;
+    position:sticky; top:0; height:100vh; overflow-y:auto;
+  }
+  nav.toc .brand{ font-weight:700; font-size:15px; letter-spacing:.02em; color:var(--accent); margin-bottom:2px; }
+  nav.toc .brand-sub{ font-size:12px; color:var(--text-muted); margin-bottom:22px; }
+  nav.toc a{ display:block; color:var(--text); text-decoration:none; font-size:13.5px; padding:7px 10px; border-radius:6px; margin-bottom:1px; }
+  nav.toc a:hover{ background:var(--surface-2); }
+  nav.toc a.lvl2{ padding-left:22px; font-size:12.5px; color:var(--text-muted); }
+  nav.toc a.lvl3{ padding-left:34px; font-size:12px; color:var(--text-muted); }
+  nav.toc .toc-group{ margin-top:16px; font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); padding:0 10px; }
+
+  main{ flex:1; min-width:0; max-width:960px; padding:48px 56px 120px; }
+  @media (max-width: 860px){
+    .layout{ flex-direction:column; }
+    nav.toc{ position:static; width:100%; height:auto; flex:none; border-right:none; border-bottom:1px solid var(--border); }
+    main{ padding:28px 20px 80px; }
+  }
+
+  /* ---------- Header ---------- */
+  header.cover{ margin-bottom:44px; }
+  header.cover h1{ font-size:34px; margin:0 0 10px; letter-spacing:-.01em; text-wrap:balance; }
+  header.cover .sub-en{ font-size:17px; color:var(--text); margin-bottom:4px; }
+  header.cover .sub-tet{ font-size:14.5px; color:var(--tet); margin-bottom:4px; font-style:italic; }
+  header.cover .sub-vi{ font-size:14px; color:var(--text-muted); margin-bottom:16px; font-style:italic; }
+  header.cover .meta{ display:flex; gap:18px; flex-wrap:wrap; font-size:12.5px; color:var(--text-muted); border-top:1px solid var(--border); padding-top:14px; }
+  header.cover .meta b{ color:var(--text); }
+  .lang-key{ display:flex; gap:16px; flex-wrap:wrap; font-size:11.5px; margin:14px 0 0; }
+  .lang-key span{ display:inline-flex; align-items:center; gap:6px; }
+  .lang-key i{ width:10px; height:10px; border-radius:3px; display:inline-block; }
+
+  /* ---------- Section blocks ---------- */
+  section{ margin-bottom:56px; scroll-margin-top:24px; }
+  h2.section-title{ font-size:26px; margin:0 0 4px; padding-bottom:14px; border-bottom:2px solid var(--accent); }
+  h2.section-title .tet{ display:block; font-size:14px; font-weight:400; font-style:italic; color:var(--tet); margin-top:4px; }
+  h2.section-title .vi{ display:block; font-size:13.5px; font-weight:400; font-style:italic; color:var(--text-muted); margin-top:2px; }
+  h3.step-title{ font-size:19px; margin:34px 0 2px; color:var(--text); }
+  h3.step-title .tet{ display:block; font-size:12.5px; font-weight:400; font-style:italic; color:var(--tet); margin-top:3px; }
+  h3.step-title .vi{ display:block; font-size:12px; font-weight:400; font-style:italic; color:var(--text-muted); margin-top:2px; }
+  h4.sub-title{ font-size:15px; margin:22px 0 2px; color:var(--accent); }
+  h4.sub-title .tet{ display:block; font-size:11.5px; font-weight:400; font-style:italic; color:var(--tet); }
+  h4.sub-title .vi{ display:block; font-size:11px; font-weight:400; font-style:italic; color:var(--text-muted); }
+
+  .tri{ margin:8px 0 16px; }
+  .tri p{ margin:0 0 4px; }
+  .tri .en{ color:var(--text); }
+  .tri .tet{ color:var(--tet); font-style:italic; font-size:14px; }
+  .tri .vi{ color:var(--text-muted); font-style:italic; font-size:13.5px; }
+
+  .menu-path{
+    display:inline-flex; align-items:center; gap:6px; font-size:12.5px;
+    background:var(--surface-2); border:1px solid var(--border); border-radius:6px;
+    padding:4px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color:var(--accent); margin:6px 0 18px;
+  }
+
+  code, .field, .btn-label{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background:var(--code-bg); padding:1px 6px; border-radius:4px; font-size:.88em;
+  }
+  .btn-label{ color:var(--accent); font-weight:600; }
+
+  /* ---------- Role/permission chip ---------- */
+  .who{
+    display:flex; align-items:flex-start; gap:10px; background:var(--surface);
+    border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:8px; padding:10px 14px; margin:10px 0 16px; box-shadow:var(--shadow);
+  }
+  .who .icon{ font-size:16px; margin-top:1px; }
+  .who .body b{ display:block; font-size:13px; }
+  .who .body span{ display:block; font-size:12px; color:var(--text-muted); margin-top:1px; }
+  .who .body span.t{ color:var(--tet); font-style:italic; }
+  .who .perm{
+    margin-left:auto; align-self:center; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size:11px; background:var(--accent-soft); color:var(--accent); padding:3px 8px; border-radius:12px;
+    white-space:nowrap;
+  }
+
+  /* ---------- Flow diagram ---------- */
+  .flow{
+    display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:18px 0 26px;
+    padding:16px; background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    box-shadow:var(--shadow); overflow-x:auto;
+  }
+  .flow .node{
+    flex:0 0 auto; text-align:center; padding:10px 14px; border-radius:8px;
+    background:var(--surface-2); border:1px solid var(--border); font-size:12.5px; font-weight:600;
+    min-width:96px;
+  }
+  .flow .node .sub{ font-weight:400; color:var(--text-muted); font-size:10.5px; margin-top:2px; }
+  .flow .arrow{ color:var(--text-muted); font-size:16px; flex:0 0 auto; }
+
+  /* ---------- Field table ---------- */
+  table.fields{ width:100%; border-collapse:collapse; margin:10px 0 22px; font-size:13.5px; }
+  table.fields th{ text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-muted); border-bottom:1px solid var(--border); padding:6px 10px 8px; }
+  table.fields td{ border-bottom:1px solid var(--border); padding:9px 10px; vertical-align:top; }
+  table.fields tr:last-child td{ border-bottom:none; }
+  table.fields td.f{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12.5px; color:var(--accent); white-space:nowrap; }
+  table.fields .en{ display:block; }
+  table.fields .tet{ display:block; color:var(--tet); font-style:italic; font-size:.92em; margin-top:2px; }
+  table.fields .vi{ display:block; color:var(--text-muted); font-style:italic; font-size:.92em; margin-top:2px; }
+
+  .callout{ background:var(--accent-soft); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin:16px 0; font-size:13.5px; }
+  .callout .tet{ color:var(--tet); font-style:italic; margin-top:6px; }
+  .callout .vi{ color:var(--text-muted); font-style:italic; margin-top:4px; }
+  .callout.warn{ background:var(--pending-bg); }
+  .callout.warn b{ color:var(--pending); }
+
+  ol.steps{ padding-left:22px; margin:10px 0 20px; }
+  ol.steps li{ margin-bottom:14px; }
+  ol.steps li .tet{ display:block; color:var(--tet); font-style:italic; font-size:.9em; margin-top:2px; }
+  ol.steps li .vi{ display:block; color:var(--text-muted); font-style:italic; font-size:.9em; margin-top:2px; }
+
+  .divider{ border:none; border-top:1px solid var(--border); margin:40px 0; }
+
+  footer{ max-width:960px; margin-left:280px; padding:32px 56px 60px; color:var(--text-muted); font-size:12.5px; border-top:1px solid var(--border); }
+  footer .tet{ color:var(--tet); font-style:italic; }
+  @media (max-width: 860px){ footer{ margin-left:0; padding:24px 20px 40px; } }
+
+  @media (prefers-reduced-motion: reduce){ *{ scroll-behavior:auto !important; } }
+  html{ scroll-behavior:smooth; }
+</style>
+
+<div class="layout">
+  <nav class="toc">
+    <div class="brand">Módulo Contabilidade</div>
+    <div class="brand-sub">User Manual · Manual Uza · Hướng dẫn sử dụng</div>
+
+    <a href="#intro">Introduction / Introdusaun / Giới thiệu</a>
+
+    <div class="toc-group">0. Setup Checklist / Prontu-uluk / Chuẩn bị trước khi dùng</div>
+    <a href="#setup-checklist" class="lvl2">Before you start / Molok hahú / Trước khi bắt đầu</a>
+
+    <div class="toc-group">I. Budget / Orsamentu / Ngân sách</div>
+    <a href="#orcamento" class="lvl2">Orçamento (rúbrica)</a>
+    <a href="#suplementar" class="lvl2">Suplementar</a>
+    <a href="#saldos-abertura" class="lvl2">Saldos de Abertura</a>
+
+    <div class="toc-group">II. Revenue / Rendimentu / Thu</div>
+    <a href="#receita" class="lvl2">Receita (PAC)</a>
+    <a href="#guia-pagamento" class="lvl2">Guia Pagamento (Contribuições)</a>
+
+    <div class="toc-group">III. Expenditure / Despeza / Chi</div>
+    <a href="#ad" class="lvl2">1. AD</a>
+    <a href="#cabimento" class="lvl2">2. Cabimento</a>
+    <a href="#compromisso" class="lvl2">3. Compromisso</a>
+    <a href="#obrigacao" class="lvl2">4. Obrigação</a>
+    <a href="#pagamento" class="lvl2">5–6. Pagamento</a>
+
+    <div class="toc-group">IV. Journal / Livru / Sổ sách</div>
+    <a href="#lancamentos" class="lvl2">Registo de Lançamentos</a>
+
+    <div class="toc-group">V. Reconciliation / Konsíliasaun / Đối chiếu</div>
+    <a href="#conciliacao" class="lvl2">Conciliação de Movimentos</a>
+    <a href="#guia-conciliacao" class="lvl2">Duyệt Guia Pagamento</a>
+
+    <div class="toc-group">VI. Settings / Konfigurasaun / Cấu hình</div>
+    <a href="#gp-conta-config" class="lvl2">Conta Débito/Crédito — GP</a>
+    <a href="#liquidacao-conta-config" class="lvl2">Conta a Pagar — Despesa</a>
+
+    <div class="toc-group">Appendix / Anexu / Phụ lục</div>
+    <a href="#glossario" class="lvl2">Glossary / Glosáriu / Thuật ngữ</a>
+
+    <div class="toc-group">VII. Users / Utilizadór / Người dùng</div>
+    <a href="#permissoes" class="lvl2">User &amp; Permission Management</a>
+  </nav>
+
+  <main>
+    <header class="cover" id="intro">
+      <h1>Módulo Contabilidade</h1>
+      <div class="sub-en">End-to-end user manual for Budget, Revenue and Expenditure</div>
+      <div class="sub-tet">Manual uza kompletu ba Orsamentu, Rendimentu no Despeza</div>
+      <div class="sub-vi">Hướng dẫn sử dụng đầu-cuối cho Ngân sách, Thu và Chi</div>
+      <div class="meta">
+        <span><b>Scope:</b> Orçamento, Receita, Despesa, Lançamentos, Conciliação, User &amp; Permission Management</span>
+        <span><b>Currency / Osan / Đơn vị tiền tệ:</b> USD</span>
+      </div>
+      <div class="lang-key">
+        <span><i style="background:var(--text);"></i> English (primary)</span>
+        <span><i style="background:var(--tet);"></i> Tetun</span>
+        <span><i style="background:var(--text-muted);"></i> Tiếng Việt</span>
+      </div>
+    </header>
+
+    <div class="tri">
+      <p class="en">This manual walks through, step by step, the core workflows of the Módulo Contabilidade: <b>Budget</b> (drafting and approving yearly budget lines), <b>Revenue</b> (recording income, both other revenue and social-security contributions), <b>Expenditure</b> (from spending authorization through to actual payment), the <b>General journal</b> (how accounting entries get created automatically), <b>Bank reconciliation</b> (matching real bank statement lines against what's recorded), and finally <b>User &amp; Permission Management</b>. Every step states where the screen is, what fields to fill in, and <b>who is allowed to perform it</b>.</p>
+      <p class="tet">Dokumentu ida-ne'e fó orientasaun pas-ba-pas kona-ba oinsá atu uza grupu servisu importante iha Módulo Contabilidade: <b>Orsamentu</b> (halo no aprova linha orsamentu tinan-tinan), <b>Rendimentu</b> (rejista osan ne'ebé tama, rendimentu seluk no kontribuisaun seguransa sosiál), <b>Despeza</b> (husi pedidu autorizasaun gastu to'o pagamentu realiza ona), <b>Livru diáriu jerál</b> (oinsá lançamento kontabilidade mosu automátiku), <b>Konsíliasaun banku</b> (konfere linha estratu banku loloos kontra saida mak rejista), no ikus liu <b>Jestaun Utilizadór &amp; Permisaun</b>. Kada pasu hatudu klaru: eskrán iha ne'ebé, kampu saida mak presiza hakerek, no <b>se mak iha direitu atu halo pasu ne'e</b>.</p>
+      <p class="vi">Tài liệu này hướng dẫn từng bước cách sử dụng các nhóm nghiệp vụ chính trong Módulo Contabilidade: <b>Ngân sách</b> (lập và duyệt rúbrica ngân sách hàng năm), <b>Thu</b> (ghi nhận các khoản thu, cả thu khác và thu đóng góp BHXH), <b>Chi</b> (từ xin phép chi tới thực chi trả), <b>Sổ nhật ký kế toán</b> (cách bút toán được tự sinh), <b>Đối chiếu ngân hàng</b> (khớp dòng sao kê ngân hàng thật với dữ liệu đã ghi nhận), và cuối cùng là <b>Quản lý User &amp; Phân quyền</b>. Mỗi bước đều ghi rõ: màn hình nằm ở đâu, các trường cần nhập, và <b>ai có quyền thực hiện bước đó</b>.</p>
+    </div>
+
+    <div class="callout">
+      <b>How to read "Who does this step"</b> — every step shows a box like the one below, naming the intended role and the exact permission token an account must be granted (via "User &amp; Permission Management", Section VII) to click that button.
+      <div class="tet">Oinsá lee "Se mak halo pasu ne'e" — kada pasu hatudu kaixa hanesan kraik, ho naran funsaun previstu no kódigu permisaun (permission token) ne'ebé konta ida presiza simu (liuhusi "Jestaun Utilizadór &amp; Permisaun", Parte VII) atu bele klik butaun ne'e.</div>
+      <div class="vi">Cách đọc "Ai làm bước này" — mỗi bước có 1 khối như dưới đây, ghi rõ vai trò dự kiến và mã quyền (permission token) mà tài khoản cần được cấp trong màn "Quản lý User &amp; Phân quyền" (mục VII) để bấm được nút đó.</div>
+      <div class="who" style="margin-top:10px;">
+        <div class="icon">👤</div>
+        <div class="body"><b>Example role</b><span class="t">Naran funsaun / vai trò</span><span>Short description of what this person does at this step</span></div>
+        <div class="perm">EXAMPLE_TOKEN</div>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <b>Note on Tetun terms / Nota kona-ba termu Tetun:</b> official financial/legal terms (AD, Cabimento, Compromisso, Obrigação, Débito, Crédito, rúbrica, Diretor DF...) are kept in Portuguese, unchanged — this matches how they are actually used in Tetun-language government and legal documents in Timor-Leste, not translated.
+      <div class="tet">Termu ofisiál kona-ba finansas/lei (AD, Cabimento, Compromisso, Obrigação, Débito, Crédito, rúbrica, Diretor DF...) hela iha Portugés, la muda — ne'e hanesan oinsá dokumentu governu no lei iha lian Tetun uza sira ona, la tradús.</div>
+      <div class="vi">Các thuật ngữ pháp lý/tài chính chính thức (AD, Cabimento, Compromisso, Obrigação, Débito, Crédito, rúbrica, Diretor DF...) được giữ nguyên tiếng Bồ Đào Nha — đúng như cách các văn bản pháp lý/nhà nước bằng tiếng Tetun ở Timor-Leste vẫn dùng, không dịch.</div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ================= 0. SETUP CHECKLIST ================= -->
+    <section id="setup-checklist">
+      <h2 class="section-title">0. Setup Checklist <span class="tet">Lista Prontu-uluk</span><span class="vi">Chuẩn bị trước khi dùng</span></h2>
+
+      <div class="tri">
+        <p class="en">Read this section <b>first</b>, before any other section — it lists every master-data/configuration screen that must (or should) be set up before the workflows in Sections I–V behave correctly. Items are ordered so that each one only depends on items above it. Screens marked <b>Required</b> genuinely block the dependent workflow; screens marked <b>Recommended</b>/<b>Optional</b> don't block anything, they only affect completeness or a nice-to-have.</p>
+        <p class="tet">Lee parte ida-ne'e <b>uluk liu</b>, molok parte seluk — hatudu kada eskrán master-data/konfigurasaun ne'ebé tenke (ka diak liu) prepara molok fluxu iha Parte I–V halo funsiona di'ak. Ordem hala'o hodi kada item de'it depende ba item iha leten. Eskrán marka <b>Obrigatóriu</b> loloos bloke'ia fluxu ne'ebé depende; eskrán marka <b>Rekomenda</b>/<b>Fakultativu</b> la bloke'ia buat ida, afeta de'it kompletu ka diak-liu.</p>
+        <p class="vi">Đọc mục này <b>trước tiên</b>, trước mọi mục khác — liệt kê mọi màn hình master-data/cấu hình cần (hoặc nên) thiết lập trước khi các luồng ở mục I–V chạy đúng. Thứ tự sắp xếp sao cho mỗi mục chỉ phụ thuộc vào mục phía trên nó. Màn đánh dấu <b>Bắt buộc</b> thực sự chặn luồng phụ thuộc; màn đánh dấu <b>Khuyến nghị</b>/<b>Tùy chọn</b> không chặn gì cả, chỉ ảnh hưởng độ đầy đủ hoặc tiện lợi thêm.</p>
+      </div>
+
+      <ol class="steps">
+        <li><b>Required</b> — Grant yourself/admin permissions <span class="tet">Fó permisaun ba admin</span><span class="vi">Cấp quyền cho admin</span>
+          <div class="menu-path">Menu: Cấu hình hệ thống → Quản lý User &amp; Phân quyền</div>
+          <span class="en">Do this first, literally before anything else. Every screen in this manual is gated by a permission token (shown in the <span class="who" style="display:inline-flex;padding:2px 8px;">EXAMPLE_TOKEN</span>-style box on each step) — until an account is granted the relevant tokens, the corresponding menu items/buttons simply don't appear or can't be clicked. Full detail in Section VII.</span>
+          <span class="tet">Halo ida-ne'e uluk liu, uluk liu duni. Kada eskrán iha dokumentu ida-ne'e bloke'ia liuhusi permission token — to'o konta ida simu token relevante, menu/butaun la mosu ka la bele klik. Detallu iha Parte VII.</span>
+          <span class="vi">Làm việc này đầu tiên, trước cả mọi thứ khác. Mỗi màn hình trong tài liệu này đều bị chặn bởi 1 mã quyền (permission token) — cho tới khi tài khoản được cấp đúng token, menu/nút tương ứng sẽ không hiện hoặc không bấm được. Chi tiết ở mục VII.</span>
+        </li>
+
+        <li><b>Required</b> — Master Data <span class="tet">Dadus Prinsipál</span><span class="vi">Master Data</span>
+          <div class="menu-path">Menu: Master Data → Organization / Estrutura Programática / Classificação Funcional / Classificação Económica / Plano de Contas / Mapeamento Rubricas</div>
+          <span class="en">Required before any Orçamento line can be entered (Section I) — every "rúbrica" is literally a combination of <b>Atividade × Classificação Económica × Organization</b>. <b>Plano de Contas</b> + <b>Mapeamento Rubricas</b> are the underlying chart of accounts that every automatically-generated journal entry (Section IV) posts against — without these, Lançamentos cannot be created correctly anywhere in the system.</span>
+          <span class="tet">Obrigatóriu molok bele hakerek linha Orçamento ida (Parte I) — kada "rúbrica" mak kombinasaun husi <b>Atividade × Classificação Económica × Organization</b>. <b>Plano de Contas</b> + <b>Mapeamento Rubricas</b> mak planu konta ne'ebé kada lançamento automátiku (Parte IV) rejista ba — se lae, Lançamentos labele kria ho loloos iha fatin ida deit.</span>
+          <span class="vi">Bắt buộc phải có trước khi nhập được bất kỳ dòng Orçamento nào (mục I) — mỗi "rúbrica" chính là tổ hợp <b>Atividade × Classificação Económica × Organization</b>. <b>Plano de Contas</b> + <b>Mapeamento Rubricas</b> là hệ thống tài khoản kế toán nền mà mọi bút toán tự sinh (mục IV) đều ghi vào — thiếu 2 cái này thì Lançamentos không thể tạo đúng ở bất kỳ đâu trong hệ thống.</span>
+        </li>
+
+        <li><b>Required</b> — Kỳ ngân sách <span class="tet">Períodu Orsamentu</span><span class="vi">Kỳ ngân sách (Orçamento Config)</span>
+          <div class="menu-path">Menu: Cấu hình hệ thống → Kỳ ngân sách (Orçamento Config)</div>
+          <span class="en">Required before Orçamento (Section I) — every budget line, AD, Compromisso, etc. is tied to an active budget period/year created here first ("+ Create budget period" button).</span>
+          <span class="tet">Obrigatóriu molok Orçamento (Parte I) — kada linha orsamentu, AD, Compromisso, ns., liga ba períodu/tinan orsamentu ativu ne'ebé kria uluk iha ne'e ("+ Create budget period").</span>
+          <span class="vi">Bắt buộc phải có trước Orçamento (mục I) — mọi dòng ngân sách, AD, Compromisso... đều gắn với 1 kỳ ngân sách/năm đang hoạt động, phải tạo ở đây trước (nút "+ Create budget period").</span>
+        </li>
+
+        <li><b>Required</b> — Ngân hàng <span class="tet">Kontas Bankáriu</span><span class="vi">Ngân hàng (Contas Bancárias)</span>
+          <div class="menu-path">Menu: Cấu hình hệ thống → Ngân hàng (Contas Bancárias)</div>
+          <span class="en">Required before <b>Conciliação de Movimentos</b> (Section V, matching bank statement lines), <b>Pagamento's Execução step</b> (Section III, choosing which INSS account the money actually left from), and <b>Guia Pagamento's bank-verified approval</b> (Section V).</span>
+          <span class="tet">Obrigatóriu molok <b>Conciliação de Movimentos</b> (Parte V, konfere linha estratu banku), pasu <b>Execução</b> husi Pagamento (Parte III, hili konta INSS ne'ebé osan sai loloos), no <b>aprovasaun Guia Pagamento konfirma-banku</b> (Parte V).</span>
+          <span class="vi">Bắt buộc phải có trước khi dùng <b>Conciliação de Movimentos</b> (mục V, khớp dòng sao kê ngân hàng), bước <b>Execução</b> của Pagamento (mục III, chọn tài khoản INSS đã thực chi tiền ra), và duyệt Guia Pagamento theo đối chiếu ngân hàng (mục V).</span>
+        </li>
+
+        <li><b>Recommended</b> — Cấu hình phòng ban <span class="tet">Konfigurasaun Departamentu</span><span class="vi">Cấu hình phòng ban (Departamentos)</span>
+          <div class="menu-path">Menu: Cấu hình hệ thống → Cấu hình phòng ban</div>
+          <span class="en">Recommended before assigning users to a department in their profile — not required for the expenditure/revenue chain itself to function.</span>
+          <span class="tet">Rekomenda molok atribui utilizadór ba departamentu iha perfil sira — la obrigatóriu ba funsionamentu siklu despeza/rendimentu rasik.</span>
+          <span class="vi">Khuyến nghị thiết lập trước khi gán phòng ban cho hồ sơ user — không bắt buộc để bản thân chu trình Thu/Chi hoạt động.</span>
+        </li>
+
+        <li><b>Required for its own step</b> — Tài khoản Nợ/Có cho Guia Pagamento <span class="tet">Konta GP</span><span class="vi">Tài khoản Nợ/Có cho Guia Pagamento</span>
+          <div class="menu-path">Menu: Cấu hình hệ thống → Tài khoản Nợ/Có cho Guia Pagamento — full detail in Section VI</div>
+          <span class="en">Required before "Duyệt Guia Pagamento" (Section V) can generate a journal entry. <b>Not a hard blocker</b>: bank reconciliation for GP still succeeds without it — the journal entry is simply skipped until this is configured.</span>
+          <span class="tet">Obrigatóriu molok "Duyệt Guia Pagamento" (Parte V) bele jera lançamento. <b>La bloke'ia</b>: konsíliasaun banku ba GP kontinua susesu la iha ida-ne'e — lançamento de'it mak salta to'o konfigura ona.</span>
+          <span class="vi">Bắt buộc để "Duyệt Guia Pagamento" (mục V) sinh được bút toán. <b>Không chặn nghiệp vụ</b>: đối chiếu ngân hàng cho GP vẫn thành công dù chưa cấu hình — chỉ là chưa sinh bút toán cho tới khi cấu hình xong.</span>
+        </li>
+
+        <li><b>Required for its own step</b> — Tài khoản Phải trả (bút toán kép Despesa) <span class="tet">Konta Selu (bút toán duplu Despesa)</span><span class="vi">Tài khoản Phải trả (bút toán kép Despesa)</span>
+          <div class="menu-path">Menu: Cấu hình hệ thống → Tài khoản Phải trả (bút toán kép Despesa)</div>
+          <span class="en">Required before Despesa/Pagamento generates its 2 journal entries correctly (one at Autorização de Pagamento approval — "Liquidação", one at Execução — see Sections III/IV for detail). This is <b>not</b> the bank account INSS pays from (that's chosen separately each time, at Execução) — it's an intermediate accounting classification account (from your own Chart of Accounts), fixed per beneficiary category (Fornecedor/Beneficiário/Contribuinte(EE)/Pessoal/Outro). <b>Not a hard blocker</b>: payments still process without it — the affected category's journal entries are simply skipped until configured. Ask your accountant which account to pick for each category if unsure.</span>
+          <span class="tet">Obrigatóriu molok Despesa/Pagamento jera lançamento rua nia loloos (ida iha aprovasaun Autorização de Pagamento — "Liquidação", ida iha Execução — haree Parte III/IV ba detallu). Ida-ne'e <b>laós</b> konta banku ne'ebé INSS selu husi (ne'e hili separadu kada vés, iha Execução) — ida-ne'e mak konta klasifikasaun kontabilidade intermediáriu (husi Planu Konta rasik), fixu tuir kategoria benefisiáriu (Fornecedor/Beneficiário/Contribuinte(EE)/Pessoal/Outro). <b>La bloke'ia</b>: pagamentu kontinua prosesu la iha ida-ne'e — lançamento husi kategoria afeta de'it mak salta to'o konfigura ona.</span>
+          <span class="vi">Bắt buộc để Despesa/Pagamento sinh đủ 2 bút toán đúng (1 lúc duyệt Autorização de Pagamento — "Liquidação", 1 lúc Execução — xem chi tiết mục III/IV). Đây <b>không phải</b> tài khoản ngân hàng mà INSS chi tiền ra (cái đó chọn riêng mỗi lần, ở bước Execução) — đây là tài khoản phân loại kế toán trung gian (trong Plano de Contas của bạn), cố định theo loại đối tượng thụ hưởng (Fornecedor/Beneficiário/Contribuinte(EE)/Pessoal/Outro). <b>Không chặn nghiệp vụ</b>: Pagamento vẫn thực hiện được dù chưa cấu hình — chỉ là bút toán của Categoria đó tạm bị bỏ qua cho tới khi cấu hình xong. Nếu không chắc chọn tài khoản nào, hỏi kế toán để xác nhận.</span>
+        </li>
+
+        <li><b>Optional</b> — Ngôn ngữ &amp; Cấu hình Upload File <span class="tet">Lian &amp; Konfigurasaun Fitxeiru</span><span class="vi">Ngôn ngữ &amp; Cấu hình Upload File</span>
+          <div class="menu-path">Menu: Cấu hình hệ thống → Ngôn ngữ (Idioma) / Cấu hình Upload File</div>
+          <span class="en">Optional — controls the display language and whether file attachments are mandatory at each expenditure step. Safe to leave at defaults for now and revisit later.</span>
+          <span class="tet">Fakultativu — kontrola lian hatudu no attachment obrigatóriu ka lae iha kada pasu despeza. Bele hela ho default agora, hadia fali depois.</span>
+          <span class="vi">Tùy chọn — chỉnh ngôn ngữ hiển thị và có bắt buộc đính kèm file ở từng bước Chi hay không. Có thể để mặc định lúc đầu, quay lại chỉnh sau cũng được.</span>
+        </li>
+      </ol>
+
+      <div class="callout warn">
+        <b>Note:</b> screens marked "Not a hard blocker" fail <i>silently</i>, not with an error — the workflow completes normally, only the journal entry (Lançamento) is missing until the account is configured. Check the Registo de Lançamentos screen (Section IV) periodically to confirm entries are actually being generated for every category you use.
+        <div class="tet">Nota: eskrán marka "La bloke'ia" falha <i>hakalimutuk</i>, la mosu erru — fluxu remata normál, lançamento de'it mak lakon to'o konta konfigura ona. Konfere eskrán Registo de Lançamentos (Parte IV) dala-dala hodi haree ona lançamento mosu ba kada kategoria ne'ebé uza.</div>
+        <div class="vi">Lưu ý: các màn đánh dấu "Không chặn nghiệp vụ" sẽ lỗi <i>âm thầm</i>, không báo lỗi gì — nghiệp vụ vẫn hoàn tất bình thường, chỉ là thiếu bút toán cho tới khi cấu hình tài khoản. Nên định kỳ kiểm tra màn Registo de Lançamentos (mục IV) để xác nhận bút toán thực sự được sinh cho mọi Categoria đang dùng.</div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ================= I. BUDGET ================= -->
+    <section id="orcamento-section">
+      <h2 class="section-title">I. Budget <span class="tet">Orsamentu</span><span class="vi">Ngân sách (Orçamento)</span></h2>
+
+      <div class="tri">
+        <p class="en">Budget is the starting point for both the Revenue and Expenditure cycles — every later expenditure must trace back to an approved budget line entered here.</p>
+        <p class="tet">Orsamentu mak pontu hahú ba siklu Rendimentu no Despeza hotu — kada despeza iha futuru tenke iha orijen husi linha orsamentu ida ne'ebé ona aprova iha ne'e.</p>
+        <p class="vi">Ngân sách là bước đầu tiên của cả 2 chu trình Thu và Chi — mọi khoản Chi sau này đều phải bắt nguồn từ 1 dòng rúbrica ngân sách đã được duyệt ở đây.</p>
+      </div>
+
+      <h3 class="step-title" id="orcamento">Enter &amp; approve budget lines <span class="tet">Hakerek &amp; aprova linha orsamentu</span><span class="vi">Nhập &amp; duyệt rúbrica ngân sách</span></h3>
+      <div class="menu-path">Menu: Orçamento</div>
+
+      <div class="tri">
+        <p class="en">Each "rúbrica" (budget line) is a combination of <b>Atividade × Classificação Económica × Organization</b>, with a USD value approved for the current budget year. There are 2 ways to enter lines:</p>
+        <p class="tet">Kada "rúbrica" (linha orsamentu) mak kombinasaun husi <b>Atividade × Classificação Económica × Organization</b>, ho valór (USD) ne'ebé aprova ona ba tinan orsamentu atual. Iha dalan rua atu hakerek linha:</p>
+        <p class="vi">Mỗi "rúbrica" là tổ hợp <b>Atividade × Classificação Económica × Organization</b>, kèm giá trị (USD) được duyệt cho năm ngân sách hiện tại. Có 2 cách nhập:</p>
+      </div>
+      <ol class="steps">
+        <li><b>Manual entry</b> — click "+ Add rúbrica", type-to-search Atividade / Classificação Económica / Organization, enter the Valor.
+          <span class="tet">Hakerek ho liman — klik "+ Aumenta rúbrica", hakerek atu buka (autocomplete) Atividade / Classificação Económica / Organization, tau Valor.</span>
+          <span class="vi">Nhập tay từng dòng — bấm "+ Thêm rúbrica", gõ tìm (autocomplete) Atividade / Classificação Económica / Organization, nhập Valor.</span>
+        </li>
+        <li><b>Bulk import from Excel</b> — the "Import Excel" button at the top (only shown while the batch is still DRAFT). Import is a <b>preview → confirm</b> flow: the file is parsed first and every row is classified as New / Already exists / Error before anything is written; for rows that already exist you explicitly choose Overwrite or Skip; only then does the final Confirm button write the resolved set.
+          <span class="tet">Importa hamutuk husi Excel — butaun "Import Excel" iha leten (mosu de'it wainhira lote sei iha estadu DRAFT). Importa liu husi fluxu <b>haree-uluk → konfirma</b>: fitxeiru parse uluk no kada linha klasifika sai Foun / Iha ona / Erru molok eskreve buat ida; ba linha ne'ebé iha ona, ita hili klaru Troka ka Salta; foin butaun Konfirma ikus mak eskreve rezultadu.</span>
+          <span class="vi">Nhập hàng loạt từ Excel — nút "Import Excel" ở đầu trang (chỉ hiện khi lô đang ở trạng thái Nháp/DRAFT). Import theo luồng <b>xem trước → xác nhận</b>: file được đọc trước, mỗi dòng được phân loại Mới / Đã tồn tại / Lỗi trước khi ghi bất cứ gì; với dòng đã tồn tại, bạn chọn rõ Ghi đè hay Bỏ qua cho từng dòng; chỉ khi bấm Xác nhận cuối cùng hệ thống mới thực sự ghi dữ liệu.</span>
+        </li>
+      </ol>
+
+      <div class="callout warn">
+        <b>Note:</b> the system blocks entering the same rúbrica (Atividade+Classificação Económica+Organization) twice <u>within the same budget year</u> — but the same rúbrica can appear again in a different year, that's normal (each year's budget is drafted fresh).
+        <div class="tet"><b>Nota:</b> sistema bloke'ia hakerek dahuluk rúbrica hanesan (Atividade+Classificação Económica+Organization) <u>iha tinan orsamentu hanesan</u> — maibé rúbrica hanesan bele hakerek fali iha tinan seluk, ne'e normál (kada tinan halo orsamentu foun husi hahú).</div>
+        <div class="vi">Lưu ý: hệ thống chặn nhập trùng cùng 1 rúbrica (Atividade+Classificação Económica+Organization) <u>trong cùng năm ngân sách</u> — nhưng cùng rúbrica đó vẫn nhập lại được ở năm ngân sách khác, đó là bình thường (mỗi năm lập ngân sách lại từ đầu).</div>
+      </div>
+
+      <h4 class="sub-title">Approval flow <span class="tet">Fluxu aprovasaun</span><span class="vi">Luồng duyệt</span></h4>
+      <div class="flow">
+        <div class="node">Draft<div class="sub">DRAFT</div></div>
+        <div class="arrow">→</div>
+        <div class="node">Pending review<div class="sub">PENDING_REVIEW</div></div>
+        <div class="arrow">→</div>
+        <div class="node">Pending approval<div class="sub">PENDING_APPROVAL</div></div>
+        <div class="arrow">→</div>
+        <div class="node" style="border-color:var(--approved); color:var(--approved);">Approved<div class="sub">APPROVED</div></div>
+      </div>
+
+      <div class="callout">
+        Once a batch is fully Approved, opening the Orçamento screen again shows that approved batch read-only — it does <b>not</b> silently start a new empty draft on top of it. To start adjusting the budget after approval, use "Bắt đầu lô điều chỉnh mới" (start a new draft batch) explicitly, or use Suplementar below for value-only adjustments.
+        <div class="tet">Wainhira lote aprova ona kompletu, loke fali eskrán Orçamento hatudu lote aprova ne'e nu'udar lee de'it — <b>la</b> hahú fila-fali lote foun mamuk ba leten nia. Atu hahú ajusta orsamentu depois aprova, uza "Bắt đầu lô điều chỉnh mới" (hahú lote foun) klaru, ka uza Suplementar iha kraik ba ajustamentu valór de'it.</div>
+        <div class="vi">Khi 1 lô đã được duyệt hoàn toàn, mở lại màn Orçamento sẽ hiện đúng lô đã duyệt đó ở dạng chỉ xem — <b>không</b> tự tạo 1 lô nháp rỗng mới đè lên. Muốn điều chỉnh tiếp sau khi đã duyệt, bấm rõ ràng "Bắt đầu lô điều chỉnh mới", hoặc dùng Suplementar bên dưới nếu chỉ cần điều chỉnh giá trị.</div>
+      </div>
+
+      <div class="who">
+        <div class="icon">✍️</div>
+        <div class="body"><b>Budget officer</b><span class="t">Ofisiál orsamentu</span><span>Creates the batch, adds/edits/deletes rúbricas, clicks "Submit" — only while the batch is still Draft.</span></div>
+        <div class="perm">ORC_SUBMIT</div>
+      </div>
+      <div class="who">
+        <div class="icon">🔍</div>
+        <div class="body"><b>Reviewer</b><span class="t">Ema ne'ebé halo revisaun</span><span>Confirms review or rejects (sends back to Draft with a reason) — the intermediate step before final approval.</span></div>
+        <div class="perm">ORC_REVIEW</div>
+      </div>
+      <div class="who">
+        <div class="icon">✅</div>
+        <div class="body"><b>Final approver</b><span class="t">Aprovadór final</span><span>Gives final approval or rejects. Once Approved, it can no longer be edited — changes must go through Suplementar.</span></div>
+        <div class="perm">ORC_APPROVE</div>
+      </div>
+
+      <hr class="divider">
+
+      <h3 class="step-title" id="suplementar">Budget adjustment <span class="tet">Ajustamentu orsamentu</span><span class="vi">Điều chỉnh ngân sách (Suplementar)</span></h3>
+      <div class="menu-path">Menu: Suplementar</div>
+      <div class="tri">
+        <p class="en">Used to increase/decrease the value of a rúbrica that has <b>already been approved</b> — e.g. a mid-year supplementary allocation. Total increases don't need to balance total decreases.</p>
+        <p class="tet">Uza atu aumenta/hamenus valór rúbrica ida ne'ebé <b>aprova ona</b> — porezemplu alokasaun suplementár iha metade tinan. La presiza totál aumenta hanesan ho totál hamenus.</p>
+        <p class="vi">Dùng khi cần tăng/giảm giá trị 1 rúbrica <b>đã được duyệt</b> — ví dụ ngân sách được cấp bổ sung giữa năm. Không yêu cầu tổng tăng phải bằng tổng giảm.</p>
+      </div>
+      <ol class="steps">
+        <li>Select the approved rúbrica to adjust, enter the increase/decrease value and a reason.
+          <span class="tet">Hili rúbrica ne'ebé aprova ona atu ajusta, tau valór aumenta/hamenus no razaun.</span>
+          <span class="vi">Chọn rúbrica đã duyệt cần điều chỉnh, nhập giá trị tăng/giảm và lý do.</span>
+        </li>
+        <li>Submit — goes through the same 3-stage flow as Orçamento above (ORC_SUBMIT → ORC_REVIEW → ORC_APPROVE).
+          <span class="tet">Haruka ba aprovasaun — liu husi fluxu 3 pasu hanesan Orçamento iha leten (ORC_SUBMIT → ORC_REVIEW → ORC_APPROVE).</span>
+          <span class="vi">Gửi duyệt — đi qua đúng luồng 3 bước như Orçamento ở trên (ORC_SUBMIT → ORC_REVIEW → ORC_APPROVE).</span>
+        </li>
+      </ol>
+
+      <hr class="divider">
+
+      <h3 class="step-title" id="saldos-abertura">Opening balances <span class="tet">Saldu inísiu</span><span class="vi">Số dư mở đầu (Saldos de Abertura)</span></h3>
+      <div class="menu-path">Menu: Saldos de Abertura</div>
+      <div class="callout warn">
+        <b>Only used during initial system setup</b> or when correcting cut-over data from the old system — not a routine day-to-day/monthly task.
+        <div class="tet"><b>Uza de'it iha konfigurasaun inísiu sistema</b> ka wainhira presiza korije dadus transisaun husi sistema tuan — la'ós servisu loron-loron/fulan-fulan.</div>
+        <div class="vi">Chỉ dùng khi thiết lập hệ thống lần đầu hoặc cần điều chỉnh số liệu chuyển đổi từ hệ thống cũ — không phải nghiệp vụ làm hàng ngày/hàng tháng.</div>
+      </div>
+      <div class="tri">
+        <p class="en">Has 2 parts: (1) entering opening balances for GL accounts (Plano de Contas), and (2) a wizard for carrying over opening bank balances (reusing the Receita data model).</p>
+        <p class="tet">Iha parte rua: (1) hakerek saldu inísiu ba konta kontabilidade (Plano de Contas), no (2) asistente atu lori saldu banku inísiu (uza fali modelu dadus Receita).</p>
+        <p class="vi">Gồm 2 phần: (1) nhập số dư mở đầu tài khoản kế toán (Plano de Contas), và (2) công cụ chuyển số dư ngân hàng đầu kỳ (tái sử dụng dữ liệu Receita).</p>
+      </div>
+    </section>
+
+    <!-- ================= II. REVENUE ================= -->
+    <section id="receita-section">
+      <h2 class="section-title">II. Revenue <span class="tet">Rendimentu</span><span class="vi">Thu (Receita)</span></h2>
+
+      <div class="tri">
+        <p class="en">There are 2 sources of revenue in the system: <b>Receita (PAC)</b> for all other income (interest, transfers, various fees...), and <b>Guia Pagamento</b> for social-security contributions collected from employers/contributors via the Contribuições module. They follow different screens but share the same core rule: <b>a journal entry is only generated once the amount is confirmed against a real bank statement line</b> — a self-reported/typed amount alone never books an entry.</p>
+        <p class="tet">Iha orijen rendimentu rua iha sistema: <b>Receita (PAC)</b> ba rendimentu seluk hotu (juru, transferénsia, taxa oioin...), no <b>Guia Pagamento</b> ba kontribuisaun seguransa sosiál ne'ebé kobra husi empregadór/kontribuinte liuhusi módulu Contribuições. Sira uza eskrán diferente maibé fiar regra kernel hanesan: <b>lançamento kontabilidade mosu de'it wainhira valór konfirma ona kontra linha estratu banku loloos</b> — valór ne'ebé rejista/hakerek de'it ho liman, la sei mosu lançamento.</p>
+        <p class="vi">Hệ thống có 2 nguồn thu: <b>Receita (PAC)</b> cho tất cả khoản thu khác (lãi ngân hàng, chuyển khoản, các loại phí...), và <b>Guia Pagamento</b> cho các khoản đóng góp BHXH thu từ doanh nghiệp/người đóng qua module Contribuições. 2 màn khác nhau nhưng cùng chung 1 nguyên tắc gốc: <b>bút toán kế toán chỉ được tự sinh sau khi số tiền được xác nhận khớp với 1 dòng sao kê ngân hàng thật</b> — số tiền chỉ tự khai/gõ tay không bao giờ tự sinh bút toán.</p>
+      </div>
+
+      <h3 class="step-title" id="receita">Enter Receita (PAC) <span class="tet">Hakerek Receita (PAC)</span><span class="vi">Nhập Receita (PAC)</span></h3>
+      <div class="menu-path">Menu: Receita</div>
+
+      <div class="callout">
+        <b>Unlike Expenditure: Revenue has no approval step.</b> Per the client's own technical specification, Receita only needs to be <b>recorded</b> (Registo), not "Aprovação" like Despesa — the money has already been received, there's nothing to authorize in advance.
+        <div class="tet"><b>La hanesan Despeza: Rendimentu la iha pasu aprovasaun.</b> Tuir espesifikasaun tékniku orijinál husi kliente, Receita presiza de'it <b>rejista</b> (Registo), la presiza "Aprovação" hanesan Despesa — tanba osan tama ona, laiha buat atu autoriza molok.</div>
+        <div class="vi">Khác với Chi: Thu không có bước duyệt. Theo đúng đặc tả kỹ thuật gốc của khách hàng, Receita chỉ cần <b>ghi nhận</b> (Registo), không cần "Aprovação" như Despesa — vì tiền đã thu về rồi, không có gì để "xin phép trước" cả.</div>
+      </div>
+
+      <ol class="steps">
+        <li>Click "+ Enter Receita (PAC)".
+          <span class="tet">Klik "+ Hakerek Receita (PAC)".</span><span class="vi">Bấm "+ Nhập Receita (PAC)".</span>
+        </li>
+        <li>Select Mês, Regime, (optional) Atividade, Classificação Económica (Revenue group only), Organization.
+          <span class="tet">Hili Mês, Regime, (fakultativu) Atividade, Classificação Económica (grupu Receita de'it), Organization.</span>
+          <span class="vi">Chọn Mês, Regime, (tùy chọn) Atividade, Classificação Económica (chỉ nhóm Receita), Organization.</span>
+        </li>
+        <li>Enter <span class="field">Descritivo</span>, <span class="field">Valor PAC</span> (the recorded amount due).
+          <span class="tet">Hakerek <span class="field">Descritivo</span>, <span class="field">Valor PAC</span> (osan ne'ebé tenke simu ona rejista).</span>
+          <span class="vi">Nhập <span class="field">Descritivo</span>, <span class="field">Valor PAC</span> (số tiền phải thu đã ghi nhận).</span>
+        </li>
+        <li>Split the amount <b>declared as collected</b> by channel: <span class="field">Collected via bank</span> (plus which bank) and/or <span class="field">Collected via cash</span>. Any remainder auto-computes as "Saldo por cobrar".
+          <span class="tet">Fahe osan ne'ebé <b>deklara ona simu</b> tuir kanál: <span class="field">Simu liu husi banku</span> (hili banku sá) no/ka <span class="field">Simu liu husi osan-mós</span>. Se seidauk simu hotu, restu kalkula automátiku sai "Saldo por cobrar".</span>
+          <span class="vi">Tách số tiền <b>khai đã thu</b> theo kênh: Đã thu qua ngân hàng (kèm chọn ngân hàng nào) và/hoặc Đã thu qua tiền mặt. Nếu chưa thu đủ, phần còn lại tự tính ra "Saldo por cobrar".</span>
+        </li>
+        <li>Select <span class="field">Débito account</span> and <span class="field">Crédito account</span> — the same pair is reused for whichever portion actually gets booked (see the timing note below).
+          <span class="tet">Hili <span class="field">Konta Débito</span> no <span class="field">Konta Crédito</span> — konta rua ne'e uza fila-fali ba parte ne'ebé loloos mosu iha lançamento (haree nota tempu iha kraik).</span>
+          <span class="vi">Chọn Tài khoản Nợ (Débito) và Tài khoản Có (Crédito) — cặp tài khoản này được dùng lại cho phần thực sự được ghi sổ (xem lưu ý về thời điểm bên dưới).</span>
+        </li>
+        <li>Click "Create". <span class="tet">Klik "Tạo".</span><span class="vi">Bấm "Tạo".</span></li>
+      </ol>
+
+      <div class="who">
+        <div class="icon">💰</div>
+        <div class="body"><b>Revenue / collections officer</b><span class="t">Ofisiál kobransa / kontabilidade rendimentu</span><span>Creates, edits (when needed), deactivates Receita — no separate approval role.</span></div>
+        <div class="perm">REC_SUBMIT</div>
+      </div>
+
+      <div class="callout warn">
+        <b>Important — when each portion actually gets booked to the journal:</b> the <b>cash</b> portion books immediately when you click Create (there's no bank statement to independently verify cash against). The <b>bank</b> portion does <u>not</u> book yet at this point — it only generates a journal entry once a matching real bank-statement line is confirmed in <b>Conciliação de Movimentos</b> (Section V). Until that match happens, the Receita record itself is correct and complete, but that bank portion simply has no journal line yet.
+        <div class="tet"><b>Importante — bainhira kada parte loloos mosu iha lançamento:</b> parte <b>osan-mós</b> mosu kedas iha lançamento wainhira klik Kria (laiha estratu banku atu konfirma osan-mós ho independente). Parte <b>banku</b> <u>la</u> mosu kedas iha pontu ne'e — mosu de'it lançamento wainhira linha estratu banku loloos konfirma ona liuhusi <b>Conciliação de Movimentos</b> (Parte V). Antes konsíliasaun ne'e akontese, rejistu Receita rasik loos no kompletu, maibé parte banku ne'e simu de'it seidauk iha linha lançamento.</div>
+        <div class="vi">Quan trọng — thời điểm từng phần được ghi sổ: phần <b>tiền mặt</b> ghi sổ ngay khi bấm Tạo (không có sao kê ngân hàng để kiểm chứng độc lập tiền mặt). Phần <b>ngân hàng</b> <u>chưa</u> ghi sổ ở bước này — chỉ sinh bút toán khi được đối chiếu khớp với 1 dòng sao kê ngân hàng thật trong màn <b>Conciliação de Movimentos</b> (mục V). Trước khi đối chiếu xong, bản ghi Receita vẫn đúng và đầy đủ, chỉ riêng phần ngân hàng chưa có dòng sổ nhật ký.</div>
+      </div>
+
+      <div class="callout warn">
+        <b>If the 2 Débito/Crédito accounts aren't selected at all, no journal entry is ever generated for either portion</b> — the Revenue figure itself stays correct on the Receita screen, only the accounting journal misses those lines.
+        <div class="tet"><b>Se la hili konta Débito/Crédito rua-ne'e, la sei mosu lançamento ba parte ida-ida</b> — valór Rendimentu iha eskrán Receita sei loos, so livru kontabilidade mak la kompletu.</div>
+        <div class="vi">Nếu không chọn đủ 2 tài khoản Nợ/Có, sẽ không sinh bút toán cho cả 2 phần — số liệu Thu vẫn đúng trên màn Receita, chỉ riêng sổ nhật ký kế toán bị thiếu dòng đó.</div>
+      </div>
+
+      <hr class="divider">
+
+      <h3 class="step-title" id="guia-pagamento">Guia Pagamento — social-security contributions <span class="tet">Guia Pagamento — kontribuisaun seguransa sosiál</span><span class="vi">Guia Pagamento — thu đóng góp BHXH</span></h3>
+
+      <div class="tri">
+        <p class="en">A "Guia Pagamento" (GP) is a payment slip generated for an employer/contributor's monthly social-security contribution, from the existing Contribuições module — this manual only covers the <b>new-mode confirmation step</b> that comes after the entidade has already submitted proof of payment.</p>
+        <p class="tet">"Guia Pagamento" (GP) mak folha pagamentu ne'ebé mosu ba kontribuisaun seguransa sosiál mensál husi empregadór/kontribuinte, husi módulu Contribuições ne'ebé iha ona — manual ida-ne'e kobre de'it <b>pasu konfirmasaun mode foun</b> ne'ebé mosu depois entidade haruka ona komprovativu pagamentu.</p>
+        <p class="vi">"Guia Pagamento" (GP) là chứng từ đóng góp BHXH hàng tháng được sinh ra cho doanh nghiệp/người đóng, từ module Contribuições đã có sẵn — tài liệu này chỉ nói về <b>bước xác nhận ở mode mới</b>, diễn ra sau khi doanh nghiệp đã nộp minh chứng đã thanh toán.</p>
+      </div>
+
+      <div class="flow" style="flex-wrap:wrap;">
+        <div class="node">Guia Gerada<div class="sub">issued</div></div><div class="arrow">→</div>
+        <div class="node">Entidade uploads proof<div class="sub">Comprovativo em Validação</div></div><div class="arrow">→</div>
+        <div class="node" style="border-color:var(--approved); color:var(--approved);">Duyệt (bank-verified)<div class="sub">Guia Paga</div></div>
+      </div>
+
+      <div class="callout">
+        <b>The old-mode "Guia Pagamento (Validação)" screen used to be the final step</b> — an officer read the uploaded proof and marked it Paid based purely on that document, with no independent check. The new-mode screen below <b>replaces that as the final step</b>: it requires matching against a real bank statement line before a Guia can be marked Paid.
+        <div class="tet"><b>Eskrán mode tuan "Guia Pagamento (Validação)" hela nu'udar pasu ikus molok ida-ne'e</b> — ofisiál lee de'it komprovativu ne'ebé haruka ona no marka Paid bazeia de'it iha dokumentu ne'e, laiha konferénsia independente ida. Eskrán mode foun iha kraik <b>troka ne'e hanesan pasu ikus</b>: presiza konsília ho linha estratu banku loloos molok Guia bele marka Paid.</div>
+        <div class="vi">Màn "Guia Pagamento (Validação)" ở mode cũ trước đây là bước cuối — cán bộ chỉ đọc minh chứng đã nộp và đánh dấu Đã trả dựa hoàn toàn vào tài liệu đó, không có kiểm chứng độc lập nào. Màn mode mới bên dưới thay thế vai trò bước cuối này: bắt buộc phải khớp với 1 dòng sao kê ngân hàng thật trước khi 1 Guia được đánh dấu Đã trả.</div>
+      </div>
+
+      <div class="tri">
+        <p class="en">See <b>"Duyệt Guia Pagamento (đối chiếu ngân hàng)"</b> in Section V for the confirmation step itself, and <b>"Conta Débito/Crédito — GP"</b> in Section VI for the one-time accounting setup an admin must configure before journal entries can be generated for this flow.</p>
+        <p class="tet">Haree <b>"Duyệt Guia Pagamento (đối chiếu ngân hàng)"</b> iha Parte V ba pasu konfirmasaun rasik, no <b>"Conta Débito/Crédito — GP"</b> iha Parte VI ba konfigurasaun kontabilidade dahuluk ida ne'ebé admin tenke halo molok lançamento bele mosu ba fluxu ida-ne'e.</p>
+        <p class="vi">Xem <b>"Duyệt Guia Pagamento (đối chiếu ngân hàng)"</b> ở mục V để biết bước xác nhận, và <b>"Conta Débito/Crédito — GP"</b> ở mục VI để biết cấu hình kế toán 1 lần mà admin cần thiết lập trước khi bút toán có thể sinh ra cho luồng này.</p>
+      </div>
+    </section>
+
+    <!-- ================= III. EXPENDITURE ================= -->
+    <section id="despesa-section">
+      <h2 class="section-title">III. Expenditure <span class="tet">Despeza</span><span class="vi">Chi (Despesa)</span></h2>
+
+      <div class="tri">
+        <p class="en">This is the longest cycle with the most approval gates — <b>6 sequential steps</b>, each one created from the previous step once it's approved. No step can be skipped.</p>
+        <p class="tet">Ne'e mak siklu ne'ebé naruk liu no iha portál aprovasaun barak liu — <b>pasu 6 sekuensiál</b>, kada pasu mosu husi pasu antes ne'ebé aprova ona. Labele salta pasu ida.</p>
+        <p class="vi">Đây là chu trình dài nhất và có nhiều bước duyệt nhất — đi qua 6 bước tuần tự, mỗi bước sinh từ bước trước đã được duyệt. Không thể nhảy cóc bước nào.</p>
+      </div>
+
+      <div class="flow" style="flex-wrap:wrap;">
+        <div class="node">1. AD</div><div class="arrow">→</div>
+        <div class="node">2. Cabimento</div><div class="arrow">→</div>
+        <div class="node">3. Compromisso</div><div class="arrow">→</div>
+        <div class="node">4. Obrigação</div><div class="arrow">→</div>
+        <div class="node">5. Autorização<div class="sub">Pagamento</div></div><div class="arrow">→</div>
+        <div class="node" style="border-color:var(--approved); color:var(--approved);">6. Realização<div class="sub">paid</div></div>
+      </div>
+
+      <hr class="divider">
+
+      <h3 class="step-title" id="ad">1. AD — Autorização de Despesa <span class="tet">Autorizasaun gastu</span><span class="vi">Xin phép chi</span></h3>
+      <div class="menu-path">Menu: AD</div>
+      <div class="tri">
+        <p class="en">The first spending-permission step, created from an <b>approved</b> budget rúbrica. Each rúbrica can only produce exactly one AD (1-to-1) — the system blocks duplicates.</p>
+        <p class="tet">Pasu primeiru atu husu lisensa gasta osan, mosu husi rúbrica orsamentu ida ne'ebé <b>aprova</b> ona. Kada rúbrica bele halo de'it AD ida (1-1) — sistema bloke'ia duplikadu.</p>
+        <p class="vi">Bước xin phép chi đầu tiên, sinh ra từ 1 rúbrica ngân sách đã duyệt. Mỗi rúbrica chỉ tạo được đúng 1 AD (1-1) — hệ thống chặn tạo trùng.</p>
+      </div>
+
+      <table class="fields">
+        <tr><th>Field</th><th>Meaning</th></tr>
+        <tr><td class="f">Descritivo</td><td><span class="en">Description of the spend</span><span class="tet">Deskrisaun gastu</span><span class="vi">Mô tả khoản chi</span></td></tr>
+        <tr><td class="f">Valor Autorizado</td><td><span class="en">Requested amount — cannot exceed the rúbrica's value</span><span class="tet">Osan ne'ebé husu — labele liu valór rúbrica</span><span class="vi">Số tiền xin phép — không được vượt quá giá trị rúbrica</span></td></tr>
+        <tr><td class="f">Tipo despesa</td><td><span class="en">Single spend or a bundled group of spends</span><span class="tet">Gastu ida de'it ka grupu gastu barak</span><span class="vi">Despesa única (1 lần) hoặc Conjunto de despesas (gộp nhiều khoản)</span></td></tr>
+        <tr><td class="f">Solicita abertura aprovisionamento</td><td><span class="en">Whether a procurement process must be opened</span><span class="tet">Presiza loke prosesu aprovizionamentu ka lae</span><span class="vi">Có cần mở thủ tục đấu thầu/mua sắm không (Sim/Não)</span></td></tr>
+        <tr><td class="f">Regularização</td><td><span class="en">Value adjustment (editable only while DRAFT)</span><span class="tet">Ajustamentu valór (bele muda de'it wainhira sei DRAFT)</span><span class="vi">Điều chỉnh giá trị (chỉ sửa được khi còn Nháp)</span></td></tr>
+        <tr><td class="f">Saldo disponível</td><td><span class="en">Auto-computed remaining balance</span><span class="tet">Saldu restante, kalkula automátiku</span><span class="vi">Tự động = Valor revisto − đã có Cabimento</span></td></tr>
+      </table>
+
+      <div class="flow">
+        <div class="node">Draft<div class="sub">DRAFT</div></div><div class="arrow">→</div>
+        <div class="node">Pending review<div class="sub">PENDING_REVIEW</div></div><div class="arrow">→</div>
+        <div class="node">Pending approval<div class="sub">PENDING_APPROVAL</div></div><div class="arrow">→</div>
+        <div class="node" style="border-color:var(--approved); color:var(--approved);">Approved<div class="sub">APPROVED</div></div>
+      </div>
+      <div class="who">
+        <div class="icon">✍️</div>
+        <div class="body"><b>Spending proposer</b><span class="t">Ema ne'ebé propoin gastu</span><span>Creates AD from a rúbrica, edits Regularização while Draft, submits.</span></div>
+        <div class="perm">AD_SUBMIT</div>
+      </div>
+      <div class="who">
+        <div class="icon">🔍</div>
+        <div class="body"><b>Reviewer</b><span class="t">Ema ne'ebé halo revisaun</span><span>Confirms review or rejects.</span></div>
+        <div class="perm">AD_REVIEW</div>
+      </div>
+      <div class="who">
+        <div class="icon">✅</div>
+        <div class="body"><b>Final approver</b><span class="t">Aprovadór final</span><span>Final approval — Cabimento can only be created after this.</span></div>
+        <div class="perm">AD_APPROVE</div>
+      </div>
+
+      <hr class="divider">
+
+      <h3 class="step-title" id="cabimento">2. Cabimento — DIC <span class="tet">Rezervasaun orsamentu</span><span class="vi">Giữ chỗ ngân sách</span></h3>
+      <div class="menu-path">Menu: Cabimento</div>
+      <div class="tri">
+        <p class="en">DIC (Declaração de Inscrição e Cabimento) — the budget "reservation" step, legally separate from AD. Created from an <b>approved</b> AD, also 1-to-1.</p>
+        <p class="tet">DIC (Declaração de Inscrição e Cabimento) — pasu "rezerva" orsamentu, separa legalmente husi AD. Mosu husi AD ne'ebé <b>aprova</b> ona, mós 1-1.</p>
+        <p class="vi">DIC (Declaração de Inscrição e Cabimento) — bước "giữ chỗ" ngân sách, tách biệt pháp lý khỏi AD. Sinh từ 1 AD đã duyệt, cũng theo quan hệ 1-1.</p>
+      </div>
+
+      <table class="fields">
+        <tr><th>Field</th><th>Meaning</th></tr>
+        <tr><td class="f">Descritivo</td><td><span class="en">Description</span><span class="tet">Deskrisaun</span><span class="vi">Mô tả</span></td></tr>
+        <tr><td class="f">Valor Cabimentado</td><td><span class="en">Reserved amount — cannot exceed the AD's Valor revisto</span><span class="tet">Osan rezerva — labele liu Valor revisto husi AD</span><span class="vi">Số tiền giữ chỗ — không vượt quá Valor revisto của AD</span></td></tr>
+        <tr><td class="f">Processo aprovisionamento prévio</td><td><span class="en">Whether a prior procurement process already exists</span><span class="tet">Prosesu aprovizionamentu antes ona ka lae</span><span class="vi">Đã có thủ tục mua sắm từ trước chưa (Sim/Não)</span></td></tr>
+        <tr><td class="f">Saldo disponível</td><td><span class="en">Auto-computed remaining balance</span><span class="tet">Saldu restante, kalkula automátiku</span><span class="vi">Auto = Valor Cabimentado − đã có Compromisso</span></td></tr>
+      </table>
+
+      <div class="flow">
+        <div class="node">Draft<div class="sub">DRAFT</div></div><div class="arrow">→</div>
+        <div class="node">Pending approval<div class="sub">PENDING_APPROVAL</div></div><div class="arrow">→</div>
+        <div class="node" style="border-color:var(--approved); color:var(--approved);">Approved<div class="sub">APPROVED</div></div>
+      </div>
+      <div class="callout">Only 2 stages (no separate "review") — lighter-weight than AD.
+        <div class="tet">Pasu 2 de'it (laiha "revisaun" separadu) — luan uituan liu duke AD.</div>
+        <div class="vi">Chỉ 2 bước (không có "kiểm tra" riêng) — nhẹ hơn AD.</div>
+      </div>
+
+      <div class="who">
+        <div class="icon">✍️</div>
+        <div class="body"><b>Proposer</b><span class="t">Ema ne'ebé propoin</span><span>Creates, edits while Draft, submits.</span></div>
+        <div class="perm">CABIMENTO_SUBMIT</div>
+      </div>
+      <div class="who">
+        <div class="icon">✅</div>
+        <div class="body"><b>Diretor DF</b><span class="t">Diretor DF</span><span>Approves or rejects — this is Cabimento's <u>only</u> approval stage.</span></div>
+        <div class="perm">CABIMENTO_APPROVE</div>
+      </div>
+
+      <hr class="divider">
+
+      <h3 class="step-title" id="compromisso">3. Compromisso <span class="tet">Kompromisu formál</span><span class="vi">Cam kết chi</span></h3>
+      <div class="menu-path">Menu: Compromisso</div>
+      <div class="tri">
+        <p class="en">The formal commitment (e.g. signing a contract, a payment decision). Created from an <b>approved</b> Cabimento — <u>unlike AD/Cabimento</u>, one Cabimento can be split into <b>multiple</b> Compromissos (e.g. individual employee salary lines drawn from one payroll Cabimento).</p>
+        <p class="tet">Kompromisu formál (porezemplu asina kontratu, desizaun pagamentu). Mosu husi Cabimento ne'ebé <b>aprova</b> ona — <u>la hanesan AD/Cabimento</u>, Cabimento ida bele fahe sai Compromisso <b>barak</b> (porezemplu linha saláriu individuál ba funsionáriu kada ida husi Cabimento saláriu ida).</p>
+        <p class="vi">Cam kết chi chính thức (vd. ký hợp đồng, quyết định chi trả). Sinh từ 1 Cabimento đã duyệt — khác với AD/Cabimento, 1 Cabimento có thể tách thành nhiều Compromisso (ví dụ trả lương từng nhân viên riêng từ 1 khoản lương đã Cabimento chung).</p>
+      </div>
+
+      <table class="fields">
+        <tr><th>Field</th><th>Meaning</th></tr>
+        <tr><td class="f">Descritivo</td><td><span class="en">Description</span><span class="tet">Deskrisaun</span><span class="vi">Mô tả</span></td></tr>
+        <tr><td class="f">Valor Compromisso global (Plurianual)</td><td><span class="en">Total multi-year contract value, if any</span><span class="tet">Valór totál kontratu tinan-barak, se iha</span><span class="vi">Tổng giá trị hợp đồng nhiều năm (nếu có)</span></td></tr>
+        <tr><td class="f">Compromisso no Ano</td><td><span class="en">This year's committed portion — cannot exceed the Cabimento's remaining balance</span><span class="tet">Parte kompromete iha tinan ne'e — labele liu saldu restante Cabimento</span><span class="vi">Phần cam kết trong năm nay — không vượt quá saldo còn lại của Cabimento</span></td></tr>
+        <tr><td class="f">Compromisso assumido com</td><td><span class="en">Contrato / Listas Beneficiários (direct payment) / Obrigação</span><span class="tet">Contrato / Listas Beneficiários (pagamentu diretu) / Obrigação</span><span class="vi">Contrato / Listas Beneficiários (chi trả trực tiếp) / Obrigação</span></td></tr>
+        <tr><td class="f">Saldo disponível</td><td><span class="en">Auto-computed, based on what's already drawn into an Obrigação</span><span class="tet">Kalkula automátiku, tuir saida mak entra ona iha Obrigação</span><span class="vi">Auto = Valor revisto − đã đưa vào Obrigação</span></td></tr>
+      </table>
+
+      <div class="flow">
+        <div class="node">Draft<div class="sub">DRAFT</div></div><div class="arrow">→</div>
+        <div class="node">Pending review<div class="sub">PENDING_REVIEW</div></div><div class="arrow">→</div>
+        <div class="node">Pending approval<div class="sub">PENDING_APPROVAL</div></div><div class="arrow">→</div>
+        <div class="node" style="border-color:var(--approved); color:var(--approved);">Approved<div class="sub">APPROVED</div></div>
+      </div>
+      <div class="who">
+        <div class="icon">✍️</div>
+        <div class="body"><b>Proposer</b><span class="t">Ema ne'ebé propoin</span><span>Creates, edits while Draft, submits.</span></div>
+        <div class="perm">COMPROMISSO_SUBMIT</div>
+      </div>
+      <div class="who">
+        <div class="icon">🔍</div>
+        <div class="body"><b>Diretor DF</b><span class="t">Diretor DF</span><span>Confirms review or rejects — the intermediate step.</span></div>
+        <div class="perm">COMPROMISSO_REVIEW</div>
+      </div>
+      <div class="who">
+        <div class="icon">✅</div>
+        <div class="body"><b>DE (Diretor Executivo)</b><span class="t">DE (Diretor Executivo)</span><span>Final approval.</span></div>
+        <div class="perm">COMPROMISSO_APPROVE</div>
+      </div>
+
+      <hr class="divider">
+
+      <h3 class="step-title" id="obrigacao">4. Obrigação <span class="tet">Obrigasaun pagamentu</span><span class="vi">Nghĩa vụ phải trả</span></h3>
+      <div class="menu-path">Menu: Obrigação</div>
+      <div class="tri">
+        <p class="en">The payment obligation — groups <b>one or more approved</b> Compromissos into a single payment, together with beneficiary information.</p>
+        <p class="tet">Obrigasaun pagamentu — junta Compromisso <b>ida ka barak</b> ne'ebé aprova ona ba pagamentu ida, hamutuk ho informasaun beneficiáriu.</p>
+        <p class="vi">Nghĩa vụ phải trả — gộp một hoặc nhiều Compromisso đã duyệt lại thành 1 lần chi trả, kèm thông tin người thụ hưởng.</p>
+      </div>
+
+      <ol class="steps">
+        <li>Click "+ Create Obrigação", select <span class="field">Liquidação de despesa relativa a</span>: Salários / Pensões / Subsídios Imediatos / Despesas sem contrato / Outras despesas.
+          <span class="tet">Klik "+ Kria Obrigação", hili <span class="field">Liquidação de despesa relativa a</span>: Salários / Pensões / Subsídios Imediatos / Despesas sem contrato / Outras despesas.</span>
+          <span class="vi">Bấm "+ Tạo Obrigação", chọn Liquidação de despesa relativa a: Salários / Pensões / Subsídios Imediatos / Despesas sem contrato / Outras despesas.</span>
+        </li>
+        <li>Select <span class="field">Categoria do Beneficiário</span>: Fornecedor, Contribuinte (EE), Outro (single beneficiary entered directly on the form) — or Beneficiário / Pessoal (uses a list of many people, like the original paper form's ListaObrigação1/2).
+          <span class="tet">Hili <span class="field">Categoria do Beneficiário</span>: Fornecedor, Contribuinte (EE), Outro (beneficiáriu ida de'it, hakerek diretamente iha formuláriu) — ka Beneficiário / Pessoal (uza lista ho ema barak, hanesan ListaObrigação1/2 husi formuláriu papél orijinál).</span>
+          <span class="vi">Chọn Categoria do Beneficiário: Fornecedor, Contribuinte (EE), Outro (nhập trực tiếp 1 người thụ hưởng trên form) — hoặc Beneficiário / Pessoal (dùng danh sách nhiều người, giống ListaObrigação1/2 của form giấy gốc).</span>
+        </li>
+        <li>On the detail screen: click "+ Add Compromisso line" — select an approved Compromisso with remaining balance, enter a value (cannot exceed that Compromisso's remaining balance). Repeat to group several Compromissos.
+          <span class="tet">Iha eskrán detallu: klik "+ Aumenta linha Compromisso" — hili Compromisso ne'ebé aprova ona no sei iha saldu, tau valór (labele liu saldu restante Compromisso ne'e). Halo fila-fali se atu junta Compromisso barak.</span>
+          <span class="vi">Ở màn chi tiết: bấm "+ Thêm dòng Compromisso" — chọn 1 Compromisso đã duyệt còn saldo, nhập giá trị (không vượt quá saldo còn lại của Compromisso đó). Lặp lại nếu gộp nhiều Compromisso.</span>
+        </li>
+        <li>If using a beneficiary list: click "+ Add beneficiary" for each person (NISS, name, bank account, amount).
+          <span class="tet">Se uza lista beneficiáriu: klik "+ Aumenta beneficiáriu" ba ema kada ida (NISS, naran, konta banku, valór).</span>
+          <span class="vi">Nếu dùng danh sách nhiều người thụ hưởng: bấm "+ Thêm người thụ hưởng" cho từng người (NISS, tên, tài khoản ngân hàng, số tiền).</span>
+        </li>
+        <li>Submit (only possible once at least 1 Compromisso line exists).
+          <span class="tet">Haruka ba aprovasaun (bele de'it wainhira iha ona linha Compromisso ida-de'it liu).</span>
+          <span class="vi">Gửi duyệt (chỉ được khi đã có ít nhất 1 dòng Compromisso).</span>
+        </li>
+      </ol>
+
+      <div class="flow">
+        <div class="node">Draft<div class="sub">DRAFT</div></div><div class="arrow">→</div>
+        <div class="node">Pending approval<div class="sub">PENDING_APPROVAL</div></div><div class="arrow">→</div>
+        <div class="node" style="border-color:var(--approved); color:var(--approved);">Approved<div class="sub">APPROVED</div></div>
+      </div>
+      <div class="who">
+        <div class="icon">✍️</div>
+        <div class="body"><b>Proposer</b><span class="t">Ema ne'ebé propoin</span><span>Creates, adds/removes Compromisso lines &amp; beneficiaries while Draft, submits.</span></div>
+        <div class="perm">OBRIGACAO_SUBMIT</div>
+      </div>
+      <div class="who">
+        <div class="icon">✅</div>
+        <div class="body"><b>Diretor DF</b><span class="t">Diretor DF</span><span>Approves (Aprovação e Liquidação) or rejects.</span></div>
+        <div class="perm">OBRIGACAO_APPROVE</div>
+      </div>
+
+      <hr class="divider">
+
+      <h3 class="step-title" id="pagamento">5–6. Pagamento — Autorização &amp; Realização <span class="tet">Autorizasaun no realizasaun pagamentu</span><span class="vi">Autorização &amp; Realização de Pagamento</span></h3>
+      <div class="menu-path">Menu: Pagamento</div>
+      <div class="tri">
+        <p class="en">The final step, split into <b>2 separate actions</b> per the legal requirement (DL 23/2022): authorize the payment first, then execute it.</p>
+        <p class="tet">Pasu ikus, fahe ba <b>asaun rua separadu</b> tuir requeremento legál (DL 23/2022): autoriza pagamentu uluk, depois foin realiza.</p>
+        <p class="vi">Bước cuối cùng, chia làm 2 hành động tách biệt theo đúng quy định pháp lý (DL 23/2022): xin phép chi trả trước, rồi mới thực hiện chi trả.</p>
+      </div>
+
+      <h4 class="sub-title">5. Autorização de Pagamento <span class="tet">Autorizasaun pagamentu</span><span class="vi">Xin phép chi trả</span></h4>
+      <ol class="steps">
+        <li>Created from an <b>approved</b> Obrigação (1-to-1, duplicates blocked).
+          <span class="tet">Kria husi Obrigação ne'ebé <b>aprova</b> ona (1-1, duplikadu bloke'ia).</span>
+          <span class="vi">Tạo từ 1 Obrigação đã duyệt (1-1, không tạo trùng được).</span>
+        </li>
+        <li>Enter <span class="field">Valor Autorizado</span> (cannot exceed the Obrigação's value).
+          <span class="tet">Tau <span class="field">Valor Autorizado</span> (labele liu valór Obrigação).</span>
+          <span class="vi">Nhập Valor Autorizado (không vượt quá giá trị Obrigação).</span>
+        </li>
+        <li>Select <span class="field">Código Conta Débito</span> (the expense account) and <span class="field">Código Conta Crédito</span> (the bank account) — <b>this is the only time these 2 accounts are chosen</b>. Note this is <u>not</u> a direct Despesa→Banco pair any more — see the "2-entry booking" callout below for what actually gets posted.
+          <span class="tet">Hili <span class="field">Código Conta Débito</span> (konta despeza) no <span class="field">Código Conta Crédito</span> (konta banku) — <b>ne'e mak tempu ida de'it atu hili konta rua ne'e</b>. Nota: ne'e la'ós ona par Despesa→Banco diretu — haree kaixa "lançamento 2 linha" iha kraik ba saida mak loloos mosu.</span>
+          <span class="vi">Chọn Código Conta Débito (tài khoản Chi phí) và Código Conta Crédito (tài khoản Ngân hàng) — đây là lúc duy nhất chọn 2 tài khoản này. Lưu ý: đây không còn là cặp Despesa→Banco trực tiếp nữa — xem khối "bút toán 2 dòng" bên dưới để biết chính xác điều gì được ghi sổ.</span>
+        </li>
+        <li>Submit. <span class="tet">Haruka ba aprovasaun.</span><span class="vi">Gửi duyệt.</span></li>
+      </ol>
+      <div class="flow">
+        <div class="node">Draft<div class="sub">DRAFT</div></div><div class="arrow">→</div>
+        <div class="node">Pending approval<div class="sub">PENDING_APPROVAL</div></div><div class="arrow">→</div>
+        <div class="node" style="border-color:var(--approved); color:var(--approved);">Approved<div class="sub">APPROVED</div></div>
+      </div>
+      <div class="who">
+        <div class="icon">✍️</div>
+        <div class="body"><b>Proposer</b><span class="t">Ema ne'ebé propoin</span><span>Creates (including choosing the 2 accounting accounts), submits.</span></div>
+        <div class="perm">PAG_SUBMIT</div>
+      </div>
+      <div class="who">
+        <div class="icon">✅</div>
+        <div class="body"><b>Diretor DF</b><span class="t">Diretor DF</span><span>Approves or rejects — <b>approving here is what generates the first journal entry</b> ("Liquidação"), see below.</span></div>
+        <div class="perm">PAG_APPROVE</div>
+      </div>
+
+      <div class="callout warn">
+        <b>2-entry booking (added after real-ledger review) — Despesa now books TWO journal lines, not one:</b>
+        <ol class="steps" style="margin-top:8px;">
+          <li><b>Entry 1 — "Liquidação"</b>, generated the instant <span class="field">Diretor DF approves</span> this Autorização (above), <u>before</u> any money moves: Debit the expense account chosen above, Credit an intermediate <b>Conta a Pagar</b> (Payable account) — see Section VI, "Conta a Pagar — Despesa". This Payable account is <b>fixed per beneficiary category</b> (Fornecedor/Beneficiário/Contribuinte(EE)/Pessoal/Outro — the Obrigação's own <span class="field">Categoria do Beneficiário</span>, Section III-4), resolved automatically — nobody picks it per transaction.</li>
+          <li><b>Entry 2 — Execução</b>, generated when "Execute payment" is clicked (below): Debit that same Payable account, Credit the bank account chosen above. This is the entry that reflects money actually leaving the bank.</li>
+        </ol>
+        This matches the client's real bookkeeping exactly (verified against actual posted 2024 entries) — every real expense passes through a Payable/creditor account, it is never a single direct Despesa→Banco line.
+        <div class="tet"><b>Lançamento 2 linha (aumenta depois haree fila-fali livru loloos) — Despesa agora mosu LANÇAMENTO RUA, la'ós ida de'it:</b> Lançamento 1 "Liquidação" mosu bainhira Diretor DF aprova Autorização (Débito konta despeza, Crédito konta Conta a Pagar intermediáriu, fixu tuir kategoria benefisiáriu — haree Parte VI); Lançamento 2 mosu bainhira "Realiza pagamentu" klik (Débito konta Conta a Pagar hanesan, Crédito konta banku). Ne'e hanesan loloos ho livru kliente rasik (konfirma kontra lançamento loloos 2024).</div>
+        <div class="vi">Bút toán 2 dòng (thêm sau khi đối chiếu sổ sách thật) — Despesa giờ sinh HAI bút toán, không phải một: <b>Bút toán 1 "Liquidação"</b> sinh ngay khi Diretor DF duyệt Autorização (Nợ tài khoản Chi phí đã chọn ở trên, Có 1 tài khoản Phải trả trung gian, cố định theo Categoria do Beneficiário của Obrigação — xem mục VI). <b>Bút toán 2 — Execução</b> sinh khi bấm "Thực hiện chi trả" (Nợ đúng tài khoản Phải trả đó, Có tài khoản Ngân hàng đã chọn ở trên). Khớp đúng sổ sách thật của khách hàng (đã đối chiếu với bút toán thật năm 2024) — mọi khoản chi thật đều qua 1 tài khoản Phải trả trung gian, không bao giờ ghi thẳng 1 dòng Despesa→Banco.</div>
+      </div>
+
+      <h4 class="sub-title">6. Realização do Pagamento <span class="tet">Realizasaun pagamentu</span><span class="vi">Thực hiện chi trả</span></h4>
+      <div class="callout">
+        This is <b>not</b> an approval gate — it's a single confirm action meaning "payment has been made," only available once the Autorização is APPROVED. Unlike Revenue, this step's journal entry (Entry 2 above) books <b>immediately</b> — the disbursement is INSS's own action, so there's nothing external left to verify before booking it; bank reconciliation afterward (Section V) only confirms it cleared, it doesn't gate the booking.
+        <div class="tet">Ne'e <b>la'ós</b> portál aprovasaun — asaun konfirmasaun ida de'it katak "pagamentu halo tiha ona", bele de'it wainhira Autorização APPROVED ona. La hanesan Rendimentu, lançamento husi pasu ne'e (Lançamento 2 iha leten) mosu <b>kedas</b> — pagamentu ne'e mak asaun rasik husi INSS, tan ne'e laiha buat eksternu seluk atu konfirma molok book; konsíliasaun banku depois (Parte V) konfirma de'it ona kompleta, la kontrola book ne'e.</div>
+        <div class="vi">Đây không phải một bước duyệt — chỉ là 1 hành động xác nhận "đã chi trả xong", chỉ bấm được khi Autorização đã Đã duyệt. Khác với Thu, bút toán của bước này (Bút toán 2 ở trên) ghi sổ <b>ngay lập tức</b> — vì việc chi trả là hành động do chính INSS thực hiện, không còn gì bên ngoài cần xác minh trước khi ghi sổ; việc đối chiếu ngân hàng sau đó (mục V) chỉ để xác nhận tiền đã thực sự ra khỏi tài khoản, không quyết định việc ghi sổ.</div>
+      </div>
+      <ol class="steps">
+        <li>Enter <span class="field">Data Pagamento</span>, select the <span class="field">Conta Bancária</span> the money left from, <span class="field">Número Documento</span>, <span class="field">Observação</span>.
+          <span class="tet">Tau <span class="field">Data Pagamento</span>, hili <span class="field">Conta Bancária</span> ne'ebé osan sai husi, <span class="field">Número Documento</span>, <span class="field">Observação</span>.</span>
+          <span class="vi">Nhập Data Pagamento, chọn Conta Bancária đã chi tiền ra, Número Documento (số chứng từ), Observação.</span>
+        </li>
+        <li>Click "Execute payment" — the system auto-generates the second Débito/Crédito line (Payable → Banco) in Registo de Lançamentos, per the "2-entry booking" callout above.
+          <span class="tet">Klik "Realiza pagamentu" — sistema sei kria automátiku linha Débito/Crédito daruak (Conta a Pagar → Banco) iha Registo de Lançamentos, tuir kaixa "lançamento 2 linha" iha leten.</span>
+          <span class="vi">Bấm "Thực hiện chi trả" — hệ thống tự sinh dòng Nợ/Có thứ 2 (Phải trả → Ngân hàng) vào Registo de Lançamentos, đúng theo khối "bút toán 2 dòng" ở trên.</span>
+        </li>
+      </ol>
+      <div class="callout warn">
+        <b>Not a hard blocker:</b> if the Conta a Pagar for this Obrigação's beneficiary category hasn't been configured yet (Section VI), both entries above are simply skipped with a warning shown to the user — Approve/Execute still succeed normally. Check Registo de Lançamentos to confirm entries are actually being generated.
+        <div class="tet"><b>La bloke'ia:</b> se Conta a Pagar ba kategoria benefisiáriu Obrigação ida-ne'e seidauk configura (Parte VI), lançamento rua iha leten salta de'it ho avizu hatudu ba utilizadór — Aprova/Realiza kontinua susesu normál. Konfere Registo de Lançamentos atu konfirma lançamento mosu loloos.</div>
+        <div class="vi">Không chặn nghiệp vụ: nếu tài khoản Phải trả cho loại đối tượng thụ hưởng của Obrigação này chưa được cấu hình (mục VI), cả 2 bút toán trên đơn giản bị bỏ qua kèm cảnh báo hiện cho người dùng — Approve/Execute vẫn thành công bình thường. Kiểm tra Registo de Lançamentos để xác nhận bút toán thực sự được sinh ra.</div>
+      </div>
+      <div class="who">
+        <div class="icon">💵</div>
+        <div class="body"><b>Cashier / disbursement officer</b><span class="t">Tesoureiru / ofisiál pagamentu</span><span>Confirms the payment was made — this action cannot be undone via the UI.</span></div>
+        <div class="perm">PAG_EXECUTE</div>
+      </div>
+    </section>
+
+    <!-- ================= IV. JOURNAL ================= -->
+    <section id="lancamentos-section">
+      <h2 class="section-title" id="lancamentos">IV. General journal <span class="tet">Livru diáriu kontabilidade</span><span class="vi">Sổ nhật ký kế toán (Registo de Lançamentos)</span></h2>
+      <div class="menu-path">Menu: Registo de Lançamentos</div>
+
+      <div class="callout">
+        <b>Read-only screen — no manual entry form.</b> Every Débito/Crédito line here is <b>auto-generated</b>, from one of 4 possible origins:
+        <div class="tet"><b>Eskrán lee de'it — laiha formuláriu hakerek ho liman.</b> Kada linha Débito/Crédito iha ne'e <b>mosu automátiku</b>, husi orijen posivel 4:</div>
+        <div class="vi">Màn hình chỉ đọc — không có form nhập tay. Mỗi dòng Nợ/Có ở đây được tự động sinh ra, từ 1 trong 4 nguồn sau:</div>
+      </div>
+
+      <table class="fields">
+        <tr><th>Origin shown in filter/table</th><th>When it's generated</th></tr>
+        <tr><td class="f">Pagamento (Liquidação)</td><td><span class="en">The instant Diretor DF approves the Autorização de Pagamento — Section III, step 5. Debit = expense account, Credit = the Conta a Pagar for the Obrigação's beneficiary category</span><span class="tet">Bainhira Diretor DF aprova Autorização de Pagamento — Parte III, pasu 5. Débito = konta despeza, Crédito = Conta a Pagar tuir kategoria benefisiáriu Obrigação</span><span class="vi">Ngay khi Diretor DF duyệt Autorização de Pagamento — mục III, bước 5. Nợ = tài khoản Chi phí, Có = tài khoản Phải trả theo Categoria do Beneficiário của Obrigação</span></td></tr>
+        <tr><td class="f">Pagamento (Execução)</td><td><span class="en">The instant "Execute payment" (Realização) is clicked — Section III, step 6. Debit = the same Conta a Pagar as above, Credit = the bank account</span><span class="tet">Bainhira klik "Realiza pagamentu" (Realização) — Parte III, pasu 6. Débito = Conta a Pagar hanesan iha leten, Crédito = konta banku</span><span class="vi">Ngay khi bấm "Thực hiện chi trả" (Realização) — mục III, bước 6. Nợ = đúng tài khoản Phải trả ở trên, Có = tài khoản Ngân hàng</span></td></tr>
+        <tr><td class="f">Receita PAC (cash)</td><td><span class="en">The instant a Receita is created/saved, for the cash-collected portion only</span><span class="tet">Bainhira Receita kria/save, ba parte osan-mós ne'ebé kobra de'it</span><span class="vi">Ngay khi Receita được tạo/lưu, chỉ cho phần đã thu qua tiền mặt</span></td></tr>
+        <tr><td class="f">Receita PAC (bank)</td><td><span class="en">Only once the bank-collected portion is matched in Conciliação de Movimentos — Section V-A</span><span class="tet">Mosu de'it wainhira parte kobra-banku konsília ona iha Conciliação de Movimentos — Parte V-A</span><span class="vi">Chỉ khi phần đã thu qua ngân hàng được đối chiếu khớp trong Conciliação de Movimentos — mục V-A</span></td></tr>
+        <tr><td class="f">Guia Pagamento (contributions)</td><td><span class="en">Only once a Guia is bank-verified in "Duyệt Guia Pagamento" — Section V-B</span><span class="tet">Mosu de'it wainhira Guia konsília ona ho banku iha "Duyệt Guia Pagamento" — Parte V-B</span><span class="vi">Chỉ khi 1 Guia được xác nhận khớp ngân hàng trong "Duyệt Guia Pagamento" — mục V-B</span></td></tr>
+      </table>
+      <div class="callout">
+        <b>Why Pagamento has 2 origin rows, not 1:</b> per the "2-entry booking" design (Section III, step 5–6), every Despesa now books through an intermediate Conta a Pagar — see that section and Section VI ("Conta a Pagar — Despesa") for full detail.
+        <div class="tet"><b>Tanba sá Pagamento iha orijen 2 linha, la'ós 1:</b> tuir dezenhu "lançamento 2 linha" (Parte III, pasu 5–6), Despesa hotu-hotu agora mosu liuhusi Conta a Pagar intermediáriu — haree parte ne'e no Parte VI ("Conta a Pagar — Despesa") ba detallu kompletu.</div>
+        <div class="vi">Vì sao Pagamento có 2 dòng nguồn, không phải 1: theo thiết kế "bút toán 2 dòng" (mục III, bước 5–6), mọi Despesa giờ đều ghi qua 1 tài khoản Phải trả trung gian — xem mục đó và mục VI ("Conta a Pagar — Despesa") để biết chi tiết đầy đủ.</div>
+      </div>
+
+      <div class="callout">
+        <b>Why 2 different "Receita PAC" origins:</b> a single Receita can be partly cash and partly bank — the cash portion is trusted the moment it's typed in (no independent check exists for cash), but the bank portion needs the extra verification step, so the 2 portions can end up in the journal at different times, as 2 separate lines for the same Receita.
+        <div class="tet"><b>Tanba sá orijen "Receita PAC" rua diferente:</b> Receita ida bele parte osan-mós no parte banku hamutuk — parte osan-mós fiar kedas bainhira hakerek (laiha konferénsia independente ba osan-mós), maibé parte banku presiza pasu konferénsia tan, tan ne'e parte rua bele tama iha lançamento iha tempu diferente, sai linha rua separadu ba Receita hanesan.</div>
+        <div class="vi">Vì sao có 2 nguồn "Receita PAC" khác nhau: 1 Receita có thể vừa có phần tiền mặt vừa có phần ngân hàng — phần tiền mặt được tin ngay khi nhập (không có cách kiểm chứng độc lập cho tiền mặt), nhưng phần ngân hàng cần thêm bước xác minh, nên 2 phần có thể vào sổ nhật ký ở 2 thời điểm khác nhau, thành 2 dòng riêng cho cùng 1 Receita.</div>
+      </div>
+
+      <table class="fields">
+        <tr><th>Column</th><th>Meaning</th></tr>
+        <tr><td class="f">Data</td><td><span class="en">Payment date (Expenditure) or recorded month/match date (Revenue)</span><span class="tet">Data pagamentu (Despeza) ka fulan rejista/data konsília (Receita)</span><span class="vi">Ngày chi trả (Chi) hoặc tháng ghi nhận/ngày đối chiếu (Thu)</span></td></tr>
+        <tr><td class="f">Descrição</td><td><span class="en">Auto-generated from the source document</span><span class="tet">Mosu automátiku husi dokumentu orijinál</span><span class="vi">Mô tả tự sinh từ chứng từ gốc</span></td></tr>
+        <tr><td class="f">Débito / Crédito</td><td><span class="en">For Receita, these are the 2 accounts chosen manually on the Receita form. For Pagamento, the expense and bank accounts are chosen manually on the Autorização (Section III, step 5), but the middle Conta a Pagar leg is <b>resolved automatically</b> from the Obrigação's beneficiary category (Section VI). For Guia Pagamento, <b>Débito is resolved automatically</b> — it's always the specific real bank account that received the money (not manually chosen); Crédito is a fixed configured value, split by Setor Público/Privado (Section VI)</span><span class="tet">Ba Receita, konta rua ne'e hili ho liman iha formuláriu Receita. Ba Pagamento, konta despeza no banku hili ho liman iha Autorização (Parte III, pasu 5), maibé parte Conta a Pagar iha klaran <b>rezolve automátiku</b> husi kategoria benefisiáriu Obrigação (Parte VI). Ba Guia Pagamento, <b>Débito rezolve automátiku</b> — nunka konta banku loloos espesífiku ne'ebé simu osan (la hili ho liman); Crédito mak valór configura fixu, fahe tuir Setor Público/Privado (Parte VI)</span><span class="vi">Với Receita, đây là 2 tài khoản được chọn tay trên form Receita. Với Pagamento, tài khoản Chi phí và Ngân hàng được chọn tay trên Autorização (mục III, bước 5), nhưng chặng tài khoản Phải trả ở giữa được hệ thống <b>tự động tra ra</b> theo Categoria do Beneficiário của Obrigação (mục VI). Với Guia Pagamento, <b>Débito được hệ thống tự động tra ra</b> — luôn là đúng tài khoản ngân hàng thật đã nhận tiền (không chọn tay); Crédito là giá trị cấu hình cố định, tách theo Setor Público/Privado (mục VI)</span></td></tr>
+        <tr><td class="f">Nguồn gốc / Origin</td><td><span class="en">Shows which of the 4 origins above generated this line (dropdown filter available)</span><span class="tet">Hatudu husi orijen 4 iha leten mak linha ne'e mosu (iha filtru dropdown)</span><span class="vi">Cho biết dòng này sinh ra từ nguồn nào trong 4 nguồn trên (có bộ lọc dropdown)</span></td></tr>
+      </table>
+
+      <div class="callout warn">
+        <b>Current limitation:</b> editing the original Pagamento/Receita's value <u>after</u> its journal entry was generated does <u>not</u> retroactively update that entry. Similarly, un-matching a bank reconciliation (Section V) deactivates that journal line so it can be re-generated correctly on the next match — but it does not disappear from the database, it is simply excluded from totals going forward.
+        <div class="tet"><b>Limitasaun atuál:</b> muda valór Pagamento/Receita orijinál <u>depois</u> lançamento mosu ona la sei atualiza automátiku fila-fali linha antigu. Hanesan mós, hasees konsíliasaun banku (Parte V) sei tasa linha lançamento ne'e atu bele mosu fali korretu iha konsíliasaun tuir mai — maibé la sei lakon husi database, so ezkluí de'it husi totál tuir mai.</div>
+        <div class="vi">Giới hạn hiện tại: nếu sửa lại giá trị của Pagamento/Receita gốc sau khi đã sinh Lançamento, dòng sổ nhật ký cũ sẽ không tự cập nhật theo. Tương tự, khi hủy 1 lần đối chiếu ngân hàng (mục V), dòng sổ nhật ký tương ứng sẽ bị vô hiệu hóa để có thể sinh đúng lại ở lần đối chiếu kế tiếp — nhưng dòng đó không bị xóa khỏi cơ sở dữ liệu, chỉ không còn tính vào tổng từ đó về sau.</div>
+      </div>
+    </section>
+
+    <!-- ================= V. BANK RECONCILIATION ================= -->
+    <section id="conciliacao-section">
+      <h2 class="section-title" id="conciliacao">V. Bank reconciliation <span class="tet">Konsíliasaun banku</span><span class="vi">Đối chiếu ngân hàng</span></h2>
+
+      <div class="tri">
+        <p class="en">There are 2 separate reconciliation screens in the system, covering different money flows — <b>use the right one for the right flow</b>:</p>
+        <p class="tet">Iha eskrán konsíliasaun rua separadu iha sistema, kobre fluxu osan diferente — <b>uza ida loos ba fluxu loos</b>:</p>
+        <p class="vi">Hệ thống có 2 màn đối chiếu tách biệt nhau, phục vụ 2 dòng tiền khác nhau — <b>dùng đúng màn cho đúng dòng tiền</b>:</p>
+      </div>
+
+      <table class="fields">
+        <tr><th>Screen</th><th>Covers</th></tr>
+        <tr><td class="f">V-A. Conciliação de Movimentos</td><td><span class="en">Receita PAC (bank portion) and Pagamento (execution) — new-mode screen, manual entry</span><span class="tet">Receita PAC (parte banku) no Pagamento (realizasaun) — eskrán mode foun, hakerek ho liman</span><span class="vi">Receita PAC (phần ngân hàng) và Pagamento (thực hiện chi trả) — màn mode mới, nhập tay</span></td></tr>
+        <tr><td class="f">V-B. Duyệt Guia Pagamento</td><td><span class="en">Guia Pagamento / social-security contributions only — reuses the older bank-statement engine already built for the Contribuições module</span><span class="tet">Guia Pagamento / kontribuisaun seguransa sosiál de'it — uza fali motór estratu banku tuan ne'ebé harii ona ba módulu Contribuições</span><span class="vi">Chỉ dành cho Guia Pagamento / đóng góp BHXH — dùng lại cơ chế sao kê ngân hàng cũ đã có sẵn từ trước cho module Contribuições</span></td></tr>
+      </table>
+
+      <div class="callout warn">
+        <b>Why 2 different screens instead of one:</b> Guia Pagamento already had its own bank-matching data/engine built for the Contribuições module before Módulo Contabilidade existed — reusing it avoided duplicating already-proven matching logic. Everything else (Receita PAC, Pagamento) is newer and uses a dedicated table built specifically for this module. They are not interchangeable — a statement line entered in one screen does not appear in the other.
+        <div class="tet"><b>Tanba sá eskrán rua la'ós ida de'it:</b> Guia Pagamento iha ona dadus/motór matching banku rasik ne'ebé harii ona ba módulu Contribuições molok Módulo Contabilidade iha. Uza fali ida ne'e evita duplika lójika matching ne'ebé prova ona di'ak. Buat seluk hotu (Receita PAC, Pagamento) mak foun liu no uza tabela dedikadu harii espesífiku ba módulu ida-ne'e. Sira la troka fali — linha estratu ne'ebé hakerek iha eskrán ida la mosu iha eskrán seluk.</div>
+        <div class="vi">Vì sao có 2 màn thay vì 1: Guia Pagamento đã có sẵn dữ liệu/cơ chế khớp ngân hàng riêng được xây từ trước cho module Contribuições, có trước cả Módulo Contabilidade. Dùng lại tránh phải làm lại logic khớp đã được kiểm chứng. Mọi thứ khác (Receita PAC, Pagamento) mới hơn và dùng 1 bảng riêng xây chuyên cho module này. 2 hệ thống không hoán đổi cho nhau — 1 dòng sao kê nhập ở màn này sẽ không hiện ở màn kia.</div>
+      </div>
+
+      <h3 class="step-title" id="conciliacao-a">V-A. Conciliação de Movimentos <span class="tet">Konsíliasaun banku — Receita/Pagamento</span><span class="vi">Đối chiếu ngân hàng — Receita/Pagamento</span></h3>
+      <div class="menu-path">Menu: Conciliação de Movimentos</div>
+
+      <div class="tri">
+        <p class="en">Cross-checks the bank statement (what the bank actually shows) against Receita PAC and Pagamento already recorded in the system — run this <b>after</b> both cycles already have data, not before.</p>
+        <p class="tet">Konfere fila-fali estratu banku (saida mak banku hatudu ona) kontra Receita PAC no Pagamento ne'ebé rejista ona iha sistema — halo ida-ne'e <b>depois</b> siklu rua hotu iha ona dadus, la'ós molok.</p>
+        <p class="vi">Đối chiếu sao kê ngân hàng (số liệu thật ngân hàng đưa ra) với Receita PAC và Pagamento đã ghi nhận trong hệ thống — chạy sau khi cả 2 chu trình Thu/Chi đã có dữ liệu, không phải trước.</p>
+      </div>
+
+      <div class="callout warn">
+        <b>Manual entry only for now</b> — there is no automatic bank-statement file import yet; each statement line must be typed in by hand.
+        <div class="tet"><b>Hakerek ho liman de'it iha tempu ne'e</b> — seidauk iha importa automátiku husi fitxeiru estratu banku; kada linha estratu tenke hakerek ho liman.</div>
+        <div class="vi">Hiện chỉ nhập tay — chưa có tính năng import file sao kê ngân hàng tự động; mỗi dòng sao kê phải gõ tay từng dòng.</div>
+      </div>
+
+      <h4 class="sub-title">A. Add a statement line <span class="tet">Aumenta linha estratu</span><span class="vi">Thêm dòng sao kê</span></h4>
+      <ol class="steps">
+        <li>Select <span class="field">Conta Bancária</span> at the top — the list below reloads for that account only.
+          <span class="tet">Hili <span class="field">Conta Bancária</span> iha leten — lista iha kraik carrega fali ba konta ne'e de'it.</span>
+          <span class="vi">Chọn Conta Bancária ở đầu trang — danh sách phía dưới tự tải lại theo đúng tài khoản đó.</span>
+        </li>
+        <li>Click "+ Add statement line", enter <span class="field">Data Valor</span> (the bank's value date), <span class="field">Código Transação Bancária</span> (optional — the bank's own reference code), <span class="field">Descrição</span>, and <b>either</b> <span class="field">Crédito</span> (money in) <b>or</b> <span class="field">Débito</span> (money out).
+          <span class="tet">Klik "+ Aumenta linha estratu", hakerek <span class="field">Data Valor</span> (data valór husi banku), <span class="field">Código Transação Bancária</span> (fakultativu — kódigu referénsia rasik husi banku), <span class="field">Descrição</span>, no <b>ida</b> <span class="field">Crédito</span> (osan tama) <b>ka</b> <span class="field">Débito</span> (osan sai).</span>
+          <span class="vi">Bấm "+ Thêm dòng sao kê", nhập Data Valor (ngày ngân hàng ghi nhận giá trị), Código Transação Bancária (tùy chọn — mã tham chiếu riêng của ngân hàng), Descrição, và một trong hai Crédito (tiền vào) hoặc Débito (tiền ra).</span>
+        </li>
+        <li>Save. The new line appears in the list as "not yet reconciled."
+          <span class="tet">Save. Linha foun mosu iha lista nu'udar "seidauk konsília".</span>
+          <span class="vi">Lưu. Dòng mới hiện ra trong danh sách với trạng thái "Chưa đối chiếu".</span>
+        </li>
+      </ol>
+
+      <h4 class="sub-title">B. Match a line <span class="tet">Konsília linha</span><span class="vi">Đối chiếu 1 dòng</span></h4>
+      <ol class="steps">
+        <li>Click on a line to expand it.
+          <span class="tet">Klik linha ida atu loke detallu.</span><span class="vi">Bấm vào 1 dòng để mở rộng chi tiết.</span>
+        </li>
+        <li>If the line has a <span class="field">Crédito</span> value: click "Match with Receita" — pick the matching Receita (PAC) from the list of ones not yet reconciled. The list shows each Receita's declared bank amount, and rows whose amount matches this line's Crédito exactly are highlighted.
+          <span class="tet">Se linha iha valór <span class="field">Crédito</span>: klik "Konsília ho Receita" — hili Receita (PAC) ne'ebé hanesan husi lista ne'ebé seidauk konsília. Lista hatudu valór banku ne'ebé Receita kada ida deklara, no linha ne'ebé valór hanesan ho Crédito husi linha ne'e destaka.</span>
+          <span class="vi">Nếu dòng có giá trị Crédito: bấm "Đối chiếu với Receita" — chọn đúng Receita (PAC) tương ứng từ danh sách các Receita chưa đối chiếu. Danh sách hiện số tiền ngân hàng đã khai của từng Receita, dòng nào khớp đúng số Crédito của dòng này sẽ được tô sáng.</span>
+        </li>
+        <li>If the line has a <span class="field">Débito</span> value: click "Match with Pagamento" — pick the matching executed payment.
+          <span class="tet">Se linha iha valór <span class="field">Débito</span>: klik "Konsília ho Pagamento" — hili pagamentu ne'ebé realiza ona ne'ebé hanesan.</span>
+          <span class="vi">Nếu dòng có giá trị Débito: bấm "Đối chiếu với Pagamento" — chọn đúng khoản đã chi trả tương ứng.</span>
+        </li>
+        <li>The line's status changes to "Reconciled," showing which Receita/Pagamento it's linked to and when. Click "Undo reconciliation" to unlink it again if it was matched wrong.
+          <span class="tet">Estadu linha muda ba "Konsília ona", hatudu Receita/Pagamento sá mak liga ba no bainhira. Klik "Hasees konsíliasaun" atu hasees fila-fali se konsília sala.</span>
+          <span class="vi">Trạng thái dòng chuyển thành "Đã đối chiếu", hiện rõ khớp với Receita/Pagamento nào và lúc nào. Bấm "Hủy đối chiếu" để gỡ lại nếu đối chiếu nhầm.</span>
+        </li>
+      </ol>
+
+      <div class="callout">
+        <b>Matching with a Receita only succeeds if the amount matches exactly</b> — the Crédito value on the bank line must exactly equal that Receita's declared bank-collected amount, otherwise the match is rejected. Once it succeeds, the journal entry (Section IV, "Receita PAC (bank)") is generated at that same moment, using the Receita's configured Débito/Crédito accounts and the <b>real bank amount</b> as the value. "Undo reconciliation" also deactivates that journal entry.
+        <div class="tet"><b>Konsília ho Receita susesu de'it se valór hanesan loloos</b> — valór Crédito iha linha banku tenke hanesan loloos ho valór ne'ebé Receita ne'e deklara simu husi banku, se lae konsília rejeita. Wainhira susesu, lançamento (Parte IV, "Receita PAC (bank)") mosu iha momentu hanesan, uza konta Débito/Crédito ne'ebé Receita ne'e configura no <b>valór banku loloos</b> nu'udar valór. "Hasees konsíliasaun" mós tasa lançamento ne'e.</div>
+        <div class="vi">Đối chiếu với Receita chỉ thành công nếu số tiền khớp chính xác — giá trị Crédito trên dòng ngân hàng phải bằng đúng số tiền đã khai thu qua ngân hàng của Receita đó, nếu không đối chiếu sẽ bị từ chối. Khi thành công, bút toán (mục IV, "Receita PAC (bank)") được sinh ngay lúc đó, dùng đúng cặp tài khoản Nợ/Có đã cấu hình trên Receita và <b>số tiền ngân hàng thật</b> làm giá trị. "Hủy đối chiếu" cũng sẽ vô hiệu hóa bút toán đó.</div>
+      </div>
+
+      <div class="callout">
+        A line can only be deleted while it is <b>not yet reconciled</b> — once matched, unmatch it first.
+        <div class="tet">Linha bele hamoos de'it wainhira sei "<b>seidauk konsília</b>" — se konsília ona, hasees uluk molok hamoos.</div>
+        <div class="vi">Chỉ xóa được dòng khi còn "Chưa đối chiếu" — nếu đã đối chiếu rồi thì phải hủy đối chiếu trước.</div>
+      </div>
+
+      <div class="who">
+        <div class="icon">🏦</div>
+        <div class="body"><b>Bank reconciliation officer</b><span class="t">Ofisiál konsíliasaun banku</span><span>Adds statement lines, matches/unmatches them against Receita and Pagamento, deletes unmatched lines.</span></div>
+        <div class="perm">BANCO_CONCILIAR</div>
+      </div>
+
+      <hr class="divider">
+
+      <h3 class="step-title" id="guia-conciliacao">V-B. Duyệt Guia Pagamento (đối chiếu ngân hàng) <span class="tet">Aprova Guia Pagamento (konsília ho banku)</span><span class="vi">Duyệt Guia Pagamento (đối chiếu ngân hàng)</span></h3>
+      <div class="menu-path">Menu: Receita → Duyệt Guia Pagamento (đối chiếu ngân hàng)</div>
+
+      <div class="tri">
+        <p class="en">Confirms that a social-security contribution Guia has genuinely been paid, by matching it against real bank statement line(s) — this is the step that actually promotes a Guia from "pending validation" to "Paid," replacing the old-mode screen that used to do this from document review alone.</p>
+        <p class="tet">Konfirma katak Guia kontribuisaun seguransa sosiál pagamentu loloos ona, liuhusi konsília ho linha estratu banku loloos — ne'e pasu ne'ebé promove loloos Guia husi "hein validasaun" ba "Paga," troka eskrán mode tuan ne'ebé halo ida-ne'e husi lee dokumentu de'it.</p>
+        <p class="vi">Xác nhận 1 Guia đóng góp BHXH thực sự đã được trả, bằng cách khớp với (các) dòng sao kê ngân hàng thật — đây là bước thực sự chuyển 1 Guia từ "chờ xác nhận" sang "Đã trả," thay thế màn mode cũ trước đây chỉ dựa vào đọc tài liệu.</p>
+      </div>
+
+      <ol class="steps">
+        <li>Left panel lists Guias pending validation (entidade has already self-reported payment and uploaded proof). Right panel lists unreconciled bank statement lines. Select 1 or more of each.
+          <span class="tet">Panel karuk lista Guia sira ne'ebé hein validasaun (entidade deklara ona pagamentu no haruka komprovativu). Panel loos lista linha estratu banku ne'ebé seidauk konsília. Hili ida ka barak husi kada ida.</span>
+          <span class="vi">Bảng trái liệt kê các Guia đang chờ xác nhận (doanh nghiệp đã tự khai đã trả và nộp minh chứng). Bảng phải liệt kê các dòng sao kê ngân hàng chưa đối chiếu. Chọn 1 hoặc nhiều dòng ở mỗi bên.</span>
+        </li>
+        <li>Selection must follow either <b>1 bank line : many Guias</b> (one bank transfer covering several Guias) or <b>many bank lines : 1 Guia</b> (one Guia paid via several transfers) — and the selected totals must match exactly. A match/mismatch indicator shows live as you select.
+          <span class="tet">Seleksaun tenke tuir ka <b>1 linha banku : Guia barak</b> (transferénsia banku ida kobre Guia hira) ka <b>linha banku barak : Guia 1</b> (Guia ida selu liuhusi transferénsia hira) — no totál ne'ebé hili tenke hanesan loloos. Indikadór hanesan/la hanesan hatudu bainhira ita hili.</span>
+          <span class="vi">Cách chọn phải theo 1 trong 2: <b>1 dòng ngân hàng : nhiều Guia</b> (1 lần chuyển khoản trả cho nhiều Guia) hoặc <b>nhiều dòng ngân hàng : 1 Guia</b> (1 Guia được trả qua nhiều lần chuyển). Tổng số tiền đã chọn 2 bên phải khớp chính xác. Có chỉ báo khớp/không khớp hiện ngay khi đang chọn.</span>
+        </li>
+        <li>Click "Confirm (mark as Paid)". Guias with a full match become "Guia Paga"; if the Guia's declared amount was only partially covered, it becomes "Guia Parcialmente Paga" instead.
+          <span class="tet">Klik "Konfirma (marka Paga)". Guia ne'ebé match kompletu sai "Guia Paga"; se valór Guia deklara kobre de'it parte, sai "Guia Parcialmente Paga" invezde.</span>
+          <span class="vi">Bấm "Xác nhận (đánh dấu Đã trả)". Guia khớp đủ chuyển thành "Guia Paga"; nếu số tiền Guia khai chỉ được khớp một phần, chuyển thành "Guia Parcialmente Paga".</span>
+        </li>
+      </ol>
+
+      <div class="callout">
+        <b>This confirm action also generates the journal entry</b> (Section IV, "Guia Pagamento") for each Guia involved: Débito is resolved automatically from the real bank account the matched statement line belongs to. Crédito comes from a fixed setting in Section VI — but <b>which one depends on the paying entidade's registered Setor</b> (Público or Privado, from that company's own registration record): Setor Público entidades credit the Setor Público account, everyone else (Setor Privado, PPP, or unset) credits the Setor Privado account. If the relevant Crédito setting hasn't been configured yet, the reconciliation still succeeds and the Guia is still marked Paid — it simply won't have a journal line until it's configured.
+        <div class="tet"><b>Asaun konfirma ne'e mós mosu lançamento</b> (Parte IV, "Guia Pagamento") ba kada Guia envolve: Débito rezolve automátiku husi konta banku loloos ne'ebé linha estratu match ba nia. Crédito husi konfigurasaun fixu iha Parte VI — maibé <b>ida ne'ebé depende ba Setor entidade pagadór rejistadu</b> (Público ka Privado, husi rejistu kompañia rasik): entidade Setor Público kredita konta Setor Público, seluk hotu (Setor Privado, PPP, ka seidauk defini) kredita konta Setor Privado. Se konfigurasaun Crédito relevante seidauk halo, konsíliasaun sei susesu de'it no Guia sei marka Paga — so la sei iha linha lançamento to'o configura tiha.</div>
+        <div class="vi">Hành động xác nhận này cũng sinh ra bút toán (mục IV, "Guia Pagamento") cho mỗi Guia liên quan: Débito được hệ thống tự động tra ra từ đúng tài khoản ngân hàng thật của dòng sao kê đã khớp. Crédito lấy từ cấu hình cố định ở mục VI — nhưng <b>lấy tài khoản nào tùy vào Setor đã đăng ký của công ty đóng góp</b> (Público hay Privado, lấy từ chính hồ sơ đăng ký công ty đó): công ty Setor Público ghi Có vào tài khoản Setor Público, còn lại (Setor Privado, PPP, hoặc chưa khai) ghi Có vào tài khoản Setor Privado. Nếu cấu hình Crédito tương ứng chưa được thiết lập, việc đối chiếu vẫn thành công và Guia vẫn được đánh dấu Đã trả — chỉ là chưa có dòng sổ nhật ký cho tới khi cấu hình xong.</div>
+      </div>
+
+      <div class="callout warn">
+        <b>Where do the bank statement lines here come from?</b> Unlike Conciliação de Movimentos (V-A), this screen does not have its own "add line" form in Módulo Contabilidade. These lines are entered via the older Conciliação de Movimentos Bancários workflow in the pre-existing (old-mode) system.
+        <div class="tet"><b>Linha estratu banku iha ne'e mai husi ne'ebé?</b> La hanesan Conciliação de Movimentos (V-A), eskrán ida-ne'e la iha formuláriu "aumenta linha" rasik iha Módulo Contabilidade. Linha sira ne'e hakerek liuhusi fluxu servisu Conciliação de Movimentos Bancários tuan iha sistema (mode tuan) ne'ebé iha ona.</div>
+        <div class="vi">Các dòng sao kê ngân hàng ở đây lấy từ đâu? Khác với Conciliação de Movimentos (V-A), màn này không có form "thêm dòng" riêng trong Módulo Contabilidade. Các dòng này được nhập qua luồng nghiệp vụ Conciliação de Movimentos Bancários cũ hơn ở hệ thống (mode cũ) đã có sẵn từ trước.</div>
+      </div>
+
+      <div class="who">
+        <div class="icon">🏦</div>
+        <div class="body"><b>Bank reconciliation officer</b><span class="t">Ofisiál konsíliasaun banku</span><span>Same permission token as V-A — one role covers both reconciliation screens.</span></div>
+        <div class="perm">BANCO_CONCILIAR</div>
+      </div>
+    </section>
+
+    <!-- ================= VI. SETTINGS ================= -->
+    <section id="settings-section">
+      <h2 class="section-title">VI. Settings <span class="tet">Konfigurasaun</span><span class="vi">Cấu hình hệ thống</span></h2>
+
+      <h3 class="step-title" id="gp-conta-config">Conta Débito/Crédito — Guia Pagamento <span class="tet">Konta Débito/Crédito — Guia Pagamento</span><span class="vi">Tài khoản Nợ/Có cho Guia Pagamento</span></h3>
+      <div class="menu-path">Menu: Cấu hình hệ thống → Tài khoản Nợ/Có cho Guia Pagamento</div>
+
+      <div class="tri">
+        <p class="en">A one-time setup an admin must complete before "Duyệt Guia Pagamento" (Section V-B) can generate journal entries. The Débito side is never configured here — it's always resolved automatically from whichever real bank account received the money for that specific transaction. <b>Crédito is split into 2 accounts</b>, one per Setor of the paying entidade (Setor Público / Setor Privado) — verified against real posted 2024 entries showing these are genuinely 2 different accounts, not one.</p>
+        <p class="tet">Konfigurasaun ida-de'it ne'ebé admin tenke halo tiha molok "Duyệt Guia Pagamento" (Parte V-B) bele mosu lançamento. Parte Débito nunka configura iha ne'e — rezolve automátiku sempre husi konta banku loloos ne'ebé simu osan ba transasaun espesífiku ne'e. <b>Crédito fahe ba konta 2</b>, ida ba kada Setor entidade pagadór (Setor Público / Setor Privado) — konfirma kontra lançamento loloos 2024 hatudu ne'e loloos konta rua diferente, la'ós ida.</p>
+        <p class="vi">Thiết lập 1 lần duy nhất mà admin cần hoàn tất trước khi "Duyệt Guia Pagamento" (mục V-B) có thể sinh bút toán. Phần Débito không bao giờ cấu hình ở đây — luôn được hệ thống tự động tra ra từ đúng tài khoản ngân hàng thật đã nhận tiền cho từng giao dịch cụ thể. <b>Crédito tách thành 2 tài khoản</b>, mỗi tài khoản cho 1 Setor của công ty đóng góp (Setor Público / Setor Privado) — đã xác nhận với bút toán thật đã ghi sổ năm 2024 cho thấy đây thực sự là 2 tài khoản khác nhau, không phải một.</p>
+      </div>
+
+      <ol class="steps">
+        <li>Type-to-search and select the <span class="field">Conta Crédito (Setor Privado)</span> — used for every entidade whose registered Setor is Privado, PPP, or not set (the large majority of real transactions).
+          <span class="tet">Hakerek atu buka no hili <span class="field">Konta Crédito (Setor Privado)</span> — uza ba entidade hotu ne'ebé Setor rejistadu Privado, PPP, ka la defini (maioria boot transasaun loloos).</span>
+          <span class="vi">Gõ tìm và chọn Conta Crédito (Setor Privado) — dùng cho mọi công ty có Setor đăng ký là Privado, PPP, hoặc chưa khai (chiếm đa số giao dịch thật).</span>
+        </li>
+        <li>Type-to-search and select the <span class="field">Conta Crédito (Setor Público)</span> — used only for entidades whose registered Setor is one of the "Setor Público - ..." branches (Governo, FFDTL, PNTL, Municípios, etc.).
+          <span class="tet">Hakerek atu buka no hili <span class="field">Konta Crédito (Setor Público)</span> — uza de'it ba entidade ne'ebé Setor rejistadu ida husi "Setor Público - ..." (Governo, FFDTL, PNTL, Municípios, ns.).</span>
+          <span class="vi">Gõ tìm và chọn Conta Crédito (Setor Público) — chỉ dùng cho công ty có Setor đăng ký thuộc nhóm "Setor Público - ..." (Governo, FFDTL, PNTL, Municípios...).</span>
+        </li>
+        <li>Click "Save" — saves both accounts together. Either can be left blank; a blank one just means that Setor's Guias won't get a journal entry until it's filled in.
+          <span class="tet">Klik "Save" — save konta rua hamutuk. Bele husik ida mamuk; ida mamuk signifika de'it Guia Setor ne'e la sei iha lançamento to'o hakerek tiha.</span>
+          <span class="vi">Bấm "Lưu" — lưu cả 2 tài khoản cùng lúc. Có thể để trống 1 trong 2; để trống nghĩa là Guia của Setor đó sẽ chưa sinh bút toán cho tới khi điền xong.</span>
+        </li>
+      </ol>
+
+      <div class="callout">
+        The currently configured values (if any) are shown at the top of the screen. Saving again replaces them — there is only ever one active configuration (holding both accounts).
+        <div class="tet">Valór configura atuál (se iha) hatudu iha leten eskrán. Save fila-fali troka sira — iha de'it konfigurasaun ativu ida sempre (kaben konta rua).</div>
+        <div class="vi">Giá trị đang cấu hình (nếu có) hiện ở đầu trang. Lưu lại lần nữa sẽ thay thế — chỉ có duy nhất 1 cấu hình đang hoạt động (chứa cả 2 tài khoản).</div>
+      </div>
+
+      <div class="who">
+        <div class="icon">🛠️</div>
+        <div class="body"><b>System administrator</b><span class="t">Admin sistema</span><span>Sets the 2 shared Crédito accounts used by all future GP reconciliations.</span></div>
+        <div class="perm">MASTERDATA_MANAGE</div>
+      </div>
+
+      <hr class="divider">
+
+      <h3 class="step-title" id="liquidacao-conta-config">Conta a Pagar — Despesa <span class="tet">Konta Selu — Despeza</span><span class="vi">Tài khoản Phải trả (bút toán kép Despesa)</span></h3>
+      <div class="menu-path">Menu: Cấu hình hệ thống → Tài khoản Phải trả (bút toán kép Despesa)</div>
+
+      <div class="tri">
+        <p class="en">A one-time setup an admin should complete before Despesa/Pagamento generates its 2 journal entries correctly — see "2-entry booking" in Section III, steps 5–6. <b>This is not a bank account</b> — it's an intermediate accounting classification account, from the client's own Chart of Accounts, that sits between the expense account and the bank account in the 2-entry pattern.</p>
+        <p class="tet">Konfigurasaun ida-de'it ne'ebé admin tenke halo molok Despesa/Pagamento mosu lançamento rua nia loloos — haree "lançamento 2 linha" iha Parte III, pasu 5–6. <b>Ne'e la'ós konta banku</b> — ne'e konta klasifikasaun kontabilidade intermediáriu, husi Planu Konta kliente rasik, ne'ebé hela entre konta despeza no konta banku iha padraun 2 linha.</p>
+        <p class="vi">Thiết lập 1 lần mà admin nên hoàn tất trước khi Despesa/Pagamento sinh đủ 2 bút toán đúng — xem "bút toán 2 dòng" ở mục III, bước 5–6. <b>Đây không phải tài khoản ngân hàng</b> — đây là tài khoản phân loại kế toán trung gian, trong Plano de Contas của chính khách hàng, nằm giữa tài khoản Chi phí và tài khoản Ngân hàng trong mẫu 2 bút toán.</p>
+      </div>
+
+      <div class="tri">
+        <p class="en">There are <b>5 rows, one per beneficiary category</b> (matching Obrigação's <span class="field">Categoria do Beneficiário</span>, Section III-4): Fornecedor, Beneficiário, Contribuinte (EE), Pessoal, Outro. Each row has its own account, editable independently.</p>
+        <p class="tet">Iha <b>linha 5, ida ba kada kategoria benefisiáriu</b> (hanesan Categoria do Beneficiário husi Obrigação, Parte III-4): Fornecedor, Beneficiário, Contribuinte (EE), Pessoal, Outro. Kada linha iha konta rasik, bele edita independente.</p>
+        <p class="vi">Có <b>5 dòng, mỗi dòng cho 1 loại đối tượng thụ hưởng</b> (khớp với Categoria do Beneficiário của Obrigação, mục III-4): Fornecedor, Beneficiário, Contribuinte (EE), Pessoal, Outro. Mỗi dòng có tài khoản riêng, sửa độc lập.</p>
+      </div>
+
+      <ol class="steps">
+        <li>For each category row, type-to-search and select its <span class="field">Conta a Pagar</span>. A faded example is shown in the box, and a small suggestion line underneath — for Fornecedor/Pessoal/Outro these are real accounts confirmed against the client's actual posted ledger; for Beneficiário/Contribuinte (EE) no distinct real example was found yet, so the suggestion is only a generic placeholder, not a confirmed match — ask your accountant to confirm before relying on it.
+          <span class="tet">Ba kada linha kategoria, hakerek atu buka no hili <span class="field">Konta a Pagar</span> nia. Ezemplu klaru sai iha kaixa, no linha sujestaun oituan iha okos — ba Fornecedor/Pessoal/Outro ne'e konta loloos konfirma kontra livru loloos kliente; ba Beneficiário/Contribuinte (EE) seidauk hetan ezemplu loloos distintu, tan ne'e sujestaun de'it plasedór jenériku, la'ós match konfirma — husu kontabilista atu konfirma molok fiar.</span>
+          <span class="vi">Với mỗi dòng Categoria, gõ tìm và chọn Conta a Pagar tương ứng. Có ví dụ hiển thị mờ trong ô, và 1 dòng gợi ý nhỏ bên dưới — với Fornecedor/Pessoal/Outro đây là tài khoản thật đã xác nhận khớp sổ sách đã ghi thật của khách hàng; với Beneficiário/Contribuinte (EE) chưa tìm thấy ví dụ riêng nào xác nhận được, nên gợi ý chỉ là gợi ý chung chung, không phải khớp đã xác nhận — hỏi kế toán xác nhận trước khi tin dùng.</span>
+        </li>
+        <li>The field may already show a pre-filled suggested account (marked "Pre-filled suggestion — not saved yet") if it was never configured before — review it, change it if needed, then click "Save" on that row to actually store it. Nothing is ever auto-saved.
+          <span class="tet">Kampu bele hatudu ona konta sujire pré-hakerek (marka "Sujestaun pré-hakerek — seidauk save") se nunka configura molok. Haree fila-fali, muda se presiza, depois klik "Save" iha linha ne'e atu loloos armazena. Laiha buat ida save automátiku.</span>
+          <span class="vi">Ô có thể đã hiện sẵn tài khoản gợi ý điền trước (đánh dấu "Gợi ý điền sẵn — chưa lưu") nếu chưa từng cấu hình. Xem lại, đổi nếu cần, rồi bấm "Lưu" ở dòng đó mới thực sự ghi vào hệ thống. Không có gì tự động lưu cả.</span>
+        </li>
+      </ol>
+
+      <div class="callout warn">
+        <b>Optional, not a hard blocker, per category:</b> if a category's Conta a Pagar isn't configured, Despesa/Pagamento for Obrigações of that category still process normally — both journal entries (Liquidação and Execução) are simply skipped with a warning until the account is set. Other categories that are already configured are unaffected.
+        <div class="tet"><b>Fakultativu, la bloke'ia, tuir kategoria ida-idak:</b> se Conta a Pagar ba kategoria ida seidauk configura, Despesa/Pagamento ba Obrigação husi kategoria ne'e kontinua prosesu normál — lançamento rua (Liquidação no Execução) salta de'it ho avizu to'o konta ne'e defini. Kategoria seluk ne'ebé configura ona la afeta.</div>
+        <div class="vi">Tùy chọn, không chặn nghiệp vụ, theo từng Categoria: nếu tài khoản Phải trả của 1 Categoria chưa cấu hình, Despesa/Pagamento cho Obrigação thuộc Categoria đó vẫn xử lý bình thường — cả 2 bút toán (Liquidação và Execução) đơn giản bị bỏ qua kèm cảnh báo cho tới khi cấu hình xong. Các Categoria khác đã cấu hình không bị ảnh hưởng.</div>
+      </div>
+
+      <div class="who">
+        <div class="icon">🛠️</div>
+        <div class="body"><b>System administrator</b><span class="t">Admin sistema</span><span>Sets the Conta a Pagar for each of the 5 beneficiary categories, independently.</span></div>
+        <div class="perm">MASTERDATA_MANAGE</div>
+      </div>
+    </section>
+
+    <!-- ================= APPENDIX ================= -->
+    <section id="glossario-section">
+      <h2 class="section-title" id="glossario">Glossary <span class="tet">Glosáriu</span><span class="vi">Bảng thuật ngữ</span></h2>
+      <table class="fields">
+        <tr><th>Portuguese (used as-is)</th><th>English</th><th>Tetun</th><th>Tiếng Việt</th></tr>
+        <tr><td class="f">Rúbrica</td><td>Budget line</td><td>Linha orsamentu</td><td>Dòng ngân sách</td></tr>
+        <tr><td class="f">AD (Autorização de Despesa)</td><td>Spending authorization</td><td>Autorizasaun gastu</td><td>Xin phép chi</td></tr>
+        <tr><td class="f">Cabimento / DIC</td><td>Budget reservation</td><td>Rezervasaun orsamentu</td><td>Giữ chỗ ngân sách</td></tr>
+        <tr><td class="f">Compromisso</td><td>Formal commitment</td><td>Kompromisu formál</td><td>Cam kết chi</td></tr>
+        <tr><td class="f">Obrigação</td><td>Payment obligation</td><td>Obrigasaun pagamentu</td><td>Nghĩa vụ phải trả</td></tr>
+        <tr><td class="f">Autorização de Pagamento</td><td>Payment authorization</td><td>Autorizasaun pagamentu</td><td>Xin phép chi trả</td></tr>
+        <tr><td class="f">Realização do Pagamento</td><td>Payment execution</td><td>Realizasaun pagamentu</td><td>Thực hiện chi trả</td></tr>
+        <tr><td class="f">Guia Pagamento</td><td>Contribution payment slip</td><td>Folha pagamentu kontribuisaun</td><td>Chứng từ đóng góp BHXH</td></tr>
+        <tr><td class="f">Saldo disponível</td><td>Remaining available balance</td><td>Saldu restante</td><td>Số dư còn dùng được</td></tr>
+        <tr><td class="f">Regularização</td><td>Value adjustment</td><td>Ajustamentu valór</td><td>Điều chỉnh giá trị</td></tr>
+        <tr><td class="f">Registo de Lançamentos</td><td>General journal</td><td>Livru diáriu kontabilidade</td><td>Sổ nhật ký kế toán</td></tr>
+        <tr><td class="f">Código Conta Débito/Crédito</td><td>Debit / Credit account</td><td>Konta Débito / Crédito</td><td>Tài khoản Nợ / Có</td></tr>
+        <tr><td class="f">Conciliação de Movimentos</td><td>Bank reconciliation</td><td>Konsíliasaun banku</td><td>Đối chiếu ngân hàng</td></tr>
+        <tr><td class="f">Extrato bancário</td><td>Bank statement</td><td>Estratu banku</td><td>Sao kê ngân hàng</td></tr>
+        <tr><td class="f">Conta a Pagar</td><td>Payable account (intermediate, not a bank account)</td><td>Konta Selu (intermediáriu, la'ós konta banku)</td><td>Tài khoản Phải trả (trung gian, không phải tài khoản ngân hàng)</td></tr>
+        <tr><td class="f">Setor Público / Privado</td><td>Public / Private sector (entidade's own registered classification)</td><td>Setor Públiku / Privadu (klasifikasaun entidade rasik ne'ebé rejista)</td><td>Khu vực Nhà nước / Tư nhân (phân loại đã đăng ký của chính công ty)</td></tr>
+        <tr><td class="f">Preset</td><td>A reusable bundle of permission tokens</td><td>Grupu permisaun ne'ebé bele uza fila-fali</td><td>Gói quyền dùng lại được (mẫu quyền)</td></tr>
+        <tr><td class="f">Token</td><td>A single granular permission</td><td>Permisaun ida-idak detallu</td><td>1 mã quyền chi tiết</td></tr>
+      </table>
+    </section>
+
+    <!-- ================= VII. USERS & PERMISSIONS ================= -->
+    <section id="permissoes-section">
+      <h2 class="section-title" id="permissoes">VII. User &amp; Permission Management <span class="tet">Jestaun Utilizadór &amp; Permisaun</span><span class="vi">Quản lý User &amp; Phân quyền</span></h2>
+
+      <div class="tri">
+        <p class="en">Every action described earlier in this manual (creating, submitting, reviewing, approving, executing, reconciling...) is gated behind a permission "token." This section covers the 2 screens used to set that up: syncing an existing account into the new system, and assigning it the tokens it needs.</p>
+        <p class="tet">Kada asaun ne'ebé deskreve ona iha manual ida-ne'e (kria, submete, revisaun, aprova, ezekuta, konsília...) hetan kontrola husi "token" permisaun. Parte ida-ne'e kobre eskrán rua ne'ebé uza atu konfigura ida-ne'e: sinkroniza konta ne'ebé iha ona ba sistema foun, no fó token ne'ebé nia presiza.</p>
+        <p class="vi">Mọi hành động đã mô tả trong tài liệu này (tạo, gửi duyệt, kiểm tra, phê duyệt, thực hiện, đối chiếu...) đều bị chặn sau 1 mã quyền ("token"). Mục này nói về 2 màn dùng để thiết lập việc đó: đồng bộ tài khoản đã có sẵn vào hệ thống mới, và cấp cho tài khoản đó các quyền nó cần.</p>
+      </div>
+
+      <h3 class="step-title" id="user-sync">A. Sync an account from the old system <span class="tet">Sinkroniza konta husi sistema tuan</span><span class="vi">Đồng bộ tài khoản từ hệ thống cũ</span></h3>
+      <div class="menu-path">Menu: Cấu hình hệ thống → Đồng bộ User (hệ thống cũ)</div>
+
+      <div class="callout warn">
+        <b>Required first step for any existing Internal account</b> that needs to log into this new mode — without syncing, the account cannot access Módulo Contabilidade at all, even if it already works in the old system.
+        <div class="tet"><b>Pasu primeiru obrigatóriu ba konta Internal ne'ebé iha ona</b> ne'ebé presiza login ba mode foun ida-ne'e — se la sinkroniza, konta la bele asesu Módulo Contabilidade, maski ona funsiona iha sistema tuan.</div>
+        <div class="vi">Bước bắt buộc đầu tiên cho bất kỳ tài khoản Internal đã có sẵn nào cần đăng nhập vào mode mới này — nếu chưa đồng bộ, tài khoản không thể vào được Módulo Contabilidade, dù đã hoạt động bình thường ở hệ thống cũ.</div>
+      </div>
+
+      <ol class="steps">
+        <li>Tab "Internal (can be synced)" lists old-system Internal accounts. Click "Sync" next to the one to onboard.
+          <span class="tet">Tab "Internal (bele sinkroniza)" lista konta Internal husi sistema tuan. Klik "Sinkroniza" hela-besik ida atu onboard.</span>
+          <span class="vi">Tab "Internal (can be synced)" liệt kê các tài khoản Internal của hệ thống cũ. Bấm "Sync" cạnh tài khoản cần đưa vào.</span>
+        </li>
+        <li>Confirm/edit <span class="field">Nome</span>, <span class="field">Email</span>, <span class="field">Departamento</span>, then confirm.
+          <span class="tet">Konfirma/muda <span class="field">Nome</span>, <span class="field">Email</span>, <span class="field">Departamento</span>, depois konfirma.</span>
+          <span class="vi">Xác nhận/sửa Nome, Email, Departamento, rồi xác nhận.</span>
+        </li>
+      </ol>
+
+      <div class="callout">
+        <b>Syncing only creates the gateway into new mode — it does not assign any permissions.</b> Right after syncing, go to "Quản lý User &amp; Phân quyền" (below) to grant the specific tokens that account needs; otherwise it can log in but won't be able to do anything gated. Tab "External" is shown for visibility only — those accounts keep using the existing employer portal (port 4200) unchanged, no sync needed.
+        <div class="tet"><b>Sinkroniza kria de'it dalan ba mode foun — la fó permisaun ida-ida.</b> Kedas depois sinkroniza, bá "Jestaun Utilizadór &amp; Permisaun" (kraik) atu fó token espesífiku ne'ebé konta ne'e presiza; se lae bele login maibé la bele halo buat ida ne'ebé kontrola ona. Tab "External" hatudu de'it atu haree — konta sira ne'e kontinua uza portál empregadór ne'ebé iha ona (port 4200) la muda, la presiza sinkroniza.</div>
+        <div class="vi">Đồng bộ chỉ tạo lối vào mode mới — không tự gán bất kỳ quyền nào. Ngay sau khi đồng bộ, vào "Quản lý User &amp; Phân quyền" (bên dưới) để cấp đúng các quyền tài khoản đó cần; nếu không, tài khoản vẫn đăng nhập được nhưng không làm được gì đã bị chặn quyền. Tab "External" chỉ để xem — các tài khoản đó vẫn dùng cổng doanh nghiệp hiện có (port 4200) như cũ, không cần đồng bộ.</div>
+      </div>
+
+      <h3 class="step-title" id="user-permission">B. Assign permissions <span class="tet">Fó permisaun</span><span class="vi">Cấp quyền</span></h3>
+      <div class="menu-path">Menu: Cấu hình hệ thống → Quản lý User &amp; Phân quyền</div>
+
+      <div class="tri">
+        <p class="en">A single combined screen: creating an account (or editing one already synced) and assigning its permissions happen together, in one form, saved in one action — by design, this is never split into 2 separate steps.</p>
+        <p class="tet">Eskrán ida kombinadu: kria konta (ka edita konta sinkroniza ona) no fó permisaun akontese hamutuk, iha formuláriu ida, save iha asaun ida — dezenhu, ne'e nunka fahe ba pasu rua separadu.</p>
+        <p class="vi">Một màn hình gộp duy nhất: tạo tài khoản (hoặc sửa tài khoản đã đồng bộ) và cấp quyền diễn ra cùng lúc, trên 1 form, lưu bằng 1 hành động — theo thiết kế, việc này không bao giờ tách thành 2 bước riêng.</p>
+      </div>
+
+      <ol class="steps">
+        <li>Click "+ Add" for a brand-new account, or "Edit" next to an existing/synced one.
+          <span class="tet">Klik "+ Aumenta" ba konta foun, ka "Edita" hela-besik konta ne'ebé iha ona/sinkroniza ona.</span>
+          <span class="vi">Bấm "+ Add" để tạo tài khoản mới, hoặc "Edit" cạnh tài khoản đã có/đã đồng bộ.</span>
+        </li>
+        <li>Fill in <span class="field">Username</span>, <span class="field">Password</span> (only required when creating, or when resetting it while editing), <span class="field">Active</span>, <span class="field">Nome</span>, <span class="field">Email</span>, <span class="field">Departamento</span>.
+          <span class="tet">Hakerek <span class="field">Username</span>, <span class="field">Password</span> (presiza de'it wainhira kria, ka wainhira reset bainhira edita), <span class="field">Active</span>, <span class="field">Nome</span>, <span class="field">Email</span>, <span class="field">Departamento</span>.</span>
+          <span class="vi">Nhập Username, Password (chỉ bắt buộc khi tạo mới, hoặc khi đặt lại lúc sửa), Active, Nome, Email, Departamento.</span>
+        </li>
+        <li>Under "Presets": tick any preset that already bundles the right set of tokens for this person's role — this is the fastest way to grant a standard role.
+          <span class="tet">Iha "Presets": marka preset ne'ebé ona iha grupu token loos ba funsaun ema ne'e — ne'e dalan lalais liu atu fó funsaun padraun.</span>
+          <span class="vi">Ở phần "Presets": tick vào preset (mẫu quyền) đã gộp sẵn đúng bộ quyền cho vai trò người này — đây là cách nhanh nhất để cấp 1 vai trò chuẩn.</span>
+        </li>
+        <li>Under "Tokens" (grouped by module — Orçamento, AD, Cabimento, Compromisso, Obrigação, Pagamento, Receita, bank reconciliation, master data...): tick individual tokens for any fine-grained adjustment beyond what the presets cover.
+          <span class="tet">Iha "Tokens" (agrupa tuir módulu — Orçamento, AD, Cabimento, Compromisso, Obrigação, Pagamento, Receita, konsíliasaun banku, master data...): marka token individuál ba ajustamentu detallu liu husi presets.</span>
+          <span class="vi">Ở phần "Tokens" (nhóm theo từng module — Orçamento, AD, Cabimento, Compromisso, Obrigação, Pagamento, Receita, đối chiếu ngân hàng, master data...): tick từng quyền riêng lẻ để điều chỉnh chi tiết hơn ngoài những gì preset đã cấp.</span>
+        </li>
+        <li>Click "Save" — the account, its Nome/Email/Departamento, and its full set of tokens are all saved together.
+          <span class="tet">Klik "Save" — konta, Nome/Email/Departamento nia, no token hotu-hotu save hamutuk.</span>
+          <span class="vi">Bấm "Save" — tài khoản, Nome/Email/Departamento và toàn bộ danh sách quyền được lưu cùng lúc.</span>
+        </li>
+      </ol>
+
+      <div class="callout">
+        <b>Presets and individually-ticked tokens add up</b> — ticking a preset grants its bundled tokens, and you can still tick more individual tokens on top of that; there is no conflict between the two.
+        <div class="tet"><b>Presets no token marka ida-idak hamutuk</b> — marka preset fó token ne'ebé nia bundle, no ita bele marka token individuál barak liu iha leten. Laiha konflitu entre rua-ne'e.</div>
+        <div class="vi">Preset và các quyền tick riêng lẻ được cộng dồn với nhau — tick 1 preset sẽ cấp bộ quyền gộp sẵn của nó, và bạn vẫn có thể tick thêm quyền riêng lẻ khác. Không có xung đột giữa 2 cách này.</div>
+      </div>
+
+      <div class="callout warn">
+        <b>ADMIN token bypasses every permission check</b> — an account with ADMIN can do anything in the system regardless of which other tokens are (or aren't) ticked. Grant it sparingly.
+        <div class="tet"><b>Token ADMIN salta konferénsia permisaun hotu-hotu</b> — konta ho ADMIN bele halo buat hotu iha sistema la importa token seluk marka ka lae. Fó ho kuidadu.</div>
+        <div class="vi">Quyền ADMIN bỏ qua mọi kiểm tra phân quyền — tài khoản có ADMIN làm được mọi thứ trong hệ thống bất kể các quyền khác có được tick hay không. Cấp quyền này một cách thận trọng.</div>
+      </div>
+
+      <div class="who">
+        <div class="icon">🔐</div>
+        <div class="body"><b>User &amp; permission administrator</b><span class="t">Admin utilizadór &amp; permisaun</span><span>Creates/edits accounts, assigns presets and tokens — typically a small number of trusted admins.</span></div>
+        <div class="perm">USER_MANAGE</div>
+      </div>
+
+      <h3 class="step-title" id="permission-tokens">C. Permission token reference <span class="tet">Referénsia token permisaun</span><span class="vi">Bảng tra cứu mã quyền</span></h3>
+      <div class="tri">
+        <p class="en">The tokens below are the full catalog available to grant, whether via a preset or individually — they aren't tied to a fixed job title; each organization can assign them however fits its own structure.</p>
+        <p class="tet">Token iha kraik mak katálogu kompletu ne'ebé bele fó, liuhusi preset ka individuál — la fixa ba título servisu ida; kada organizasaun bele fahe tuir estrutura rasik.</p>
+        <p class="vi">Các mã quyền dưới đây là toàn bộ danh mục có thể cấp, dù qua preset hay từng quyền riêng lẻ — không gắn với 1 chức danh cố định, mỗi cơ quan có thể phân quyền theo cơ cấu riêng của mình.</p>
+      </div>
+      <table class="fields">
+        <tr><th>Module</th><th>Submit</th><th>Review</th><th>Final approve</th><th>Other</th></tr>
+        <tr><td>Orçamento</td><td class="f">ORC_SUBMIT</td><td class="f">ORC_REVIEW</td><td class="f">ORC_APPROVE</td><td>—</td></tr>
+        <tr><td>AD</td><td class="f">AD_SUBMIT</td><td class="f">AD_REVIEW</td><td class="f">AD_APPROVE</td><td>—</td></tr>
+        <tr><td>Cabimento</td><td class="f">CABIMENTO_SUBMIT</td><td>—</td><td class="f">CABIMENTO_APPROVE</td><td>—</td></tr>
+        <tr><td>Compromisso</td><td class="f">COMPROMISSO_SUBMIT</td><td class="f">COMPROMISSO_REVIEW</td><td class="f">COMPROMISSO_APPROVE</td><td>—</td></tr>
+        <tr><td>Obrigação</td><td class="f">OBRIGACAO_SUBMIT</td><td>—</td><td class="f">OBRIGACAO_APPROVE</td><td>—</td></tr>
+        <tr><td>Pagamento</td><td class="f">PAG_SUBMIT</td><td>—</td><td class="f">PAG_APPROVE</td><td class="f">PAG_EXECUTE (pay)</td></tr>
+        <tr><td>Receita</td><td class="f">REC_SUBMIT</td><td>—</td><td>—</td><td>no approval step</td></tr>
+        <tr><td>Bank reconciliation (V-A and V-B)</td><td>—</td><td>—</td><td>—</td><td class="f">BANCO_CONCILIAR</td></tr>
+        <tr><td>Shared master data / settings (incl. Section VI)</td><td>—</td><td>—</td><td>—</td><td class="f">MASTERDATA_MANAGE</td></tr>
+        <tr><td>User &amp; permission management</td><td>—</td><td>—</td><td>—</td><td class="f">USER_MANAGE</td></tr>
+        <tr><td>Everything (bypass)</td><td>—</td><td>—</td><td>—</td><td class="f">ADMIN</td></tr>
+      </table>
+    </section>
+  </main>
+</div>
+
+<footer>
+  Módulo Contabilidade — INSS Timor-Leste. Internal document.
+  <div class="tet">Dokumentu internu.</div>
+  <div style="color:var(--text-muted); font-style:italic;">Tài liệu nội bộ.</div>
+</footer>
