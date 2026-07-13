@@ -447,8 +447,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             ImportOrcamentoPreviewResponse response = new ImportOrcamentoPreviewResponse();
             try
             {
-                OrcamentoBatch batch = GetOrCreateDraftBatch(request.OrcamentoConfigFk);
-                if (batch.Estado != ESTADO_DRAFT)
+                // Chỉ để XEM/PHÂN LOẠI — không tự tạo lô DRAFT mới. Cùng lỗi đã sửa ở
+                // GetActiveBatch (orcamento-view-batch-fix) nhưng tái diễn ở đây vì
+                // ImportPreview vẫn gọi GetOrCreateDraftBatch dù chỉ cần đọc Estado —
+                // mở màn import (chọn file để xem trước) đủ để âm thầm tạo 1 lô DRAFT
+                // RỖNG mới, khiến các rúbrica đã duyệt ở lô cũ "biến mất" khỏi màn hình
+                // dù import vẫn báo đúng là "đã tồn tại" (2026-07-13, phát hiện qua báo
+                // cáo user). Lô DRAFT thật sự chỉ nên được tạo ở ConfirmImport, khi
+                // người dùng thật sự bấm lưu.
+                OrcamentoBatch batch = _unitOfWork.OrcamentoBatchRepository.GetLatestBatch(request.OrcamentoConfigFk);
+                if (batch != null && (batch.Estado == ESTADO_PENDING_REVIEW || batch.Estado == ESTADO_PENDING_APPROVAL))
                 {
                     response.Errors.Add(new Error { ErrorCode = "ORC-NOT-DRAFT", ErrorMessage = "Lô ngân sách đang chờ duyệt, không thể import thêm." });
                     return response;
