@@ -30,6 +30,9 @@ export class ConciliacaoMovimentosComponent implements OnInit {
 
   public lines: BankStatementLineDataContract[] = [];
   public expandedId: number | null = null;
+  // Lọc theo trạng thái đối chiếu — lọc phía client vì dữ liệu đã tải hết
+  // theo Ano/Ngân hàng/Ngày rồi, không cần thêm tham số gọi lại backend.
+  public statusFilter: 'ALL' | 'CONCILIADO' | 'NAO_CONCILIADO' = 'ALL';
 
   public showAddForm = false;
   public formContaBancariaFk: number | null = null;
@@ -92,6 +95,16 @@ export class ConciliacaoMovimentosComponent implements OnInit {
 
   public get totalNaoConciliado(): number {
     return this.lines.filter(l => !l.isConciliado).length;
+  }
+
+  public get filteredLines(): BankStatementLineDataContract[] {
+    if (this.statusFilter === 'CONCILIADO') {
+      return this.lines.filter(l => l.isConciliado);
+    }
+    if (this.statusFilter === 'NAO_CONCILIADO') {
+      return this.lines.filter(l => !l.isConciliado);
+    }
+    return this.lines;
   }
 
   public openAddForm(): void {

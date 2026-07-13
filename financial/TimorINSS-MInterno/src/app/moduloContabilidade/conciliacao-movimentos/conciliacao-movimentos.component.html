@@ -27,6 +27,14 @@
       <mat-datepicker-toggle matSuffix [for]="pickerDataFim"></mat-datepicker-toggle>
       <mat-datepicker #pickerDataFim></mat-datepicker>
     </mat-form-field>
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>{{ 'conciliacao.fieldStatus' | translate }} <span class="itag drop">{{ 'conciliacao.dropTag' | translate }}</span></mat-label>
+      <mat-select [(ngModel)]="statusFilter" name="statusFilter">
+        <mat-option value="ALL">{{ 'conciliacao.statusAll' | translate }}</mat-option>
+        <mat-option value="CONCILIADO">{{ 'conciliacao.statusConciliado' | translate }}</mat-option>
+        <mat-option value="NAO_CONCILIADO">{{ 'conciliacao.statusNaoConciliado' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
     <button mat-stroked-button (click)="load()">{{ 'conciliacao.reload' | translate }}</button>
 
     <span class="spacer"></span>
@@ -54,7 +62,7 @@
       <span class="con-col-estado">{{ 'conciliacao.colConciliacao' | translate }}</span>
     </div>
 
-    <ng-container *ngFor="let l of lines">
+    <ng-container *ngFor="let l of filteredLines">
       <div class="con-row con-row-summary" (click)="toggleExpand(l)">
         <span class="con-col-banco">{{ l.contaBancariaNome || '—' }}</span>
         <span class="con-col-data">{{ l.dataValor | date:'dd/MM/yyyy' }}</span>
@@ -110,7 +118,7 @@
       </div>
     </ng-container>
 
-    <div class="con-empty" *ngIf="lines.length === 0">{{ 'conciliacao.emptyList' | translate }}</div>
+    <div class="con-empty" *ngIf="filteredLines.length === 0">{{ 'conciliacao.emptyList' | translate }}</div>
   </div>
 
   <div class="con-form-overlay" *ngIf="showAddForm">
