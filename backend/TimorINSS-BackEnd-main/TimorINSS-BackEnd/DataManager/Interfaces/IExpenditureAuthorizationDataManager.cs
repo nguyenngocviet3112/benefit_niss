@@ -6,6 +6,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
     public interface IExpenditureAuthorizationDataManager
     {
         ExpenditureAuthorizationListResponse GetByAno(GetExpenditureAuthorizationListRequest request);
+        StringFileReponse GetByAnoExcel(GetExpenditureAuthorizationListRequest request);
         AvailableRubricasResponse GetAvailableRubricas(GetAvailableRubricasRequest request);
         ExpenditureAuthorizationResponse Create(CreateExpenditureAuthorizationRequest request);
         ResponseBaseDataContract Save(SaveExpenditureAuthorizationRequest request);

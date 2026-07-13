@@ -33,6 +33,10 @@
         <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
+
+    <button mat-stroked-button class="export-excel-btn" (click)="exportarExcel()" [disabled]="loading || items.length === 0">
+      <mat-icon>download</mat-icon> {{ 'general.exportExcel' | translate }}
+    </button>
   </div>
 
   <div class="rc-loading" *ngIf="loading">{{ 'registoCabimentos.loading' | translate }}</div>

@@ -1,5 +1,6 @@
 {
   "general": {
+    "exportExcel": "Export Excel",
     "inssCore": "INSS Core - Social Security",
     "close": "Close",
     "loading": "Loading…",
@@ -1959,7 +1960,7 @@
     "itemCicloDespesa": "Ciclo da Despesa",
     "itemSinteseProgramas": "Síntese Programas",
     "itemClassificacaoFuncionalRelatorio": "Classificação Funcional (relatório)",
-    "itemExecucaoAtividade": "Execução por Atividade / Programa / Regime (4 regimes: Contributivo/Não Contributivo/Administração/Capitalização FRSS)",
+    "itemExecucaoAtividade": "Budget Execution",
     "itemRegistoAd": "Registo AD",
     "itemRegistoCabimentos": "Registo Cabimentos",
     "itemRegistoCompromissos": "Registo Compromissos",
@@ -2899,7 +2900,7 @@
     "errGeneric": "Something went wrong."
   },
   "execucaoAtividade": {
-    "header": "Execução por Atividade / Programa / Regime",
+    "header": "Budget Execution",
     "headerGloss": "budget execution rollup by Atividade and by Regime (root Programa)",
     "hint": "Cabimento/Compromisso/Obrigação/Pagamento totals grouped by Atividade or by Regime, computed from the same Ciclo da Despesa data — view only.",
     "fieldAno": "Year",

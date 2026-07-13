@@ -6,6 +6,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
     public interface ICompromissoDespesaDataManager
     {
         CompromissoDespesaListResponse GetByAno(GetCompromissoDespesaListRequest request);
+        StringFileReponse GetByAnoExcel(GetCompromissoDespesaListRequest request);
         CabimentosDisponiveisResponse GetCabimentosDisponiveis(GetCabimentosDisponiveisRequest request);
         CompromissoDespesaResponse Create(CreateCompromissoDespesaRequest request);
         ResponseBaseDataContract Save(SaveCompromissoDespesaRequest request);

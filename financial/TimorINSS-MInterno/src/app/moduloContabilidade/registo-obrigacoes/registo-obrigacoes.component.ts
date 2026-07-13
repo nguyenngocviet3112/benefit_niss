@@ -4,6 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
 import { ObligationService } from '../../services/obligation.service';
 import { ObligationDataContract } from '../../response-models/obligation-response';
+import { blobToSaveAs } from '../../utils';
 
 // Registo Obrigações — sổ đăng ký toàn bộ Obrigação trong 1 năm ngân sách (mọi
 // trạng thái), đọc thẳng từ GetByAno đã dùng cho màn nhập liệu — không cần API
@@ -112,5 +113,21 @@ export class RegistoObrigacoesComponent implements OnInit {
 
   public get totalValorObrigacao(): number {
     return this.items.reduce((sum, i) => sum + (i.valorObrigacao ?? 0), 0);
+  }
+
+  public exportarExcel(): void {
+    this.obligationService.getByAnoExcel(this.selectedYear).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+          return;
+        }
+        blobToSaveAs(response.file, `RegistoObrigacoes_${this.selectedYear}.xlsx`);
+      },
+      err => {
+        const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('registoObrigacoes.errGeneric');
+        this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
+      }
+    );
   }
 }

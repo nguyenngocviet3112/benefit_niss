@@ -17,3 +17,9 @@ export interface ResponseBase {
     warnings?: string[];
     requestId?: string;
 }
+
+// Dùng chung cho mọi endpoint "Xuất Excel" (StringFileReponse phía backend) —
+// file là chuỗi base64, giải mã bằng base64ToArrayBuffer/blobToSaveAs (utils.ts).
+export interface StringFileResponse extends ResponseBase {
+    file: string;
+}

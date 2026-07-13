@@ -26,6 +26,10 @@
         <mat-option *ngIf="filteredOrganizations.length === 0" disabled>{{ 'cicloDespesa.noneFound' | translate }}</mat-option>
       </mat-autocomplete>
     </mat-form-field>
+
+    <button mat-stroked-button class="export-excel-btn" (click)="exportarExcel()" [disabled]="loading || items.length === 0">
+      <mat-icon>download</mat-icon> {{ 'general.exportExcel' | translate }}
+    </button>
   </div>
 
   <div class="cd-loading" *ngIf="loading">{{ 'cicloDespesa.loading' | translate }}</div>

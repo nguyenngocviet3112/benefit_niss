@@ -46,5 +46,27 @@ namespace TimorINSSBackEnd.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost("GetReportExcel")]
+        [RequirePerm("REPORT_VIEW")]
+        public IActionResult GetReportExcel(CeInssGlobalRequest request)
+        {
+            StringFileReponse response = new StringFileReponse();
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.GetReportExcel(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new TimorINSSBackEnd.DataContracts.ResponseDataContract.Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("GetReportExcel", Log, request))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }

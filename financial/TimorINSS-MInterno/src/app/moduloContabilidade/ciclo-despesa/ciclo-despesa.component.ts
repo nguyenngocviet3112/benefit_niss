@@ -6,6 +6,7 @@ import { CicloDespesaService } from '../../services/ciclo-despesa.service';
 import { InstitutionService } from '../../services/institution.service';
 import { CicloDespesaRow } from '../../response-models/ciclo-despesa-response';
 import { SelectDescription } from '../../models/utils';
+import { blobToSaveAs } from '../../utils';
 
 // Ciclo da Despesa — 1 dòng/AD, theo dõi toàn bộ chu trình chấp hành chi tiêu
 // (Cabimento -> Compromisso -> Obrigação -> Pagamento) kèm saldo từng bước, đúng
@@ -115,5 +116,21 @@ export class CicloDespesaComponent implements OnInit {
 
   public get totalPagamentos(): number {
     return this.items.reduce((sum, i) => sum + i.pagamentos, 0);
+  }
+
+  public exportarExcel(): void {
+    this.cicloDespesaService.getByAnoExcel(this.selectedYear, this.selectedInstitution).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+          return;
+        }
+        blobToSaveAs(response.file, `CicloDespesa_${this.selectedYear}.xlsx`);
+      },
+      err => {
+        const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('cicloDespesa.errGeneric');
+        this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
+      }
+    );
   }
 }

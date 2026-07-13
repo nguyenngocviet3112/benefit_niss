@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApproveCabimentoRequest, CreateCabimentoRequest, SaveCabimentoRequest, SubmitCabimentoRequest } from '../request-models/cabimento-request';
 import { AdsDisponiveisParaCabimentoResponse, CabimentoListResponse, CabimentoResponse } from '../response-models/cabimento-response';
-import { ResponseBase } from '../response-models/utils-response';
+import { ResponseBase, StringFileResponse } from '../response-models/utils-response';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,10 @@ export class CabimentoService {
 
   public getByAno(ano: number): Observable<CabimentoListResponse> {
     return this.http.get<CabimentoListResponse>(`${environment.apiUrl}/cabimento/GetByAno/${ano}`);
+  }
+
+  public getByAnoExcel(ano: number): Observable<StringFileResponse> {
+    return this.http.get<StringFileResponse>(`${environment.apiUrl}/cabimento/GetByAnoExcel/${ano}`);
   }
 
   public getAdsDisponiveis(ano: number): Observable<AdsDisponiveisParaCabimentoResponse> {

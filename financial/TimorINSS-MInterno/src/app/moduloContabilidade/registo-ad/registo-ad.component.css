@@ -119,3 +119,21 @@
 .ra-badge-PENDING_REVIEW { background: #fff3e0; color: #ef6c00; }
 .ra-badge-PENDING_APPROVAL { background: #e3f2fd; color: #1565c0; }
 .ra-badge-APPROVED { background: #e6f4ea; color: #1e7e34; }
+
+.export-excel-btn {
+  height: 40px;
+  line-height: 38px;
+  padding: 0 12px;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-sizing: border-box;
+}
+
+.export-excel-btn mat-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  line-height: 18px;
+}

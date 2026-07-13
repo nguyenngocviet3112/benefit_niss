@@ -6,6 +6,7 @@ import { ExpenditureAuthorizationService } from '../../services/expenditure-auth
 import { InstitutionService } from '../../services/institution.service';
 import { ExpenditureAuthorizationDataContract } from '../../response-models/expenditure-authorization-response';
 import { SelectDescription } from '../../models/utils';
+import { blobToSaveAs } from '../../utils';
 
 // Registo AD — sổ đăng ký toàn bộ Autorização de Despesa trong 1 năm ngân sách
 // (mọi trạng thái, không chỉ đã duyệt), đọc thẳng từ GetByAno đã dùng cho màn
@@ -134,5 +135,21 @@ export class RegistoAdComponent implements OnInit {
 
   public get totalSaldoDisponivel(): number {
     return this.items.reduce((sum, i) => sum + (i.saldoDisponivel ?? 0), 0);
+  }
+
+  public exportarExcel(): void {
+    this.expenditureAuthorizationService.getByAnoExcel(this.selectedYear).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+          return;
+        }
+        blobToSaveAs(response.file, `RegistoAD_${this.selectedYear}.xlsx`);
+      },
+      err => {
+        const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('registoAd.errGeneric');
+        this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
+      }
+    );
   }
 }

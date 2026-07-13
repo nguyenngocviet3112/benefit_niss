@@ -1,5 +1,6 @@
 {
   "general": {
+    "exportExcel": "Exportar Excel",
     "loading": "Carregando…",
     "inssCore": "INSS Core - Segurança Social",
     "close": "Fechar",
@@ -1955,7 +1956,7 @@
     "itemCicloDespesa": "Ciclo da Despesa",
     "itemSinteseProgramas": "Síntese Programas",
     "itemClassificacaoFuncionalRelatorio": "Classificação Funcional (relatório)",
-    "itemExecucaoAtividade": "Execução por Atividade / Programa / Regime (4 regimes: Contributivo/Não Contributivo/Administração/Capitalização FRSS)",
+    "itemExecucaoAtividade": "Execução Orçamental",
     "itemRegistoAd": "Registo AD",
     "itemRegistoCabimentos": "Registo Cabimentos",
     "itemRegistoCompromissos": "Registo Compromissos",
@@ -2895,7 +2896,7 @@
     "errGeneric": "Ocorreu um erro."
   },
   "execucaoAtividade": {
-    "header": "Execução por Atividade / Programa / Regime",
+    "header": "Execução Orçamental",
     "headerGloss": "execução orçamental agregada por Atividade e por Regime (Programa raiz)",
     "hint": "Totais de Cabimento/Compromisso/Obrigação/Pagamento agrupados por Atividade ou por Regime, calculados a partir dos mesmos dados do Ciclo da Despesa — apenas visualização.",
     "fieldAno": "Ano",

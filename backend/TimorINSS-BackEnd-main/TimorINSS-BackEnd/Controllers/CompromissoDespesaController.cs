@@ -49,6 +49,29 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
+        [HttpGet("GetByAnoExcel/{ano}")]
+        public IActionResult GetByAnoExcel(int ano)
+        {
+            StringFileReponse response;
+            try
+            {
+                GetCompromissoDespesaListRequest request = new GetCompromissoDespesaListRequest();
+                request.GetHeaderInfo(Request.Headers);
+                request.Ano = ano;
+                response = _dataManager.GetByAnoExcel(request);
+            }
+            catch (Exception e)
+            {
+                response = new StringFileReponse();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("GetByAnoExcel", Log, null))
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
         [HttpGet("GetCabimentosDisponiveis/{ano}")]
         public IActionResult GetCabimentosDisponiveis(int ano)
         {

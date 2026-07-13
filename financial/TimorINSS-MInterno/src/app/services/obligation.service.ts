@@ -16,7 +16,7 @@ import {
   ObligationListResponse,
   ObligationResponse
 } from '../response-models/obligation-response';
-import { ResponseBase } from '../response-models/utils-response';
+import { ResponseBase, StringFileResponse } from '../response-models/utils-response';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +27,10 @@ export class ObligationService {
 
   public getByAno(ano: number): Observable<ObligationListResponse> {
     return this.http.get<ObligationListResponse>(`${environment.apiUrl}/obligation/GetByAno/${ano}`);
+  }
+
+  public getByAnoExcel(ano: number): Observable<StringFileResponse> {
+    return this.http.get<StringFileResponse>(`${environment.apiUrl}/obligation/GetByAnoExcel/${ano}`);
   }
 
   public getCompromissosComSaldo(ano: number): Observable<CompromissosComSaldoResponse> {

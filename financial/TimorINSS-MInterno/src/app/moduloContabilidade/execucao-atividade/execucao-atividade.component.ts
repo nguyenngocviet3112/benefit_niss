@@ -6,6 +6,7 @@ import { CicloDespesaService } from '../../services/ciclo-despesa.service';
 import { InstitutionService } from '../../services/institution.service';
 import { CicloDespesaRow } from '../../response-models/ciclo-despesa-response';
 import { SelectDescription } from '../../models/utils';
+import * as XLSX from 'xlsx';
 
 export interface ExecucaoGroupRow {
   codigo: string;
@@ -178,5 +179,24 @@ export class ExecucaoAtividadeComponent implements OnInit {
 
   public get totalPagamentos(): number {
     return this.groupedItems.reduce((sum, i) => sum + i.pagamentos, 0);
+  }
+
+  // Xuất Excel 100% phía client — dữ liệu đã gộp sẵn trong browser (không có
+  // API riêng cho màn này, xem ghi chú đầu file), dùng thư viện "xlsx" đã có
+  // sẵn trong package.json (đã dùng ở vài màn mode cũ).
+  public exportarExcel(): void {
+    const isRegime = this.groupBy === 'regime';
+    const header = isRegime
+      ? ['Regime', 'N.º AD', 'Cabimentos', 'Compromissos', 'Saldo 1', 'Obrigações', 'Saldo 2', 'Pagamentos', 'Saldo 3']
+      : ['Regime', 'Atividade', 'N.º AD', 'Cabimentos', 'Compromissos', 'Saldo 1', 'Obrigações', 'Saldo 2', 'Pagamentos', 'Saldo 3'];
+
+    const rows = this.groupedItems.map(r => isRegime
+      ? [`${r.codigo} ${r.designacao}`, r.numeroAds, r.cabimentos, r.compromissos, r.saldo1, r.obrigacoes, r.saldo2, r.pagamentos, r.saldo3]
+      : [`${r.regimeCodigo} ${r.regimeDesignacao}`, `${r.codigo} ${r.designacao}`, r.numeroAds, r.cabimentos, r.compromissos, r.saldo1, r.obrigacoes, r.saldo2, r.pagamentos, r.saldo3]);
+
+    const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Execução');
+    XLSX.writeFile(wb, `ExecucaoAtividade_${this.selectedYear}.xlsx`);
   }
 }

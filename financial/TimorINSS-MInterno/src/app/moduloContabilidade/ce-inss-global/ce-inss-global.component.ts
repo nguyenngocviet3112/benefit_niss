@@ -5,6 +5,7 @@ import { CeInssGlobalService } from '../../services/ce-inss-global.service';
 import { InstitutionService } from '../../services/institution.service';
 import { CeInssGlobalResponse } from '../../response-models/ce-inss-global-response';
 import { SelectDescription } from '../../models/utils';
+import { blobToSaveAs } from '../../utils';
 
 @Component({
   selector: 'app-ce-inss-global',
@@ -79,6 +80,25 @@ export class CeInssGlobalComponent implements OnInit {
       },
       err => {
         this.loading = false;
+        const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('ceInssGlobal.errGeneric');
+        this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
+      }
+    );
+  }
+
+  public exportarExcel(): void {
+    this.ceInssGlobalService.getReportExcel({
+      year: this.selectedYear,
+      institution: this.selectedInstitution
+    }).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+          return;
+        }
+        blobToSaveAs(response.file, `CE_OSS_Global_${this.selectedYear}.xlsx`);
+      },
+      err => {
         const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('ceInssGlobal.errGeneric');
         this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
       }

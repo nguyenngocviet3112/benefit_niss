@@ -50,5 +50,30 @@ namespace TimorINSSBackEnd.Controllers
             }
             return Ok(response);
         }
+
+        [HttpGet("GetByAnoExcel/{ano}")]
+        [RequirePerm("REPORT_VIEW")]
+        public IActionResult GetByAnoExcel(int ano, [FromQuery] int? institution)
+        {
+            StringFileReponse response = new StringFileReponse();
+            try
+            {
+                GetCicloDespesaListRequest request = new GetCicloDespesaListRequest();
+                request.GetHeaderInfo(Request.Headers);
+                request.Ano = ano;
+                request.Institution = institution;
+                response = _dataManager.GetByAnoExcel(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new TimorINSSBackEnd.DataContracts.ResponseDataContract.Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("GetByAnoExcel", Log, null))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }

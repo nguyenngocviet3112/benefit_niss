@@ -5,6 +5,7 @@ using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DataManager.Interfaces;
+using TimorINSSBackEnd.Extensions;
 using TimorINSSBackEnd.Models;
 using TimorINSSBackEnd.Repository.Interfaces;
 
@@ -88,6 +89,38 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 response.Items = items
                     .Select(c => MapEntity(c, obrigadoPorCompromisso.TryGetValue(c.Id, out var v) ? v : 0))
                     .ToList();
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
+        public StringFileReponse GetByAnoExcel(GetCompromissoDespesaListRequest request)
+        {
+            var response = new StringFileReponse { RequestId = request.RequestId };
+            try
+            {
+                var list = GetByAno(request);
+                if (list.Errors.Count > 0)
+                {
+                    response.Errors = list.Errors;
+                    return response;
+                }
+
+                var headers = new[] { "N.º Compromisso", "N.º Cabimento", "Atividade", "Classificação Económica", "Organization",
+                    "Descritivo", "Valor Compromisso (ano)", "Valor Obrigado", "Saldo Disponível", "Estado" };
+
+                var rows = new List<object[]>();
+                foreach (var i in list.Items)
+                {
+                    rows.Add(new object[] { $"{i.Numero}/{i.Ano}", $"{i.CabimentoNumero}/{i.CabimentoMes}",
+                        $"{i.AtividadeCodigo} {i.AtividadeDesignacao}", $"{i.EconomicClassificationCodigo} {i.EconomicClassificationDesignacao}",
+                        i.OrganizationNome, i.Descritivo, i.ValorCompromissoAno, i.ValorObrigado, i.SaldoDisponivel, i.Estado });
+                }
+
+                response.File = ExcelExportHelper.BuildXlsxBase64("Registo Compromissos", headers, rows);
             }
             catch (Exception e)
             {

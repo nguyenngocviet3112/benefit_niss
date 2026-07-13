@@ -5,6 +5,7 @@ using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DataManager.Interfaces;
+using TimorINSSBackEnd.Extensions;
 using TimorINSSBackEnd.Models;
 using TimorINSSBackEnd.Repository.Interfaces;
 
@@ -114,6 +115,38 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 response.Items = _unitOfWork.ObligationRepository.GetByAno(request.Ano)
                     .Select(MapEntity)
                     .ToList();
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
+        public StringFileReponse GetByAnoExcel(GetObligationListRequest request)
+        {
+            var response = new StringFileReponse { RequestId = request.RequestId };
+            try
+            {
+                var list = GetByAno(request);
+                if (list.Errors.Count > 0)
+                {
+                    response.Errors = list.Errors;
+                    return response;
+                }
+
+                var headers = new[] { "N.º Obrigação", "Descritivo", "Compromisso relacionado", "Categoria",
+                    "Beneficiário", "Valor Obrigação", "Estado" };
+
+                var rows = new List<object[]>();
+                foreach (var i in list.Items)
+                {
+                    string compromissos = string.Join(", ", i.Items.Select(it => $"{it.CompromissoDespesaNumero}/{it.CompromissoDespesaMes}"));
+                    rows.Add(new object[] { $"{i.Numero}/{i.Ano}", i.DescritivoObrigacao, compromissos,
+                        i.BeneficiarioCategoria, i.BeneficiarioNome, i.ValorObrigacao, i.Estado });
+                }
+
+                response.File = ExcelExportHelper.BuildXlsxBase64("Registo Obrigação", headers, rows);
             }
             catch (Exception e)
             {

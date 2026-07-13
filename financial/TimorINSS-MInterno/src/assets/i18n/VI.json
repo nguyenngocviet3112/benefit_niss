@@ -1,5 +1,6 @@
 {
   "general": {
+    "exportExcel": "Xuất Excel",
     "loading": "Đang tải…",
     "inssCore": "INSS Core - An sinh Xã hội",
     "close": "Đóng",
@@ -1959,7 +1960,7 @@
     "itemCicloDespesa": "Ciclo da Despesa",
     "itemSinteseProgramas": "Síntese Programas",
     "itemClassificacaoFuncionalRelatorio": "Classificação Funcional (relatório)",
-    "itemExecucaoAtividade": "Execução por Atividade / Programa / Regime (4 regimes: Contributivo/Não Contributivo/Administração/Capitalização FRSS)",
+    "itemExecucaoAtividade": "Chấp hành Ngân sách",
     "itemRegistoAd": "Registo AD",
     "itemRegistoCabimentos": "Registo Cabimentos",
     "itemRegistoCompromissos": "Registo Compromissos",
@@ -2899,7 +2900,7 @@
     "errGeneric": "Đã xảy ra lỗi."
   },
   "execucaoAtividade": {
-    "header": "Execução por Atividade / Programa / Regime",
+    "header": "Chấp hành Ngân sách",
     "headerGloss": "gộp báo cáo chấp hành ngân sách theo Atividade và theo Regime (Programa gốc)",
     "hint": "Tổng hợp giá trị Cabimento/Compromisso/Obrigação/Pagamento theo Atividade hoặc theo Regime, tính từ đúng dữ liệu Ciclo da Despesa — chỉ xem.",
     "fieldAno": "Ano",

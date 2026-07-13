@@ -15,7 +15,7 @@ import {
   CompromissoDespesaListResponse,
   CompromissoDespesaResponse
 } from '../response-models/compromisso-despesa-response';
-import { ResponseBase } from '../response-models/utils-response';
+import { ResponseBase, StringFileResponse } from '../response-models/utils-response';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +26,10 @@ export class CompromissoDespesaService {
 
   public getByAno(ano: number): Observable<CompromissoDespesaListResponse> {
     return this.http.get<CompromissoDespesaListResponse>(`${environment.apiUrl}/compromissodespesa/GetByAno/${ano}`);
+  }
+
+  public getByAnoExcel(ano: number): Observable<StringFileResponse> {
+    return this.http.get<StringFileResponse>(`${environment.apiUrl}/compromissodespesa/GetByAnoExcel/${ano}`);
   }
 
   public getCabimentosDisponiveis(ano: number): Observable<CabimentosDisponiveisResponse> {

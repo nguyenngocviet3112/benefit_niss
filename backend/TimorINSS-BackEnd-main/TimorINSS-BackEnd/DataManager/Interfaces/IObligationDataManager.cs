@@ -6,6 +6,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
     public interface IObligationDataManager
     {
         ObligationListResponse GetByAno(GetObligationListRequest request);
+        StringFileReponse GetByAnoExcel(GetObligationListRequest request);
         CompromissosComSaldoResponse GetCompromissosComSaldo(GetCompromissosComSaldoRequest request);
         ObligationResponse Create(CreateObligationRequest request);
         ResponseBaseDataContract AddItem(AddObligationItemRequest request);

@@ -6,6 +6,7 @@ import { CabimentoService } from '../../services/cabimento.service';
 import { InstitutionService } from '../../services/institution.service';
 import { CabimentoDataContract } from '../../response-models/cabimento-response';
 import { SelectDescription } from '../../models/utils';
+import { blobToSaveAs } from '../../utils';
 
 // Registo Cabimentos — sổ đăng ký toàn bộ Cabimento/DIC trong 1 năm ngân sách
 // (mọi trạng thái), đọc thẳng từ GetByAno đã dùng cho màn nhập liệu — không
@@ -133,5 +134,21 @@ export class RegistoCabimentosComponent implements OnInit {
 
   public get totalSaldoDisponivel(): number {
     return this.items.reduce((sum, i) => sum + (i.saldoDisponivel ?? 0), 0);
+  }
+
+  public exportarExcel(): void {
+    this.cabimentoService.getByAnoExcel(this.selectedYear).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+          return;
+        }
+        blobToSaveAs(response.file, `RegistoCabimentos_${this.selectedYear}.xlsx`);
+      },
+      err => {
+        const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('registoCabimentos.errGeneric');
+        this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
+      }
+    );
   }
 }

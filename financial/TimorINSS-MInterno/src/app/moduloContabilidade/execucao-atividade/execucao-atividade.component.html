@@ -33,6 +33,10 @@
         <mat-option *ngFor="let g of groupByOptions" [value]="g.value">{{ g.label | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
+
+    <button mat-stroked-button class="export-excel-btn" (click)="exportarExcel()" [disabled]="loading || groupedItems.length === 0">
+      <mat-icon>download</mat-icon> {{ 'general.exportExcel' | translate }}
+    </button>
   </div>
 
   <div class="ea-loading" *ngIf="loading">{{ 'execucaoAtividade.loading' | translate }}</div>

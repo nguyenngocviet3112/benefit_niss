@@ -25,6 +25,10 @@
         <mat-option *ngIf="filteredOrganizations.length === 0" disabled>{{ 'ceInssGlobal.noneFound' | translate }}</mat-option>
       </mat-autocomplete>
     </mat-form-field>
+
+    <button mat-stroked-button class="export-excel-btn" (click)="exportarExcel()" [disabled]="loading || !report">
+      <mat-icon>download</mat-icon> {{ 'general.exportExcel' | translate }}
+    </button>
   </div>
 
   <div class="cg-loading" *ngIf="loading">{{ 'ceInssGlobal.loading' | translate }}</div>

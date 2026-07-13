@@ -61,7 +61,12 @@ export class ContabilidadeShellComponent implements OnInit {
   // qua [RequirePerm] trên các hành động ghi/sửa (xem RBAC enforcement).
   // Hầu hết endpoint GET/xem không bị chặn — nên mục không có permTokens
   // (undefined) mặc định LUÔN hiện.
+  // 2026-07-13 (user yêu cầu): mục còn comingSoon (chưa xây xong) ẩn hẳn khỏi
+  // UI, không hiện dạng disabled/tooltip nữa.
   private canSee(item: TreebarLeaf): boolean {
+    if (item.comingSoon) {
+      return false;
+    }
     if (!item.permTokens || item.permTokens.length === 0) {
       return true;
     }

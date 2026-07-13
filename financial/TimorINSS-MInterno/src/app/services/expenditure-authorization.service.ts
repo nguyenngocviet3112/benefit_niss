@@ -16,7 +16,7 @@ import {
   ExpenditureAuthorizationListResponse,
   ExpenditureAuthorizationResponse
 } from '../response-models/expenditure-authorization-response';
-import { ResponseBase } from '../response-models/utils-response';
+import { ResponseBase, StringFileResponse } from '../response-models/utils-response';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +27,10 @@ export class ExpenditureAuthorizationService {
 
   public getByAno(ano: number): Observable<ExpenditureAuthorizationListResponse> {
     return this.http.get<ExpenditureAuthorizationListResponse>(`${environment.apiUrl}/expenditureauthorization/GetByAno/${ano}`);
+  }
+
+  public getByAnoExcel(ano: number): Observable<StringFileResponse> {
+    return this.http.get<StringFileResponse>(`${environment.apiUrl}/expenditureauthorization/GetByAnoExcel/${ano}`);
   }
 
   public getAvailableRubricas(orcamentoConfigFk: number): Observable<AvailableRubricasResponse> {

@@ -6,5 +6,6 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
     public interface ICeInssGlobalDataManager
     {
         CeInssGlobalResponse GetReport(CeInssGlobalRequest request);
+        StringFileReponse GetReportExcel(CeInssGlobalRequest request);
     }
 }

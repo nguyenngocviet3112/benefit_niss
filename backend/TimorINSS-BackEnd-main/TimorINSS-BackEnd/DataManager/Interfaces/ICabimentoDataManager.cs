@@ -6,6 +6,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
     public interface ICabimentoDataManager
     {
         CabimentoListResponse GetByAno(GetCabimentoListRequest request);
+        StringFileReponse GetByAnoExcel(GetCabimentoListRequest request);
         AdsDisponiveisParaCabimentoResponse GetAdsDisponiveis(GetAdsDisponiveisParaCabimentoRequest request);
         CabimentoResponse Create(CreateCabimentoRequest request);
         ResponseBaseDataContract Save(SaveCabimentoRequest request);
