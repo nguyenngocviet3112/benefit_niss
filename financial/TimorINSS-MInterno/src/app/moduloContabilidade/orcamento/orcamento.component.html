@@ -29,6 +29,7 @@
     <div class="orc-row orc-row-header">
       <span class="orc-col-atividade">Atividade</span>
       <span class="orc-col-ec">Classificação Económica</span>
+      <span class="orc-col-ec">{{ 'orcamento.colClassificacaoFuncional' | translate }}</span>
       <span class="orc-col-org">Organization</span>
       <span class="orc-col-valor">{{ 'orcamento.colValor' | translate }}</span>
       <span class="orc-col-actions" *ngIf="isDraft">{{ 'orcamento.colActions' | translate }}</span>
@@ -36,6 +37,7 @@
     <div class="orc-row" *ngFor="let l of batch.linhas">
       <span class="orc-col-atividade">{{ l.atividadeCodigo }} - {{ l.atividadeDesignacao }}</span>
       <span class="orc-col-ec">{{ l.economicClassificationCodigo }} - {{ l.economicClassificationDesignacao }}</span>
+      <span class="orc-col-ec">{{ l.functionalClassificationCodigo ? (l.functionalClassificationCodigo + ' - ' + l.functionalClassificationDesignacao) : '—' }}</span>
       <span class="orc-col-org">{{ l.organizationNome }}</span>
       <span class="orc-col-valor">{{ l.valor | number:'1.2-2' }}</span>
       <span class="orc-col-actions" *ngIf="isDraft">
@@ -95,6 +97,18 @@
             {{ e.codigo }} - {{ e.designacao }}
           </mat-option>
           <mat-option *ngIf="filteredEconomicClassifications.length === 0" disabled>{{ 'orcamento.noneFound' | translate }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'orcamento.fieldClassificacaoFuncional' | translate }} <span class="itag type">{{ 'orcamento.searchOptionalTag' | translate }}</span></mat-label>
+        <input matInput [(ngModel)]="functionalClassificationSearch" name="functionalClassificationSearchInput"
+               (ngModelChange)="onFunctionalClassificationSearchChange()" [matAutocomplete]="autoFuncional" />
+        <mat-autocomplete #autoFuncional="matAutocomplete">
+          <mat-option *ngFor="let f of filteredFunctionalClassifications" [value]="f" (onSelectionChange)="selectFunctionalClassification(f)">
+            {{ f.codigo }} - {{ f.designacao }}
+          </mat-option>
+          <mat-option *ngIf="filteredFunctionalClassifications.length === 0" disabled>{{ 'orcamento.noneFound' | translate }}</mat-option>
         </mat-autocomplete>
       </mat-form-field>
 

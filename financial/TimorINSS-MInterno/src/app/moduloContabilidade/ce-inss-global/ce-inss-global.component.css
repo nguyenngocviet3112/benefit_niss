@@ -24,6 +24,16 @@
   min-width: 220px;
 }
 
+.itag {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.itag.type { background: #fff3e0; color: #ef6c00; }
+
 .cg-loading {
   padding: 24px;
   color: #999;

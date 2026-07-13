@@ -26,15 +26,15 @@
       </div>
 
       <div class="mode-select-container">
-        <div class="mode-select-label">Giao diện (Interface)</div>
+        <div class="mode-select-label">{{ 'login_form.modeSelectLabel' | translate }}</div>
         <div class="mode-select-options">
           <label class="mode-select-option">
             <input type="radio" name="loginMode" value="old" [(ngModel)]="selectedMode">
-            <span>Giao diện cũ</span>
+            <span>{{ 'login_form.modeOld' | translate }}</span>
           </label>
           <label class="mode-select-option">
             <input type="radio" name="loginMode" value="new" [(ngModel)]="selectedMode">
-            <span>Giao diện mới (Contabilidade)</span>
+            <span>{{ 'login_form.modeNew' | translate }}</span>
           </label>
         </div>
       </div>

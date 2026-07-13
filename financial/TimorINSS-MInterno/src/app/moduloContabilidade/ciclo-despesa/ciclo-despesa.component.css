@@ -32,8 +32,18 @@
 }
 
 .cd-field-org {
-  width: 220px;
+  width: 260px;
 }
+
+.itag {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.itag.type { background: #fff3e0; color: #ef6c00; }
 
 .cd-loading {
   padding: 24px;

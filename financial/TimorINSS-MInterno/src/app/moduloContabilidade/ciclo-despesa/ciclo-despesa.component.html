@@ -13,11 +13,18 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="cd-field-org">
-      <mat-label>Organization</mat-label>
-      <mat-select [(ngModel)]="selectedInstitution" (selectionChange)="load()">
-        <mat-option [value]="undefined">{{ 'cicloDespesa.bothOption' | translate }}</mat-option>
-        <mat-option *ngFor="let inst of institutions" [value]="inst.id">{{ inst.nome }}</mat-option>
-      </mat-select>
+      <mat-label>Organization <span class="itag type">{{ 'cicloDespesa.searchToTypeTag' | translate }}</span></mat-label>
+      <input matInput [(ngModel)]="organizationSearch" name="organizationSearchInput"
+             (ngModelChange)="onOrganizationSearchChange()" [matAutocomplete]="autoOrg" />
+      <mat-autocomplete #autoOrg="matAutocomplete">
+        <mat-option [value]="undefined" (onSelectionChange)="selectOrganization()">
+          {{ 'cicloDespesa.bothOption' | translate }}
+        </mat-option>
+        <mat-option *ngFor="let inst of filteredOrganizations" [value]="inst.nome" (onSelectionChange)="selectOrganization(inst)">
+          {{ inst.nome }}
+        </mat-option>
+        <mat-option *ngIf="filteredOrganizations.length === 0" disabled>{{ 'cicloDespesa.noneFound' | translate }}</mat-option>
+      </mat-autocomplete>
     </mat-form-field>
   </div>
 

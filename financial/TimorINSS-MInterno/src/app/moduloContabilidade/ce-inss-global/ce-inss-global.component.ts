@@ -17,6 +17,8 @@ export class CeInssGlobalComponent implements OnInit {
   public report: CeInssGlobalResponse | null = null;
 
   public institutions: SelectDescription[] = [];
+  public filteredOrganizations: SelectDescription[] = [];
+  public organizationSearch = '';
   public years: number[] = [];
 
   // undefined = "Cả 2 (Both)" — INSS Global
@@ -33,12 +35,31 @@ export class CeInssGlobalComponent implements OnInit {
   ngOnInit(): void {
     const current = new Date().getFullYear();
     this.years = [current - 1, current, current + 1];
+    this.organizationSearch = this.translate.instant('ceInssGlobal.bothOption');
 
     this.institutionService.getAllInstitutionsAtivo().subscribe(
-      response => this.institutions = response.selects ?? [],
+      response => {
+        this.institutions = response.selects ?? [];
+        this.filteredOrganizations = this.institutions;
+      },
       () => { /* Organization filter still works with just "Both" if this fails */ }
     );
 
+    this.load();
+  }
+
+  private normalize(value: string): string {
+    return (value || '').toLowerCase();
+  }
+
+  public onOrganizationSearchChange(): void {
+    const term = this.normalize(this.organizationSearch);
+    this.filteredOrganizations = this.institutions.filter(o => this.normalize(o.nome).includes(term));
+  }
+
+  public selectOrganization(o?: SelectDescription): void {
+    this.selectedInstitution = o?.id;
+    this.organizationSearch = o ? o.nome : this.translate.instant('ceInssGlobal.bothOption');
     this.load();
   }
 

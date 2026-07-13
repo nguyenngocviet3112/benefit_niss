@@ -5,9 +5,11 @@ import { OrcamentoService } from '../../services/orcamento.service';
 import { ProgramActivityService } from '../../services/program-activity.service';
 import { EconomicClassificationService } from '../../services/economic-classification.service';
 import { InstitutionService } from '../../services/institution.service';
+import { FunctionalClassificationService } from '../../services/functional-classification.service';
 import { OrcamentoBatchDataContract, OrcamentoLinhaDataContract } from '../../response-models/orcamento-response';
 import { ProgramActivityDataContract } from '../../response-models/program-activity-response';
 import { EconomicClassificationDataContract } from '../../response-models/economic-classification-response';
+import { FunctionalClassificationDataContract } from '../../response-models/functional-classification-response';
 import { SelectDescription } from '../../models/utils';
 
 const ESTADO_LABELS: { [key: string]: string } = {
@@ -32,21 +34,25 @@ export class OrcamentoComponent implements OnInit {
   // Pickers (só folhas — nível mais baixo de cada árvore).
   public atividades: ProgramActivityDataContract[] = [];
   public economicClassifications: EconomicClassificationDataContract[] = [];
+  public functionalClassifications: FunctionalClassificationDataContract[] = [];
   public organizations: SelectDescription[] = [];
 
   // Danh sách đã lọc theo ô tìm kiếm (autocomplete) — gõ tới đâu lọc tới đó,
   // thay cho kéo-chọn trong mat-select khi danh sách quá dài.
   public filteredAtividades: ProgramActivityDataContract[] = [];
   public filteredEconomicClassifications: EconomicClassificationDataContract[] = [];
+  public filteredFunctionalClassifications: FunctionalClassificationDataContract[] = [];
   public filteredOrganizations: SelectDescription[] = [];
 
   public atividadeSearch = '';
   public economicClassificationSearch = '';
+  public functionalClassificationSearch = '';
   public organizationSearch = '';
 
   public editingId: number | null = null;
   public formAtividadeFk: number | null = null;
   public formEconomicClassificationFk: number | null = null;
+  public formFunctionalClassificationFk: number | null = null;
   public formOrganizationFk: number | null = null;
   public formValor: number | null = null;
   public showForm = false;
@@ -60,6 +66,7 @@ export class OrcamentoComponent implements OnInit {
     private programActivityService: ProgramActivityService,
     private economicClassificationService: EconomicClassificationService,
     private institutionService: InstitutionService,
+    private functionalClassificationService: FunctionalClassificationService,
     private snackBar: MatSnackBar,
     private translate: TranslateService
   ) { }
@@ -81,6 +88,10 @@ export class OrcamentoComponent implements OnInit {
     this.institutionService.getAllInstitutionsAtivo().subscribe(response => {
       this.organizations = response.selects ?? [];
       this.filteredOrganizations = this.organizations;
+    });
+    this.functionalClassificationService.getAllActive().subscribe(response => {
+      this.functionalClassifications = (response.items ?? []).filter(f => !f.hasKids);
+      this.filteredFunctionalClassifications = this.functionalClassifications;
     });
   }
 
@@ -108,6 +119,17 @@ export class OrcamentoComponent implements OnInit {
   public selectEconomicClassification(e: EconomicClassificationDataContract): void {
     this.formEconomicClassificationFk = e.id;
     this.economicClassificationSearch = `${e.codigo} - ${e.designacao}`;
+  }
+
+  public onFunctionalClassificationSearchChange(): void {
+    const term = this.normalize(this.functionalClassificationSearch);
+    this.filteredFunctionalClassifications = this.functionalClassifications.filter(f =>
+      this.normalize(f.codigo).includes(term) || this.normalize(f.designacao).includes(term));
+  }
+
+  public selectFunctionalClassification(f: FunctionalClassificationDataContract): void {
+    this.formFunctionalClassificationFk = f.id;
+    this.functionalClassificationSearch = `${f.codigo} - ${f.designacao}`;
   }
 
   public onOrganizationSearchChange(): void {
@@ -156,13 +178,16 @@ export class OrcamentoComponent implements OnInit {
     this.editingId = null;
     this.formAtividadeFk = null;
     this.formEconomicClassificationFk = null;
+    this.formFunctionalClassificationFk = null;
     this.formOrganizationFk = null;
     this.formValor = null;
     this.atividadeSearch = '';
     this.economicClassificationSearch = '';
+    this.functionalClassificationSearch = '';
     this.organizationSearch = '';
     this.filteredAtividades = this.atividades;
     this.filteredEconomicClassifications = this.economicClassifications;
+    this.filteredFunctionalClassifications = this.functionalClassifications;
     this.filteredOrganizations = this.organizations;
     this.showForm = true;
   }
@@ -171,13 +196,17 @@ export class OrcamentoComponent implements OnInit {
     this.editingId = linha.id;
     this.formAtividadeFk = linha.atividadeFk;
     this.formEconomicClassificationFk = linha.economicClassificationFk;
+    this.formFunctionalClassificationFk = linha.functionalClassificationFk ?? null;
     this.formOrganizationFk = linha.organizationFk;
     this.formValor = linha.valor;
     this.atividadeSearch = `${linha.atividadeCodigo} - ${linha.atividadeDesignacao}`;
     this.economicClassificationSearch = `${linha.economicClassificationCodigo} - ${linha.economicClassificationDesignacao}`;
+    this.functionalClassificationSearch = linha.functionalClassificationCodigo
+      ? `${linha.functionalClassificationCodigo} - ${linha.functionalClassificationDesignacao}` : '';
     this.organizationSearch = linha.organizationNome;
     this.filteredAtividades = this.atividades;
     this.filteredEconomicClassifications = this.economicClassifications;
+    this.filteredFunctionalClassifications = this.functionalClassifications;
     this.filteredOrganizations = this.organizations;
     this.showForm = true;
   }
@@ -197,6 +226,7 @@ export class OrcamentoComponent implements OnInit {
       orcamentoConfigFk: this.orcamentoConfigFk,
       atividadeFk: this.formAtividadeFk,
       economicClassificationFk: this.formEconomicClassificationFk,
+      functionalClassificationFk: this.formFunctionalClassificationFk ?? undefined,
       organizationFk: this.formOrganizationFk,
       valor: this.formValor
     }).subscribe(
