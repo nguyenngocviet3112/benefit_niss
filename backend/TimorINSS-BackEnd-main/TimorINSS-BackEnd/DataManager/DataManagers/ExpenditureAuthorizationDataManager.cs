@@ -298,6 +298,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 }
 
+                // Chỉ xoá được khi AD gốc còn DRAFT — bản ghi đã duyệt thì không cho xoá
+                // gì nữa (2026-07-13, nguyên tắc chung, xem CLAUDE.md §9). Trước đây chỉ
+                // frontend ẩn nút, API không chặn — 1 AD đã duyệt vẫn xoá được Plurianualidade.
+                ExpenditureAuthorization parent = _unitOfWork.ExpenditureAuthorizationRepository.Get(entity.ExpenditureAuthorizationFk);
+                if (parent != null && parent.Estado != ESTADO_DRAFT)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "AD-NOT-DRAFT", ErrorMessage = "AD không ở trạng thái nháp — không thể xoá Plurianualidade." });
+                    return response;
+                }
+
                 entity.IndActivo = false;
                 entity = _utils.UpdateDetailsToEntity(entity);
                 _unitOfWork.ExpenditureAuthorizationRepository.UpdatePlurianualidade(entity);

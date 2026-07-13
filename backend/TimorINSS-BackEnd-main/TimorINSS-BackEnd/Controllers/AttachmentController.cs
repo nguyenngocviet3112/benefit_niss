@@ -85,5 +85,26 @@ namespace TimorINSSBackEnd.Controllers
             Response.Headers["Content-Disposition"] = $"inline; filename=\"{entity.FileName}\"";
             return File(entity.FileContent, entity.ContentType);
         }
+
+        [HttpPost("Delete")]
+        public IActionResult Delete(DeleteAttachmentRequest request)
+        {
+            ResponseBaseDataContract response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.Delete(request);
+            }
+            catch (Exception e)
+            {
+                response = new ResponseBaseDataContract();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("Delete", Log, request))
+                return BadRequest(response);
+
+            return Ok(response);
+        }
     }
 }

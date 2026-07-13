@@ -9,5 +9,6 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         AttachmentListResponse GetByEntity(GetAttachmentsByEntityRequest request);
         UploadAttachmentResponse Upload(UploadAttachmentRequest request);
         Attachment GetForDownload(int id);
+        ResponseBaseDataContract Delete(DeleteAttachmentRequest request);
     }
 }

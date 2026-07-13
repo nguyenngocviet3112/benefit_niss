@@ -9,5 +9,6 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         Attachment Get(int id);
         bool ExistsForEntity(string entityType, int entityId);
         void Add(Attachment entity);
+        void Update(Attachment entity);
     }
 }

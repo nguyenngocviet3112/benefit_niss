@@ -30,4 +30,11 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         [DataMember(IsRequired = true)]
         public string FileContentBase64 { get; set; }
     }
+
+    [DataContract]
+    public class DeleteAttachmentRequest : RequestBaseDataContract
+    {
+        [DataMember(IsRequired = true)]
+        public int Id { get; set; }
+    }
 }

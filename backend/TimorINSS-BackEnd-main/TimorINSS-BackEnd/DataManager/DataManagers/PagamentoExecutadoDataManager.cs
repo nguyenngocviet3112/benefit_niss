@@ -225,6 +225,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             // validações
             Pagamentosexecutados pagamento = _unitOfWork.PagamentosExecutadosRepository.Get(request.Id);
+
+            // Đã thực chi (có DataExecucao — set ở SaveClassificacaoExecucao) thì không
+            // cho xoá nữa (2026-07-13, nguyên tắc chung, xem CLAUDE.md §9) — trước đây
+            // xoá được thẳng, kể cả khoản đã chi trả xong, không kiểm tra gì cả.
+            if (pagamento != null && pagamento.DataExecucao.HasValue)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = "Pagamento đã thực hiện chi trả — không thể xoá." });
+                return response;
+            }
+
             if (pagamento != null)
             {
                 pagamento.IndActivo = false;

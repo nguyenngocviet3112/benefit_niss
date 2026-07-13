@@ -85,6 +85,24 @@ export class AttachmentUploadComponent implements OnInit {
     );
   }
 
+  // Cho phép xoá file lỡ upload sai (2026-07-13, user yêu cầu). Widget này chỉ
+  // hiện khi entity gốc còn DRAFT (xem *ngIf ở nơi gọi <app-attachment-upload>),
+  // nên nút này tự động không xuất hiện sau khi entity gốc đã duyệt.
+  public delete(item: AttachmentItem): void {
+    if (!confirm(this.translate.instant('attachmentUpload.confirmDelete', { fileName: item.fileName }))) { return; }
+    this.attachmentService.delete(item.id).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+          return;
+        }
+        this.snackBar.open(this.translate.instant('attachmentUpload.deleteSuccess'), this.translate.instant('general.close'), { duration: 3000 });
+        this.load();
+      },
+      () => this.showError()
+    );
+  }
+
   public formatSize(bytes: number): string {
     if (bytes < 1024) { return `${bytes} B`; }
     if (bytes < 1024 * 1024) { return `${(bytes / 1024).toFixed(1)} KB`; }

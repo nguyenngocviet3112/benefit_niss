@@ -50,5 +50,13 @@ namespace TimorINSSBackEnd.Repository.Repositories
         {
             _moduloContribuicoesContext.Attachment.Add(entity);
         }
+
+        public void Update(Attachment entity)
+        {
+            Attachment entityToUpdate = _moduloContribuicoesContext.Attachment
+                .Single(a => a.Id == entity.Id);
+
+            entityToUpdate = Utils.UpdateClassWithoutVirtuals(entity, entityToUpdate);
+        }
     }
 }
