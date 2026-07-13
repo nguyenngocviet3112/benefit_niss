@@ -3,6 +3,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { CompromissoDespesaService } from '../../services/compromisso-despesa.service';
 import { CabimentoDisponivelParaCompromissoDataContract, CompromissoDespesaDataContract } from '../../response-models/compromisso-despesa-response';
+import { AttachmentConfigService } from '../../services/attachment-config.service';
+import { AttachmentConfigItem } from '../../response-models/attachment-config-response';
+import { AttachmentItem } from '../../response-models/attachment-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
   DRAFT: 'compromisso.estadoDraft',
@@ -53,14 +56,23 @@ export class CompromissoDespesaComponent implements OnInit {
   public editValorCompromissoAno: number | null = null;
   public editAssumidoCom: 'CONTRATO' | 'LISTA_BENEFICIARIOS' | 'OBRIGACAO' = 'CONTRATO';
 
+  public attachmentConfig: AttachmentConfigItem | null = null;
+  public compromissoHasAttachment: { [id: number]: boolean } = {};
+
   constructor(
     private compromissoDespesaService: CompromissoDespesaService,
+    private attachmentConfigService: AttachmentConfigService,
     private snackBar: MatSnackBar,
     private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.load();
+    this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
+  }
+
+  public onAttachmentsLoaded(compromissoId: number, items: AttachmentItem[]): void {
+    this.compromissoHasAttachment[compromissoId] = items.length > 0;
   }
 
   public load(): void {

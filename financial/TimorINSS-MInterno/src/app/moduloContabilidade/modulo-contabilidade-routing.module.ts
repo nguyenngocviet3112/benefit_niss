@@ -36,9 +36,11 @@ import { LancamentosComponent } from './lancamentos/lancamentos.component';
 import { ConciliacaoMovimentosComponent } from './conciliacao-movimentos/conciliacao-movimentos.component';
 import { GuiaConciliacaoComponent } from './guia-conciliacao/guia-conciliacao.component';
 import { GuiaPagamentoContaConfigComponent } from './settings/guia-pagamento-conta-config/guia-pagamento-conta-config.component';
+import { LiquidacaoContaConfigComponent } from './settings/liquidacao-conta-config/liquidacao-conta-config.component';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CicloDespesaComponent } from './ciclo-despesa/ciclo-despesa.component';
+import { AttachmentConfigComponent } from './settings/attachment-config/attachment-config.component';
 
 const routes: Routes = [
   {
@@ -71,6 +73,8 @@ const routes: Routes = [
       { path: 'settings/kyNganSach', component: KyNganSachComponent },
       { path: 'settings/bankAccount', component: BankAccountComponent },
       { path: 'settings/guiaPagamentoContaConfig', component: GuiaPagamentoContaConfigComponent },
+      { path: 'settings/liquidacaoContaConfig', component: LiquidacaoContaConfigComponent },
+      { path: 'settings/attachmentConfig', component: AttachmentConfigComponent },
       { path: 'userPermission', component: UserPermissionComponent },
       { path: 'userSync', component: UserSyncComponent },
       { path: 'meuPerfil', component: MeuPerfilComponent },

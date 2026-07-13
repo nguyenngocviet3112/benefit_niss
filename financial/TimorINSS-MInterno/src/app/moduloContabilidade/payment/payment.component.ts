@@ -8,6 +8,9 @@ import {
   ObligacaoDisponivelParaPagamentoDataContract,
   PaymentAuthorizationDataContract
 } from '../../response-models/payment-response';
+import { AttachmentConfigService } from '../../services/attachment-config.service';
+import { AttachmentConfigItem } from '../../response-models/attachment-config-response';
+import { AttachmentItem } from '../../response-models/attachment-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
   DRAFT: 'payment.estadoDraft',
@@ -49,14 +52,23 @@ export class PaymentComponent implements OnInit {
   public rejectComment = '';
   public rejectId: number | null = null;
 
+  public attachmentConfig: AttachmentConfigItem | null = null;
+  public paymentHasAttachment: { [id: number]: boolean } = {};
+
   constructor(
     private paymentService: PaymentService,
+    private attachmentConfigService: AttachmentConfigService,
     private snackBar: MatSnackBar,
     private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.load();
+    this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
+  }
+
+  public onAttachmentsLoaded(paymentId: number, items: AttachmentItem[]): void {
+    this.paymentHasAttachment[paymentId] = items.length > 0;
   }
 
   public load(): void {

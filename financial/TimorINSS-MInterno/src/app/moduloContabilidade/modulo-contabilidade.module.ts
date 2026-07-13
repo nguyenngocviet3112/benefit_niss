@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -49,6 +50,9 @@ import { GuiaConciliacaoComponent } from './guia-conciliacao/guia-conciliacao.co
 import { GuiaPagamentoContaConfigComponent } from './settings/guia-pagamento-conta-config/guia-pagamento-conta-config.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CicloDespesaComponent } from './ciclo-despesa/ciclo-despesa.component';
+import { AttachmentUploadComponent } from './attachment-upload/attachment-upload.component';
+import { AttachmentConfigComponent } from './settings/attachment-config/attachment-config.component';
+import { LiquidacaoContaConfigComponent } from './settings/liquidacao-conta-config/liquidacao-conta-config.component';
 
 @NgModule({
   declarations: [
@@ -84,11 +88,16 @@ import { CicloDespesaComponent } from './ciclo-despesa/ciclo-despesa.component';
     OrcamentoImportPreviewComponent,
     GuiaConciliacaoComponent,
     GuiaPagamentoContaConfigComponent,
-    CicloDespesaComponent
+    LiquidacaoContaConfigComponent,
+    CicloDespesaComponent,
+    AttachmentUploadComponent,
+    AttachmentConfigComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
+    NgxMatFileInputModule,
     ModuloContabilidadeRoutingModule,
     MatButtonModule,
     MatFormFieldModule,

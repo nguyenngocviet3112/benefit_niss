@@ -242,6 +242,8 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'shell.itemKyNganSach', route: '/contabilidade/settings/kyNganSach', permTokens: ['MASTERDATA_MANAGE'] },
         { label: 'shell.itemBankAccount', route: '/contabilidade/settings/bankAccount', permTokens: ['MASTERDATA_MANAGE'] },
         { label: 'shell.itemGuiaPagamentoContaConfig', route: '/contabilidade/settings/guiaPagamentoContaConfig', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemLiquidacaoContaConfig', route: '/contabilidade/settings/liquidacaoContaConfig', permTokens: ['MASTERDATA_MANAGE'] },
+        { label: 'shell.itemAttachmentConfig', route: '/contabilidade/settings/attachmentConfig', permTokens: ['MASTERDATA_MANAGE'] },
         { label: 'shell.itemDepartamentos', route: '/contabilidade/sistema/departamentos', permTokens: ['MASTERDATA_MANAGE'] },
         { label: 'shell.itemUserPermission', route: '/contabilidade/userPermission', permTokens: ['USER_MANAGE'] },
         { label: 'shell.itemUserSync', route: '/contabilidade/userSync', permTokens: ['USER_MANAGE'] },

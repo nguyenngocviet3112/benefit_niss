@@ -3,6 +3,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { ExpenditureAuthorizationService } from '../../services/expenditure-authorization.service';
 import { ExpenditureAuthorizationDataContract, RubricaDisponivelDataContract } from '../../response-models/expenditure-authorization-response';
+import { AttachmentConfigService } from '../../services/attachment-config.service';
+import { AttachmentConfigItem } from '../../response-models/attachment-config-response';
+import { AttachmentItem } from '../../response-models/attachment-response';
+import { FunctionalClassificationService } from '../../services/functional-classification.service';
+import { FunctionalClassificationDataContract } from '../../response-models/functional-classification-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
   DRAFT: 'adCabimento.estadoDraft',
@@ -33,7 +38,19 @@ export class AdCabimentoComponent implements OnInit {
   public formValorAutorizado: number | null = null;
   public formTipoDespesa: 'UNICA' | 'CONJUNTO' = 'UNICA';
   public formSolicitaAberturaAprovisionamento = false;
+  public formProposta = '';
+  public formFundamentacaoLegal = '';
+  public formObjetivoDespesa = '';
   public formMes = 1;
+
+  public functionalClassificationOptions: FunctionalClassificationDataContract[] = [];
+  public functionalClassificationSearch = '';
+  public filteredFunctionalClassifications: FunctionalClassificationDataContract[] = [];
+  public formFunctionalClassificationFk: number | null = null;
+
+  public showApprovePrompt = false;
+  public approveComment = '';
+  public approveAction: { adId: number; action: 'review' | 'approve' } | null = null;
 
   public formRegularizacao = 0;
 
@@ -44,14 +61,43 @@ export class AdCabimentoComponent implements OnInit {
   public rejectComment = '';
   public rejectAction: { adId: number; action: 'review' | 'approve' } | null = null;
 
+  public attachmentConfig: AttachmentConfigItem | null = null;
+  public adHasAttachment: { [id: number]: boolean } = {};
+
+  public onAttachmentsLoaded(adId: number, items: AttachmentItem[]): void {
+    this.adHasAttachment[adId] = items.length > 0;
+  }
+
   constructor(
     private expenditureAuthorizationService: ExpenditureAuthorizationService,
+    private attachmentConfigService: AttachmentConfigService,
+    private functionalClassificationService: FunctionalClassificationService,
     private snackBar: MatSnackBar,
     private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.load();
+    this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
+    this.functionalClassificationService.getAllActive().subscribe(response => {
+      this.functionalClassificationOptions = response.items ?? [];
+      this.filteredFunctionalClassifications = this.functionalClassificationOptions;
+    });
+  }
+
+  private normalize(value: string): string {
+    return (value || '').toLowerCase();
+  }
+
+  public onFunctionalClassificationSearchChange(): void {
+    const term = this.normalize(this.functionalClassificationSearch);
+    this.filteredFunctionalClassifications = this.functionalClassificationOptions.filter(f =>
+      this.normalize(f.codigo).includes(term) || this.normalize(f.designacao).includes(term));
+  }
+
+  public selectFunctionalClassification(f: FunctionalClassificationDataContract): void {
+    this.formFunctionalClassificationFk = f.id;
+    this.functionalClassificationSearch = `${f.codigo} - ${f.designacao}`;
   }
 
   public load(): void {
@@ -89,6 +135,12 @@ export class AdCabimentoComponent implements OnInit {
     this.formValorAutorizado = r.valor;
     this.formTipoDespesa = 'UNICA';
     this.formSolicitaAberturaAprovisionamento = false;
+    this.formProposta = '';
+    this.formFundamentacaoLegal = '';
+    this.formObjetivoDespesa = '';
+    this.formFunctionalClassificationFk = null;
+    this.functionalClassificationSearch = '';
+    this.filteredFunctionalClassifications = this.functionalClassificationOptions;
     this.formMes = new Date().getMonth() + 1;
   }
 
@@ -109,6 +161,10 @@ export class AdCabimentoComponent implements OnInit {
       valorAutorizado: this.formValorAutorizado,
       tipoDespesa: this.formTipoDespesa,
       solicitaAberturaAprovisionamento: this.formSolicitaAberturaAprovisionamento,
+      proposta: this.formProposta || undefined,
+      fundamentacaoLegal: this.formFundamentacaoLegal || undefined,
+      objetivoDespesa: this.formObjetivoDespesa || undefined,
+      functionalClassificationFk: this.formFunctionalClassificationFk ?? undefined,
       mes: this.formMes,
       ano: this.ano
     }).subscribe(
@@ -189,30 +245,34 @@ export class AdCabimentoComponent implements OnInit {
     );
   }
 
-  public reviewApprove(item: ExpenditureAuthorizationDataContract): void {
-    this.expenditureAuthorizationService.review({ id: item.id, approve: true }).subscribe(
+  public openApprovePrompt(adId: number, action: 'review' | 'approve'): void {
+    this.approveAction = { adId, action };
+    this.approveComment = '';
+    this.showApprovePrompt = true;
+  }
+
+  public confirmApprove(): void {
+    if (!this.approveAction) { return; }
+    const { adId, action } = this.approveAction;
+    const call = action === 'review'
+      ? this.expenditureAuthorizationService.review({ id: adId, approve: true, comment: this.approveComment || undefined })
+      : this.expenditureAuthorizationService.approve({ id: adId, approve: true, comment: this.approveComment || undefined });
+
+    call.subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
           this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
+        this.showApprovePrompt = false;
         this.load();
       },
       err => this.showError(err)
     );
   }
 
-  public finalApprove(item: ExpenditureAuthorizationDataContract): void {
-    this.expenditureAuthorizationService.approve({ id: item.id, approve: true }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.load();
-      },
-      err => this.showError(err)
-    );
+  public cancelApprove(): void {
+    this.showApprovePrompt = false;
   }
 
   public openRejectPrompt(adId: number, action: 'review' | 'approve'): void {

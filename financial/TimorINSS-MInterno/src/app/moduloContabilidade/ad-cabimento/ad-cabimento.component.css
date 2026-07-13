@@ -106,6 +106,10 @@
   font-size: 13px;
 }
 
+.ad-field-wide {
+  grid-column: 1 / -1;
+}
+
 .ad-field label {
   font-size: 11px;
   color: #888;
@@ -139,6 +143,12 @@
 
 .ad-reject-text {
   color: #c62828;
+}
+
+.ad-attach-hint {
+  font-size: 12px;
+  color: #c62828;
+  margin-left: 8px;
 }
 
 .ad-pluri {

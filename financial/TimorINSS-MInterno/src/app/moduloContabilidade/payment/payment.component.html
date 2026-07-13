@@ -27,7 +27,7 @@
     <ng-container *ngFor="let item of items">
       <div class="pag-row pag-row-summary" (click)="toggleExpand(item)">
         <span class="pag-col-num">{{ item.numero }}/{{ item.mes }}</span>
-        <span class="pag-col-obr">Obr {{ item.obligationNumero }} — {{ item.obligationDescritivo || '—' }}</span>
+        <span class="pag-col-obr">Obr {{ item.obligationNumero }}/{{ item.obligationMes }} — {{ item.obligationDescritivo || '—' }}</span>
         <span class="pag-col-valor">$ {{ item.valorAutorizado | number:'1.2-2' }}</span>
         <span class="pag-col-estado">
           <span class="pag-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] | translate }}</span>
@@ -79,8 +79,18 @@
           <strong>{{ 'payment.lastRejectComment' | translate }}</strong> {{ item.lastRejectComment }}
         </div>
 
+        <app-attachment-upload *ngIf="item.estado === 'DRAFT'" entityType="PAGAMENTO" [entityId]="item.id"
+          (itemsLoaded)="onAttachmentsLoaded(item.id, $event)"></app-attachment-upload>
+
         <div class="pag-actions-bar">
-          <button mat-raised-button color="primary" *ngIf="item.estado === 'DRAFT'" (click)="submitAuthorization(item)">{{ 'payment.submitButton' | translate }}</button>
+          <ng-container *ngIf="item.estado === 'DRAFT'">
+            <button mat-raised-button color="primary"
+              [disabled]="attachmentConfig?.pagamentoObrigatorio && !paymentHasAttachment[item.id]"
+              (click)="submitAuthorization(item)">{{ 'payment.submitButton' | translate }}</button>
+            <span class="pag-attach-hint" *ngIf="attachmentConfig?.pagamentoObrigatorio && !paymentHasAttachment[item.id]">
+              {{ 'attachmentUpload.requiredHint' | translate }}
+            </span>
+          </ng-container>
 
           <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
             <button mat-raised-button color="primary" (click)="approve(item)">{{ 'payment.approveButton' | translate }}</button>
@@ -137,7 +147,7 @@
         <mat-label>{{ 'payment.fieldObrigacao' | translate }} <span class="itag drop">{{ 'payment.dropTag' | translate }}</span></mat-label>
         <mat-select [(ngModel)]="formObligationFk" name="formObligationFk" (selectionChange)="onObligacaoSelected()">
           <mat-option *ngFor="let o of obligacoesDisponiveis" [value]="o.obligationId">
-            Obr {{ o.numero }} — {{ o.descritivoObrigacao || '—' }} ($ {{ o.valorObrigacao | number:'1.2-2' }})
+            Obr {{ o.numero }}/{{ o.mes }} — {{ o.descritivoObrigacao || '—' }} ($ {{ o.valorObrigacao | number:'1.2-2' }})
           </mat-option>
         </mat-select>
       </mat-form-field>

@@ -103,6 +103,12 @@
   color: #c62828;
 }
 
+.cab-attach-hint {
+  font-size: 12px;
+  color: #c62828;
+  padding: 0 12px 8px;
+}
+
 .cab-empty {
   padding: 24px;
   text-align: center;

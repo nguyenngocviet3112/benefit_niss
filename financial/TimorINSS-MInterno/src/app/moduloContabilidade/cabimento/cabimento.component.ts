@@ -3,6 +3,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { CabimentoService } from '../../services/cabimento.service';
 import { AdDisponivelParaCabimentoDataContract, CabimentoDataContract } from '../../response-models/cabimento-response';
+import { AttachmentConfigService } from '../../services/attachment-config.service';
+import { AttachmentConfigItem } from '../../response-models/attachment-config-response';
+import { AttachmentItem } from '../../response-models/attachment-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
   DRAFT: 'cabimento.estadoDraft',
@@ -39,14 +42,23 @@ export class CabimentoComponent implements OnInit {
   public editValorCabimentado: number | null = null;
   public editProcessoAprovisionamentoPrevio = false;
 
+  public attachmentConfig: AttachmentConfigItem | null = null;
+  public cabimentoHasAttachment: { [id: number]: boolean } = {};
+
   constructor(
     private cabimentoService: CabimentoService,
+    private attachmentConfigService: AttachmentConfigService,
     private snackBar: MatSnackBar,
     private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.load();
+    this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
+  }
+
+  public onAttachmentsLoaded(cabimentoId: number, items: AttachmentItem[]): void {
+    this.cabimentoHasAttachment[cabimentoId] = items.length > 0;
   }
 
   public load(): void {

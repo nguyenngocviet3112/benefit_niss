@@ -3,6 +3,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { ObligationService } from '../../services/obligation.service';
 import { CompromissoComSaldoDataContract, ObligationDataContract } from '../../response-models/obligation-response';
+import { AttachmentConfigService } from '../../services/attachment-config.service';
+import { AttachmentConfigItem } from '../../response-models/attachment-config-response';
+import { AttachmentItem } from '../../response-models/attachment-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
   DRAFT: 'obligation.estadoDraft',
@@ -84,14 +87,23 @@ export class ObligationComponent implements OnInit {
   public rejectComment = '';
   public rejectId: number | null = null;
 
+  public attachmentConfig: AttachmentConfigItem | null = null;
+  public obligationHasAttachment: { [id: number]: boolean } = {};
+
   constructor(
     private obligationService: ObligationService,
+    private attachmentConfigService: AttachmentConfigService,
     private snackBar: MatSnackBar,
     private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.load();
+    this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
+  }
+
+  public onAttachmentsLoaded(obligationId: number, items: AttachmentItem[]): void {
+    this.obligationHasAttachment[obligationId] = items.length > 0;
   }
 
   public load(): void {

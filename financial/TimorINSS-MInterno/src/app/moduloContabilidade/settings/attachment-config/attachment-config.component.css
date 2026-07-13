@@ -1,0 +1,52 @@
+.atc-container {
+  padding: 24px;
+  max-width: 640px;
+}
+
+.atc-header h2 {
+  margin: 0 0 4px;
+}
+
+.atc-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.atc-hint {
+  margin: 0 0 16px;
+  color: #666;
+  font-size: 13px;
+}
+
+.atc-loading {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+}
+
+.atc-field-size {
+  width: 220px;
+  display: block;
+}
+
+.atc-section {
+  margin: 20px 0 4px;
+}
+
+.atc-section-hint {
+  margin: 0 0 12px;
+  color: #666;
+  font-size: 12px;
+}
+
+.atc-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.atc-actions {
+  margin-top: 8px;
+}

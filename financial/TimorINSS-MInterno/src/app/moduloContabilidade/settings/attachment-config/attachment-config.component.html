@@ -1,0 +1,30 @@
+<div class="atc-container">
+  <div class="atc-header">
+    <h2>{{ 'attachmentConfig.header' | translate }} <span class="en">({{ 'attachmentConfig.headerGloss' | translate }})</span></h2>
+    <p class="atc-hint">{{ 'attachmentConfig.hint' | translate }}</p>
+  </div>
+
+  <div class="atc-loading" *ngIf="loading">{{ 'attachmentConfig.loading' | translate }}</div>
+
+  <div class="atc-form" *ngIf="!loading">
+    <mat-form-field appearance="outline" class="atc-field-size">
+      <mat-label>{{ 'attachmentConfig.fieldMaxSize' | translate }}</mat-label>
+      <input matInput type="number" min="1" [(ngModel)]="form.maxFileSizeMb" name="maxFileSizeMb" />
+    </mat-form-field>
+
+    <h4 class="atc-section">{{ 'attachmentConfig.sectionObrigatorio' | translate }}</h4>
+    <p class="atc-section-hint">{{ 'attachmentConfig.sectionObrigatorioHint' | translate }}</p>
+
+    <div class="atc-checkbox-list">
+      <mat-checkbox [(ngModel)]="form.adObrigatorio">{{ 'attachmentConfig.stageAd' | translate }}</mat-checkbox>
+      <mat-checkbox [(ngModel)]="form.cabimentoObrigatorio">{{ 'attachmentConfig.stageCabimento' | translate }}</mat-checkbox>
+      <mat-checkbox [(ngModel)]="form.compromissoObrigatorio">{{ 'attachmentConfig.stageCompromisso' | translate }}</mat-checkbox>
+      <mat-checkbox [(ngModel)]="form.obrigacaoObrigatorio">{{ 'attachmentConfig.stageObrigacao' | translate }}</mat-checkbox>
+      <mat-checkbox [(ngModel)]="form.pagamentoObrigatorio">{{ 'attachmentConfig.stagePagamento' | translate }}</mat-checkbox>
+    </div>
+
+    <div class="atc-actions">
+      <button mat-raised-button color="primary" [disabled]="saving" (click)="save()">{{ 'attachmentConfig.saveButton' | translate }}</button>
+    </div>
+  </div>
+</div>

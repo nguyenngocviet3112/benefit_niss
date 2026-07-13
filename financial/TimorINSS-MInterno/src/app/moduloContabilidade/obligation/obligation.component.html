@@ -210,8 +210,18 @@
           <button mat-raised-button color="primary" (click)="confirmAddItem()">{{ 'obligation.addSubmitButton' | translate }}</button>
         </div>
 
+        <app-attachment-upload *ngIf="item.estado === 'DRAFT'" entityType="OBRIGACAO" [entityId]="item.id"
+          (itemsLoaded)="onAttachmentsLoaded(item.id, $event)"></app-attachment-upload>
+
         <div class="obr-actions-bar">
-          <button mat-raised-button color="primary" *ngIf="item.estado === 'DRAFT'" [disabled]="item.items.length === 0" (click)="submitObligation(item)">{{ 'obligation.submitButton' | translate }}</button>
+          <ng-container *ngIf="item.estado === 'DRAFT'">
+            <button mat-raised-button color="primary"
+              [disabled]="item.items.length === 0 || (attachmentConfig?.obrigacaoObrigatorio && !obligationHasAttachment[item.id])"
+              (click)="submitObligation(item)">{{ 'obligation.submitButton' | translate }}</button>
+            <span class="obr-attach-hint" *ngIf="attachmentConfig?.obrigacaoObrigatorio && !obligationHasAttachment[item.id]">
+              {{ 'attachmentUpload.requiredHint' | translate }}
+            </span>
+          </ng-container>
 
           <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
             <button mat-raised-button color="primary" (click)="approve(item)">{{ 'obligation.approveButton' | translate }}</button>

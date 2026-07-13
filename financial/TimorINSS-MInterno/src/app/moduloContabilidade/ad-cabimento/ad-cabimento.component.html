@@ -56,6 +56,22 @@
             <span>{{ (item.solicitaAberturaAprovisionamento ? 'adCabimento.simOption' : 'adCabimento.naoOption') | translate }}</span>
           </div>
           <div class="ad-field">
+            <label>{{ 'adCabimento.fieldClassificacaoFuncional' | translate }} <span class="itag drop">{{ 'adCabimento.dropTag' | translate }}</span></label>
+            <span>{{ item.functionalClassificationCodigo ? (item.functionalClassificationCodigo + ' - ' + item.functionalClassificationDesignacao) : '—' }}</span>
+          </div>
+          <div class="ad-field ad-field-wide">
+            <label>{{ 'adCabimento.fieldProposta' | translate }} <span class="itag type">{{ 'adCabimento.typedOptionalTag' | translate }}</span></label>
+            <span>{{ item.proposta || '—' }}</span>
+          </div>
+          <div class="ad-field ad-field-wide">
+            <label>{{ 'adCabimento.fieldFundamentacaoLegal' | translate }} <span class="itag type">{{ 'adCabimento.typedOptionalTag' | translate }}</span></label>
+            <span>{{ item.fundamentacaoLegal || '—' }}</span>
+          </div>
+          <div class="ad-field ad-field-wide">
+            <label>{{ 'adCabimento.fieldObjetivoDespesa' | translate }} <span class="itag type">{{ 'adCabimento.typedOptionalTag' | translate }}</span></label>
+            <span>{{ item.objetivoDespesa || '—' }}</span>
+          </div>
+          <div class="ad-field">
             <label>{{ 'adCabimento.fieldRegularizacao' | translate }} <span class="itag type">{{ 'adCabimento.typedTag' | translate }}</span></label>
             <span *ngIf="item.estado !== 'DRAFT'">$ {{ item.regularizacao | number:'1.2-2' }}</span>
             <span *ngIf="item.estado === 'DRAFT'" class="ad-regularizacao-edit">
@@ -74,6 +90,14 @@
           <div class="ad-field">
             <label>{{ 'adCabimento.fieldSaldoDisponivel' | translate }} <span class="itag auto">{{ 'adCabimento.autoTag' | translate }}</span></label>
             <span [ngClass]="item.saldoDisponivel < 0 ? 'ad-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
+          </div>
+          <div class="ad-field ad-field-wide" *ngIf="item.reviewComment">
+            <label>{{ 'adCabimento.fieldReviewComment' | translate }}</label>
+            <span>{{ item.reviewComment }}</span>
+          </div>
+          <div class="ad-field ad-field-wide" *ngIf="item.approveComment">
+            <label>{{ 'adCabimento.fieldApproveComment' | translate }}</label>
+            <span>{{ item.approveComment }}</span>
           </div>
           <div class="ad-field" *ngIf="item.lastRejectComment">
             <label>{{ 'adCabimento.lastRejectComment' | translate }}</label>
@@ -95,16 +119,26 @@
           </div>
         </div>
 
+        <app-attachment-upload *ngIf="item.estado === 'DRAFT'" entityType="AD" [entityId]="item.id"
+          (itemsLoaded)="onAttachmentsLoaded(item.id, $event)"></app-attachment-upload>
+
         <div class="ad-actions-bar">
-          <button mat-raised-button color="primary" *ngIf="item.estado === 'DRAFT'" (click)="submitAd(item)">{{ 'adCabimento.submitButton' | translate }}</button>
+          <ng-container *ngIf="item.estado === 'DRAFT'">
+            <button mat-raised-button color="primary"
+              [disabled]="attachmentConfig?.adObrigatorio && !adHasAttachment[item.id]"
+              (click)="submitAd(item)">{{ 'adCabimento.submitButton' | translate }}</button>
+            <span class="ad-attach-hint" *ngIf="attachmentConfig?.adObrigatorio && !adHasAttachment[item.id]">
+              {{ 'attachmentUpload.requiredHint' | translate }}
+            </span>
+          </ng-container>
 
           <ng-container *ngIf="item.estado === 'PENDING_REVIEW'">
-            <button mat-raised-button color="primary" (click)="reviewApprove(item)">{{ 'adCabimento.reviewApproveButton' | translate }}</button>
+            <button mat-raised-button color="primary" (click)="openApprovePrompt(item.id, 'review')">{{ 'adCabimento.reviewApproveButton' | translate }}</button>
             <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'review')">{{ 'adCabimento.rejectButton' | translate }}</button>
           </ng-container>
 
           <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
-            <button mat-raised-button color="primary" (click)="finalApprove(item)">{{ 'adCabimento.finalApproveButton' | translate }}</button>
+            <button mat-raised-button color="primary" (click)="openApprovePrompt(item.id, 'approve')">{{ 'adCabimento.finalApproveButton' | translate }}</button>
             <button mat-stroked-button color="warn" (click)="openRejectPrompt(item.id, 'approve')">{{ 'adCabimento.rejectButton' | translate }}</button>
           </ng-container>
         </div>
@@ -156,6 +190,33 @@
           </mat-select>
         </mat-form-field>
 
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'adCabimento.fieldClassificacaoFuncional' | translate }} <span class="itag drop">{{ 'adCabimento.searchToTypeTag' | translate }}</span></mat-label>
+          <input matInput [(ngModel)]="functionalClassificationSearch" name="functionalClassificationSearch"
+                 (ngModelChange)="onFunctionalClassificationSearchChange()" [matAutocomplete]="autoFuncional" />
+          <mat-autocomplete #autoFuncional="matAutocomplete">
+            <mat-option *ngFor="let f of filteredFunctionalClassifications" [value]="f.codigo + ' - ' + f.designacao" (onSelectionChange)="selectFunctionalClassification(f)">
+              {{ f.codigo }} - {{ f.designacao }}
+            </mat-option>
+            <mat-option *ngIf="filteredFunctionalClassifications.length === 0" disabled>{{ 'adCabimento.noneFound' | translate }}</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'adCabimento.fieldProposta' | translate }} <span class="itag type">{{ 'adCabimento.typedOptionalTag' | translate }}</span></mat-label>
+          <textarea matInput [(ngModel)]="formProposta" name="formProposta" rows="2"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'adCabimento.fieldFundamentacaoLegal' | translate }} <span class="itag type">{{ 'adCabimento.typedOptionalTag' | translate }}</span></mat-label>
+          <textarea matInput [(ngModel)]="formFundamentacaoLegal" name="formFundamentacaoLegal" rows="2"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'adCabimento.fieldObjetivoDespesa' | translate }} <span class="itag type">{{ 'adCabimento.typedOptionalTag' | translate }}</span></mat-label>
+          <textarea matInput [(ngModel)]="formObjetivoDespesa" name="formObjetivoDespesa" rows="2"></textarea>
+        </mat-form-field>
+
         <mat-form-field appearance="outline" class="small-field">
           <mat-label>{{ 'adCabimento.fieldMes' | translate }}</mat-label>
           <input matInput type="number" min="1" max="12" [(ngModel)]="formMes" name="formMes" />
@@ -165,6 +226,20 @@
       <div class="ad-form-actions">
         <button mat-button (click)="cancelRubricaPicker()">{{ 'adCabimento.cancelButton' | translate }}</button>
         <button mat-raised-button color="primary" *ngIf="pickedRubrica" (click)="createAd()">{{ 'adCabimento.createAdButton' | translate }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-form-overlay" *ngIf="showApprovePrompt">
+    <div class="ad-form">
+      <h3>{{ 'adCabimento.approveTitle' | translate }}</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'adCabimento.fieldParecer' | translate }} <span class="itag type">{{ 'adCabimento.typedOptionalTag' | translate }}</span></mat-label>
+        <textarea matInput [(ngModel)]="approveComment" name="approveComment" rows="3"></textarea>
+      </mat-form-field>
+      <div class="ad-form-actions">
+        <button mat-button (click)="cancelApprove()">{{ 'adCabimento.cancelButton' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="confirmApprove()">{{ 'adCabimento.confirmApproveButton' | translate }}</button>
       </div>
     </div>
   </div>

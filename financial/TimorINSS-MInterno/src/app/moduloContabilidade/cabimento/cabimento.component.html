@@ -39,13 +39,20 @@
         <span class="cab-col-actions">
           <ng-container *ngIf="item.estado === 'DRAFT'">
             <button mat-button (click)="openEdit(item)">{{ 'cabimento.editButton' | translate }}</button>
-            <button mat-button (click)="submitCabimento(item)">{{ 'cabimento.submitButton' | translate }}</button>
+            <button mat-button
+              [disabled]="attachmentConfig?.cabimentoObrigatorio && !cabimentoHasAttachment[item.id]"
+              (click)="submitCabimento(item)">{{ 'cabimento.submitButton' | translate }}</button>
           </ng-container>
           <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
             <button mat-button color="primary" (click)="approve(item)">{{ 'cabimento.approveButton' | translate }}</button>
             <button mat-button color="warn" (click)="openRejectPrompt(item.id)">{{ 'cabimento.rejectButton' | translate }}</button>
           </ng-container>
         </span>
+      </div>
+      <app-attachment-upload *ngIf="item.estado === 'DRAFT'" entityType="CABIMENTO" [entityId]="item.id"
+        (itemsLoaded)="onAttachmentsLoaded(item.id, $event)"></app-attachment-upload>
+      <div class="cab-attach-hint" *ngIf="item.estado === 'DRAFT' && attachmentConfig?.cabimentoObrigatorio && !cabimentoHasAttachment[item.id]">
+        {{ 'attachmentUpload.requiredHint' | translate }}
       </div>
       <div class="cab-reject-note" *ngIf="item.lastRejectComment">
         <label>{{ 'cabimento.lastRejectComment' | translate }}</label>

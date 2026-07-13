@@ -129,6 +129,12 @@
   color: #c62828;
 }
 
+.comp-attach-hint {
+  font-size: 12px;
+  color: #c62828;
+  margin-left: 8px;
+}
+
 .comp-pluri {
   margin-bottom: 16px;
 }

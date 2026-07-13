@@ -28,7 +28,7 @@
     <ng-container *ngFor="let item of items">
       <div class="comp-row comp-row-summary" (click)="toggleExpand(item)">
         <span class="comp-col-num">{{ item.numero }}/{{ item.mes }}</span>
-        <span class="comp-col-cab">Cab {{ item.cabimentoNumero }} / AD {{ item.expenditureAuthorizationNumero }}</span>
+        <span class="comp-col-cab">Cab {{ item.cabimentoNumero }}/{{ item.cabimentoMes }} / AD {{ item.expenditureAuthorizationNumero }}/{{ item.expenditureAuthorizationMes }}</span>
         <span class="comp-col-atividade">{{ item.atividadeCodigo }} — {{ item.economicClassificationCodigo }} {{ item.economicClassificationDesignacao }}</span>
         <span class="comp-col-valor">$ {{ item.valorRevisto | number:'1.2-2' }}</span>
         <span class="comp-col-saldo" [ngClass]="item.saldoDisponivel < 0 ? 'comp-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
@@ -90,10 +90,18 @@
           </div>
         </div>
 
+        <app-attachment-upload *ngIf="item.estado === 'DRAFT'" entityType="COMPROMISSO" [entityId]="item.id"
+          (itemsLoaded)="onAttachmentsLoaded(item.id, $event)"></app-attachment-upload>
+
         <div class="comp-actions-bar">
           <ng-container *ngIf="item.estado === 'DRAFT'">
             <button mat-stroked-button (click)="openEdit(item)">{{ 'compromisso.editButton' | translate }}</button>
-            <button mat-raised-button color="primary" (click)="submitCompromisso(item)">{{ 'compromisso.submitButton' | translate }}</button>
+            <button mat-raised-button color="primary"
+              [disabled]="attachmentConfig?.compromissoObrigatorio && !compromissoHasAttachment[item.id]"
+              (click)="submitCompromisso(item)">{{ 'compromisso.submitButton' | translate }}</button>
+            <span class="comp-attach-hint" *ngIf="attachmentConfig?.compromissoObrigatorio && !compromissoHasAttachment[item.id]">
+              {{ 'attachmentUpload.requiredHint' | translate }}
+            </span>
           </ng-container>
 
           <ng-container *ngIf="item.estado === 'PENDING_REVIEW'">
@@ -118,7 +126,7 @@
 
       <div class="comp-cab-list" *ngIf="!pickedCabimento">
         <div class="comp-cab-row" *ngFor="let c of availableCabimentos" (click)="pickCabimento(c)">
-          <span>Cab {{ c.numero }} — {{ c.atividadeCodigo }} / {{ c.economicClassificationCodigo }}</span>
+          <span>Cab {{ c.numero }}/{{ c.mes }} — {{ c.atividadeCodigo }} / {{ c.economicClassificationCodigo }}</span>
           <span>{{ c.organizationNome }}</span>
           <span>$ {{ c.valorCabimentado | number:'1.2-2' }}</span>
         </div>
@@ -126,7 +134,7 @@
       </div>
 
       <div *ngIf="pickedCabimento">
-        <p><b>{{ 'compromisso.cabimentoLabel' | translate }}</b> {{ pickedCabimento.numero }} — {{ pickedCabimento.atividadeCodigo }} / {{ pickedCabimento.economicClassificationCodigo }} ({{ pickedCabimento.organizationNome }})</p>
+        <p><b>{{ 'compromisso.cabimentoLabel' | translate }}</b> {{ pickedCabimento.numero }}/{{ pickedCabimento.mes }} — {{ pickedCabimento.atividadeCodigo }} / {{ pickedCabimento.economicClassificationCodigo }} ({{ pickedCabimento.organizationNome }})</p>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>{{ 'compromisso.fieldDescritivo' | translate }} <span class="itag type">{{ 'compromisso.typedTag' | translate }}</span></mat-label>

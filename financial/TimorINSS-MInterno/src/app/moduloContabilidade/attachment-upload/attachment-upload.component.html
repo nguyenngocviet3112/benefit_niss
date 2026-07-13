@@ -1,0 +1,23 @@
+<div class="att-container">
+  <label class="att-title">{{ 'attachmentUpload.title' | translate }}</label>
+
+  <div class="att-list" *ngIf="!loading">
+    <div class="att-item" *ngFor="let item of items">
+      <mat-icon class="att-icon">description</mat-icon>
+      <span class="att-name">{{ item.fileName }}</span>
+      <span class="att-size">{{ formatSize(item.fileSize) }}</span>
+      <button mat-button color="primary" (click)="view(item)">{{ 'attachmentUpload.viewButton' | translate }}</button>
+    </div>
+    <div class="att-empty" *ngIf="items.length === 0">{{ 'attachmentUpload.emptyList' | translate }}</div>
+  </div>
+
+  <div class="att-upload-row">
+    <mat-form-field appearance="outline" class="att-file-field">
+      <mat-label>{{ 'attachmentUpload.selectFile' | translate }}</mat-label>
+      <ngx-mat-file-input [formControl]="fileControl" [accept]="accept" [disabled]="uploading">
+        <mat-icon ngxMatFileInputIcon>upload</mat-icon>
+      </ngx-mat-file-input>
+    </mat-form-field>
+    <span class="att-uploading" *ngIf="uploading">{{ 'attachmentUpload.uploading' | translate }}</span>
+  </div>
+</div>
