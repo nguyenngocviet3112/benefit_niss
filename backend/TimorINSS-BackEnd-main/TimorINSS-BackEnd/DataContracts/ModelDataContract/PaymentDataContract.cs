@@ -54,6 +54,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public int ObligationNumero { get; set; }
 
         [DataMember]
+        public int ObligationMes { get; set; }
+
+        [DataMember]
         public string ObligationDescritivo { get; set; }
 
         [DataMember]
@@ -126,6 +129,17 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public PaymentExecutionDataContract Execution { get; set; }
+
+        // true khi bút toán Liquidação (sinh lúc Approve) đã bị bỏ qua vì thiếu
+        // Tài khoản Phải trả/Ngân hàng — cho phép người dùng bổ sung tài khoản
+        // ngay tại màn này để ghi bù, thay vì phải "tìm ở đâu đó" (2026-07-13).
+        [DataMember]
+        public bool LiquidacaoFaltaConfiguracao { get; set; }
+
+        // true khi bút toán tất toán (sinh lúc Execute) đã bị bỏ qua vì thiếu
+        // Tài khoản Phải trả/Ngân hàng.
+        [DataMember]
+        public bool ExecucaoFaltaConfiguracao { get; set; }
     }
 
     [DataContract]
@@ -136,6 +150,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public int Numero { get; set; }
+
+        [DataMember]
+        public int Mes { get; set; }
 
         [DataMember]
         public string DescritivoObrigacao { get; set; }

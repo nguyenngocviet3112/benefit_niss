@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   ApprovePaymentAuthorizationRequest,
+  CompletarLancamentoPagamentoRequest,
   CreatePaymentAuthorizationRequest,
   ExecutePaymentRequest,
   SubmitPaymentAuthorizationRequest
@@ -54,5 +55,9 @@ export class PaymentService {
 
   public execute(request: ExecutePaymentRequest): Observable<ResponseBase> {
     return this.http.post<ResponseBase>(`${environment.apiUrl}/pagamento/Execute`, request);
+  }
+
+  public completarLancamento(request: CompletarLancamentoPagamentoRequest): Observable<ResponseBase> {
+    return this.http.post<ResponseBase>(`${environment.apiUrl}/pagamento/CompletarLancamento`, request);
   }
 }

@@ -211,6 +211,30 @@
   padding: 12px;
 }
 
+.pag-completar-warning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff3e0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #c62828;
+  margin-bottom: 8px;
+}
+
+.pag-completar-form {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
 .pag-execute-form .full-width {
   flex-basis: 100%;
 }

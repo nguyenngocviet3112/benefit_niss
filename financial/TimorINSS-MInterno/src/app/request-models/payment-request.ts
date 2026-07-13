@@ -25,3 +25,11 @@ export interface ExecutePaymentRequest {
   numeroDocumento?: string;
   observacao?: string;
 }
+
+export interface CompletarLancamentoPagamentoRequest {
+  paymentAuthorizationFk: number;
+  // 'PaymentAuthorizationLiquidacao' | 'PaymentExecution'
+  origemTipo: string;
+  codigoContaDebitoFk: number;
+  codigoContaCreditoFk: number;
+}

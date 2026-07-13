@@ -186,7 +186,10 @@
     "emailRequired": "Email é obrigatório",
     "emailSent": "Email enviado!",
     "passwordNoMatch": "Não é igual à Palavra-passe",
-    "invalidPassword": "Palavra-passe deve conter pelo menos 8 caracteres, um número, um caractere maiúsculo, um caractere minúsculo e um caractere especial."
+    "invalidPassword": "Palavra-passe deve conter pelo menos 8 caracteres, um número, um caractere maiúsculo, um caractere minúsculo e um caractere especial.",
+    "modeSelectLabel": "Escolher Modo",
+    "modeOld": "Modo Tradicional",
+    "modeNew": "Modo Moderno (Contabilidade)"
   },
   "home": {
     "declaracaoTitle": "DECLARAÇÃO REMUNERAÇÃO",
@@ -2343,7 +2346,12 @@
     "confirmSubmit": "Submeter a Autorização de Pagamento n.º {{numero}} para aprovação?",
     "executedSuccess": "Pagamento executado (Realização do Pagamento).",
     "approveSuccess": "Autorização de Pagamento aprovada.",
-    "errGeneric": "Ocorreu um erro."
+    "errGeneric": "Ocorreu um erro.",
+    "liquidacaoFaltaConfiguracao": "Falta o lançamento da Liquidação — as contas Débito/Crédito não foram configuradas.",
+    "execucaoFaltaConfiguracao": "Falta o lançamento da execução do pagamento — as contas Débito/Crédito não foram configuradas.",
+    "completarButton": "Completar lançamento",
+    "completarSuccess": "Lançamento registado.",
+    "errMissingCompletarConta": "Selecione as contas Débito e Crédito."
   },
   "orcamento": {
     "header": "Orçamento",
@@ -2689,6 +2697,7 @@
     "suggestionLabel": "Sugestão:"
   },
   "liquidacaoContaConfig": {
+    "prefilledNote": "Sugestão pré-preenchida — ainda não guardada. Reveja e clique em Guardar para aceitar, ou altere antes.",
     "header": "Contas a Pagar (dupla contabilização de Despesa)",
     "headerGloss": "a conta a Pagar intermediária usada nos 2 lançamentos de cada Despesa/Pagamento (Liquidação e depois Execução) — conforme a prática real do livro-razão",
     "hint": "Esta NÃO é a conta bancária de onde o INSS paga — essa é escolhida à parte, em cada pagamento, no momento da Execução. Esta é uma conta de classificação contabilística, do próprio Plano de Contas, usada apenas para registar 'esta despesa já é devida, ainda não paga' antes do dinheiro sair do banco. Mantém-se SEMPRE A MESMA para cada transação do mesmo tipo de beneficiário — pergunte ao seu contabilista qual conta escolher em caso de dúvida. Fluxo quando o pagamento é feito: Débito [Conta a Pagar — definida aqui, fixa por categoria] / Crédito [conta bancária real — escolhida à parte em cada pagamento, não aqui]. Enquanto uma categoria não estiver definida abaixo, os seus lançamentos são simplesmente ignorados (não bloqueia).",

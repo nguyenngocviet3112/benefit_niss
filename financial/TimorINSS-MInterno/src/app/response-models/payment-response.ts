@@ -20,6 +20,7 @@ export interface PaymentAuthorizationDataContract {
   ano: number;
   obligationFk: number;
   obligationNumero: number;
+  obligationMes: number;
   obligationDescritivo?: string;
   valorObrigacao: number;
   // Thông tin người thụ hưởng — echo read-only từ Obligation (không nhập lại
@@ -46,11 +47,16 @@ export interface PaymentAuthorizationDataContract {
   lastRejectComment?: string;
   lastRejectAt?: string;
   execution?: PaymentExecutionDataContract;
+  // true = bút toán tương ứng bị bỏ qua lúc Approve/Execute vì thiếu Tài
+  // khoản Nợ/Có — cho phép bổ sung ngay tại màn này (nút "Ghi bù bút toán").
+  liquidacaoFaltaConfiguracao: boolean;
+  execucaoFaltaConfiguracao: boolean;
 }
 
 export interface ObligacaoDisponivelParaPagamentoDataContract {
   obligationId: number;
   numero: number;
+  mes: number;
   descritivoObrigacao?: string;
   valorObrigacao: number;
 }

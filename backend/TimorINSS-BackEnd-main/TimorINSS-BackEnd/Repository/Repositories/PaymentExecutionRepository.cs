@@ -45,5 +45,10 @@ namespace TimorINSSBackEnd.Repository.Repositories
         {
             return BaseQuery().SingleOrDefault(e => e.Id == id);
         }
+
+        public PaymentExecution GetByAuthorization(int paymentAuthorizationFk)
+        {
+            return BaseQuery().SingleOrDefault(e => e.IndActivo && e.PaymentAuthorizationFk == paymentAuthorizationFk);
+        }
     }
 }

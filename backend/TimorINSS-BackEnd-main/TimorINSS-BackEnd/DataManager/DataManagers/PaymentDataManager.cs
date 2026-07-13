@@ -32,6 +32,17 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return obligation?.ObligationItem?.Where(i => i.IndActivo).Sum(i => i.Value) ?? 0;
         }
 
+        // Tài khoản Phải trả trung gian dùng cho bút toán kép (xem Approve/Execute) —
+        // xác nhận từ sổ sách thật (FRSSVF.xlsm "Lançamentos"): mọi Despesa có 2 bút
+        // toán qua 1 tài khoản Phải trả (Fornecedores c/c/Com o pessoal/Outros credores...),
+        // không phải Nợ Despesa / Có Ngân hàng trực tiếp trong 1 bút toán. Tài khoản phụ
+        // thuộc BeneficiarioCategoria — trả về null nếu chưa cấu hình (soft-fail, giống
+        // GuiaPagamentoContaConfig: GerarSeChuaCo tự bỏ qua nếu thiếu tài khoản).
+        private int? GetContaPhaiTraFk(Obligation obligation)
+        {
+            return _unitOfWork.LiquidacaoContaConfigRepository.GetByCategoria(obligation?.BeneficiarioCategoria)?.CodigoContaFk;
+        }
+
         private PaymentAuthorizationDataContract MapEntity(PaymentAuthorization entity)
         {
             return new PaymentAuthorizationDataContract
@@ -42,6 +53,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Ano = entity.Ano,
                 ObligationFk = entity.ObligationFk,
                 ObligationNumero = entity.ObligationFkNavigation?.Numero ?? 0,
+                ObligationMes = entity.ObligationFkNavigation?.Mes ?? 0,
                 ObligationDescritivo = entity.ObligationFkNavigation?.DescritivoObrigacao,
                 ValorObrigacao = ValorObrigacao(entity.ObligationFkNavigation),
                 BeneficiarioNome = entity.ObligationFkNavigation?.BeneficiarioNome,
@@ -95,7 +107,11 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     NumeroDocumento = entity.PaymentExecution.NumeroDocumento,
                     Observacao = entity.PaymentExecution.Observacao,
                     ExecutedAt = entity.PaymentExecution.ExecutedAt
-                } : null
+                } : null,
+                LiquidacaoFaltaConfiguracao = entity.ApprovedAt.HasValue
+                    && !_unitOfWork.LancamentoRepository.ExistsForOrigem("PaymentAuthorizationLiquidacao", entity.Id),
+                ExecucaoFaltaConfiguracao = entity.PaymentExecution != null
+                    && !_unitOfWork.LancamentoRepository.ExistsForOrigem("PaymentExecution", entity.PaymentExecution.Id)
             };
         }
 
@@ -130,6 +146,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     {
                         ObligationId = o.Id,
                         Numero = o.Numero,
+                        Mes = o.Mes,
                         DescritivoObrigacao = o.DescritivoObrigacao,
                         ValorObrigacao = ValorObrigacao(o)
                     })
@@ -305,6 +322,34 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 entity = _utils.UpdateDetailsToEntity(entity);
                 _unitOfWork.PaymentAuthorizationRepository.Update(entity);
                 _unitOfWork.Commit();
+
+                if (request.Approve)
+                {
+                    // Bút toán 1 (ghi nhận khoản Phải trả — "Liquidação") — sinh ngay khi
+                    // Autorização de Pagamento được duyệt, TRƯỚC khi tiền thực rời ngân
+                    // hàng. Nợ tài khoản Chi phí (đã chọn lúc tạo Autorização) / Có tài
+                    // khoản Phải trả (theo BeneficiarioCategoria của Obrigação gốc). Xem
+                    // memory liquidacao-conta-config-double-booking.
+                    var lancResult = _lancamentoDataManager.GerarSeChuaCo(
+                        origemTipo: "PaymentAuthorizationLiquidacao",
+                        origemId: entity.Id,
+                        data: entity.ApprovedAt ?? DateTime.Now,
+                        codigoContaDebitoFk: entity.CodigoContaDebitoFk,
+                        codigoContaCreditoFk: GetContaPhaiTraFk(entity.ObligationFkNavigation),
+                        valor: entity.ValorAutorizado,
+                        descricao: $"Autorização de Pagamento Nº {entity.Numero}/{entity.Ano} - {entity.Descritivo} (Liquidação)");
+
+                    if (lancResult.FaltaConfiguracao)
+                    {
+                        response.Warnings.Add($"Đã duyệt, nhưng chưa ghi được bút toán Liquidação cho Autorização Nº {entity.Numero}/{entity.Ano} vì thiếu Tài khoản Nợ hoặc Tài khoản Phải trả — bổ sung ngay tại màn này (nút Ghi bù bút toán) để hoàn thiện sổ sách.");
+                    }
+                    else if (lancResult.Gerado)
+                    {
+                        response.Warnings.Add($"Đã tự động ghi bút toán Liquidação cho Autorização Nº {entity.Numero}/{entity.Ano}. Kiểm tra tại Registo de Lançamentos nếu cần điều chỉnh.");
+                    }
+
+                    _unitOfWork.Commit();
+                }
             }
             catch (Exception e)
             {
@@ -350,19 +395,104 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 _unitOfWork.PaymentExecutionRepository.Add(entity);
                 _unitOfWork.Commit(); // entity.Id (identity) chỉ có giá trị thật sau Commit
 
-                // Bút toán Débito/Crédito tự sinh ngay khi Pagamento thực hiện — dùng
-                // đúng 2 tài khoản đã lưu ở PaymentAuthorization (bước duyệt), không nhập
-                // tay riêng (xem memory lancamentos-conciliacao-link-design).
-                _lancamentoDataManager.GerarSeChuaCo(
+                // Bút toán 2 (tất toán khoản Phải trả — tiền THỰC SỰ rời ngân hàng) — Nợ
+                // tài khoản Phải trả (cùng tài khoản đã dùng ở bút toán 1 lúc duyệt
+                // Autorização) / Có tài khoản Ngân hàng (đã chọn lúc tạo Autorização).
+                // Không còn Nợ thẳng vào tài khoản Chi phí ở bước này nữa — đã chuyển
+                // sang bút toán 1 tại Approve(), đúng theo sổ sách thật (xem memory
+                // liquidacao-conta-config-double-booking).
+                var lancResult = _lancamentoDataManager.GerarSeChuaCo(
                     origemTipo: "PaymentExecution",
                     origemId: entity.Id,
                     data: request.DataPagamento,
-                    codigoContaDebitoFk: authorization.CodigoContaDebitoFk,
+                    codigoContaDebitoFk: GetContaPhaiTraFk(authorization.ObligationFkNavigation),
                     codigoContaCreditoFk: authorization.CodigoContaCreditoFk,
                     valor: authorization.ValorAutorizado,
                     descricao: $"Pagamento Autorização Nº {authorization.Numero}/{authorization.Ano} - {authorization.Descritivo}");
 
+                if (lancResult.FaltaConfiguracao)
+                {
+                    response.Warnings.Add($"Đã ghi nhận thực hiện chi trả, nhưng chưa ghi được bút toán tất toán cho Autorização Nº {authorization.Numero}/{authorization.Ano} vì thiếu Tài khoản Phải trả hoặc Tài khoản Ngân hàng — bổ sung ngay tại màn này (nút Ghi bù bút toán) để hoàn thiện sổ sách.");
+                }
+                else if (lancResult.Gerado)
+                {
+                    response.Warnings.Add($"Đã tự động ghi bút toán tất toán cho Autorização Nº {authorization.Numero}/{authorization.Ano}. Kiểm tra tại Registo de Lançamentos nếu cần điều chỉnh.");
+                }
+
                 _unitOfWork.Commit();
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
+        // Ghi bù 1 bút toán đã bị bỏ qua vì thiếu Tài khoản Nợ/Có (FaltaConfiguracao),
+        // cho phép người dùng nhập trực tiếp cặp tài khoản ngay tại màn Pagamento thay
+        // vì phải đi cấu hình rồi không có cách nào quay lại ghi bù (Approve/Execute
+        // chỉ chạy được đúng 1 lần). Giá trị/ngày/mô tả luôn lấy lại từ dữ liệu gốc,
+        // không tin theo giá trị client gửi lên — chỉ 2 tài khoản là do người dùng chọn.
+        public ResponseBaseDataContract CompletarLancamento(CompletarLancamentoPagamentoRequest request)
+        {
+            ResponseBaseDataContract response = new ResponseBaseDataContract { RequestId = request.RequestId };
+            try
+            {
+                PaymentAuthorization authorization = _unitOfWork.PaymentAuthorizationRepository.Get(request.PaymentAuthorizationFk);
+                if (authorization == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "PAG-NOT-FOUND", ErrorMessage = "Không tìm thấy Autorização de Pagamento." });
+                    return response;
+                }
+
+                LancamentoGerarResult lancResult;
+                if (request.OrigemTipo == "PaymentAuthorizationLiquidacao")
+                {
+                    if (!authorization.ApprovedAt.HasValue)
+                    {
+                        response.Errors.Add(new Error { ErrorCode = "PAG-NOT-APPROVED", ErrorMessage = "Autorização de Pagamento chưa được duyệt." });
+                        return response;
+                    }
+                    lancResult = _lancamentoDataManager.GerarSeChuaCo(
+                        origemTipo: "PaymentAuthorizationLiquidacao",
+                        origemId: authorization.Id,
+                        data: authorization.ApprovedAt.Value,
+                        codigoContaDebitoFk: request.CodigoContaDebitoFk,
+                        codigoContaCreditoFk: request.CodigoContaCreditoFk,
+                        valor: authorization.ValorAutorizado,
+                        descricao: $"Autorização de Pagamento Nº {authorization.Numero}/{authorization.Ano} - {authorization.Descritivo} (Liquidação)");
+                }
+                else if (request.OrigemTipo == "PaymentExecution")
+                {
+                    PaymentExecution execution = _unitOfWork.PaymentExecutionRepository.GetByAuthorization(request.PaymentAuthorizationFk);
+                    if (execution == null)
+                    {
+                        response.Errors.Add(new Error { ErrorCode = "PAG-NOT-EXECUTED", ErrorMessage = "Autorização de Pagamento này chưa được thực hiện chi trả." });
+                        return response;
+                    }
+                    lancResult = _lancamentoDataManager.GerarSeChuaCo(
+                        origemTipo: "PaymentExecution",
+                        origemId: execution.Id,
+                        data: execution.DataPagamento,
+                        codigoContaDebitoFk: request.CodigoContaDebitoFk,
+                        codigoContaCreditoFk: request.CodigoContaCreditoFk,
+                        valor: authorization.ValorAutorizado,
+                        descricao: $"Pagamento Autorização Nº {authorization.Numero}/{authorization.Ano} - {authorization.Descritivo}");
+                }
+                else
+                {
+                    response.Errors.Add(new Error { ErrorCode = "PAG-INVALID-ORIGEM", ErrorMessage = "Loại bút toán không hợp lệ." });
+                    return response;
+                }
+
+                if (lancResult.Gerado)
+                {
+                    _unitOfWork.Commit();
+                }
+                else
+                {
+                    response.Errors.Add(new Error { ErrorCode = "PAG-LANCAMENTO-ALREADY-EXISTS", ErrorMessage = "Bút toán này đã được ghi rồi (không cần bổ sung nữa)." });
+                }
             }
             catch (Exception e)
             {

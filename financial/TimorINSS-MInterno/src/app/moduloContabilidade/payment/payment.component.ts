@@ -52,6 +52,13 @@ export class PaymentComponent implements OnInit {
   public rejectComment = '';
   public rejectId: number | null = null;
 
+  // Ghi bù bút toán bị bỏ qua vì thiếu Tài khoản Nợ/Có (2026-07-13) — cấu
+  // hình tài khoản không bao giờ chặn Approve/Execute, đây là đường hoàn
+  // thiện sổ sách ngay tại màn này sau đó, không cần đi tìm màn khác.
+  public completarTarget: { item: PaymentAuthorizationDataContract; origemTipo: string } | null = null;
+  public formCompletarDebitoFk: number | null = null;
+  public formCompletarCreditoFk: number | null = null;
+
   public attachmentConfig: AttachmentConfigItem | null = null;
   public paymentHasAttachment: { [id: number]: boolean } = {};
 
@@ -65,6 +72,7 @@ export class PaymentComponent implements OnInit {
   ngOnInit(): void {
     this.load();
     this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
+    this.paymentService.getCodigoContaOptions().subscribe(response => this.codigoContaOptions = response.items ?? []);
   }
 
   public onAttachmentsLoaded(paymentId: number, items: AttachmentItem[]): void {
@@ -238,6 +246,40 @@ export class PaymentComponent implements OnInit {
         }
         this.executeTarget = null;
         this.showSuccessWithWarnings(this.translate.instant('payment.executedSuccess'), response.warnings);
+        this.load();
+      },
+      err => this.showError(err)
+    );
+  }
+
+  public openCompletarLancamento(item: PaymentAuthorizationDataContract, origemTipo: string): void {
+    this.completarTarget = { item, origemTipo };
+    this.formCompletarDebitoFk = null;
+    this.formCompletarCreditoFk = null;
+  }
+
+  public cancelCompletarLancamento(): void {
+    this.completarTarget = null;
+  }
+
+  public confirmCompletarLancamento(): void {
+    if (!this.completarTarget || !this.formCompletarDebitoFk || !this.formCompletarCreditoFk) {
+      this.snackBar.open(this.translate.instant('payment.errMissingCompletarConta'), this.translate.instant('general.close'), { duration: 3000 });
+      return;
+    }
+    this.paymentService.completarLancamento({
+      paymentAuthorizationFk: this.completarTarget.item.id,
+      origemTipo: this.completarTarget.origemTipo,
+      codigoContaDebitoFk: this.formCompletarDebitoFk,
+      codigoContaCreditoFk: this.formCompletarCreditoFk
+    }).subscribe(
+      response => {
+        if (response.errors && response.errors.length > 0) {
+          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+          return;
+        }
+        this.completarTarget = null;
+        this.snackBar.open(this.translate.instant('payment.completarSuccess'), this.translate.instant('general.close'), { duration: 3000 });
         this.load();
       },
       err => this.showError(err)

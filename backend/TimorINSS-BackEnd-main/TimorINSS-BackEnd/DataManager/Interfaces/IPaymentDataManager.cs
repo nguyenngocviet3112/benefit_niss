@@ -13,5 +13,6 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         ResponseBaseDataContract Submit(SubmitPaymentAuthorizationRequest request);
         ResponseBaseDataContract Approve(ApprovePaymentAuthorizationRequest request);
         ResponseBaseDataContract Execute(ExecutePaymentRequest request);
+        ResponseBaseDataContract CompletarLancamento(CompletarLancamentoPagamentoRequest request);
     }
 }

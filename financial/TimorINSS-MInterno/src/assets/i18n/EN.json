@@ -187,7 +187,10 @@
     "emailSent": "Email sent!",
     "passwordNoMatch": "Doesn't match with Password",
     "invalidPassword": "Password should be at least 8 characters long, contain one number, one letter uppercase, one letter lowercase and one special character.",
-    "noNewModeAccess": "This account does not have access to the new Finance interface."
+    "noNewModeAccess": "This account does not have access to the new Finance interface.",
+    "modeSelectLabel": "Choose Mode",
+    "modeOld": "Traditional Mode",
+    "modeNew": "Modern Mode (Contabilidade)"
   },
   "home": {
     "declaracaoTitle": "REMUNERATION DECLARATION",
@@ -2347,7 +2350,12 @@
     "confirmSubmit": "Submit Autorização de Pagamento No. {{numero}} for approval?",
     "executedSuccess": "Disbursement executed (Realização do Pagamento).",
     "approveSuccess": "Autorização de Pagamento approved.",
-    "errGeneric": "Something went wrong."
+    "errGeneric": "Something went wrong.",
+    "liquidacaoFaltaConfiguracao": "Ledger entry for Liquidação is missing — Débito/Crédito accounts were not configured.",
+    "execucaoFaltaConfiguracao": "Ledger entry for the payment execution is missing — Débito/Crédito accounts were not configured.",
+    "completarButton": "Complete ledger entry",
+    "completarSuccess": "Ledger entry recorded.",
+    "errMissingCompletarConta": "Please select both the Débito and Crédito accounts."
   },
   "orcamento": {
     "header": "Orçamento",
@@ -2693,6 +2701,7 @@
     "suggestionLabel": "Suggestion:"
   },
   "liquidacaoContaConfig": {
+    "prefilledNote": "Pre-filled suggestion — not saved yet. Review and click Save to accept, or change it first.",
     "header": "Payable Accounts (Despesa double-booking)",
     "headerGloss": "the intermediate Payable account used for the 2-entry booking of every Despesa/Pagamento (Liquidação then Execução) — matches the real ledger's practice",
     "hint": "This is NOT the bank account INSS pays from — that one is chosen separately, each time, when the payment is actually executed. This is an accounting classification account, from your own Chart of Accounts (Plano de Contas), used only to record 'this expense is now owed, not yet paid' before the money leaves the bank. It stays the SAME for every transaction of the same beneficiary type — ask your accountant which account to pick if you're unsure. Flow when a payment is made: Debit [Payable account — set here, fixed per category] / Credit [real bank account — chosen separately each time, not here]. Until a category is set below, its entries are simply skipped (not a blocker).",

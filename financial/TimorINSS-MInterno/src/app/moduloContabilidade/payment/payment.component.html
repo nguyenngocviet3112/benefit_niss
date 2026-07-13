@@ -133,6 +133,34 @@
             <button mat-raised-button color="primary" (click)="confirmExecute()">{{ 'payment.confirmExecuteButton' | translate }}</button>
           </div>
         </div>
+
+        <div class="pag-completar-warning" *ngIf="item.liquidacaoFaltaConfiguracao && completarTarget?.item?.id !== item.id">
+          {{ 'payment.liquidacaoFaltaConfiguracao' | translate }}
+          <button mat-button color="warn" (click)="openCompletarLancamento(item, 'PaymentAuthorizationLiquidacao')">{{ 'payment.completarButton' | translate }}</button>
+        </div>
+        <div class="pag-completar-warning" *ngIf="item.execucaoFaltaConfiguracao && completarTarget?.item?.id !== item.id">
+          {{ 'payment.execucaoFaltaConfiguracao' | translate }}
+          <button mat-button color="warn" (click)="openCompletarLancamento(item, 'PaymentExecution')">{{ 'payment.completarButton' | translate }}</button>
+        </div>
+
+        <div class="pag-completar-form" *ngIf="completarTarget?.item?.id === item.id">
+          <mat-form-field appearance="outline" class="medium-field">
+            <mat-label>{{ 'payment.fieldContaDebito' | translate }}</mat-label>
+            <mat-select [(ngModel)]="formCompletarDebitoFk" name="formCompletarDebitoFk">
+              <mat-option *ngFor="let c of codigoContaOptions" [value]="c.id">{{ c.designacao }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="medium-field">
+            <mat-label>{{ 'payment.fieldContaCredito' | translate }}</mat-label>
+            <mat-select [(ngModel)]="formCompletarCreditoFk" name="formCompletarCreditoFk">
+              <mat-option *ngFor="let c of codigoContaOptions" [value]="c.id">{{ c.designacao }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="pag-form-actions">
+            <button mat-button (click)="cancelCompletarLancamento()">{{ 'payment.cancelButton' | translate }}</button>
+            <button mat-raised-button color="primary" (click)="confirmCompletarLancamento()">{{ 'payment.completarButton' | translate }}</button>
+          </div>
+        </div>
       </div>
     </ng-container>
 

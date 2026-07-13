@@ -79,4 +79,25 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         [DataMember]
         public string Observacao { get; set; }
     }
+
+    // Bổ sung tài khoản Nợ/Có còn thiếu để ghi bù 1 bút toán đã bị bỏ qua lúc
+    // Approve ("PaymentAuthorizationLiquidacao") hoặc Execute ("PaymentExecution")
+    // — cấu hình tài khoản không bao giờ chặn nghiệp vụ chính, đây là đường
+    // hoàn thiện sổ sách sau đó, ngay tại màn Pagamento (2026-07-13).
+    [DataContract]
+    public class CompletarLancamentoPagamentoRequest : RequestBaseDataContract
+    {
+        [DataMember(IsRequired = true)]
+        public int PaymentAuthorizationFk { get; set; }
+
+        // "PaymentAuthorizationLiquidacao" | "PaymentExecution"
+        [DataMember(IsRequired = true)]
+        public string OrigemTipo { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public int CodigoContaDebitoFk { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public int CodigoContaCreditoFk { get; set; }
+    }
 }

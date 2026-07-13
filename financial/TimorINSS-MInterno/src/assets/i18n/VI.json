@@ -187,7 +187,10 @@
     "emailSent": "Email sent!",
     "passwordNoMatch": "Doesn't match with Password",
     "invalidPassword": "Password should be at least 8 characters long, contain one number, one letter uppercase, one letter lowercase and one special character.",
-    "noNewModeAccess": "Tài khoản này không có quyền truy cập giao diện Tài chính mới."
+    "noNewModeAccess": "Tài khoản này không có quyền truy cập giao diện Tài chính mới.",
+    "modeSelectLabel": "Chọn giao diện",
+    "modeOld": "Giao diện cũ",
+    "modeNew": "Giao diện mới (Contabilidade)"
   },
   "home": {
     "declaracaoTitle": "REMUNERATION DECLARATION",
@@ -2347,7 +2350,12 @@
     "confirmSubmit": "Gửi duyệt Autorização de Pagamento số {{numero}}?",
     "executedSuccess": "Đã thực hiện chi trả (Realização do Pagamento).",
     "approveSuccess": "Đã duyệt Autorização de Pagamento.",
-    "errGeneric": "Có lỗi xảy ra."
+    "errGeneric": "Có lỗi xảy ra.",
+    "liquidacaoFaltaConfiguracao": "Thiếu bút toán Liquidação — chưa có Tài khoản Nợ/Có.",
+    "execucaoFaltaConfiguracao": "Thiếu bút toán tất toán (Execução) — chưa có Tài khoản Nợ/Có.",
+    "completarButton": "Ghi bù bút toán",
+    "completarSuccess": "Đã ghi bút toán.",
+    "errMissingCompletarConta": "Vui lòng chọn cả Tài khoản Nợ và Tài khoản Có."
   },
   "orcamento": {
     "header": "Orçamento",
@@ -2693,6 +2701,7 @@
     "suggestionLabel": "Gợi ý:"
   },
   "liquidacaoContaConfig": {
+    "prefilledNote": "Gợi ý điền sẵn — chưa lưu. Xem lại rồi bấm Lưu để chấp nhận, hoặc đổi trước khi lưu.",
     "header": "Tài khoản Phải trả (bút toán kép Despesa)",
     "headerGloss": "tài khoản Phải trả trung gian dùng cho 2 bút toán của mỗi Despesa/Pagamento (Liquidação rồi Execução) — đúng theo sổ sách thật",
     "hint": "Đây KHÔNG PHẢI là tài khoản ngân hàng mà INSS chi tiền ra — cái đó được chọn riêng, mỗi lần chi, ngay lúc Execução (thực hiện chi trả). Đây là 1 tài khoản kế toán trong Plano de Contas (hệ thống tài khoản của bạn), chỉ dùng để ghi nhận 'khoản này đã xác định phải trả, chưa trả tiền' trước khi tiền thực rời ngân hàng. Nó LUÔN GIỐNG NHAU cho mọi giao dịch cùng loại đối tượng — nếu chưa chắc chọn tài khoản nào, hỏi kế toán để xác nhận. Luồng khi chi trả thật: Nợ [Tài khoản Phải trả — cấu hình ở đây, cố định theo Categoria] / Có [tài khoản ngân hàng thật — chọn riêng mỗi lần chi, không phải ở đây]. Categoria nào chưa cấu hình thì bút toán của Categoria đó tạm thời bị bỏ qua (không chặn nghiệp vụ).",

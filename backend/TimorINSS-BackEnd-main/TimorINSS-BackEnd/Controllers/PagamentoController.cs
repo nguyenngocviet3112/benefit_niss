@@ -203,5 +203,28 @@ namespace TimorINSSBackEnd.Controllers
             _cache.Reset();
             return Ok(response);
         }
+
+        [HttpPost("CompletarLancamento")]
+        [RequirePerm("PAG_APPROVE", "PAG_EXECUTE")]
+        public IActionResult CompletarLancamento(CompletarLancamentoPagamentoRequest request)
+        {
+            ResponseBaseDataContract response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.CompletarLancamento(request);
+            }
+            catch (Exception e)
+            {
+                response = new ResponseBaseDataContract();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("CompletarLancamento", Log, request))
+                return BadRequest(response);
+
+            _cache.Reset();
+            return Ok(response);
+        }
     }
 }

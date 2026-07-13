@@ -9,5 +9,6 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         bool HasExecutionForAuthorization(int paymentAuthorizationFk);
         List<PaymentExecution> GetAll();
         PaymentExecution Get(int id);
+        PaymentExecution GetByAuthorization(int paymentAuthorizationFk);
     }
 }
