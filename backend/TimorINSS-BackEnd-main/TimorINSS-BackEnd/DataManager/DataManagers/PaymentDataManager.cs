@@ -445,7 +445,14 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     return response;
                 }
 
+                // Bút toán 1 (Liquidação) và bút toán 2 (Execução) dùng CHUNG 1 tài khoản
+                // Phải trả — Có ở bút toán 1 phải khớp Nợ ở bút toán 2 để triệt tiêu đúng
+                // (xem comment GetContaPhaiTraFk). Nếu bút toán còn lại đã tồn tại, LUÔN
+                // lấy tài khoản Phải trả từ đó, không tin theo lựa chọn của người dùng ở
+                // phía này nữa — tránh 2 bên chọn lệch nhau làm sổ sách sai (2026-07-13,
+                // phát hiện sau khi build tính năng Ghi bù bút toán).
                 LancamentoGerarResult lancResult;
+                bool contaPhaiTraOverridden = false;
                 if (request.OrigemTipo == "PaymentAuthorizationLiquidacao")
                 {
                     if (!authorization.ApprovedAt.HasValue)
@@ -453,12 +460,24 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                         response.Errors.Add(new Error { ErrorCode = "PAG-NOT-APPROVED", ErrorMessage = "Autorização de Pagamento chưa được duyệt." });
                         return response;
                     }
+
+                    int contaPhaiTraFk = request.CodigoContaCreditoFk;
+                    PaymentExecution existingExecution = _unitOfWork.PaymentExecutionRepository.GetByAuthorization(authorization.Id);
+                    Lancamento execLancamento = existingExecution != null
+                        ? _unitOfWork.LancamentoRepository.GetByOrigem("PaymentExecution", existingExecution.Id)
+                        : null;
+                    if (execLancamento != null && execLancamento.CodigoContaDebitoFk != request.CodigoContaCreditoFk)
+                    {
+                        contaPhaiTraFk = execLancamento.CodigoContaDebitoFk;
+                        contaPhaiTraOverridden = true;
+                    }
+
                     lancResult = _lancamentoDataManager.GerarSeChuaCo(
                         origemTipo: "PaymentAuthorizationLiquidacao",
                         origemId: authorization.Id,
                         data: authorization.ApprovedAt.Value,
                         codigoContaDebitoFk: request.CodigoContaDebitoFk,
-                        codigoContaCreditoFk: request.CodigoContaCreditoFk,
+                        codigoContaCreditoFk: contaPhaiTraFk,
                         valor: authorization.ValorAutorizado,
                         descricao: $"Autorização de Pagamento Nº {authorization.Numero}/{authorization.Ano} - {authorization.Descritivo} (Liquidação)");
                 }
@@ -470,11 +489,20 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                         response.Errors.Add(new Error { ErrorCode = "PAG-NOT-EXECUTED", ErrorMessage = "Autorização de Pagamento này chưa được thực hiện chi trả." });
                         return response;
                     }
+
+                    int contaPhaiTraFk = request.CodigoContaDebitoFk;
+                    Lancamento liquidacaoLancamento = _unitOfWork.LancamentoRepository.GetByOrigem("PaymentAuthorizationLiquidacao", authorization.Id);
+                    if (liquidacaoLancamento != null && liquidacaoLancamento.CodigoContaCreditoFk != request.CodigoContaDebitoFk)
+                    {
+                        contaPhaiTraFk = liquidacaoLancamento.CodigoContaCreditoFk;
+                        contaPhaiTraOverridden = true;
+                    }
+
                     lancResult = _lancamentoDataManager.GerarSeChuaCo(
                         origemTipo: "PaymentExecution",
                         origemId: execution.Id,
                         data: execution.DataPagamento,
-                        codigoContaDebitoFk: request.CodigoContaDebitoFk,
+                        codigoContaDebitoFk: contaPhaiTraFk,
                         codigoContaCreditoFk: request.CodigoContaCreditoFk,
                         valor: authorization.ValorAutorizado,
                         descricao: $"Pagamento Autorização Nº {authorization.Numero}/{authorization.Ano} - {authorization.Descritivo}");
@@ -483,6 +511,11 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 {
                     response.Errors.Add(new Error { ErrorCode = "PAG-INVALID-ORIGEM", ErrorMessage = "Loại bút toán không hợp lệ." });
                     return response;
+                }
+
+                if (contaPhaiTraOverridden)
+                {
+                    response.Warnings.Add("Tài khoản Phải trả bạn chọn không khớp với bút toán còn lại — đã tự động dùng đúng tài khoản Phải trả từ bút toán kia để sổ sách khớp nhau.");
                 }
 
                 if (lancResult.Gerado)

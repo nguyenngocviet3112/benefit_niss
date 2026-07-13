@@ -26,6 +26,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Any(l => l.IndActivo && l.OrigemTipo == origemTipo && l.OrigemId == origemId);
         }
 
+        public Lancamento GetByOrigem(string origemTipo, int origemId)
+        {
+            return _moduloContribuicoesContext.Lancamento
+                .SingleOrDefault(l => l.IndActivo && l.OrigemTipo == origemTipo && l.OrigemId == origemId);
+        }
+
         public List<Lancamento> GetByFilter(int? ano, int? mes, string origemTipo)
         {
             IQueryable<Lancamento> query = _moduloContribuicoesContext.Lancamento
@@ -43,6 +49,18 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 query = query.Where(l => l.OrigemTipo == origemTipo);
 
             return query.OrderByDescending(l => l.Data).ThenByDescending(l => l.Id).ToList();
+        }
+
+        // Dùng khi 1 đối chiếu (match) bị hủy (Unmatch) — bút toán đã sinh từ lần
+        // match trước không còn đúng, phải tắt đi để lần match kế tiếp cho cùng
+        // origem có thể sinh bút toán mới (ExistsForOrigem chỉ tính dòng active).
+        public void DeactivateForOrigem(string origemTipo, int origemId)
+        {
+            foreach (Lancamento entity in _moduloContribuicoesContext.Lancamento
+                .Where(l => l.IndActivo && l.OrigemTipo == origemTipo && l.OrigemId == origemId))
+            {
+                entity.IndActivo = false;
+            }
         }
     }
 }

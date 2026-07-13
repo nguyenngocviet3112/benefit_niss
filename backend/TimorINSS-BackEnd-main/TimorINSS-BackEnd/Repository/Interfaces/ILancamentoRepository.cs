@@ -7,6 +7,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
     {
         void Add(Lancamento entity);
         bool ExistsForOrigem(string origemTipo, int origemId);
+        Lancamento GetByOrigem(string origemTipo, int origemId);
         List<Lancamento> GetByFilter(int? ano, int? mes, string origemTipo);
+        void DeactivateForOrigem(string origemTipo, int origemId);
     }
 }
