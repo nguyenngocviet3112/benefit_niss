@@ -87,7 +87,7 @@ export class SaldosAberturaComponent implements OnInit {
   public onGlSearchChange(): void {
     const term = (this.glSearch || '').toLowerCase();
     this.filteredGlAccounts = this.glAccounts.filter(c =>
-      (c.codigo || '').toLowerCase().includes(term) || (c.designacao || '').toLowerCase().includes(term));
+      (c.fullCodigo || '').toLowerCase().includes(term) || (c.designacao || '').toLowerCase().includes(term));
     this.glPageIndex = 0;
     this.updatePagedGlAccounts();
   }
@@ -115,7 +115,7 @@ export class SaldosAberturaComponent implements OnInit {
           this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
           return;
         }
-        this.snackBar.open(this.translate.instant('saldosAbertura.glSavedSuccess', { codigo: c.codigo }), this.translate.instant('general.close'), { duration: 2500 });
+        this.snackBar.open(this.translate.instant('saldosAbertura.glSavedSuccess', { codigo: c.fullCodigo }), this.translate.instant('general.close'), { duration: 2500 });
       },
       err => this.showError(err)
     );

@@ -71,14 +71,15 @@
   color: #666;
 }
 
-.ab-gl-col-codigo { flex: 0.8; font-family: monospace; }
-.ab-gl-col-designacao { flex: 2.5; }
-.ab-gl-col-valor { flex: 1.2; }
-.ab-gl-col-tipo { flex: 1; }
-.ab-gl-col-data { flex: 1; }
-.ab-gl-col-actions { flex: 0.6; text-align: right; }
+.ab-gl-col-codigo { flex: 0.8; min-width: 0; font-family: monospace; }
+.ab-gl-col-designacao { flex: 2.5; min-width: 0; }
+.ab-gl-col-valor { flex: 1.2; min-width: 0; }
+.ab-gl-col-tipo { flex: 1; min-width: 0; }
+.ab-gl-col-data { flex: 1; min-width: 0; }
+.ab-gl-col-actions { flex: 0.6; min-width: 0; text-align: right; }
 
 .ab-gl-input {
+  box-sizing: border-box;
   width: 100%;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -87,6 +88,8 @@
 }
 
 .ab-gl-select {
+  box-sizing: border-box;
+  display: block;
   width: 100%;
   font-size: 13px;
 }

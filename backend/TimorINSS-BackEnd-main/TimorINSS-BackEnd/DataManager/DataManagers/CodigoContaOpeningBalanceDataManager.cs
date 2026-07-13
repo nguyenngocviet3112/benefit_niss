@@ -30,18 +30,41 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             CodigoContaOpeningBalanceListResponse response = new CodigoContaOpeningBalanceListResponse();
             try
             {
-                response.Items = _unitOfWork.CodigoContaRepository.GetAll()
+                var all = _unitOfWork.CodigoContaRepository.GetAll().ToList();
+                var byId = all.ToDictionary(c => c.Id);
+
+                // Codigoconta.Codigo là mã cục bộ theo từng cấp (vd "1"), lặp lại giống
+                // hệt nhau ở nhiều nhánh khác nhau — mã tài khoản thật là ghép các mã
+                // cục bộ từ gốc xuống, không dấu phân cách (xem memory
+                // codigoconta-local-vs-full-code, đã áp dụng cho Plano de Contas).
+                string BuildFullCodigo(Codigoconta node)
+                {
+                    var segments = new System.Collections.Generic.List<string>();
+                    var current = node;
+                    var guard = 0;
+                    while (current != null && guard++ < 20)
+                    {
+                        segments.Insert(0, current.Codigo);
+                        current = current.ParentFk.HasValue && byId.ContainsKey(current.ParentFk.Value)
+                            ? byId[current.ParentFk.Value]
+                            : null;
+                    }
+                    return string.Concat(segments);
+                }
+
+                response.Items = all
                     .Where(c => c.IndActivo)
-                    .OrderBy(c => c.Codigo)
                     .Select(c => new CodigoContaOpeningBalanceDataContract
                     {
                         Id = c.Id,
                         Codigo = c.Codigo,
+                        FullCodigo = BuildFullCodigo(c),
                         Designacao = c.Designacao,
                         InitialValue = c.InitialValue,
                         IsCredit = c.IsCredit,
                         InitialValueDate = c.InitialValueDate
                     })
+                    .OrderBy(c => c.FullCodigo)
                     .ToList();
             }
             catch (Exception e)

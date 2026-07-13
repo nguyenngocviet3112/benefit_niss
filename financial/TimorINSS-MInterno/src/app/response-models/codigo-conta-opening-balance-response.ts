@@ -3,6 +3,7 @@ import { ResponseBase } from './utils-response';
 export interface CodigoContaOpeningBalanceDataContract {
   id: number;
   codigo: string;
+  fullCodigo: string;
   designacao: string;
   initialValue?: number;
   isCredit?: boolean;

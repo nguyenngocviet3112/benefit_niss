@@ -13,6 +13,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public string Codigo { get; set; }
 
         [DataMember]
+        public string FullCodigo { get; set; }
+
+        [DataMember]
         public string Designacao { get; set; }
 
         [DataMember]
