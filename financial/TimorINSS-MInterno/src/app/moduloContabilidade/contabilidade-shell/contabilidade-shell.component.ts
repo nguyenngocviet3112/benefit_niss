@@ -167,7 +167,7 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'shell.itemCicloDespesa', route: '/contabilidade/relatorios/cicloDespesa', permTokens: ['REPORT_VIEW'] },
         { label: 'shell.itemSinteseProgramas', comingSoon: true },
         { label: 'shell.itemClassificacaoFuncionalRelatorio', comingSoon: true },
-        { label: 'shell.itemExecucaoAtividade', comingSoon: true },
+        { label: 'shell.itemExecucaoAtividade', route: '/contabilidade/relatorios/execucaoAtividade', permTokens: ['REPORT_VIEW'] },
         { label: 'shell.itemRegistoAd', route: '/contabilidade/relatorios/registoAd', permTokens: ['REPORT_VIEW'] },
         { label: 'shell.itemRegistoCabimentos', route: '/contabilidade/relatorios/registoCabimentos', permTokens: ['REPORT_VIEW'] },
         { label: 'shell.itemRegistoCompromissos', route: '/contabilidade/relatorios/registoCompromissos', permTokens: ['REPORT_VIEW'] },

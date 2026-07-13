@@ -58,6 +58,7 @@ import { RegistoAdComponent } from './registo-ad/registo-ad.component';
 import { RegistoCabimentosComponent } from './registo-cabimentos/registo-cabimentos.component';
 import { RegistoCompromissosComponent } from './registo-compromissos/registo-compromissos.component';
 import { RegistoObrigacoesComponent } from './registo-obrigacoes/registo-obrigacoes.component';
+import { ExecucaoAtividadeComponent } from './execucao-atividade/execucao-atividade.component';
 
 @NgModule({
   declarations: [
@@ -100,7 +101,8 @@ import { RegistoObrigacoesComponent } from './registo-obrigacoes/registo-obrigac
     RegistoAdComponent,
     RegistoCabimentosComponent,
     RegistoCompromissosComponent,
-    RegistoObrigacoesComponent
+    RegistoObrigacoesComponent,
+    ExecucaoAtividadeComponent
   ],
   imports: [
     CommonModule,

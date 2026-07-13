@@ -2897,5 +2897,32 @@
     "emptyList": "No data",
     "totalLabel": "Total",
     "errGeneric": "Something went wrong."
+  },
+  "execucaoAtividade": {
+    "header": "Execução por Atividade / Programa / Regime",
+    "headerGloss": "budget execution rollup by Atividade and by Regime (root Programa)",
+    "hint": "Cabimento/Compromisso/Obrigação/Pagamento totals grouped by Atividade or by Regime, computed from the same Ciclo da Despesa data — view only.",
+    "fieldAno": "Year",
+    "fieldOrganization": "Organization",
+    "searchToTypeTag": "Type to search",
+    "bothOption": "All",
+    "noneFound": "No results",
+    "fieldGroupBy": "Group by",
+    "groupByAtividade": "Atividade",
+    "groupByRegime": "Regime (Programa)",
+    "colRegime": "Regime",
+    "colAtividade": "Atividade",
+    "colNumeroAds": "AD count",
+    "colCabimentos": "Cabimentos",
+    "colCompromissos": "Compromissos",
+    "colSaldo1": "Balance 1",
+    "colObrigacoes": "Obrigações",
+    "colSaldo2": "Balance 2",
+    "colPagamentos": "Pagamentos",
+    "colSaldo3": "Balance 3",
+    "loading": "Loading...",
+    "emptyList": "No data",
+    "totalLabel": "Total",
+    "errGeneric": "Something went wrong."
   }
 }

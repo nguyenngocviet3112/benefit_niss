@@ -45,6 +45,7 @@ import { RegistoAdComponent } from './registo-ad/registo-ad.component';
 import { RegistoCabimentosComponent } from './registo-cabimentos/registo-cabimentos.component';
 import { RegistoCompromissosComponent } from './registo-compromissos/registo-compromissos.component';
 import { RegistoObrigacoesComponent } from './registo-obrigacoes/registo-obrigacoes.component';
+import { ExecucaoAtividadeComponent } from './execucao-atividade/execucao-atividade.component';
 
 const routes: Routes = [
   {
@@ -77,6 +78,7 @@ const routes: Routes = [
       { path: 'relatorios/registoCabimentos', component: RegistoCabimentosComponent },
       { path: 'relatorios/registoCompromissos', component: RegistoCompromissosComponent },
       { path: 'relatorios/registoObrigacoes', component: RegistoObrigacoesComponent },
+      { path: 'relatorios/execucaoAtividade', component: ExecucaoAtividadeComponent },
       { path: 'settings/idioma', component: IdiomaConfigComponent },
       { path: 'settings/kyNganSach', component: KyNganSachComponent },
       { path: 'settings/bankAccount', component: BankAccountComponent },

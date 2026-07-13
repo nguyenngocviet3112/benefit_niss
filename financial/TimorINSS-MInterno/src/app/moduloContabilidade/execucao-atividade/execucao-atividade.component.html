@@ -1,0 +1,92 @@
+<div class="ea-container">
+  <div class="ea-header">
+    <h2>{{ 'execucaoAtividade.header' | translate }} <span class="en">({{ 'execucaoAtividade.headerGloss' | translate }})</span></h2>
+    <p class="ea-hint">{{ 'execucaoAtividade.hint' | translate }}</p>
+  </div>
+
+  <div class="ea-filter-bar">
+    <mat-form-field appearance="outline" class="ea-field-ano">
+      <mat-label>{{ 'execucaoAtividade.fieldAno' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedYear" (selectionChange)="load()">
+        <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ea-field-org">
+      <mat-label>{{ 'execucaoAtividade.fieldOrganization' | translate }} <span class="itag type">{{ 'execucaoAtividade.searchToTypeTag' | translate }}</span></mat-label>
+      <input matInput [(ngModel)]="organizationSearch" name="organizationSearchInput"
+             (ngModelChange)="onOrganizationSearchChange()" [matAutocomplete]="autoOrg" />
+      <mat-autocomplete #autoOrg="matAutocomplete">
+        <mat-option [value]="undefined" (onSelectionChange)="selectOrganization()">
+          {{ 'execucaoAtividade.bothOption' | translate }}
+        </mat-option>
+        <mat-option *ngFor="let inst of filteredOrganizations" [value]="inst.nome" (onSelectionChange)="selectOrganization(inst)">
+          {{ inst.nome }}
+        </mat-option>
+        <mat-option *ngIf="filteredOrganizations.length === 0" disabled>{{ 'execucaoAtividade.noneFound' | translate }}</mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ea-field-groupby">
+      <mat-label>{{ 'execucaoAtividade.fieldGroupBy' | translate }}</mat-label>
+      <mat-select [(ngModel)]="groupBy" (selectionChange)="onGroupByChange()">
+        <mat-option *ngFor="let g of groupByOptions" [value]="g.value">{{ g.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="ea-loading" *ngIf="loading">{{ 'execucaoAtividade.loading' | translate }}</div>
+
+  <div class="ea-table-wrap" *ngIf="!loading">
+    <table class="ea-table">
+      <thead>
+        <tr>
+          <th *ngIf="groupBy === 'atividade'">{{ 'execucaoAtividade.colRegime' | translate }}</th>
+          <th>{{ (groupBy === 'atividade' ? 'execucaoAtividade.colAtividade' : 'execucaoAtividade.colRegime') | translate }}</th>
+          <th class="ea-num">{{ 'execucaoAtividade.colNumeroAds' | translate }}</th>
+          <th class="ea-num">{{ 'execucaoAtividade.colCabimentos' | translate }}</th>
+          <th class="ea-num">{{ 'execucaoAtividade.colCompromissos' | translate }}</th>
+          <th class="ea-num">{{ 'execucaoAtividade.colSaldo1' | translate }}</th>
+          <th class="ea-num">{{ 'execucaoAtividade.colObrigacoes' | translate }}</th>
+          <th class="ea-num">{{ 'execucaoAtividade.colSaldo2' | translate }}</th>
+          <th class="ea-num">{{ 'execucaoAtividade.colPagamentos' | translate }}</th>
+          <th class="ea-num">{{ 'execucaoAtividade.colSaldo3' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of pagedItems">
+          <td *ngIf="groupBy === 'atividade'">{{ row.regimeCodigo }} <span class="ea-designacao">{{ row.regimeDesignacao }}</span></td>
+          <td><span class="ea-code">{{ row.codigo }}</span> {{ row.designacao }}</td>
+          <td class="ea-num">{{ row.numeroAds }}</td>
+          <td class="ea-num">{{ row.cabimentos | number:'1.2-2' }}</td>
+          <td class="ea-num">{{ row.compromissos | number:'1.2-2' }}</td>
+          <td class="ea-num">{{ row.saldo1 | number:'1.2-2' }}</td>
+          <td class="ea-num">{{ row.obrigacoes | number:'1.2-2' }}</td>
+          <td class="ea-num">{{ row.saldo2 | number:'1.2-2' }}</td>
+          <td class="ea-num">{{ row.pagamentos | number:'1.2-2' }}</td>
+          <td class="ea-num">{{ row.saldo3 | number:'1.2-2' }}</td>
+        </tr>
+        <tr *ngIf="pagedItems.length === 0">
+          <td [attr.colspan]="groupBy === 'atividade' ? 10 : 9" class="ea-empty">{{ 'execucaoAtividade.emptyList' | translate }}</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="groupedItems.length > 0">
+        <tr>
+          <td [attr.colspan]="groupBy === 'atividade' ? 3 : 2" class="ea-total-label">{{ 'execucaoAtividade.totalLabel' | translate }}</td>
+          <td class="ea-num ea-total-value">{{ totalCabimentos | number:'1.2-2' }}</td>
+          <td class="ea-num ea-total-value">{{ totalCompromissos | number:'1.2-2' }}</td>
+          <td></td>
+          <td class="ea-num ea-total-value">{{ totalObrigacoes | number:'1.2-2' }}</td>
+          <td></td>
+          <td class="ea-num ea-total-value">{{ totalPagamentos | number:'1.2-2' }}</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <mat-paginator *ngIf="groupedItems.length > 0"
+      [length]="groupedItems.length" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100]"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

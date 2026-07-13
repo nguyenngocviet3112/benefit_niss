@@ -2896,5 +2896,32 @@
     "emptyList": "Sem dados",
     "totalLabel": "Total",
     "errGeneric": "Ocorreu um erro."
+  },
+  "execucaoAtividade": {
+    "header": "Execução por Atividade / Programa / Regime",
+    "headerGloss": "execução orçamental agregada por Atividade e por Regime (Programa raiz)",
+    "hint": "Totais de Cabimento/Compromisso/Obrigação/Pagamento agrupados por Atividade ou por Regime, calculados a partir dos mesmos dados do Ciclo da Despesa — apenas visualização.",
+    "fieldAno": "Ano",
+    "fieldOrganization": "Organization",
+    "searchToTypeTag": "Digite para pesquisar",
+    "bothOption": "Todos",
+    "noneFound": "Nenhum resultado",
+    "fieldGroupBy": "Agrupar por",
+    "groupByAtividade": "Atividade",
+    "groupByRegime": "Regime (Programa)",
+    "colRegime": "Regime",
+    "colAtividade": "Atividade",
+    "colNumeroAds": "N.º AD",
+    "colCabimentos": "Cabimentos",
+    "colCompromissos": "Compromissos",
+    "colSaldo1": "Saldo 1",
+    "colObrigacoes": "Obrigações",
+    "colSaldo2": "Saldo 2",
+    "colPagamentos": "Pagamentos",
+    "colSaldo3": "Saldo 3",
+    "loading": "A carregar...",
+    "emptyList": "Sem dados",
+    "totalLabel": "Total",
+    "errGeneric": "Ocorreu um erro."
   }
 }

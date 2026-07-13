@@ -2897,5 +2897,32 @@
     "emptyList": "Không có dữ liệu",
     "totalLabel": "Tổng cộng",
     "errGeneric": "Đã xảy ra lỗi."
+  },
+  "execucaoAtividade": {
+    "header": "Execução por Atividade / Programa / Regime",
+    "headerGloss": "gộp báo cáo chấp hành ngân sách theo Atividade và theo Regime (Programa gốc)",
+    "hint": "Tổng hợp giá trị Cabimento/Compromisso/Obrigação/Pagamento theo Atividade hoặc theo Regime, tính từ đúng dữ liệu Ciclo da Despesa — chỉ xem.",
+    "fieldAno": "Ano",
+    "fieldOrganization": "Organization",
+    "searchToTypeTag": "Gõ để tìm",
+    "bothOption": "Tất cả",
+    "noneFound": "Không tìm thấy",
+    "fieldGroupBy": "Nhóm theo",
+    "groupByAtividade": "Atividade",
+    "groupByRegime": "Regime (Programa)",
+    "colRegime": "Regime",
+    "colAtividade": "Atividade",
+    "colNumeroAds": "Số AD",
+    "colCabimentos": "Cabimentos",
+    "colCompromissos": "Compromissos",
+    "colSaldo1": "Saldo 1",
+    "colObrigacoes": "Obrigações",
+    "colSaldo2": "Saldo 2",
+    "colPagamentos": "Pagamentos",
+    "colSaldo3": "Saldo 3",
+    "loading": "Đang tải...",
+    "emptyList": "Không có dữ liệu",
+    "totalLabel": "Tổng cộng",
+    "errGeneric": "Đã xảy ra lỗi."
   }
 }

@@ -1,0 +1,112 @@
+.ea-container {
+  padding: 24px;
+  max-width: 1400px;
+}
+
+.ea-header h2 {
+  margin: 0 0 4px;
+}
+
+.ea-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.ea-hint {
+  margin: 0 0 16px;
+  color: #666;
+  font-size: 13px;
+}
+
+.ea-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.ea-field-ano {
+  width: 110px;
+}
+
+.ea-field-org {
+  width: 260px;
+}
+
+.itag {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.itag.type { background: #fff3e0; color: #ef6c00; }
+
+.ea-loading {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+}
+
+.ea-table-wrap {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.ea-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.ea-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+.ea-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.ea-code {
+  font-family: monospace;
+  color: #7c2d22;
+  margin-right: 6px;
+}
+
+.ea-designacao {
+  color: #555;
+  font-size: 12px;
+}
+
+.ea-num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.ea-empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+}
+
+.ea-total-label {
+  text-align: right;
+  font-weight: 600;
+}
+
+.ea-total-value {
+  font-weight: 600;
+}
+
+.ea-field-groupby {
+  width: 220px;
+}
