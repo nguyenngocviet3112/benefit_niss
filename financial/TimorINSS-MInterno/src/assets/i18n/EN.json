@@ -2530,6 +2530,7 @@
     "sectionAHint": "Enter the opening value (Debit/Credit) for each accounting account. Only accounts with a non-zero opening balance need to be entered.",
     "searchLabel": "Search by account code or name",
     "colCodigo": "Code",
+    "localCodigoTitle": "Local segment code: {{codigo}}",
     "colDesignacao": "Designation",
     "colValorInicial": "Opening Value (USD)",
     "colDebitoCredito": "Debit/Credit",

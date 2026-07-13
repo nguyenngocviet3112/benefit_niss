@@ -2530,6 +2530,7 @@
     "sectionAHint": "Nhập giá trị đầu kỳ (Débito/Crédito) cho từng tài khoản kế toán. Chỉ cần nhập những tài khoản có số dư đầu kỳ khác 0.",
     "searchLabel": "Tìm theo mã hoặc tên tài khoản",
     "colCodigo": "Código",
+    "localCodigoTitle": "Mã cục bộ của cấp này: {{codigo}}",
     "colDesignacao": "Designação",
     "colValorInicial": "Giá trị đầu kỳ (USD)",
     "colDebitoCredito": "Débito/Crédito",

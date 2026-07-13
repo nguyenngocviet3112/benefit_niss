@@ -2526,6 +2526,7 @@
     "sectionAHint": "Insira o valor de abertura (Débito/Crédito) para cada conta contabilística. Só é necessário inserir contas com saldo de abertura diferente de zero.",
     "searchLabel": "Pesquisar por código ou nome da conta",
     "colCodigo": "Código",
+    "localCodigoTitle": "Código local do nível: {{codigo}}",
     "colDesignacao": "Designação",
     "colValorInicial": "Valor de Abertura (USD)",
     "colDebitoCredito": "Débito/Crédito",
