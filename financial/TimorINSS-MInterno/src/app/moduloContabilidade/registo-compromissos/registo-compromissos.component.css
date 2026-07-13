@@ -1,0 +1,121 @@
+.rco-container {
+  padding: 24px;
+  max-width: 1400px;
+}
+
+.rco-header h2 {
+  margin: 0 0 4px;
+}
+
+.rco-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.rco-hint {
+  margin: 0 0 16px;
+  color: #666;
+  font-size: 13px;
+}
+
+.rco-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.rco-field-ano {
+  width: 110px;
+}
+
+.rco-field-org {
+  width: 260px;
+}
+
+.rco-field-estado {
+  width: 200px;
+}
+
+.itag {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.itag.type { background: #fff3e0; color: #ef6c00; }
+
+.rco-loading {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+}
+
+.rco-table-wrap {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.rco-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.rco-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+.rco-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.rco-code {
+  font-family: monospace;
+  color: #7c2d22;
+  margin-right: 6px;
+}
+
+.rco-num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.rco-empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+}
+
+.rco-total-label {
+  text-align: right;
+  font-weight: 600;
+}
+
+.rco-total-value {
+  font-weight: 600;
+}
+
+.rco-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rco-badge-DRAFT { background: #eee; color: #616161; }
+.rco-badge-PENDING_REVIEW { background: #fff3e0; color: #ef6c00; }
+.rco-badge-PENDING_APPROVAL { background: #e3f2fd; color: #1565c0; }
+.rco-badge-APPROVED { background: #e6f4ea; color: #1e7e34; }

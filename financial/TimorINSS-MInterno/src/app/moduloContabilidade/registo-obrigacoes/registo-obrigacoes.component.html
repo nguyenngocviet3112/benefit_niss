@@ -1,0 +1,73 @@
+<div class="ro-container">
+  <div class="ro-header">
+    <h2>{{ 'registoObrigacoes.header' | translate }} <span class="en">({{ 'registoObrigacoes.headerGloss' | translate }})</span></h2>
+    <p class="ro-hint">{{ 'registoObrigacoes.hint' | translate }}</p>
+  </div>
+
+  <div class="ro-filter-bar">
+    <mat-form-field appearance="outline" class="ro-field-ano">
+      <mat-label>{{ 'registoObrigacoes.fieldAno' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedYear" (selectionChange)="load()">
+        <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ro-field-categoria">
+      <mat-label>{{ 'registoObrigacoes.fieldCategoria' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedCategoria" (selectionChange)="onCategoriaChange()">
+        <mat-option *ngFor="let c of categoriaOptions" [value]="c.value">{{ c.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ro-field-estado">
+      <mat-label>{{ 'registoObrigacoes.fieldEstado' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedEstado" (selectionChange)="onEstadoChange()">
+        <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="ro-loading" *ngIf="loading">{{ 'registoObrigacoes.loading' | translate }}</div>
+
+  <div class="ro-table-wrap" *ngIf="!loading">
+    <table class="ro-table">
+      <thead>
+        <tr>
+          <th>{{ 'registoObrigacoes.colNumero' | translate }}</th>
+          <th>{{ 'registoObrigacoes.colDescritivo' | translate }}</th>
+          <th>{{ 'registoObrigacoes.colCompromissos' | translate }}</th>
+          <th>{{ 'registoObrigacoes.colCategoria' | translate }}</th>
+          <th>{{ 'registoObrigacoes.colBeneficiario' | translate }}</th>
+          <th class="ro-num">{{ 'registoObrigacoes.colValorObrigacao' | translate }}</th>
+          <th>{{ 'registoObrigacoes.colEstado' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of pagedItems">
+          <td>{{ row.numero }}/{{ row.ano }}</td>
+          <td>{{ row.descritivoObrigacao }}</td>
+          <td>{{ compromissosLabel(row) }}</td>
+          <td>{{ (row.beneficiarioCategoria ? ('registoObrigacoes.categoria' + row.beneficiarioCategoria) : '') | translate }}</td>
+          <td>{{ row.beneficiarioNome }}</td>
+          <td class="ro-num">$ {{ row.valorObrigacao | number:'1.2-2' }}</td>
+          <td><span class="ro-badge" [ngClass]="'ro-badge-' + row.estado">{{ ('registoObrigacoes.estado' + row.estado) | translate }}</span></td>
+        </tr>
+        <tr *ngIf="pagedItems.length === 0">
+          <td colspan="7" class="ro-empty">{{ 'registoObrigacoes.emptyList' | translate }}</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="items.length > 0">
+        <tr>
+          <td colspan="5" class="ro-total-label">{{ 'registoObrigacoes.totalLabel' | translate }}</td>
+          <td class="ro-num ro-total-value">$ {{ totalValorObrigacao | number:'1.2-2' }}</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <mat-paginator *ngIf="items.length > 0"
+      [length]="items.length" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100]"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

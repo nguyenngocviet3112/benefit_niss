@@ -1,0 +1,125 @@
+.ro-container {
+  padding: 24px;
+  max-width: 1400px;
+}
+
+.ro-header h2 {
+  margin: 0 0 4px;
+}
+
+.ro-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.ro-hint {
+  margin: 0 0 16px;
+  color: #666;
+  font-size: 13px;
+}
+
+.ro-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.ro-field-ano {
+  width: 110px;
+}
+
+.ro-field-org {
+  width: 260px;
+}
+
+.ro-field-estado {
+  width: 200px;
+}
+
+.itag {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.itag.type { background: #fff3e0; color: #ef6c00; }
+
+.ro-loading {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+}
+
+.ro-table-wrap {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.ro-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.ro-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+.ro-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.ro-code {
+  font-family: monospace;
+  color: #7c2d22;
+  margin-right: 6px;
+}
+
+.ro-num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.ro-empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+}
+
+.ro-total-label {
+  text-align: right;
+  font-weight: 600;
+}
+
+.ro-total-value {
+  font-weight: 600;
+}
+
+.ro-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ro-badge-DRAFT { background: #eee; color: #616161; }
+.ro-badge-PENDING_REVIEW { background: #fff3e0; color: #ef6c00; }
+.ro-badge-PENDING_APPROVAL { background: #e3f2fd; color: #1565c0; }
+.ro-badge-APPROVED { background: #e6f4ea; color: #1e7e34; }
+
+.ro-field-categoria {
+  width: 200px;
+}

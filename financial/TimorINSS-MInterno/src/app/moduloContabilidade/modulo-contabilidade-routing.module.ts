@@ -41,6 +41,10 @@ import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CicloDespesaComponent } from './ciclo-despesa/ciclo-despesa.component';
 import { AttachmentConfigComponent } from './settings/attachment-config/attachment-config.component';
+import { RegistoAdComponent } from './registo-ad/registo-ad.component';
+import { RegistoCabimentosComponent } from './registo-cabimentos/registo-cabimentos.component';
+import { RegistoCompromissosComponent } from './registo-compromissos/registo-compromissos.component';
+import { RegistoObrigacoesComponent } from './registo-obrigacoes/registo-obrigacoes.component';
 
 const routes: Routes = [
   {
@@ -69,6 +73,10 @@ const routes: Routes = [
       { path: 'sistema/departamentos', component: DepartamentoConfigComponent },
       { path: 'relatorios/ceInssGlobal', component: CeInssGlobalComponent },
       { path: 'relatorios/cicloDespesa', component: CicloDespesaComponent },
+      { path: 'relatorios/registoAd', component: RegistoAdComponent },
+      { path: 'relatorios/registoCabimentos', component: RegistoCabimentosComponent },
+      { path: 'relatorios/registoCompromissos', component: RegistoCompromissosComponent },
+      { path: 'relatorios/registoObrigacoes', component: RegistoObrigacoesComponent },
       { path: 'settings/idioma', component: IdiomaConfigComponent },
       { path: 'settings/kyNganSach', component: KyNganSachComponent },
       { path: 'settings/bankAccount', component: BankAccountComponent },

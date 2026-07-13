@@ -1,0 +1,89 @@
+<div class="rco-container">
+  <div class="rco-header">
+    <h2>{{ 'registoCompromissos.header' | translate }} <span class="en">({{ 'registoCompromissos.headerGloss' | translate }})</span></h2>
+    <p class="rco-hint">{{ 'registoCompromissos.hint' | translate }}</p>
+  </div>
+
+  <div class="rco-filter-bar">
+    <mat-form-field appearance="outline" class="rco-field-ano">
+      <mat-label>{{ 'registoCompromissos.fieldAno' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedYear" (selectionChange)="load()">
+        <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="rco-field-org">
+      <mat-label>{{ 'registoCompromissos.fieldOrganization' | translate }} <span class="itag type">{{ 'registoCompromissos.searchToTypeTag' | translate }}</span></mat-label>
+      <input matInput [(ngModel)]="organizationSearch" name="organizationSearchInput"
+             (ngModelChange)="onOrganizationSearchChange()" [matAutocomplete]="autoOrg" />
+      <mat-autocomplete #autoOrg="matAutocomplete">
+        <mat-option [value]="undefined" (onSelectionChange)="selectOrganization()">
+          {{ 'registoCompromissos.bothOption' | translate }}
+        </mat-option>
+        <mat-option *ngFor="let inst of filteredOrganizations" [value]="inst.nome" (onSelectionChange)="selectOrganization(inst)">
+          {{ inst.nome }}
+        </mat-option>
+        <mat-option *ngIf="filteredOrganizations.length === 0" disabled>{{ 'registoCompromissos.noneFound' | translate }}</mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="rco-field-estado">
+      <mat-label>{{ 'registoCompromissos.fieldEstado' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedEstado" (selectionChange)="onEstadoChange()">
+        <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="rco-loading" *ngIf="loading">{{ 'registoCompromissos.loading' | translate }}</div>
+
+  <div class="rco-table-wrap" *ngIf="!loading">
+    <table class="rco-table">
+      <thead>
+        <tr>
+          <th>{{ 'registoCompromissos.colNumero' | translate }}</th>
+          <th>{{ 'registoCompromissos.colNumeroCabimento' | translate }}</th>
+          <th>{{ 'registoCompromissos.colAtividade' | translate }}</th>
+          <th>{{ 'registoCompromissos.colClassEconomica' | translate }}</th>
+          <th>{{ 'registoCompromissos.colOrganization' | translate }}</th>
+          <th>{{ 'registoCompromissos.colDescritivo' | translate }}</th>
+          <th class="rco-num">{{ 'registoCompromissos.colValorCompromissoAno' | translate }}</th>
+          <th class="rco-num">{{ 'registoCompromissos.colValorObrigado' | translate }}</th>
+          <th class="rco-num">{{ 'registoCompromissos.colSaldoDisponivel' | translate }}</th>
+          <th>{{ 'registoCompromissos.colEstado' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of pagedItems">
+          <td>{{ row.numero }}/{{ row.ano }}</td>
+          <td>{{ row.cabimentoNumero }}/{{ row.cabimentoMes }}</td>
+          <td><span class="rco-code">{{ row.atividadeCodigo }}</span> {{ row.atividadeDesignacao }}</td>
+          <td><span class="rco-code">{{ row.economicClassificationCodigo }}</span> {{ row.economicClassificationDesignacao }}</td>
+          <td>{{ row.organizationNome }}</td>
+          <td>{{ row.descritivo }}</td>
+          <td class="rco-num">$ {{ row.valorCompromissoAno | number:'1.2-2' }}</td>
+          <td class="rco-num">$ {{ row.valorObrigado | number:'1.2-2' }}</td>
+          <td class="rco-num">$ {{ row.saldoDisponivel | number:'1.2-2' }}</td>
+          <td><span class="rco-badge" [ngClass]="'rco-badge-' + row.estado">{{ ('registoCompromissos.estado' + row.estado) | translate }}</span></td>
+        </tr>
+        <tr *ngIf="pagedItems.length === 0">
+          <td colspan="10" class="rco-empty">{{ 'registoCompromissos.emptyList' | translate }}</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="items.length > 0">
+        <tr>
+          <td colspan="6" class="rco-total-label">{{ 'registoCompromissos.totalLabel' | translate }}</td>
+          <td class="rco-num rco-total-value">$ {{ totalValorCompromissoAno | number:'1.2-2' }}</td>
+          <td class="rco-num rco-total-value">$ {{ totalValorObrigado | number:'1.2-2' }}</td>
+          <td class="rco-num rco-total-value">$ {{ totalSaldoDisponivel | number:'1.2-2' }}</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <mat-paginator *ngIf="items.length > 0"
+      [length]="items.length" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100]"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

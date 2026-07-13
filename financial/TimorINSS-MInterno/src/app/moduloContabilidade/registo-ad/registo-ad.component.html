@@ -1,0 +1,87 @@
+<div class="ra-container">
+  <div class="ra-header">
+    <h2>{{ 'registoAd.header' | translate }} <span class="en">({{ 'registoAd.headerGloss' | translate }})</span></h2>
+    <p class="ra-hint">{{ 'registoAd.hint' | translate }}</p>
+  </div>
+
+  <div class="ra-filter-bar">
+    <mat-form-field appearance="outline" class="ra-field-ano">
+      <mat-label>{{ 'registoAd.fieldAno' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedYear" (selectionChange)="load()">
+        <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ra-field-org">
+      <mat-label>{{ 'registoAd.fieldOrganization' | translate }} <span class="itag type">{{ 'registoAd.searchToTypeTag' | translate }}</span></mat-label>
+      <input matInput [(ngModel)]="organizationSearch" name="organizationSearchInput"
+             (ngModelChange)="onOrganizationSearchChange()" [matAutocomplete]="autoOrg" />
+      <mat-autocomplete #autoOrg="matAutocomplete">
+        <mat-option [value]="undefined" (onSelectionChange)="selectOrganization()">
+          {{ 'registoAd.bothOption' | translate }}
+        </mat-option>
+        <mat-option *ngFor="let inst of filteredOrganizations" [value]="inst.nome" (onSelectionChange)="selectOrganization(inst)">
+          {{ inst.nome }}
+        </mat-option>
+        <mat-option *ngIf="filteredOrganizations.length === 0" disabled>{{ 'registoAd.noneFound' | translate }}</mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ra-field-estado">
+      <mat-label>{{ 'registoAd.fieldEstado' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedEstado" (selectionChange)="onEstadoChange()">
+        <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="ra-loading" *ngIf="loading">{{ 'registoAd.loading' | translate }}</div>
+
+  <div class="ra-table-wrap" *ngIf="!loading">
+    <table class="ra-table">
+      <thead>
+        <tr>
+          <th>{{ 'registoAd.colNumero' | translate }}</th>
+          <th>{{ 'registoAd.colAtividade' | translate }}</th>
+          <th>{{ 'registoAd.colClassEconomica' | translate }}</th>
+          <th>{{ 'registoAd.colOrganization' | translate }}</th>
+          <th>{{ 'registoAd.colDescritivo' | translate }}</th>
+          <th class="ra-num">{{ 'registoAd.colValorAutorizado' | translate }}</th>
+          <th class="ra-num">{{ 'registoAd.colValorCabimentado' | translate }}</th>
+          <th class="ra-num">{{ 'registoAd.colSaldoDisponivel' | translate }}</th>
+          <th>{{ 'registoAd.colEstado' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of pagedItems">
+          <td>{{ row.numero }}/{{ row.ano }}</td>
+          <td><span class="ra-code">{{ row.atividadeCodigo }}</span> {{ row.atividadeDesignacao }}</td>
+          <td><span class="ra-code">{{ row.economicClassificationCodigo }}</span> {{ row.economicClassificationDesignacao }}</td>
+          <td>{{ row.organizationNome }}</td>
+          <td>{{ row.descritivo }}</td>
+          <td class="ra-num">$ {{ row.valorAutorizado | number:'1.2-2' }}</td>
+          <td class="ra-num">$ {{ row.valorCabimentado | number:'1.2-2' }}</td>
+          <td class="ra-num">$ {{ row.saldoDisponivel | number:'1.2-2' }}</td>
+          <td><span class="ra-badge" [ngClass]="'ra-badge-' + row.estado">{{ ('registoAd.estado' + row.estado) | translate }}</span></td>
+        </tr>
+        <tr *ngIf="pagedItems.length === 0">
+          <td colspan="9" class="ra-empty">{{ 'registoAd.emptyList' | translate }}</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="items.length > 0">
+        <tr>
+          <td colspan="5" class="ra-total-label">{{ 'registoAd.totalLabel' | translate }}</td>
+          <td class="ra-num ra-total-value">$ {{ totalValorAutorizado | number:'1.2-2' }}</td>
+          <td class="ra-num ra-total-value">$ {{ totalValorCabimentado | number:'1.2-2' }}</td>
+          <td class="ra-num ra-total-value">$ {{ totalSaldoDisponivel | number:'1.2-2' }}</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <mat-paginator *ngIf="items.length > 0"
+      [length]="items.length" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100]"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

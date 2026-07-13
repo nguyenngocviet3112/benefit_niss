@@ -54,6 +54,10 @@ import { CicloDespesaComponent } from './ciclo-despesa/ciclo-despesa.component';
 import { AttachmentUploadComponent } from './attachment-upload/attachment-upload.component';
 import { AttachmentConfigComponent } from './settings/attachment-config/attachment-config.component';
 import { LiquidacaoContaConfigComponent } from './settings/liquidacao-conta-config/liquidacao-conta-config.component';
+import { RegistoAdComponent } from './registo-ad/registo-ad.component';
+import { RegistoCabimentosComponent } from './registo-cabimentos/registo-cabimentos.component';
+import { RegistoCompromissosComponent } from './registo-compromissos/registo-compromissos.component';
+import { RegistoObrigacoesComponent } from './registo-obrigacoes/registo-obrigacoes.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +96,11 @@ import { LiquidacaoContaConfigComponent } from './settings/liquidacao-conta-conf
     LiquidacaoContaConfigComponent,
     CicloDespesaComponent,
     AttachmentUploadComponent,
-    AttachmentConfigComponent
+    AttachmentConfigComponent,
+    RegistoAdComponent,
+    RegistoCabimentosComponent,
+    RegistoCompromissosComponent,
+    RegistoObrigacoesComponent
   ],
   imports: [
     CommonModule,

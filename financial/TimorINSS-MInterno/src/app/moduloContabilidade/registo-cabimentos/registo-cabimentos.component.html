@@ -1,0 +1,89 @@
+<div class="rc-container">
+  <div class="rc-header">
+    <h2>{{ 'registoCabimentos.header' | translate }} <span class="en">({{ 'registoCabimentos.headerGloss' | translate }})</span></h2>
+    <p class="rc-hint">{{ 'registoCabimentos.hint' | translate }}</p>
+  </div>
+
+  <div class="rc-filter-bar">
+    <mat-form-field appearance="outline" class="rc-field-ano">
+      <mat-label>{{ 'registoCabimentos.fieldAno' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedYear" (selectionChange)="load()">
+        <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="rc-field-org">
+      <mat-label>{{ 'registoCabimentos.fieldOrganization' | translate }} <span class="itag type">{{ 'registoCabimentos.searchToTypeTag' | translate }}</span></mat-label>
+      <input matInput [(ngModel)]="organizationSearch" name="organizationSearchInput"
+             (ngModelChange)="onOrganizationSearchChange()" [matAutocomplete]="autoOrg" />
+      <mat-autocomplete #autoOrg="matAutocomplete">
+        <mat-option [value]="undefined" (onSelectionChange)="selectOrganization()">
+          {{ 'registoCabimentos.bothOption' | translate }}
+        </mat-option>
+        <mat-option *ngFor="let inst of filteredOrganizations" [value]="inst.nome" (onSelectionChange)="selectOrganization(inst)">
+          {{ inst.nome }}
+        </mat-option>
+        <mat-option *ngIf="filteredOrganizations.length === 0" disabled>{{ 'registoCabimentos.noneFound' | translate }}</mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="rc-field-estado">
+      <mat-label>{{ 'registoCabimentos.fieldEstado' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedEstado" (selectionChange)="onEstadoChange()">
+        <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="rc-loading" *ngIf="loading">{{ 'registoCabimentos.loading' | translate }}</div>
+
+  <div class="rc-table-wrap" *ngIf="!loading">
+    <table class="rc-table">
+      <thead>
+        <tr>
+          <th>{{ 'registoCabimentos.colNumero' | translate }}</th>
+          <th>{{ 'registoCabimentos.colNumeroAd' | translate }}</th>
+          <th>{{ 'registoCabimentos.colAtividade' | translate }}</th>
+          <th>{{ 'registoCabimentos.colClassEconomica' | translate }}</th>
+          <th>{{ 'registoCabimentos.colOrganization' | translate }}</th>
+          <th>{{ 'registoCabimentos.colDescritivo' | translate }}</th>
+          <th class="rc-num">{{ 'registoCabimentos.colValorCabimentado' | translate }}</th>
+          <th class="rc-num">{{ 'registoCabimentos.colValorComprometido' | translate }}</th>
+          <th class="rc-num">{{ 'registoCabimentos.colSaldoDisponivel' | translate }}</th>
+          <th>{{ 'registoCabimentos.colEstado' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of pagedItems">
+          <td>{{ row.numero }}/{{ row.ano }}</td>
+          <td>{{ row.expenditureAuthorizationNumero }}/{{ row.expenditureAuthorizationMes }}</td>
+          <td><span class="rc-code">{{ row.atividadeCodigo }}</span> {{ row.atividadeDesignacao }}</td>
+          <td><span class="rc-code">{{ row.economicClassificationCodigo }}</span> {{ row.economicClassificationDesignacao }}</td>
+          <td>{{ row.organizationNome }}</td>
+          <td>{{ row.descritivo }}</td>
+          <td class="rc-num">$ {{ row.valorCabimentado | number:'1.2-2' }}</td>
+          <td class="rc-num">$ {{ row.valorComprometido | number:'1.2-2' }}</td>
+          <td class="rc-num">$ {{ row.saldoDisponivel | number:'1.2-2' }}</td>
+          <td><span class="rc-badge" [ngClass]="'rc-badge-' + row.estado">{{ ('registoCabimentos.estado' + row.estado) | translate }}</span></td>
+        </tr>
+        <tr *ngIf="pagedItems.length === 0">
+          <td colspan="10" class="rc-empty">{{ 'registoCabimentos.emptyList' | translate }}</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="items.length > 0">
+        <tr>
+          <td colspan="6" class="rc-total-label">{{ 'registoCabimentos.totalLabel' | translate }}</td>
+          <td class="rc-num rc-total-value">$ {{ totalValorCabimentado | number:'1.2-2' }}</td>
+          <td class="rc-num rc-total-value">$ {{ totalValorComprometido | number:'1.2-2' }}</td>
+          <td class="rc-num rc-total-value">$ {{ totalSaldoDisponivel | number:'1.2-2' }}</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <mat-paginator *ngIf="items.length > 0"
+      [length]="items.length" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100]"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>
