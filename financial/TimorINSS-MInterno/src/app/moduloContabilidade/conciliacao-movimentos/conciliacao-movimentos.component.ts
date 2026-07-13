@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { BankStatementLineService } from '../../services/bank-statement-line.service';
@@ -47,7 +48,8 @@ export class ConciliacaoMovimentosComponent implements OnInit {
     private bankStatementLineService: BankStatementLineService,
     private bankAccountService: BankAccountService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -196,7 +198,7 @@ export class ConciliacaoMovimentosComponent implements OnInit {
     this.bankStatementLineService.matchReceita({ id: this.matchTarget.id, receitaPacFk: receita.receitaPacId }).subscribe(
       response => {
         if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+          this.showErrorWithConfigLink(response.errors[0].errorCode, response.errors[0].errorMessage);
           return;
         }
         this.matchTarget = null;
@@ -249,6 +251,18 @@ export class ConciliacaoMovimentosComponent implements OnInit {
 
   private showError(err: any): void {
     const message = err?.error?.errors?.[0]?.errorMessage ?? this.translate.instant('conciliacao.errGeneric');
+    this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
+  }
+
+  // Backend chặn hẳn việc đối chiếu khi Receita chưa cấu hình Tài khoản Nợ/Có
+  // (2026-07-13, user yêu cầu) — thay vì chỉ đóng snackbar, đưa thẳng link
+  // sang màn Receita PAC để sửa ngay, đỡ phải tự đi tìm.
+  private showErrorWithConfigLink(errorCode: string, message: string): void {
+    if (errorCode === 'REC-MISSING-CONTA-CONFIG') {
+      const ref = this.snackBar.open(message, this.translate.instant('conciliacao.goToReceitaConfig'), { duration: 10000 });
+      ref.onAction().subscribe(() => this.router.navigate(['/contabilidade/receita']));
+      return;
+    }
     this.snackBar.open(message, this.translate.instant('general.close'), { duration: 4000 });
   }
 }
