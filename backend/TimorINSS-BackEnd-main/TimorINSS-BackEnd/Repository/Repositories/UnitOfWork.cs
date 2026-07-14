@@ -119,12 +119,14 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IReceitaPacRepository _receitaPacRepository;
         private IOrcamentoSuplementarRepository _orcamentoSuplementarRepository;
         private IBankStatementLineRepository _bankStatementLineRepository;
+        private IBankStatementLineGuiaPagamentoRepository _bankStatementLineGuiaPagamentoRepository;
         private ILancamentoRepository _lancamentoRepository;
         private IGuiaPagamentoContaConfigRepository _guiaPagamentoContaConfigRepository;
         private IDashboardRepository _dashboardRepository;
         private IAttachmentConfigRepository _attachmentConfigRepository;
         private IAttachmentRepository _attachmentRepository;
         private ILiquidacaoContaConfigRepository _liquidacaoContaConfigRepository;
+        private IIntegrationConfigRepository _integrationConfigRepository;
 
 
         public UnitOfWork(TimorINSSModuloContribuicoesContext moduloContribuicoesContext, IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResource> localizer)
@@ -187,6 +189,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         public IBankStatementLineRepository BankStatementLineRepository
         { get { return _bankStatementLineRepository ??= new BankStatementLineRepository(_moduloContribuicoesContext); } }
+        public IBankStatementLineGuiaPagamentoRepository BankStatementLineGuiaPagamentoRepository
+        { get { return _bankStatementLineGuiaPagamentoRepository ??= new BankStatementLineGuiaPagamentoRepository(_moduloContribuicoesContext); } }
 
         public ILancamentoRepository LancamentoRepository
         { get { return _lancamentoRepository ??= new LancamentoRepository(_moduloContribuicoesContext); } }
@@ -202,6 +206,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
         { get { return _attachmentRepository ??= new AttachmentRepository(_moduloContribuicoesContext); } }
         public ILiquidacaoContaConfigRepository LiquidacaoContaConfigRepository
         { get { return _liquidacaoContaConfigRepository ??= new LiquidacaoContaConfigRepository(_moduloContribuicoesContext); } }
+        public IIntegrationConfigRepository IntegrationConfigRepository
+        { get { return _integrationConfigRepository ??= new IntegrationConfigRepository(_moduloContribuicoesContext); } }
 
         //Repository declarations in unit of work
         public IImporterRepository ImporterRepository

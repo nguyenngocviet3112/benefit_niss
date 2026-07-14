@@ -24,4 +24,11 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         [DataMember]
         public List<PagamentoDisponivelParaConciliacaoDataContract> Items { get; set; } = new List<PagamentoDisponivelParaConciliacaoDataContract>();
     }
+
+    [DataContract]
+    public class ImportBankStatementLinePreviewResponse : ResponseBaseDataContract
+    {
+        [DataMember]
+        public List<BankStatementLineImportRowDataContract> Rows { get; set; } = new List<BankStatementLineImportRowDataContract>();
+    }
 }

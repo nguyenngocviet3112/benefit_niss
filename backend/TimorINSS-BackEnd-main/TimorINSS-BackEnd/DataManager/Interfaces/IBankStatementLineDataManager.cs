@@ -13,5 +13,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         ResponseBaseDataContract MatchReceita(MatchReceitaRequest request);
         ResponseBaseDataContract MatchPagamento(MatchPagamentoRequest request);
         ResponseBaseDataContract Unmatch(UnmatchRequest request);
+        ImportBankStatementLinePreviewResponse ImportPreview(ImportBankStatementLinePreviewRequest request);
+        ResponseBaseDataContract ImportConfirm(ConfirmBankStatementLineImportRequest request);
     }
 }

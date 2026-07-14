@@ -208,5 +208,50 @@ namespace TimorINSSBackEnd.Controllers
             _cache.Reset();
             return Ok(response);
         }
+
+        [HttpPost("ImportPreview")]
+        [RequirePerm("BANCO_CONCILIAR")]
+        public IActionResult ImportPreview([FromForm] ImportBankStatementLinePreviewRequest request)
+        {
+            ImportBankStatementLinePreviewResponse response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.ImportPreview(request);
+            }
+            catch (Exception e)
+            {
+                response = new ImportBankStatementLinePreviewResponse();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("ImportPreview", Log, null))
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpPost("ImportConfirm")]
+        [RequirePerm("BANCO_CONCILIAR")]
+        public IActionResult ImportConfirm(ConfirmBankStatementLineImportRequest request)
+        {
+            ResponseBaseDataContract response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.ImportConfirm(request);
+            }
+            catch (Exception e)
+            {
+                response = new ResponseBaseDataContract();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("ImportConfirm", Log, request))
+                return BadRequest(response);
+
+            _cache.Reset();
+            return Ok(response);
+        }
     }
 }

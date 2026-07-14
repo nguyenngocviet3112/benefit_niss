@@ -15,6 +15,12 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         [DataMember]
         public string ContaBancariaNome { get; set; }
 
+        // Nome do banco isolado (Contabancaria.EntidadeBancaria) — separado de
+        // ContaBancariaNome (que já vem formatado como "BANCO (número)") para
+        // permitir filtro por banco no frontend sem parsear string (2026-07-14).
+        [DataMember]
+        public string EntidadeBancaria { get; set; }
+
         [DataMember]
         public DateTime DataValor { get; set; }
 
@@ -75,6 +81,34 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public decimal ValorCobradoBanco { get; set; }
+    }
+
+    // 1 dòng đọc được từ Excel ở bước preview (CLAUDE.md §6) — chưa ghi DB.
+    // IsDuplicate = đã có 1 BankStatementLine active khớp Conta+Data+Credito/
+    // Debito+Descricao — không phải lỗi chặn, chỉ gợi ý để user tự chọn
+    // Insert/Skip (khác NEW/EXISTS/ERROR của Orçamento vì sao kê ngân hàng
+    // không có "khóa nghiệp vụ" thật để coi là ghi đè — chỉ có thể trùng lặp
+    // do import lại cùng 1 file).
+    [DataContract]
+    public class BankStatementLineImportRowDataContract
+    {
+        [DataMember]
+        public int RowNum { get; set; }
+
+        [DataMember]
+        public DateTime DataValor { get; set; }
+
+        [DataMember]
+        public string Descricao { get; set; }
+
+        [DataMember]
+        public decimal Credito { get; set; }
+
+        [DataMember]
+        public decimal Debito { get; set; }
+
+        [DataMember]
+        public bool IsDuplicate { get; set; }
     }
 
     [DataContract]

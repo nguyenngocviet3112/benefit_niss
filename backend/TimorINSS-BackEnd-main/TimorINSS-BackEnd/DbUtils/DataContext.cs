@@ -387,6 +387,21 @@ namespace TimorINSSBackEnd.Models
                     .HasConstraintName("FK_BankStatementLine_PaymentExecution");
             });
 
+            modelBuilder.Entity<BankStatementLineGuiaPagamento>(entity =>
+            {
+                entity.HasOne(d => d.BankStatementLineFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.BankStatementLineFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BankStatementLineGuiaPagamento_BankStatementLine");
+
+                entity.HasOne(d => d.GuiaPagamentoFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.GuiaPagamentoFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BankStatementLineGuiaPagamento_Guiapagamento");
+            });
+
             modelBuilder.Entity<Lancamento>(entity =>
             {
                 entity.Property(e => e.Valor).HasColumnType("decimal(18, 2)");

@@ -342,5 +342,89 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
             return response;
         }
+
+        // Bước 1/2 (CLAUDE.md §6) — port lại parser Excel của
+        // MovimentosBancariosDataManager.ImportMovimentos (mode cũ) nhưng ghi
+        // vào BankStatementLine thay vì Movimentosbancarios, và bỏ hẳn cơ chế
+        // job nền/tarefaAtivoId của mode cũ (không còn ý nghĩa ở đây — xem
+        // memory long-term-goal-new-mode-only). Không ghi DB ở bước này.
+        public ImportBankStatementLinePreviewResponse ImportPreview(ImportBankStatementLinePreviewRequest request)
+        {
+            var response = new ImportBankStatementLinePreviewResponse();
+            try
+            {
+                List<ExcelReaderService.Models.MovimentoBancario> movimentos;
+                try
+                {
+                    movimentos = ExcelReaderService.ExcelReader.Read<ExcelReaderService.Models.MovimentoBancario>(request.File.OpenReadStream());
+                }
+                catch (Exception)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "BSL-IMPORT-INVALID-FILE", ErrorMessage = "File Excel không hợp lệ hoặc thiếu cột bắt buộc (Description, Amount, Date (dd/mm/yyyy))." });
+                    return response;
+                }
+
+                for (int i = 0; i < movimentos.Count; i++)
+                {
+                    var m = movimentos[i];
+                    if (string.IsNullOrEmpty(m.Description) || !m._Date.HasValue || !m.Amount.HasValue || m.Amount == 0)
+                    {
+                        continue;
+                    }
+
+                    decimal credito = m.Amount >= 0 ? m.Amount.Value : 0;
+                    decimal debito = m.Amount < 0 ? Math.Abs(m.Amount.Value) : 0;
+
+                    bool isDuplicate = _unitOfWork.BankStatementLineRepository.HasDuplicate(request.ContaBancariaFk, m._Date.Value, credito, debito, m.Description);
+
+                    response.Rows.Add(new BankStatementLineImportRowDataContract
+                    {
+                        RowNum = i + 2,
+                        DataValor = m._Date.Value,
+                        Descricao = m.Description,
+                        Credito = credito,
+                        Debito = debito,
+                        IsDuplicate = isDuplicate
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
+        // Bước 2/2 — chỉ áp dụng đúng Action (Insert/Skip) người dùng đã chọn
+        // cho từng dòng ở bước preview, không đọc lại file.
+        public ResponseBaseDataContract ImportConfirm(ConfirmBankStatementLineImportRequest request)
+        {
+            var response = new ResponseBaseDataContract { RequestId = request.RequestId };
+            try
+            {
+                foreach (var row in request.Rows ?? new List<BankStatementLineImportRowConfirmRequest>())
+                {
+                    if (row.Action != "Insert") { continue; }
+
+                    var entity = new BankStatementLine
+                    {
+                        ContaBancariaFk = request.ContaBancariaFk,
+                        DataValor = row.DataValor,
+                        Descricao = row.Descricao,
+                        Credito = row.Credito,
+                        Debito = row.Debito,
+                        IndActivo = true
+                    };
+                    entity = (BankStatementLine)_utils.SetDetailsToEntity(entity);
+                    _unitOfWork.BankStatementLineRepository.Add(entity);
+                }
+                _unitOfWork.Commit();
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
     }
 }

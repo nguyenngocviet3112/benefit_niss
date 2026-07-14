@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
 using TimorINSSBackEnd.Authorization;
+using TimorINSSBackEnd.DataContracts;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
 using TimorINSSBackEnd.DataManager.Interfaces;
@@ -27,6 +28,28 @@ namespace TimorINSSBackEnd.Controllers
             _dataManager = dataManager;
         }
 
+        [HttpPost("GetLinhasDisponiveis")]
+        [RequirePerm("BANCO_CONCILIAR")]
+        public IActionResult GetLinhasDisponiveis(SearchFilterRequest request)
+        {
+            BankStatementLineListResponse response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.GetLinhasDisponiveis(request);
+            }
+            catch (Exception e)
+            {
+                response = new BankStatementLineListResponse();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("GetLinhasDisponiveis", Log, null))
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
         [HttpPost("ConciliarGuiaPagamento")]
         [RequirePerm("BANCO_CONCILIAR")]
         public IActionResult ConciliarGuiaPagamento(ConciliarGuiaPagamentoRequest request)
@@ -44,6 +67,50 @@ namespace TimorINSSBackEnd.Controllers
             }
 
             if (response.ManageErrors("ConciliarGuiaPagamento", Log, request))
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpPost("GetReceitasGpReport")]
+        [RequirePerm("REPORT_VIEW")]
+        public IActionResult GetReceitasGpReport(GetReceitasGpReportRequest request)
+        {
+            GuiaListagemResponse response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.GetReceitasGpReport(request);
+            }
+            catch (Exception e)
+            {
+                response = new GuiaListagemResponse();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("GetReceitasGpReport", Log, null))
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpPost("UndoConciliacao")]
+        [RequirePerm("BANCO_CONCILIAR")]
+        public IActionResult UndoConciliacao(UndoConciliacaoGuiaRequest request)
+        {
+            ResponseBaseDataContract response;
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.UndoConciliacao(request);
+            }
+            catch (Exception e)
+            {
+                response = new ResponseBaseDataContract();
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            if (response.ManageErrors("UndoConciliacao", Log, request))
                 return BadRequest(response);
 
             return Ok(response);

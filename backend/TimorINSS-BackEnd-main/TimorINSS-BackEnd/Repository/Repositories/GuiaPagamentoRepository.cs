@@ -431,6 +431,57 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return result;
         }
 
+        // Báo cáo "Receitas GP" (2026-07-14) — khác getGuiasAporoveByFilter: không loại
+        // trừ "Guia Gerada" theo mặc định (lấy ĐỦ mọi trạng thái, kể cả đã đối chiếu/Paga),
+        // không phân trang server-side (theo đúng pattern Registo AD — tải cả năm, lọc/
+        // phân trang phía client), và có thêm tên Entidade + ngày đối chiếu ngân hàng gần
+        // nhất (join BankStatementLineGuiaPagamento, vì đây là báo cáo cần biết "đã khớp
+        // ngân hàng chưa", trong khi 2 method kia không cần).
+        public GuiaListagemResponse GetGuiasForReceitasGpReport(int ano)
+        {
+            var reconciledDates = _moduloContribuicoesContext.BankStatementLineGuiaPagamento
+                .Where(r => r.IndActivo)
+                .GroupBy(r => r.GuiaPagamentoFk)
+                .Select(g => new { GuiaId = g.Key, ReconciliadoEm = g.Min(x => x.DataCriacao) })
+                .ToList()
+                .ToDictionary(x => x.GuiaId, x => (DateTime?)x.ReconciliadoEm);
+
+            var guias = _moduloContribuicoesContext.Guiapagamento
+                .Include(e => e.GuiaEntidadeFkNavigation)
+                .Where(u => u.IndActivo && u.MesAno.Year == ano)
+                .Select(e => new GuiaListagem
+                {
+                    idGuia = e.IdGuia,
+                    numDocumento = e.NumDocumento,
+                    mesAno = e.MesAno,
+                    descricao = e.Descricao,
+                    valor = e.Valor,
+                    juros = (decimal)(e.ValorJurosFixo != null ? e.ValorJurosFixo : (e.ValorJuros ?? 0)),
+                    total = e.Valor + (decimal)(e.ValorJurosFixo != null ? e.ValorJurosFixo : (e.ValorJuros ?? 0)),
+                    dtValidade = e.DtValidade,
+                    tipo = e.TipoGuiaNavigation.Valor,
+                    valorPago = e.ValorComprovPag ?? 0,
+                    dtValorPago = e.DataComprovPag,
+                    niss = e.GuiaEntidadeFkNavigation.Niss,
+                    userName = e.GuiaEntidadeFkNavigation.Nome,
+                    estadoPagamento = e.IndPagoNavigation.Valor,
+                    qrInvoice = e.QrInvoice,
+                    dataCriacao = e.DataCriacao,
+                    paymentRef = e.PaymentRef,
+                    bankCode = e.BankCode,
+                    dataSubmissaoComprovativo = e.DataAlteracao
+                })
+                .OrderByDescending(e => e.idGuia)
+                .ToList();
+
+            foreach (var g in guias)
+            {
+                g.reconciliadoEm = reconciledDates.TryGetValue(g.idGuia, out var dt) ? dt : null;
+            }
+
+            return new GuiaListagemResponse { guias = guias, rows = guias.Count };
+        }
+
         public List<Guiapagamento> GetAllGuiasAtrasadas(long geradaStateId)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
@@ -455,6 +506,19 @@ namespace TimorINSSBackEnd.Repository.Repositories
         {
             return _moduloContribuicoesContext.Guiapagamento.Where(e => e.ContaCorrenteId == idContaCorrente && e.IndActivo)
                                                             .Sum(e => e.ValorComprovPag ?? 0);
+        }
+
+        // Dashboard — số Guia đã validate (IndPago = "Guia Paga", Dominio.Valor = 1, sau khi đối
+        // chiếu ngân hàng thật qua GuiaConciliacaoDataManager.ConciliarGuiaPagamento) / tổng số Guia
+        // của năm (theo MesAno, cùng cột năm dùng ở getGuiasAporoveByFilter).
+        public (int Validado, int Total) GetValidacaoSummary(int year)
+        {
+            var estados = _moduloContribuicoesContext.Guiapagamento
+                .Where(g => g.IndActivo && g.MesAno.Year == year)
+                .Select(g => g.IndPagoNavigation.Valor)
+                .ToList();
+
+            return (estados.Count(v => v == 1), estados.Count);
         }
 
         //public Guiapagamento GetUltimoGuiaFilho(int? idGuiaPai)

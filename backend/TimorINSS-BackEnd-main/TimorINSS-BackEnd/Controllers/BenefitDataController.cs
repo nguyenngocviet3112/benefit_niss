@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Models;
 
 namespace TimorINSSBackEnd.Controllers
@@ -30,6 +31,7 @@ namespace TimorINSSBackEnd.Controllers
 
         // ---------- Hàm 1: Thông tin công ty theo NISS công ty ----------
         [HttpGet("company/{niss}")]
+        [RequireBenefitApiEnabled]
         public IActionResult GetCompany(string niss)
         {
             const string sql = @"
@@ -53,6 +55,7 @@ WHERE e.NISS = @niss;";
 
         // ---------- Hàm 2: HỒ SƠ ĐẦY ĐỦ của NLĐ theo NISS (master + giấy tờ + địa chỉ + liên hệ + INSS nước ngoài) ----------
         [HttpGet("worker/{niss}")]
+        [RequireBenefitApiEnabled]
         public IActionResult GetWorker(string niss)
         {
             // Trả kèm text (descricao) cho sexo/estadoCivil/nacionalidade — vì mã DOMINIO có thể
@@ -131,6 +134,7 @@ ORDER BY ie.idINSSEstrang;";
 
         // ---------- Tải file PDF giấy tờ của worker theo idDoc (lấy từ Hàm 2) ----------
         [HttpGet("document/{idDoc:int}")]
+        [RequireBenefitApiEnabled]
         public IActionResult GetDocumentFile(int idDoc)
         {
             const string sql = @"SELECT doc.documento, doc.nomeDocumento, doc.numero,
@@ -158,6 +162,7 @@ WHERE doc.idDocIdentificacao = @id AND doc.indActivo = 1;";
 
         // ---------- Hàm 3: Lịch sử đóng góp theo NISS NLĐ, lồng theo từng hợp đồng ----------
         [HttpGet("contributions/{niss}")]
+        [RequireBenefitApiEnabled]
         public IActionResult GetContributions(string niss)
         {
             const string workerSql = "SELECT NISS, nome FROM TRABALHADOR WHERE NISS = @niss;";

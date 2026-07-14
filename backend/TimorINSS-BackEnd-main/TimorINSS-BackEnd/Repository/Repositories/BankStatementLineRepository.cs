@@ -64,5 +64,33 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return _moduloContribuicoesContext.BankStatementLine
                 .Any(l => l.IndActivo && l.PaymentExecutionFk == paymentExecutionFk);
         }
+
+        public bool HasDuplicate(int contaBancariaFk, DateTime dataValor, decimal credito, decimal debito, string descricao)
+        {
+            return _moduloContribuicoesContext.BankStatementLine
+                .Any(l => l.IndActivo
+                    && l.ContaBancariaFk == contaBancariaFk
+                    && l.DataValor == dataValor
+                    && l.Credito == credito
+                    && l.Debito == debito
+                    && l.Descricao == descricao);
+        }
+
+        public List<BankStatementLine> GetByIds(List<int> ids)
+        {
+            if (ids == null || ids.Count == 0) return new List<BankStatementLine>();
+
+            return BaseQuery().Where(l => ids.Contains(l.Id)).ToList();
+        }
+
+        public List<decimal> GetValores(List<int> ids)
+        {
+            if (ids == null || ids.Count == 0) return new List<decimal>();
+
+            return _moduloContribuicoesContext.BankStatementLine
+                .Where(l => ids.Contains(l.Id))
+                .Select(l => l.Credito != 0 ? l.Credito : l.Debito)
+                .ToList();
+        }
     }
 }

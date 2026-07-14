@@ -18,6 +18,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public decimal SumValorPago(int idContaCorrente);
 
+        public (int Validado, int Total) GetValidacaoSummary(int year);
+
         public List<Guiapagamento> GetAllGuiasAtrasadas(long geradaStateId);
 
         public List<Guiapagamento> GetGuiasExpiradasPorMesAno(int mes, int ano);
@@ -27,5 +29,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public List<Guiapagamento> GetGuiasByIds(List<int> idGuias);
 
         public RelatorioGuiaPagamentoListagemResponse GetGuiasPagamentoRelatorios(RelatorioGuiaPagamentoListagemRequest request);
+
+        // Báo cáo "Receitas GP" — toàn bộ Guia trong 1 năm, mọi entidade, mọi trạng thái.
+        public GuiaListagemResponse GetGuiasForReceitasGpReport(int ano);
     }
 }

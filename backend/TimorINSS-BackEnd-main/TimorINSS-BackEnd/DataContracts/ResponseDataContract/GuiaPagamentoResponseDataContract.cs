@@ -87,6 +87,18 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         [DataMember]
         public decimal? valorTrabalhador { get; set; }
 
+        // Ngày khớp ngân hàng gần nhất (BankStatementLineGuiaPagamento.DataCriacao) —
+        // null nếu Guia chưa từng được đối chiếu qua màn Duyệt Guia Pagamento mới.
+        // Populated only by GetGuiasForReceitasGpReport (báo cáo Receitas GP, 2026-07-14).
+        [DataMember]
+        public DateTime? reconciliadoEm { get; set; }
+
+        // Ngày doanh nghiệp nộp chứng từ (comprovativo) để chờ xác nhận — dùng
+        // Guiapagamento.DataAlteracao vì insertComprovativoPagamento chỉ UPDATE dòng đã
+        // có, không tạo dòng mới (cùng cách suy luận đã dùng ở GuiaComprovativoDataContract.
+        // DataUpload) — null nếu Guia chưa từng nộp chứng từ (VD còn ở "Guia Gerada").
+        [DataMember]
+        public DateTime? dataSubmissaoComprovativo { get; set; }
 
         //[DataMember]
         //public decimal quotizacoes { get; set; }

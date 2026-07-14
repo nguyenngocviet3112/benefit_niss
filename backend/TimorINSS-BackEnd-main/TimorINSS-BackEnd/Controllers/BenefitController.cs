@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using TimorINSSBackEnd.Authorization;
 using TimorINSSBackEnd.Cache;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -29,6 +30,7 @@ namespace TimorINSSBackEnd.Controllers
 
 
         [HttpPost("getCitizenByInss")]
+        [RequireBenefitApiEnabled]
         public IActionResult GetSingleByNiss(TrabalhadorListagemNissRequest request)
         {
             TrabalhadorViewResponse response = new TrabalhadorViewResponse();

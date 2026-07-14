@@ -14,10 +14,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
     // that legacy method promotes a Guia straight to Paid/Partial Paid based only on manual
     // document review (officer typing in the amount they see on the uploaded evidence), with
     // no check against real bank data. This DataManager requires the officer to pick actual
-    // Movimentosbancarios line(s) whose value matches the entidade's self-reported amount
-    // before the same promotion happens - mirrors the core matching logic already proven in
-    // MovimentosPorConciliarDataManager.ConciliarMovimentos (GuiaPagamento branch), but gated
-    // by the new-mode [RequirePerm] RBAC instead of the old Tarefa permission system.
+    // BankStatementLine row(s) whose value matches the entidade's self-reported amount before
+    // the same promotion happens, gated by the new-mode [RequirePerm] RBAC.
+    // 2026-07-13: migrated off Movimentosbancarios/REL_MOVIMENTOSPORCONCILIAR_MOVIMENTOS (old
+    // mode) onto BankStatementLine (already used by Conciliação de Movimentos for Receita/
+    // Pagamento) + a new BankStatementLineGuiaPagamento junction table — user asked new-mode
+    // to fully stop depending on old-mode's bank-statement infra ahead of eventually retiring
+    // old-mode. Guia Pagamento genuinely needs N:N matching (client confirmed: 1 bank transfer
+    // can cover several Guias, or 1 Guia can be paid across several transfers), which is why
+    // this uses a real junction table rather than reusing BankStatementLine's simpler 1:1
+    // ReceitaPacFk/PaymentExecutionFk columns.
     public class GuiaConciliacaoDataManager : IGuiaConciliacaoDataManager
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -45,11 +51,49 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return descricao != null && descricao.StartsWith("Setor Público", StringComparison.OrdinalIgnoreCase);
         }
 
+        // Dòng sao kê ngân hàng khả dụng để khớp Guia Pagamento — chưa khớp Receita/
+        // Pagamento (BankStatementLine.ReceitaPacFk/PaymentExecutionFk) và chưa khớp
+        // Guia nào khác (BankStatementLineGuiaPagamento). Chỉ trả Credito > 0 vì Guia
+        // Pagamento luôn là tiền VÀO (giữ đúng hành vi cũ, trước đây lọc phía frontend).
+        public BankStatementLineListResponse GetLinhasDisponiveis(SearchFilterRequest request)
+        {
+            var response = new BankStatementLineListResponse();
+            try
+            {
+                var lines = _unitOfWork.BankStatementLineGuiaPagamentoRepository
+                    .GetDisponiveisParaGuiaPagamento(request.filter?.dateFilterBegin, request.filter?.dateFilterEnd)
+                    .Where(l => l.Credito > 0)
+                    .ToList();
+
+                response.Items = lines.Select(l => new DataContracts.ModelDataContract.BankStatementLineDataContract
+                {
+                    Id = l.Id,
+                    ContaBancariaFk = l.ContaBancariaFk,
+                    ContaBancariaNome = l.ContaBancariaFkNavigation != null
+                        ? $"{l.ContaBancariaFkNavigation.EntidadeBancaria} ({l.ContaBancariaFkNavigation.Numero})"
+                        : null,
+                    EntidadeBancaria = l.ContaBancariaFkNavigation?.EntidadeBancaria,
+                    DataValor = l.DataValor,
+                    DataTransacao = l.DataTransacao,
+                    CodigoTransacaoBancaria = l.CodigoTransacaoBancaria,
+                    Descricao = l.Descricao,
+                    Credito = l.Credito,
+                    Debito = l.Debito,
+                    IsConciliado = false
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
         public ResponseBaseDataContract ConciliarGuiaPagamento(ConciliarGuiaPagamentoRequest request)
         {
             var response = new ResponseBaseDataContract { RequestId = request.RequestId };
 
-            if (request.GuiaIds == null || request.GuiaIds.Count == 0 || request.MovimentosBancarios == null || request.MovimentosBancarios.Count == 0)
+            if (request.GuiaIds == null || request.GuiaIds.Count == 0 || request.BankStatementLineIds == null || request.BankStatementLineIds.Count == 0)
             {
                 response.Errors.Add(new Error { ErrorCode = "GCONC-EMPTY-SELECTION", ErrorMessage = "Chọn ít nhất 1 Guia và 1 dòng sao kê ngân hàng." });
                 return response;
@@ -72,16 +116,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             var movimentosAConciliar = request.GuiaIds.Select(id => new MovimentosAConciliar { Id = id, Type = MovimentosPorConciliarListagemType.GuiaPagamento }).ToList();
 
-            var movimentosBancariosValores = _unitOfWork.MovimentosbancariosRepository.GetValores(request.MovimentosBancarios);
+            var bankStatementLineValores = _unitOfWork.BankStatementLineRepository.GetValores(request.BankStatementLineIds);
             var guiasValores = _unitOfWork.MovimentosPorConciliarRepository.GetValores(movimentosAConciliar);
 
-            var formIsValid = ((request.MovimentosBancarios.Count == 1 && request.GuiaIds.Count >= 1) ||
-                               (request.GuiaIds.Count == 1 && request.MovimentosBancarios.Count >= 1)) &&
-                               movimentosBancariosValores.Count == request.MovimentosBancarios.Count &&
+            var formIsValid = ((request.BankStatementLineIds.Count == 1 && request.GuiaIds.Count >= 1) ||
+                               (request.GuiaIds.Count == 1 && request.BankStatementLineIds.Count >= 1)) &&
+                               bankStatementLineValores.Count == request.BankStatementLineIds.Count &&
                                guiasValores.Count == request.GuiaIds.Count &&
-                               movimentosBancariosValores.Select(Math.Abs).Sum() == guiasValores.Select(Math.Abs).Sum() &&
-                               !_unitOfWork.MovimentosPorConciliarRepository.TemConciliados(movimentosAConciliar) &&
-                               !_unitOfWork.MovimentosbancariosRepository.TemConciliados(request.MovimentosBancarios);
+                               bankStatementLineValores.Select(Math.Abs).Sum() == guiasValores.Select(Math.Abs).Sum() &&
+                               !_unitOfWork.BankStatementLineGuiaPagamentoRepository.AnyGuiaAlreadyMatched(request.GuiaIds) &&
+                               !_unitOfWork.BankStatementLineGuiaPagamentoRepository.AnyLineAlreadyMatched(request.BankStatementLineIds);
 
             if (!formIsValid)
             {
@@ -89,27 +133,19 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 return response;
             }
 
-            var estadoMovimento = _unitOfWork.DominioRepository.getIdDominio("ESTADOMOVIMENTO", 1);
-
-            if (request.MovimentosBancarios.Count == 1)
+            foreach (var lineId in request.BankStatementLineIds)
             {
-                var movBancarioId = request.MovimentosBancarios.First();
-                movimentosAConciliar.ForEach(mov =>
+                foreach (var guiaId in request.GuiaIds)
                 {
-                    var rel = _unitOfWork.MovimentosPorConciliarRepository.CreateRelationObject(movBancarioId, mov, estadoMovimento);
-                    _utils.SetDetailsToEntity(rel);
-                    _unitOfWork.MovimentosPorConciliarRepository.AddRelation(rel);
-                });
-            }
-            else
-            {
-                var guia = movimentosAConciliar.First();
-                request.MovimentosBancarios.ForEach(mov =>
-                {
-                    var rel = _unitOfWork.MovimentosPorConciliarRepository.CreateRelationObject(mov, guia, estadoMovimento);
-                    _utils.SetDetailsToEntity(rel);
-                    _unitOfWork.MovimentosPorConciliarRepository.AddRelation(rel);
-                });
+                    var rel = new BankStatementLineGuiaPagamento
+                    {
+                        BankStatementLineFk = lineId,
+                        GuiaPagamentoFk = guiaId,
+                        IndActivo = true
+                    };
+                    rel = (BankStatementLineGuiaPagamento)_utils.SetDetailsToEntity(rel);
+                    _unitOfWork.BankStatementLineGuiaPagamentoRepository.AddRelation(rel);
+                }
             }
 
             var contasCorrente = new List<int>();
@@ -142,13 +178,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             // Crédito của Setor tương ứng chưa cấu hình) — bỏ qua lặng lẽ, không chặn việc
             // đối chiếu (GerarSeChuaCo tự bỏ qua khi thiếu debitoFk/creditoFk).
             var contaConfig = _unitOfWork.GuiaPagamentoContaConfigRepository.GetActive();
-            var movimentosBancarios = _unitOfWork.MovimentosbancariosRepository.GetByIds(request.MovimentosBancarios);
+            var bankStatementLines = _unitOfWork.BankStatementLineRepository.GetByIds(request.BankStatementLineIds);
 
-            // N movimentos : 1 guia dùng ngân hàng của dòng sao kê đầu tiên — giả định
+            // N dòng sao kê : 1 guia dùng ngân hàng của dòng sao kê đầu tiên — giả định
             // thông thường toàn bộ tiền của 1 Guia về cùng 1 ngân hàng; nếu về nhiều ngân
             // hàng khác nhau trong cùng 1 lần đối chiếu, đây là giới hạn đã biết (không xảy
-            // ra ở chiều 1 movimento : N guias vì khi đó tất cả guias dùng chung dòng đó).
-            var debitoContaBancariaFk = movimentosBancarios.FirstOrDefault()?.ContaFkNavigation?.CodigoContaFk;
+            // ra ở chiều 1 dòng : N guias vì khi đó tất cả guias dùng chung dòng đó).
+            var debitoContaBancariaFk = bankStatementLines.FirstOrDefault()?.ContaBancariaFkNavigation?.CodigoContaFk;
 
             foreach (var guia in guiasPagamento)
             {
@@ -186,6 +222,77 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 _unitOfWork.Rollback();
             }
 
+            return response;
+        }
+
+        // Báo cáo "Receitas GP" (2026-07-14) — sổ đăng ký toàn bộ Guia Pagamento trong 1
+        // năm, mọi entidade, mọi trạng thái kể cả đã đối chiếu/đã Paga — chỉ xem. Khác màn
+        // Duyệt Guia Pagamento (GetLinhasDisponiveis/ConciliarGuiaPagamento), chỉ hiện Guia
+        // đang chờ đối chiếu.
+        public GuiaListagemResponse GetReceitasGpReport(GetReceitasGpReportRequest request)
+        {
+            var response = new GuiaListagemResponse { RequestId = request.RequestId };
+            try
+            {
+                var result = _unitOfWork.GuiaPagamentoRepository.GetGuiasForReceitasGpReport(request.Ano);
+                response.guias = result.guias;
+                response.rows = result.rows;
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            return response;
+        }
+
+        // Hủy 1 lần đối chiếu ngân hàng đã xác nhận sai (2026-07-14, user yêu cầu — cần có
+        // đường lùi khi officer chọn nhầm dòng sao kê khớp với Guia). Đảo ngược đúng những gì
+        // ConciliarGuiaPagamento đã làm: hạ IndPago về lại trạng thái chờ tương ứng, tắt
+        // active quan hệ BankStatementLineGuiaPagamento (để dòng sao kê + Guia khả dụng lại
+        // cho lần đối chiếu sau), và hủy Lançamento tự sinh (nếu có).
+        public ResponseBaseDataContract UndoConciliacao(UndoConciliacaoGuiaRequest request)
+        {
+            var response = new ResponseBaseDataContract { RequestId = request.RequestId };
+            try
+            {
+                var guia = _unitOfWork.GuiaPagamentoRepository.GetGuiasByIds(new List<int> { request.GuiaId }).FirstOrDefault();
+                if (guia == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "GCONC-GUIA-NOT-FOUND", ErrorMessage = "Không tìm thấy Guia." });
+                    return response;
+                }
+
+                var pagoStates = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.INDPAGO);
+                var guiaPagaId = (int)pagoStates.FirstOrDefault(x => x.descricao == "Guia Paga").id;
+                var guiaParcialPagaId = (int)pagoStates.FirstOrDefault(x => x.descricao == "Guia Parcialmente Paga").id;
+                var comprovativoValidacaoId = (int)pagoStates.FirstOrDefault(x => x.descricao == "Comprovativo em Validação").id;
+                var comprovativoParcialId = (int)pagoStates.FirstOrDefault(x => x.descricao == "Comprovativo Parcial em Validação").id;
+
+                int? revertToId = null;
+                if (guia.IndPago == guiaPagaId) revertToId = comprovativoValidacaoId;
+                else if (guia.IndPago == guiaParcialPagaId) revertToId = comprovativoParcialId;
+
+                if (revertToId == null)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "GCONC-UNDO-NOT-RECONCILED", ErrorMessage = "Guia này chưa được đối chiếu ngân hàng — không có gì để hủy." });
+                    return response;
+                }
+
+                guia.IndPago = revertToId.Value;
+                _utils.UpdateDetailsToEntity(guia);
+                _unitOfWork.GuiaPagamentoRepository.Update(guia);
+
+                _unitOfWork.BankStatementLineGuiaPagamentoRepository.DeactivateForGuia(guia.IdGuia);
+                _lancamentoDataManager.DesfazerSeExiste("GuiaPagamento", guia.IdGuia);
+
+                _unitOfWork.Commit();
+                _unitOfWork.ContaCorrenteRepository.UpdateSituacaoPagamento(guia.ContaCorrenteId, forceRecompute: true);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+                _unitOfWork.Rollback();
+            }
             return response;
         }
 
