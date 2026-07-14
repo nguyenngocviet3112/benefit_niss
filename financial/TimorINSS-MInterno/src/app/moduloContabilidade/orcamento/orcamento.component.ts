@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { OrcamentoService } from '../../services/orcamento.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { ProgramActivityService } from '../../services/program-activity.service';
 import { EconomicClassificationService } from '../../services/economic-classification.service';
 import { InstitutionService } from '../../services/institution.service';
@@ -68,7 +69,8 @@ export class OrcamentoComponent implements OnInit {
     private institutionService: InstitutionService,
     private functionalClassificationService: FunctionalClassificationService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -243,36 +245,36 @@ export class OrcamentoComponent implements OnInit {
   }
 
   public deleteLinha(linha: OrcamentoLinhaDataContract): void {
-    if (!confirm(this.translate.instant('orcamento.confirmDelete', { atividade: linha.atividadeCodigo, ec: linha.economicClassificationCodigo }))) {
-      return;
-    }
-    this.orcamentoService.deleteLinha({ id: linha.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.loadBatch();
-      },
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('orcamento.confirmDelete', { atividade: linha.atividadeCodigo, ec: linha.economicClassificationCodigo })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.orcamentoService.deleteLinha({ id: linha.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.loadBatch();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   public submitBatch(): void {
-    if (!confirm(this.translate.instant('orcamento.confirmSubmitBatch'))) {
-      return;
-    }
-    this.orcamentoService.submit({ orcamentoConfigFk: this.orcamentoConfigFk }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.snackBar.open(this.translate.instant('orcamento.submittedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
-        this.loadBatch();
-      },
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('orcamento.confirmSubmitBatch')).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.orcamentoService.submit({ orcamentoConfigFk: this.orcamentoConfigFk }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.snackBar.open(this.translate.instant('orcamento.submittedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
+          this.loadBatch();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   public reviewApprove(): void {

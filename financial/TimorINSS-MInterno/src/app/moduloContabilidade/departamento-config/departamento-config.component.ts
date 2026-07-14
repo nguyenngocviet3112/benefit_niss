@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { SelectDescription } from '../../models/utils';
 import { DepartamentoConfigDataContract } from '../../response-models/departamento-config-response';
 import { DepartamentoConfigService } from '../../services/departamento-config.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { InstitutionService } from '../../services/institution.service';
 
 @Component({
@@ -26,7 +27,8 @@ export class DepartamentoConfigComponent implements OnInit {
     private departamentoConfigService: DepartamentoConfigService,
     private institutionService: InstitutionService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -94,11 +96,13 @@ export class DepartamentoConfigComponent implements OnInit {
   }
 
   public deactivate(item: DepartamentoConfigDataContract): void {
-    if (!confirm(this.translate.instant('departamentoConfig.confirmDelete', { nome: item.nome }))) { return; }
-    this.departamentoConfigService.deactivate({ id: item.id }).subscribe(
-      () => this.load(),
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('departamentoConfig.confirmDelete', { nome: item.nome })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.departamentoConfigService.deactivate({ id: item.id }).subscribe(
+        () => this.load(),
+        err => this.showError(err)
+      );
+    });
   }
 
   private showError(err: any): void {

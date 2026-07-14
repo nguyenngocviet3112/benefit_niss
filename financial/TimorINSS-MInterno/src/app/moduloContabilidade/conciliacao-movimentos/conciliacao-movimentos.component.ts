@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { BankStatementLineService } from '../../services/bank-statement-line.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { BankAccountService, BankAccountModel } from '../../services/bank-account.service';
 import {
   BankStatementLineDataContract,
@@ -32,7 +33,15 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   public expandedId: number | null = null;
   // Lọc theo trạng thái đối chiếu — lọc phía client vì dữ liệu đã tải hết
   // theo Ano/Ngân hàng/Ngày rồi, không cần thêm tham số gọi lại backend.
-  public statusFilter: 'ALL' | 'CONCILIADO' | 'NAO_CONCILIADO' = 'ALL';
+  // Mặc định "Chưa đối chiếu" (2026-07-13, user yêu cầu) — trước đây mặc định
+  // "ALL" khiến các dòng đã đối chiếu lẫn vào danh sách cần xử lý.
+  public statusFilter: 'ALL' | 'CONCILIADO' | 'NAO_CONCILIADO' = 'NAO_CONCILIADO';
+  // Lọc theo chiều Nợ/Có — cũng lọc phía client, cùng lý do trên. Mặc định chỉ
+  // Credit (tiền về) vì đây là danh sách "cần đối chiếu", tiền ra (Debit) ít
+  // liên quan tới nghiệp vụ đối chiếu Receita hàng ngày — vẫn giữ lựa chọn
+  // "Tất cả"/"Debit" để không mất khả năng xem toàn bộ sổ phụ khi cần
+  // (2026-07-13, user yêu cầu, theo house rule CLAUDE.md §3 — filter luôn có "Tất cả").
+  public directionFilter: 'ALL' | 'CREDITO' | 'DEBITO' = 'CREDITO';
 
   public showAddForm = false;
   public formContaBancariaFk: number | null = null;
@@ -52,7 +61,8 @@ export class ConciliacaoMovimentosComponent implements OnInit {
     private bankAccountService: BankAccountService,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -98,13 +108,18 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   }
 
   public get filteredLines(): BankStatementLineDataContract[] {
+    let result = this.lines;
     if (this.statusFilter === 'CONCILIADO') {
-      return this.lines.filter(l => l.isConciliado);
+      result = result.filter(l => l.isConciliado);
+    } else if (this.statusFilter === 'NAO_CONCILIADO') {
+      result = result.filter(l => !l.isConciliado);
     }
-    if (this.statusFilter === 'NAO_CONCILIADO') {
-      return this.lines.filter(l => !l.isConciliado);
+    if (this.directionFilter === 'CREDITO') {
+      result = result.filter(l => l.credito > 0);
+    } else if (this.directionFilter === 'DEBITO') {
+      result = result.filter(l => l.debito > 0);
     }
-    return this.lines;
+    return result;
   }
 
   public openAddForm(): void {
@@ -170,17 +185,19 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   }
 
   public deleteLine(line: BankStatementLineDataContract): void {
-    if (!confirm(this.translate.instant('conciliacao.confirmDeleteLine', { descricao: line.descricao || line.dataValor }))) { return; }
-    this.bankStatementLineService.deleteLine({ id: line.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.load();
-      },
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('conciliacao.confirmDeleteLine', { descricao: line.descricao || line.dataValor })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.bankStatementLineService.deleteLine({ id: line.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.load();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   public openMatchReceita(line: BankStatementLineDataContract): void {
@@ -258,17 +275,19 @@ export class ConciliacaoMovimentosComponent implements OnInit {
   }
 
   public unmatch(line: BankStatementLineDataContract): void {
-    if (!confirm(this.translate.instant('conciliacao.confirmUnmatch'))) { return; }
-    this.bankStatementLineService.unmatch({ id: line.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.load();
-      },
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('conciliacao.confirmUnmatch')).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.bankStatementLineService.unmatch({ id: line.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.load();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   private showError(err: any): void {

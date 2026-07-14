@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { OrcamentoSuplementarService } from '../../services/orcamento-suplementar.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { OrcamentoSuplementarBatchDataContract, OrcamentoSuplementarLinhaDataContract, RubricaAprovadaParaSuplementarDataContract } from '../../response-models/orcamento-suplementar-response';
 
 const ESTADO_LABELS: { [key: string]: string } = {
@@ -40,7 +41,8 @@ export class OrcamentoSuplementarComponent implements OnInit {
   constructor(
     private suplementarService: OrcamentoSuplementarService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -141,36 +143,36 @@ export class OrcamentoSuplementarComponent implements OnInit {
   }
 
   public deleteLinha(linha: OrcamentoSuplementarLinhaDataContract): void {
-    if (!confirm(this.translate.instant('orcamentoSuplementar.confirmDelete', { atividade: linha.atividadeCodigo, ec: linha.economicClassificationCodigo }))) {
-      return;
-    }
-    this.suplementarService.deleteLinha({ id: linha.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.loadBatch();
-      },
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('orcamentoSuplementar.confirmDelete', { atividade: linha.atividadeCodigo, ec: linha.economicClassificationCodigo })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.suplementarService.deleteLinha({ id: linha.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.loadBatch();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   public submitBatch(): void {
-    if (!confirm(this.translate.instant('orcamentoSuplementar.confirmSubmitBatch'))) {
-      return;
-    }
-    this.suplementarService.submit({ orcamentoConfigFk: this.orcamentoConfigFk }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.snackBar.open(this.translate.instant('orcamentoSuplementar.submittedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
-        this.loadBatch();
-      },
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('orcamentoSuplementar.confirmSubmitBatch')).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.suplementarService.submit({ orcamentoConfigFk: this.orcamentoConfigFk }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.snackBar.open(this.translate.instant('orcamentoSuplementar.submittedSuccess'), this.translate.instant('general.close'), { duration: 3000 });
+          this.loadBatch();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   public reviewApprove(): void {

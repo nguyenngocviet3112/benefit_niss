@@ -99,11 +99,13 @@
   .tri .vi{ color:var(--text-muted); font-style:italic; font-size:13.5px; }
 
   .menu-path{
-    display:inline-flex; align-items:center; gap:6px; font-size:12.5px;
+    display:inline-flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:12.5px;
     background:var(--surface-2); border:1px solid var(--border); border-radius:6px;
     padding:4px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     color:var(--accent); margin:6px 0 18px;
   }
+  .menu-path .tet{ color:var(--tet); font-style:italic; }
+  .menu-path .vi{ color:var(--text-muted); font-style:italic; }
 
   code, .field, .btn-label{
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -204,6 +206,7 @@
     <div class="toc-group">V. Reconciliation / Konsíliasaun / Đối chiếu</div>
     <a href="#conciliacao" class="lvl2">Conciliação de Movimentos</a>
     <a href="#guia-conciliacao" class="lvl2">Duyệt Guia Pagamento</a>
+    <a href="#receitas-gp" class="lvl2">Receitas GP (sổ đăng ký + Hủy đối chiếu)</a>
 
     <div class="toc-group">VI. Settings / Konfigurasaun / Cấu hình</div>
     <a href="#gp-conta-config" class="lvl2">Conta Débito/Crédito — GP</a>
@@ -218,6 +221,10 @@
 
   <main>
     <header class="cover" id="intro">
+      <div class="meta" style="margin-bottom:8px;">
+        <span><b>Author:</b> Hoan Michael Zero</span>
+        <span><b>Beneficiary:</b> INSS Timor-Leste</span>
+      </div>
       <h1>Módulo Contabilidade</h1>
       <div class="sub-en">End-to-end user manual for Budget, Revenue and Expenditure</div>
       <div class="sub-tet">Manual uza kompletu ba Orsamentu, Rendimentu no Despeza</div>
@@ -270,7 +277,7 @@
 
       <ol class="steps">
         <li><b>Required</b> — Grant yourself/admin permissions <span class="tet">Fó permisaun ba admin</span><span class="vi">Cấp quyền cho admin</span>
-          <div class="menu-path">Menu: Cấu hình hệ thống → Quản lý User &amp; Phân quyền</div>
+          <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → User Management &amp; Permissions <span class="tet">/ Gestão de Utilizadores &amp; Permissões</span><span class="vi">/ Quản lý User &amp; Phân quyền</span></div>
           <span class="en">Do this first, literally before anything else. Every screen in this manual is gated by a permission token (shown in the <span class="who" style="display:inline-flex;padding:2px 8px;">EXAMPLE_TOKEN</span>-style box on each step) — until an account is granted the relevant tokens, the corresponding menu items/buttons simply don't appear or can't be clicked. Full detail in Section VII.</span>
           <span class="tet">Halo ida-ne'e uluk liu, uluk liu duni. Kada eskrán iha dokumentu ida-ne'e bloke'ia liuhusi permission token — to'o konta ida simu token relevante, menu/butaun la mosu ka la bele klik. Detallu iha Parte VII.</span>
           <span class="vi">Làm việc này đầu tiên, trước cả mọi thứ khác. Mỗi màn hình trong tài liệu này đều bị chặn bởi 1 mã quyền (permission token) — cho tới khi tài khoản được cấp đúng token, menu/nút tương ứng sẽ không hiện hoặc không bấm được. Chi tiết ở mục VII.</span>
@@ -283,43 +290,43 @@
           <span class="vi">Bắt buộc phải có trước khi nhập được bất kỳ dòng Orçamento nào (mục I) — mỗi "rúbrica" chính là tổ hợp <b>Atividade × Classificação Económica × Organization</b>. <b>Plano de Contas</b> + <b>Mapeamento Rubricas</b> là hệ thống tài khoản kế toán nền mà mọi bút toán tự sinh (mục IV) đều ghi vào — thiếu 2 cái này thì Lançamentos không thể tạo đúng ở bất kỳ đâu trong hệ thống.</span>
         </li>
 
-        <li><b>Required</b> — Kỳ ngân sách <span class="tet">Períodu Orsamentu</span><span class="vi">Kỳ ngân sách (Orçamento Config)</span>
-          <div class="menu-path">Menu: Cấu hình hệ thống → Kỳ ngân sách (Orçamento Config)</div>
+        <li><b>Required</b> — Budget period <span class="tet">Períodu Orsamentu</span><span class="vi">Kỳ ngân sách (Orçamento Config)</span>
+          <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → Budget Period (Orçamento Config) <span class="tet">/ Período Orçamental (Configuração)</span><span class="vi">/ Kỳ ngân sách</span></div>
           <span class="en">Required before Orçamento (Section I) — every budget line, AD, Compromisso, etc. is tied to an active budget period/year created here first ("+ Create budget period" button).</span>
           <span class="tet">Obrigatóriu molok Orçamento (Parte I) — kada linha orsamentu, AD, Compromisso, ns., liga ba períodu/tinan orsamentu ativu ne'ebé kria uluk iha ne'e ("+ Create budget period").</span>
           <span class="vi">Bắt buộc phải có trước Orçamento (mục I) — mọi dòng ngân sách, AD, Compromisso... đều gắn với 1 kỳ ngân sách/năm đang hoạt động, phải tạo ở đây trước (nút "+ Create budget period").</span>
         </li>
 
-        <li><b>Required</b> — Ngân hàng <span class="tet">Kontas Bankáriu</span><span class="vi">Ngân hàng (Contas Bancárias)</span>
-          <div class="menu-path">Menu: Cấu hình hệ thống → Ngân hàng (Contas Bancárias)</div>
+        <li><b>Required</b> — Bank accounts <span class="tet">Kontas Bankáriu</span><span class="vi">Ngân hàng (Contas Bancárias)</span>
+          <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → Bank (Contas Bancárias) <span class="tet">/ Contas Bancárias</span><span class="vi">/ Ngân hàng</span></div>
           <span class="en">Required before <b>Conciliação de Movimentos</b> (Section V, matching bank statement lines), <b>Pagamento's Execução step</b> (Section III, choosing which INSS account the money actually left from), and <b>Guia Pagamento's bank-verified approval</b> (Section V).</span>
           <span class="tet">Obrigatóriu molok <b>Conciliação de Movimentos</b> (Parte V, konfere linha estratu banku), pasu <b>Execução</b> husi Pagamento (Parte III, hili konta INSS ne'ebé osan sai loloos), no <b>aprovasaun Guia Pagamento konfirma-banku</b> (Parte V).</span>
           <span class="vi">Bắt buộc phải có trước khi dùng <b>Conciliação de Movimentos</b> (mục V, khớp dòng sao kê ngân hàng), bước <b>Execução</b> của Pagamento (mục III, chọn tài khoản INSS đã thực chi tiền ra), và duyệt Guia Pagamento theo đối chiếu ngân hàng (mục V).</span>
         </li>
 
-        <li><b>Recommended</b> — Cấu hình phòng ban <span class="tet">Konfigurasaun Departamentu</span><span class="vi">Cấu hình phòng ban (Departamentos)</span>
-          <div class="menu-path">Menu: Cấu hình hệ thống → Cấu hình phòng ban</div>
+        <li><b>Recommended</b> — Department configuration <span class="tet">Konfigurasaun Departamentu</span><span class="vi">Cấu hình phòng ban (Departamentos)</span>
+          <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → Department Configuration <span class="tet">/ Configuração de Departamento</span><span class="vi">/ Cấu hình phòng ban</span></div>
           <span class="en">Recommended before assigning users to a department in their profile — not required for the expenditure/revenue chain itself to function.</span>
           <span class="tet">Rekomenda molok atribui utilizadór ba departamentu iha perfil sira — la obrigatóriu ba funsionamentu siklu despeza/rendimentu rasik.</span>
           <span class="vi">Khuyến nghị thiết lập trước khi gán phòng ban cho hồ sơ user — không bắt buộc để bản thân chu trình Thu/Chi hoạt động.</span>
         </li>
 
-        <li><b>Required for its own step</b> — Tài khoản Nợ/Có cho Guia Pagamento <span class="tet">Konta GP</span><span class="vi">Tài khoản Nợ/Có cho Guia Pagamento</span>
-          <div class="menu-path">Menu: Cấu hình hệ thống → Tài khoản Nợ/Có cho Guia Pagamento — full detail in Section VI</div>
+        <li><b>Required for its own step</b> — Debit/Credit accounts for Guia Pagamento <span class="tet">Konta GP</span><span class="vi">Tài khoản Nợ/Có cho Guia Pagamento</span>
+          <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → Débito/Crédito Accounts for Guia Pagamento <span class="tet">/ Contas Débito/Crédito para Guia Pagamento</span><span class="vi">/ Tài khoản Nợ/Có cho Guia Pagamento</span> — full detail in Section VI</div>
           <span class="en">Required before "Duyệt Guia Pagamento" (Section V) can generate a journal entry. <b>Not a hard blocker</b>: bank reconciliation for GP still succeeds without it — the journal entry is simply skipped until this is configured.</span>
           <span class="tet">Obrigatóriu molok "Duyệt Guia Pagamento" (Parte V) bele jera lançamento. <b>La bloke'ia</b>: konsíliasaun banku ba GP kontinua susesu la iha ida-ne'e — lançamento de'it mak salta to'o konfigura ona.</span>
           <span class="vi">Bắt buộc để "Duyệt Guia Pagamento" (mục V) sinh được bút toán. <b>Không chặn nghiệp vụ</b>: đối chiếu ngân hàng cho GP vẫn thành công dù chưa cấu hình — chỉ là chưa sinh bút toán cho tới khi cấu hình xong.</span>
         </li>
 
-        <li><b>Required for its own step</b> — Tài khoản Phải trả (bút toán kép Despesa) <span class="tet">Konta Selu (bút toán duplu Despesa)</span><span class="vi">Tài khoản Phải trả (bút toán kép Despesa)</span>
-          <div class="menu-path">Menu: Cấu hình hệ thống → Tài khoản Phải trả (bút toán kép Despesa)</div>
+        <li><b>Required for its own step</b> — Payable account (Despesa double-entry booking) <span class="tet">Konta Selu (Kontabilidade Duplu Despesa)</span><span class="vi">Tài khoản Phải trả (bút toán kép Despesa)</span>
+          <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → Payable Accounts (Despesa Double-Booking) <span class="tet">/ Contas a Pagar (Dupla Contabilização de Despesa)</span><span class="vi">/ Tài khoản Phải trả (bút toán kép Despesa)</span></div>
           <span class="en">Required before Despesa/Pagamento generates its 2 journal entries correctly (one at Autorização de Pagamento approval — "Liquidação", one at Execução — see Sections III/IV for detail). This is <b>not</b> the bank account INSS pays from (that's chosen separately each time, at Execução) — it's an intermediate accounting classification account (from your own Chart of Accounts), fixed per beneficiary category (Fornecedor/Beneficiário/Contribuinte(EE)/Pessoal/Outro). <b>Not a hard blocker</b>: payments still process without it — the affected category's journal entries are simply skipped until configured. Ask your accountant which account to pick for each category if unsure.</span>
           <span class="tet">Obrigatóriu molok Despesa/Pagamento jera lançamento rua nia loloos (ida iha aprovasaun Autorização de Pagamento — "Liquidação", ida iha Execução — haree Parte III/IV ba detallu). Ida-ne'e <b>laós</b> konta banku ne'ebé INSS selu husi (ne'e hili separadu kada vés, iha Execução) — ida-ne'e mak konta klasifikasaun kontabilidade intermediáriu (husi Planu Konta rasik), fixu tuir kategoria benefisiáriu (Fornecedor/Beneficiário/Contribuinte(EE)/Pessoal/Outro). <b>La bloke'ia</b>: pagamentu kontinua prosesu la iha ida-ne'e — lançamento husi kategoria afeta de'it mak salta to'o konfigura ona.</span>
           <span class="vi">Bắt buộc để Despesa/Pagamento sinh đủ 2 bút toán đúng (1 lúc duyệt Autorização de Pagamento — "Liquidação", 1 lúc Execução — xem chi tiết mục III/IV). Đây <b>không phải</b> tài khoản ngân hàng mà INSS chi tiền ra (cái đó chọn riêng mỗi lần, ở bước Execução) — đây là tài khoản phân loại kế toán trung gian (trong Plano de Contas của bạn), cố định theo loại đối tượng thụ hưởng (Fornecedor/Beneficiário/Contribuinte(EE)/Pessoal/Outro). <b>Không chặn nghiệp vụ</b>: Pagamento vẫn thực hiện được dù chưa cấu hình — chỉ là bút toán của Categoria đó tạm bị bỏ qua cho tới khi cấu hình xong. Nếu không chắc chọn tài khoản nào, hỏi kế toán để xác nhận.</span>
         </li>
 
-        <li><b>Optional</b> — Ngôn ngữ &amp; Cấu hình Upload File <span class="tet">Lian &amp; Konfigurasaun Fitxeiru</span><span class="vi">Ngôn ngữ &amp; Cấu hình Upload File</span>
-          <div class="menu-path">Menu: Cấu hình hệ thống → Ngôn ngữ (Idioma) / Cấu hình Upload File</div>
+        <li><b>Optional</b> — Language &amp; File Upload configuration <span class="tet">Lian &amp; Konfigurasaun Fitxeiru</span><span class="vi">Ngôn ngữ &amp; Cấu hình Upload File</span>
+          <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → Language (Idioma) / File Upload Settings <span class="tet">/ Idioma / Configuração de Upload de Ficheiros</span><span class="vi">/ Ngôn ngữ / Cấu hình Upload File</span></div>
           <span class="en">Optional — controls the display language and whether file attachments are mandatory at each expenditure step. Safe to leave at defaults for now and revisit later.</span>
           <span class="tet">Fakultativu — kontrola lian hatudu no attachment obrigatóriu ka lae iha kada pasu despeza. Bele hela ho default agora, hadia fali depois.</span>
           <span class="vi">Tùy chọn — chỉnh ngôn ngữ hiển thị và có bắt buộc đính kèm file ở từng bước Chi hay không. Có thể để mặc định lúc đầu, quay lại chỉnh sau cũng được.</span>
@@ -938,7 +945,7 @@
       <hr class="divider">
 
       <h3 class="step-title" id="guia-conciliacao">V-B. Duyệt Guia Pagamento (đối chiếu ngân hàng) <span class="tet">Aprova Guia Pagamento (konsília ho banku)</span><span class="vi">Duyệt Guia Pagamento (đối chiếu ngân hàng)</span></h3>
-      <div class="menu-path">Menu: Receita → Duyệt Guia Pagamento (đối chiếu ngân hàng)</div>
+      <div class="menu-path">Menu: Receita → Approve Guia Pagamento (bank reconciliation) <span class="tet">/ Aprovar Guia Pagamento (conciliação bancária)</span><span class="vi">/ Duyệt Guia Pagamento (đối chiếu ngân hàng)</span></div>
 
       <div class="tri">
         <p class="en">Confirms that a social-security contribution Guia has genuinely been paid, by matching it against real bank statement line(s) — this is the step that actually promotes a Guia from "pending validation" to "Paid," replacing the old-mode screen that used to do this from document review alone.</p>
@@ -978,6 +985,46 @@
         <div class="body"><b>Bank reconciliation officer</b><span class="t">Ofisiál konsíliasaun banku</span><span>Same permission token as V-A — one role covers both reconciliation screens.</span></div>
         <div class="perm">BANCO_CONCILIAR</div>
       </div>
+
+      <h3 class="step-title" id="receitas-gp">V-C. Receitas GP — register &amp; undo a wrong match <span class="tet">Receitas GP — registu &amp; anula match sala</span><span class="vi">Receitas GP — sổ đăng ký &amp; hủy đối chiếu sai</span></h3>
+      <div class="menu-path">Menu: Reports <span class="tet">/ Relatóriu</span><span class="vi">/ Báo cáo</span> → Receitas GP</div>
+
+      <div class="tri">
+        <p class="en">A view-only register of every Guia de Pagamento in a budget year, across all entidades and every state — including ones already bank-reconciled (V-B). Unlike V-B (pending only) or the legacy contributor screen (one entidade at a time), this is the only cross-entidade place to see the full picture, and it's where you go if a V-B match was done in error.</p>
+        <div class="tet">Registu de'i-haree de'it husi Guia de Pagamento hotu iha tinan orsamentu ida, husi entidade hotu no estadu hotu — inklui ne'ebé ona konsília ho banku (V-B). La hanesan V-B (hein de'it) ka eskrán kontribuinte tuan (entidade ida de'it kada vés), ne'e mak fatin de'i-ida atu haree kompletu husi entidade hotu, no fatin ba wainhira match V-B halo sala.</div>
+        <div class="vi">Sổ đăng ký chỉ-xem toàn bộ Guia de Pagamento trong 1 năm ngân sách, mọi entidade, mọi trạng thái — kể cả những Guia đã đối chiếu ngân hàng xong (V-B). Khác với V-B (chỉ hiện Guia đang chờ) hay màn cũ dành cho doanh nghiệp (chỉ xem từng entidade), đây là nơi duy nhất xem được toàn cảnh mọi entidade, và cũng là nơi để sửa khi lỡ đối chiếu (V-B) sai.</div>
+      </div>
+
+      <ol class="steps">
+        <li>Filter by <span class="field">Ano</span>, <span class="field">Entidade</span> (type to search, "Tất cả" available), and <span class="field">Trạng thái</span> ("Tất cả" available) — same searchable-dropdown convention as every other filter/report screen.
+          <span class="tet">Filtra husi <span class="field">Ano</span>, <span class="field">Entidade</span> (hakerek atu buka, "Hotu-hotu" iha), no <span class="field">Estadu</span> ("Hotu-hotu" iha) — hanesan konvensaun dropdown ne'ebé bele buka iha eskrán filter/relatóriu seluk.</span>
+          <span class="vi">Lọc theo Ano, Entidade (gõ để tìm, có "Tất cả"), và Trạng thái (có "Tất cả") — đúng quy ước dropdown lọc/tìm kiếm dùng chung mọi màn báo cáo/filter khác.</span>
+        </li>
+        <li>The <span class="field">Đối chiếu lúc</span> (Reconciled on) column shows when a Guia was last matched to a bank statement line via V-B — blank if it has never gone through V-B.
+          <span class="tet"><span class="field">Rekonsilia iha</span> hatudu bainhira Guia match ikus liu ho linha estratu banku liuhusi V-B — mamuk se seidauk hola V-B.</span>
+          <span class="vi">Cột Đối chiếu lúc hiển thị lần khớp ngân hàng gần nhất qua V-B — để trống nếu Guia chưa từng qua V-B.</span>
+        </li>
+        <li>If a Guia's state is <span class="field">Guia Paga</span> or <span class="field">Guia Parcialmente Paga</span> (meaning it went through V-B), a <span class="field">Hủy đối chiếu</span> (Undo reconciliation) button appears on its row.
+          <span class="tet">Se estadu Guia mak <span class="field">Guia Paga</span> ka <span class="field">Guia Parcialmente Paga</span> (signifika ona liu V-B), butaun <span class="field">Anula rekonsiliasaun</span> mosu iha linha nia.</span>
+          <span class="vi">Nếu trạng thái Guia là Guia Paga hoặc Guia Parcialmente Paga (nghĩa là đã qua V-B), nút Hủy đối chiếu sẽ hiện trên dòng đó.</span>
+        </li>
+        <li>Clicking it shows a confirmation dialog explaining the impact — you must confirm before anything happens.
+          <span class="tet">Klik ba nia hatudu diálogu konfirmasaun ne'ebé esplika impaktu — ita tenke konfirma molok buat ida akontese.</span>
+          <span class="vi">Bấm vào sẽ hiện hộp thoại xác nhận nêu rõ hậu quả — phải xác nhận thì mới thực hiện.</span>
+        </li>
+      </ol>
+
+      <div class="callout warn">
+        <b>What Undo actually reverses</b> — exactly the 3 things V-B's confirm step did, in reverse: (1) the Guia's state drops back to the matching pending state (Guia Paga → Comprovativo em Validação; Guia Parcialmente Paga → Comprovativo Parcial em Validação), so it reappears in V-B ready to be matched again; (2) the bank statement line(s) involved become available again for matching (in V-B or elsewhere); (3) the journal entry (Section IV) auto-generated by the original match, if any, is reversed. This is a deliberate, narrow exception to the "approved records are never deletable" rule — it undoes one automatic action (a bank match), not a real delete, and only applies to Guia Pagamento reconciliation.
+        <div class="tet"><b>Saida mak Anula loloos halo fila fali</b> — buat 3 ne'ebé pasu konfirma V-B halo, iha dalan fali: (1) estadu Guia tun fila fali ba estadu hein ne'ebé hanesan (Guia Paga → Comprovativo em Validação; Guia Parcialmente Paga → Comprovativo Parcial em Validação), atu nia mosu fali iha V-B prontu atu match fali; (2) linha estratu banku ne'ebé envolve sai disponivel fali atu match (iha V-B ka fatin seluk); (3) lançamento ne'ebé jera automátiku husi match orijinál, se iha, anula fali. Ida-ne'e mak esceção kik ho intensaun, ba regra "rejistu aprova ona labele hasai" — nia anula de'it 1 asaun automátiku (match banku), laós hasai loloos, no aplika de'it ba rekonsiliasaun Guia Pagamento.</div>
+        <div class="vi">Hủy đối chiếu thực sự đảo ngược gì — đúng 3 việc bước xác nhận ở V-B đã làm, theo chiều ngược: (1) trạng thái Guia hạ về lại trạng thái chờ tương ứng (Guia Paga → Comprovativo em Validação; Guia Parcialmente Paga → Comprovativo Parcial em Validação), để nó xuất hiện lại ở V-B sẵn sàng khớp lại; (2) dòng sao kê ngân hàng liên quan trở lại khả dụng để khớp (ở V-B hoặc nơi khác); (3) bút toán (mục IV) đã tự sinh từ lần khớp trước đó, nếu có, sẽ bị hủy. Đây là 1 ngoại lệ hẹp, có chủ đích, cho quy tắc "hồ sơ đã duyệt không bao giờ xóa được" — nó chỉ đảo ngược 1 hành động tự động (khớp ngân hàng), không phải xóa thật, và chỉ áp dụng riêng cho đối chiếu Guia Pagamento.</div>
+      </div>
+
+      <div class="who">
+        <div class="icon">📖</div>
+        <div class="body"><b>Bank reconciliation officer</b><span class="t">Ofisiál konsíliasaun banku</span><span>Viewing the register only needs report access; the Undo button needs the same token as V-A/V-B.</span></div>
+        <div class="perm">REPORT_VIEW <span style="opacity:.7;">(view)</span> / BANCO_CONCILIAR <span style="opacity:.7;">(undo)</span></div>
+      </div>
     </section>
 
     <!-- ================= VI. SETTINGS ================= -->
@@ -985,7 +1032,7 @@
       <h2 class="section-title">VI. Settings <span class="tet">Konfigurasaun</span><span class="vi">Cấu hình hệ thống</span></h2>
 
       <h3 class="step-title" id="gp-conta-config">Conta Débito/Crédito — Guia Pagamento <span class="tet">Konta Débito/Crédito — Guia Pagamento</span><span class="vi">Tài khoản Nợ/Có cho Guia Pagamento</span></h3>
-      <div class="menu-path">Menu: Cấu hình hệ thống → Tài khoản Nợ/Có cho Guia Pagamento</div>
+      <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → Débito/Crédito Accounts for Guia Pagamento <span class="tet">/ Contas Débito/Crédito para Guia Pagamento</span><span class="vi">/ Tài khoản Nợ/Có cho Guia Pagamento</span></div>
 
       <div class="tri">
         <p class="en">A one-time setup an admin must complete before "Duyệt Guia Pagamento" (Section V-B) can generate journal entries. The Débito side is never configured here — it's always resolved automatically from whichever real bank account received the money for that specific transaction. <b>Crédito is split into 2 accounts</b>, one per Setor of the paying entidade (Setor Público / Setor Privado) — verified against real posted 2024 entries showing these are genuinely 2 different accounts, not one.</p>
@@ -1023,7 +1070,7 @@
       <hr class="divider">
 
       <h3 class="step-title" id="liquidacao-conta-config">Conta a Pagar — Despesa <span class="tet">Konta Selu — Despeza</span><span class="vi">Tài khoản Phải trả (bút toán kép Despesa)</span></h3>
-      <div class="menu-path">Menu: Cấu hình hệ thống → Tài khoản Phải trả (bút toán kép Despesa)</div>
+      <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → Payable Accounts (Despesa Double-Booking) <span class="tet">/ Contas a Pagar (Dupla Contabilização de Despesa)</span><span class="vi">/ Tài khoản Phải trả (bút toán kép Despesa)</span></div>
 
       <div class="tri">
         <p class="en">A one-time setup an admin should complete before Despesa/Pagamento generates its 2 journal entries correctly — see "2-entry booking" in Section III, steps 5–6. <b>This is not a bank account</b> — it's an intermediate accounting classification account, from the client's own Chart of Accounts, that sits between the expense account and the bank account in the 2-entry pattern.</p>
@@ -1098,7 +1145,7 @@
       </div>
 
       <h3 class="step-title" id="user-sync">A. Sync an account from the old system <span class="tet">Sinkroniza konta husi sistema tuan</span><span class="vi">Đồng bộ tài khoản từ hệ thống cũ</span></h3>
-      <div class="menu-path">Menu: Cấu hình hệ thống → Đồng bộ User (hệ thống cũ)</div>
+      <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → Sync Users (legacy system) <span class="tet">/ Sincronizar Utilizadores (sistema antigo)</span><span class="vi">/ Đồng bộ User (hệ thống cũ)</span></div>
 
       <div class="callout warn">
         <b>Required first step for any existing Internal account</b> that needs to log into this new mode — without syncing, the account cannot access Módulo Contabilidade at all, even if it already works in the old system.
@@ -1124,7 +1171,7 @@
       </div>
 
       <h3 class="step-title" id="user-permission">B. Assign permissions <span class="tet">Fó permisaun</span><span class="vi">Cấp quyền</span></h3>
-      <div class="menu-path">Menu: Cấu hình hệ thống → Quản lý User &amp; Phân quyền</div>
+      <div class="menu-path">Menu: System Settings <span class="tet">/ Configuração do Sistema</span><span class="vi">/ Cấu hình hệ thống</span> → User Management &amp; Permissions <span class="tet">/ Gestão de Utilizadores &amp; Permissões</span><span class="vi">/ Quản lý User &amp; Phân quyền</span></div>
 
       <div class="tri">
         <p class="en">A single combined screen: creating an account (or editing one already synced) and assigning its permissions happen together, in one form, saved in one action — by design, this is never split into 2 separate steps.</p>

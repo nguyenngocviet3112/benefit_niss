@@ -1,6 +1,6 @@
 # Thay đổi cơ sở dữ liệu — Módulo Contabilidade (mode mới) / Database Changes — Módulo Contabilidade (new mode)
 
-*Cập nhật / Last updated: 2026-07-13*
+*Cập nhật / Last updated: 2026-07-14*
 
 ## 1. Tổng quan / Overview
 
@@ -8,11 +8,11 @@
 
 **EN** — This document lists **all** database changes made since the start of the "new mode" (Módulo Contabilidade) build, compared against the original backup taken **right before work began** (`TimorINSSModuloContribuicoes_2026-07-11_pre_m1.bak`, 2026-07-11 00:32). The list was verified by restoring that original backup into a scratch database and directly **diffing the schema** (INFORMATION_SCHEMA) against the current database — not just re-reading the migration scripts — to catch any change that may have been applied directly and not saved as a script.
 
-**Kết quả xác minh / Verification result (re-verified 2026-07-13):**
+**Kết quả xác minh / Verification result (re-verified 2026-07-14):**
 
 | | Số lượng / Count |
 |---|---|
-| Bảng mới / New tables | **31** |
+| Bảng mới / New tables | **33** |
 | Cột mới trên bảng đã có sẵn / New columns on pre-existing tables | **1** |
 | Bảng bị xóa / Tables removed | **0** |
 | Cột bị xóa / Columns removed | **0** |
@@ -22,8 +22,8 @@
 
 **EN** — In other words, nearly every change is strictly **additive**: no table was dropped, and no column on a pre-existing table was removed or had its type changed — only **1 new column** was added to 1 pre-existing table (`ContaBancaria.CodigoContaFk`, see section 3). Old-mode data and screens are unaffected. The client only needs to run **one single, already-bundled SQL script** (section 6, Part 2) against their database — there is no data-loss risk.
 
-Toàn bộ script SQL gốc, theo đúng thứ tự đã chạy, nằm ở thư mục `db_migrations/` trong repo (35 file, đặt tên theo ngày, 2026-07-11 → 2026-07-13). **Phần 2 (mục 6) đã có sẵn 1 file gộp** (`Guideline/CONSOLIDATED_client_handoff_2026-07-13.sql`) — đã được kiểm thử thật: chạy trên 1 bản copy sạch của baseline gốc rồi so sánh schema kết quả với DB hiện tại, khớp 100% (bảng/cột/kiểu dữ liệu).
-All original SQL scripts, in the exact order they were run, are in the `db_migrations/` folder in the repo (35 files, dated, 2026-07-11 → 2026-07-13). **Part 2 (section 6) now exists as one bundled file** (`Guideline/CONSOLIDATED_client_handoff_2026-07-13.sql`) — real-tested: run against a clean copy of the original baseline, then the resulting schema was diffed against the current database and matched 100% (tables/columns/data types).
+Toàn bộ script SQL gốc, theo đúng thứ tự đã chạy, nằm ở thư mục `db_migrations/` trong repo (38 file schema + 1 file backfill dữ liệu, đặt tên theo ngày, 2026-07-11 → 2026-07-14). **Phần 2 (mục 6) đã có sẵn 1 file gộp** (`Guideline/CONSOLIDATED_client_handoff_2026-07-13.sql`, tên file giữ nguyên dù đã cập nhật thêm 2 bảng mới ngày 2026-07-14) — đã được kiểm thử thật lại: chạy trên 1 bản copy sạch của baseline gốc rồi so sánh schema kết quả với DB hiện tại, khớp 100% (115/115 bảng, toàn bộ cột).
+All original SQL scripts, in the exact order they were run, are in the `db_migrations/` folder in the repo (38 schema files + 1 data-backfill file, dated, 2026-07-11 → 2026-07-14). **Part 2 (section 6) now exists as one bundled file** (`Guideline/CONSOLIDATED_client_handoff_2026-07-13.sql`, filename kept as-is even though 2 more tables were added to it on 2026-07-14) — re-tested for real: run against a clean copy of the original baseline, then the resulting schema was diffed against the current database and matched 100% (115/115 tables, every column).
 
 ---
 
@@ -72,7 +72,8 @@ All original SQL scripts, in the exact order they were run, are in the `db_migra
 
 | Bảng / Table | Mục đích (VI) | Purpose (EN) |
 |---|---|---|
-| `BankStatementLine` | Dòng sao kê ngân hàng mode mới (nhập/import thủ công, không có kết nối ngân hàng tự động), dùng để đối chiếu sau khi Thu/Chi đã ghi nhận. Bảng **mới hoàn toàn**, không tái dùng `MOVIMENTOSBANCARIOS`/`MOVIMENTOSPORCONCILIAR` cũ (gắn với các chiều dữ liệu cũ không còn áp dụng). | New-mode bank statement line (manually entered/imported — no automatic bank feed), used to reconcile after Receita/Despesa are booked. A **fresh** table, not a reuse of the old `MOVIMENTOSBANCARIOS`/`MOVIMENTOSPORCONCILIAR` pair (tied to legacy dimensions no longer applicable). |
+| `BankStatementLine` | Dòng sao kê ngân hàng mode mới (nhập tay hoặc import Excel, không có kết nối ngân hàng tự động), dùng để đối chiếu sau khi Thu/Chi đã ghi nhận. Bảng **mới hoàn toàn**, không tái dùng `MOVIMENTOSBANCARIOS`/`MOVIMENTOSPORCONCILIAR` cũ (gắn với các chiều dữ liệu cũ không còn áp dụng). Từ 2026-07-14, cũng là nguồn duy nhất cho đối chiếu Guia Pagamento (xem dòng `BankStatementLineGuiaPagamento` bên dưới) — màn "Duyệt Guia Pagamento" đã ngưng phụ thuộc vào bảng cũ. | New-mode bank statement line (manually entered or imported from Excel — no automatic bank feed), used to reconcile after Receita/Despesa are booked. A **fresh** table, not a reuse of the old `MOVIMENTOSBANCARIOS`/`MOVIMENTOSPORCONCILIAR` pair (tied to legacy dimensions no longer applicable). As of 2026-07-14, also the sole source for Guia Pagamento reconciliation (see `BankStatementLineGuiaPagamento` below) — the "Approve Guia Pagamento" screen no longer depends on the old table. |
+| `BankStatementLineGuiaPagamento` | Bảng nối N-N giữa `BankStatementLine` và `Guiapagamento` (mode cũ) — lưu "dòng sao kê nào khớp với Guia nào". Tách riêng khỏi 2 cột `ReceitaPacFk`/`PaymentExecutionFk` sẵn có trên `BankStatementLine` (chỉ hỗ trợ 1-đối-1) vì Guia Pagamento cần thật sự N-đối-N (khách xác nhận: 1 khoản chuyển ngân hàng có thể gộp trả nhiều Guia, hoặc 1 Guia được trả làm nhiều đợt). | Junction table (N:N) between `BankStatementLine` and `Guiapagamento` (old mode) — records which statement line matches which Guia. Kept separate from the existing `ReceitaPacFk`/`PaymentExecutionFk` columns on `BankStatementLine` (1:1 only) because Guia Pagamento genuinely needs N:N (client confirmed: one bank transfer can cover several Guias, or one Guia can be paid across several transfers). |
 
 ### 2.6 Sổ nhật ký kế toán / Accounting journal
 
@@ -98,6 +99,7 @@ All original SQL scripts, in the exact order they were run, are in the `db_migra
 |---|---|---|
 | `LanguageConfig` | Bật/tắt các ngôn ngữ giao diện hiển thị cho người dùng (EN/PT/TET/VI) từ màn admin, thay cho danh sách cố định trong code. | Admin-configurable on/off switch for which UI languages are offered to users (EN/PT/TET/VI), replacing a hardcoded list in code. |
 | `AttachmentConfig` | Cấu hình 1 dòng (singleton): dung lượng file tối đa (mặc định 10MB) + cờ bắt buộc đính kèm cho từng loại hồ sơ (AD/Cabimento/Compromisso/Obrigação/Pagamento). Seed sẵn 1 dòng mặc định, tất cả cờ bắt buộc = tắt (không chặn hồ sơ đang xử lý). | 1-row (singleton) config: max file size (default 10MB) + a per-document-type (AD/Cabimento/Compromisso/Obrigação/Pagamento) mandatory-attachment flag. Seeded with 1 default row, every mandatory flag off (doesn't block in-flight records). |
+| `IntegrationConfig` | Cấu hình 1 dòng (singleton): bật/tắt cho phép các module khác gọi vào API của hệ thống này — hiện chỉ gate 2 controller mà module Benefit gọi vào (`api/benefit`, `api/benefit-data`) để lấy thông tin NLĐ/công ty/lịch sử đóng góp. Tắt ở đây thì 2 API đó trả lỗi 403 ngay, không cần đổi code phía Benefit. Seed sẵn 1 dòng, bật mặc định (đã có traffic thật dùng API này). | 1-row (singleton) config: on/off switch for whether other modules may call into this system's API — currently gates the 2 controllers the Benefit module calls (`api/benefit`, `api/benefit-data`) to fetch worker/company/contribution data. Turning it off makes both APIs return 403 immediately, no code change needed on the Benefit side. Seeded with 1 row, enabled by default (real traffic already uses this API). |
 
 ### 2.9 Tệp đính kèm / Attachments
 
@@ -137,6 +139,7 @@ Every other new-mode need for a "budget year" is served by the new `BudgetPeriod
 | `PermissionPreset` + `PermissionPresetItem` | 5 gói quyền mẫu (ADMIN/TECNICO_DF/DIRETOR_DF/DIRETOR_EXECUTIVO/REPORT_ONLY), 27 dòng token | Gói khởi điểm cho màn "Quản lý User & Phân quyền" — có thể sửa/xóa/thêm sau |
 | `Perfil` | 1 dòng "Conta Módulo Contabilidade (sem Perfil legado)" | Tài khoản mode mới bắt buộc phải có 1 Perfil để đăng nhập được (giới hạn kỹ thuật của hệ đăng nhập cũ) — dòng này không gắn quyền nào của mode cũ |
 | `AttachmentConfig` | 1 dòng mặc định (giới hạn 10MB, chưa bắt buộc đính kèm loại nào) | Bảng cấu hình dạng singleton, cần đúng 1 dòng để không lỗi |
+| `IntegrationConfig` | 1 dòng mặc định (`BenefitApiEnabled = 1`, đang bật) | Bảng cấu hình dạng singleton, cần đúng 1 dòng để không lỗi; bật sẵn để không làm gián đoạn tích hợp Benefit đang chạy |
 | `LiquidacaoContaConfig` | 5 dòng theo Categoria, tài khoản để trống | Danh mục Categoria cố định; admin điền tài khoản sau |
 | `ProgramActivity` (A07/A08 và các nhánh con) | 7 dòng — cấu trúc chương trình "Administração do FRSS"/"Regime Contributivo de Capitalização" theo `OSS_Global_2026_FINAL_livro.xlsx` | Dữ liệu tổ chức ngân sách thật của khách hàng, không phải dữ liệu test — script tự gắn vào kỳ ngân sách (`ORCAMENTOCONFIG`) hiện có của khách khi chạy |
 | `BudgetPeriod` | Sao chép động từ đúng các dòng `ORCAMENTOCONFIG` hiện có của khách | Không dùng số liệu cứng từ máy dev — mỗi khách có kỳ ngân sách khác nhau |
@@ -151,6 +154,7 @@ Every other new-mode need for a "budget year" is served by the new `BudgetPeriod
 | `PermissionPreset` + `PermissionPresetItem` | 5 starter role bundles (ADMIN/TECNICO_DF/DIRETOR_DF/DIRETOR_EXECUTIVO/REPORT_ONLY), 27 token rows | Starting point for the "User & Permission Management" screen — editable/removable later |
 | `Perfil` | 1 row "Conta Módulo Contabilidade (sem Perfil legado)" | New-mode accounts must have a Perfil to be able to log in at all (a legacy login-system limitation) — this row carries no old-mode permissions |
 | `AttachmentConfig` | 1 default row (10MB limit, nothing mandatory yet) | Singleton config table, needs exactly 1 row to avoid errors |
+| `IntegrationConfig` | 1 default row (`BenefitApiEnabled = 1`, enabled) | Singleton config table, needs exactly 1 row to avoid errors; enabled by default so it doesn't interrupt the live Benefit integration |
 | `LiquidacaoContaConfig` | 5 rows by Categoria, account left blank | Fixed Categoria catalog; admin fills in the account later |
 | `ProgramActivity` (A07/A08 and children) | 7 rows — the "Administração do FRSS"/"Regime Contributivo de Capitalização" program structure per `OSS_Global_2026_FINAL_livro.xlsx` | Real client budget-organization data, not test data — the script links it to the client's existing budget-year config (`ORCAMENTOCONFIG`) at run time |
 | `BudgetPeriod` | Dynamically copied from the client's own existing `ORCAMENTOCONFIG` rows | No hardcoded dev-machine values — every client has a different budget period |
@@ -161,7 +165,7 @@ Every other new-mode need for a "budget year" is served by the new `BudgetPeriod
 
 ## 6. Phần 2 — Script SQL gộp sẵn / Part 2 — Bundled runnable script
 
-**VI** — File **`Guideline/CONSOLIDATED_client_handoff_2026-07-13.sql`** là 1 script SQL duy nhất, gộp lại từ toàn bộ 35 file gốc, đã được rà soát và bỏ đi mọi dữ liệu chỉ có ý nghĩa trên máy phát triển (vd tài khoản ngân hàng giả để test, 1 dòng kỳ ngân sách test năm 2099, cấp quyền thử cho 1 tài khoản test cụ thể) — chỉ giữ lại phần schema thật và dữ liệu khởi tạo cần thiết (mục 5). Đã kiểm thử thật: chạy script này trên 1 bản copy sạch của baseline gốc, sau đó so sánh trực tiếp schema kết quả với DB hiện tại đang chạy — khớp 100% (không thiếu, không thừa bảng/cột/kiểu dữ liệu nào).
+**VI** — File **`Guideline/CONSOLIDATED_client_handoff_2026-07-13.sql`** là 1 script SQL duy nhất, gộp lại từ toàn bộ các file schema gốc (38 file, tính tới 2026-07-14), đã được rà soát và bỏ đi mọi dữ liệu chỉ có ý nghĩa trên máy phát triển (vd tài khoản ngân hàng giả để test, 1 dòng kỳ ngân sách test năm 2099, cấp quyền thử cho 1 tài khoản test cụ thể) — chỉ giữ lại phần schema thật và dữ liệu khởi tạo cần thiết (mục 5). Đã kiểm thử thật lại 2026-07-14 (sau khi thêm `IntegrationConfig`/`BankStatementLineGuiaPagamento`): chạy script này trên 1 bản copy sạch của baseline gốc, sau đó so sánh trực tiếp schema kết quả với DB hiện tại đang chạy — khớp 100% (115/115 bảng, không thiếu/thừa cột nào). File `2026-07-13h_migrate_movimentosbancarios_to_bankstatementline.sql` (backfill dữ liệu lịch sử từ bảng cũ, không phải thay đổi schema) **không** nằm trong script gộp này — chỉ cần cho máy dev đã có sẵn dữ liệu cũ, DB khách hàng mới dựng từ script này chưa có dữ liệu cũ để backfill.
 
 Cách chạy:
 1. **Backup DB trước** (script chỉ cộng thêm, không xóa/đổi gì trên bảng cũ — nhưng vẫn nên backup trước mọi thay đổi schema).
@@ -169,7 +173,7 @@ Cách chạy:
 3. Script tự động chọn dòng `ORCAMENTOCONFIG` đang active, mới tạo gần nhất, để gắn dữ liệu A07/A08 vào đúng kỳ ngân sách — nếu muốn chọn dòng khác, sửa câu lệnh `SELECT` tương ứng trong file (tìm từ khóa `TargetOrcamentoConfigId`) trước khi chạy.
 4. Sau khi chạy xong, vào các màn Cấu hình hệ thống để hoàn tất thiết lập riêng của khách hàng (mục 5, phần "Không seed sẵn").
 
-**EN** — File **`Guideline/CONSOLIDATED_client_handoff_2026-07-13.sql`** is a single SQL script, bundled from all 35 original files, reviewed and stripped of anything that only makes sense on the vendor's development machine (e.g. fake test bank accounts, a test year-2099 budget-period row, a test access grant for one specific dev account) — keeping only the real schema and the essential seed data (section 5). Real-tested: run against a clean copy of the original baseline, then the resulting schema was directly diffed against the currently-running database — a 100% match (no missing or extra tables/columns/data types).
+**EN** — File **`Guideline/CONSOLIDATED_client_handoff_2026-07-13.sql`** is a single SQL script, bundled from all original schema files (38 as of 2026-07-14), reviewed and stripped of anything that only makes sense on the vendor's development machine (e.g. fake test bank accounts, a test year-2099 budget-period row, a test access grant for one specific dev account) — keeping only the real schema and the essential seed data (section 5). Re-tested for real on 2026-07-14 (after adding `IntegrationConfig`/`BankStatementLineGuiaPagamento`): run against a clean copy of the original baseline, then the resulting schema was directly diffed against the currently-running database — a 100% match (115/115 tables, no missing or extra columns). File `2026-07-13h_migrate_movimentosbancarios_to_bankstatementline.sql` (a historical-data backfill from the old table, not a schema change) is **not** included in this bundle — it's only needed on the dev machine, which already had old-mode bank-statement history; a fresh client database built from this script has nothing to backfill.
 
 How to run it:
 1. **Back up your database first** (the script is purely additive — nothing on a pre-existing table is dropped or changed — but always back up before any schema change).
@@ -181,10 +185,10 @@ How to run it:
 
 ## 7. Nguồn / Sources
 
-- 35 file script SQL gốc, theo thứ tự thời gian: `db_migrations/*.sql` (2026-07-11 → 2026-07-13).
+- 38 file script SQL gốc thay đổi schema + 1 file backfill dữ liệu, theo thứ tự thời gian: `db_migrations/*.sql` (2026-07-11 → 2026-07-14).
 - Bản backup gốc dùng để đối chiếu (chụp ngay trước khi bắt đầu): `db_backup/dated_backups/TimorINSSModuloContribuicoes_2026-07-11_pre_m1.bak`.
-- Kết quả so sánh schema được xác minh trực tiếp trên DB (restore bản backup gốc vào DB tạm, so sánh `INFORMATION_SCHEMA.TABLES`/`INFORMATION_SCHEMA.COLUMNS` với DB hiện tại) — không chỉ dựa vào việc đọc lại script. Đã xác minh thêm bằng API thật cho từng luồng chính (Orçamento, Atividade, Classificação Económica, báo cáo CE_INSS_Global, và các màn hình mode cũ liên quan). Xác minh lại 2026-07-13 sau khi có thêm các migration mới, và bằng cách chạy thử script gộp ở mục 6 rồi so sánh schema kết quả với DB hiện tại.
+- Kết quả so sánh schema được xác minh trực tiếp trên DB (restore bản backup gốc vào DB tạm, so sánh `INFORMATION_SCHEMA.TABLES`/`INFORMATION_SCHEMA.COLUMNS` với DB hiện tại) — không chỉ dựa vào việc đọc lại script. Đã xác minh thêm bằng API thật cho từng luồng chính (Orçamento, Atividade, Classificação Económica, báo cáo CE_INSS_Global, và các màn hình mode cũ liên quan). Xác minh lại 2026-07-14 sau khi có thêm `IntegrationConfig`/`BankStatementLineGuiaPagamento`, bằng cách chạy thử script gộp ở mục 6 trên 1 bản restore sạch của baseline gốc rồi so sánh toàn bộ bảng + cột với DB hiện tại — khớp 100%.
 
-- 35 original SQL scripts, in chronological order: `db_migrations/*.sql` (2026-07-11 → 2026-07-13).
+- 38 original schema-change SQL scripts + 1 data-backfill file, in chronological order: `db_migrations/*.sql` (2026-07-11 → 2026-07-14).
 - Baseline backup used for comparison (taken right before work began): `db_backup/dated_backups/TimorINSSModuloContribuicoes_2026-07-11_pre_m1.bak`.
-- The schema comparison was verified directly against the database (baseline restored into a scratch DB, `INFORMATION_SCHEMA.TABLES`/`INFORMATION_SCHEMA.COLUMNS` diffed against the current one) — not just by re-reading the scripts. Further verified via real API calls across the main flows (Orçamento, Atividade, Classificação Económica, the CE_INSS_Global report, and the related old-mode screens). Re-verified 2026-07-13 after more migrations landed, and by running the bundled script from section 6 and diffing the resulting schema against the live database.
+- The schema comparison was verified directly against the database (baseline restored into a scratch DB, `INFORMATION_SCHEMA.TABLES`/`INFORMATION_SCHEMA.COLUMNS` diffed against the current one) — not just by re-reading the scripts. Further verified via real API calls across the main flows (Orçamento, Atividade, Classificação Económica, the CE_INSS_Global report, and the related old-mode screens). Re-verified 2026-07-14 after `IntegrationConfig`/`BankStatementLineGuiaPagamento` landed, by running the bundled script from section 6 against a clean restore of the original baseline and diffing every table + column against the live database — a 100% match.

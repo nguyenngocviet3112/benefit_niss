@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { FunctionalClassificationService } from '../../services/functional-classification.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { FunctionalClassificationDataContract } from '../../response-models/functional-classification-response';
 
 interface FunctionalClassificationRow extends FunctionalClassificationDataContract {
@@ -29,7 +30,8 @@ export class ClassificacaoFuncionalComponent implements OnInit {
   constructor(
     private functionalClassificationService: FunctionalClassificationService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -131,20 +133,20 @@ export class ClassificacaoFuncionalComponent implements OnInit {
   }
 
   public deactivate(item: FunctionalClassificationDataContract): void {
-    if (!confirm(this.translate.instant('classificacaoFuncionalScreen.confirmDelete', { codigo: item.codigo, designacao: item.designacao }))) {
-      return;
-    }
+    this.confirmDialog.confirm(this.translate.instant('classificacaoFuncionalScreen.confirmDelete', { codigo: item.codigo, designacao: item.designacao })).subscribe(confirmed => {
+      if (!confirmed) { return; }
 
-    this.functionalClassificationService.deactivate({ id: item.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.load();
-      },
-      err => this.showError(err)
-    );
+      this.functionalClassificationService.deactivate({ id: item.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.load();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   private showError(err: any): void {

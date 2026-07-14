@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
 import { OrcamentoConfigService } from '../../../services/orcamento-config.service';
+import { ConfirmDialogService } from '../../../services/confirm-dialog.service';
 import { OrcamentoConfigDataContract } from '../../../response-models/orcamento-config-response';
 
 @Component({
@@ -28,7 +29,8 @@ export class KyNganSachComponent implements OnInit {
   constructor(
     private orcamentoConfigService: OrcamentoConfigService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -106,20 +108,20 @@ export class KyNganSachComponent implements OnInit {
   }
 
   public deactivate(item: OrcamentoConfigDataContract): void {
-    if (!confirm(this.translate.instant('kyNganSach.confirmDelete', { ano: item.ano, tipo: item.tipo }))) {
-      return;
-    }
+    this.confirmDialog.confirm(this.translate.instant('kyNganSach.confirmDelete', { ano: item.ano, tipo: item.tipo })).subscribe(confirmed => {
+      if (!confirmed) { return; }
 
-    this.orcamentoConfigService.deactivate({ id: item.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.load();
-      },
-      err => this.showError(err)
-    );
+      this.orcamentoConfigService.deactivate({ id: item.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.load();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   private showError(err: any): void {

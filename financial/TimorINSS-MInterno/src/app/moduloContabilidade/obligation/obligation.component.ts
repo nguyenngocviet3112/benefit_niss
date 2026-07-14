@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { ObligationService } from '../../services/obligation.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
+import { PermissionService } from '../../services/permission.service';
 import { CompromissoComSaldoDataContract, ObligationDataContract } from '../../response-models/obligation-response';
 import { AttachmentConfigService } from '../../services/attachment-config.service';
 import { AttachmentConfigItem } from '../../response-models/attachment-config-response';
@@ -45,8 +47,17 @@ export class ObligationComponent implements OnInit {
   public liquidacaoTipoLabels = LIQUIDACAO_TIPO_LABELS;
   public beneficiarioCategoriaLabels = BENEFICIARIO_CATEGORIA_LABELS;
   public loading = false;
+  public allItems: ObligationDataContract[] = [];
   public items: ObligationDataContract[] = [];
   public expandedId: number | null = null;
+
+  public estadoOptions: { value: string; label: string }[] = [
+    { value: '', label: 'obligation.estadoTodos' },
+    { value: 'DRAFT', label: 'obligation.estadoDraft' },
+    { value: 'PENDING_APPROVAL', label: 'obligation.estadoPendingApproval' },
+    { value: 'APPROVED', label: 'obligation.estadoApproved' }
+  ];
+  public selectedEstado = '';
 
   public showCreateForm = false;
   public formDescritivo = '';
@@ -94,23 +105,46 @@ export class ObligationComponent implements OnInit {
     private obligationService: ObligationService,
     private attachmentConfigService: AttachmentConfigService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService,
+    private permissionService: PermissionService
   ) { }
 
   ngOnInit(): void {
+    this.selectedEstado = this.computeDefaultEstado();
     this.load();
     this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
+  }
+
+  // See ad-cabimento.component.ts for the rationale.
+  private computeDefaultEstado(): string {
+    const hasSubmit = this.permissionService.hasPerm('OBRIGACAO_SUBMIT');
+    const hasApprove = this.permissionService.hasPerm('OBRIGACAO_APPROVE');
+    if (hasSubmit) { return ''; }
+    if (hasApprove) { return 'PENDING_APPROVAL'; }
+    return '';
   }
 
   public onAttachmentsLoaded(obligationId: number, items: AttachmentItem[]): void {
     this.obligationHasAttachment[obligationId] = items.length > 0;
   }
 
+  public onEstadoChange(): void {
+    this.applyFilters();
+  }
+
+  private applyFilters(): void {
+    this.items = this.selectedEstado
+      ? this.allItems.filter(i => i.estado === this.selectedEstado)
+      : this.allItems;
+  }
+
   public load(): void {
     this.loading = true;
     this.obligationService.getByAno(this.ano).subscribe(
       response => {
-        this.items = response.items ?? [];
+        this.allItems = response.items ?? [];
+        this.applyFilters();
         this.loading = false;
       },
       err => {
@@ -302,17 +336,19 @@ export class ObligationComponent implements OnInit {
   }
 
   public submitObligation(item: ObligationDataContract): void {
-    if (!confirm(this.translate.instant('obligation.confirmSubmit', { numero: item.numero }))) { return; }
-    this.obligationService.submit({ id: item.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.load();
-      },
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('obligation.confirmSubmit', { numero: item.numero })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.obligationService.submit({ id: item.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.load();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   public approve(item: ObligationDataContract): void {

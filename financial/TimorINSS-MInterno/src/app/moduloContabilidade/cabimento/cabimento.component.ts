@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { CabimentoService } from '../../services/cabimento.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
+import { PermissionService } from '../../services/permission.service';
 import { AdDisponivelParaCabimentoDataContract, CabimentoDataContract } from '../../response-models/cabimento-response';
 import { AttachmentConfigService } from '../../services/attachment-config.service';
 import { AttachmentConfigItem } from '../../response-models/attachment-config-response';
@@ -23,7 +25,16 @@ export class CabimentoComponent implements OnInit {
   public ano = 2026;
   public estadoLabels = ESTADO_LABELS;
   public loading = false;
+  public allItems: CabimentoDataContract[] = [];
   public items: CabimentoDataContract[] = [];
+
+  public estadoOptions: { value: string; label: string }[] = [
+    { value: '', label: 'cabimento.estadoTodos' },
+    { value: 'DRAFT', label: 'cabimento.estadoDraft' },
+    { value: 'PENDING_APPROVAL', label: 'cabimento.estadoPendingApproval' },
+    { value: 'APPROVED', label: 'cabimento.estadoApproved' }
+  ];
+  public selectedEstado = '';
 
   public availableAds: AdDisponivelParaCabimentoDataContract[] = [];
   public showAdPicker = false;
@@ -55,12 +66,25 @@ export class CabimentoComponent implements OnInit {
     private cabimentoService: CabimentoService,
     private attachmentConfigService: AttachmentConfigService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService,
+    private permissionService: PermissionService
   ) { }
 
   ngOnInit(): void {
+    this.selectedEstado = this.computeDefaultEstado();
     this.load();
     this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
+  }
+
+  // See ad-cabimento.component.ts for the rationale: only default-restrict
+  // approve-only accounts, so they don't see not-yet-submitted records.
+  private computeDefaultEstado(): string {
+    const hasSubmit = this.permissionService.hasPerm('CABIMENTO_SUBMIT');
+    const hasApprove = this.permissionService.hasPerm('CABIMENTO_APPROVE');
+    if (hasSubmit) { return ''; }
+    if (hasApprove) { return 'PENDING_APPROVAL'; }
+    return '';
   }
 
   public onAttachmentsLoaded(cabimentoId: number, items: AttachmentItem[]): void {
@@ -71,7 +95,8 @@ export class CabimentoComponent implements OnInit {
     this.loading = true;
     this.cabimentoService.getByAno(this.ano).subscribe(
       response => {
-        this.items = response.items ?? [];
+        this.allItems = response.items ?? [];
+        this.applyFilters();
         this.loading = false;
       },
       err => {
@@ -79,6 +104,16 @@ export class CabimentoComponent implements OnInit {
         this.showError(err);
       }
     );
+  }
+
+  public onEstadoChange(): void {
+    this.applyFilters();
+  }
+
+  private applyFilters(): void {
+    this.items = this.selectedEstado
+      ? this.allItems.filter(i => i.estado === this.selectedEstado)
+      : this.allItems;
   }
 
   public openAdPicker(): void {
@@ -168,17 +203,19 @@ export class CabimentoComponent implements OnInit {
   }
 
   public submitCabimento(item: CabimentoDataContract): void {
-    if (!confirm(this.translate.instant('cabimento.confirmSubmit', { numero: item.numero }))) { return; }
-    this.cabimentoService.submit({ id: item.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.load();
-      },
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('cabimento.confirmSubmit', { numero: item.numero })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.cabimentoService.submit({ id: item.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.load();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   public openApprovePrompt(id: number): void {

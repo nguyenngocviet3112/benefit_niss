@@ -10,6 +10,13 @@
     </mat-form-field>
     <button mat-stroked-button (click)="load()">{{ 'adCabimento.reload' | translate }}</button>
 
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>{{ 'adCabimento.fieldEstado' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedEstado" (selectionChange)="onEstadoChange()">
+        <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <span class="spacer"></span>
 
     <button mat-raised-button color="primary" (click)="openRubricaPicker()">{{ 'adCabimento.addFromRubrica' | translate }}</button>
@@ -23,6 +30,7 @@
       <span class="ad-col-valor">{{ 'adCabimento.colValor' | translate }}</span>
       <span class="ad-col-saldo">{{ 'adCabimento.colSaldo' | translate }}</span>
       <span class="ad-col-estado">{{ 'adCabimento.colEstado' | translate }}</span>
+      <span class="ad-col-actions">{{ 'adCabimento.colActions' | translate }}</span>
     </div>
 
     <ng-container *ngFor="let item of items">
@@ -34,6 +42,16 @@
         <span class="ad-col-saldo" [ngClass]="item.saldoDisponivel < 0 ? 'ad-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
         <span class="ad-col-estado">
           <span class="ad-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] | translate }}</span>
+        </span>
+        <span class="ad-col-actions">
+          <ng-container *ngIf="item.estado === 'PENDING_REVIEW'">
+            <button mat-button color="primary" (click)="openApprovePrompt(item.id, 'review'); $event.stopPropagation()">{{ 'adCabimento.reviewApproveButton' | translate }}</button>
+            <button mat-button color="warn" (click)="openRejectPrompt(item.id, 'review'); $event.stopPropagation()">{{ 'adCabimento.rejectButton' | translate }}</button>
+          </ng-container>
+          <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
+            <button mat-button color="primary" (click)="openApprovePrompt(item.id, 'approve'); $event.stopPropagation()">{{ 'adCabimento.finalApproveButton' | translate }}</button>
+            <button mat-button color="warn" (click)="openRejectPrompt(item.id, 'approve'); $event.stopPropagation()">{{ 'adCabimento.rejectButton' | translate }}</button>
+          </ng-container>
         </span>
       </div>
 

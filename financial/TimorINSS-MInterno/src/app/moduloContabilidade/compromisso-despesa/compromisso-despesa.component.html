@@ -10,6 +10,13 @@
     </mat-form-field>
     <button mat-stroked-button (click)="load()">{{ 'compromisso.reload' | translate }}</button>
 
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>{{ 'compromisso.fieldEstado' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedEstado" (selectionChange)="onEstadoChange()">
+        <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <span class="spacer"></span>
 
     <button mat-raised-button color="primary" (click)="openCabimentoPicker()">{{ 'compromisso.addFromCabimento' | translate }}</button>
@@ -23,6 +30,7 @@
       <span class="comp-col-valor">{{ 'compromisso.colValor' | translate }}</span>
       <span class="comp-col-saldo">{{ 'compromisso.colSaldo' | translate }}</span>
       <span class="comp-col-estado">{{ 'compromisso.colEstado' | translate }}</span>
+      <span class="comp-col-actions">{{ 'compromisso.colActions' | translate }}</span>
     </div>
 
     <ng-container *ngFor="let item of items">
@@ -34,6 +42,16 @@
         <span class="comp-col-saldo" [ngClass]="item.saldoDisponivel < 0 ? 'comp-saldo-negativo' : ''">$ {{ item.saldoDisponivel | number:'1.2-2' }}</span>
         <span class="comp-col-estado">
           <span class="comp-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] | translate }}</span>
+        </span>
+        <span class="comp-col-actions">
+          <ng-container *ngIf="item.estado === 'PENDING_REVIEW'">
+            <button mat-button color="primary" (click)="openApprovePrompt(item.id, 'review'); $event.stopPropagation()">{{ 'compromisso.reviewApproveButton' | translate }}</button>
+            <button mat-button color="warn" (click)="openRejectPrompt(item.id, 'review'); $event.stopPropagation()">{{ 'compromisso.rejectButton' | translate }}</button>
+          </ng-container>
+          <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
+            <button mat-button color="primary" (click)="openApprovePrompt(item.id, 'approve'); $event.stopPropagation()">{{ 'compromisso.finalApproveButton' | translate }}</button>
+            <button mat-button color="warn" (click)="openRejectPrompt(item.id, 'approve'); $event.stopPropagation()">{{ 'compromisso.rejectButton' | translate }}</button>
+          </ng-container>
         </span>
       </div>
 

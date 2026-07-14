@@ -10,6 +10,13 @@
     </mat-form-field>
     <button mat-stroked-button (click)="load()">{{ 'obligation.reload' | translate }}</button>
 
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>{{ 'obligation.fieldEstado' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedEstado" (selectionChange)="onEstadoChange()">
+        <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <span class="spacer"></span>
 
     <button mat-raised-button color="primary" (click)="openCreateForm()">{{ 'obligation.addButton' | translate }}</button>
@@ -21,6 +28,7 @@
       <span class="obr-col-desc">{{ 'obligation.colDescritivo' | translate }}</span>
       <span class="obr-col-valor">{{ 'obligation.colValor' | translate }}</span>
       <span class="obr-col-estado">{{ 'obligation.colEstado' | translate }}</span>
+      <span class="obr-col-actions">{{ 'obligation.colActions' | translate }}</span>
     </div>
 
     <ng-container *ngFor="let item of items">
@@ -30,6 +38,12 @@
         <span class="obr-col-valor">$ {{ item.valorObrigacao | number:'1.2-2' }}</span>
         <span class="obr-col-estado">
           <span class="obr-estado" [ngClass]="'estado-' + item.estado">{{ estadoLabels[item.estado] | translate }}</span>
+        </span>
+        <span class="obr-col-actions">
+          <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
+            <button mat-button color="primary" (click)="approve(item); $event.stopPropagation()">{{ 'obligation.approveButton' | translate }}</button>
+            <button mat-button color="warn" (click)="openRejectPrompt(item.id); $event.stopPropagation()">{{ 'obligation.rejectButton' | translate }}</button>
+          </ng-container>
         </span>
       </div>
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { AgrupamentoRubricaService } from '../../services/agrupamento-rubrica.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { AgrupamentoRubricaItemDataContract } from '../../response-models/agrupamento-rubrica-response';
 
 interface AgrupamentoRubricaRow extends AgrupamentoRubricaItemDataContract {
@@ -38,7 +39,8 @@ export class MapeamentoRubricasComponent implements OnInit {
   constructor(
     private agrupamentoRubricaService: AgrupamentoRubricaService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -156,20 +158,20 @@ export class MapeamentoRubricasComponent implements OnInit {
   }
 
   public deactivate(item: AgrupamentoRubricaItemDataContract): void {
-    if (!confirm(this.translate.instant('mapeamentoRubricas.confirmDelete', { codigo: item.codigo, designacao: item.designacao }))) {
-      return;
-    }
+    this.confirmDialog.confirm(this.translate.instant('mapeamentoRubricas.confirmDelete', { codigo: item.codigo, designacao: item.designacao })).subscribe(confirmed => {
+      if (!confirmed) { return; }
 
-    this.agrupamentoRubricaService.deactivate({ id: item.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.loadTree();
-      },
-      err => this.showError(err)
-    );
+      this.agrupamentoRubricaService.deactivate({ id: item.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.loadTree();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   private showError(err: any): void {

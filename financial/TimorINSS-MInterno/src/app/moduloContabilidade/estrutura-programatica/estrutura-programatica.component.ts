@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { ProgramActivityService } from '../../services/program-activity.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { ProgramActivityDataContract } from '../../response-models/program-activity-response';
 
 interface ProgramActivityRow extends ProgramActivityDataContract {
@@ -34,7 +35,8 @@ export class EstruturaProgramaticaComponent implements OnInit {
   constructor(
     private programActivityService: ProgramActivityService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -141,20 +143,20 @@ export class EstruturaProgramaticaComponent implements OnInit {
   }
 
   public deactivate(item: ProgramActivityDataContract): void {
-    if (!confirm(this.translate.instant('estruturaProgramaticaScreen.confirmDelete', { codigo: item.codigo, designacao: item.designacao }))) {
-      return;
-    }
+    this.confirmDialog.confirm(this.translate.instant('estruturaProgramaticaScreen.confirmDelete', { codigo: item.codigo, designacao: item.designacao })).subscribe(confirmed => {
+      if (!confirmed) { return; }
 
-    this.programActivityService.deactivate({ id: item.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.loadTree();
-      },
-      err => this.showError(err)
-    );
+      this.programActivityService.deactivate({ id: item.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.loadTree();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   public copyFromCurrentYear(): void {

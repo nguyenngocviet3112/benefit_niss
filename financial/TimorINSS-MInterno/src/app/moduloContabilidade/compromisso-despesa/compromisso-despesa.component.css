@@ -70,6 +70,7 @@
 .comp-col-valor { flex: 1; text-align: right; font-family: monospace; }
 .comp-col-saldo { flex: 1; text-align: right; font-family: monospace; }
 .comp-col-estado { flex: 1; text-align: right; }
+.comp-col-actions { flex: 1.6; text-align: right; white-space: nowrap; }
 
 .comp-saldo-negativo { color: #c62828; font-weight: 600; }
 

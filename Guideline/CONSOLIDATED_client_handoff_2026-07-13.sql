@@ -2035,3 +2035,78 @@ ALTER TABLE [dbo].[CompromissoDespesa] ADD [ReviewComment] [nvarchar](1000) NULL
 GO
 ALTER TABLE [dbo].[CompromissoDespesa] ADD [ApproveComment] [nvarchar](1000) NULL
 GO
+
+-- ============================================================
+-- Source: db_migrations/2026-07-13f_integration_config.sql
+-- ============================================================
+-- Cấu hình tích hợp — bật/tắt cho phép các API gọi vào từ module ngoài
+-- (hiện chỉ có Benefit module gọi vào api/benefit + api/benefit-data để lấy
+-- thông tin NLĐ/công ty/lịch sử đóng góp). Singleton config (Id luôn = 1).
+
+CREATE TABLE [dbo].[IntegrationConfig](
+	[Id] [int] NOT NULL,
+	[BenefitApiEnabled] [bit] NOT NULL,
+	[UtilizadorAlteracao] [int] NULL,
+	[DataAlteracao] [datetime] NULL,
+	CONSTRAINT [PK_IntegrationConfig] PRIMARY KEY CLUSTERED ([Id] ASC)
+) ON [PRIMARY]
+GO
+
+-- Default row: bật sẵn (đang có traffic thật từ Benefit module dùng API này
+-- rồi), admin có thể tắt bất cứ lúc nào từ màn "Cấu hình tích hợp".
+INSERT INTO [dbo].[IntegrationConfig]
+	([Id], [BenefitApiEnabled])
+VALUES
+	(1, 1)
+GO
+
+-- ============================================================
+-- Source: db_migrations/2026-07-13g_bank_statement_line_guia_pagamento.sql
+-- ============================================================
+-- Bảng nối N-N giữa BankStatementLine (sao kê ngân hàng mode mới) và
+-- Guiapagamento (mode cũ) — phần còn lại của việc hợp nhất mode mới sang
+-- dùng hẳn BankStatementLine cho cả Guia Pagamento (trước đây đối chiếu
+-- Guia Pagamento vẫn dùng bảng cũ MOVIMENTOSBANCARIOS/
+-- REL_MOVIMENTOSPORCONCILIAR_MOVIMENTOS).
+--
+-- Khác với BankStatementLine.ReceitaPacFk/PaymentExecutionFk (1 dòng : 1
+-- Receita/Pagamento, đủ dùng cho 2 luồng đó) — Guia Pagamento cần "1 dòng :
+-- N Guia" hoặc "N dòng : 1 Guia" thật (khách xác nhận 2026-07-13, ví dụ
+-- ngân hàng chuyển gộp nhiều Guia trong 1 giao dịch), nên phải dùng bảng
+-- nối riêng thay vì thêm 1 cột FK đơn trên BankStatementLine.
+
+CREATE TABLE [dbo].[BankStatementLineGuiaPagamento](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[BankStatementLineFk] [int] NOT NULL,
+	[GuiaPagamentoFk] [int] NOT NULL,
+	[IndActivo] [bit] NOT NULL CONSTRAINT [DF_BankStatementLineGuiaPagamento_IndActivo] DEFAULT (1),
+	[UtilizadorCriacao] [int] NOT NULL,
+	[DataCriacao] [datetime] NOT NULL,
+	[UtilizadorAlteracao] [int] NULL,
+	[DataAlteracao] [datetime] NULL,
+	[Ipv6] [varchar](45) NULL,
+ CONSTRAINT [PK_BankStatementLineGuiaPagamento] PRIMARY KEY CLUSTERED
+(
+	[Id] ASC
+)
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[BankStatementLineGuiaPagamento] WITH CHECK ADD CONSTRAINT [FK_BankStatementLineGuiaPagamento_BankStatementLine]
+	FOREIGN KEY([BankStatementLineFk]) REFERENCES [dbo].[BankStatementLine] ([Id])
+GO
+ALTER TABLE [dbo].[BankStatementLineGuiaPagamento] CHECK CONSTRAINT [FK_BankStatementLineGuiaPagamento_BankStatementLine]
+GO
+
+ALTER TABLE [dbo].[BankStatementLineGuiaPagamento] WITH CHECK ADD CONSTRAINT [FK_BankStatementLineGuiaPagamento_Guiapagamento]
+	FOREIGN KEY([GuiaPagamentoFk]) REFERENCES [dbo].[GUIAPAGAMENTO] ([idGuia])
+GO
+ALTER TABLE [dbo].[BankStatementLineGuiaPagamento] CHECK CONSTRAINT [FK_BankStatementLineGuiaPagamento_Guiapagamento]
+GO
+
+-- NOTE: db_migrations/2026-07-13h_migrate_movimentosbancarios_to_bankstatementline.sql
+-- is deliberately NOT included here — it is a one-time DATA backfill (copies existing
+-- active MOVIMENTOSBANCARIOS rows + their Guia Pagamento matches into the 2 new tables
+-- above) meant for the vendor's own dev database, which already had old-mode bank
+-- statement history. A fresh client database being stood up from this consolidated
+-- script has no such old data yet, so there is nothing to backfill.

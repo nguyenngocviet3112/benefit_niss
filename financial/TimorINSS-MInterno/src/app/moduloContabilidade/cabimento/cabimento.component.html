@@ -10,6 +10,13 @@
     </mat-form-field>
     <button mat-stroked-button (click)="load()">{{ 'cabimento.reload' | translate }}</button>
 
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>{{ 'cabimento.fieldEstado' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedEstado" (selectionChange)="onEstadoChange()">
+        <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <span class="spacer"></span>
 
     <button mat-raised-button color="primary" (click)="openAdPicker()">{{ 'cabimento.addFromAd' | translate }}</button>

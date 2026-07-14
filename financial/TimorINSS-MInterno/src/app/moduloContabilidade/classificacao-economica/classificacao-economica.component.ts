@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { EconomicClassificationService } from '../../services/economic-classification.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { EconomicClassificationDataContract } from '../../response-models/economic-classification-response';
 
 interface EconomicClassificationRow extends EconomicClassificationDataContract {
@@ -33,7 +34,8 @@ export class ClassificacaoEconomicaComponent implements OnInit {
   constructor(
     private economicClassificationService: EconomicClassificationService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -145,20 +147,20 @@ export class ClassificacaoEconomicaComponent implements OnInit {
   }
 
   public deactivate(item: EconomicClassificationDataContract): void {
-    if (!confirm(this.translate.instant('classificacaoEconomica.confirmDelete', { codigo: item.codigo, designacao: item.designacao }))) {
-      return;
-    }
+    this.confirmDialog.confirm(this.translate.instant('classificacaoEconomica.confirmDelete', { codigo: item.codigo, designacao: item.designacao })).subscribe(confirmed => {
+      if (!confirmed) { return; }
 
-    this.economicClassificationService.deactivate({ id: item.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.loadTree();
-      },
-      err => this.showError(err)
-    );
+      this.economicClassificationService.deactivate({ id: item.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.loadTree();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   private showError(err: any): void {

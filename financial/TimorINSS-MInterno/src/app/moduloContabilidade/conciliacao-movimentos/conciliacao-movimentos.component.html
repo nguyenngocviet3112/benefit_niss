@@ -35,10 +35,19 @@
         <mat-option value="NAO_CONCILIADO">{{ 'conciliacao.statusNaoConciliado' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>{{ 'conciliacao.fieldDirection' | translate }} <span class="itag drop">{{ 'conciliacao.dropTag' | translate }}</span></mat-label>
+      <mat-select [(ngModel)]="directionFilter" name="directionFilter">
+        <mat-option value="ALL">{{ 'conciliacao.directionAll' | translate }}</mat-option>
+        <mat-option value="CREDITO">{{ 'conciliacao.directionCredito' | translate }}</mat-option>
+        <mat-option value="DEBITO">{{ 'conciliacao.directionDebito' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
     <button mat-stroked-button (click)="load()">{{ 'conciliacao.reload' | translate }}</button>
 
     <span class="spacer"></span>
 
+    <app-bank-statement-line-import [contaBancariaFk]="contaBancariaFk" (imported)="load()"></app-bank-statement-line-import>
     <button mat-raised-button color="primary" (click)="openAddForm()">{{ 'conciliacao.addLineButton' | translate }}</button>
   </div>
 

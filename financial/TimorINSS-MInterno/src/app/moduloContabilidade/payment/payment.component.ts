@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { PaymentService } from '../../services/payment.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
+import { PermissionService } from '../../services/permission.service';
 import {
   CodigoContaOptionDataContract,
   ContaBancariaOptionDataContract,
@@ -28,8 +30,17 @@ export class PaymentComponent implements OnInit {
   public ano = 2026;
   public estadoLabels = ESTADO_LABELS;
   public loading = false;
+  public allItems: PaymentAuthorizationDataContract[] = [];
   public items: PaymentAuthorizationDataContract[] = [];
   public expandedId: number | null = null;
+
+  public estadoOptions: { value: string; label: string }[] = [
+    { value: '', label: 'payment.estadoTodos' },
+    { value: 'DRAFT', label: 'payment.estadoDraft' },
+    { value: 'PENDING_APPROVAL', label: 'payment.estadoPendingApproval' },
+    { value: 'APPROVED', label: 'payment.estadoApproved' }
+  ];
+  public selectedEstado = '';
 
   public showCreateForm = false;
   public obligacoesDisponiveis: ObligacaoDisponivelParaPagamentoDataContract[] = [];
@@ -66,13 +77,28 @@ export class PaymentComponent implements OnInit {
     private paymentService: PaymentService,
     private attachmentConfigService: AttachmentConfigService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService,
+    private permissionService: PermissionService
   ) { }
 
   ngOnInit(): void {
+    this.selectedEstado = this.computeDefaultEstado();
     this.load();
     this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
     this.paymentService.getCodigoContaOptions().subscribe(response => this.codigoContaOptions = response.items ?? []);
+  }
+
+  // See ad-cabimento.component.ts for the rationale. PAG_EXECUTE-only accounts
+  // default to APPROVED (their actionable stage — pending execution).
+  private computeDefaultEstado(): string {
+    const hasSubmit = this.permissionService.hasPerm('PAG_SUBMIT');
+    const hasApprove = this.permissionService.hasPerm('PAG_APPROVE');
+    const hasExecute = this.permissionService.hasPerm('PAG_EXECUTE');
+    if (hasSubmit || (hasApprove && hasExecute)) { return ''; }
+    if (hasApprove) { return 'PENDING_APPROVAL'; }
+    if (hasExecute) { return 'APPROVED'; }
+    return '';
   }
 
   public onAttachmentsLoaded(paymentId: number, items: AttachmentItem[]): void {
@@ -83,7 +109,8 @@ export class PaymentComponent implements OnInit {
     this.loading = true;
     this.paymentService.getByAno(this.ano).subscribe(
       response => {
-        this.items = response.items ?? [];
+        this.allItems = response.items ?? [];
+        this.applyFilters();
         this.loading = false;
       },
       err => {
@@ -91,6 +118,16 @@ export class PaymentComponent implements OnInit {
         this.showError(err);
       }
     );
+  }
+
+  public onEstadoChange(): void {
+    this.applyFilters();
+  }
+
+  private applyFilters(): void {
+    this.items = this.selectedEstado
+      ? this.allItems.filter(i => i.estado === this.selectedEstado)
+      : this.allItems;
   }
 
   public toggleExpand(item: PaymentAuthorizationDataContract): void {
@@ -157,17 +194,19 @@ export class PaymentComponent implements OnInit {
   }
 
   public submitAuthorization(item: PaymentAuthorizationDataContract): void {
-    if (!confirm(this.translate.instant('payment.confirmSubmit', { numero: item.numero }))) { return; }
-    this.paymentService.submit({ id: item.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.load();
-      },
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('payment.confirmSubmit', { numero: item.numero })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.paymentService.submit({ id: item.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.load();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   public approve(item: PaymentAuthorizationDataContract): void {

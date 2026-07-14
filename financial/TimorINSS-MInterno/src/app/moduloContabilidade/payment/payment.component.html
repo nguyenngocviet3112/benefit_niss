@@ -10,6 +10,13 @@
     </mat-form-field>
     <button mat-stroked-button (click)="load()">{{ 'payment.reload' | translate }}</button>
 
+    <mat-form-field appearance="outline" class="small-field">
+      <mat-label>{{ 'payment.fieldEstado' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedEstado" (selectionChange)="onEstadoChange()">
+        <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <span class="spacer"></span>
 
     <button mat-raised-button color="primary" (click)="openCreateForm()">{{ 'payment.addButton' | translate }}</button>
@@ -22,6 +29,7 @@
       <span class="pag-col-valor">{{ 'payment.colValorAutorizado' | translate }}</span>
       <span class="pag-col-estado">{{ 'payment.colEstado' | translate }}</span>
       <span class="pag-col-exec">{{ 'payment.colExecucao' | translate }}</span>
+      <span class="pag-col-actions">{{ 'payment.colActions' | translate }}</span>
     </div>
 
     <ng-container *ngFor="let item of items">
@@ -35,6 +43,14 @@
         <span class="pag-col-exec">
           <span class="pag-executado" *ngIf="item.execution">{{ 'payment.executado' | translate }}</span>
           <span class="pag-nao-executado" *ngIf="!item.execution">—</span>
+        </span>
+        <span class="pag-col-actions">
+          <ng-container *ngIf="item.estado === 'PENDING_APPROVAL'">
+            <button mat-button color="primary" (click)="approve(item); $event.stopPropagation()">{{ 'payment.approveButton' | translate }}</button>
+            <button mat-button color="warn" (click)="openRejectPrompt(item.id); $event.stopPropagation()">{{ 'payment.rejectButton' | translate }}</button>
+          </ng-container>
+          <button mat-button color="accent" *ngIf="item.estado === 'APPROVED' && !item.execution"
+            (click)="openExecuteForm(item); expandedId = item.id; $event.stopPropagation()">{{ 'payment.executeButton' | translate }}</button>
         </span>
       </div>
 

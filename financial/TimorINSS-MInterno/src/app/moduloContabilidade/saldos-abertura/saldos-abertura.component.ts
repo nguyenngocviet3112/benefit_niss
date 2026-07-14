@@ -11,6 +11,7 @@ import { ProgramActivityDataContract } from '../../response-models/program-activ
 import { EconomicClassificationService } from '../../services/economic-classification.service';
 import { InstitutionService } from '../../services/institution.service';
 import { SelectDescription } from '../../models/utils';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 
 const SALDO_GERENCIA_CODIGO = '408';
 
@@ -56,7 +57,8 @@ export class SaldosAberturaComponent implements OnInit {
     private economicClassificationService: EconomicClassificationService,
     private institutionService: InstitutionService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -208,11 +210,13 @@ export class SaldosAberturaComponent implements OnInit {
   }
 
   public removeSaldoEntry(item: ReceitaPacDataContract): void {
-    if (!confirm(this.translate.instant('saldosAbertura.confirmDelete', { descritivo: item.descritivo }))) { return; }
-    this.receitaPacService.deactivate({ id: item.id }).subscribe(
-      () => this.loadExistingSaldoEntries(),
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('saldosAbertura.confirmDelete', { descritivo: item.descritivo })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.receitaPacService.deactivate({ id: item.id }).subscribe(
+        () => this.loadExistingSaldoEntries(),
+        err => this.showError(err)
+      );
+    });
   }
 
   private showError(err: any): void {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { CodigoContaTreeService } from '../../services/codigo-conta-tree.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { CodigoContaTreeItemDataContract } from '../../response-models/codigo-conta-tree-response';
 
 interface CodigoContaRow extends CodigoContaTreeItemDataContract {
@@ -36,7 +37,8 @@ export class PlanoContasComponent implements OnInit {
   constructor(
     private codigoContaTreeService: CodigoContaTreeService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -156,46 +158,46 @@ export class PlanoContasComponent implements OnInit {
   }
 
   public deactivate(item: CodigoContaTreeItemDataContract): void {
-    if (!confirm(this.translate.instant('planoContas.confirmDelete', { codigo: item.codigo, designacao: item.designacao }))) {
-      return;
-    }
+    this.confirmDialog.confirm(this.translate.instant('planoContas.confirmDelete', { codigo: item.codigo, designacao: item.designacao })).subscribe(confirmed => {
+      if (!confirmed) { return; }
 
-    this.codigoContaTreeService.deactivate({ id: item.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.loadTree();
-      },
-      err => this.showError(err)
-    );
+      this.codigoContaTreeService.deactivate({ id: item.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.loadTree();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   // Save() ở backend luôn set IndActivo=true bất kể tạo mới hay sửa — dùng
   // lại đúng endpoint đó (gửi nguyên các field hiện có) để kích hoạt lại,
   // không cần thêm API riêng.
   public reactivate(item: CodigoContaTreeItemDataContract): void {
-    if (!confirm(this.translate.instant('planoContas.confirmReactivate', { codigo: item.codigo, designacao: item.designacao }))) {
-      return;
-    }
+    this.confirmDialog.confirm(this.translate.instant('planoContas.confirmReactivate', { codigo: item.codigo, designacao: item.designacao })).subscribe(confirmed => {
+      if (!confirmed) { return; }
 
-    this.codigoContaTreeService.save({
-      id: item.id,
-      codigo: item.codigo,
-      designacao: item.designacao,
-      parentFk: item.parentFk,
-      orcamentoConfigFk: this.orcamentoConfigFk
-    }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.loadTree();
-      },
-      err => this.showError(err)
-    );
+      this.codigoContaTreeService.save({
+        id: item.id,
+        codigo: item.codigo,
+        designacao: item.designacao,
+        parentFk: item.parentFk,
+        orcamentoConfigFk: this.orcamentoConfigFk
+      }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.loadTree();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   private showError(err: any): void {

@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { AttachmentService } from '../../services/attachment.service';
 import { AttachmentConfigService } from '../../services/attachment-config.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { AttachmentItem } from '../../response-models/attachment-response';
 import { base64ArrayBuffer } from '../../utils';
 
@@ -44,7 +45,8 @@ export class AttachmentUploadComponent implements OnInit {
     private attachmentService: AttachmentService,
     private attachmentConfigService: AttachmentConfigService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -89,18 +91,20 @@ export class AttachmentUploadComponent implements OnInit {
   // hiện khi entity gốc còn DRAFT (xem *ngIf ở nơi gọi <app-attachment-upload>),
   // nên nút này tự động không xuất hiện sau khi entity gốc đã duyệt.
   public delete(item: AttachmentItem): void {
-    if (!confirm(this.translate.instant('attachmentUpload.confirmDelete', { fileName: item.fileName }))) { return; }
-    this.attachmentService.delete(item.id).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.snackBar.open(this.translate.instant('attachmentUpload.deleteSuccess'), this.translate.instant('general.close'), { duration: 3000 });
-        this.load();
-      },
-      () => this.showError()
-    );
+    this.confirmDialog.confirm(this.translate.instant('attachmentUpload.confirmDelete', { fileName: item.fileName })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.attachmentService.delete(item.id).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.snackBar.open(this.translate.instant('attachmentUpload.deleteSuccess'), this.translate.instant('general.close'), { duration: 3000 });
+          this.load();
+        },
+        () => this.showError()
+      );
+    });
   }
 
   public formatSize(bytes: number): string {

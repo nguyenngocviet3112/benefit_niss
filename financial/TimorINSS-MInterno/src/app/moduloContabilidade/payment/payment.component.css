@@ -69,6 +69,7 @@
 .pag-col-valor { flex: 1; text-align: right; font-family: monospace; }
 .pag-col-estado { flex: 1; text-align: right; }
 .pag-col-exec { flex: 0.8; text-align: right; }
+.pag-col-actions { flex: 1.6; text-align: right; white-space: nowrap; }
 
 .pag-estado {
   font-size: 11px;

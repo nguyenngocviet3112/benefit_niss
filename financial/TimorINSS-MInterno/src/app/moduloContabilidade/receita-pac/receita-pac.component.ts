@@ -8,6 +8,7 @@ import { EconomicClassificationService } from '../../services/economic-classific
 import { InstitutionService } from '../../services/institution.service';
 import { ProgramActivityService } from '../../services/program-activity.service';
 import { ReceitaPacService } from '../../services/receita-pac.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { SelectDescription } from '../../models/utils';
 import { BankAccountModel, BankAccountService } from '../../services/bank-account.service';
 import { CodigoContaOptionDataContract } from '../../response-models/payment-response';
@@ -58,7 +59,8 @@ export class ReceitaPacComponent implements OnInit {
     private institutionService: InstitutionService,
     private bankAccountService: BankAccountService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -220,11 +222,13 @@ export class ReceitaPacComponent implements OnInit {
   }
 
   public deactivate(item: ReceitaPacDataContract): void {
-    if (!confirm(this.translate.instant('receitaPac.confirmDeactivate', { numero: item.numero }))) { return; }
-    this.receitaPacService.deactivate({ id: item.id }).subscribe(
-      () => this.load(),
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('receitaPac.confirmDeactivate', { numero: item.numero })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.receitaPacService.deactivate({ id: item.id }).subscribe(
+        () => this.load(),
+        err => this.showError(err)
+      );
+    });
   }
 
   private showError(err: any): void {

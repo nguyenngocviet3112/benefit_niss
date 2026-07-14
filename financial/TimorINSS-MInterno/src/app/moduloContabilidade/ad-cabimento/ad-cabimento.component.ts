@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { ExpenditureAuthorizationService } from '../../services/expenditure-authorization.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
+import { PermissionService } from '../../services/permission.service';
 import { ExpenditureAuthorizationDataContract, RubricaDisponivelDataContract } from '../../response-models/expenditure-authorization-response';
 import { AttachmentConfigService } from '../../services/attachment-config.service';
 import { AttachmentConfigItem } from '../../response-models/attachment-config-response';
@@ -26,8 +28,18 @@ export class AdCabimentoComponent implements OnInit {
   public estadoLabels = ESTADO_LABELS;
   public loading = false;
 
+  public allItems: ExpenditureAuthorizationDataContract[] = [];
   public items: ExpenditureAuthorizationDataContract[] = [];
   public expandedId: number | null = null;
+
+  public estadoOptions: { value: string; label: string }[] = [
+    { value: '', label: 'adCabimento.estadoTodos' },
+    { value: 'DRAFT', label: 'adCabimento.estadoDraft' },
+    { value: 'PENDING_REVIEW', label: 'adCabimento.estadoPendingReview' },
+    { value: 'PENDING_APPROVAL', label: 'adCabimento.estadoPendingApproval' },
+    { value: 'APPROVED', label: 'adCabimento.estadoApproved' }
+  ];
+  public selectedEstado = '';
 
   public availableRubricas: RubricaDisponivelDataContract[] = [];
   public showRubricaPicker = false;
@@ -65,19 +77,38 @@ export class AdCabimentoComponent implements OnInit {
     private expenditureAuthorizationService: ExpenditureAuthorizationService,
     private attachmentConfigService: AttachmentConfigService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService,
+    private permissionService: PermissionService
   ) { }
 
   ngOnInit(): void {
+    this.selectedEstado = this.computeDefaultEstado();
     this.load();
     this.attachmentConfigService.getConfig().subscribe(response => this.attachmentConfig = response.item ?? null);
+  }
+
+  // Default the Estado filter to whatever's actionable for this account's role,
+  // so a Reviewer/Approver-only account doesn't see not-yet-their-turn records
+  // by default (avoids clutter) — accounts that can Submit still need to see
+  // their own DRAFT items, and multi-role/ADMIN accounts need full visibility,
+  // so both cases fall back to no filter ("Tất cả").
+  private computeDefaultEstado(): string {
+    const hasSubmit = this.permissionService.hasPerm('AD_SUBMIT');
+    const hasReview = this.permissionService.hasPerm('AD_REVIEW');
+    const hasApprove = this.permissionService.hasPerm('AD_APPROVE');
+    if (hasSubmit || (hasReview && hasApprove)) { return ''; }
+    if (hasReview) { return 'PENDING_REVIEW'; }
+    if (hasApprove) { return 'PENDING_APPROVAL'; }
+    return '';
   }
 
   public load(): void {
     this.loading = true;
     this.expenditureAuthorizationService.getByAno(this.ano).subscribe(
       response => {
-        this.items = response.items ?? [];
+        this.allItems = response.items ?? [];
+        this.applyFilters();
         this.loading = false;
       },
       err => {
@@ -85,6 +116,16 @@ export class AdCabimentoComponent implements OnInit {
         this.showError(err);
       }
     );
+  }
+
+  public onEstadoChange(): void {
+    this.applyFilters();
+  }
+
+  private applyFilters(): void {
+    this.items = this.selectedEstado
+      ? this.allItems.filter(i => i.estado === this.selectedEstado)
+      : this.allItems;
   }
 
   public toggleExpand(item: ExpenditureAuthorizationDataContract): void {
@@ -201,17 +242,19 @@ export class AdCabimentoComponent implements OnInit {
   }
 
   public submitAd(item: ExpenditureAuthorizationDataContract): void {
-    if (!confirm(this.translate.instant('adCabimento.confirmSubmit', { numero: item.numero }))) { return; }
-    this.expenditureAuthorizationService.submit({ id: item.id }).subscribe(
-      response => {
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
-          return;
-        }
-        this.load();
-      },
-      err => this.showError(err)
-    );
+    this.confirmDialog.confirm(this.translate.instant('adCabimento.confirmSubmit', { numero: item.numero })).subscribe(confirmed => {
+      if (!confirmed) { return; }
+      this.expenditureAuthorizationService.submit({ id: item.id }).subscribe(
+        response => {
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 4000 });
+            return;
+          }
+          this.load();
+        },
+        err => this.showError(err)
+      );
+    });
   }
 
   public openApprovePrompt(adId: number, action: 'review' | 'approve'): void {

@@ -70,6 +70,7 @@
 .ad-col-valor { flex: 1; text-align: right; font-family: monospace; }
 .ad-col-saldo { flex: 1; text-align: right; font-family: monospace; }
 .ad-col-estado { flex: 1; text-align: right; }
+.ad-col-actions { flex: 1.6; text-align: right; white-space: nowrap; }
 
 .ad-saldo-negativo { color: #c62828; font-weight: 600; }
 

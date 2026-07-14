@@ -68,6 +68,7 @@
 .obr-col-desc { flex: 2.5; }
 .obr-col-valor { flex: 1; text-align: right; font-family: monospace; }
 .obr-col-estado { flex: 1; text-align: right; }
+.obr-col-actions { flex: 1.6; text-align: right; white-space: nowrap; }
 
 .obr-estado {
   font-size: 11px;
