@@ -56,6 +56,14 @@ export class ContabilidadeShellComponent implements OnInit {
       .filter(group => group.items.length > 0);
   }
 
+  // true khi user đã đăng nhập được vào shell nhưng chưa có group menu nào —
+  // dấu hiệu gần như chắc chắn là chưa được "Đồng bộ User" (UserModeAccess)
+  // và/hoặc chưa được gán permission nào, KHÔNG phải lỗi hệ thống. Trước đây
+  // trường hợp này chỉ hiện màn trắng không lối ra (2026-07-13, agus.berek).
+  public get hasNoAccess(): boolean {
+    return this.visibleGroups.length === 0;
+  }
+
   // Ẩn/hiện mục menu theo quyền hiện có (2026-07-12, user yêu cầu) — chỉ là
   // dọn giao diện, KHÔNG phải lớp bảo mật mới: backend vẫn là nơi chặn thật
   // qua [RequirePerm] trên các hành động ghi/sửa (xem RBAC enforcement).
@@ -177,7 +185,7 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'shell.itemRegistoCabimentos', route: '/contabilidade/relatorios/registoCabimentos', permTokens: ['REPORT_VIEW'] },
         { label: 'shell.itemRegistoCompromissos', route: '/contabilidade/relatorios/registoCompromissos', permTokens: ['REPORT_VIEW'] },
         { label: 'shell.itemRegistoObrigacao', route: '/contabilidade/relatorios/registoObrigacoes', permTokens: ['REPORT_VIEW'] },
-        { label: 'shell.itemReceitasGp', comingSoon: true },
+        { label: 'shell.itemReceitasGp', route: '/contabilidade/relatorios/receitasGp', permTokens: ['REPORT_VIEW'] },
         { label: 'shell.itemReceitasPac', comingSoon: true },
         { label: 'shell.itemControlo', comingSoon: true },
         { label: 'shell.itemExtratosBancarios', comingSoon: true },
@@ -253,7 +261,7 @@ export class ContabilidadeShellComponent implements OnInit {
         { label: 'shell.itemUserPermission', route: '/contabilidade/userPermission', permTokens: ['USER_MANAGE'] },
         { label: 'shell.itemUserSync', route: '/contabilidade/userSync', permTokens: ['USER_MANAGE'] },
         { label: 'shell.itemEmailConfig', comingSoon: true },
-        { label: 'shell.itemApiIntegration', comingSoon: true },
+        { label: 'shell.itemApiIntegration', route: '/contabilidade/settings/integrationConfig', permTokens: ['MASTERDATA_MANAGE'] },
       ]
     },
     {

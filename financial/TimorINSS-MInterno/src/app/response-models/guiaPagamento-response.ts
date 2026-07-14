@@ -25,6 +25,9 @@ export interface GuiaListagem
   qrInvoice: string;
   bankCode: string;
   approveFile: string;
+  userName?: string;
+  reconciliadoEm?: Date;
+  dataSubmissaoComprovativo?: Date;
 }
 
 

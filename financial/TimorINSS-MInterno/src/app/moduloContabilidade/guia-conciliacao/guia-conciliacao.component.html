@@ -10,7 +10,7 @@
 
   <div class="gc-panels">
     <div class="gc-panel">
-      <h3>{{ 'guiaConciliacao.panelGuias' | translate }} ({{ guias.length }})</h3>
+      <h3>{{ 'guiaConciliacao.panelGuias' | translate }} ({{ filteredGuias.length }})</h3>
 
       <div class="gc-filter">
         <mat-form-field appearance="outline" class="gc-filter-date">
@@ -25,6 +25,13 @@
           <mat-datepicker-toggle matSuffix [for]="pickerGuiaTo"></mat-datepicker-toggle>
           <mat-datepicker #pickerGuiaTo></mat-datepicker>
         </mat-form-field>
+        <mat-form-field appearance="outline" class="gc-filter-banco">
+          <mat-label>{{ 'guiaConciliacao.fieldBanco' | translate }}</mat-label>
+          <mat-select [(ngModel)]="selectedBankGuia" (selectionChange)="onBankFilterGuiaChange()">
+            <mat-option [value]="null">{{ 'guiaConciliacao.allBanks' | translate }}</mat-option>
+            <mat-option *ngFor="let b of bankOptionsGuias" [value]="b">{{ ('guiaPagamentoListagem.lstBankCode.' + b) | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
         <button mat-stroked-button color="primary" (click)="applyFilterGuias()">{{ 'guiaConciliacao.applyFilter' | translate }}</button>
         <button mat-button (click)="clearFilterGuias()">{{ 'guiaConciliacao.clearFilter' | translate }}</button>
       </div>
@@ -38,8 +45,8 @@
           <span class="gc-col-valor">{{ 'guiaConciliacao.colValorDeclarado' | translate }}</span>
           <span class="gc-col-view"></span>
         </div>
-        <div class="gc-row" *ngFor="let g of guias" [class.gc-row-selected]="selectedGuiaIds.has(g.idGuia)" (click)="toggleGuia(g.idGuia)">
-          <span class="gc-col-check"><mat-checkbox [checked]="selectedGuiaIds.has(g.idGuia)" (click)="$event.stopPropagation(); toggleGuia(g.idGuia)"></mat-checkbox></span>
+        <div class="gc-row" *ngFor="let g of pagedGuias" [class.gc-row-selected]="selectedGuiaIds.has(g.idGuia)" (click)="toggleGuia(g.idGuia)">
+          <span class="gc-col-check"><mat-checkbox [checked]="selectedGuiaIds.has(g.idGuia)" (click)="$event.stopPropagation()" (change)="toggleGuia(g.idGuia)"></mat-checkbox></span>
           <span class="gc-col-doc gc-col-clickable" [matTooltip]="'guiaConciliacao.viewButton' | translate" (click)="viewComprovativo(g.idGuia, $event)">{{ g.numDocumento }}</span>
           <span class="gc-col-desc gc-col-clickable" [matTooltip]="'guiaConciliacao.viewButton' | translate" (click)="viewComprovativo(g.idGuia, $event)">{{ g.descricao }} <span class="gc-sub">{{ g.niss }}</span></span>
           <span class="gc-col-banco">{{ (g.bankCode ? ('guiaPagamentoListagem.lstBankCode.' + g.bankCode) : '—') | translate }}</span>
@@ -50,15 +57,19 @@
             </button>
           </span>
         </div>
-        <div class="gc-empty" *ngIf="guias.length === 0">{{ 'guiaConciliacao.emptyGuias' | translate }}</div>
+        <div class="gc-empty" *ngIf="filteredGuias.length === 0">{{ 'guiaConciliacao.emptyGuias' | translate }}</div>
       </div>
+      <mat-paginator *ngIf="!loadingGuias && filteredGuias.length > 0"
+        [length]="filteredGuias.length" [pageSize]="pageSizeGuias" [pageSizeOptions]="[10, 20, 50, 100]"
+        (page)="onPageChangeGuias($event)">
+      </mat-paginator>
       <ng-template #loadingGuiasTpl>
         <div class="gc-loading">{{ 'general.loading' | translate }}</div>
       </ng-template>
     </div>
 
     <div class="gc-panel">
-      <h3>{{ 'guiaConciliacao.panelMovimentos' | translate }} ({{ movimentos.length }})</h3>
+      <h3>{{ 'guiaConciliacao.panelMovimentos' | translate }} ({{ filteredMovimentos.length }})</h3>
 
       <div class="gc-filter">
         <mat-form-field appearance="outline" class="gc-filter-date">
@@ -73,6 +84,13 @@
           <mat-datepicker-toggle matSuffix [for]="pickerMovTo"></mat-datepicker-toggle>
           <mat-datepicker #pickerMovTo></mat-datepicker>
         </mat-form-field>
+        <mat-form-field appearance="outline" class="gc-filter-banco">
+          <mat-label>{{ 'guiaConciliacao.fieldBanco' | translate }}</mat-label>
+          <mat-select [(ngModel)]="selectedBankMovimento" (selectionChange)="onBankFilterMovimentoChange()">
+            <mat-option [value]="null">{{ 'guiaConciliacao.allBanks' | translate }}</mat-option>
+            <mat-option *ngFor="let b of bankOptionsMovimentos" [value]="b">{{ b }}</mat-option>
+          </mat-select>
+        </mat-form-field>
         <button mat-stroked-button color="primary" (click)="applyFilterMovimentos()">{{ 'guiaConciliacao.applyFilter' | translate }}</button>
         <button mat-button (click)="clearFilterMovimentos()">{{ 'guiaConciliacao.clearFilter' | translate }}</button>
       </div>
@@ -82,16 +100,22 @@
           <span class="gc-col-check"></span>
           <span class="gc-col-data">{{ 'guiaConciliacao.colData' | translate }}</span>
           <span class="gc-col-desc">{{ 'guiaConciliacao.colDescricao' | translate }}</span>
+          <span class="gc-col-banco">{{ 'guiaConciliacao.colBanco' | translate }}</span>
           <span class="gc-col-valor">{{ 'guiaConciliacao.colValorBanco' | translate }}</span>
         </div>
-        <div class="gc-row" *ngFor="let m of movimentos" [class.gc-row-selected]="selectedMovimentoIds.has(m.id)" (click)="toggleMovimento(m.id)">
-          <span class="gc-col-check"><mat-checkbox [checked]="selectedMovimentoIds.has(m.id)" (click)="$event.stopPropagation(); toggleMovimento(m.id)"></mat-checkbox></span>
+        <div class="gc-row" *ngFor="let m of pagedMovimentos" [class.gc-row-selected]="selectedMovimentoIds.has(m.id)" (click)="toggleMovimento(m.id)">
+          <span class="gc-col-check"><mat-checkbox [checked]="selectedMovimentoIds.has(m.id)" (click)="$event.stopPropagation()" (change)="toggleMovimento(m.id)"></mat-checkbox></span>
           <span class="gc-col-data">{{ m.dataValor | date:'dd/MM/yyyy' }}</span>
           <span class="gc-col-desc">{{ m.descricao || '—' }}</span>
+          <span class="gc-col-banco">{{ m.entidadeBancaria || '—' }}</span>
           <span class="gc-col-valor">$ {{ valorMovimento(m) | number:'1.2-2' }}</span>
         </div>
-        <div class="gc-empty" *ngIf="movimentos.length === 0">{{ 'guiaConciliacao.emptyMovimentos' | translate }}</div>
+        <div class="gc-empty" *ngIf="filteredMovimentos.length === 0">{{ 'guiaConciliacao.emptyMovimentos' | translate }}</div>
       </div>
+      <mat-paginator *ngIf="!loadingMovimentos && filteredMovimentos.length > 0"
+        [length]="filteredMovimentos.length" [pageSize]="pageSizeMovimentos" [pageSizeOptions]="[10, 20, 50, 100]"
+        (page)="onPageChangeMovimentos($event)">
+      </mat-paginator>
       <ng-template #loadingMovTpl>
         <div class="gc-loading">{{ 'general.loading' | translate }}</div>
       </ng-template>

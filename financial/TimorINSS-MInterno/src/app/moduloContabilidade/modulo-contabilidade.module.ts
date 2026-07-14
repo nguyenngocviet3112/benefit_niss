@@ -12,10 +12,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { ChartsModule } from 'ng2-charts';
 
 import { ModuloContabilidadeRoutingModule } from './modulo-contabilidade-routing.module';
 import { EstruturaProgramaticaComponent } from './estrutura-programatica/estrutura-programatica.component';
@@ -54,11 +57,15 @@ import { CicloDespesaComponent } from './ciclo-despesa/ciclo-despesa.component';
 import { AttachmentUploadComponent } from './attachment-upload/attachment-upload.component';
 import { AttachmentConfigComponent } from './settings/attachment-config/attachment-config.component';
 import { LiquidacaoContaConfigComponent } from './settings/liquidacao-conta-config/liquidacao-conta-config.component';
+import { IntegrationConfigComponent } from './settings/integration-config/integration-config.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { BankStatementLineImportComponent } from './bank-statement-line-import/bank-statement-line-import.component';
 import { RegistoAdComponent } from './registo-ad/registo-ad.component';
 import { RegistoCabimentosComponent } from './registo-cabimentos/registo-cabimentos.component';
 import { RegistoCompromissosComponent } from './registo-compromissos/registo-compromissos.component';
 import { RegistoObrigacoesComponent } from './registo-obrigacoes/registo-obrigacoes.component';
 import { ExecucaoAtividadeComponent } from './execucao-atividade/execucao-atividade.component';
+import { ReceitasGpComponent } from './receitas-gp/receitas-gp.component';
 
 @NgModule({
   declarations: [
@@ -98,11 +105,15 @@ import { ExecucaoAtividadeComponent } from './execucao-atividade/execucao-ativid
     CicloDespesaComponent,
     AttachmentUploadComponent,
     AttachmentConfigComponent,
+    IntegrationConfigComponent,
     RegistoAdComponent,
     RegistoCabimentosComponent,
     RegistoCompromissosComponent,
     RegistoObrigacoesComponent,
-    ExecucaoAtividadeComponent
+    ExecucaoAtividadeComponent,
+    ReceitasGpComponent,
+    ConfirmDialogComponent,
+    BankStatementLineImportComponent
   ],
   imports: [
     CommonModule,
@@ -120,10 +131,13 @@ import { ExecucaoAtividadeComponent } from './execucao-atividade/execucao-ativid
     MatPaginatorModule,
     MatAutocompleteModule,
     MatCheckboxModule,
+    MatSlideToggleModule,
+    MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
     TranslateModule,
-    PdfViewerModule
+    PdfViewerModule,
+    ChartsModule
   ]
 })
 export class ModuloContabilidadeModule { }

@@ -1,0 +1,7 @@
+<div class="cd-container">
+  <p class="cd-message">{{ data.message }}</p>
+  <div class="cd-actions">
+    <button mat-button (click)="onCancel()">{{ 'general.cancel' | translate }}</button>
+    <button mat-raised-button color="primary" (click)="onConfirm()">{{ 'general.confirm' | translate }}</button>
+  </div>
+</div>

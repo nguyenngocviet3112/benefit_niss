@@ -1,7 +1,15 @@
 <div class="shell">
   <aside class="treebar">
     <div class="treebar-header">
-      <span class="treebar-title">{{ 'general.moduloContabilidade' | translate }}</span>
+      <a routerLink="/contabilidade/dashboard" class="treebar-title" [matTooltip]="'shell.homeTooltip' | translate">
+        <mat-icon class="treebar-home-icon">home</mat-icon>
+        {{ 'general.moduloContabilidade' | translate }}
+      </a>
+    </div>
+
+    <div class="treebar-no-access" *ngIf="hasNoAccess">
+      <mat-icon>info</mat-icon>
+      <span>{{ 'shell.noAccessMessage' | translate }}</span>
     </div>
 
     <nav class="treebar-nav">
@@ -26,6 +34,11 @@
   </aside>
 
   <main class="shell-content">
+    <div class="content-no-access" *ngIf="hasNoAccess">
+      <mat-icon>lock_outline</mat-icon>
+      <h3>{{ 'shell.noAccessTitle' | translate }}</h3>
+      <p>{{ 'shell.noAccessMessage' | translate }}</p>
+    </div>
     <router-outlet></router-outlet>
   </main>
 </div>

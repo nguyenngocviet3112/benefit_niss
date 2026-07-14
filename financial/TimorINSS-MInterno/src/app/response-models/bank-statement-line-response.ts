@@ -4,6 +4,7 @@ export interface BankStatementLineDataContract {
   id: number;
   contaBancariaFk: number;
   contaBancariaNome: string;
+  entidadeBancaria?: string;
   dataValor: string;
   dataTransacao?: string;
   codigoTransacaoBancaria?: string;
@@ -47,4 +48,19 @@ export interface ReceitasDisponiveisParaConciliacaoResponse extends ResponseBase
 
 export interface PagamentosDisponiveisParaConciliacaoResponse extends ResponseBase {
   items: PagamentoDisponivelParaConciliacaoDataContract[];
+}
+
+export interface BankStatementLineImportRow {
+  rowNum: number;
+  dataValor: string;
+  descricao: string;
+  credito: number;
+  debito: number;
+  isDuplicate: boolean;
+  // Chỉ dùng ở frontend (không tới từ backend) — người dùng chọn cho từng dòng.
+  action?: 'Insert' | 'Skip';
+}
+
+export interface ImportBankStatementLinePreviewResponse extends ResponseBase {
+  rows: BankStatementLineImportRow[];
 }

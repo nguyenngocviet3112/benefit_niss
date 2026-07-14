@@ -1,0 +1,88 @@
+<div class="rgp-container">
+  <div class="rgp-header">
+    <h2>{{ 'receitasGp.header' | translate }} <span class="en">({{ 'receitasGp.headerGloss' | translate }})</span></h2>
+    <p class="rgp-hint">{{ 'receitasGp.hint' | translate }}</p>
+  </div>
+
+  <div class="rgp-filter-bar">
+    <mat-form-field appearance="outline" class="rgp-field-ano">
+      <mat-label>{{ 'receitasGp.fieldAno' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedYear" (selectionChange)="load()">
+        <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="rgp-field-entidade">
+      <mat-label>{{ 'receitasGp.fieldEntidade' | translate }} <span class="itag type">{{ 'receitasGp.searchToTypeTag' | translate }}</span></mat-label>
+      <input matInput [(ngModel)]="entidadeSearch" name="entidadeSearchInput"
+             (ngModelChange)="onEntidadeSearchChange()" [matAutocomplete]="autoEntidade" />
+      <mat-autocomplete #autoEntidade="matAutocomplete">
+        <mat-option [value]="undefined" (onSelectionChange)="selectEntidade()">
+          {{ 'receitasGp.bothOption' | translate }}
+        </mat-option>
+        <mat-option *ngFor="let nome of filteredEntidades" [value]="nome" (onSelectionChange)="selectEntidade(nome)">
+          {{ nome }}
+        </mat-option>
+        <mat-option *ngIf="filteredEntidades.length === 0" disabled>{{ 'receitasGp.noneFound' | translate }}</mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="rgp-field-estado">
+      <mat-label>{{ 'receitasGp.fieldEstado' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedEstado" (selectionChange)="onEstadoChange()">
+        <mat-option *ngFor="let e of estadoOptions" [value]="e.value">{{ e.label | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="rgp-loading" *ngIf="loading">{{ 'receitasGp.loading' | translate }}</div>
+
+  <div class="rgp-table-wrap" *ngIf="!loading">
+    <table class="rgp-table">
+      <thead>
+        <tr>
+          <th>{{ 'receitasGp.colNumDocumento' | translate }}</th>
+          <th>{{ 'receitasGp.colMesAno' | translate }}</th>
+          <th>{{ 'receitasGp.colEntidade' | translate }}</th>
+          <th>{{ 'receitasGp.colNiss' | translate }}</th>
+          <th class="rgp-num">{{ 'receitasGp.colValor' | translate }}</th>
+          <th>{{ 'receitasGp.colEstado' | translate }}</th>
+          <th>{{ 'receitasGp.colDataSubmissao' | translate }}</th>
+          <th>{{ 'receitasGp.colReconciliadoEm' | translate }}</th>
+          <th>{{ 'receitasGp.colActions' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of pagedItems">
+          <td>{{ row.numDocumento }}</td>
+          <td>{{ row.mesAno | date:'MM/yyyy' }}</td>
+          <td>{{ row.userName || '—' }}</td>
+          <td>{{ row.niss }}</td>
+          <td class="rgp-num">$ {{ row.valor | number:'1.2-2' }}</td>
+          <td><span class="rgp-badge" [ngClass]="'rgp-badge-' + row.estadoPagamento">{{ estadoLabels[row.estadoPagamento] | translate }}</span></td>
+          <td>{{ row.dataSubmissaoComprovativo ? (row.dataSubmissaoComprovativo | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
+          <td>{{ row.reconciliadoEm ? (row.reconciliadoEm | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
+          <td>
+            <button mat-button color="primary" *ngIf="podeConciliar(row)" (click)="irParaConciliacao(row)">{{ 'receitasGp.conciliarButton' | translate }}</button>
+            <button mat-button color="warn" *ngIf="podeDesfazer(row)" (click)="undoConciliacao(row)">{{ 'receitasGp.undoButton' | translate }}</button>
+          </td>
+        </tr>
+        <tr *ngIf="pagedItems.length === 0">
+          <td colspan="9" class="rgp-empty">{{ 'receitasGp.emptyList' | translate }}</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="items.length > 0">
+        <tr>
+          <td colspan="4" class="rgp-total-label">{{ 'receitasGp.totalLabel' | translate }}</td>
+          <td class="rgp-num rgp-total-value">$ {{ totalValor | number:'1.2-2' }}</td>
+          <td colspan="4"></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <mat-paginator *ngIf="items.length > 0"
+      [length]="items.length" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100]"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

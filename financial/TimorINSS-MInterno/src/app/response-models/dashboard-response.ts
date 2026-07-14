@@ -15,6 +15,10 @@ export interface DashboardSummaryDataContract {
   pagamentoExecutado: number;
   bancoConciliado: number;
   bancoPendente: number;
+  orcamentoTotal: number;
+  despesaExecutada: number;
+  guiaPagamentoValidado: number;
+  guiaPagamentoTotal: number;
 }
 
 export interface DashboardSummaryResponse extends ResponseBase {

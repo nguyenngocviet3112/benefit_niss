@@ -1,0 +1,51 @@
+<input #fileInput type="file" accept=".xlsx" style="display:none" (change)="onFileSelected($event)" />
+<button mat-stroked-button color="primary" [disabled]="loading" (click)="triggerFileSelect()">
+  {{ (loading ? 'bankStatementLineImport.loading' : 'bankStatementLineImport.importButton') | translate }}
+</button>
+
+<div class="bsli-overlay" *ngIf="showPreview">
+  <div class="bsli-dialog">
+    <h3>{{ 'bankStatementLineImport.title' | translate }}</h3>
+    <p class="bsli-hint">{{ 'bankStatementLineImport.hint' | translate }}</p>
+
+    <div class="bsli-table-wrap">
+      <table class="bsli-table">
+        <thead>
+          <tr>
+            <th>{{ 'bankStatementLineImport.colRow' | translate }}</th>
+            <th>{{ 'bankStatementLineImport.colData' | translate }}</th>
+            <th>{{ 'bankStatementLineImport.colDesc' | translate }}</th>
+            <th class="bsli-num">{{ 'bankStatementLineImport.colCredito' | translate }}</th>
+            <th class="bsli-num">{{ 'bankStatementLineImport.colDebito' | translate }}</th>
+            <th>{{ 'bankStatementLineImport.colAction' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of rows" [class.bsli-row-duplicate]="r.isDuplicate">
+            <td>{{ r.rowNum }}</td>
+            <td>{{ r.dataValor | date:'dd/MM/yyyy' }}</td>
+            <td>
+              {{ r.descricao }}
+              <span class="bsli-duplicate-badge" *ngIf="r.isDuplicate">{{ 'bankStatementLineImport.duplicateBadge' | translate }}</span>
+            </td>
+            <td class="bsli-num">{{ r.credito | number:'1.2-2' }}</td>
+            <td class="bsli-num">{{ r.debito | number:'1.2-2' }}</td>
+            <td>
+              <mat-select [(ngModel)]="r.action" class="bsli-action-select">
+                <mat-option value="Insert">{{ 'bankStatementLineImport.actionInsert' | translate }}</mat-option>
+                <mat-option value="Skip">{{ 'bankStatementLineImport.actionSkip' | translate }}</mat-option>
+              </mat-select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bsli-actions">
+      <button mat-button (click)="closePreview()">{{ 'bankStatementLineImport.cancelButton' | translate }}</button>
+      <button mat-raised-button color="primary" [disabled]="saving || insertCount === 0" (click)="confirmImport()">
+        {{ 'bankStatementLineImport.saveButton' | translate: { count: insertCount } }}
+      </button>
+    </div>
+  </div>
+</div>

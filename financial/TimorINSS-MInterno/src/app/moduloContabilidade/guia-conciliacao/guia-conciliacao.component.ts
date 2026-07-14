@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PageEvent } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
 import { GuiaConciliacaoService } from '../../services/guia-conciliacao.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { GuiaListagem } from '../../response-models/guiaPagamento-response';
-import { MovimentosBancariosData } from '../../models/movimentosBancarios';
+import { BankStatementLineDataContract } from '../../response-models/bank-statement-line-response';
 import { GuiaComprovativoDataContract } from '../../response-models/guia-conciliacao-response';
 import { base64ToArrayBuffer, blobToSaveAs } from '../../utils';
 
@@ -25,7 +28,7 @@ export class GuiaConciliacaoComponent implements OnInit {
   public conciliando = false;
 
   public guias: GuiaListagem[] = [];
-  public movimentos: MovimentosBancariosData[] = [];
+  public movimentos: BankStatementLineDataContract[] = [];
 
   public selectedGuiaIds = new Set<number>();
   public selectedMovimentoIds = new Set<number>();
@@ -46,16 +49,54 @@ export class GuiaConciliacaoComponent implements OnInit {
   public movDateFrom: Date | null = null;
   public movDateTo: Date | null = null;
 
+  // Lọc theo ngân hàng — mỗi bên 1 dropdown riêng, mặc định "Tất cả" (2026-07-14,
+  // user yêu cầu). Danh sách option tính động từ dữ liệu đang tải, không hardcode —
+  // 2 bên dùng 2 khái niệm "ngân hàng" khác nhau: Guia.bankCode là mã doanh nghiệp
+  // tự khai khi tạo Guia (đối chiếu qua guiaPagamentoListagem.lstBankCode), còn
+  // BankStatementLine.entidadeBancaria là Contabancaria.EntidadeBancaria (cấu hình
+  // tài khoản ngân hàng thật của INSS) — không dùng chung 1 danh sách được.
+  public selectedBankGuia: string | null = null;
+  public selectedBankMovimento: string | null = null;
+
+  // Phân trang phía client — mỗi panel 1 paginator riêng (2026-07-14, user yêu
+  // cầu: danh sách tích lũy theo thời gian, render hết 1 lần sẽ chậm dần).
+  public pageIndexGuias = 0;
+  public pageSizeGuias = 20;
+  public pageIndexMovimentos = 0;
+  public pageSizeMovimentos = 20;
+
+  // Đến từ màn "Receitas GP" (nút "Thực hiện đối chiếu") — tick sẵn đúng Guia này
+  // ngay khi danh sách chờ xác nhận tải xong lần đầu (2026-07-14, user yêu cầu).
+  private focusGuiaId: number | null = null;
+
   constructor(
     private guiaConciliacaoService: GuiaConciliacaoService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmDialog: ConfirmDialogService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     const today = new Date();
-    const defaultFrom = new Date(today.getFullYear(), today.getMonth() - 2, 1);
-    const defaultTo = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    let defaultFrom = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+    let defaultTo = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    const guiaIdParam = this.route.snapshot.queryParamMap.get('guiaId');
+    const mesAnoParam = this.route.snapshot.queryParamMap.get('mesAno');
+    if (guiaIdParam) {
+      this.focusGuiaId = Number(guiaIdParam);
+      // Mở rộng khoảng lọc để chắc chắn bao trùm tháng phát sinh của Guia này —
+      // mặc định 3 tháng gần nhất có thể bỏ sót Guia cũ hơn.
+      if (mesAnoParam) {
+        const mesAno = new Date(mesAnoParam);
+        const fromCandidate = new Date(mesAno.getFullYear(), mesAno.getMonth() - 1, 1);
+        const toCandidate = new Date(mesAno.getFullYear(), mesAno.getMonth() + 2, 0);
+        if (fromCandidate < defaultFrom) { defaultFrom = fromCandidate; }
+        if (toCandidate > defaultTo) { defaultTo = toCandidate; }
+      }
+    }
+
     this.guiaDateFrom = defaultFrom;
     this.guiaDateTo = defaultTo;
     this.movDateFrom = new Date(defaultFrom);
@@ -71,6 +112,7 @@ export class GuiaConciliacaoComponent implements OnInit {
   public loadGuias(): void {
     this.loadingGuias = true;
     this.selectedGuiaIds.clear();
+    this.pageIndexGuias = 0;
 
     this.guiaConciliacaoService.getGuiasPendentesValidacao({
       filter: { index: 0, rows: 500, dateFilterBegin: this.guiaDateFrom ?? undefined, dateFilterEnd: this.guiaDateTo ?? undefined }
@@ -78,6 +120,14 @@ export class GuiaConciliacaoComponent implements OnInit {
       response => {
         this.guias = (response.guias ?? []).filter(g => g.estadoPagamento === ESTADO_VALIDACAO || g.estadoPagamento === ESTADO_VALIDACAO_PARCIAL);
         this.loadingGuias = false;
+        if (this.focusGuiaId != null) {
+          if (this.guias.some(g => g.idGuia === this.focusGuiaId)) {
+            this.selectedGuiaIds.add(this.focusGuiaId);
+          } else {
+            this.snackBar.open(this.translate.instant('guiaConciliacao.focusGuiaNotFound'), this.translate.instant('general.close'), { duration: 5000 });
+          }
+          this.focusGuiaId = null;
+        }
       },
       err => { this.loadingGuias = false; this.showError(err); }
     );
@@ -86,13 +136,17 @@ export class GuiaConciliacaoComponent implements OnInit {
   public loadMovimentos(): void {
     this.loadingMovimentos = true;
     this.selectedMovimentoIds.clear();
+    this.pageIndexMovimentos = 0;
 
-    this.guiaConciliacaoService.getMovimentosBancariosDisponiveis({
-      tarefaAtivoId: 0,
+    // 2026-07-13: đọc từ BankStatementLine (mode mới, cùng bảng với Conciliação
+    // de Movimentos) thay vì Movimentosbancarios (bảng cũ) — xem memory
+    // bank-statement-line-guia-pagamento-unification. Backend đã lọc sẵn
+    // "chưa khớp Guia/Receita/Pagamento nào" + Credito > 0.
+    this.guiaConciliacaoService.getLinhasDisponiveis({
       filter: { index: 0, rows: 500, dateFilterBegin: this.movDateFrom ?? undefined, dateFilterEnd: this.movDateTo ?? undefined }
     }).subscribe(
       response => {
-        this.movimentos = (response.movimentos ?? []).filter(m => !m.conciliado);
+        this.movimentos = response.items ?? [];
         this.loadingMovimentos = false;
       },
       err => { this.loadingMovimentos = false; this.showError(err); }
@@ -119,6 +173,50 @@ export class GuiaConciliacaoComponent implements OnInit {
     this.loadMovimentos();
   }
 
+  public get bankOptionsGuias(): string[] {
+    return Array.from(new Set(this.guias.map(g => g.bankCode).filter(b => !!b))).sort();
+  }
+
+  public get bankOptionsMovimentos(): string[] {
+    return Array.from(new Set(this.movimentos.map(m => m.entidadeBancaria).filter((b): b is string => !!b))).sort();
+  }
+
+  public get filteredGuias(): GuiaListagem[] {
+    return this.selectedBankGuia ? this.guias.filter(g => g.bankCode === this.selectedBankGuia) : this.guias;
+  }
+
+  public get filteredMovimentos(): BankStatementLineDataContract[] {
+    return this.selectedBankMovimento ? this.movimentos.filter(m => m.entidadeBancaria === this.selectedBankMovimento) : this.movimentos;
+  }
+
+  public get pagedGuias(): GuiaListagem[] {
+    const start = this.pageIndexGuias * this.pageSizeGuias;
+    return this.filteredGuias.slice(start, start + this.pageSizeGuias);
+  }
+
+  public get pagedMovimentos(): BankStatementLineDataContract[] {
+    const start = this.pageIndexMovimentos * this.pageSizeMovimentos;
+    return this.filteredMovimentos.slice(start, start + this.pageSizeMovimentos);
+  }
+
+  public onBankFilterGuiaChange(): void {
+    this.pageIndexGuias = 0;
+  }
+
+  public onBankFilterMovimentoChange(): void {
+    this.pageIndexMovimentos = 0;
+  }
+
+  public onPageChangeGuias(event: PageEvent): void {
+    this.pageIndexGuias = event.pageIndex;
+    this.pageSizeGuias = event.pageSize;
+  }
+
+  public onPageChangeMovimentos(event: PageEvent): void {
+    this.pageIndexMovimentos = event.pageIndex;
+    this.pageSizeMovimentos = event.pageSize;
+  }
+
   public toggleGuia(id: number): void {
     if (this.selectedGuiaIds.has(id)) { this.selectedGuiaIds.delete(id); } else { this.selectedGuiaIds.add(id); }
   }
@@ -135,8 +233,8 @@ export class GuiaConciliacaoComponent implements OnInit {
     return this.movimentos.filter(m => this.selectedMovimentoIds.has(m.id)).reduce((sum, m) => sum + this.valorMovimento(m), 0);
   }
 
-  public valorMovimento(m: MovimentosBancariosData): number {
-    return m.credito ?? m.debito ?? 0;
+  public valorMovimento(m: BankStatementLineDataContract): number {
+    return m.credito || m.debito || 0;
   }
 
   public get valoresIguais(): boolean {
@@ -162,26 +260,35 @@ export class GuiaConciliacaoComponent implements OnInit {
     return null;
   }
 
+  // window.confirm() nguyên bản trình duyệt bị Chrome (và nhiều trình duyệt
+  // khác) tự động chặn im lặng sau vài lần gọi liên tiếp trên cùng 1 trang —
+  // sau khi bị chặn, confirm() luôn trả về false ngay lập tức, không hiện
+  // popup, không báo lỗi gì, khiến nút "Xác nhận" trông như bị vô hiệu hoàn
+  // toàn (2026-07-13, user report). Dùng ConfirmDialogService (MatDialog)
+  // thay thế để không bao giờ bị trình duyệt chặn kiểu đó.
   public confirmar(): void {
     if (!this.selecaoValida) { return; }
-    if (!confirm(this.translate.instant('guiaConciliacao.confirmMatch'))) { return; }
 
-    this.conciliando = true;
-    this.guiaConciliacaoService.conciliarGuiaPagamento({
-      guiaIds: Array.from(this.selectedGuiaIds),
-      movimentosBancarios: Array.from(this.selectedMovimentoIds)
-    }).subscribe(
-      response => {
-        this.conciliando = false;
-        if (response.errors && response.errors.length > 0) {
-          this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 5000 });
-          return;
-        }
-        this.showSuccessWithWarnings(this.translate.instant('guiaConciliacao.matchSuccess'), response.warnings);
-        this.load();
-      },
-      err => { this.conciliando = false; this.showError(err); }
-    );
+    this.confirmDialog.confirm(this.translate.instant('guiaConciliacao.confirmMatch')).subscribe(confirmed => {
+      if (!confirmed) { return; }
+
+      this.conciliando = true;
+      this.guiaConciliacaoService.conciliarGuiaPagamento({
+        guiaIds: Array.from(this.selectedGuiaIds),
+        bankStatementLineIds: Array.from(this.selectedMovimentoIds)
+      }).subscribe(
+        response => {
+          this.conciliando = false;
+          if (response.errors && response.errors.length > 0) {
+            this.snackBar.open(response.errors[0].errorMessage, this.translate.instant('general.close'), { duration: 5000 });
+            return;
+          }
+          this.showSuccessWithWarnings(this.translate.instant('guiaConciliacao.matchSuccess'), response.warnings);
+          this.load();
+        },
+        err => { this.conciliando = false; this.showError(err); }
+      );
+    });
   }
 
   // Bút toán tự sinh (hoặc bị bỏ qua vì thiếu cấu hình) — luôn thông báo, để

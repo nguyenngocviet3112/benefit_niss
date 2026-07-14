@@ -33,13 +33,25 @@
 .gc-filter {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   gap: 0.5rem 0.75rem;
   padding: 0.6rem 0.9rem 0;
 }
 
 .gc-filter-date {
+  width: 8rem;
+  flex-shrink: 0;
+}
+
+.gc-filter-banco {
   width: 8.5rem;
+  flex-shrink: 0;
+}
+
+.gc-filter button {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .gc-filter ::ng-deep .mat-form-field-wrapper {

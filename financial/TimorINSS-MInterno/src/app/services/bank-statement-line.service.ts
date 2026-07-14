@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   AddBankStatementLineRequest,
+  ConfirmBankStatementLineImportRequest,
   DeleteBankStatementLineRequest,
   MatchPagamentoRequest,
   MatchReceitaRequest,
@@ -11,6 +12,7 @@ import {
 } from '../request-models/bank-statement-line-request';
 import {
   BankStatementLineListResponse,
+  ImportBankStatementLinePreviewResponse,
   PagamentosDisponiveisParaConciliacaoResponse,
   ReceitasDisponiveisParaConciliacaoResponse
 } from '../response-models/bank-statement-line-response';
@@ -59,5 +61,16 @@ export class BankStatementLineService {
 
   public unmatch(request: UnmatchRequest): Observable<ResponseBase> {
     return this.http.post<ResponseBase>(`${environment.apiUrl}/bankstatementline/Unmatch`, request);
+  }
+
+  public importPreview(file: File, contaBancariaFk: number): Observable<ImportBankStatementLinePreviewResponse> {
+    const formData = new FormData();
+    formData.append('File', file);
+    formData.append('ContaBancariaFk', contaBancariaFk.toString());
+    return this.http.post<ImportBankStatementLinePreviewResponse>(`${environment.apiUrl}/bankstatementline/ImportPreview`, formData);
+  }
+
+  public importConfirm(request: ConfirmBankStatementLineImportRequest): Observable<ResponseBase> {
+    return this.http.post<ResponseBase>(`${environment.apiUrl}/bankstatementline/ImportConfirm`, request);
   }
 }

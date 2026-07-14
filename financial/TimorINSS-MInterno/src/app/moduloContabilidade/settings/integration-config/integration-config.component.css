@@ -1,0 +1,60 @@
+.ic-container {
+  padding: 24px;
+  max-width: 640px;
+}
+
+.ic-header h2 {
+  margin: 0 0 4px;
+}
+
+.ic-header .en {
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
+
+.ic-hint {
+  margin: 0 0 16px;
+  color: #666;
+  font-size: 13px;
+}
+
+.ic-loading {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+}
+
+.ic-section {
+  margin: 20px 0 4px;
+}
+
+.ic-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ic-toggle-status {
+  font-weight: 500;
+}
+
+.ic-toggle-status.on {
+  color: #2e7d32;
+}
+
+.ic-toggle-status.off {
+  color: #c62828;
+}
+
+.ic-endpoint-list {
+  margin: 0 0 20px;
+  padding-left: 20px;
+  color: #666;
+  font-size: 12px;
+}
+
+.ic-actions {
+  margin-top: 8px;
+}

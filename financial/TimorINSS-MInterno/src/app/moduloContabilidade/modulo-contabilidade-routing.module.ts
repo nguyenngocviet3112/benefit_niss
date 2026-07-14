@@ -41,11 +41,13 @@ import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CicloDespesaComponent } from './ciclo-despesa/ciclo-despesa.component';
 import { AttachmentConfigComponent } from './settings/attachment-config/attachment-config.component';
+import { IntegrationConfigComponent } from './settings/integration-config/integration-config.component';
 import { RegistoAdComponent } from './registo-ad/registo-ad.component';
 import { RegistoCabimentosComponent } from './registo-cabimentos/registo-cabimentos.component';
 import { RegistoCompromissosComponent } from './registo-compromissos/registo-compromissos.component';
 import { RegistoObrigacoesComponent } from './registo-obrigacoes/registo-obrigacoes.component';
 import { ExecucaoAtividadeComponent } from './execucao-atividade/execucao-atividade.component';
+import { ReceitasGpComponent } from './receitas-gp/receitas-gp.component';
 
 const routes: Routes = [
   {
@@ -79,12 +81,14 @@ const routes: Routes = [
       { path: 'relatorios/registoCompromissos', component: RegistoCompromissosComponent },
       { path: 'relatorios/registoObrigacoes', component: RegistoObrigacoesComponent },
       { path: 'relatorios/execucaoAtividade', component: ExecucaoAtividadeComponent },
+      { path: 'relatorios/receitasGp', component: ReceitasGpComponent },
       { path: 'settings/idioma', component: IdiomaConfigComponent },
       { path: 'settings/kyNganSach', component: KyNganSachComponent },
       { path: 'settings/bankAccount', component: BankAccountComponent },
       { path: 'settings/guiaPagamentoContaConfig', component: GuiaPagamentoContaConfigComponent },
       { path: 'settings/liquidacaoContaConfig', component: LiquidacaoContaConfigComponent },
       { path: 'settings/attachmentConfig', component: AttachmentConfigComponent },
+      { path: 'settings/integrationConfig', component: IntegrationConfigComponent },
       { path: 'userPermission', component: UserPermissionComponent },
       { path: 'userSync', component: UserSyncComponent },
       { path: 'meuPerfil', component: MeuPerfilComponent },

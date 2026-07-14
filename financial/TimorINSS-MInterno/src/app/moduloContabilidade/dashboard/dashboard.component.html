@@ -58,9 +58,93 @@
             </span>
           </div>
         </div>
+
+        <div class="dash-card">
+          <div class="dash-card-head">
+            <mat-icon class="dash-card-icon">account_balance_wallet</mat-icon>
+            <span class="dash-card-title">{{ 'dashboard.orcamentoTitle' | translate }}</span>
+          </div>
+          <div class="dash-card-total">$ {{ summary.despesaExecutada | number:'1.2-2' }}</div>
+          <div class="dash-card-note">{{ 'dashboard.orcamentoOfLabel' | translate }} $ {{ summary.orcamentoTotal | number:'1.2-2' }}</div>
+          <div class="dash-bar">
+            <span class="dash-bar-approved" [style.width.%]="percentOf(summary.despesaExecutada, summary.orcamentoTotal)"></span>
+          </div>
+          <div class="dash-card-legend">
+            <span class="dash-legend-item">{{ 'dashboard.taxaExecucaoLabel' | translate }} <b>{{ percentOf(summary.despesaExecutada, summary.orcamentoTotal) }}%</b></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-chart-grid">
+        <div class="dash-card dash-chart-card">
+          <div class="dash-card-head">
+            <mat-icon class="dash-card-icon">pie_chart</mat-icon>
+            <span class="dash-card-title">{{ 'dashboard.consumoChartTitle' | translate }}</span>
+          </div>
+          <div class="dash-chart-canvas">
+            <canvas baseChart
+              [data]="consumoChartData"
+              [labels]="consumoChartLabels"
+              [chartType]="chartType"
+              [options]="consumoChartOptions"
+              [colors]="consumoChartColors"
+              [legend]="false">
+            </canvas>
+          </div>
+          <div class="dash-card-legend dash-chart-legend">
+            <span class="dash-legend-item">
+              <span class="dash-dot dash-dot-consumido"></span>
+              {{ 'dashboard.consumidoLabel' | translate }}
+              <b>$ {{ consumoChartData[0] | number:'1.2-2' }}</b>
+              ({{ percentOf(consumoChartData[0], summary.orcamentoTotal) }}%)
+            </span>
+            <span class="dash-legend-item">
+              <span class="dash-dot dash-dot-restante"></span>
+              {{ 'dashboard.restanteLabel' | translate }}
+              <b>$ {{ consumoChartData[1] | number:'1.2-2' }}</b>
+              ({{ percentOf(consumoChartData[1], summary.orcamentoTotal) }}%)
+            </span>
+          </div>
+        </div>
+
+        <div class="dash-card dash-chart-card">
+          <div class="dash-card-head">
+            <mat-icon class="dash-card-icon">pie_chart</mat-icon>
+            <span class="dash-card-title">{{ 'dashboard.gpChartTitle' | translate }}</span>
+          </div>
+          <div class="dash-chart-canvas">
+            <canvas baseChart
+              [data]="gpChartData"
+              [labels]="gpChartLabels"
+              [chartType]="chartType"
+              [options]="gpChartOptions"
+              [colors]="gpChartColors"
+              [legend]="false">
+            </canvas>
+          </div>
+          <div class="dash-card-legend dash-chart-legend">
+            <span class="dash-legend-item">
+              <span class="dash-dot dash-dot-approved"></span>
+              {{ 'dashboard.gpValidadoLabel' | translate }}
+              <b>{{ gpChartData[0] }}</b>
+              ({{ percentOf(gpChartData[0], summary.guiaPagamentoTotal) }}%)
+            </span>
+            <span class="dash-legend-item">
+              <span class="dash-dot dash-dot-progress"></span>
+              {{ 'dashboard.gpPendenteLabel' | translate }}
+              <b>{{ gpChartData[1] }}</b>
+              ({{ percentOf(gpChartData[1], summary.guiaPagamentoTotal) }}%)
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </ng-container>
 
-  <ng-template #blankTpl></ng-template>
+  <ng-template #blankTpl>
+    <div class="dash-no-access">
+      <mat-icon>lock_outline</mat-icon>
+      <p>{{ 'dashboard.noAccessMessage' | translate }}</p>
+    </div>
+  </ng-template>
 </div>

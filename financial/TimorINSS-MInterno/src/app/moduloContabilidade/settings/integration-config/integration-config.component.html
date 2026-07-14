@@ -1,0 +1,32 @@
+<div class="ic-container">
+  <div class="ic-header">
+    <h2>{{ 'integrationConfig.header' | translate }} <span class="en">({{ 'integrationConfig.headerGloss' | translate }})</span></h2>
+    <p class="ic-hint">{{ 'integrationConfig.hint' | translate }}</p>
+  </div>
+
+  <div class="ic-loading" *ngIf="loading">{{ 'integrationConfig.loading' | translate }}</div>
+
+  <div class="ic-form" *ngIf="!loading">
+    <h4 class="ic-section">{{ 'integrationConfig.sectionBenefit' | translate }}</h4>
+
+    <div class="ic-toggle-row">
+      <mat-slide-toggle [(ngModel)]="form.benefitApiEnabled" color="primary"></mat-slide-toggle>
+      <span class="ic-toggle-status" [ngClass]="form.benefitApiEnabled ? 'on' : 'off'">
+        {{ (form.benefitApiEnabled ? 'integrationConfig.statusEnabled' : 'integrationConfig.statusDisabled') | translate }}
+      </span>
+    </div>
+
+    <p class="ic-hint">{{ 'integrationConfig.benefitHint' | translate }}</p>
+    <ul class="ic-endpoint-list">
+      <li>POST /api/benefit/getCitizenByInss</li>
+      <li>GET /api/benefit-data/company/{{ '{niss}' }}</li>
+      <li>GET /api/benefit-data/worker/{{ '{niss}' }}</li>
+      <li>GET /api/benefit-data/document/{{ '{idDoc}' }}</li>
+      <li>GET /api/benefit-data/contributions/{{ '{niss}' }}</li>
+    </ul>
+
+    <div class="ic-actions">
+      <button mat-raised-button color="primary" [disabled]="saving" (click)="save()">{{ 'integrationConfig.saveButton' | translate }}</button>
+    </div>
+  </div>
+</div>
