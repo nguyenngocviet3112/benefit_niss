@@ -41,5 +41,23 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public int BancoPendente { get; set; }
+
+        // Thực chi/Ngân sách (năm hiện tại) — cùng công thức đã dùng ở CE_OSS_Global
+        // (OrcamentoLinha batch APPROVED, loại trừ ngoài phạm vi OSS; Execução tính theo
+        // ObligationItem, chỉ PaymentAuthorization đã có PaymentExecution). Xem
+        // CeInssGlobalRepository.GetTotaisDespesa.
+        [DataMember]
+        public decimal OrcamentoTotal { get; set; }
+
+        [DataMember]
+        public decimal DespesaExecutada { get; set; }
+
+        // Guia Pagamento đã validate (IndPago = "Guia Paga", Valor domain = 1) / tổng số Guia
+        // trong năm hiện tại. Xem GuiaPagamentoRepository.GetValidacaoSummary.
+        [DataMember]
+        public int GuiaPagamentoValidado { get; set; }
+
+        [DataMember]
+        public int GuiaPagamentoTotal { get; set; }
     }
 }

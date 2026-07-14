@@ -188,6 +188,37 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return response;
         }
 
+        // Dashboard — apenas os 2 totais (Orçamento aprovado, Despesa executada) sem construir o
+        // breakdown por Classificação Económica nem tocar Receita/Cabimentos/Compromissos, que
+        // GetReport calcula mas o Dashboard não precisa. Mesma filtragem (batch APPROVED, exclusão
+        // do perímetro OSS, execução via ObligationItem) para bater com CE_OSS_Global.
+        public (decimal Orcamento, decimal Executado) GetTotaisDespesa(int year, int? institution)
+        {
+            var orcamentoConfigFk = _context.BudgetPeriod
+                .Where(o => o.IndActivo && o.DataInicio.Year <= year && (o.DataFim == null || o.DataFim.Value.Year >= year))
+                .Select(o => o.Id)
+                .FirstOrDefault();
+
+            if (orcamentoConfigFk == 0)
+                return (0, 0);
+
+            var offPerimeterAtividadeIds = GetOffPerimeterAtividadeIds(orcamentoConfigFk);
+
+            var orcamento = _context.OrcamentoLinha
+                .Where(l => l.IndActivo
+                    && l.OrcamentoBatchFkNavigation.Estado == "APPROVED"
+                    && l.OrcamentoBatchFkNavigation.BudgetPeriodFk == orcamentoConfigFk
+                    && (!institution.HasValue || l.OrganizationFk == institution))
+                .Select(l => new { l.AtividadeFk, l.Valor })
+                .ToList()
+                .Where(l => !offPerimeterAtividadeIds.Contains(l.AtividadeFk))
+                .Sum(l => l.Valor);
+
+            var executado = GetExecucaoDespesaPorCodigo(year, offPerimeterAtividadeIds, institution).Values.Sum();
+
+            return (orcamento, executado);
+        }
+
         // Receita GP (Contribuições) collected amount, bridged from the OLD Contribuições module into
         // the 4 leaf Classificação Económica codes it maps to. Confirmed with the user 2026-07-11:
         //   - "Público" = Entidadeempregadora.EntidadeNatJuridicaFk in (10, 11) — looked up live in

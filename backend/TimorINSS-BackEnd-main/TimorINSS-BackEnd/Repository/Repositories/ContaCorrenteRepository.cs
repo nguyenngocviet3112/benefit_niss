@@ -322,7 +322,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         }
 
 
-        public void UpdateSituacaoPagamento(int contaCorrenteId)
+        public void UpdateSituacaoPagamento(int contaCorrenteId, bool forceRecompute = false)
         {
             var contaCorrente = _moduloContribuicoesContext.Contacorrente.FirstOrDefault(e => e.IdContaCorrente == contaCorrenteId);
 
@@ -333,7 +333,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             // Estado de Guia Paga
             var guiaPagaStatus = contaPagStatus.First(e => e.Valor == 1).IdDominio;
 
-            if (contaCorrente.SituacaoPagamento == guiaPagaStatus) return;
+            if (!forceRecompute && contaCorrente.SituacaoPagamento == guiaPagaStatus) return;
 
 
             var guias = _moduloContribuicoesContext.Guiapagamento.Include(e => e.Movimentosporconciliar.Where(a => a.IndActivo == true))

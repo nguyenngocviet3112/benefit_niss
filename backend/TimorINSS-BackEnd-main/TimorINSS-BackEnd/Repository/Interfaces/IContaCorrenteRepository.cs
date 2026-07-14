@@ -22,7 +22,10 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public void UpdateCorrente(int contraId);
 
-        public void UpdateSituacaoPagamento(int contaCorrenteId);
+        // forceRecompute (2026-07-14, undo-đối-chiếu Guia Pagamento): bỏ qua early-return
+        // "đã là Guia Paga thì không tính lại nữa" — cần thiết khi 1 Guia bị hủy đối chiếu
+        // và IndPago bị hạ xuống lại, nếu không SituacaoPagamento sẽ kẹt ở "Guia Paga" mãi.
+        public void UpdateSituacaoPagamento(int contaCorrenteId, bool forceRecompute = false);
 
 
     }
