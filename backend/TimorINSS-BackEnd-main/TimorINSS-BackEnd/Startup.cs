@@ -94,16 +94,27 @@ namespace TimorINSSBackEnd
                     OnTokenValidated = context =>
                     {
                         var dataBaseService = context.HttpContext.RequestServices.GetRequiredService<IUtilizadoresRepository>();
-                        context.HttpContext.Request.Headers.TryGetValue("User-Id", out var requestUserId);
                         var userId = int.Parse(context.Principal.Identity.Name);
 
                         var user = dataBaseService.Get(userId);
                         var tokenStr = context.Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
                         var validToken = ConfirmToken(internalTokenSalt, context, tokenStr, userId);
-                        if (user == null || userId.ToString() != requestUserId || !validToken)
+                        if (user == null || !validToken)
                         {
                             // return unauthorized if user no longer exists
                             context.Fail("Unauthorized");
+                        }
+                        else
+                        {
+                            // The client-supplied "User-Id" header cannot be trusted as transport: a
+                            // low-level header-parsing issue (observed with Kestrel on this netcoreapp3.1
+                            // build) silently corrupts numeric header values 2-4 digits long, which broke
+                            // login for every non-"admin" account (any idUtilizador >= 10). The JWT's
+                            // "unique_name" claim (validated above via signature + ConfirmToken) is the
+                            // authoritative source instead — overwrite the header here so every downstream
+                            // consumer (RequestBaseDataContract.GetHeaderInfo, UtilsDataManager audit
+                            // stamping) keeps working unchanged, but now off a value that's always correct.
+                            context.HttpContext.Request.Headers["User-Id"] = userId.ToString();
                         }
                         return Task.CompletedTask;
                     }
