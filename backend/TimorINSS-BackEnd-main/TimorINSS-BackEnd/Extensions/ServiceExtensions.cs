@@ -196,6 +196,7 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<ITarefaRepository, TarefaRepository>();
             services.AddScoped<ITaxaJuroMensalRepository, TaxaJuroMensalRepository>();
             services.AddScoped<ITrabalhadoresRepository, TrabalhadoresRepository>();
+            services.AddScoped<IBenefitDataRepository, BenefitDataRepository>();
             services.AddScoped<IUtilizadoresRepository, UtilizadoresRepository>();
             services.AddScoped<IRelCodigoContaAgrupamentoConfigRepository, RelCodigoContaAgrupamentoConfigRepository>();
             services.AddScoped<IComponenteDespesaRegistoRepository, ComponenteDespesaRegistoRepository>();
@@ -265,6 +266,7 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<IComponenteOrcamentoConfigDataManager, ComponenteOrcamentoConfigDataManager>();
             services.AddScoped<IKhachHangDataManager, KhachHangDataManager>();
             services.AddScoped<IBenefitDataManager, BenefitDataManager>();
+            services.AddScoped<IBenefitDataDataManager, BenefitDataDataManager>();
             services.AddScoped<IInstitutionDataManager, InstitutionDataManager>();
 
             //Misc
