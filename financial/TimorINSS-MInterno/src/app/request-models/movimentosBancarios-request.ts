@@ -54,6 +54,7 @@ export interface MovimentosAConciliarFilterRequest {
   tarefaAtivoId?: number;
   filtroConciliado?: FiltroConciliado;
   isReceita?: boolean;
+  bankCode?: string;
   filter: FilterRequest;
 }
 

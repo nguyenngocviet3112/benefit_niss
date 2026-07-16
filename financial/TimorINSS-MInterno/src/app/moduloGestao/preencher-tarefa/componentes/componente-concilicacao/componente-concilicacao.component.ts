@@ -97,7 +97,16 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   public movimentosDisplayType = SelectType.multiple;
   public movimentosList: MovimentosDespesaReceita[] = [];
   public movimentosListOld: MovimentosDespesaReceita[] = [];
-  public movimentosdisplayedColumns: string[] = ['descricao', 'comprovativo', 'documento', 'numPagamentoGuia', 'valor', 'acoes', 'select'];
+  public bankCode?: string;
+  public bankOptions: { key: string; label: string }[] = [];
+
+  public get movimentosdisplayedColumns(): string[] {
+    const base = ['descricao', 'comprovativo', 'documento', 'numPagamentoGuia'];
+    // Bank só có ý nghĩa ở phía Receita (dữ liệu đến từ Guia Pagamento/Invoice)
+    return this.isReceitaSelected
+      ? [...base, 'bankCode', 'valor', 'acoes', 'select']
+      : [...base, 'valor', 'acoes', 'select'];
+  }
   public movimentosTotalRowsTable: number = 0;
   public movimentosPageSizeTable = 20;
   public movimentosPageIndexTable = 0;
@@ -137,6 +146,13 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     }
     else {
       this.spinner.show();
+      this.translate.get('guiaPagamentoListagem.lstBankCode').subscribe((res: any) => {
+        this.bankOptions = Object.keys(res).map((key) => ({
+          key,
+          label: res[key],
+        }));
+      });
+
       let permissinonsRequest: ConciliarMovimentosPermissionsListRequest = <ConciliarMovimentosPermissionsListRequest>{ tarefaAtivoId: this.tarefaActivoId };
       // let dominioCaixas = this.dominiosService.getAllCaixas();
       // let contasBancarias = this.movimentosService.ListContasBancarias();
@@ -343,6 +359,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       tarefaAtivoId: this.apenasMovimentosProcesso ? this.tarefaActivoId : undefined,
       filtroConciliado: filterByConciliados ? FiltroConciliado.Conciliados : FiltroConciliado.NaoConciliados,
       isReceita: this.isReceita,
+      bankCode: this.isReceitaSelected ? this.bankCode : undefined,
       filter: this.movimentosFilter
     };
 
@@ -852,6 +869,18 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     this.movimentosPageSizeTable = 20;
     this.movimentosPageIndexTable = 0;
     this.movimentosFilter = {};
+    this.getMovimentosTable();
+  }
+
+  public onBancoSelected(event: any): void {
+    this.bankCode = event.value;
+    this.movimentosPageIndexTable = 0;
+    this.getMovimentosTable();
+  }
+
+  public clearFilterBanco(): void {
+    this.bankCode = undefined;
+    this.movimentosPageIndexTable = 0;
     this.getMovimentosTable();
   }
 

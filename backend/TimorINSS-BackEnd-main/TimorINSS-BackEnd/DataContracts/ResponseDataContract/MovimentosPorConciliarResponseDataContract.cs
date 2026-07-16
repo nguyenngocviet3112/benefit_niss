@@ -71,6 +71,9 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
 
         [DataMember]
         public bool? isClassificada { get; set; }
+
+        [DataMember]
+        public string bankCode { get; set; }
     }
 
     public enum MovimentosPorConciliarListagemType

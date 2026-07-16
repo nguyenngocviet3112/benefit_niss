@@ -17,7 +17,8 @@ export interface MovimentosDespesaReceita
     centroCusto: number,
     tipoConta: number,
     contaOSS: number,
-    isClassificada?: boolean
+    isClassificada?: boolean,
+    bankCode?: string
 }
 
 export enum MovimentosPorConciliarListagemType {

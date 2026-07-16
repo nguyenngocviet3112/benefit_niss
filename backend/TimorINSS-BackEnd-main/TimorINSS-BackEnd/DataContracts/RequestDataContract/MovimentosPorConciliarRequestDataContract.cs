@@ -15,6 +15,9 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
 
         [DataMember(IsRequired = true)]
         public bool IsReceita { get; set; }
+
+        [DataMember(IsRequired = false)]
+        public string BankCode { get; set; }
     }
 
     [DataContract]

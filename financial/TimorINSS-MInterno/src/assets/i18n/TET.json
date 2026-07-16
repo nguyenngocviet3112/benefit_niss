@@ -1388,6 +1388,8 @@
   "conciliacaoComponent": {
     "conta": "Conta Bancária",
     "caixa": "Caixa",
+    "bankCode": "Banco",
+    "allBanks": "Hotu-hotu",
     "movimentoAConciliar": "Movimentos a Conciliar",
     "verConciliados": "Ver Conciliados",
     "verNaoConciliados": "Ver Não Conciliados",

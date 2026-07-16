@@ -118,7 +118,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     // Filtrar por datas
                     (beginDate.HasValue && endDate.HasValue ? e.DataCriacao >= beginDate && e.DataCriacao <= endDate :
                      beginDate.HasValue && !endDate.HasValue ? e.DataCriacao == beginDate :
-                     true)
+                     true) &&
+                    // Movimento manual, không có Bank riêng — chỉ hiện khi không lọc theo Bank
+                    request.BankCode == null
                )
                .Select(e => new MovimentosPorConciliarListagem
                {
@@ -152,7 +154,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         // Filtrar por datas
                         (beginDate.HasValue && endDate.HasValue ? e.DataCriacao >= beginDate && e.DataCriacao <= endDate :
                          beginDate.HasValue && !endDate.HasValue ? e.DataCriacao == beginDate :
-                         true)
+                         true) &&
+                        // Filtrar por Bank — phải khớp/đồng bộ với Guia Pagamento/Invoice
+                        (request.BankCode == null || e.BankCode == request.BankCode)
                     )
                     .Select(e => new MovimentosPorConciliarListagem
                     {
@@ -169,6 +173,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         type = MovimentosPorConciliarListagemType.GuiaPagamento,
                         editavel = false,
                         isClassificada = e.Movimentosporconciliar.Any(a => a.IndActivo == true && a.CodigoContaCreditoFk != null),
+                        bankCode = e.BankCode,
                     })
                );
                 listaMovimentosPorConciliar = listaMovimentosPorConciliar.Concat(
@@ -184,7 +189,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         // Filtrar por datas
                         (beginDate.HasValue && endDate.HasValue ? e.DataCriacao >= beginDate && e.DataCriacao <= endDate :
                          beginDate.HasValue && !endDate.HasValue ? e.DataCriacao == beginDate :
-                         true)
+                         true) &&
+                        // Nota de crédito thừa kế Bank từ Guia gốc
+                        (request.BankCode == null || e.ReservaGuiaPagamentoFkNavigation.BankCode == request.BankCode)
                     )
                     .Select(e => new MovimentosPorConciliarListagem
                     {
@@ -201,6 +208,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         type = MovimentosPorConciliarListagemType.ReservaCredito,
                         editavel = false,
                         isClassificada = e.Movimentosporconciliar.Any(a => a.IndActivo == true && a.CodigoContaCreditoFk != null),
+                        bankCode = e.ReservaGuiaPagamentoFkNavigation.BankCode,
                     })
                );
             }

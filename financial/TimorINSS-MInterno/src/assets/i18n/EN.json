@@ -1405,6 +1405,8 @@
   "conciliacaoComponent": {
     "conta": "Bank Account",
     "caixa": "Account",
+    "bankCode": "Bank",
+    "allBanks": "All",
     "movimentoAConciliar": "Transactions to be Reconciled",
     "verConciliados": "See Reconciled",
     "verNaoConciliados": "See Non Reconciled",
