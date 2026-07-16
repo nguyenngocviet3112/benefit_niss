@@ -161,7 +161,7 @@
         <div>
           <mat-form-field class="descricaoDespesa" appearance="outline">
             <mat-label>{{'componenteDespesa.descricao' | translate}}</mat-label>
-            <input matInput maxlength="50" type="text" [(ngModel)]="descricaoDespesa" name="DescricaoDespesa"
+            <input matInput maxlength="150" type="text" [(ngModel)]="descricaoDespesa" name="DescricaoDespesa"
               [errorStateMatcher]="matcher" [required]="submittedTry" />
             <mat-error>{{'general.required' | translate}}</mat-error>
           </mat-form-field>

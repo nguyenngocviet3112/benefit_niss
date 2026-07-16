@@ -664,7 +664,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -804,7 +804,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -866,7 +866,7 @@ namespace TimorINSSBackEnd.Models
 
                 entity.Property(e => e.Descricao)
                     .IsRequired()
-                    .HasMaxLength(100)
+                    .HasMaxLength(150)
                     .IsUnicode(false)
                     .HasColumnName("descricao");
 
@@ -875,7 +875,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -1185,7 +1185,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -1241,7 +1241,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -1524,7 +1524,7 @@ namespace TimorINSSBackEnd.Models
                     .HasColumnName("iban");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -1914,7 +1914,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -2098,7 +2098,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.FlagImportado).HasColumnName("flagImportado");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -2180,7 +2180,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -2242,7 +2242,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -2528,7 +2528,7 @@ namespace TimorINSSBackEnd.Models
                     .HasColumnName("descricao");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -2584,7 +2584,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -2642,7 +2642,7 @@ namespace TimorINSSBackEnd.Models
                     .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 
@@ -2751,7 +2751,7 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.IndActivo).HasColumnName("indActivo");
 
                 entity.Property(e => e.Ipv6)
-                    .HasMaxLength(16)
+                    .HasMaxLength(45)
                     .IsUnicode(false)
                     .HasColumnName("ipv6");
 

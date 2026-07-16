@@ -10,7 +10,7 @@
 
             <mat-form-field class="despesaAExecutar" appearance="outline">
                 <mat-label>{{'componenteDespesa.descricaoDespesaRegistada' | translate}}</mat-label>
-                <input matInput maxlength="100" type="text" [(ngModel)]="data.despesaCabimentada.descricaoDespesa" name="nomeDespesa"
+                <input matInput maxlength="150" type="text" [(ngModel)]="data.despesaCabimentada.descricaoDespesa" name="nomeDespesa"
                   [errorStateMatcher]="matcher" [required]="submittedTry" [disabled]="true" />
               </mat-form-field>
 
