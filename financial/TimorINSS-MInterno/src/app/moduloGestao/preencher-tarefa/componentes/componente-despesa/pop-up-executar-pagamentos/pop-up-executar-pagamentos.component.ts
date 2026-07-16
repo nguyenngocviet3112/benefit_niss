@@ -76,6 +76,7 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
   public pagamento = <PagamentoExecutado>{};
   public listaPagamentosExecutadosDestinatario: PagamentoExecutadoDestinatario[] = [];
   public totalPagamentoDestinatario: number = 0;
+  public bankOptions: { key: string; label: string }[] = [];
 
 
   public displayedColumnsDespesasAExecutar: string[] = ['descricao', 'valor', 'valorExecutado', 'faltaExecutar'];
@@ -114,6 +115,13 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
       this.router.navigate([''])
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
+
+      this.translate.get('guiaPagamentoListagem.lstBankCode').subscribe((res: any) => {
+        this.bankOptions = Object.keys(res).map((key) => ({
+          key,
+          label: res[key],
+        }));
+      });
 
       //obter configuração codigos
       this.getOrcamentoAprovado(this.data.tarefaActivoId);
@@ -289,6 +297,7 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
     this.pagamento.numeroConta = element.numeroConta;
     this.pagamento.iban = element.iban;
     this.pagamento.swift = element.swift;
+    this.pagamento.bankCode = element.bankCode;
     this.pagamento.processoId = element.processoId;
     this.pagamento.destinatarioFk = element.destinatario.id;
     this.pagamento.compromissoFk = element.compromissoFk;

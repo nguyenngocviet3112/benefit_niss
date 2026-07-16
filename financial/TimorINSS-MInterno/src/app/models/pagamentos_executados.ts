@@ -11,6 +11,7 @@ export interface PagamentoExecutado
   iban?: string;
   swift?: string;
   numeroConta?: string;
+  bankCode?: string;
   processoId: number;
   codigoContaDebito?: number;
   codigoContaCredito?: number;
@@ -30,6 +31,7 @@ export interface PagamentoExecutadoDestinatario
   iban?: string;
   swift?: string;
   numeroConta?: string;
+  bankCode?: string;
   processoId: number;
   codigoContaDebito?: number;
   codigoContaCredito?: number;

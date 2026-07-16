@@ -604,6 +604,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Estado = _unitOfWork.DominioRepository.getIdDominio("ESTADOPAGAMENTO", 1),
                 Iban = request.Iban,
                 Swift = request.Swift,
+                BankCode = request.BankCode,
                 ProcessoAtivoFk = request.ProcessoId,
                 IndActivo = true,
                 NumeroConta = request.NumeroConta,

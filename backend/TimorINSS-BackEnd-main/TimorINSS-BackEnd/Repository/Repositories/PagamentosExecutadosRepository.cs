@@ -108,7 +108,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                      NumeroConta = u.NumeroConta,
                      CodigoContaCredito = u.CodigoContaCreditoFk,
                      CodigoContaDebito = u.CodigoContaDebitoFk,
-                     DataObrigacao = u.DataObrigacao
+                     DataObrigacao = u.DataObrigacao,
+                     BankCode = u.BankCode
                  })
                 .ToList();
         }
@@ -135,7 +136,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                      NumeroConta = u.NumeroConta,
                      CodigoContaCredito = u.CodigoContaCreditoFk,
                      CodigoContaDebito = u.CodigoContaDebitoFk,
-                     DataObrigacao = u.DataObrigacao
+                     DataObrigacao = u.DataObrigacao,
+                     BankCode = u.BankCode
                  })
                 .ToList();
         }

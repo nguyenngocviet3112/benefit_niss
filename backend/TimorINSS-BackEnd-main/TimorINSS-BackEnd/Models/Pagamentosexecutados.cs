@@ -34,6 +34,7 @@ namespace TimorINSSBackEnd.Models
         public DateTime? DataExecucao { get; set; }
         public int? CompromissoFk { get; set; }
         public string Swift { get; set; }
+        public string BankCode { get; set; }
 
         public virtual Codigoconta CodigoContaCreditoFkNavigation { get; set; }
         public virtual Codigoconta CodigoContaDebitoFkNavigation { get; set; }

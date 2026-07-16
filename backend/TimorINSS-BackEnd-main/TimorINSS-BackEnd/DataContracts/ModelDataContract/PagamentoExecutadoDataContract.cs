@@ -47,6 +47,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         [DataMember]
         public DateTime? DataObrigacao { get; set; }
 
+        [DataMember]
+        public string? BankCode { get; set; }
+
     }
 
     [DataContract]
@@ -96,6 +99,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public DateTime? DataObrigacao { get; set; }
+
+        [DataMember]
+        public string? BankCode { get; set; }
     }
 
     [DataContract]

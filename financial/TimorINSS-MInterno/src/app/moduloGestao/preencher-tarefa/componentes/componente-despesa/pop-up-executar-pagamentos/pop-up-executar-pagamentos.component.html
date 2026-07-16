@@ -122,6 +122,15 @@
             <mat-error *ngIf="!!pagamento.numeroConta">{{'general.wrongFormat' | translate}}</mat-error>
           </mat-form-field>
 
+          <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'guiaPagamentoListagem.bankCode' | translate}}</mat-label>
+            <mat-select [disabled]="!!this.importerId" [(ngModel)]="pagamento.bankCode" name="bankCode">
+              <mat-option *ngFor="let option of bankOptions" [value]="option.key">
+                {{option.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <div class="despesaAExecutar iban-field-wrapper" *ngIf="isIban">
             <mat-form-field appearance="outline">
               <mat-label>{{'componenteDespesa.ibanDestinatario' | translate}}</mat-label>

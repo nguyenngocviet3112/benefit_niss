@@ -2902,6 +2902,10 @@ namespace TimorINSSBackEnd.Models
                     .IsUnicode(false)
                     .HasColumnName("swift");
 
+                entity.Property(e => e.BankCode)
+                    .HasMaxLength(50)
+                    .HasColumnName("bankCode");
+
                 entity.Property(e => e.UtilizadorAlteracao).HasColumnName("utilizadorAlteracao");
 
                 entity.Property(e => e.UtilizadorCriacao).HasColumnName("utilizadorCriacao");
