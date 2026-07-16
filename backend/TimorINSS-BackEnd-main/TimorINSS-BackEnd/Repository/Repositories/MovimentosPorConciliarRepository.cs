@@ -137,6 +137,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                    type = MovimentosPorConciliarListagemType.MovimentoAConciliar,
                    editavel = true,
                    isClassificada = e.CodigoContaCreditoFk != null,
+                   // EF Concat/UNION đòi hỏi mọi nhánh gán đủ property — movimento
+                   // thủ công không có Bank riêng nên gán null tường minh.
+                   bankCode = null,
                });
 
             if (request.IsReceita)
@@ -245,6 +248,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         type = MovimentosPorConciliarListagemType.PagamentoExecutado,
                         editavel = false,
                         isClassificada = e.CodigoContaCreditoFk != null,
+                        bankCode = null,
                     })
                 );
             }
