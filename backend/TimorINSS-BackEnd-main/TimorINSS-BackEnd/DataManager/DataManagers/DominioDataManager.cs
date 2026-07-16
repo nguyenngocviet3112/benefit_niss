@@ -106,7 +106,11 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         {
             DominioDescricaoStringResponse response = new DominioDescricaoStringResponse();
 
-            List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA).Where(x => x.descricao != "Neutro Receita" && x.descricao != "Neutro Despesa" && x.indActivo == true).ToList();
+            // Allow-list Receita/Despesa only. TIPOCONTA is a shared Dominio bucket reused by
+            // other features (Actividade/Funcional entries added later for a different
+            // screen), so block-listing "Neutro *" alone let those leak into the Conciliação
+            // Bancária "movement type" picker even though they aren't transaction types.
+            List<DominioDescricaoString> dominios = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA).Where(x => (x.descricao == "Receita" || x.descricao == "Despesa") && x.indActivo == true).ToList();
             List<DominioDescricaoString> dominiosOut = new List<DominioDescricaoString>();
             if (language != null && language.ToUpper().Contains("EN"))
             {
@@ -116,8 +120,8 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     dominiosOut.Add(dominio);
                 }
                 response.dominios = dominiosOut;
-            } else 
-            { 
+            } else
+            {
                 response.dominios = dominios;
             }
                 return response;
