@@ -241,6 +241,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             IQueryable<Guiapagamento> query = _moduloContribuicoesContext.Guiapagamento
                 .Include(e => e.GuiaEntidadeFkNavigation)
+                .Include(e => e.ContaCorrente)
                 .Where(u => u.IdGuia == decodedId);
 
 
@@ -269,6 +270,14 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         approveFile = e.ApproveFile,
                         qrInvoice = e.QrInvoice,
                         paymentRef = e.PaymentRef,
+                        // Cần đủ để tái tạo đúng design Invoice (đồng bộ với
+                        // getGuiasByFilter/Contribution module) — trước đây thiếu,
+                        // khiến document tạo từ endpoint này (vd. màn Đối soát) không
+                        // thể hiện đúng tên/TIN/EE-TCO.
+                        userName = e.GuiaEntidadeFkNavigation.Nome,
+                        tin = e.GuiaEntidadeFkNavigation.Tin,
+                        valorEntidade = e.ContaCorrente.ValorEntidade,
+                        valorTrabalhador = e.ContaCorrente.ValorTrabalhador,
                         bankCode = e.BankCode,
                         dataCriacao = e.DataCriacao
                     })

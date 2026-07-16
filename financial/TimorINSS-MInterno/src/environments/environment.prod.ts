@@ -8,6 +8,7 @@ export const environment = {
   apiImportsUrl: 'http://localhost:5000/imports',
   ssIcon: 'assets/image/inss_logo.png',
   signatureIcon: 'assets/image/signature_icon.png',
+  signatureNew2026: 'assets/image/signature_new_2026.png',
   checkBoxIcon: 'assets/image/check_box.png',
   stampImage: 'assets/image/stamp_signature.png'
 };

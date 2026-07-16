@@ -19,6 +19,8 @@ import { DominiosService } from 'src/app/services/dominios.service';
 import { movimentosBancariosService } from 'src/app/services/movimentosBancarios.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { base64ToArrayBuffer, formatDatePT, openErrorsDialog, openSnackBar } from 'src/app/utils';
+import { gerarInvoicePDF } from 'src/app/utils-invoice';
+import { GuiaPagamentoService } from 'src/app/services/guiaPagamento.service';
 import { gerarPDF, PopUpMovimentosDesfazerConciliacaoComponent } from './pop-up-movimentos-desfazer-conciliacao/logic';
 import { PopUpMovimentosDespesaReceitaUpsertComponent } from './pop-up-movimentos-despesa-receita-upsert/logic';
 import { PopUpMovimentosUpsertComponent } from './pop-up-movimentos-upsert/logic';
@@ -138,6 +140,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     public snackBar: MatSnackBar,
     public warningDialog: MatDialog,
     public classificarContabilisticaDialog: MatDialog,
+    public guiaPagamentoService: GuiaPagamentoService,
   ) { }
 
   ngOnInit(): void {
@@ -906,7 +909,23 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   }
 
   public gerarPDFDocumento(element: MovimentosDespesaReceita): void {
-    gerarPDF(element, this.translate);
+    // Movimento vem de Guiapagamento (Receita) — buscar registo completo (NISS/TIN/
+    // EE-TCO/QR) para gerar o mesmo design "SOCIAL CONTRIBUTIONS PAYMENT GUIDE" do
+    // Contribution module. Outros tipos (movimento manual/PagamentoExecutado/
+    // ReservaCredito) não são um "Guia/Invoice" — mantém o documento simples atual.
+    if (element.type === MovimentosPorConciliarListagemType.GuiaPagamento) {
+      this.guiaPagamentoService.getGuiasDetailByEntidade({ idGuiaPagamento: element.id, filter: {} }).subscribe(x => {
+        const guia = x.guias?.[0];
+        if (guia) {
+          gerarInvoicePDF(guia, this.translate, this.datepipe);
+        } else {
+          gerarPDF(element, this.translate);
+        }
+      },
+        () => gerarPDF(element, this.translate));
+    } else {
+      gerarPDF(element, this.translate);
+    }
   }
 
   public gerarPDFComprovativo(doc: string) {

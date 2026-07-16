@@ -25,6 +25,10 @@ export interface GuiaListagem
   qrInvoice: string;
   bankCode: string;
   approveFile: string;
+  userName: string;
+  tin?: string;
+  valorEntidade?: number;
+  valorTrabalhador?: number;
 }
 
 
