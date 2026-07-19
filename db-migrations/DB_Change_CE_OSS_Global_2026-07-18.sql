@@ -241,6 +241,14 @@ PRINT CONCAT('Using Actidade bucket reltipo_id = ', @reltipoActidade, ' (current
 DECLARE @nextId INT;
 DECLARE @a07 INT, @a0701 INT;
 
+-- [EN] AGRUPAMENTOCONFIG.id is an IDENTITY column on this environment -- must
+-- allow explicit id values while inserting the 3 new A07 rows below, then turn
+-- it back off right after (best practice -- don't leave it on longer than needed).
+-- [VI] Cột id của AGRUPAMENTOCONFIG là IDENTITY trên môi trường này -- phải cho
+-- phép chèn id tường minh khi tạo 3 dòng A07 mới bên dưới, rồi tắt lại ngay sau
+-- đó (best practice -- không để bật lâu hơn mức cần thiết).
+SET IDENTITY_INSERT dbo.AGRUPAMENTOCONFIG ON;
+
 SELECT @a07 = id FROM AGRUPAMENTOCONFIG WHERE reltipoDeContaOrcamentoConfig_fk=@reltipoActidade AND codigo='A07' AND parent_fk IS NULL AND indActivo=1;
 IF @a07 IS NULL
 BEGIN
@@ -267,6 +275,8 @@ END
 IF NOT EXISTS (SELECT 1 FROM AGRUPAMENTOCONFIG WHERE parent_fk=@a0701 AND codigo='01' AND indActivo=1)
     INSERT INTO AGRUPAMENTOCONFIG (id, codigo, designacao, reltipoDeContaOrcamentoConfig_fk, parent_fk, indActivo, utilizadorCriacao, dataCriacao)
     VALUES ((SELECT ISNULL(MAX(id),0)+1 FROM AGRUPAMENTOCONFIG), '01', 'Gestão do património do FRSS', @reltipoActidade, @a0701, 1, 1, GETDATE());
+
+SET IDENTITY_INSERT dbo.AGRUPAMENTOCONFIG OFF;
 
 PRINT 'A07 Programa/Subprograma/Atividade (only branch actually missing on production): OK. / Nhánh A07 (nhánh duy nhất thật sự thiếu trên production): OK.';
 
