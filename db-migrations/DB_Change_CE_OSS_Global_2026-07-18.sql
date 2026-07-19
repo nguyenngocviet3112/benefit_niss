@@ -110,9 +110,11 @@ WHERE codigo IN ('04','05','06')
       WHERE d.descricao = 'Actidade'
   );
 
-IF EXISTS (SELECT 1 FROM @junkRoots)
+DECLARE @junkCount INT = (SELECT COUNT(*) FROM @junkRoots);
+
+IF @junkCount > 0
 BEGIN
-    PRINT CONCAT('Found ', (SELECT COUNT(*) FROM @junkRoots), ' duplicate junk Programa root(s) from an older run of this script (codigo 04/05/06) -- deactivating them and their children now. / Tìm thấy ', (SELECT COUNT(*) FROM @junkRoots), ' dòng Programa gốc rác (codigo 04/05/06) do chạy bản script cũ trước đây -- đang vô hiệu hoá chúng và các dòng con.');
+    PRINT CONCAT('Found ', @junkCount, ' duplicate junk Programa root(s) from an older run of this script (codigo 04/05/06) -- deactivating them and their children now. / Tìm thấy ', @junkCount, ' dòng Programa gốc rác (codigo 04/05/06) do chạy bản script cũ trước đây -- đang vô hiệu hoá chúng và các dòng con.');
 
     UPDATE AGRUPAMENTOCONFIG SET indActivo = 0
     WHERE indActivo = 1 AND (
