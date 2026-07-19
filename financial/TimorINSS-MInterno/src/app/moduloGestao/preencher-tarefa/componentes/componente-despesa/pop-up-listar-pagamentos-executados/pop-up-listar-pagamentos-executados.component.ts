@@ -29,6 +29,7 @@ export class PopUpListarPagamentosExecutadosComponent implements OnInit {
   public listaPagamentos: ListaPagamentosDoProcesso[]=[];
   public displayedColumnsPagamentosExecutados: string[] = ['numPagamento', 'valor', 'pdf'];
   public listaPagamentosDetails: ListaPagamentosDoProcesso[]=[];
+  public bankOptions: { key: string; label: string }[] = [];
 
 
   constructor(
@@ -49,6 +50,12 @@ export class PopUpListarPagamentosExecutadosComponent implements OnInit {
       this.router.navigate([''])
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
+      this.translate.get('guiaPagamentoListagem.lstBankCode').subscribe((res: any) => {
+        this.bankOptions = Object.keys(res).map((key) => ({
+          key,
+          label: res[key],
+        }));
+      });
       this.getListaPagamentosProcesso();
 
     }
@@ -104,36 +111,63 @@ export class PopUpListarPagamentosExecutadosComponent implements OnInit {
   public gerarPDF(pdfList: ListaPagamentosDoProcesso[], numPagamento: string){
 
     var pdf = new jsPDF();
-    // INSS logo
-    pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
+    const monthKeysPT = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 
-
-    //title
-    JsPdf_centerText(pdf, this.translate.instant('general.ordemPagamento'), 35);
-    // pdf.text('Ordem de Pagamento', 83, 35);
-    pdf.setFontSize(12);
-    pdf.setTextColor(99);
-
-    //Número do Documento
-    JsPdf_centerText(pdf, this.translate.instant('pagamentosExecutados.numeroOrdemPagamento') + ': ' + numPagamento, 45);
-
-
-    var rows: string[][] = [];
+    // Agrupar por Banco + Mês/Ano (dataObrigacao)
+    const groups = new Map<string, ListaPagamentosDoProcesso[]>();
     pdfList.forEach(row => {
-      var temp = [row.contaOGE, row.destinatario.nome, row.destinatario.niss ?? '- ' + '/' + row.destinatario.tin ?? ' -',
-      row.iban ?? row.numeroConta ?? '', '$' + row.valor];
-
-      rows.push(temp);
-
+      const date = row.dataObrigacao ? new Date(row.dataObrigacao) : new Date();
+      const key = `${row.bankCode ?? ''}_${date.getMonth()}_${date.getFullYear()}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key)!.push(row);
     });
 
+    let isFirstPage = true;
+    groups.forEach((rowsForGroup, key) => {
+      if (!isFirstPage) pdf.addPage();
+      isFirstPage = false;
+
+      const [bankCode, monthIndex, year] = key.split('_');
+      const bankLabel = this.bankOptions.find(b => b.key === bankCode)?.label ?? bankCode ?? '';
+      const monthLabel = monthKeysPT[Number(monthIndex)];
+
+      // INSS logo
+      pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
+
+      //title (mantido em Tetun, documento oficial fixo)
+      JsPdf_centerText(pdf, 'Lista Pagamentu Saláriu Funcionáriu INSS', 35);
+      pdf.setFontSize(12);
+      pdf.setTextColor(99);
+
+      //Fulan (Mês) + Banco + Tinan (Ano)
+      JsPdf_centerText(pdf, `Fulan ${monthLabel} ${bankLabel} Tinan ${year}`, 43);
+
+      // Somar valor por destinatário dentro do grupo
+      const byDestinatario = new Map<number, { nome: string; niss: string; numeroConta: string; iban: string; total: number }>();
+      rowsForGroup.forEach(row => {
+        const id = row.destinatario.id;
+        if (!byDestinatario.has(id)) {
+          byDestinatario.set(id, { nome: row.destinatario.nome, niss: row.destinatario.niss ?? '', numeroConta: row.numeroConta ?? '', iban: row.iban ?? '', total: 0 });
+        }
+        const entry = byDestinatario.get(id)!;
+        entry.total = Math.round((entry.total + row.valor) * 100) / 100;
+      });
+
+      var rows: string[][] = [];
+      var stt = 1;
+      var totalPagamentu = 0;
+      byDestinatario.forEach(entry => {
+        rows.push([String(stt++), entry.niss, entry.nome, entry.numeroConta, entry.iban, '$' + entry.total.toFixed(2)]);
+        totalPagamentu = Math.round((totalPagamentu + entry.total) * 100) / 100;
+      });
 
       (pdf as any).autoTable({
-        startY: 55,
-        columnStyles: { europe: { halign: 'center' } },
-        head: [[this.translate.instant('pagamentosExecutados.contaOGE'), this.translate.instant('pagamentosExecutados.destinatario'), "NISS/TIN", this.translate.instant('pagamentosExecutados.iban') + '/' + this.translate.instant('general.NConta'), this.translate.instant('pagamentosExecutados.valor')]],
+        startY: 53,
+        head: [['No', 'NISS', 'Naran Funsionáriu', 'No. Konta Bankária', 'No. IBAN', 'Total Paga']],
         body: rows,
+        foot: [['', '', '', '', 'Total Pagamentu', '$' + totalPagamentu.toFixed(2)]],
         theme: 'grid',
+        columnStyles: { 5: { halign: 'right' } },
         headStyles: {
           fillColor: [42, 129, 204],
           textColor: [0, 0, 0],
@@ -142,7 +176,6 @@ export class PopUpListarPagamentosExecutadosComponent implements OnInit {
           valign: 'middle',
           halign: 'center',
         },
-
         bodyStyles: {
           textColor: [0, 0, 0],
           fontSize: 10,
@@ -150,31 +183,33 @@ export class PopUpListarPagamentosExecutadosComponent implements OnInit {
           valign: 'middle',
           halign: 'center',
         },
-        didDrawCell: (data: { column: { index: any; }; }) => {
-          console.log(data.column.index)
+        footStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontSize: 10,
+          fontStyle: 'bold',
+          halign: 'right',
         }
-
       })
 
-      const img = new Image();
+      const finalY = (pdf as any).lastAutoTable?.finalY ?? 53;
+      const today = new Date();
+      pdf.setFontSize(10);
+      pdf.setTextColor(0);
+      pdf.text(`Dili, ${today.getDate()} de ${monthKeysPT[today.getMonth()]} de ${today.getFullYear()}`, 20, finalY + 15);
 
-      img.onload = function(){
-        const widthCap = 70;
-        const height = img.height;
-        const width = img.width;
+      // Assinaturas: Visto husi (esquerda) + Aprova husi (direita) — apenas texto, sem carimbo/assinatura em imagem
+      pdf.text('Visto husi', 30, finalY + 35);
+      pdf.text('Agus Berek', 20, finalY + 55);
+      pdf.text('Director do Departamento Financeiro', 20, finalY + 60);
 
-        const { width: pdfWidth, height: pdfHeight } = pdf.internal.pageSize;
+      pdf.text('Aprova husi', 130, finalY + 35);
+      pdf.text('Ana Romana Freitas Li', 120, finalY + 55);
+      pdf.text('Diretora Executiva de INSS', 120, finalY + 60);
+    });
 
-        const resolvedHeight = height * widthCap / width;
-
-        // Stamp and Signature
-        pdf.addImage(environment.stampImage, 'JPEG', pdfWidth / 2 - widthCap / 2, pdfHeight - resolvedHeight - 30, widthCap, resolvedHeight);
-
-        // Open PDF document in browser's new tab
-        window.open(URL.createObjectURL(pdf.output("blob")));
-      }
-
-      img.src = environment.stampImage;
+    // Open PDF document in browser's new tab
+    window.open(URL.createObjectURL(pdf.output("blob")));
 
     //pdf.output('dataurlnewwindow');
 

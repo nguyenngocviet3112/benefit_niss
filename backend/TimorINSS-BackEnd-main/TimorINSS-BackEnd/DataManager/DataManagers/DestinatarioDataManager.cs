@@ -279,9 +279,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                                     continue;
                                 }
 
-                                if (!isTimorIban && string.IsNullOrEmpty(destinatario.Swift))
+                                if (!string.IsNullOrEmpty(destinatario.IBAN) && !isTimorIban && string.IsNullOrEmpty(destinatario.Swift))
                                 {
-                                    // json error - SWIFT é obrigatório
+                                    // json error - SWIFT é obrigatório (apenas quando existe um IBAN estrangeiro)
                                     progressJson.Fail++;
                                     progressJson.MissingFields.Add((i + 2) + " - " + destinatario.Name);
                                     File.WriteAllText(filePath, JsonConvert.SerializeObject(progressJson, Formatting.Indented));

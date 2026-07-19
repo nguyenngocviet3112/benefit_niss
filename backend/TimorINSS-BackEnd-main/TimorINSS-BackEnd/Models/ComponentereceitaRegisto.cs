@@ -19,6 +19,7 @@ namespace TimorINSSBackEnd.Models
         public int TipoContaFk { get; set; }
         public int CodigoContaFk { get; set; }
         public int AgrupamentoConfigFk { get; set; }
+        public int? InstitutionId { get; set; }
         public string Descricao { get; set; }
         public decimal Valor { get; set; }
         public int UtilizadorCriacao { get; set; }
@@ -31,6 +32,7 @@ namespace TimorINSSBackEnd.Models
         public int? CodigoContaDebitoFk { get; set; }
 
         public virtual Agrupamentoconfig AgrupamentoConfigFkNavigation { get; set; }
+        public virtual Institution InstitutionFkNavigation { get; set; }
         public virtual Centrocusto CentroCustoFkNavigation { get; set; }
         public virtual Codigoconta CodigoContaDebitoFkNavigation { get; set; }
         public virtual Codigoconta CodigoContaFkNavigation { get; set; }

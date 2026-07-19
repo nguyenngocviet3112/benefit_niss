@@ -7,6 +7,7 @@
     "menu": "Menu",
     "NConta": "Account Number",
     "ordemPagamento": "Payment Order",
+    "listaPagamentoSalario": "Salary Payment List",
     "descricao": "Description",
     "valor": "Amount",
     "total": "Total",
@@ -159,7 +160,7 @@
     "invoiceATCO": "Amount payable by TCO",
     "invoiceSSS": "Social Security Services",
     "invoiceSAS": "Signature and stamp",
-    "period":"Period"
+    "period": "Period"
   },
   "login_form": {
     "title": "Authentication",
@@ -1431,6 +1432,8 @@
     "centroCusto": "Cost Center",
     "iban": "IBAN",
     "ibanNacional": "Nacional IBAN",
+    "aprovaHusi": "Approved by",
+    "numeroSequencial": "No.",
     "relatoriosPagamentosEmitidos": "Reports - Payments issued cost center per month",
     "pagamentosExecutados": "Executed payments",
     "valorNaoSuperiorError": "The amount to be executed must not be greater than the amount to be executed of the selected expense"
@@ -1448,11 +1451,15 @@
     "internalUser": "Internal User"
   },
   "execucaoOrcamental": {
+    "instiutiton": "Institution",
     "contaOGE": "OGE Account",
     "centroCusto": "Cost Center",
     "rubricaClassificacao": "Economic Classification Rubric",
     "valorOrcamentoInicial": "Initial Budget Amount",
     "valorOrcamentado": "Budgeted Amount",
+    "cabimentos": "Commitments (Cabimento)",
+    "compromissos": "Commitments (Compromisso)",
+    "obrigacoes": "Obligations",
     "anoAnterior": "Last year execution",
     "janeiroADezembro": "January to december",
     "janeiro": "January",
@@ -1473,6 +1480,25 @@
     "variacaoExecucao": "Execution variation compared to the same period of the previous year (%)",
     "relatoriosExecucaoOrcamental": "Reports - Budget Execution",
     "tipoConta": "Account Type"
+  },
+  "classificacaoEconomica": {
+    "menuLabel": "CE_OSS_Global",
+    "titulo": "CE_OSS_Global - Total by Economic Classification",
+    "receitas": "REVENUE",
+    "despesas": "EXPENDITURE",
+    "codigo": "Code",
+    "designacao": "Description",
+    "ossInicial": "OSS Initial",
+    "ossCorrigido": "OSS Corrected"
+  },
+  "execucaoPorPrograma": {
+    "menuLabel": "Execução por Programa",
+    "titulo": "Execução Orçamental por Programa (A04-A07)",
+    "legendaOrcamento": "Budget (initial/approved)",
+    "legendaCabimento": "Commitment (Cabimento)",
+    "legendaCompromisso": "Commitment (Compromisso)",
+    "legendaObrigacao": "Obligation",
+    "legendaExecucao": "Execution (payment made)"
   },
   "extratosbancarios": {
     "conta": "Bank account",
@@ -1495,7 +1521,8 @@
     "cabimentada": "Fitted",
     "compromisso": "Commitment",
     "obrigacao": "Obligation",
-    "executada": "Executed",
+    "ordemPagamentoEmitida": "Payment Order Issued",
+    "executada": "Paid (Reconciled)",
     "departamento": "INSS Departament",
     "centroCusto": "Cost Center",
     "tipoConta": "Account Type",

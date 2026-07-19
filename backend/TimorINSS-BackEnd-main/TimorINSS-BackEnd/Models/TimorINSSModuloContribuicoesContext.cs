@@ -105,6 +105,7 @@ namespace TimorINSSBackEnd.Models
 
         public virtual DbSet<Departamento> Departamento { get; set; }
         public virtual DbSet<Institution> Institution { get; set; }
+        public virtual DbSet<RelAgrupamentoConfigClassificacaoEconomica> RelAgrupamentoConfigClassificacaoEconomica { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -149,6 +150,43 @@ namespace TimorINSSBackEnd.Models
                 entity.Property(e => e.UtilizadorAlteracao).HasColumnName("utilizadorAlteracao");
 
                 entity.Property(e => e.UtilizadorCriacao).HasColumnName("utilizadorCriacao");
+            });
+
+            modelBuilder.Entity<RelAgrupamentoConfigClassificacaoEconomica>(entity =>
+            {
+                entity.ToTable("RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.AgrupamentoConfigOrigemFk).HasColumnName("agrupamentoConfigOrigem_fk");
+
+                entity.Property(e => e.AgrupamentoConfigCeFk).HasColumnName("agrupamentoConfigCE_fk");
+
+                entity.Property(e => e.Confianca)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("confianca");
+
+                entity.Property(e => e.IndActivo).HasColumnName("indActivo");
+
+                entity.Property(e => e.UtilizadorCriacao).HasColumnName("utilizadorCriacao");
+
+                entity.Property(e => e.DataCriacao)
+                    .HasColumnType("datetime")
+                    .HasColumnName("dataCriacao");
+
+                entity.HasOne(d => d.AgrupamentoConfigOrigemFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.AgrupamentoConfigOrigemFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RelAgrupamentoConfigCE_Origem");
+
+                entity.HasOne(d => d.AgrupamentoConfigCeFkNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.AgrupamentoConfigCeFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RelAgrupamentoConfigCE_Ce");
             });
 
             modelBuilder.Entity<Agrupamentoconfig>(entity =>
@@ -1285,6 +1323,12 @@ namespace TimorINSSBackEnd.Models
                     .HasForeignKey(d => d.ComponenteOrcamentoRegistoFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_componenteOrcamentoRegisto_receita");
+
+                entity.HasOne(d => d.InstitutionFkNavigation)
+                    .WithMany(p => p.ComponentereceitaRegisto)
+                    .HasForeignKey(d => d.InstitutionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_componentReceitaRegisto_institution");
 
                 entity.HasOne(d => d.DepartamentoFkNavigation)
                     .WithMany(p => p.ComponentereceitaRegisto)

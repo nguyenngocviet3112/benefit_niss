@@ -110,6 +110,8 @@ import { ConsultasExtratosBancariosComponent } from './moduloRelatorios/consulta
 import { ConsultasDespesasComponent } from './moduloRelatorios/consultas/despesas/consultas-despesas.component';
 import { RelatoriosPagamentosEmiditosComponent } from './moduloRelatorios/relatorios/pagamentos-emitidos/reports-pag-emitidos.component';
 import { RelatoriosExecucaoOrcamentalComponent } from './moduloRelatorios/relatorios/execucao-orcamental/reports-execucao-orcamental.component';
+import { RelatoriosExecucaoPorProgramaComponent } from './moduloRelatorios/relatorios/execucao-por-programa/reports-execucao-por-programa.component';
+import { RelatoriosClassificacaoEconomicaComponent } from './moduloRelatorios/relatorios/classificacao-economica/reports-classificacao-economica.component';
 import { PopUpListarPagamentosExecutadosComponent } from './moduloGestao/preencher-tarefa/componentes/componente-despesa/pop-up-listar-pagamentos-executados/pop-up-listar-pagamentos-executados.component';
 import { ConsultasClassificacaoContabilisticaComponent } from './moduloRelatorios/consultas/classificacao-contab/consultas-classificacao-contab.component';
 import { ConsultasReceitasComponent } from './moduloRelatorios/consultas/receitas/consultas-receitas.component';
@@ -137,6 +139,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DialogComponent,
     PopUpWarningComponent,
     RelatoriosExecucaoOrcamentalComponent,
+    RelatoriosExecucaoPorProgramaComponent,
+    RelatoriosClassificacaoEconomicaComponent,
     AdicionarPerfilComponent,
     PopUpGravarCampoComponent,
     LoginComponent,

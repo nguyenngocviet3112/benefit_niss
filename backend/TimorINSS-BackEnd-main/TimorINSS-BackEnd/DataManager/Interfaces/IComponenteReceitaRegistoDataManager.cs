@@ -13,6 +13,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         public ResponseBaseDataContract DeleteReceita(DeleteReceitaRequest request);
 
         public ExecucaoOrcamentalListagemResponse GetExecucaoOrcamental(RelatorioExecucaoOrcamentalListagemRequest request);
+        public ClassificacaoEconomicaExecucaoListagemResponse GetExecucaoOrcamentalPorClassificacaoEconomica(RelatorioClassificacaoEconomicaRequest request);
 
         public StringFileReponse GetExecucaoOrcamentalExcel(RelatorioExecucaoOrcamentalListagemRequest request);
 

@@ -465,6 +465,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Include(e => e.Componenteorcamentovalor)
                 .ThenInclude(e => e.CentroCustoFkNavigation)
                 .Include(e => e.Componenteorcamentovalor)
+                .ThenInclude(e => e.InstitutionFkNavigation)
+                .Include(e => e.Componenteorcamentovalor)
                 .ThenInclude(e => e.ComponenteOrcamentoRegistoFkNavigation)
                 .Include(e => e.ComponentedespesaRegisto)
                 .ThenInclude(e => e.Compromisso)
@@ -477,6 +479,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Select(e => new ExecucaoOrcamentalDataContract()
                 {
                     contaOGE = e.Codigo + " - " + e.Designacao,
+                    // Nome da instituição (INSS/FRSS) associada ao valor orçamentado filtrado
+                    instiutiton = e.Componenteorcamentovalor.Where(a => a.InstitutionId == request.institution && a.InstitutionFkNavigation != null).Select(a => a.InstitutionFkNavigation.Nome).FirstOrDefault(),
                     // Lista de centros de custo
                     centrosCusto = e.Componenteorcamentovalor.Where(a => a.CentroCustoFk.HasValue).Select(a => a.CentroCustoFkNavigation.Descricao),
                     // Rubricas do agrupamento (códigos do 3º nível do agrupamento - InverseParentFkNavigation são os filhos)
@@ -487,6 +491,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     valorOrcamentado = e.Componenteorcamentovalor.Where(a => a.ComponenteOrcamentoRegistoFkNavigation.Aprovado && a.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year && a.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year).Select(a => a.Valor).Last(),
                     // Soma dos pagamentos executados do ano anterior ao filtro
                     valorAnoAnterior = e.ComponentedespesaRegisto.Select(x => x.Compromisso.SelectMany(a => a.Pagamentosexecutados.Where(s => s.IndActivo && s.DataCriacao.Date >= lastYearBegin && s.DataCriacao.Date <= lastYearEnd)).Sum(s => s.ValorExecutado)).Sum(),
+                    // Soma das despesas cabimentadas (ESTADODESPESA = 89 = 'C')
+                    cabimentos = e.ComponentedespesaRegisto.Where(x => x.IndActivo && x.Estado == 89 && x.DataCriacao.Year == request.year).Sum(x => x.Valor),
+                    // Soma dos compromissos assumidos
+                    compromissos = e.ComponentedespesaRegisto.SelectMany(x => x.Compromisso.Where(c => c.IndActivo && c.DataCriacao.Year == request.year)).Sum(c => c.Valor),
+                    // Soma dos pagamentos com obrigação registada (proxy: não existe entidade Obrigação dedicada)
+                    obrigacoes = e.ComponentedespesaRegisto.Select(x => x.Compromisso.SelectMany(a => a.Pagamentosexecutados.Where(s => s.IndActivo && s.DataObrigacao.HasValue && s.DataObrigacao.Value.Year == request.year)).Sum(s => s.ValorExecutado)).Sum(),
                     // Soma dos pagamentos executados de janeiro
                     janeiro = e.ComponentedespesaRegisto.Select(x => x.Compromisso.SelectMany(a => a.Pagamentosexecutados.Where(s => s.IndActivo && s.DataCriacao.Month == 1 && s.DataCriacao.Year == now.Year)).Sum(s => s.ValorExecutado)).Sum(),
                     // Soma dos pagamentos executados de fevereiro
@@ -529,6 +539,227 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return response;
         }
 
+        /// <summary>
+        /// Relatório CE_OSS_Global (Despesa): agrupa por mã Classificação Económica (501-506), não por Conta OGE/Programa.
+        /// Resolve cada Conta OGE (esquema antigo 01-12 OU esquema novo/CE real 50-56, ambos já existentes em AGRUPAMENTOCONFIG)
+        /// para o seu nó-raiz de Classificação Económica -- diretamente se já estiver no esquema novo, ou via a tabela
+        /// de correspondência provisória RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA caso contrário. Ver plano/memória
+        /// "ce-oss-global-prod-dev-feasibility" para o racional completo.
+        /// </summary>
+        public ClassificacaoEconomicaExecucaoListagemResponse GetExecucaoOrcamentalPorClassificacaoEconomica(RelatorioClassificacaoEconomicaRequest request)
+        {
+            ClassificacaoEconomicaExecucaoListagemResponse response = new ClassificacaoEconomicaExecucaoListagemResponse();
+
+            int tipoContaDespesaId = _moduloContribuicoesContext.Dominio
+                .Where(d => d.Dominio1 == "TIPOCONTA" && d.Descricao == "Despesa")
+                .Select(d => d.IdDominio)
+                .First();
+
+            var allNodes = _moduloContribuicoesContext.Agrupamentoconfig
+                .Where(a => a.IndActivo && a.ReltipoDeContaOrcamentoConfigFkNavigation.TipoContaFk == tipoContaDespesaId)
+                .Include(a => a.Componenteorcamentovalor)
+                    .ThenInclude(v => v.ComponenteOrcamentoRegistoFkNavigation)
+                .Include(a => a.ComponentedespesaRegisto)
+                    .ThenInclude(d => d.Compromisso)
+                    .ThenInclude(c => c.Pagamentosexecutados)
+                .ToList()
+                .ToDictionary(a => a.Id);
+
+            var crosswalk = _moduloContribuicoesContext.RelAgrupamentoConfigClassificacaoEconomica
+                .Where(c => c.IndActivo)
+                .ToDictionary(c => c.AgrupamentoConfigOrigemFk, c => c.AgrupamentoConfigCeFk);
+
+            Agrupamentoconfig GetRootAncestor(Agrupamentoconfig node)
+            {
+                var current = node;
+                while (current.ParentFk.HasValue && allNodes.ContainsKey(current.ParentFk.Value))
+                {
+                    current = allNodes[current.ParentFk.Value];
+                }
+                return current;
+            }
+
+            // Código completo (concatena os códigos de todos os ancestrais, mesmo padrão de GetFullCodigoTransactionless)
+            string GetFullCode(Agrupamentoconfig node)
+            {
+                var sb = new System.Text.StringBuilder(node.Codigo);
+                var current = node;
+                while (current.ParentFk.HasValue && allNodes.ContainsKey(current.ParentFk.Value))
+                {
+                    current = allNodes[current.ParentFk.Value];
+                    sb.Insert(0, current.Codigo);
+                }
+                return sb.ToString();
+            }
+
+            int GetDepth(Agrupamentoconfig node)
+            {
+                int depth = 0;
+                var current = node;
+                while (current.ParentFk.HasValue && allNodes.ContainsKey(current.ParentFk.Value))
+                {
+                    current = allNodes[current.ParentFk.Value];
+                    depth++;
+                }
+                return depth;
+            }
+
+            // Resolve para o nó CE exato (não só a raiz) -- preserva o nível real quando o registo já é do
+            // esquema novo; usa o alvo exato do crosswalk (pode ser raiz ou mais fundo) quando é esquema antigo
+            Agrupamentoconfig ResolveToEconomicTarget(int? id)
+            {
+                if (!id.HasValue || !allNodes.ContainsKey(id.Value)) return null;
+
+                var node = allNodes[id.Value];
+                var root = GetRootAncestor(node);
+
+                // Esquema CE já é o novo/real (mã 50-56) -- usa o próprio nó, no nível em que já está
+                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 50 && rootCode <= 56)
+                {
+                    return node;
+                }
+
+                // Esquema antigo -- sobe a cadeia de ancestrais (incluindo o próprio nó) à procura do crosswalk mais próximo
+                var current = node;
+                while (current != null)
+                {
+                    if (crosswalk.TryGetValue(current.Id, out int targetId) && allNodes.ContainsKey(targetId))
+                    {
+                        return allNodes[targetId];
+                    }
+                    current = current.ParentFk.HasValue && allNodes.ContainsKey(current.ParentFk.Value) ? allNodes[current.ParentFk.Value] : null;
+                }
+
+                return null; // sem correspondência -- fica fora do relatório até haver crosswalk
+            }
+
+            var resultado = new Dictionary<int, ClassificacaoEconomicaExecucaoDataContract>();
+
+            ClassificacaoEconomicaExecucaoDataContract GetOrCreate(Agrupamentoconfig node)
+            {
+                if (!resultado.TryGetValue(node.Id, out var item))
+                {
+                    item = new ClassificacaoEconomicaExecucaoDataContract
+                    {
+                        codigoCE = GetFullCode(node),
+                        designacaoCE = node.Designacao,
+                        nivel = GetDepth(node)
+                    };
+                    resultado[node.Id] = item;
+                }
+                return item;
+            }
+
+            // Credita o valor no nó-alvo E em todos os seus ancestrais (rollup), para que cada nível
+            // (raiz/sub/sub-sub) mostre a soma de tudo o que está por baixo dele, como no ficheiro Excel original
+            void CreditAncestors(Agrupamentoconfig target, Action<ClassificacaoEconomicaExecucaoDataContract> apply)
+            {
+                var current = target;
+                while (current != null)
+                {
+                    apply(GetOrCreate(current));
+                    current = current.ParentFk.HasValue && allNodes.ContainsKey(current.ParentFk.Value) ? allNodes[current.ParentFk.Value] : null;
+                }
+            }
+
+            // Orçamento (OSS inicial / OSS corrigido), por Conta OGE original, depois agregado por raiz CE
+            var orcamentoPorConta = allNodes.Values
+                .Where(a => a.Componenteorcamentovalor.Any(v => v.InstitutionId == request.institution
+                    && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
+                    && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year))
+                .Select(a => new
+                {
+                    AgrupamentoId = a.Id,
+                    ValorInicial = a.Componenteorcamentovalor
+                        .Where(v => v.InstitutionId == request.institution
+                            && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
+                            && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
+                        .Select(v => v.Valor).FirstOrDefault(),
+                    ValorCorrigido = a.Componenteorcamentovalor
+                        .Where(v => v.InstitutionId == request.institution
+                            && v.ComponenteOrcamentoRegistoFkNavigation.Aprovado
+                            && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
+                            && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
+                        .Select(v => v.Valor).LastOrDefault()
+                })
+                .ToList();
+
+            foreach (var item in orcamentoPorConta)
+            {
+                var target = ResolveToEconomicTarget(item.AgrupamentoId);
+                if (target == null) continue;
+                CreditAncestors(target, ce =>
+                {
+                    ce.valorOrcamentoInicial += item.ValorInicial;
+                    ce.valorOrcamentado += item.ValorCorrigido;
+                });
+            }
+
+            // Execução mensal (Pagamentosexecutados), por Conta OGE original, depois agregado por raiz CE
+            var despesaPorConta = allNodes.Values
+                .Select(a => new
+                {
+                    AgrupamentoId = a.Id,
+                    Janeiro = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 1 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Fevereiro = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 2 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Marco = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 3 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Abril = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 4 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Maio = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 5 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Junho = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 6 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Julho = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 7 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Agosto = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 8 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Setembro = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 9 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Outubro = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 10 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Novembro = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 11 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                    Dezembro = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 12 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                })
+                .Where(x => x.Janeiro != 0 || x.Fevereiro != 0 || x.Marco != 0 || x.Abril != 0 || x.Maio != 0 || x.Junho != 0
+                    || x.Julho != 0 || x.Agosto != 0 || x.Setembro != 0 || x.Outubro != 0 || x.Novembro != 0 || x.Dezembro != 0)
+                .ToList();
+
+            foreach (var item in despesaPorConta)
+            {
+                var target = ResolveToEconomicTarget(item.AgrupamentoId);
+                if (target == null) continue;
+                CreditAncestors(target, ce =>
+                {
+                    ce.janeiro += item.Janeiro;
+                    ce.fevereiro += item.Fevereiro;
+                    ce.marco += item.Marco;
+                    ce.abril += item.Abril;
+                    ce.maio += item.Maio;
+                    ce.junho += item.Junho;
+                    ce.julho += item.Julho;
+                    ce.agosto += item.Agosto;
+                    ce.setembro += item.Setembro;
+                    ce.outubro += item.Outubro;
+                    ce.novembro += item.Novembro;
+                    ce.dezembro += item.Dezembro;
+                });
+            }
+
+            // Garante que TODOS os nós da árvore CE (esquema novo/real, mã 50-56) aparecem no relatório,
+            // mesmo com valor zero -- tal como no ficheiro Excel original do cliente
+            foreach (var node in allNodes.Values)
+            {
+                var root = GetRootAncestor(node);
+                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 50 && rootCode <= 56)
+                {
+                    GetOrCreate(node);
+                }
+            }
+
+            foreach (var ce in resultado.Values)
+            {
+                ce.totalExecucao = ce.janeiro + ce.fevereiro + ce.marco + ce.abril + ce.maio + ce.junho + ce.julho + ce.agosto + ce.setembro + ce.outubro + ce.novembro + ce.dezembro;
+                ce.taxaExecucao = ce.valorOrcamentado == 0 || ce.totalExecucao == 0 ? 0 : ce.totalExecucao / ce.valorOrcamentado;
+            }
+
+            response.lista = resultado.Values.OrderBy(c => c.codigoCE).ToList();
+
+            return response;
+        }
+
 
         public List<ListaPagamentosDoProcessoDataContract> GetListaPagamentosByProcessoAtivoID(int processoAtivoId)
         {
@@ -566,7 +797,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                      NumeroConta = u.NumeroConta,
                      CodigoContaCredito = u.CodigoContaCreditoFk,
                      CodigoContaDebito = u.CodigoContaDebitoFk,
-                     DataObrigacao = u.DataObrigacao
+                     DataObrigacao = u.DataObrigacao,
+                     BankCode = u.BankCode
                  })
                 .ToList();
         }

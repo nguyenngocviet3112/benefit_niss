@@ -142,6 +142,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public DateTime? DataObrigacao { get; set; }
+
+        [DataMember]
+        public string? BankCode { get; set; }
     }
 
     public class ClassificacaoContabilisticaExecucao

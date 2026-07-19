@@ -11,3 +11,8 @@ export interface GetExecucaoOrcamentalRelatoriosRequest extends FilterRequest {
   tipoConta: number;
   institution: number;
 }
+
+export interface GetExecucaoOrcamentalClassificacaoEconomicaRequest {
+  year: number;
+  institution: number;
+}

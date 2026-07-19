@@ -192,8 +192,16 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         .Where(u => u.IndActivo &&
                                     ((estadosDespesa.Any() && estadosDespesa.Contains(u.Estado)) ||
                                      (estadoPagamento.HasValue && u.Compromisso.Any(x => x.Pagamentosexecutados.Any(e => e.IndActivo && e.Estado == estadoPagamento)) ||
-                                     (tipo == EstadoDespesaEnum.Executado && u.Compromisso.Any(x => x.Pagamentosexecutados.Any(e => e.IndActivo && e.RelMovimentosporconciliarMovimentos.Any(a => a.IndActivo == true)))))) &&
-                                    (beginDate.HasValue && !endDate.HasValue ? u.DataAlteracao.Value.Date == beginDate :
+                                     (tipo == EstadoDespesaEnum.Executado && u.Compromisso.Any(x => x.Pagamentosexecutados.Any(e => e.IndActivo && e.RelMovimentosporconciliarMovimentos.Any(a => a.IndActivo == true)))) ||
+                                     // Obrigação real: comprovativo (Carregar Documentos) + confirmação (Texto) registados na tarefa RD05 "Liquidação da despesa" (tarefaconfig id 7) do mesmo processo
+                                     (tipo == EstadoDespesaEnum.Obricacao && u.TarefaActivoFkNavigation.ProcessoAtivoFkNavigation.Tarefaativo
+                                         .Any(ta => ta.TarefaconfigFk == 7
+                                             && ta.ComponentedocumentoRegisto.Any(d => d.IndActivo)
+                                             && ta.ComponentetextoRegisto.Any(t => t.IndActivo && t.Texto != null && t.Texto != ""))))) &&
+                                    // Data-only = from that date onward; Data de Fim-only = up to that date; both = range; neither = no filter.
+                                    // Fixed 2026-07-18 (was: Data-only matched that exact single day, confusing "from/to" semantics.)
+                                    (beginDate.HasValue && !endDate.HasValue ? u.DataAlteracao.Value.Date >= beginDate :
+                                     !beginDate.HasValue && endDate.HasValue ? u.DataAlteracao.Value.Date <= endDate :
                                      beginDate.HasValue && endDate.HasValue ? u.DataAlteracao.Value.Date >= beginDate && u.DataAlteracao <= endDate : true))
                         .Select(u => new DespesasRelatoriosDataContract
                         {
@@ -233,8 +241,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         .Include(e => e.ComponenteDespesaRegistoFkNavigation)
                         .ThenInclude(e => e.AgrupamentoConfigFkNavigation)
                         .ThenInclude(e => e.ParentFkNavigation)
-                        .Where(u => u.IndActivo && 
-                                    (beginDate.HasValue && !endDate.HasValue ? u.DataAlteracao.HasValue ? u.DataAlteracao.Value.Date == beginDate : u.DataCriacao.Date == beginDate :
+                        .Where(u => u.IndActivo &&
+                                    // Data-only = from that date onward; Data de Fim-only = up to that date; both = range; neither = no filter.
+                                    // Fixed 2026-07-18 (was: Data-only matched that exact single day, confusing "from/to" semantics.)
+                                    (beginDate.HasValue && !endDate.HasValue ? u.DataAlteracao.HasValue ? u.DataAlteracao.Value.Date >= beginDate : u.DataCriacao.Date >= beginDate :
+                                     !beginDate.HasValue && endDate.HasValue ? u.DataAlteracao.HasValue ? u.DataAlteracao.Value.Date <= endDate : u.DataCriacao.Date <= endDate :
                                      beginDate.HasValue && endDate.HasValue ? u.DataAlteracao.HasValue ? u.DataAlteracao.Value.Date >= beginDate && u.DataAlteracao.Value.Date <= endDate : u.DataCriacao.Date >= beginDate && u.DataCriacao.Date <= endDate : true))
                         .Select(u => new DespesasRelatoriosDataContract
                         {
@@ -291,6 +302,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     break;
                 case EstadoDespesaEnum.Executado:
                     estado = _localizer["executada"].Value;
+                    break;
+                case EstadoDespesaEnum.OrdemPagamentoEmitida:
+                    estado = _localizer["ordemPagamentoEmitida"].Value;
                     break;
                 default:
                     break;

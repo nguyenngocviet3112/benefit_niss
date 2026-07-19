@@ -48,7 +48,7 @@ export class RelatoriosExecucaoOrcamentalComponent implements OnInit {
 
   //Region tarefa table
   public contasList: RelatoriosExecucaoOrcamentalListagem[] = [];
-  public displayedColumns: string[] = ['instiutiton','conta', 'centroCusto', 'rubrica', 'valorOrcamentoInicial', 'valorOrcamentado', 'valorAnoAnterior', 'janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro', 'totalExecucao', 'taxaExecucao', 'variacaoExecucao'];
+  public displayedColumns: string[] = ['instiutiton','conta', 'centroCusto', 'rubrica', 'valorOrcamentoInicial', 'valorOrcamentado', 'cabimentos', 'compromissos', 'obrigacoes', 'valorAnoAnterior', 'janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro', 'totalExecucao', 'taxaExecucao', 'variacaoExecucao'];
   public totalRowsTable: number = 0;
   public pageSizeTable = 20;
   public pageIndexTable = 0;

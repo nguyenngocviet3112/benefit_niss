@@ -239,6 +239,225 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return response;
         }
 
+        /// <summary>
+        /// Relatório CE_OSS_Global (Receita): mesma lógica de resolução do lado Despesa
+        /// (ver PagamentosExecutadosRepository.GetExecucaoOrcamentalPorClassificacaoEconomica), mas usando o bucket
+        /// "Receita" de TIPOCONTA e os movimentos bancários conciliados (ComponentereceitaRegistoMovimentos) como
+        /// fonte de execução mensal em vez de Pagamentosexecutados.
+        /// </summary>
+        public ClassificacaoEconomicaExecucaoListagemResponse GetExecucaoOrcamentalPorClassificacaoEconomica(RelatorioClassificacaoEconomicaRequest request)
+        {
+            ClassificacaoEconomicaExecucaoListagemResponse response = new ClassificacaoEconomicaExecucaoListagemResponse();
+
+            int tipoContaReceitaId = _moduloContribuicoesContext.Dominio
+                .Where(d => d.Dominio1 == "TIPOCONTA" && d.Descricao == "Receita")
+                .Select(d => d.IdDominio)
+                .First();
+
+            var allNodes = _moduloContribuicoesContext.Agrupamentoconfig
+                .Where(a => a.IndActivo && a.ReltipoDeContaOrcamentoConfigFkNavigation.TipoContaFk == tipoContaReceitaId)
+                .Include(a => a.Componenteorcamentovalor)
+                    .ThenInclude(v => v.ComponenteOrcamentoRegistoFkNavigation)
+                .Include(a => a.ComponentereceitaRegisto)
+                    .ThenInclude(r => r.ComponentereceitaRegistoMovimentos)
+                    .ThenInclude(m => m.RelMovimentosPorConciliarMovimentos)
+                    .ThenInclude(rm => rm.MovimentosBancariosFkNavigation)
+                .ToList()
+                .ToDictionary(a => a.Id);
+
+            var crosswalk = _moduloContribuicoesContext.RelAgrupamentoConfigClassificacaoEconomica
+                .Where(c => c.IndActivo)
+                .ToDictionary(c => c.AgrupamentoConfigOrigemFk, c => c.AgrupamentoConfigCeFk);
+
+            Agrupamentoconfig GetRootAncestor(Agrupamentoconfig node)
+            {
+                var current = node;
+                while (current.ParentFk.HasValue && allNodes.ContainsKey(current.ParentFk.Value))
+                {
+                    current = allNodes[current.ParentFk.Value];
+                }
+                return current;
+            }
+
+            // Código completo (concatena os códigos de todos os ancestrais, mesmo padrão de GetFullCodigoTransactionless)
+            string GetFullCode(Agrupamentoconfig node)
+            {
+                var sb = new System.Text.StringBuilder(node.Codigo);
+                var current = node;
+                while (current.ParentFk.HasValue && allNodes.ContainsKey(current.ParentFk.Value))
+                {
+                    current = allNodes[current.ParentFk.Value];
+                    sb.Insert(0, current.Codigo);
+                }
+                return sb.ToString();
+            }
+
+            int GetDepth(Agrupamentoconfig node)
+            {
+                int depth = 0;
+                var current = node;
+                while (current.ParentFk.HasValue && allNodes.ContainsKey(current.ParentFk.Value))
+                {
+                    current = allNodes[current.ParentFk.Value];
+                    depth++;
+                }
+                return depth;
+            }
+
+            // Resolve para o nó CE exato (não só a raiz) -- preserva o nível real quando o registo já é do
+            // esquema novo; usa o alvo exato do crosswalk (pode ser raiz ou mais fundo) quando é esquema antigo
+            Agrupamentoconfig ResolveToEconomicTarget(int? id)
+            {
+                if (!id.HasValue || !allNodes.ContainsKey(id.Value)) return null;
+
+                var node = allNodes[id.Value];
+                var root = GetRootAncestor(node);
+
+                // Esquema CE já é o novo/real (mã 41-49) -- usa o próprio nó, no nível em que já está
+                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 41 && rootCode <= 49)
+                {
+                    return node;
+                }
+
+                // Esquema antigo -- sobe a cadeia de ancestrais (incluindo o próprio nó) à procura do crosswalk mais próximo
+                var current = node;
+                while (current != null)
+                {
+                    if (crosswalk.TryGetValue(current.Id, out int targetId) && allNodes.ContainsKey(targetId))
+                    {
+                        return allNodes[targetId];
+                    }
+                    current = current.ParentFk.HasValue && allNodes.ContainsKey(current.ParentFk.Value) ? allNodes[current.ParentFk.Value] : null;
+                }
+
+                return null; // sem correspondência -- fica fora do relatório até haver crosswalk
+            }
+
+            var resultado = new Dictionary<int, ClassificacaoEconomicaExecucaoDataContract>();
+
+            ClassificacaoEconomicaExecucaoDataContract GetOrCreate(Agrupamentoconfig node)
+            {
+                if (!resultado.TryGetValue(node.Id, out var item))
+                {
+                    item = new ClassificacaoEconomicaExecucaoDataContract
+                    {
+                        codigoCE = GetFullCode(node),
+                        designacaoCE = node.Designacao,
+                        nivel = GetDepth(node)
+                    };
+                    resultado[node.Id] = item;
+                }
+                return item;
+            }
+
+            // Credita o valor no nó-alvo E em todos os seus ancestrais (rollup), para que cada nível
+            // (raiz/sub/sub-sub) mostre a soma de tudo o que está por baixo dele, como no ficheiro Excel original
+            void CreditAncestors(Agrupamentoconfig target, Action<ClassificacaoEconomicaExecucaoDataContract> apply)
+            {
+                var current = target;
+                while (current != null)
+                {
+                    apply(GetOrCreate(current));
+                    current = current.ParentFk.HasValue && allNodes.ContainsKey(current.ParentFk.Value) ? allNodes[current.ParentFk.Value] : null;
+                }
+            }
+
+            // Orçamento (OSS inicial / OSS corrigido), por Conta OGE original, depois agregado por raiz CE
+            var orcamentoPorConta = allNodes.Values
+                .Where(a => a.Componenteorcamentovalor.Any(v => v.InstitutionId == request.institution
+                    && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
+                    && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year))
+                .Select(a => new
+                {
+                    AgrupamentoId = a.Id,
+                    ValorInicial = a.Componenteorcamentovalor
+                        .Where(v => v.InstitutionId == request.institution
+                            && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
+                            && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
+                        .Select(v => v.Valor).FirstOrDefault(),
+                    ValorCorrigido = a.Componenteorcamentovalor
+                        .Where(v => v.InstitutionId == request.institution
+                            && v.ComponenteOrcamentoRegistoFkNavigation.Aprovado
+                            && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
+                            && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
+                        .Select(v => v.Valor).LastOrDefault()
+                })
+                .ToList();
+
+            foreach (var item in orcamentoPorConta)
+            {
+                var target = ResolveToEconomicTarget(item.AgrupamentoId);
+                if (target == null) continue;
+                CreditAncestors(target, ce =>
+                {
+                    ce.valorOrcamentoInicial += item.ValorInicial;
+                    ce.valorOrcamentado += item.ValorCorrigido;
+                });
+            }
+
+            // Execução mensal (movimentos bancários conciliados), por Conta OGE original, depois agregado por raiz CE
+            var receitaPorConta = allNodes.Values
+                .Select(a => new
+                {
+                    AgrupamentoId = a.Id,
+                    Janeiro = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 1 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Fevereiro = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 2 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Marco = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 3 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Abril = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 4 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Maio = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 5 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Junho = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 6 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Julho = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 7 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Agosto = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 8 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Setembro = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 9 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Outubro = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 10 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Novembro = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 11 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                    Dezembro = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.ComponentereceitaRegistoMovimentos.Any(m => m.IndActivo.Value && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Month == 12 && m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.DataValor.Year == request.year)).Sum(s => s.ComponentereceitaRegistoMovimentos.Where(m => m.IndActivo.Value).Sum(m => m.RelMovimentosPorConciliarMovimentos.MovimentosBancariosFkNavigation.Credito.Value)),
+                })
+                .ToList();
+
+            foreach (var item in receitaPorConta)
+            {
+                var target = ResolveToEconomicTarget(item.AgrupamentoId);
+                if (target == null) continue;
+                CreditAncestors(target, ce =>
+                {
+                    ce.janeiro += item.Janeiro;
+                    ce.fevereiro += item.Fevereiro;
+                    ce.marco += item.Marco;
+                    ce.abril += item.Abril;
+                    ce.maio += item.Maio;
+                    ce.junho += item.Junho;
+                    ce.julho += item.Julho;
+                    ce.agosto += item.Agosto;
+                    ce.setembro += item.Setembro;
+                    ce.outubro += item.Outubro;
+                    ce.novembro += item.Novembro;
+                    ce.dezembro += item.Dezembro;
+                });
+            }
+
+            // Garante que TODOS os nós da árvore CE (esquema novo/real, mã 41-49) aparecem no relatório,
+            // mesmo com valor zero -- tal como no ficheiro Excel original do cliente
+            foreach (var node in allNodes.Values)
+            {
+                var root = GetRootAncestor(node);
+                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 41 && rootCode <= 49)
+                {
+                    GetOrCreate(node);
+                }
+            }
+
+            foreach (var ce in resultado.Values)
+            {
+                ce.totalExecucao = ce.janeiro + ce.fevereiro + ce.marco + ce.abril + ce.maio + ce.junho + ce.julho + ce.agosto + ce.setembro + ce.outubro + ce.novembro + ce.dezembro;
+                ce.taxaExecucao = ce.valorOrcamentado == 0 || ce.totalExecucao == 0 ? 0 : ce.totalExecucao / ce.valorOrcamentado;
+            }
+
+            response.lista = resultado.Values.OrderBy(c => c.codigoCE).ToList();
+
+            return response;
+        }
+
         public GetDespesasRelatoriosReponse ReceitasRelatorios(SearchFilterRequest request)
         {
             GetDespesasRelatoriosReponse response = new GetDespesasRelatoriosReponse();

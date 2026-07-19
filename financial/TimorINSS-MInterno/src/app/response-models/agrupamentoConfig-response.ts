@@ -14,11 +14,15 @@ export interface RelatoriosExecucaoOrcamentalListagemResponse {
 }
 
 export interface RelatoriosExecucaoOrcamentalListagem {
-  instiutitons: string[];
+  instiutiton: string;
   contaOGE: string;
   centrosCusto: string[];
   rubricas: string[];
+  valorOrcamentoInicial: number;
   valorOrcamentado: number;
+  cabimentos: number;
+  compromissos: number;
+  obrigacoes: number;
   valorAnoAnterior: number;
   janeiro: number;
   fevereiro: number;
@@ -35,5 +39,31 @@ export interface RelatoriosExecucaoOrcamentalListagem {
   totalExecucao: number;
   taxaExecucao: number;
   variacaoExecucao: number;
+}
+
+export interface ClassificacaoEconomicaExecucaoListagemResponse {
+  lista: ClassificacaoEconomicaExecucaoListagem[];
+}
+
+export interface ClassificacaoEconomicaExecucaoListagem {
+  codigoCE: string;
+  designacaoCE: string;
+  nivel: number;
+  valorOrcamentoInicial: number;
+  valorOrcamentado: number;
+  janeiro: number;
+  fevereiro: number;
+  marco: number;
+  abril: number;
+  maio: number;
+  junho: number;
+  julho: number;
+  agosto: number;
+  setembro: number;
+  outubro: number;
+  novembro: number;
+  dezembro: number;
+  totalExecucao: number;
+  taxaExecucao: number;
 }
 

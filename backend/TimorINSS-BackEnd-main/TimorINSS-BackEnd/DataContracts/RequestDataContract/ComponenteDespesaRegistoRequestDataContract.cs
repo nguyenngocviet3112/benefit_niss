@@ -72,7 +72,8 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         Cabimentado = 2,
         Compromisso = 3,
         Obricacao = 4,
-        Executado = 5
+        Executado = 5,
+        OrdemPagamentoEmitida = 6
     }
 
     [DataContract]

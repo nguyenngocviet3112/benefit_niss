@@ -51,6 +51,7 @@ export interface ListaPagamentosDoProcesso
   codigoContaDebito?: number;
   codigoContaCredito?: number;
   dataObrigacao?: Date;
+  bankCode?: string;
 }
 
 export interface ClassificacaoContabilisticaResponse{

@@ -579,6 +579,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Estado = _unitOfWork.DominioRepository.getIdDominio("ESTADOPAGAMENTO", 1),
                 Iban = pag.IBAN ?? null,
                 Swift = pag.Swift ?? null,
+                BankCode = request.BankCode,
                 ProcessoAtivoFk = request.ProcessoId,
                 IndActivo = true,
                 NumeroConta = string.IsNullOrEmpty(pag.IBAN) ? pag.AccountNumber : null,
@@ -883,6 +884,31 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             try
             {
                 response = _unitOfWork.PagamentosExecutadosRepository.GetExecucaoOrcamental(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors = new List<Error> { new Error { ErrorCode = "-1", ErrorMessage = e.Message } };
+            }
+
+            return response;
+        }
+
+        public ClassificacaoEconomicaExecucaoListagemResponse GetExecucaoOrcamentalPorClassificacaoEconomica(RelatorioClassificacaoEconomicaRequest request)
+        {
+            ClassificacaoEconomicaExecucaoListagemResponse response = new ClassificacaoEconomicaExecucaoListagemResponse();
+
+            // Validar se o utilizador tem as permissões necessárias
+            bool permission = _utils.ValidatePermission((int)request.UserId, (int)ModuleRelatorios.Relatorios, _unitOfWork);
+
+            if (!permission)
+            {
+                response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
+                return response;
+            }
+
+            try
+            {
+                response = _unitOfWork.PagamentosExecutadosRepository.GetExecucaoOrcamentalPorClassificacaoEconomica(request);
             }
             catch (Exception e)
             {

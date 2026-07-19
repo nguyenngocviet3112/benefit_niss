@@ -151,7 +151,10 @@
     <value>Estado de Despesa</value>
   </data>
   <data name="executada" xml:space="preserve">
-    <value>Executada</value>
+    <value>Selu Ona (Konsilia)</value>
+  </data>
+  <data name="ordemPagamentoEmitida" xml:space="preserve">
+    <value>Ordem Pagamentu Sai Ona</value>
   </data>
   <data name="numeroProcesso" xml:space="preserve">
     <value>N.º processo</value>

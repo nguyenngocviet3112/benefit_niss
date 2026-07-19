@@ -29,6 +29,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         public SelectDescriptionResponse GetCentrosCusto(SearchFilterRequest request);
 
         public ExecucaoOrcamentalListagemResponse GetExecucaoOrcamental(RelatorioExecucaoOrcamentalListagemRequest request);
+        public ClassificacaoEconomicaExecucaoListagemResponse GetExecucaoOrcamentalPorClassificacaoEconomica(RelatorioClassificacaoEconomicaRequest request);
 
         public StringFileReponse GetExecucaoOrcamentalExcel(RelatorioExecucaoOrcamentalListagemRequest request);
         public DestinatarioPagamentoExecutadosResponse GetListaPagamentoExcel(ListagemPagamentosProcessoRequest request);

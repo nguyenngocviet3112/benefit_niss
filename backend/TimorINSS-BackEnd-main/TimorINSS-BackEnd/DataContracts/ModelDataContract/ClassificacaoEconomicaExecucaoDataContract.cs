@@ -1,40 +1,24 @@
-﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 {
     [DataContract]
-    public class ExecucaoOrcamentalDataContract
+    public class ClassificacaoEconomicaExecucaoDataContract
     {
         [DataMember]
-        public string contaOGE { get; set; }
+        public string codigoCE { get; set; }
 
         [DataMember]
-        public IEnumerable<string> centrosCusto { get; set; }
+        public string designacaoCE { get; set; }
 
         [DataMember]
-        public string instiutiton { get; set; }
-
-        [DataMember]
-        public IEnumerable<string> rubricas { get; set; }
+        public int nivel { get; set; }
 
         [DataMember]
         public decimal valorOrcamentoInicial { get; set; }
 
         [DataMember]
         public decimal valorOrcamentado { get; set; }
-
-        [DataMember]
-        public decimal valorAnoAnterior { get; set; }
-
-        [DataMember]
-        public decimal cabimentos { get; set; }
-
-        [DataMember]
-        public decimal compromissos { get; set; }
-
-        [DataMember]
-        public decimal obrigacoes { get; set; }
 
         [DataMember]
         public decimal janeiro { get; set; }
@@ -77,8 +61,5 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
 
         [DataMember]
         public decimal taxaExecucao { get; set; }
-
-        [DataMember]
-        public decimal variacaoExecucao { get; set; }
     }
 }

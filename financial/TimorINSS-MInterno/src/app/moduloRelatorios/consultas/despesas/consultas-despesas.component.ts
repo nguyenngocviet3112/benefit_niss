@@ -49,6 +49,10 @@ export class ConsultasDespesasComponent implements OnInit {
       nome: 'despesas.obrigacao'
     },
     {
+      id: 6,
+      nome: 'despesas.ordemPagamentoEmitida'
+    },
+    {
       id: 5,
       nome: 'despesas.executada'
     },

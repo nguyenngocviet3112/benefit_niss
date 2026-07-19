@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DeleteReceitaRequest, GetComponenteReceitaRegistoByIdContaOSSRequest, ReceitasNaoConciliadasRelatorioRequest, RegistoReceitaRequest } from '../request-models/componenteReceitaRegisto-request';
 import { ComponenteReceitaRegistoResponse } from '../response-models/componenteReceitaRegisto-response';
-import { GetExecucaoOrcamentalRelatoriosRequest } from '../request-models/agrupamentoConfig-request';
-import { RelatoriosExecucaoOrcamentalListagemResponse } from '../response-models/agrupamentoConfig-response';
+import { GetExecucaoOrcamentalRelatoriosRequest, GetExecucaoOrcamentalClassificacaoEconomicaRequest } from '../request-models/agrupamentoConfig-request';
+import { RelatoriosExecucaoOrcamentalListagemResponse, ClassificacaoEconomicaExecucaoListagemResponse } from '../response-models/agrupamentoConfig-response';
 import { FilterRequest } from '../request-models/utils-request';
 import { ReceitaNaoConciliadaRelatorioResponse, ReceitaRelatorioResponse } from '../models/componenteReceitaRegisto';
 import { ApiHelperService } from './api-helper.service';
@@ -41,6 +41,10 @@ export class ComponenteReceitaRegistoService {
 
   public GetExecucaoOrcamentalExcel(request: GetExecucaoOrcamentalRelatoriosRequest): Observable<any> {
     return this.api.post<any>('componenteReceitaRegisto/GetExecucaoOrcamentalExcel', request);
+  }
+
+  public GetExecucaoOrcamentalPorClassificacaoEconomica(request: GetExecucaoOrcamentalClassificacaoEconomicaRequest): Observable<ClassificacaoEconomicaExecucaoListagemResponse> {
+    return this.api.post<ClassificacaoEconomicaExecucaoListagemResponse>('componenteReceitaRegisto/GetExecucaoOrcamentalPorClassificacaoEconomica', request);
   }
 
   public GetReceitasRelatorio(request: FilterRequest): Observable<ReceitaRelatorioResponse> {

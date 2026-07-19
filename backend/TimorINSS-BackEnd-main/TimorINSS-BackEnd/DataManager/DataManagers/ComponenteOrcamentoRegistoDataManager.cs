@@ -38,6 +38,23 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             _localizer = localizer;
         }
 
+        // Allow-list Receita/Despesa only. TIPOCONTA is a shared Dominio bucket also reused
+        // for Actividade/Funcional (added later for a different feature — those are
+        // sub-classifications of Despesa only per the client's real Excel model, not
+        // account types on their own). The "Tipo de Conta" field on Despesa/Orçamento/Receita
+        // registration screens is meant to pick the Receita/Despesa economic-classification
+        // tree for the main "Conta OSS" field, so Actividade/Funcional must not leak in here
+        // (they already have their own dedicated fields/dropdowns on the same forms).
+        // Same fix pattern as getAllMovimentosTypesFiltered (DominioDataManager.cs), applied
+        // 2026-07-18 after verifying against the client's real Excel files — see memory
+        // open-questions-for-client.md #2.
+        private List<DominioDescricaoString> GetTiposDeContaEconomicos()
+        {
+            return _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA)
+                .Where(x => (x.descricao == "Receita" || x.descricao == "Despesa") && x.indActivo == true)
+                .ToList();
+        }
+
         public GetComponenteOrcamentoRegistoReponse GetComponenteOrcamentoRegisto(GetComponenteOrcamentoRegistoRequest request)
         {
             GetComponenteOrcamentoRegistoReponse response = new GetComponenteOrcamentoRegistoReponse();
@@ -120,7 +137,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 response.Actidades = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(orcamentoId, tipoContaActidateId);
                 response.Functionals = _unitOfWork.AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig(orcamentoId, tipoContaFunctionalId);
                 response.CentrosCusto = _unitOfWork.CentroCustoRepository.GetAllActiveCentroCustoByOrcamentoRegisto(componente.Id);
-                response.TiposDeConta = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA);
+                response.TiposDeConta = GetTiposDeContaEconomicos();
             }
 
             return response;
@@ -159,7 +176,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     {
                         response.CodigoConta = _unitOfWork.CodigoContaRepository.GetAllActivCodigoContaByOrcamentoConfig(orcamento.Id);
                         response.CentrosCusto = _unitOfWork.CentroCustoRepository.GetAllActiveCentroCustoByOrcamentoRegisto(componente.Id);
-                        response.TiposDeConta = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA);
+                        response.TiposDeConta = GetTiposDeContaEconomicos();
                         response.existeOrcamentoAprovado = true;
                     }
                     else
@@ -407,7 +424,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             if (response.UpdateValues)
             {
                 response.Agrupamentos = _unitOfWork.AgrupamentoConfigRepository.GetAlllActivAgrupamentoConfigByOrcamentoConfig(orcamento.Id);
-                response.TiposDeConta = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA);
+                response.TiposDeConta = GetTiposDeContaEconomicos();
             }
             response.CentrosCusto = centrosDeCusto;
 
@@ -483,7 +500,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
 
             response.Agrupamentos = _unitOfWork.AgrupamentoConfigRepository.GetAlllActivAgrupamentoConfigByOrcamentoConfig(orcamentoAprovado.OrcamentoConfigFk);
-            response.TiposDeConta = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA);
+            response.TiposDeConta = GetTiposDeContaEconomicos();
             response.CentrosCusto = _unitOfWork.CentroCustoRepository.GetAllActiveCentroCustoByOrcamentoRegisto(orcamentoAprovado.Id);
 
             ComponenteorcamentoRegisto orcamentoRetificado = _unitOfWork.ComponenteOrcamentoRegistoRepository.GetByIdTarefaActivo(request.IdTarefaActivo);
@@ -1623,7 +1640,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     {
                         response.CodigoConta = _unitOfWork.CodigoContaRepository.GetAllActivCodigoContaByOrcamentoConfig(orcamento.Id);
                         response.CentrosCusto = _unitOfWork.CentroCustoRepository.GetAllActiveCentroCustoByOrcamentoRegisto(componente.Id);
-                        response.TiposDeConta = _unitOfWork.DominioRepository.getAllTiposDeDominio(TiposDominio.TIPOCONTA);
+                        response.TiposDeConta = GetTiposDeContaEconomicos();
                         response.existeOrcamentoAprovado = true;
                     }
                     else

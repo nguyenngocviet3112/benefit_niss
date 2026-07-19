@@ -407,7 +407,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     case EstadoDespesaEnum.Autorizado:
                         estadoValor = new List<int>()
                         {
-                            2, 3
+                            2
                         };
                         break;
                     case EstadoDespesaEnum.Cabimentado:
@@ -419,12 +419,13 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     case EstadoDespesaEnum.Compromisso:
                         estadoPagamento = 1;
                         break;
-                    case EstadoDespesaEnum.Obricacao:
+                    case EstadoDespesaEnum.OrdemPagamentoEmitida:
                         estadoPagamento = 2;
                         break;
-                    //case EstadoDespesaEnum.Executado:
-                    //    estadoPagamento = 3;
-                    //    break;
+                    // EstadoDespesaEnum.Obricacao and EstadoDespesaEnum.Executado are handled
+                    // directly in the repository: Obricacao checks the Carregar Documentos +
+                    // Texto entries registered at the RD05 "Liquidação" task (real Obrigação
+                    // evidence), Executado checks the reconciled bank movement.
                     default:
                         break;
                 }

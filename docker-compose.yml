@@ -1,0 +1,66 @@
+services:
+  inss-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: inss-db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "INSSdev@2024!"
+      MSSQL_PID: Developer
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"INSSdev@2024!\" -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - inss-net
+
+  inss-backend:
+    image: mcr.microsoft.com/dotnet/sdk:3.1
+    container_name: inss-backend
+    depends_on:
+      inss-db:
+        condition: service_healthy
+    working_dir: /src/TimorINSS-BackEnd
+    volumes:
+      - ./backend/TimorINSS-BackEnd-main:/src
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__sqlserverconnection: "Server=inss-db,1433;Database=TimorINSSModuloContribuicoes_ProdDev;User ID=sa;Password=INSSdev@2024!;TrustServerCertificate=True;Encrypt=False"
+      DOTNET_GENERATE_ASPNET_CERTIFICATE: "false"
+      DOTNET_RUNNING_IN_CONTAINER: "true"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      NUGET_XMLDOC_MODE: skip
+    command: ["bash", "-c", "dotnet run -c Release --no-build --no-launch-profile"]
+    ports:
+      - "5000:5000"
+    networks:
+      - inss-net
+
+  inss_interno:
+    image: node:14
+    container_name: inss_interno
+    working_dir: /app
+    volumes:
+      - ./financial/TimorINSS-MInterno:/app
+    command: ["bash", "-c", "npm install --legacy-peer-deps 2>&1 | tail -5 && npx ng serve --host 0.0.0.0 --port 4300 --disable-host-check"]
+    ports:
+      - "4300:4300"
+    networks:
+      - inss-net
+
+  inss_contrib:
+    image: node:14
+    container_name: inss_contrib
+    working_dir: /app
+    volumes:
+      - ./contribution/ModuloContribuicoes:/app
+    command: ["bash", "-c", "npm install --legacy-peer-deps 2>&1 | tail -5 && npx ng serve --host 0.0.0.0 --port 4200 --disable-host-check"]
+    ports:
+      - "4200:4200"
+
+networks:
+  inss-net:
+    name: inss-benefit-app_default
+    external: true

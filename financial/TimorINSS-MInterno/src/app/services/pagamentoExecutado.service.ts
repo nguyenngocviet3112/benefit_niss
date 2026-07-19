@@ -6,8 +6,8 @@ import { BalancoRelatoriosRequest, DeletePagamentoRequest, EditPagamentoExecutad
 import { DestinatarioPagamentoExecutadosResponse, ListagemPagamentosProcessoResponse, RelatoriosOrdensPagamentoListagemResponse } from '../response-models/pagamentosExecutados-response';
 import { FilterRequest } from '../request-models/utils-request';
 import { SelectDescriptionResponse } from '../response-models/utils-response';
-import { GetExecucaoOrcamentalRelatoriosRequest } from '../request-models/agrupamentoConfig-request';
-import { RelatoriosExecucaoOrcamentalListagemResponse } from '../response-models/agrupamentoConfig-response';
+import { GetExecucaoOrcamentalRelatoriosRequest, GetExecucaoOrcamentalClassificacaoEconomicaRequest } from '../request-models/agrupamentoConfig-request';
+import { RelatoriosExecucaoOrcamentalListagemResponse, ClassificacaoEconomicaExecucaoListagemResponse } from '../response-models/agrupamentoConfig-response';
 import { BalancoResponse, ClassificacaoContabilisticaResponse, FornecedoresResponse } from '../models/pagamentos_executados';
 import { ApiHelperService } from './api-helper.service';
 
@@ -74,6 +74,10 @@ export class PagamentoExecutadoService {
 
   public GetExecucaoOrcamentalExcel(request: GetExecucaoOrcamentalRelatoriosRequest): Observable<any> {
     return this.api.post<any>('pagamentoExecutado/GetExecucaoOrcamentalExcel', request);
+  }
+
+  public GetExecucaoOrcamentalPorClassificacaoEconomica(request: GetExecucaoOrcamentalClassificacaoEconomicaRequest): Observable<ClassificacaoEconomicaExecucaoListagemResponse> {
+    return this.api.post<ClassificacaoEconomicaExecucaoListagemResponse>('pagamentoExecutado/GetExecucaoOrcamentalPorClassificacaoEconomica', request);
   }
 
   public GetListaPagamentosProcesso(request: ListagemPagamentosProcessoRequest): Observable<ListagemPagamentosProcessoResponse>

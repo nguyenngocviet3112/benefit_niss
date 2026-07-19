@@ -1,0 +1,211 @@
+<div class="ordens">
+
+    <div class="subHeader">
+        <div class="searchContainer inputs-grid inputs-grid--6">
+            <button class="ordensSearchButton inputs-grid__cell" mat-fab color="green" aria-label="Search"
+                (click)="getRelatorio()">
+                <mat-icon class="ordensSearchIcon">search</mat-icon>
+            </button>
+
+            <mat-form-field class="input inputs-grid__cell" appearance="outline">
+                <mat-label>{{'perfil.data' | translate}}</mat-label>
+                <input [(ngModel)]="year" matInput readonly="true" [errorStateMatcher]="matcher" [required]="submittedTry">
+                <input matInput hidden [matDatepicker]="beginDatePicker" [(ngModel)]="beginDate" name="BeginDate"/>
+                <mat-datepicker-toggle matSuffix [for]="beginDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #beginDatePicker (yearSelected)="chosenYearHandler($event, beginDatePicker)" startView="multi-year"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="input inputs-grid__cell">
+                <mat-label>{{'utilizador.institution' | translate}}</mat-label>
+                <mat-select [(ngModel)]="selectedInstitution" name="selectedInstitution" [errorStateMatcher]="matcher" [required]="submittedTry">
+                    <mat-option *ngFor="let institution of institutionContaOptions" [value]="institution.id">{{ institution.nome }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <a (click)="clearFilter()" class="clearFilterButton input inputs-grid__cell" type="button" mat-raised-button>
+                <mat-icon class="clearFilterIcon">clear</mat-icon>
+                <mat-label>{{'general.clearFilter' | translate}}</mat-label>
+            </a>
+        </div>
+    </div>
+
+    <div>
+        <div class="painelListagemOrdens">
+
+            <div class="tabelaOrdensTitulo">
+                <mat-icon class="tableTitleIcon">toc</mat-icon>
+                {{'classificacaoEconomica.titulo' | translate}}
+            </div>
+
+            <div class="no-results" *ngIf="!resultsShown">
+                {{ 'general.filtroNecessarioParaListagem' | translate }}
+            </div>
+
+            <ng-container *ngIf="resultsShown">
+
+                <div class="seccaoTitulo">{{ 'classificacaoEconomica.receitas' | translate }}</div>
+                <table mat-table [dataSource]="receitasList" class="mat-elevation-z8 tabelaOrdens">
+                    <ng-container matColumnDef="codigoCE">
+                        <th mat-header-cell *matHeaderCellDef class="sticky-col sticky-col-1">{{ 'classificacaoEconomica.codigo' | translate }}</th>
+                        <td mat-cell *matCellDef="let element" class="sticky-col sticky-col-1">{{ element.codigoCE }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="designacaoCE">
+                        <th mat-header-cell *matHeaderCellDef class="sticky-col sticky-col-2">{{ 'classificacaoEconomica.designacao' | translate }}</th>
+                        <td mat-cell *matCellDef="let element" class="sticky-col sticky-col-2" [style.padding-left.px]="8 + element.nivel * 16" [class.linha-raiz]="element.nivel === 0">{{ element.designacaoCE }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorOrcamentoInicial">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.ossInicial' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorOrcamentoInicial) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorOrcamentado">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.ossCorrigido' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorOrcamentado) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="janeiro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.janeiro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.janeiro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fevereiro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.fevereiro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.fevereiro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="marco">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.marco' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.marco) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="abril">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.abril' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.abril) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="maio">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.maio' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.maio) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="junho">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.junho' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.junho) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="julho">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.julho' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.julho) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="agosto">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.agosto' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.agosto) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="setembro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.setembro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.setembro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="outubro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.outubro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.outubro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="novembro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.novembro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.novembro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="dezembro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.dezembro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.dezembro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="totalExecucao">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.totalExecucao' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.totalExecucao) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="taxaExecucao">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.taxaEcecucao' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.taxaExecucao.toFixed(2) }}%</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <div class="no-results" *ngIf="receitasList.length === 0">{{ 'general.semResultados' | translate }}</div>
+
+                <div class="seccaoTitulo despesasTitulo">{{ 'classificacaoEconomica.despesas' | translate }}</div>
+                <table mat-table [dataSource]="despesasList" class="mat-elevation-z8 tabelaOrdens">
+                    <ng-container matColumnDef="codigoCE">
+                        <th mat-header-cell *matHeaderCellDef class="sticky-col sticky-col-1">{{ 'classificacaoEconomica.codigo' | translate }}</th>
+                        <td mat-cell *matCellDef="let element" class="sticky-col sticky-col-1">{{ element.codigoCE }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="designacaoCE">
+                        <th mat-header-cell *matHeaderCellDef class="sticky-col sticky-col-2">{{ 'classificacaoEconomica.designacao' | translate }}</th>
+                        <td mat-cell *matCellDef="let element" class="sticky-col sticky-col-2" [style.padding-left.px]="8 + element.nivel * 16" [class.linha-raiz]="element.nivel === 0">{{ element.designacaoCE }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorOrcamentoInicial">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.ossInicial' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorOrcamentoInicial) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorOrcamentado">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.ossCorrigido' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorOrcamentado) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="janeiro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.janeiro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.janeiro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fevereiro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.fevereiro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.fevereiro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="marco">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.marco' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.marco) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="abril">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.abril' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.abril) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="maio">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.maio' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.maio) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="junho">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.junho' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.junho) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="julho">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.julho' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.julho) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="agosto">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.agosto' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.agosto) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="setembro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.setembro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.setembro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="outubro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.outubro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.outubro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="novembro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.novembro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.novembro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="dezembro">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.dezembro' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.dezembro) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="totalExecucao">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.totalExecucao' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.totalExecucao) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="taxaExecucao">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.taxaEcecucao' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.taxaExecucao.toFixed(2) }}%</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <div class="no-results" *ngIf="despesasList.length === 0">{{ 'general.semResultados' | translate }}</div>
+
+            </ng-container>
+
+        </div>
+    </div>
+</div>

@@ -41,6 +41,8 @@ import { ConsultasGuiasComponent } from './moduloRelatorios/consultas/guias/cons
 import { ConsultasExtratosBancariosComponent } from './moduloRelatorios/consultas/extratos-bancarios/consultas-extratos-bancarios.component';
 import { RelatoriosPagamentosEmiditosComponent } from './moduloRelatorios/relatorios/pagamentos-emitidos/reports-pag-emitidos.component';
 import { RelatoriosExecucaoOrcamentalComponent } from './moduloRelatorios/relatorios/execucao-orcamental/reports-execucao-orcamental.component';
+import { RelatoriosExecucaoPorProgramaComponent } from './moduloRelatorios/relatorios/execucao-por-programa/reports-execucao-por-programa.component';
+import { RelatoriosClassificacaoEconomicaComponent } from './moduloRelatorios/relatorios/classificacao-economica/reports-classificacao-economica.component';
 import { PopUpListarPagamentosExecutadosComponent } from './moduloGestao/preencher-tarefa/componentes/componente-despesa/pop-up-listar-pagamentos-executados/pop-up-listar-pagamentos-executados.component';
 import { ConsultasDespesasComponent } from './moduloRelatorios/consultas/despesas/consultas-despesas.component';
 import { ConsultasClassificacaoContabilisticaComponent } from './moduloRelatorios/consultas/classificacao-contab/consultas-classificacao-contab.component';
@@ -55,6 +57,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', component: HomePageComponent },
   { path: 'relatoriosExecucaoOrcamental', component: RelatoriosExecucaoOrcamentalComponent },
+  { path: 'relatoriosExecucaoPorPrograma', component: RelatoriosExecucaoPorProgramaComponent },
+  { path: 'relatoriosClassificacaoEconomica', component: RelatoriosClassificacaoEconomicaComponent },
   { path: 'relatoriosPagamentosEmitidos', component: RelatoriosPagamentosEmiditosComponent },
   { path: 'consultasGuiasPagamento', component: ConsultasGuiasComponent },
   { path: 'consultasSituacaoContributiva', component: ConsultasSituacoesContributivasComponent },

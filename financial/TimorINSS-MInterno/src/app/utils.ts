@@ -256,10 +256,22 @@ export function CreateMenuPermissions(user: Utilizador | null) : MenuItem[]
             order: 2
           });
           response.find(x => x.name == relatoriosTitle)?.children?.push({
+            name: 'execucaoPorPrograma.menuLabel',
+            icon: 'toc',
+            link: '/relatoriosExecucaoPorPrograma',
+            order: 3
+          });
+          response.find(x => x.name == relatoriosTitle)?.children?.push({
+            name: 'classificacaoEconomica.menuLabel',
+            icon: 'toc',
+            link: '/relatoriosClassificacaoEconomica',
+            order: 3.5
+          });
+          response.find(x => x.name == relatoriosTitle)?.children?.push({
             name: 'general.pagamentosEmitidos',
             icon: 'toc',
             link: '/relatoriosPagamentosEmitidos',
-            order: 3
+            order: 4
           });
         }
 

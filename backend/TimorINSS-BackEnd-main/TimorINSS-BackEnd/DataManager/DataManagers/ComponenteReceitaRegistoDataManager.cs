@@ -258,6 +258,31 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
+        public ClassificacaoEconomicaExecucaoListagemResponse GetExecucaoOrcamentalPorClassificacaoEconomica(RelatorioClassificacaoEconomicaRequest request)
+        {
+            ClassificacaoEconomicaExecucaoListagemResponse response = new ClassificacaoEconomicaExecucaoListagemResponse();
+
+            // Validar se o utilizador tem as permissões necessárias
+            bool permission = _utils.ValidatePermission((int)request.UserId, (int)ModuleRelatorios.Relatorios, _unitOfWork);
+
+            if (!permission)
+            {
+                response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
+                return response;
+            }
+
+            try
+            {
+                response = _unitOfWork.ComponenteReceitaRegistoRepository.GetExecucaoOrcamentalPorClassificacaoEconomica(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors = new List<Error> { new Error { ErrorCode = "-1", ErrorMessage = e.Message } };
+            }
+
+            return response;
+        }
+
         public StringFileReponse GetExecucaoOrcamentalExcel(RelatorioExecucaoOrcamentalListagemRequest request)
         {
             StringFileReponse response = new StringFileReponse();

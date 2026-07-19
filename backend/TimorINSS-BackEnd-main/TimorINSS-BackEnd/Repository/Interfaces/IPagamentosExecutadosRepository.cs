@@ -29,6 +29,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public RelatorioPagamentosListagemResponse GetPagamentosRelatorios(RelatorioPagamentosListagemRequest request);
 
         public ExecucaoOrcamentalListagemResponse GetExecucaoOrcamental(RelatorioExecucaoOrcamentalListagemRequest request);
+        public ClassificacaoEconomicaExecucaoListagemResponse GetExecucaoOrcamentalPorClassificacaoEconomica(RelatorioClassificacaoEconomicaRequest request);
         public List<Pagamentosexecutados> GetPagamentosexecutadosByIdProcessoAtivoEstado(int idProcessoAtivo, int estado);
         public List<PagamentoExecutadoDestinatrioDataContract> GetPagamentosexecutadosByProcessoAtivoID(int processoAtivoId);
         public List<ListaPagamentosDoProcessoDataContract> GetListaPagamentosByProcessoAtivoID(int processoAtivoId);

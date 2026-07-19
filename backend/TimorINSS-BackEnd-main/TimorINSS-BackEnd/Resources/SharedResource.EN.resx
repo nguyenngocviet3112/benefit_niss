@@ -151,7 +151,10 @@
     <value>Expense Status</value>
   </data>
   <data name="executada" xml:space="preserve">
-    <value>Executed</value>
+    <value>Paid (Reconciled)</value>
+  </data>
+  <data name="ordemPagamentoEmitida" xml:space="preserve">
+    <value>Payment Order Issued</value>
   </data>
   <data name="numeroProcesso" xml:space="preserve">
     <value>Case number</value>

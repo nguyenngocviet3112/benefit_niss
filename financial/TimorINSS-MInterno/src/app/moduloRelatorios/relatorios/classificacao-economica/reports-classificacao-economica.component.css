@@ -1,0 +1,170 @@
+.ordens {
+  position: relative;
+  min-height: 85%;
+}
+
+.linha-raiz {
+  font-weight: bold;
+}
+
+.mat-form-field {
+  font-size: 11px;
+  min-width: 150px;
+  width: calc(100% - 32px);
+}
+
+.subHeader {
+  background: rgba(207, 207, 207, 0.966);
+  width: 90%;
+  padding-left: 10%;
+  height: 71px;
+}
+
+.no-results {
+  font-size: 18px;
+  margin: 20px 0;
+  font-weight: 600;
+}
+
+.searchContainer {
+  width: 20%;
+  height: 100%;
+  min-width: 192px;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  column-gap: 14px;
+}
+
+.ordensSearchButton {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  background-color: #2A81CC;
+  color: white;
+}
+
+.ordensSearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+.input {
+  height: 44px;
+}
+
+.clearFilterButton{
+  background: green;
+  min-width: unset;
+  color: white;
+  height: 40px;
+  font-size: 14px;
+}
+
+.clearFilterIcon {
+  font-size: 21px;
+  padding-right: 5px;
+  width: 19px;
+  height: 19px;
+}
+
+.painelListagemOrdens {
+  width: 80%;
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 2%;
+  text-align: center;
+}
+
+.tabelaOrdensTitulo {
+  width: 100%;
+  padding-bottom: 1%;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2A81CC;
+  display: flex;
+  padding-top: 20px;
+}
+
+.tableTitleIcon {
+  font-size: 1.7em;
+  padding-right: 10px;
+  top: -5px;
+  position: relative;
+}
+
+.seccaoTitulo {
+  width: 100%;
+  text-align: left;
+  font-size: 1em;
+  font-weight: bold;
+  color: #fff;
+  background-color: #2A81CC;
+  padding: 8px 12px;
+  margin-top: 20px;
+}
+
+.despesasTitulo {
+  margin-top: 40px;
+}
+
+.tabelaOrdens {
+  width: 100%;
+  text-align: left;
+  background-color: white;
+  overflow-x: auto;
+  display: block;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+table th {
+  background-color: rgb(211, 211, 211);
+  font-weight: bold;
+}
+
+table tr:nth-child(even) {
+  background-color: rgb(231, 231, 231);
+}
+
+table td,
+table th {
+  text-align: center;
+  padding: 0 7px;
+}
+
+table td {
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+table thead,
+table tr.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.sticky-col {
+  position: sticky;
+  z-index: 2;
+  background-color: inherit;
+}
+
+.sticky-col-1 {
+  left: 0;
+  min-width: 90px;
+}
+
+.sticky-col-2 {
+  left: 90px;
+  min-width: 220px;
+  text-align: left;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.12);
+}
+
+th.sticky-col {
+  z-index: 4;
+  background-color: rgb(211, 211, 211);
+}

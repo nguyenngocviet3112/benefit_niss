@@ -7,6 +7,7 @@
     "menu": "Menu",
     "NConta": "Nº Conta",
     "ordemPagamento": "Ordem de Pagamento",
+    "listaPagamentoSalario": "Lista Pagamento Salário",
     "descricao": "Descrição",
     "valor": "Valor",
     "total": "Total",
@@ -159,7 +160,7 @@
     "invoiceATCO": "Valor a cargo do TCO",
     "invoiceSSS": "Os Serviços da Segurança Social",
     "invoiceSAS": "Assinatura e carimbo",
-    "period":"Period"
+    "period": "Period"
   },
   "login_form": {
     "title": "Autenticação",
@@ -1414,6 +1415,8 @@
     "centroCusto": "Centro de Custo",
     "iban": "IBAN",
     "ibanNacional": "IBAN nacional",
+    "aprovaHusi": "Aprova husi",
+    "numeroSequencial": "Nº",
     "relatoriosPagamentosEmitidos": "Relatórios - Pagamentos emitidos centro de custo/mês",
     "pagamentosExecutados": "Pagamentos executados",
     "valorNaoSuperiorError": "O valor a executar não deve ser superior ao valor falta executar da despesa selecionada"
@@ -1431,11 +1434,15 @@
     "internalUser": "Internal User"
   },
   "execucaoOrcamental": {
+    "instiutiton": "Instituisaun",
     "contaOGE": "Conta OGE",
     "centroCusto": "Centro de Custo",
     "rubricaClassificacao": "Rúbrica de Classificação Económica",
     "valorOrcamentoInicial": "Valor Orçamento Inicial",
     "valorOrcamentado": "Valor Orçamentado",
+    "cabimentos": "Cabimentos",
+    "compromissos": "Compromissos",
+    "obrigacoes": "Obrigasaun",
     "anoAnterior": "Execução ano anterior",
     "janeiroADezembro": "Janeiro a dezembro",
     "janeiro": "Janeiro",
@@ -1456,6 +1463,25 @@
     "variacaoExecucao": "Variação Execução em relação ao período homólogo ano anterior (%)",
     "relatoriosExecucaoOrcamental": "Relatórios - Execução Orçamental",
     "tipoConta": "Tipo de Conta"
+  },
+  "classificacaoEconomica": {
+    "menuLabel": "CE_OSS_Global",
+    "titulo": "CE_OSS_Global - Totál por Klasifikasaun Ekonómika",
+    "receitas": "RESEITA",
+    "despesas": "DESPEZA",
+    "codigo": "Kódigu",
+    "designacao": "Deskrisaun",
+    "ossInicial": "OSS Inisiál",
+    "ossCorrigido": "OSS Korrejidu"
+  },
+  "execucaoPorPrograma": {
+    "menuLabel": "Execução por Programa",
+    "titulo": "Execução Orçamental por Programa (A04-A07)",
+    "legendaOrcamento": "Orçamento (inicial/aprovado)",
+    "legendaCabimento": "Cabimento",
+    "legendaCompromisso": "Compromisso",
+    "legendaObrigacao": "Obrigação",
+    "legendaExecucao": "Execução (pagamento realizado)"
   },
   "extratosbancarios": {
     "conta": "Conta bancária",
@@ -1478,7 +1504,8 @@
     "cabimentada": "Cabimentada",
     "compromisso": "Compromisso",
     "obrigacao": "Obrigação",
-    "executada": "Executada",
+    "ordemPagamentoEmitida": "Ordem Pagamentu Sai Ona",
+    "executada": "Selu Ona (Konsilia)",
     "departamento": "Departamento INSS",
     "centroCusto": "Centro de custo",
     "tipoConta": "Tipo de Conta",

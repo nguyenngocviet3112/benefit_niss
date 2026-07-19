@@ -298,6 +298,28 @@ namespace TimorINSSBackEnd.Controllers
             return Ok(response);
         }
 
+        [HttpPost("GetExecucaoOrcamentalPorClassificacaoEconomica")]
+        public IActionResult GetExecucaoOrcamentalPorClassificacaoEconomica(RelatorioClassificacaoEconomicaRequest request)
+        {
+            ClassificacaoEconomicaExecucaoListagemResponse response = new ClassificacaoEconomicaExecucaoListagemResponse();
+            try
+            {
+                // Parse dos valores do header para o request
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.GetExecucaoOrcamentalPorClassificacaoEconomica(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            // Guardar log do erro no ficheiro de logs
+            if (response.ManageErrors("GetExecucaoOrcamentalPorClassificacaoEconomica", Log, request))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
         [HttpPost("GetExecucaoOrcamentalExcel")]
         public IActionResult GetExecucaoOrcamentalExcel(RelatorioExecucaoOrcamentalListagemRequest request)
         {

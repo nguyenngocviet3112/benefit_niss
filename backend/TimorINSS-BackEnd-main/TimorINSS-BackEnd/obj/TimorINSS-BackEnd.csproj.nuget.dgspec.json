@@ -1,36 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj": {}
+    "/src/TimorINSS-BackEnd/TimorINSS-BackEnd.csproj": {}
   },
   "projects": {
-    "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj": {
+    "/src/TimorINSS-BackEnd/TimorINSS-BackEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj",
+        "projectUniqueName": "/src/TimorINSS-BackEnd/TimorINSS-BackEnd.csproj",
         "projectName": "TimorINSSBackEnd",
-        "projectPath": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\TimorINSS-BackEnd.csproj",
-        "packagesPath": "C:\\Users\\Todaypc.vn\\.nuget\\packages\\",
-        "outputPath": "F:\\Code\\github_code\\Timor_INSS\\git-github.com-nguyenngocviet3112-TimorINSSModule.git\\backend\\TimorINSS-BackEnd-main\\TimorINSS-BackEnd\\obj\\",
+        "projectPath": "/src/TimorINSS-BackEnd/TimorINSS-BackEnd.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/src/TimorINSS-BackEnd/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Todaypc.vn\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -38,17 +31,10 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.200"
+        }
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "ClosedXML": {
               "target": "Package",
@@ -107,29 +93,10 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[3.1.10, 3.1.10]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[3.1.32, 3.1.32]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[3.1.0, 3.1.0]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[3.1.0, 3.1.0]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -138,7 +105,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.426/RuntimeIdentifierGraph.json"
         }
       }
     }
