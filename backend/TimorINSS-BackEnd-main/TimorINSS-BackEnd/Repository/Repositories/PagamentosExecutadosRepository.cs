@@ -541,7 +541,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
         /// <summary>
         /// Relatório CE_OSS_Global (Despesa): agrupa por mã Classificação Económica (501-506), não por Conta OGE/Programa.
-        /// Resolve cada Conta OGE (esquema antigo 01-12 OU esquema novo/CE real 50-56, ambos já existentes em AGRUPAMENTOCONFIG)
+        /// Resolve cada Conta OGE (esquema antigo (se existir) OU esquema novo/CE real 501-506, ambos já existentes em AGRUPAMENTOCONFIG)
         /// para o seu nó-raiz de Classificação Económica -- diretamente se já estiver no esquema novo, ou via a tabela
         /// de correspondência provisória RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA caso contrário. Ver plano/memória
         /// "ce-oss-global-prod-dev-feasibility" para o racional completo.
@@ -613,8 +613,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 var node = allNodes[id.Value];
                 var root = GetRootAncestor(node);
 
-                // Esquema CE já é o novo/real (mã 50-56) -- usa o próprio nó, no nível em que já está
-                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 50 && rootCode <= 56)
+                // Esquema CE já é o novo/real (mã 501-506) -- usa o próprio nó, no nível em que já está
+                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 501 && rootCode <= 506)
                 {
                     return node;
                 }
@@ -738,12 +738,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 });
             }
 
-            // Garante que TODOS os nós da árvore CE (esquema novo/real, mã 50-56) aparecem no relatório,
+            // Garante que TODOS os nós da árvore CE (esquema novo/real, mã 501-506) aparecem no relatório,
             // mesmo com valor zero -- tal como no ficheiro Excel original do cliente
             foreach (var node in allNodes.Values)
             {
                 var root = GetRootAncestor(node);
-                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 50 && rootCode <= 56)
+                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 501 && rootCode <= 506)
                 {
                     GetOrCreate(node);
                 }

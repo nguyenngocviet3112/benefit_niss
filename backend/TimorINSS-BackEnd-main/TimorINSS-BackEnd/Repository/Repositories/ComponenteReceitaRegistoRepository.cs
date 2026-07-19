@@ -313,8 +313,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 var node = allNodes[id.Value];
                 var root = GetRootAncestor(node);
 
-                // Esquema CE já é o novo/real (mã 41-49) -- usa o próprio nó, no nível em que já está
-                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 41 && rootCode <= 49)
+                // Esquema CE já é o novo/real (mã 401-409) -- usa o próprio nó, no nível em que já está
+                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 401 && rootCode <= 409)
                 {
                     return node;
                 }
@@ -436,12 +436,12 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 });
             }
 
-            // Garante que TODOS os nós da árvore CE (esquema novo/real, mã 41-49) aparecem no relatório,
+            // Garante que TODOS os nós da árvore CE (esquema novo/real, mã 401-409) aparecem no relatório,
             // mesmo com valor zero -- tal como no ficheiro Excel original do cliente
             foreach (var node in allNodes.Values)
             {
                 var root = GetRootAncestor(node);
-                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 41 && rootCode <= 49)
+                if (int.TryParse(root.Codigo, out int rootCode) && rootCode >= 401 && rootCode <= 409)
                 {
                     GetOrCreate(node);
                 }
