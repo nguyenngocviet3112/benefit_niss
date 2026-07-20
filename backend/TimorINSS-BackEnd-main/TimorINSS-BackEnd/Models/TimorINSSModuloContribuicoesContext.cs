@@ -2304,7 +2304,9 @@ namespace TimorINSSBackEnd.Models
 
                 entity.Property(e => e.IdGuia).HasColumnName("idGuia");
 
-                entity.Property(e => e.ComprovativoPag).HasColumnName("comprovativoPAG");
+                entity.Property(e => e.ComprovativoPag)
+                    .HasColumnType("varbinary(max)")
+                    .HasColumnName("comprovativoPAG");
 
                 entity.Property(e => e.ContaCorrenteId).HasColumnName("contaCorrenteId");
 
@@ -2668,7 +2670,9 @@ namespace TimorINSSBackEnd.Models
 
                 entity.Property(e => e.CodigoContaDebitoFk).HasColumnName("codigoContaDebito_fk");
 
-                entity.Property(e => e.Comprovativo).HasColumnName("comprovativo");
+                entity.Property(e => e.Comprovativo)
+                    .HasColumnType("varbinary(max)")
+                    .HasColumnName("comprovativo");
 
                 entity.Property(e => e.DataAlteracao)
                     .HasColumnType("datetime")
@@ -2948,6 +2952,7 @@ namespace TimorINSSBackEnd.Models
 
                 entity.Property(e => e.BankCode)
                     .HasMaxLength(50)
+                    .IsUnicode(false)
                     .HasColumnName("bankCode");
 
                 entity.Property(e => e.UtilizadorAlteracao).HasColumnName("utilizadorAlteracao");

@@ -158,7 +158,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         (beginDate.HasValue && endDate.HasValue ? e.DataCriacao >= beginDate && e.DataCriacao <= endDate :
                          beginDate.HasValue && !endDate.HasValue ? e.DataCriacao == beginDate :
                          true) &&
-                        // Filtrar por Bank — phải khớp/đồng bộ với Guia Pagamento/Invoice
+                        // Filtrar por Bank — phải khớp/đồng bộ com Guia Pagamento/Invoice
                         (request.BankCode == null || e.BankCode == request.BankCode)
                     )
                     .Select(e => new MovimentosPorConciliarListagem
@@ -179,6 +179,10 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         bankCode = e.BankCode,
                     })
                );
+                // Nota: descrição da Reservacredito NÃO concatena o sufixo "notaCredito" aqui —
+                // concatenar uma LocalizedString (nvarchar) com uma coluna varchar dentro do
+                // Concat/Union causava "different store types" na tradução do EF Core 3.1.
+                // O sufixo é adicionado em memória, depois do .ToList(), mais abaixo.
                 listaMovimentosPorConciliar = listaMovimentosPorConciliar.Concat(
                     _moduloContribuicoesContext.Reservacredito
                     .Include(e => e.ReservaGuiaPagamentoFkNavigation)
@@ -202,7 +206,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         descricao = new MovimentosPorConciliarDescricao()
                         {
                             id = null,
-                            descricao = e.ReservaGuiaPagamentoFkNavigation.Descricao + " - " + _localizer["notaCredito"].Value,
+                            descricao = e.ReservaGuiaPagamentoFkNavigation.Descricao,
                         },
                         comprovativo = e.ReservaGuiaPagamentoFkNavigation.ComprovativoPag,
                         numeroDocumento = e.ReservaGuiaPagamentoFkNavigation.NumDocumento,
@@ -215,10 +219,25 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     })
                );
             }
-            else if (!request.IsReceita)
+            List<MovimentosPorConciliarListagem> movimentosPorConciliar;
+            int totalNumber;
+
+            if (!request.IsReceita)
             {
-                listaMovimentosPorConciliar = listaMovimentosPorConciliar.Concat(
-                    _moduloContribuicoesContext.Pagamentosexecutados
+                // Nota: o Concat/Union SQL deste ramo (Pagamentosexecutados) com o ramo
+                // Movimentosporconciliar dava "different store types" na tradução do EF
+                // Core 3.1 — testado sistematicamente (WHERE, Include, e cada campo do
+                // SELECT isolados um a um) sem encontrar uma única coluna causadora
+                // isolada; o erro parece ser um problema mais estrutural do EF Core 3.1
+                // ao unir estas duas fontes específicas (mesmo padrão que motivou o
+                // Guiapagamento estar comentado no GetListagemConciliacao abaixo).
+                // Solução: materializar as duas fontes separadamente e concatenar em
+                // memória (LINQ to Objects), evitando o Concat SQL por completo. Custo:
+                // paginação (Skip/Take/OrderBy) passa a ser em memória — aceitável para
+                // este ecrã de reconciliação administrativa (volume moderado por conta).
+                var movimentosManuais = listaMovimentosPorConciliar.ToList();
+
+                var movimentosDespesa = _moduloContribuicoesContext.Pagamentosexecutados
                     .Include(e => e.CompromissoFkNavigation)
                     .ThenInclude(e => e.ComponenteDespesaRegistoFkNavigation)
                     .Include(e => e.RelMovimentosporconciliarMovimentos)
@@ -233,6 +252,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                          beginDate.HasValue && !endDate.HasValue ? e.DataCriacao == beginDate :
                          true)
                     )
+                    .ToList()
                     .Select(e => new MovimentosPorConciliarListagem
                     {
                         id = e.Id,
@@ -249,17 +269,34 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         editavel = false,
                         isClassificada = e.CodigoContaCreditoFk != null,
                         bankCode = null,
-                    })
-                );
+                    });
+
+                var todosMovimentos = movimentosManuais.Concat(movimentosDespesa).AsQueryable();
+
+                totalNumber = todosMovimentos.Count();
+                movimentosPorConciliar = todosMovimentos
+                    .OrderBy(request.filter.orderBy, request.filter.orderDirection)
+                    .Skip(index * rows)
+                    .Take(rows)
+                    .ToList();
+            }
+            else
+            {
+                totalNumber = listaMovimentosPorConciliar.Count();
+                movimentosPorConciliar = listaMovimentosPorConciliar
+                    .OrderBy(request.filter.orderBy, request.filter.orderDirection)
+                    .Skip(index * rows)
+                    .Take(rows)
+                    .ToList();
             }
 
-            var movimentosPorConciliar = listaMovimentosPorConciliar
-                .OrderBy(request.filter.orderBy, request.filter.orderDirection)
-                .Skip(index * rows)
-                .Take(rows)
-                .ToList();
+            // Sufixo "notaCredito" adicionado aqui (em memória) em vez de dentro do LINQ —
+            // ver nota acima no Concat da Reservacredito.
+            foreach (var m in movimentosPorConciliar.Where(m => m.type == MovimentosPorConciliarListagemType.ReservaCredito))
+            {
+                m.descricao.descricao = m.descricao.descricao + " - " + _localizer["notaCredito"].Value;
+            }
 
-            var totalNumber = listaMovimentosPorConciliar.Count();
             response.rows = totalNumber;
             response.movimentos = movimentosPorConciliar;
 
