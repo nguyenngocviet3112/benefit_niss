@@ -63,7 +63,7 @@
             <mat-select
               [(ngModel)]="tipoConta.id" [(value)]="tipoConta.id" name="tipoConta" [errorStateMatcher]="matcher"
               [required]="submittedTry">
-              <ng-container *ngIf="tipoContaFiltered.length > 1">
+              <ng-container *ngIf="tipoContaFiltered.length > 0">
                 <mat-option *ngFor="let tipo of tipoContaFiltered" [value]="tipo.id">
                   {{tipo.descricao}}
                 </mat-option>
