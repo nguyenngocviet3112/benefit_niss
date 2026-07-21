@@ -670,19 +670,37 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Select(a => new
                 {
                     AgrupamentoId = a.Id,
+                    // [EN] BUGFIX 2026-07-22: a single AgrupamentoConfig can have several
+                    // Componenteorcamentovalor rows for the SAME orçamento period, split by
+                    // Centro de Custo/Departamento (confirmed on real staging data -- e.g. node
+                    // "Salários de membros de órgãos de direção" had $9,600 (Centro 4) + $78,000
+                    // (Centro 3) under the same registo, true total $87,600). Must SUM within each
+                    // registo first, THEN pick the earliest registo (Inicial) / latest approved
+                    // registo (Corrigido) -- picking a single row via FirstOrDefault silently
+                    // dropped every other Centro de Custo, under-reporting the real budget.
+                    // [VI] SỬA LỖI 2026-07-22: 1 mã AgrupamentoConfig có thể có nhiều dòng
+                    // Componenteorcamentovalor cho CÙNG 1 đợt ngân sách, khác nhau theo Centro de
+                    // Custo/Departamento (đã xác nhận trên dữ liệu staging thật). Phải CỘNG trong
+                    // từng đợt trước, rồi mới chọn đợt đầu (Inicial)/đợt duyệt gần nhất (Corrigido)
+                    // -- lấy đại 1 dòng qua FirstOrDefault đã âm thầm bỏ sót các Centro de Custo
+                    // khác, báo cáo ra số thấp hơn thực tế.
                     ValorInicial = a.Componenteorcamentovalor
                         .Where(v => v.InstitutionId == request.institution
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
-                        .OrderBy(v => v.ComponenteOrcamentoRegistoFkNavigation.Id)
-                        .Select(v => v.Valor).FirstOrDefault(),
+                        .GroupBy(v => v.ComponenteOrcamentoRegistoFk)
+                        .OrderBy(g => g.Key)
+                        .Select(g => g.Sum(v => v.Valor))
+                        .FirstOrDefault(),
                     ValorCorrigido = a.Componenteorcamentovalor
                         .Where(v => v.InstitutionId == request.institution
                             && v.ComponenteOrcamentoRegistoFkNavigation.Aprovado
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
-                        .OrderByDescending(v => v.ComponenteOrcamentoRegistoFkNavigation.Id)
-                        .Select(v => v.Valor).FirstOrDefault()
+                        .GroupBy(v => v.ComponenteOrcamentoRegistoFk)
+                        .OrderByDescending(g => g.Key)
+                        .Select(g => g.Sum(v => v.Valor))
+                        .FirstOrDefault()
                 })
                 .ToList();
 

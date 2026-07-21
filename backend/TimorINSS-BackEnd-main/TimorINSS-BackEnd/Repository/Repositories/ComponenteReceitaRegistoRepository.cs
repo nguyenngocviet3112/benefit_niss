@@ -370,19 +370,29 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Select(a => new
                 {
                     AgrupamentoId = a.Id,
+                    // [EN] BUGFIX 2026-07-22: see identical fix + full explanation in
+                    // PagamentosExecutadosRepository.GetExecucaoOrcamentalPorClassificacaoEconomica --
+                    // must sum all Centro de Custo rows within a registo before picking Inicial/Corrigido.
+                    // [VI] SỬA LỖI 2026-07-22: xem giải thích đầy đủ ở hàm cùng tên bên
+                    // PagamentosExecutadosRepository -- phải cộng hết các dòng Centro de Custo trong
+                    // cùng 1 đợt trước khi chọn Inicial/Corrigido.
                     ValorInicial = a.Componenteorcamentovalor
                         .Where(v => v.InstitutionId == request.institution
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
-                        .OrderBy(v => v.ComponenteOrcamentoRegistoFkNavigation.Id)
-                        .Select(v => v.Valor).FirstOrDefault(),
+                        .GroupBy(v => v.ComponenteOrcamentoRegistoFk)
+                        .OrderBy(g => g.Key)
+                        .Select(g => g.Sum(v => v.Valor))
+                        .FirstOrDefault(),
                     ValorCorrigido = a.Componenteorcamentovalor
                         .Where(v => v.InstitutionId == request.institution
                             && v.ComponenteOrcamentoRegistoFkNavigation.Aprovado
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
-                        .OrderByDescending(v => v.ComponenteOrcamentoRegistoFkNavigation.Id)
-                        .Select(v => v.Valor).FirstOrDefault()
+                        .GroupBy(v => v.ComponenteOrcamentoRegistoFk)
+                        .OrderByDescending(g => g.Key)
+                        .Select(g => g.Sum(v => v.Valor))
+                        .FirstOrDefault()
                 })
                 .ToList();
 

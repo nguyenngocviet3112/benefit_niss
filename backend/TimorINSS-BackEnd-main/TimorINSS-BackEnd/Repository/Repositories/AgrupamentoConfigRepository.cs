@@ -884,7 +884,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         Name = _localizer["taxaExecucao"].Value + " (%)",
                         ColumnTextStyleKey = "HeaderWrap",
                         DataTextStyleKey = "TableCell",
-                        Value = (data) => data.taxaExecucao + "%",
+                        // [EN] Round to 2 decimals like the on-screen report (element.taxaExecucao.toFixed(2))
+                        // instead of concatenating the raw fraction, which Excel displayed as a long ugly decimal.
+                        // [VI] Làm tròn 2 số thập phân giống báo cáo trên màn hình, thay vì nối chuỗi số thô
+                        // (Excel hiển thị ra số thập phân dài, xấu).
+                        Value = (data) => data.taxaExecucao.ToString("F2") + "%",
                         Width = 15
                     },
                 });
