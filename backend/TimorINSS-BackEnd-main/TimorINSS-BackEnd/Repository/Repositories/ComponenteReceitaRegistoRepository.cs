@@ -397,6 +397,29 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 });
             }
 
+            // Receita Liquidada, por Conta OGE original, depois agregado por raiz CE -- valor total registado em
+            // ComponentereceitaRegisto (reconhecido/a cobrar), independentemente de já ter sido recebido/conciliado
+            // ou não. ComponentereceitaRegisto não tem um campo "Estado" tipo Cabimento/Compromisso (ao contrário
+            // de ComponentedespesaRegisto) -- é o equivalente mais próximo de "Obrigação" do lado Despesa.
+            var receitaLiquidadaPorConta = allNodes.Values
+                .Select(a => new
+                {
+                    AgrupamentoId = a.Id,
+                    ReceitaLiquidada = a.ComponentereceitaRegisto.Where(s => s.IndActivo && s.InstitutionId == request.institution && s.DataCriacao.Year == request.year).Sum(s => s.Valor),
+                })
+                .Where(x => x.ReceitaLiquidada != 0)
+                .ToList();
+
+            foreach (var item in receitaLiquidadaPorConta)
+            {
+                var target = ResolveToEconomicTarget(item.AgrupamentoId);
+                if (target == null) continue;
+                CreditAncestors(target, ce =>
+                {
+                    ce.receitaLiquidada += item.ReceitaLiquidada;
+                });
+            }
+
             // Execução mensal (movimentos bancários conciliados), por Conta OGE original, depois agregado por raiz CE
             var receitaPorConta = allNodes.Values
                 .Select(a => new
@@ -453,6 +476,11 @@ namespace TimorINSSBackEnd.Repository.Repositories
             {
                 ce.totalExecucao = ce.janeiro + ce.fevereiro + ce.marco + ce.abril + ce.maio + ce.junho + ce.julho + ce.agosto + ce.setembro + ce.outubro + ce.novembro + ce.dezembro;
                 ce.taxaExecucao = ce.valorOrcamentado == 0 || ce.totalExecucao == 0 ? 0 : ce.totalExecucao / ce.valorOrcamentado;
+
+                // [EN] "Saldo"/gap columns, exact formulas from sheet CE_OSS_Global rows 6-9 (Receita block).
+                // [VI] Các cột "Saldo", đúng công thức từ sheet CE_OSS_Global dòng 6-9 (khối Receita).
+                ce.saldoExecucao = ce.valorOrcamentado - ce.totalExecucao;                          // (7) = (2) - (5)
+                ce.saldoReceitaLiquidadaNaoCobrada = ce.receitaLiquidada - ce.totalExecucao;         // (8) = (3) - (5) -- DÍVIDA
             }
 
             response.lista = resultado.Values.OrderBy(c => c.codigoCE).ToList();

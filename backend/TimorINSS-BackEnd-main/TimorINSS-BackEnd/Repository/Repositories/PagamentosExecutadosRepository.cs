@@ -697,6 +697,39 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 });
             }
 
+            // Cabimentos / Compromissos / Obrigações, por Conta OGE original, depois agregado por raiz CE --
+            // mesmo padrão/mesmas condições de GetExecucaoOrcamental (Cabimentos: ComponentedespesaRegisto com
+            // Estado=89='C'; Compromissos: soma de Compromisso; Obrigações: proxy via Pagamentosexecutados com
+            // DataObrigacao preenchida -- não existe entidade Obrigação dedicada).
+            var funilPorConta = allNodes.Values
+                .Select(a => new
+                {
+                    AgrupamentoId = a.Id,
+                    Cabimentos = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution && x.IndActivo && x.Estado == 89 && x.DataCriacao.Year == request.year).Sum(x => x.Valor),
+                    Compromissos = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).SelectMany(x => x.Compromisso.Where(c => c.IndActivo && c.DataCriacao.Year == request.year)).Sum(c => c.Valor),
+                    Obrigacoes = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataObrigacao.HasValue && p.DataObrigacao.Value.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
+                })
+                // [EN] No zero-filter here (unlike an earlier draft) -- matches the Receita side's
+                // unfiltered receitaPorConta, so every CE category always appears (even at $0),
+                // consistent between Despesa and Receita instead of Despesa silently disappearing
+                // when a given year/institution has no activity yet.
+                // [VI] Không lọc bỏ dòng toàn 0 ở đây -- khớp với receitaPorConta bên Receita (không lọc),
+                // để mọi mã CE luôn hiện ra (dù $0), nhất quán giữa Despesa và Receita thay vì Despesa
+                // biến mất khi năm/cơ quan đó chưa có hoạt động gì.
+                .ToList();
+
+            foreach (var item in funilPorConta)
+            {
+                var target = ResolveToEconomicTarget(item.AgrupamentoId);
+                if (target == null) continue;
+                CreditAncestors(target, ce =>
+                {
+                    ce.cabimentos += item.Cabimentos;
+                    ce.compromissos += item.Compromissos;
+                    ce.obrigacoes += item.Obrigacoes;
+                });
+            }
+
             // Execução mensal (Pagamentosexecutados), por Conta OGE original, depois agregado por raiz CE
             var despesaPorConta = allNodes.Values
                 .Select(a => new
@@ -715,8 +748,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     Novembro = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 11 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
                     Dezembro = a.ComponentedespesaRegisto.Where(x => x.InstitutionId == request.institution).Select(x => x.Compromisso.SelectMany(c => c.Pagamentosexecutados.Where(p => p.IndActivo && p.DataCriacao.Month == 12 && p.DataCriacao.Year == request.year)).Sum(p => p.ValorExecutado)).Sum(),
                 })
-                .Where(x => x.Janeiro != 0 || x.Fevereiro != 0 || x.Marco != 0 || x.Abril != 0 || x.Maio != 0 || x.Junho != 0
-                    || x.Julho != 0 || x.Agosto != 0 || x.Setembro != 0 || x.Outubro != 0 || x.Novembro != 0 || x.Dezembro != 0)
+                // [EN] No zero-filter here either -- see note on funilPorConta above, same reasoning.
+                // [VI] Cũng không lọc bỏ dòng toàn 0 -- xem ghi chú ở funilPorConta phía trên, cùng lý do.
                 .ToList();
 
             foreach (var item in despesaPorConta)
@@ -755,6 +788,16 @@ namespace TimorINSSBackEnd.Repository.Repositories
             {
                 ce.totalExecucao = ce.janeiro + ce.fevereiro + ce.marco + ce.abril + ce.maio + ce.junho + ce.julho + ce.agosto + ce.setembro + ce.outubro + ce.novembro + ce.dezembro;
                 ce.taxaExecucao = ce.valorOrcamentado == 0 || ce.totalExecucao == 0 ? 0 : ce.totalExecucao / ce.valorOrcamentado;
+
+                // [EN] "Saldo"/gap columns, exact formulas from sheet CE_OSS_Global rows 174-177 (see [[ce-oss-global-naming]]
+                // memory for the full column mapping) -- plain subtractions, no ratios.
+                // [VI] Các cột "Saldo"/khoảng trống, đúng công thức từ sheet CE_OSS_Global dòng 174-177 -- chỉ là phép trừ.
+                ce.saldoExecucao = ce.valorOrcamentado - ce.totalExecucao;                          // (9)  = (2) - (7)
+                ce.saldoDisponivel = ce.valorOrcamentado - ce.cabimentos;                            // (10) = (2) - (3)
+                ce.saldoNaoComprometido = ce.valorOrcamentado - ce.compromissos;                     // (11) = (2) - (4)
+                ce.valorCabimentadoNaoComprometido = ce.cabimentos - ce.compromissos;                // (12) = (3) - (4)
+                ce.valorComprometidoNaoLiquidado = ce.compromissos - ce.obrigacoes;                  // (13) = (4) - (5)
+                ce.valorLiquidadoNaoPago = ce.obrigacoes - ce.totalExecucao;                         // (14) = (5) - (7) -- DÍVIDA
             }
 
             response.lista = resultado.Values.OrderBy(c => c.codigoCE).ToList();

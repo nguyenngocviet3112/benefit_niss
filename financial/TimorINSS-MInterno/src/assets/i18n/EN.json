@@ -1489,7 +1489,15 @@
     "codigo": "Code",
     "designacao": "Description",
     "ossInicial": "OSS Initial",
-    "ossCorrigido": "OSS Corrected"
+    "ossCorrigido": "OSS Corrected",
+    "receitaLiquidada": "Revenue Recognized",
+    "saldoExecucao": "Execution Balance",
+    "saldoReceitaLiquidadaNaoCobrada": "Recognized Revenue Not Yet Collected (DEBT)",
+    "saldoDisponivel": "Available Balance (Execution+Commitment)",
+    "saldoNaoComprometido": "Uncommitted Balance",
+    "valorCabimentadoNaoComprometido": "Committed but Not Yet Obligated",
+    "valorComprometidoNaoLiquidado": "Obligated but Not Yet Recognized",
+    "valorLiquidadoNaoPago": "Recognized but Unpaid (DEBT)"
   },
   "execucaoPorPrograma": {
     "menuLabel": "Execução por Programa",

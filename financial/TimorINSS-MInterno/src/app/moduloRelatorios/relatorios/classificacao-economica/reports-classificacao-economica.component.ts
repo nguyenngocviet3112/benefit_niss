@@ -12,7 +12,7 @@ import { ComponenteReceitaRegistoService } from "src/app/services/componenteRece
 import { DominiosService } from "src/app/services/dominios.service";
 import { PagamentoExecutadoService } from "src/app/services/pagamentoExecutado.service";
 import { TokenStorageService } from "src/app/services/token-storage.service";
-import { formataCurrency, openErrorsDialog, showExpiredError } from "src/app/utils";
+import { blobExcelSaveAs, formataCurrency, openErrorsDialog, showExpiredError } from "src/app/utils";
 
 /**
  * CE_OSS_Global -- relatório "TOTAL POR CLASSIFICAÇÃO ECONÓMICA", conforme sheet CE_OSS_Global do
@@ -39,7 +39,8 @@ export class RelatoriosClassificacaoEconomicaComponent implements OnInit {
 
   public receitasList: ClassificacaoEconomicaExecucaoListagem[] = [];
   public despesasList: ClassificacaoEconomicaExecucaoListagem[] = [];
-  public displayedColumns: string[] = ['codigoCE', 'designacaoCE', 'valorOrcamentoInicial', 'valorOrcamentado', 'janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro', 'totalExecucao', 'taxaExecucao'];
+  public displayedColumnsReceitas: string[] = ['codigoCE', 'designacaoCE', 'valorOrcamentoInicial', 'valorOrcamentado', 'receitaLiquidada', 'janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro', 'totalExecucao', 'taxaExecucao', 'saldoExecucao', 'saldoReceitaLiquidadaNaoCobrada'];
+  public displayedColumnsDespesas: string[] = ['codigoCE', 'designacaoCE', 'valorOrcamentoInicial', 'valorOrcamentado', 'cabimentos', 'compromissos', 'obrigacoes', 'janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro', 'totalExecucao', 'taxaExecucao', 'saldoExecucao', 'saldoDisponivel', 'saldoNaoComprometido', 'valorCabimentadoNaoComprometido', 'valorComprometidoNaoLiquidado', 'valorLiquidadoNaoPago'];
 
   constructor(
     private router: Router,
@@ -122,6 +123,27 @@ export class RelatoriosClassificacaoEconomicaComponent implements OnInit {
     },
       err => {
         this.receitasList = [];
+        this.hideLoader();
+        err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        this.showError();
+      });
+  }
+
+  public exportExcelRelatorio() {
+    if (!this.year || !this.selectedInstitution) return;
+
+    this.showLoader();
+
+    const request: GetExecucaoOrcamentalClassificacaoEconomicaRequest = {
+      year: this.year!,
+      institution: this.selectedInstitution!,
+    };
+
+    this.pagamentosService.GetExecucaoOrcamentalPorClassificacaoEconomicaExcel(request).subscribe((response) => {
+      this.hideLoader();
+      blobExcelSaveAs(response.file, `reports-classificacao-economica-${this.year}`);
+    },
+      err => {
         this.hideLoader();
         err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
         this.showError();

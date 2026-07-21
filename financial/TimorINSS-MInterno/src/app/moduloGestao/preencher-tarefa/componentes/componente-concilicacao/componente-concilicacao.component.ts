@@ -18,9 +18,14 @@ import { ConciliarMovimentosPermissionsListResponse, SaldoMovimentosResponse } f
 import { DominiosService } from 'src/app/services/dominios.service';
 import { movimentosBancariosService } from 'src/app/services/movimentosBancarios.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
-import { base64ToArrayBuffer, formatDatePT, openErrorsDialog, openSnackBar } from 'src/app/utils';
+import { base64ToArrayBuffer, formatDatePT, openErrorsDialog, openSnackBar, JsPdf_centerText } from 'src/app/utils';
 import { gerarInvoicePDF } from 'src/app/utils-invoice';
 import { GuiaPagamentoService } from 'src/app/services/guiaPagamento.service';
+import { PagamentoExecutadoService } from 'src/app/services/pagamentoExecutado.service';
+import { GetDestinatarioPagamentoRequest } from 'src/app/request-models/pagamentoExecutado-request';
+import { ListaPagamentosDoProcesso } from 'src/app/models/pagamentos_executados';
+import jsPDF from 'jspdf';
+import { environment } from 'src/environments/environment';
 import { gerarPDF, PopUpMovimentosDesfazerConciliacaoComponent } from './pop-up-movimentos-desfazer-conciliacao/logic';
 import { PopUpMovimentosDespesaReceitaUpsertComponent } from './pop-up-movimentos-despesa-receita-upsert/logic';
 import { PopUpMovimentosUpsertComponent } from './pop-up-movimentos-upsert/logic';
@@ -141,6 +146,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     public warningDialog: MatDialog,
     public classificarContabilisticaDialog: MatDialog,
     public guiaPagamentoService: GuiaPagamentoService,
+    public pagamentosService: PagamentoExecutadoService,
   ) { }
 
   ngOnInit(): void {
@@ -911,8 +917,11 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   public gerarPDFDocumento(element: MovimentosDespesaReceita): void {
     // Movimento vem de Guiapagamento (Receita) — buscar registo completo (NISS/TIN/
     // EE-TCO/QR) para gerar o mesmo design "SOCIAL CONTRIBUTIONS PAYMENT GUIDE" do
-    // Contribution module. Outros tipos (movimento manual/PagamentoExecutado/
-    // ReservaCredito) não são um "Guia/Invoice" — mantém o documento simples atual.
+    // Contribution module. Movimentos de Despesa (PagamentoExecutado/ReservaCredito)
+    // usam o mesmo design "Lista Pagamentu Saláriu Funcionáriu INSS" gerado ao Emitir
+    // Ordem de Pagamento (ver pop-up-executar-pagamentos), buscando o(s) destinatário(s)
+    // pelo número do pagamento/guia. Movimento manual (sem numeroDocumento) mantém o
+    // documento simples antigo, pois não existe um pagamento executado para buscar.
     if (element.type === MovimentosPorConciliarListagemType.GuiaPagamento) {
       this.guiaPagamentoService.getGuiasDetailByEntidade({ idGuiaPagamento: element.id, filter: {} }).subscribe(x => {
         const guia = x.guias?.[0];
@@ -923,9 +932,124 @@ export class ComponenteConcilicacaoComponent implements OnInit {
         }
       },
         () => gerarPDF(element, this.translate));
+    } else if (element.numeroDocumento) {
+      let request = <GetDestinatarioPagamentoRequest>{
+        numPagamento: element.numeroDocumento,
+      };
+      this.pagamentosService.GetPagamentoDetails(request).subscribe(x => {
+        if (x.pagamentos && x.pagamentos.length > 0) {
+          this.gerarPDFListaPagamentos(x.pagamentos);
+        } else {
+          gerarPDF(element, this.translate);
+        }
+      },
+        () => gerarPDF(element, this.translate));
     } else {
       gerarPDF(element, this.translate);
     }
+  }
+
+  // Mesmo design "Lista Pagamentu Saláriu Funcionáriu INSS" gerado ao Emitir Ordem de
+  // Pagamento (ver pop-up-executar-pagamentos.component.ts / pop-up-listar-pagamentos-
+  // executados.component.ts) — replicado aqui para o ícone "Documento" da Conciliação
+  // de Movimentos (Despesa), em vez do documento simples antigo (2 colunas Descrição/Valor).
+  public gerarPDFListaPagamentos(pdfList: ListaPagamentosDoProcesso[]): void {
+    var pdf = new jsPDF();
+    const monthKeysPT = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+    // Agrupar por Banco + Mês/Ano (dataObrigacao)
+    const groups = new Map<string, ListaPagamentosDoProcesso[]>();
+    pdfList.forEach(row => {
+      const date = row.dataObrigacao ? new Date(row.dataObrigacao) : new Date();
+      const key = `${row.bankCode ?? ''}_${date.getMonth()}_${date.getFullYear()}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key)!.push(row);
+    });
+
+    let isFirstPage = true;
+    groups.forEach((rowsForGroup, key) => {
+      if (!isFirstPage) pdf.addPage();
+      isFirstPage = false;
+
+      const [bankCode, monthIndex, year] = key.split('_');
+      const bankLabel = this.bankOptions.find(b => b.key === bankCode)?.label ?? bankCode ?? '';
+      const monthLabel = monthKeysPT[Number(monthIndex)];
+
+      // INSS logo
+      pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
+
+      JsPdf_centerText(pdf, 'Lista Pagamentu Saláriu Funcionáriu INSS', 35);
+      pdf.setFontSize(12);
+      pdf.setTextColor(99);
+
+      JsPdf_centerText(pdf, `Fulan ${monthLabel} ${bankLabel} Tinan ${year}`, 43);
+
+      // Somar valor por destinatário dentro do grupo
+      const byDestinatario = new Map<number, { nome: string; niss: string; numeroConta: string; iban: string; total: number }>();
+      rowsForGroup.forEach(row => {
+        const id = row.destinatario.id;
+        if (!byDestinatario.has(id)) {
+          byDestinatario.set(id, { nome: row.destinatario.nome, niss: row.destinatario.niss ?? '', numeroConta: row.numeroConta ?? '', iban: row.iban ?? '', total: 0 });
+        }
+        const entry = byDestinatario.get(id)!;
+        entry.total = Math.round((entry.total + row.valor) * 100) / 100;
+      });
+
+      var rows: string[][] = [];
+      var stt = 1;
+      var totalPagamentu = 0;
+      byDestinatario.forEach(entry => {
+        rows.push([String(stt++), entry.niss, entry.nome, entry.numeroConta, entry.iban, '$' + entry.total.toFixed(2)]);
+        totalPagamentu = Math.round((totalPagamentu + entry.total) * 100) / 100;
+      });
+
+      (pdf as any).autoTable({
+        startY: 53,
+        head: [['No', 'NISS', 'Naran Funsionáriu', 'No. Konta Bankária', 'No. IBAN', 'Total Paga']],
+        body: rows,
+        foot: [['', '', '', '', 'Total Pagamentu', '$' + totalPagamentu.toFixed(2)]],
+        theme: 'grid',
+        columnStyles: { 5: { halign: 'right' } },
+        headStyles: {
+          fillColor: [42, 129, 204],
+          textColor: [0, 0, 0],
+          fontSize: 8,
+          padding: 0,
+          valign: 'middle',
+          halign: 'center',
+        },
+        bodyStyles: {
+          textColor: [0, 0, 0],
+          fontSize: 10,
+          padding: 0,
+          valign: 'middle',
+          halign: 'center',
+        },
+        footStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontSize: 10,
+          fontStyle: 'bold',
+          halign: 'right',
+        }
+      })
+
+      const finalY = (pdf as any).lastAutoTable?.finalY ?? 53;
+      const today = new Date();
+      pdf.setFontSize(10);
+      pdf.setTextColor(0);
+      pdf.text(`Dili, ${today.getDate()} de ${monthKeysPT[today.getMonth()]} de ${today.getFullYear()}`, 20, finalY + 15);
+
+      pdf.text('Visto husi', 30, finalY + 35);
+      pdf.text('Agus Berek', 20, finalY + 55);
+      pdf.text('Director do Departamento Financeiro', 20, finalY + 60);
+
+      pdf.text('Aprova husi', 130, finalY + 35);
+      pdf.text('Ana Romana Freitas Li', 120, finalY + 55);
+      pdf.text('Diretora Executiva de INSS', 120, finalY + 60);
+    });
+
+    window.open(URL.createObjectURL(pdf.output("blob")));
   }
 
   public gerarPDFComprovativo(doc: string) {

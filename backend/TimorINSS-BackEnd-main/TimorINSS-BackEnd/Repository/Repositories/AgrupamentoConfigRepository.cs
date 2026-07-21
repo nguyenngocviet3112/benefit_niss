@@ -709,5 +709,210 @@ namespace TimorINSSBackEnd.Repository.Repositories
             // Conversão do documento excel em base64
             return excelDocument.GetFileString();
         }
+
+        public string ExecucaoOrcamentalPorClassificacaoEconomicaExcel(RelatorioClassificacaoEconomicaRequest request, List<ClassificacaoEconomicaExecucaoDataContract> listaReceitas, List<ClassificacaoEconomicaExecucaoDataContract> listaDespesas)
+        {
+            // Inicialização do documento excel, um separador (page) para Receitas e outro para Despesas
+            var excelDocument = new ExcelDocument(new List<string>() { _localizer["receitas"].Value, _localizer["despesas"].Value }, new ExcelDocumentOptions()
+            {
+                TextStyles = Extensions.ServiceExtensions.ExcelDocumentTextStyles
+            });
+
+            void AddClassificacaoEconomicaPage(int pageIndex, List<ClassificacaoEconomicaExecucaoDataContract> lista, bool isDespesa)
+            {
+                var page = excelDocument.Pages[pageIndex];
+
+                // Adição dos títulos
+                page.AddText(_localizer["relatorioClassificacaoEconomica"].Value, new ExcelDocumentTextPosition(1, 1), "Header", new ExcelDocumentTextPosition(17, 1));
+                page.AddText(_localizer["ano"].Value + " " + request.year, new ExcelDocumentTextPosition(1, 2), "Header", new ExcelDocumentTextPosition(17, 2));
+
+                var colunas = new List<ColumnOption<ClassificacaoEconomicaExecucaoDataContract>>()
+                {
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["codigo"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellWrap",
+                        Value = (data) => data.codigoCE,
+                        Width = 14
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["designacao"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellWrap",
+                        Value = (data) => data.designacaoCE,
+                        Width = 40
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["ossInicial"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.valorOrcamentoInicial,
+                        Width = 15
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["ossCorrigido"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.valorOrcamentado,
+                        Width = 15
+                    },
+                };
+
+                if (isDespesa)
+                {
+                    colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["cabimentosCE"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.cabimentos, Width = 15 });
+                    colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["compromissosCE"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.compromissos, Width = 15 });
+                    colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["obrigacoes"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.obrigacoes, Width = 15 });
+                }
+                else
+                {
+                    colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["receitaLiquidada"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.receitaLiquidada, Width = 15 });
+                }
+
+                colunas.AddRange(new List<ColumnOption<ClassificacaoEconomicaExecucaoDataContract>>()
+                {
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["janeiro"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.janeiro,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["fevereiro"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.fevereiro,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["marco"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.marco,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["abril"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.abril,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["maio"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.maio,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["junho"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.junho,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["julho"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.julho,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["agosto"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.agosto,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["setembro"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.setembro,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["outubro"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.outubro,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["novembro"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.novembro,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["dezembro"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.dezembro,
+                        Width = 13
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["totalExecucao"].Value,
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCellMoney",
+                        Value = (data) => data.totalExecucao,
+                        Width = 15
+                    },
+                    new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>()
+                    {
+                        Name = _localizer["taxaExecucao"].Value + " (%)",
+                        ColumnTextStyleKey = "HeaderWrap",
+                        DataTextStyleKey = "TableCell",
+                        Value = (data) => data.taxaExecucao + "%",
+                        Width = 15
+                    },
+                });
+
+                colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["saldoExecucaoCE"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.saldoExecucao, Width = 15 });
+
+                if (isDespesa)
+                {
+                    colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["saldoDisponivel"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.saldoDisponivel, Width = 18 });
+                    colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["saldoNaoComprometido"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.saldoNaoComprometido, Width = 18 });
+                    colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["valorCabimentadoNaoComprometido"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.valorCabimentadoNaoComprometido, Width = 18 });
+                    colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["valorComprometidoNaoLiquidado"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.valorComprometidoNaoLiquidado, Width = 18 });
+                    colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["valorLiquidadoNaoPago"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.valorLiquidadoNaoPago, Width = 18 });
+                }
+                else
+                {
+                    colunas.Add(new ColumnOption<ClassificacaoEconomicaExecucaoDataContract>() { Name = _localizer["saldoReceitaLiquidadaNaoCobrada"].Value, ColumnTextStyleKey = "HeaderWrap", DataTextStyleKey = "TableCellMoney", Value = (data) => data.saldoReceitaLiquidadaNaoCobrada, Width = 18 });
+                }
+
+                // Adição da tabela
+                page.AddTable(new ExcelDocumentTextPosition(1, 4), lista, colunas, new TableOptions() { AutoFitColumns = false });
+            }
+
+            AddClassificacaoEconomicaPage(0, listaReceitas, false);
+            AddClassificacaoEconomicaPage(1, listaDespesas, true);
+
+            // Conversão do documento excel em base64
+            return excelDocument.GetFileString();
+        }
     }
 }

@@ -37,5 +37,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public string ExecucaoOrcamentalExcel(RelatorioExecucaoOrcamentalListagemRequest request, List<ExecucaoOrcamentalDataContract> lista);
         public List<AgrupamentoConfigDataContract> GetAlllActivAgrupamentoConfigByOrcamentoConfigTipoConta(int? orcamentoId, int tipoContaFK);
 
+        public string ExecucaoOrcamentalPorClassificacaoEconomicaExcel(RelatorioClassificacaoEconomicaRequest request, List<ClassificacaoEconomicaExecucaoDataContract> listaReceitas, List<ClassificacaoEconomicaExecucaoDataContract> listaDespesas);
+
     }
 }

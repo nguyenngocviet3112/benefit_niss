@@ -18,6 +18,27 @@
   width: 90%;
   padding-left: 10%;
   height: 71px;
+  position: relative;
+}
+
+.exportExcelButton {
+  position: absolute;
+  right: 3%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #2A81CC;
+  color: white;
+  height: 40px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.exportExcelIcon {
+  font-size: 19px;
+  width: 19px;
+  height: 19px;
+  padding-right: 5px;
 }
 
 .no-results {

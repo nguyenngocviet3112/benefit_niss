@@ -65,5 +65,16 @@ export interface ClassificacaoEconomicaExecucaoListagem {
   dezembro: number;
   totalExecucao: number;
   taxaExecucao: number;
+  cabimentos: number;
+  compromissos: number;
+  obrigacoes: number;
+  saldoDisponivel: number;
+  saldoNaoComprometido: number;
+  valorCabimentadoNaoComprometido: number;
+  valorComprometidoNaoLiquidado: number;
+  valorLiquidadoNaoPago: number;
+  receitaLiquidada: number;
+  saldoReceitaLiquidadaNaoCobrada: number;
+  saldoExecucao: number;
 }
 

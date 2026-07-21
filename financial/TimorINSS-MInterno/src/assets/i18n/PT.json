@@ -1486,7 +1486,15 @@
     "codigo": "Código",
     "designacao": "Designação",
     "ossInicial": "OSS Inicial",
-    "ossCorrigido": "OSS Corrigido"
+    "ossCorrigido": "OSS Corrigido",
+    "receitaLiquidada": "Receita Liquidada",
+    "saldoExecucao": "Saldo Execução",
+    "saldoReceitaLiquidadaNaoCobrada": "Saldo Receita Liquidada e não cobrada (DÍVIDA)",
+    "saldoDisponivel": "Saldo disponível (Execução+Cabimentos)",
+    "saldoNaoComprometido": "Saldo não comprometido",
+    "valorCabimentadoNaoComprometido": "Valor Cabimentado e não comprometido",
+    "valorComprometidoNaoLiquidado": "Valor Comprometido e não liquidado",
+    "valorLiquidadoNaoPago": "Valor Liquidado e não pago (DÍVIDA)"
   },
   "execucaoPorPrograma": {
     "menuLabel": "Execução por Programa",

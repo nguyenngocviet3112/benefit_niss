@@ -80,6 +80,10 @@ export class PagamentoExecutadoService {
     return this.api.post<ClassificacaoEconomicaExecucaoListagemResponse>('pagamentoExecutado/GetExecucaoOrcamentalPorClassificacaoEconomica', request);
   }
 
+  public GetExecucaoOrcamentalPorClassificacaoEconomicaExcel(request: GetExecucaoOrcamentalClassificacaoEconomicaRequest): Observable<any> {
+    return this.api.post<any>('pagamentoExecutado/GetExecucaoOrcamentalPorClassificacaoEconomicaExcel', request);
+  }
+
   public GetListaPagamentosProcesso(request: ListagemPagamentosProcessoRequest): Observable<ListagemPagamentosProcessoResponse>
   {
     return this.api.post<ListagemPagamentosProcessoResponse>('pagamentoExecutado/GetListaPagamentosProcesso', request);

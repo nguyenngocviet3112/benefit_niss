@@ -28,6 +28,11 @@
                 <mat-label>{{'general.clearFilter' | translate}}</mat-label>
             </a>
         </div>
+
+        <button class="exportExcelButton" mat-raised-button (click)="exportExcelRelatorio()" [disabled]="!year || !selectedInstitution">
+            <mat-icon class="exportExcelIcon">description</mat-icon>
+            <mat-label>{{'general.gerarExcel' | translate}}</mat-label>
+        </button>
     </div>
 
     <div>
@@ -62,6 +67,10 @@
                         <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.ossCorrigido' | translate }}</th>
                         <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorOrcamentado) }}</td>
                     </ng-container>
+                    <ng-container matColumnDef="receitaLiquidada">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.receitaLiquidada' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.receitaLiquidada) }}</td>
+                    </ng-container>
                     <ng-container matColumnDef="janeiro">
                         <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.janeiro' | translate }}</th>
                         <td mat-cell *matCellDef="let element">{{ formataCurrency(element.janeiro) }}</td>
@@ -118,9 +127,17 @@
                         <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.taxaEcecucao' | translate }}</th>
                         <td mat-cell *matCellDef="let element">{{ element.taxaExecucao.toFixed(2) }}%</td>
                     </ng-container>
+                    <ng-container matColumnDef="saldoExecucao">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.saldoExecucao' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.saldoExecucao) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="saldoReceitaLiquidadaNaoCobrada">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.saldoReceitaLiquidadaNaoCobrada' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.saldoReceitaLiquidadaNaoCobrada) }}</td>
+                    </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsReceitas"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsReceitas;"></tr>
                 </table>
                 <div class="no-results" *ngIf="receitasList.length === 0">{{ 'general.semResultados' | translate }}</div>
 
@@ -142,6 +159,18 @@
                         <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.ossCorrigido' | translate }}</th>
                         <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorOrcamentado) }}</td>
                     </ng-container>
+                    <ng-container matColumnDef="cabimentos">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.cabimentos' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.cabimentos) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="compromissos">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.compromissos' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.compromissos) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="obrigacoes">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.obrigacoes' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.obrigacoes) }}</td>
+                    </ng-container>
                     <ng-container matColumnDef="janeiro">
                         <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.janeiro' | translate }}</th>
                         <td mat-cell *matCellDef="let element">{{ formataCurrency(element.janeiro) }}</td>
@@ -198,9 +227,33 @@
                         <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.taxaEcecucao' | translate }}</th>
                         <td mat-cell *matCellDef="let element">{{ element.taxaExecucao.toFixed(2) }}%</td>
                     </ng-container>
+                    <ng-container matColumnDef="saldoExecucao">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.saldoExecucao' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.saldoExecucao) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="saldoDisponivel">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.saldoDisponivel' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.saldoDisponivel) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="saldoNaoComprometido">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.saldoNaoComprometido' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.saldoNaoComprometido) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorCabimentadoNaoComprometido">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.valorCabimentadoNaoComprometido' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorCabimentadoNaoComprometido) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorComprometidoNaoLiquidado">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.valorComprometidoNaoLiquidado' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorComprometidoNaoLiquidado) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorLiquidadoNaoPago">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'classificacaoEconomica.valorLiquidadoNaoPago' | translate }}</th>
+                        <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorLiquidadoNaoPago) }}</td>
+                    </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsDespesas"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsDespesas;"></tr>
                 </table>
                 <div class="no-results" *ngIf="despesasList.length === 0">{{ 'general.semResultados' | translate }}</div>
 

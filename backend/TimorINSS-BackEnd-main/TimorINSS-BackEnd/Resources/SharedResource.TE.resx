@@ -183,6 +183,51 @@
   <data name="designacao" xml:space="preserve">
     <value>Designação</value>
   </data>
+  <data name="codigo" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="ossInicial" xml:space="preserve">
+    <value>OSS Inicial</value>
+  </data>
+  <data name="ossCorrigido" xml:space="preserve">
+    <value>OSS Corrigido</value>
+  </data>
+  <data name="relatorioClassificacaoEconomica" xml:space="preserve">
+    <value>CE_OSS_Global - Total por Classificação Económica</value>
+  </data>
+  <data name="receitaLiquidada" xml:space="preserve">
+    <value>Receita Liquidada</value>
+  </data>
+  <data name="saldoExecucaoCE" xml:space="preserve">
+    <value>Saldo Execução</value>
+  </data>
+  <data name="saldoReceitaLiquidadaNaoCobrada" xml:space="preserve">
+    <value>Saldo Receita Liquidada e não cobrada (DÍVIDA)</value>
+  </data>
+  <data name="saldoDisponivel" xml:space="preserve">
+    <value>Saldo disponível (Execução+Cabimentos)</value>
+  </data>
+  <data name="saldoNaoComprometido" xml:space="preserve">
+    <value>Saldo não comprometido</value>
+  </data>
+  <data name="valorCabimentadoNaoComprometido" xml:space="preserve">
+    <value>Valor Cabimentado e não comprometido</value>
+  </data>
+  <data name="valorComprometidoNaoLiquidado" xml:space="preserve">
+    <value>Valor Comprometido e não liquidado</value>
+  </data>
+  <data name="valorLiquidadoNaoPago" xml:space="preserve">
+    <value>Valor Liquidado e não pago (DÍVIDA)</value>
+  </data>
+  <data name="cabimentosCE" xml:space="preserve">
+    <value>Cabimentos</value>
+  </data>
+  <data name="compromissosCE" xml:space="preserve">
+    <value>Compromissos</value>
+  </data>
+  <data name="obrigacoes" xml:space="preserve">
+    <value>Obrigações</value>
+  </data>
   <data name="filtro" xml:space="preserve">
     <value>Filtro</value>
   </data>

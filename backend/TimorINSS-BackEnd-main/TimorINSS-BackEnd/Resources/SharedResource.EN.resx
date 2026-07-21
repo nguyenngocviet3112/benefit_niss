@@ -183,6 +183,51 @@
   <data name="designacao" xml:space="preserve">
     <value>Designation</value>
   </data>
+  <data name="codigo" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="ossInicial" xml:space="preserve">
+    <value>OSS Initial</value>
+  </data>
+  <data name="ossCorrigido" xml:space="preserve">
+    <value>OSS Corrected</value>
+  </data>
+  <data name="relatorioClassificacaoEconomica" xml:space="preserve">
+    <value>CE_OSS_Global - Total by Economic Classification</value>
+  </data>
+  <data name="receitaLiquidada" xml:space="preserve">
+    <value>Revenue Recognized</value>
+  </data>
+  <data name="saldoExecucaoCE" xml:space="preserve">
+    <value>Execution Balance</value>
+  </data>
+  <data name="saldoReceitaLiquidadaNaoCobrada" xml:space="preserve">
+    <value>Recognized Revenue Not Yet Collected (DEBT)</value>
+  </data>
+  <data name="saldoDisponivel" xml:space="preserve">
+    <value>Available Balance (Execution+Commitment)</value>
+  </data>
+  <data name="saldoNaoComprometido" xml:space="preserve">
+    <value>Uncommitted Balance</value>
+  </data>
+  <data name="valorCabimentadoNaoComprometido" xml:space="preserve">
+    <value>Committed but Not Yet Obligated</value>
+  </data>
+  <data name="valorComprometidoNaoLiquidado" xml:space="preserve">
+    <value>Obligated but Not Yet Recognized</value>
+  </data>
+  <data name="valorLiquidadoNaoPago" xml:space="preserve">
+    <value>Recognized but Unpaid (DEBT)</value>
+  </data>
+  <data name="cabimentosCE" xml:space="preserve">
+    <value>Commitments (Cabimento)</value>
+  </data>
+  <data name="compromissosCE" xml:space="preserve">
+    <value>Commitments (Compromisso)</value>
+  </data>
+  <data name="obrigacoes" xml:space="preserve">
+    <value>Obligations</value>
+  </data>
   <data name="filtro" xml:space="preserve">
     <value>Filter</value>
   </data>
