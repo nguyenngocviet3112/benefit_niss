@@ -374,13 +374,15 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         .Where(v => v.InstitutionId == request.institution
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
+                        .OrderBy(v => v.ComponenteOrcamentoRegistoFkNavigation.Id)
                         .Select(v => v.Valor).FirstOrDefault(),
                     ValorCorrigido = a.Componenteorcamentovalor
                         .Where(v => v.InstitutionId == request.institution
                             && v.ComponenteOrcamentoRegistoFkNavigation.Aprovado
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataInicio.Year <= request.year
                             && v.ComponenteOrcamentoRegistoFkNavigation.DataFim.Year >= request.year)
-                        .Select(v => v.Valor).LastOrDefault()
+                        .OrderByDescending(v => v.ComponenteOrcamentoRegistoFkNavigation.Id)
+                        .Select(v => v.Valor).FirstOrDefault()
                 })
                 .ToList();
 
