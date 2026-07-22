@@ -840,9 +840,9 @@ export class ComponenteDespesaComponent implements OnInit {
       width: '40%',
       height: '30%',
       panelClass: 'warningModal',
-      data: this.valorDespesaListagem[3] != null && this.valorDespesaListagem[3].valorCabimentado != null && this.valorDespesaListagem[3].valorCabimentado <= 0 ?
+      data: this.valorDespesaListagem[3] != null && this.valorDespesaListagem[3].valorCabimentado != null && this.valorDespesaListagem[3].valorCabimentado < 0 ?
         { function: this.autorizarDespesaValue(), msg: this.translate.instant('warnings.valorCabimentacaoNegativo'), noConfirmation: true } :
-        this.valorDespesaListagem[3] != null && this.valorDespesaListagem[3].valorCabimentado > 0 &&
+        this.valorDespesaListagem[3] != null && this.valorDespesaListagem[3].valorCabimentado >= 0 &&
           this.valorDespesaListagem[4].valorAutorizado != null && this.valorDespesaListagem[4].valorAutorizado < 0 ?
           { function: this.componenteDespesaService.UpdateDespesa({ id: this.despesaRegistadaAutorizada.id, estado: this.despesaRegistadaAutorizada.estado }), msg: this.translate.instant('warnings.valorAutorizacaoNegativo') } :
           { function: this.componenteDespesaService.UpdateDespesa({ id: this.despesaRegistadaAutorizada.id, estado: this.despesaRegistadaAutorizada.estado }), msg: this.translate.instant('warnings.autorizacaoDespesa') }
@@ -869,7 +869,7 @@ export class ComponenteDespesaComponent implements OnInit {
       width: '40%',
       height: '30%',
       panelClass: 'warningModal',
-      data: this.valorDespesaListagem[3] != null && this.valorDespesaListagem[3].valorCabimentado != null && this.valorDespesaListagem[3].valorCabimentado <= 0 ?
+      data: this.valorDespesaListagem[3] != null && this.valorDespesaListagem[3].valorCabimentado != null && this.valorDespesaListagem[3].valorCabimentado < 0 ?
         { function: this.cabimentarDespesaValue(), msg: this.translate.instant('warnings.valorCabimentacaoNegativo'), noConfirmation: true } :
         { function: this.componenteDespesaService.UpdateDespesa({ id: this.despesaRegistadaAutorizada.id, estado: this.despesaRegistadaAutorizada.estado }), msg: this.translate.instant('warnings.cabimentacaoDespesa') }
 
