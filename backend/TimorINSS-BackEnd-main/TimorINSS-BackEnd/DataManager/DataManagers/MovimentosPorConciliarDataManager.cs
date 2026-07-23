@@ -150,7 +150,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             var tarefaConfig = _unitOfWork.TarefaAtivoRepository.GetTarefaAtivoById(request.TarefaAtivoId).TarefaconfigFkNavigation;
             
             // Validar se a tarefa tem permissões para o componente
-            if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoMovimentosConciliar != 2)
+            if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo)?.PermissaoMovimentosConciliar != 2)
             {
                 response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
                 return response;

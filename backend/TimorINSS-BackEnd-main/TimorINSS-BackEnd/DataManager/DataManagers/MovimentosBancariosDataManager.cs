@@ -35,7 +35,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             var tarefaConfig = _unitOfWork.TarefaAtivoRepository.GetTarefaAtivoById(request.data.TarefaAtivoId).TarefaconfigFkNavigation;
 
             // Validar se a tarefa tem permissões para o componente
-            if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoMovimentosBancarios != 2)
+            if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo)?.PermissaoMovimentosBancarios != 2)
             {
                 response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
                 return response;
@@ -61,7 +61,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             var tarefaConfig = _unitOfWork.TarefaAtivoRepository.GetTarefaAtivoById(request.data.TarefaAtivoId).TarefaconfigFkNavigation;
 
             // Validar se a tarefa tem permissões para o componente
-            if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoMovimentosBancarios != 2)
+            if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo)?.PermissaoMovimentosBancarios != 2)
             {
                 response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
                 return response;
@@ -93,7 +93,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             var tarefaConfig = _unitOfWork.TarefaAtivoRepository.GetTarefaAtivoById(request.TarefaAtivoId).TarefaconfigFkNavigation;
 
             // Validar se a tarefa tem permissões para o componente
-            if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoMovimentosBancarios != 2)
+            if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo)?.PermissaoMovimentosBancarios != 2)
             {
                 response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
                 return response;
@@ -186,12 +186,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             var tarefaConfig = _unitOfWork.TarefaAtivoRepository.GetTarefaAtivoById(request.TarefaAtivoId).TarefaconfigFkNavigation;
 
-            response.selectMovimentosTypePermission = tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoSelecionarMovimentos;
-            response.addEditMovimentosPermission = tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoMovimentosConciliar;
-            response.addEditMovimentosBancariosPermission = tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoMovimentosBancarios;
-            response.viewSelectedToConciliatePermission = tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoVerMovimentosAconciliar;
-            response.conciliatePermission = tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoConciliar;
-            response.undoConciliationPermission = tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoDesfazerConciliar;
+            var componenteConciliacao = tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo);
+
+            // Tarefa sem componente de conciliação configurado/activo é um estado válido
+            // (ex.: não configurado pelo administrador) - não deve rebentar, apenas devolver sem permissões.
+            response.selectMovimentosTypePermission = componenteConciliacao?.PermissaoSelecionarMovimentos ?? 0;
+            response.addEditMovimentosPermission = componenteConciliacao?.PermissaoMovimentosConciliar ?? 0;
+            response.addEditMovimentosBancariosPermission = componenteConciliacao?.PermissaoMovimentosBancarios ?? 0;
+            response.viewSelectedToConciliatePermission = componenteConciliacao?.PermissaoVerMovimentosAconciliar ?? 0;
+            response.conciliatePermission = componenteConciliacao?.PermissaoConciliar ?? 0;
+            response.undoConciliationPermission = componenteConciliacao?.PermissaoDesfazerConciliar ?? 0;
 
             return response;
         }
@@ -265,7 +269,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 var tarefaConfig = _unitOfWork.TarefaAtivoRepository.GetTarefaAtivoById(tarefaAtivoId).TarefaconfigFkNavigation;
 
                 // Validar se a tarefa tem permissões para o componente
-                if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo).PermissaoMovimentosBancarios != 2)
+                if (tarefaConfig.Componenteconciliacaomovimentos.FirstOrDefault(x => x.IndActivo)?.PermissaoMovimentosBancarios != 2)
                 {
                     response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
                     return response;
