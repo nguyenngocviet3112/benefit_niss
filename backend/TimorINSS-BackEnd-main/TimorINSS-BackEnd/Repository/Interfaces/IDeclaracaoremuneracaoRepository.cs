@@ -16,6 +16,12 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public DeclaracaoListagem GetDeclaracaoTrabalhadorInfo(DeclaracaoRemuneracaoDataContract declaracao);
 
+        // Versão em lote de GetDeclaracaoTrabalhadorInfo -- mesma lógica/regras por item, mas faz um punhado de
+        // queries para toda a lista em vez de uma query (multi-join) por trabalhador. Devolve um dicionário
+        // chaveado por declaracaoRelEntidadeTrabalhadorFk, na mesma ordem de processamento não é garantida --
+        // o chamador deve iterar pela sua própria lista/ordem.
+        public Dictionary<int, DeclaracaoListagem> GetDeclaracaoTrabalhadorInfoBatch(List<DeclaracaoRemuneracaoDataContract> declaracoes, DateTime mesAno);
+
         public decimal getTemDecimoTerceiroMes(DateTime mesAno, int idRel);
 
         public List<Tuple<int, DateTime>> GetEntidadesAndFirstDateComDeclaracaoNaoRegistadasPastDay(DateTime day);

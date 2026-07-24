@@ -27,5 +27,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public bool EntidadeTemConflitoComTipoRegime(int entidadeId, int regimeId);
 
         public List<Relentidadetrabalhador> GetRelEntidadeTrabalhadorINSS(string Niss);
+
+        // Versão em lote de GetDto -- 1 query para todos os ids em vez de 1 query por id.
+        public Dictionary<int, RelentidadetrabalhadorDto> GetDtoBatch(List<int> ids);
     }
 }

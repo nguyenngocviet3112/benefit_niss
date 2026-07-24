@@ -36,9 +36,11 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             _localizer = localizer;
         }
 
-        private DeclaracaoListagem BuildDeclaracaoDataContract(DeclaracaoremuneracaoDto declaracao, DateTime mesAno)
+        // Só constrói o objecto (sem chamar a BD) -- usado pelo GetDeclaracaoByEntidadeAndFilter para juntar
+        // todos os contratos numa lista e resolver a info do trabalhador de todos em lote (ver GetDeclaracaoTrabalhadorInfoBatch).
+        private DeclaracaoRemuneracaoDataContract BuildDeclaracaoDataContractModel(DeclaracaoremuneracaoDto declaracao, DateTime mesAno)
         {
-            DeclaracaoRemuneracaoDataContract declaracaoModel = new DeclaracaoRemuneracaoDataContract
+            return new DeclaracaoRemuneracaoDataContract
             {
                 idDeclaracao = declaracao.IdDeclaracao,
                 declaracaoRelEntidadeTrabalhadorFk = declaracao.DeclaracaoRelEntidadeTrabalhadorFk,
@@ -58,14 +60,11 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 regimeFk = declaracao.RegimeFk,
                 sexoFk = declaracao.SexoFk
             };
-
-            return _unitOfWork.DeclaracaoRemuneracaoRepository
-                .GetDeclaracaoTrabalhadorInfo(declaracaoModel);
         }
 
-        private DeclaracaoListagem BuildEmptyDeclaracaoDataContract(int idRel, DateTime mesAno)
+        private DeclaracaoRemuneracaoDataContract BuildEmptyDeclaracaoDataContractModel(int idRel, DateTime mesAno)
         {
-            DeclaracaoRemuneracaoDataContract declaracaoModel = new DeclaracaoRemuneracaoDataContract
+            return new DeclaracaoRemuneracaoDataContract
             {
                 idDeclaracao = 0,
                 declaracaoRelEntidadeTrabalhadorFk = idRel,
@@ -82,9 +81,6 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 oficioso = false,
                 flagImportado = false
             };
-
-            return _unitOfWork.DeclaracaoRemuneracaoRepository
-                .GetDeclaracaoTrabalhadorInfo(declaracaoModel);
         }
 
         public GetDeclaracaoByEntidadeAndFilterResponse GetDeclaracaoByEntidadeAndFilter(GetDeclaracaoByEntidadeAndFilterRequest request)
@@ -145,72 +141,89 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 List<int> relIdsAll = _unitOfWork.RelEntidadeTrabalhadorRepository.GetAllRelTrabalhadorByEntidadeAndMonthAll(decodedId, date);
                 List<int> relSuspensosIds = _unitOfWork.SuspensaoRepository.GetAllRelEntidadeTrabalhadorSuspensosByDate(decodedId, date, date.AddMonths(1).AddDays(-1));
 
-                DeclaracaoremuneracaoDto declaracao;
-                DeclaracaoListagem declaracaoListagem;
                 response.declaracoes = new List<DeclaracaoListagem>();
                 response.rows = relIdsAll.Count;
-                //Para todas as relações de trabalhadores com entidades valida se existe pelo menos um trabalhador relacionado e se existe alguma declaração, senão cria uma nova vazia
-                bool exists;
+
+                // 1ª passagem (sem ir à BD): monta os contratos a resolver para todos os relIds válidos,
+                // na mesma ordem/regras do código original (só troca chamadas por-linha por lote, ver abaixo)
+                var contratosPorRel = new Dictionary<int, DeclaracaoRemuneracaoDataContract>();
+                var existsPorRel = new Dictionary<int, bool>();
+                var idRelsValidosNaOrdem = new List<int>();
+
                 foreach (int idRel in relIds)
                 {
-                    exists = false;
                     //Caso haja alguma relação entre este trabalhador e a entidadem que não esteja suspenso
-                    if (!relSuspensosIds.Contains(idRel))
+                    if (relSuspensosIds.Contains(idRel))
+                        continue;
+
+                    //Se encontrar declaração ele constroi a declaração com dados já existentes, senão ele cria uma nova vazia
+                    DeclaracaoremuneracaoDto declaracao = declaracoes.Find(d => d.DeclaracaoRelEntidadeTrabalhadorFk == idRel);
+                    bool exists = declaracao != null;
+
+                    contratosPorRel[idRel] = exists
+                        ? BuildDeclaracaoDataContractModel(declaracao, date)
+                        : BuildEmptyDeclaracaoDataContractModel(idRel, date);
+                    existsPorRel[idRel] = exists;
+                    idRelsValidosNaOrdem.Add(idRel);
+                }
+
+                // resolve a info do trabalhador de todos em lote (poucas queries no total, em vez de várias por trabalhador)
+                var infoBatch = _unitOfWork.DeclaracaoRemuneracaoRepository
+                    .GetDeclaracaoTrabalhadorInfoBatch(contratosPorRel.Values.ToList(), date);
+
+                //caso não haja nenhuma declaração, vai ser preciso criar uma nova vazia consoante as regras de negócio estabelecidas -- busca o Rel desses em lote
+                List<int> relIdsParaCalculoDias = idRelsValidosNaOrdem.Where(idRel => !declaracoesExists || !existsPorRel[idRel]).ToList();
+                Dictionary<int, RelentidadetrabalhadorDto> relsParaCalculoDias = relIdsParaCalculoDias.Any()
+                    ? _unitOfWork.RelEntidadeTrabalhadorRepository.GetDtoBatch(relIdsParaCalculoDias)
+                    : new Dictionary<int, RelentidadetrabalhadorDto>();
+
+                // 2ª passagem: monta a resposta final, na mesma ordem/regras do código original
+                foreach (int idRel in idRelsValidosNaOrdem)
+                {
+                    DeclaracaoListagem declaracaoListagem = infoBatch.ContainsKey(idRel) ? infoBatch[idRel] : new DeclaracaoListagem();
+
+                    //Se não houver informação do trabalhador quer dizer que existem erros com a declaração
+                    if (declaracaoListagem.trabalhadorInfo == null)
                     {
-                        //Se encontrar declaração ele constroi a declaração com dados já existentes, senão ele cria uma nova vazia
-                        declaracao = declaracoes.Find(d => d.DeclaracaoRelEntidadeTrabalhadorFk == idRel);
-                        if (declaracao == null)
-                            declaracaoListagem = BuildEmptyDeclaracaoDataContract(idRel, date);
-                        else
+                        response.Errors.Add(new Error
                         {
-                            declaracaoListagem = BuildDeclaracaoDataContract(declaracao, date);
-                            exists = true;
+                            ErrorCode = ((int)ErrorsDataContract.DeclaracaoComErro).ToString(),
+                            ErrorMessage = ErrorsDataContract.DeclaracaoComErro.ToString()
+                        });
+                        return response;
+                    }
+                    else
+                    {
+                        if (!declaracoesExists || !existsPorRel[idRel])
+                        {
+                            RelentidadetrabalhadorDto rel = relsParaCalculoDias[idRel];
+
+                            //Como foi dito nas regras de negócio, e segundo os calculos fornecidos, o dia inicial e o ultimo dia do mês são calculados conforme o mês, pois nem todos os meses têm o dia final como 30
+                            int diaInicial = 0;
+                            int diaFinal = 30;
+
+                            if (rel.DtIniFimTrabalhador.HasValue && rel.DtIniFimTrabalhador.Value.Month == date.Month)
+                                diaFinal = rel.DtIniFimTrabalhador.Value.Day;
+
+                            if (rel.DtIniVincTrabalhador.Month == date.Month)
+                                diaInicial = rel.DtIniVincTrabalhador.Day - 1;
+
+                            declaracaoListagem.declaracao.diasContrato = diaFinal - diaInicial;
+
+                            int diaFinalMes = date.AddMonths(1).AddDays(-1).Day;
+
+                            if (declaracaoListagem.declaracao.diasContrato > 30 || (diaInicial == 0 && diaFinal >= diaFinalMes))
+                                declaracaoListagem.declaracao.diasContrato = 30;
+
+                            // Este parte conta todos os dias que são admissiveis para a segurança social (dias trabalhados, dias de parentalidade e com faltas injustificadas), para depois fazer a diferença com os dias que estão no contrato
+                            decimal diasTrabcontabSegSocialPart1 = declaracaoListagem.declaracao.diasEfecTrabalhados + declaracaoListagem.declaracao.diasParentalidade + declaracaoListagem.declaracao.faltasInjustific;
+                            decimal diasTrabcontabSegSocialPart2 = diasTrabcontabSegSocialPart1 - declaracaoListagem.declaracao.diasContrato;
+
+                            declaracaoListagem.declaracao.diasEfecTrabalhados = declaracaoListagem.declaracao.diasEfecTrabalhados - diasTrabcontabSegSocialPart2;
+                            declaracaoListagem.declaracao.diasTrabcontabSegSocial = declaracaoListagem.declaracao.diasContrato;
                         }
 
-                        //Se não houver informação do trabalhador quer dizer que existem erros com a declaração
-                        if (declaracaoListagem.trabalhadorInfo == null)
-                        {
-                            response.Errors.Add(new Error
-                            {
-                                ErrorCode = ((int)ErrorsDataContract.DeclaracaoComErro).ToString(),
-                                ErrorMessage = ErrorsDataContract.DeclaracaoComErro.ToString()
-                            });
-                            return response;
-                        }
-                        else
-                        {
-                            //caso não haja nenhuma declaração, ele vai criar uma nova vazia consoante as regras de negócio estabelecidas
-                            if (!declaracoesExists || !exists)
-                            {
-                                RelentidadetrabalhadorDto rel = _unitOfWork.RelEntidadeTrabalhadorRepository.GetDto(idRel);
-
-                                //Como foi dito nas regras de negócio, e segundo os calculos fornecidos, o dia inicial e o ultimo dia do mês são calculados conforme o mês, pois nem todos os meses têm o dia final como 30
-                                int diaInicial = 0;
-                                int diaFinal = 30;
-
-                                if (rel.DtIniFimTrabalhador.HasValue && rel.DtIniFimTrabalhador.Value.Month == date.Month)
-                                    diaFinal = rel.DtIniFimTrabalhador.Value.Day;
-
-                                if (rel.DtIniVincTrabalhador.Month == date.Month)
-                                    diaInicial = rel.DtIniVincTrabalhador.Day - 1;
-
-                                declaracaoListagem.declaracao.diasContrato = diaFinal - diaInicial;
-
-                                int diaFinalMes = date.AddMonths(1).AddDays(-1).Day;
-
-                                if (declaracaoListagem.declaracao.diasContrato > 30 || (diaInicial == 0 && diaFinal >= diaFinalMes))
-                                    declaracaoListagem.declaracao.diasContrato = 30;
-
-                                // Este parte conta todos os dias que são admissiveis para a segurança social (dias trabalhados, dias de parentalidade e com faltas injustificadas), para depois fazer a diferença com os dias que estão no contrato
-                                decimal diasTrabcontabSegSocialPart1 = declaracaoListagem.declaracao.diasEfecTrabalhados + declaracaoListagem.declaracao.diasParentalidade + declaracaoListagem.declaracao.faltasInjustific;
-                                decimal diasTrabcontabSegSocialPart2 = diasTrabcontabSegSocialPart1 - declaracaoListagem.declaracao.diasContrato;
-
-                                declaracaoListagem.declaracao.diasEfecTrabalhados = declaracaoListagem.declaracao.diasEfecTrabalhados - diasTrabcontabSegSocialPart2;
-                                declaracaoListagem.declaracao.diasTrabcontabSegSocial = declaracaoListagem.declaracao.diasContrato;
-                            }
-
-                            response.declaracoes.Add(declaracaoListagem);
-                        }
+                        response.declaracoes.Add(declaracaoListagem);
                     }
                 }
             }

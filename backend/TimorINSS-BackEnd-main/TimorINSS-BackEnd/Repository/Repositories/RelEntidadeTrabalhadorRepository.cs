@@ -180,5 +180,33 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Where(r => r.EntidadeFkNavigation.Niss == Niss)
                 .ToList();
         }
+
+        public Dictionary<int, RelentidadetrabalhadorDto> GetDtoBatch(List<int> ids)
+        {
+            return _moduloContribuicoesContext.Relentidadetrabalhador
+                .Where(r => ids.Contains(r.IdRel))
+                .Select(r => new RelentidadetrabalhadorDto
+                {
+                    IdRel = r.IdRel,
+                    EntidadeFk = r.EntidadeFk,
+                    TrabalhadorFk = r.TrabalhadorFk,
+                    TipoContrato = r.TipoContrato,
+                    NaturezaContrato = r.NaturezaContrato,
+                    LeiLabAplicavel = r.LeiLabAplicavel,
+                    HorasSemana = r.HorasSemana,
+                    DiasSemana = r.DiasSemana,
+                    DtIniVincTrabalhador = r.DtIniVincTrabalhador,
+                    DtIniFimTrabalhador = r.DtIniFimTrabalhador,
+                    FuncPublico = r.FuncPublico,
+                    NumFuncPublico = r.NumFuncPublico,
+                    FlagImportado = r.FlagImportado,
+                    RegimeFk = r.RegimeFk,
+                    EscalaoFk = r.EscalaoFk,
+                    Profissao = r.Profissao,
+                    ProfissaoOutro = r.ProfissaoOutro
+                })
+                .ToList()
+                .ToDictionary(dto => dto.IdRel);
+        }
     }
 }

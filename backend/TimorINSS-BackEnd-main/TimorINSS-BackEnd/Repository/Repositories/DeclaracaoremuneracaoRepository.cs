@@ -196,6 +196,212 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return res;
         }
 
+        // Versão em lote de GetDeclaracaoTrabalhadorInfo -- mesmas regras/ramos de negócio linha a linha,
+        // mas faz um punhado de queries para toda a lista de declaracoes em vez de várias queries (multi-join)
+        // por trabalhador. Motivo: GetDeclaracaoByEntidadeAndFilter chama isto dentro de um foreach por
+        // trabalhador, o que para uma entidade com muitos trabalhadores gerava um N+1 severo.
+        public Dictionary<int, DeclaracaoListagem> GetDeclaracaoTrabalhadorInfoBatch(List<DeclaracaoRemuneracaoDataContract> declaracoes, DateTime mesAno)
+        {
+            var resultado = new Dictionary<int, DeclaracaoListagem>();
+
+            if (declaracoes == null || !declaracoes.Any())
+                return resultado;
+
+            var grupoNovo = declaracoes.Where(d => d.regimeFk == 0).ToList();
+            var grupoExistente = declaracoes.Where(d => d.regimeFk != 0).ToList();
+
+            // ---- Grupo "regimeFk == 0" (mesma condição/Include da branch original) ----
+            if (grupoNovo.Any())
+            {
+                var relIds = grupoNovo.Select(d => d.declaracaoRelEntidadeTrabalhadorFk).ToList();
+
+                var rels = _moduloContribuicoesContext.Relentidadetrabalhador
+                    .Include(r => r.TrabalhadorFkNavigation)
+                        .ThenInclude(t => t.NacionalidadeTrabalhadorNavigation)
+                    .Include(r => r.TrabalhadorFkNavigation)
+                        .ThenInclude(t => t.SexoTrabalhadorNavigation)
+                    .Include(r => r.RegimeFkNavigation)
+                        .ThenInclude(rg => rg.RegimeRegimePaiNavigation)
+                            .ThenInclude(rgp => rgp.TipoRegimeNavigation)
+                    .Where(r => relIds.Contains(r.IdRel) &&
+                                r.RegimeFkNavigation.RegimeRegimePaiNavigation.Any(rgp => rgp.DataInicio <= mesAno &&
+                                                                                          (rgp.DataFim ?? System.Data.SqlTypes.SqlDateTime.MaxValue.Value) >= mesAno))
+                    .ToList()
+                    .ToDictionary(r => r.IdRel);
+
+                // 1ª passagem: descobre o tipoRegime de cada linha (precisa disto para saber se vai
+                // precisar de Escalao ou de decimoTerceiro no lote seguinte)
+                var tipoRegimePorRel = new Dictionary<int, string>();
+                var escalaoIdsNecessarios = new List<int>();
+                var decimoTerceiroIdsNecessarios = new List<int>();
+
+                foreach (var d in grupoNovo)
+                {
+                    if (!rels.ContainsKey(d.declaracaoRelEntidadeTrabalhadorFk))
+                        continue; // idêntico ao original: rel==null vai rebentar mais abaixo (dado corrompido/impossível dentro do mesmo pedido)
+
+                    var rel = rels[d.declaracaoRelEntidadeTrabalhadorFk];
+                    var regimePai = rel.RegimeFkNavigation.RegimeRegimePaiNavigation.FirstOrDefault();
+                    var tipoRegime = regimePai.TipoRegimeNavigation.Descricao;
+                    tipoRegimePorRel[d.declaracaoRelEntidadeTrabalhadorFk] = tipoRegime;
+
+                    if (tipoRegime == "E")
+                    {
+                        if (rel.EscalaoFk.HasValue)
+                            escalaoIdsNecessarios.Add(rel.EscalaoFk.Value);
+                    }
+                    else
+                    {
+                        decimoTerceiroIdsNecessarios.Add(d.declaracaoRelEntidadeTrabalhadorFk);
+                    }
+                }
+
+                var escalaoDict = _moduloContribuicoesContext.Escalao
+                    .Where(e => escalaoIdsNecessarios.Contains(e.IdEscalao))
+                    .ToList()
+                    .ToDictionary(e => e.IdEscalao);
+
+                var decimoTerceiroDict = _moduloContribuicoesContext.Declaracaoremuneracao
+                    .Where(dr => dr.MesAno.Year == mesAno.Year &&
+                                 decimoTerceiroIdsNecessarios.Contains(dr.DeclaracaoRelEntidadeTrabalhadorFk) &&
+                                 dr.IndActivo && dr.DecimoTerceiro > 0)
+                    .Select(dr => new { dr.DeclaracaoRelEntidadeTrabalhadorFk, dr.DecimoTerceiro })
+                    .ToList()
+                    .GroupBy(x => x.DeclaracaoRelEntidadeTrabalhadorFk)
+                    .ToDictionary(g => g.Key, g => g.First().DecimoTerceiro);
+
+                // 2ª passagem: constrói o resultado final de cada linha, replicando exactamente a lógica original
+                foreach (var d in grupoNovo)
+                {
+                    var res = new DeclaracaoListagem();
+                    var rel = rels[d.declaracaoRelEntidadeTrabalhadorFk];
+
+                    string tipoRegime = tipoRegimePorRel[d.declaracaoRelEntidadeTrabalhadorFk];
+
+                    d.regimeFk = rel.RegimeFkNavigation.RegimeRegimePaiNavigation.FirstOrDefault().IdRegime;
+                    d.sexoFk = rel.TrabalhadorFkNavigation.SexoTrabalhador;
+                    d.nacionalidadeFk = rel.TrabalhadorFkNavigation.NacionalidadeTrabalhador;
+
+                    var infoDeclaracao = new DeclaracaoTrabalhadorInfo
+                    {
+                        nacionalidade = rel.TrabalhadorFkNavigation.NacionalidadeTrabalhadorNavigation.Descricao,
+                        niss = rel.TrabalhadorFkNavigation.Niss,
+                        nome = rel.TrabalhadorFkNavigation.Nome,
+                        regime = rel.RegimeFkNavigation.Descricao,
+                        tipoRegime = tipoRegime,
+                        sexo = rel.TrabalhadorFkNavigation.SexoTrabalhadorNavigation.Descricao
+                    };
+
+                    if (tipoRegime == "E")
+                    {
+                        if (!rel.EscalaoFk.HasValue || !escalaoDict.ContainsKey(rel.EscalaoFk.Value))
+                        {
+                            resultado[d.declaracaoRelEntidadeTrabalhadorFk] = res; // igual ao "if (escalao == null) return res;" original
+                            continue;
+                        }
+
+                        d.remunDeclarada = escalaoDict[rel.EscalaoFk.Value].Valor;
+                    }
+                    else
+                    {
+                        decimal decimoTerceiroMes = decimoTerceiroDict.ContainsKey(d.declaracaoRelEntidadeTrabalhadorFk)
+                            ? decimoTerceiroDict[d.declaracaoRelEntidadeTrabalhadorFk] : 0;
+                        d.decimoTerceiroMes = decimoTerceiroMes > 0;
+                        d.decimoTerceiro = decimoTerceiroMes;
+                    }
+
+                    res.declaracao = d;
+                    res.trabalhadorInfo = infoDeclaracao;
+                    resultado[d.declaracaoRelEntidadeTrabalhadorFk] = res;
+                }
+            }
+
+            // ---- Grupo "regimeFk != 0" (mesma condição/Include da branch original "else") ----
+            if (grupoExistente.Any())
+            {
+                var relIds = grupoExistente.Select(d => d.declaracaoRelEntidadeTrabalhadorFk).ToList();
+                var regimeIds = grupoExistente.Select(d => d.regimeFk).Distinct().ToList();
+                var nacionalidadeIds = grupoExistente.Select(d => d.nacionalidadeFk).Distinct().ToList();
+                var sexoIds = grupoExistente.Select(d => d.sexoFk).Distinct().ToList();
+
+                var trabalhadoresDict = _moduloContribuicoesContext.Relentidadetrabalhador
+                    .Include(r => r.TrabalhadorFkNavigation)
+                    .Where(r => relIds.Contains(r.IdRel))
+                    .ToList()
+                    .ToDictionary(r => r.IdRel, r => r.TrabalhadorFkNavigation);
+
+                var regimesDict = _moduloContribuicoesContext.Regime
+                    .Include(r => r.TipoRegimeNavigation)
+                    .Where(r => regimeIds.Contains(r.IdRegime))
+                    .ToList()
+                    .ToDictionary(r => r.IdRegime);
+
+                var dominiosNecessarios = nacionalidadeIds.Concat(sexoIds).Distinct().ToList();
+                var dominiosDict = _moduloContribuicoesContext.Dominio
+                    .Where(dm => dominiosNecessarios.Contains(dm.IdDominio))
+                    .ToList()
+                    .ToDictionary(dm => dm.IdDominio);
+
+                foreach (var d in grupoExistente)
+                {
+                    var res = new DeclaracaoListagem();
+
+                    if (!trabalhadoresDict.ContainsKey(d.declaracaoRelEntidadeTrabalhadorFk) || trabalhadoresDict[d.declaracaoRelEntidadeTrabalhadorFk] == null)
+                    {
+                        resultado[d.declaracaoRelEntidadeTrabalhadorFk] = res; // "if (trabalhador == null) return res;"
+                        continue;
+                    }
+                    var trabalhador = trabalhadoresDict[d.declaracaoRelEntidadeTrabalhadorFk];
+
+                    if (!regimesDict.ContainsKey(d.regimeFk))
+                    {
+                        resultado[d.declaracaoRelEntidadeTrabalhadorFk] = res; // "if (regime == null) return res;"
+                        continue;
+                    }
+                    var regime = regimesDict[d.regimeFk];
+
+                    var tipoRegime = regime.TipoRegimeNavigation;
+                    if (tipoRegime == null)
+                    {
+                        resultado[d.declaracaoRelEntidadeTrabalhadorFk] = res; // "if (tipoRegime == null) return res;"
+                        continue;
+                    }
+
+                    if (!dominiosDict.ContainsKey(d.nacionalidadeFk))
+                    {
+                        resultado[d.declaracaoRelEntidadeTrabalhadorFk] = res; // "if (nacionalidade == null) return res;"
+                        continue;
+                    }
+                    var nacionalidade = dominiosDict[d.nacionalidadeFk];
+
+                    if (!dominiosDict.ContainsKey(d.sexoFk))
+                    {
+                        resultado[d.declaracaoRelEntidadeTrabalhadorFk] = res; // "if (sexo == null) return res;"
+                        continue;
+                    }
+                    var sexo = dominiosDict[d.sexoFk];
+
+                    var infoDeclaracao = new DeclaracaoTrabalhadorInfo
+                    {
+                        nacionalidade = nacionalidade.Descricao,
+                        niss = trabalhador.Niss,
+                        nome = trabalhador.Nome,
+                        regime = regime.NomeRegime,
+                        tipoRegime = tipoRegime.Descricao,
+                        sexo = sexo.Descricao
+                    };
+
+                    d.decimoTerceiroMes = d.decimoTerceiro > 0;
+
+                    res.declaracao = d;
+                    res.trabalhadorInfo = infoDeclaracao;
+                    resultado[d.declaracaoRelEntidadeTrabalhadorFk] = res;
+                }
+            }
+
+            return resultado;
+        }
+
         public decimal getTemDecimoTerceiroMes(DateTime mesAno, int idRel)
         {
             return _moduloContribuicoesContext.Declaracaoremuneracao
