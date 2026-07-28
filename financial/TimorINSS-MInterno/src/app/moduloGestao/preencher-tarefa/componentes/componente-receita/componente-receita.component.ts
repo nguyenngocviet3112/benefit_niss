@@ -60,6 +60,10 @@ export class ComponenteReceitaComponent implements OnInit {
     public submittedTry: boolean = false;
 
 
+    // Institution
+    public institution = <SelectDescription>{};
+    public institutionListagem: SelectDescription[] = [];
+
     // Departamento INSS
     public departamentoINSS = <SelectDescription>{};
     public departamentoINSSListagem: SelectDescription[] = [];
@@ -178,10 +182,20 @@ export class ComponenteReceitaComponent implements OnInit {
 
         let componenteReceitaConfig = this.componenteReceitaConfigService.getComponenteReceitaConfigByTarefaAtivoId(request);
         let departamentoInss = this.departamentoService.getAllDepartamentosAtivo();
+        let institutions = this.departamentoService.getAllInstitutionsAtivo();
 
-        forkJoin([departamentoInss, componenteReceitaConfig]).subscribe(([departamentoInss, componenteReceitaConfig]) => {
+        forkJoin([departamentoInss, componenteReceitaConfig, institutions]).subscribe(([departamentoInss, componenteReceitaConfig, institutions]) => {
             this.departamentoINSSListagem = departamentoInss.selects;
             this.componenteReceitaConfig = componenteReceitaConfig.componenteReceitaConfig;
+            this.institutionListagem = institutions.selects;
+
+            // Institution não tem passo de seleção manual nesta tela -- default para "INSS"
+            // (ou única Institution ativa, se só existir uma) em vez de deixar por preencher.
+            const institutionInss = this.institutionListagem.find(i => i.nome.toUpperCase() === 'INSS');
+            this.institution.id = institutionInss ? institutionInss.id
+                : this.institutionListagem.length === 1 ? this.institutionListagem[0].id
+                : this.institution.id;
+
             this.hideLoader();
 
         },
@@ -285,6 +299,7 @@ export class ComponenteReceitaComponent implements OnInit {
                 codigoContaFk: this.contabilidade.id,
                 codigoContaDebitoFk: this.contabilidadeDebito.id,
                 agrupamentoConfigFk: this.contaOSS.id,
+                institutionId: this.institution.id,
                 descricao: this.descricaoReceita,
                 valor: this.valorReceita,
                 listaMovimentosConciliados: this.movimentosSelecionados
@@ -428,6 +443,7 @@ export class ComponenteReceitaComponent implements OnInit {
     public editarMovimento(element: MovimentoReceita) {
         this.editar = true;
         this.idReceita = element.receita.id;
+        this.institution.id = element.receita.institutionId;
         this.departamentoINSS.id = element.receita.departamentoFk;
         this.centroCusto.id = element.receita.centroCustoFk;
         this.tipoConta.id = element.receita.tipoContaFk;

@@ -19,6 +19,7 @@ export interface ComponenteReceita
   tipoContaFk: number;
   codigoContaFk: number;
   agrupamentoConfigFk: number;
+  institutionId: number;
   descricao: string;
   valor: number|undefined;
   movimentos: MovimentosConciliados[];

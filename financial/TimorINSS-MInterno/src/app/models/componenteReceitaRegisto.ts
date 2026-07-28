@@ -11,6 +11,7 @@ export interface ComponenteReceitaRegisto
   codigoContaFk: number;
   codigoContaDebitoFk: number;
   agrupamentoConfigFk: number;
+  institutionId: number;
   descricao: string;
   valor: number|undefined;
   listaMovimentosConciliados: MovimentosPorConciliar [];

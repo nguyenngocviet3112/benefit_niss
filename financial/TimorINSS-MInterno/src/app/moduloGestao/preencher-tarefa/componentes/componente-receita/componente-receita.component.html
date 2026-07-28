@@ -22,6 +22,19 @@
 
                     <div>
                         <mat-form-field class="select_box" appearance="outline">
+                            <mat-label>{{'componenteDespesa.institution' | translate}}</mat-label>
+                            <mat-select [(ngModel)]="institution.id" [(value)]="institution.id" name="institution">
+                                <ng-container *ngIf="institutionListagem.length > 0">
+                                    <mat-option *ngFor="let institution of institutionListagem"
+                                    matTooltip="{{institution.nome}}"
+                                        [value]="institution.id">
+                                        {{institution.nome}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="select_box" appearance="outline">
                             <mat-label>{{'componenteDespesa.departamentoINSS' | translate}}</mat-label>
                             <mat-select [(ngModel)]="departamentoINSS.id" [(value)]="departamentoINSS.id"
                                 name="departamento">

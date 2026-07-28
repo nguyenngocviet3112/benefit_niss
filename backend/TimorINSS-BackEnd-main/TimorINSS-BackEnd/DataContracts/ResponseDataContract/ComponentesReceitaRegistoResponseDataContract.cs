@@ -42,6 +42,9 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         public int AgrupamentoConfigFk { get; set; }
 
         [DataMember]
+        public int InstitutionId { get; set; }
+
+        [DataMember]
         public string Descricao { get; set; }
 
         [DataMember]

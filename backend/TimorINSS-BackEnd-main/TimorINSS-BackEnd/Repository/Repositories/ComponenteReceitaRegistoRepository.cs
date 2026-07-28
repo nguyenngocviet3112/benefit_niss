@@ -94,6 +94,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                    TipoContaFk = e.TipoContaFk,
                    CodigoContaFk = e.CodigoContaFk,
                    AgrupamentoConfigFk = e.AgrupamentoConfigFk,
+                   InstitutionId = e.InstitutionId ?? 0,
                    Descricao = e.Descricao,
                    Valor = e.Valor,
                    MovimentosIds = e.ComponentereceitaRegistoMovimentos.Select(a => a.RelMovimentosPorConciliarMovimentosId)

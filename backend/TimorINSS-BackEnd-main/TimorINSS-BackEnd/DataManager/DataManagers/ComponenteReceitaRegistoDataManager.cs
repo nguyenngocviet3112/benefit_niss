@@ -216,6 +216,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 CodigoContaFk = request.CodigoContaFk,
                 CodigoContaDebitoFk = request.CodigoContaDebitoFk,
                 AgrupamentoConfigFk = request.AgrupamentoConfigFk,
+                InstitutionId = request.InstitutionId,
                 Descricao = request.Descricao,
                 Valor = request.Valor,
                 IndActivo = true,
