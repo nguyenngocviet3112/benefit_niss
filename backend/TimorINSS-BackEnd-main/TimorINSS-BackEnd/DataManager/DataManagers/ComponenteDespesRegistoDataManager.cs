@@ -36,6 +36,31 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
 
             ComponentedespesaRegisto componenteDespesaRegisto = BuildComponenteDespesaRegistoObject(request.despesa);
+
+            // Só ao criar uma despesa nova (não ao editar uma já existente): impedir registar uma 2ª despesa
+            // para a mesma rubrica/AD enquanto já existe outra activa ainda não Cabimentada (Registada ou
+            // Autorizada) -- evita processos duplicados/esquecidos a disputar a mesma rubrica em simultâneo
+            // (ver [[despesa-processo-duplicate-and-cabimentar-gating]]). Uma vez Cabimentada, a despesa
+            // anterior já reservou o seu próprio saldo (protegido pelo check CabimentoExcedeSaldoDisponivel
+            // em UpdateDespesa), por isso deixa de bloquear novas despesas para a mesma rubrica.
+            if (componenteDespesaRegisto.Id == 0)
+            {
+                int estadoRegistado = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 1);
+                int estadoAutorizado = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 2);
+                List<ComponentedespesaRegisto> despesasNaRubrica = _unitOfWork.ComponenteDespesaRegistoRepository
+                    .GetAllDespesaRegistadaByAgrupamentoConfigFk(componenteDespesaRegisto.AgrupamentoConfigFk,
+                        componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0, componenteDespesaRegisto.FuncionalFk ?? 0);
+
+                bool existeDespesaEmCursoNaRubrica = despesasNaRubrica != null
+                    && despesasNaRubrica.Any(d => d.Estado == estadoRegistado || d.Estado == estadoAutorizado);
+
+                if (existeDespesaEmCursoNaRubrica)
+                {
+                    response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.JaExisteDespesaEmCursoNaRubrica).ToString(), ErrorMessage = ErrorsDataContract.JaExisteDespesaEmCursoNaRubrica.ToString() });
+                    return response;
+                }
+            }
+
             try
             {
                 if (componenteDespesaRegisto.Id > 0)

@@ -81,7 +81,8 @@
         ValidIdCard = -77,
         ValidEletoraCard = -78,
         PossivelObrigacaoDuplicada = -79,
-        CabimentoExcedeSaldoDisponivel = -80
+        CabimentoExcedeSaldoDisponivel = -80,
+        JaExisteDespesaEmCursoNaRubrica = -81
 
     }
 }

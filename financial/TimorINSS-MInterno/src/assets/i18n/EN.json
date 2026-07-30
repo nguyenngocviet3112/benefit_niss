@@ -312,7 +312,8 @@
     "-73": "Excel not valid or required columns are missing",
     "-74": "Attention: it is not possible to change the period end date of the cost center since this cost center already has budgeted values",
     "-75": "Maximum expiry day is 28",
-    "-80": "The amount to commit ($ {1}) exceeds the available balance of the budget line (available: $ {0})"
+    "-80": "The amount to commit ($ {1}) exceeds the available balance of the budget line (available: $ {0})",
+    "-81": "There is already an expense in progress (Registered or Authorized) for this budget line. Please wait until it is Committed before registering a new one"
   },
   "month": {
     "0": "JANUARY",
