@@ -289,7 +289,34 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 // se estiver no estabo Autorizado 'A' passa para o estado cabimentado
                 if (request.Estado == "A")
                 {
-                    despesa.Estado = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 3);
+                    // Validar que o valor da despesa não excede o saldo disponível da rubrica
+                    // (Valor Orçamentado - soma já Cabimentada por outras despesas da mesma rubrica)
+                    // antes de promover para Cabimentado -- faltava este check (só existia um nível
+                    // abaixo, Compromisso vs Cabimentado, em UpsertCompromisso).
+                    List<Componenteorcamentovalor> listaOrcamentoValor = _unitOfWork.ComponenteOrcamentoValorRepository
+                        .getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(despesa.AgrupamentoConfigFk, despesa.ComponenteOrcamentoRegistoFk,
+                            despesa.InstitutionId ?? 0, despesa.ActidadeFk ?? 0, despesa.FuncionalFk ?? 0);
+                    decimal valorOrcamentado = listaOrcamentoValor != null ? listaOrcamentoValor.Sum(x => x.Valor) : 0;
+
+                    int estadoCabimentado = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 3);
+                    List<ComponentedespesaRegisto> outrasDespesasNaRubrica = _unitOfWork.ComponenteDespesaRegistoRepository
+                        .GetAllDespesaRegistadaByAgrupamentoConfigFk(despesa.AgrupamentoConfigFk, despesa.InstitutionId ?? 0, despesa.ActidadeFk ?? 0, despesa.FuncionalFk ?? 0);
+                    decimal valorJaCabimentado = outrasDespesasNaRubrica != null
+                        ? outrasDespesasNaRubrica.Where(d => d.Id != despesa.Id && d.Estado == estadoCabimentado).Sum(d => d.Valor)
+                        : 0;
+
+                    decimal saldoDisponivel = valorOrcamentado - valorJaCabimentado;
+
+                    if (despesa.Valor > saldoDisponivel)
+                    {
+                        // ÿ separa os valores a substituir em {0}/{1} na mensagem traduzida no frontend
+                        // (mesmo padrão usado noutros erros parametrizados, ex: OrcamentoARetificar)
+                        string errorCode = $"{(int)ErrorsDataContract.CabimentoExcedeSaldoDisponivel}ÿ{saldoDisponivel:0.00}ÿ{despesa.Valor:0.00}";
+                        response.Errors.Add(new Error { ErrorCode = errorCode, ErrorMessage = ErrorsDataContract.CabimentoExcedeSaldoDisponivel.ToString() });
+                        return response;
+                    }
+
+                    despesa.Estado = estadoCabimentado;
                 }
                 despesa = _utils.UpdateDetailsToEntity(despesa);
             }

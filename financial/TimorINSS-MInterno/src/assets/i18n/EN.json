@@ -311,7 +311,8 @@
     "-72": "Value cannot be lower than what was already committed",
     "-73": "Excel not valid or required columns are missing",
     "-74": "Attention: it is not possible to change the period end date of the cost center since this cost center already has budgeted values",
-    "-75": "Maximum expiry day is 28"
+    "-75": "Maximum expiry day is 28",
+    "-80": "The amount to commit ($ {1}) exceeds the available balance of the budget line (available: $ {0})"
   },
   "month": {
     "0": "JANUARY",
@@ -845,6 +846,7 @@
     "cabimentacaoDespesa": "This action will 'cabimentar' the selected Expense",
     "valorCabimentacaoNegativo": "The amount available for commitment does not even allow the Expense to be authorized. Please edit the amount or delete the expense",
     "valorAutorizacaoNegativo": "The amount available for authorization will be exceeded if you authorize the expense.",
+    "possivelObrigacaoDuplicada": "An Obligation for this recipient already exists in the same month, under the same Salary budget line. Are you sure you want to continue?",
     "deleteMovimentoWarningMsg": "This Action will delete this Movement",
     "concilate": "This action will conciliate these movements",
     "warningDeleteCompromisso": "This action will delete this Commitment.",

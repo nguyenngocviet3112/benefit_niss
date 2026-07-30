@@ -311,7 +311,8 @@
     "-72": "Valor não pode ser inferior ao que já foi comprometido",
     "-73": "O excel não é válido ou faltam colunas obrigatórias",
     "-74": "Atenção: não é possivel alterar a data de fim do período do centro de custo dado que este centro de custo ja tem valores orçamentados",
-    "-75": "O dia de vencimento máximo é 28"
+    "-75": "O dia de vencimento máximo é 28",
+    "-80": "O valor a cabimentar ($ {1}) excede o saldo disponível da rubrica orçamental (disponível: $ {0})"
   },
   "month": {
     "0": "JANEIRO",
@@ -885,6 +886,7 @@
     "cabimentacaoDespesa": "Esta acção irá Cabimentar a Despesa seleccionada",
     "valorCabimentacaoNegativo": "O valor disponível para cabimentação não permite sequer autorizar a despesa. Por favor edite o valor ou elimine a despesa",
     "valorAutorizacaoNegativo": "O valor disponível para autorização será excedido se autorizar a despesa.",
+    "possivelObrigacaoDuplicada": "Já existe uma Obrigação registada para este destinatário no mesmo mês, na mesma rubrica orçamental de Salários. Tem a certeza que deseja continuar?",
     "deleteMovimentoWarningMsg": "Esta acção irá eliminar este Movimento.",
     "concilate": "Esta acção irá conciliar estes movimentos.",
     "warningDeleteCompromisso": "Esta acção irá eliminar este compromisso.",

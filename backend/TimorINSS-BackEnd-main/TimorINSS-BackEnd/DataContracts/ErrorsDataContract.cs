@@ -79,7 +79,9 @@
         MaxDataVencimento = -75,
         AgeLessThan18 = -76,
         ValidIdCard = -77,
-        ValidEletoraCard = -78
+        ValidEletoraCard = -78,
+        PossivelObrigacaoDuplicada = -79,
+        CabimentoExcedeSaldoDisponivel = -80
 
     }
 }
