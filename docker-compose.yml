@@ -44,9 +44,9 @@ services:
     working_dir: /app
     volumes:
       - ./financial/TimorINSS-MInterno:/app
-    command: ["bash", "-c", "npm install --legacy-peer-deps 2>&1 | tail -5 && npx ng serve --host 0.0.0.0 --port 4300 --disable-host-check"]
+    command: ["bash", "-c", "npm install --legacy-peer-deps 2>&1 | tail -5 && npx ng serve --host 0.0.0.0 --port 4200 --disable-host-check"]
     ports:
-      - "4300:4300"
+      - "4200:4200"
     networks:
       - inss-net
 
@@ -56,9 +56,9 @@ services:
     working_dir: /app
     volumes:
       - ./contribution/ModuloContribuicoes:/app
-    command: ["bash", "-c", "npm install --legacy-peer-deps 2>&1 | tail -5 && npx ng serve --host 0.0.0.0 --port 4200 --disable-host-check"]
+    command: ["bash", "-c", "npm install --legacy-peer-deps 2>&1 | tail -5 && npx ng serve --host 0.0.0.0 --port 4300 --disable-host-check"]
     ports:
-      - "4200:4200"
+      - "4300:4300"
 
 networks:
   inss-net:
