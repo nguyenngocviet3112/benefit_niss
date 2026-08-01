@@ -61,6 +61,44 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 }
             }
 
+            // Impedir registar/editar uma despesa (ainda em estado Registado) com um valor que,
+            // somado ao que já está reservado (Registado + Autorizado + Cabimentado) por outras
+            // despesas da mesma rubrica, excederia o Valor Orçamentado -- mesma lógica do check
+            // CabimentoExcedeSaldoDisponivel, mas aplicada logo no registo em vez de só no Cabimento
+            // (ver [[registo-ad-missing-budget-check]]). Distingue "sem orçamento nenhum" de
+            // "excede o disponível" para a mensagem ficar clara sobre o que fazer em cada caso.
+            List<Componenteorcamentovalor> listaOrcamentoValorRegisto = _unitOfWork.ComponenteOrcamentoValorRepository
+                .getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(componenteDespesaRegisto.AgrupamentoConfigFk, componenteDespesaRegisto.ComponenteOrcamentoRegistoFk,
+                    componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0, componenteDespesaRegisto.FuncionalFk ?? 0);
+            decimal valorOrcamentadoRegisto = listaOrcamentoValorRegisto != null ? listaOrcamentoValorRegisto.Sum(x => x.Valor) : 0;
+
+            int estadoRegistadoRegisto = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 1);
+            int estadoAutorizadoRegisto = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 2);
+            int estadoCabimentadoRegisto = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 3);
+            List<ComponentedespesaRegisto> outrasDespesasNaRubricaRegisto = _unitOfWork.ComponenteDespesaRegistoRepository
+                .GetAllDespesaRegistadaByAgrupamentoConfigFk(componenteDespesaRegisto.AgrupamentoConfigFk, componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0, componenteDespesaRegisto.FuncionalFk ?? 0);
+            decimal valorJaReservado = outrasDespesasNaRubricaRegisto != null
+                ? outrasDespesasNaRubricaRegisto.Where(d => d.Id != componenteDespesaRegisto.Id
+                    && (d.Estado == estadoRegistadoRegisto || d.Estado == estadoAutorizadoRegisto || d.Estado == estadoCabimentadoRegisto))
+                    .Sum(d => d.Valor)
+                : 0;
+
+            decimal saldoDisponivelRegisto = valorOrcamentadoRegisto - valorJaReservado;
+
+            if (componenteDespesaRegisto.Valor > saldoDisponivelRegisto)
+            {
+                if (valorOrcamentadoRegisto <= 0)
+                {
+                    response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.RegistoSemOrcamentoAtribuido).ToString(), ErrorMessage = ErrorsDataContract.RegistoSemOrcamentoAtribuido.ToString() });
+                }
+                else
+                {
+                    string errorCode = $"{(int)ErrorsDataContract.RegistoExcedeSaldoDisponivel}ÿ{saldoDisponivelRegisto:0.00}ÿ{componenteDespesaRegisto.Valor:0.00}";
+                    response.Errors.Add(new Error { ErrorCode = errorCode, ErrorMessage = ErrorsDataContract.RegistoExcedeSaldoDisponivel.ToString() });
+                }
+                return response;
+            }
+
             try
             {
                 if (componenteDespesaRegisto.Id > 0)

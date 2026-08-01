@@ -313,7 +313,10 @@
     "-74": "Attention: it is not possible to change the period end date of the cost center since this cost center already has budgeted values",
     "-75": "Maximum expiry day is 28",
     "-80": "The amount to commit ($ {1}) exceeds the available balance of the budget line (available: $ {0})",
-    "-81": "There is already an expense in progress (Registered or Authorized) for this budget line. Please wait until it is Committed before registering a new one"
+    "-81": "There is already an expense in progress (Registered or Authorized) for this budget line. Please wait until it is Committed before registering a new one",
+    "-82": "The amount entered ($ {1}) exceeds the available budget for this account line (available: $ {0}). Please reduce the amount, or request additional budget for this line before registering.",
+    "-83": "This account line has not been allocated any budget yet (available: $ 0.00). Please request budget allocation for this line before registering an expense against it.",
+    "-84": "This task cannot be advanced yet: there are still expenses in this process pending Authorization (Registered but not yet Authorized). Please authorize or remove them first."
   },
   "month": {
     "0": "JANUARY",

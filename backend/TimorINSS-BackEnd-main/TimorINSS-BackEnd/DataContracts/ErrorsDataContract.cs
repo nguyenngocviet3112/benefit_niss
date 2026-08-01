@@ -82,7 +82,10 @@
         ValidEletoraCard = -78,
         PossivelObrigacaoDuplicada = -79,
         CabimentoExcedeSaldoDisponivel = -80,
-        JaExisteDespesaEmCursoNaRubrica = -81
+        JaExisteDespesaEmCursoNaRubrica = -81,
+        RegistoExcedeSaldoDisponivel = -82,
+        RegistoSemOrcamentoAtribuido = -83,
+        DespesaPendenteImpedeAvancoTarefa = -84
 
     }
 }

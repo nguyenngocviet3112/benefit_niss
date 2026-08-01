@@ -996,6 +996,18 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     if (requiredDocuments.Where(x => !tarefaAtivaDocumentIds.Contains(x.DocumentoFk)).Any())
                         response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.LackOfObligatoryDocuments).ToString(), ErrorMessage = ErrorsDataContract.LackOfObligatoryDocuments.ToString() });
                 }
+
+                // Despesa Region
+                // Impedir avançar a tarefa enquanto existirem despesas deste processo ainda em
+                // estado Registado (não Autorizadas) -- sem este check ficavam "esquecidas" numa
+                // TarefaAtivo já fechada, sem nenhum ecrã que voltasse a mostrá-las para autorização
+                // (ver [[next-task-missing-ad-completeness-check]]).
+                if (relComponentes.Where(x => x.descricao == "Despesa").Any())
+                {
+                    var despesaRegistadaListagem = _unitOfWork.ComponenteDespesaRegistoRepository.GetAllDespesaRegistadaByTarefaAtivoId(request.tarefaAtivoId);
+                    if (despesaRegistadaListagem != null && despesaRegistadaListagem.Any(d => d.estado == "R"))
+                        response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.DespesaPendenteImpedeAvancoTarefa).ToString(), ErrorMessage = ErrorsDataContract.DespesaPendenteImpedeAvancoTarefa.ToString() });
+                }
             }
 
             if (response.Errors.Count > 0)

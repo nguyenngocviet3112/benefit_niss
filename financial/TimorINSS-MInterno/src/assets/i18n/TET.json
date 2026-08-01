@@ -313,7 +313,10 @@
     "-74": "Atenção: não é possivel alterar a data de fim do período do centro de custo dado que este centro de custo ja tem valores orçamentados",
     "-75": "O dia de vencimento máximo é 28",
     "-80": "O valor a cabimentar ($ {1}) excede o saldo disponível da rubrica orçamental (disponível: $ {0})",
-    "-81": "Já existe uma despesa em curso (Registada ou Autorizada) para esta rubrica. Aguarde que seja Cabimentada antes de registar uma nova"
+    "-81": "Já existe uma despesa em curso (Registada ou Autorizada) para esta rubrica. Aguarde que seja Cabimentada antes de registar uma nova",
+    "-82": "O valor introduzido ($ {1}) excede o orçamento disponível para esta rubrica (disponível: $ {0}). Por favor reduza o valor, ou solicite orçamento adicional para esta rubrica antes de registar.",
+    "-83": "Esta rubrica ainda não tem qualquer orçamento atribuído (disponível: $ 0.00). Por favor solicite a atribuição de orçamento para esta rubrica antes de registar uma despesa.",
+    "-84": "Não é possível avançar esta tarefa: ainda existem despesas neste processo pendentes de Autorização (Registadas mas ainda não Autorizadas). Por favor autorize-as ou elimine-as primeiro."
   },
   "month": {
     "0": "JANEIRO",

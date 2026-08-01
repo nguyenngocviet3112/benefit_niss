@@ -134,7 +134,11 @@ export class ComponenteDespesaComponent implements OnInit {
   public despesaRegistadaAutorizadaListagem: DespesaRegistada[] = [];
   public valorDespesaListagem: ValoresDespesaRegistada[] = [];
   public displayedColumns: string[] = ['descricao', 'valorOrcamentado', 'valorExecutado', 'valorCabimentado', 'valorAutorizado'];
-  public allDespesasAutorizadas: boolean = false;
+  // Derivado a cada leitura (não é um campo assinalado manualmente) para nunca ficar "preso"
+  // num valor antigo depois que todas as despesas passam a Cabimentado.
+  public get allDespesasAutorizadas(): boolean {
+    return this.listaDespesaRegistadas.length === 0 && this.listaDespesaAutorizadas.length > 0;
+  }
 
   //Listagem Despesas Registadas - Painel 3
   public listaDespesaRegistadas: DespesaRegistada[] = [];
@@ -345,8 +349,6 @@ export class ComponenteDespesaComponent implements OnInit {
 
           if (ultimaDespesaRegistada == null || ultimaDespesaRegistada.length == 0) {
             ultimaDespesaRegistada = this.despesaRegistadaAutorizadaListagem.filter(estadoDespesa => estadoDespesa.estado == 'A');
-            this.allDespesasAutorizadas = true;
-
           }
 
           if (ultimaDespesaRegistada != null && ultimaDespesaRegistada.length > 0) {
@@ -366,9 +368,6 @@ export class ComponenteDespesaComponent implements OnInit {
             this.despesaRegistadaAutorizada.idFuncional = ultimaDespesaRegistada[ultimaDespesaRegistada.length - 1].idFuncional;
 
             this.updateDespesaRegistada();
-          }
-          else {
-            this.allDespesasAutorizadas = true;
           }
         }
         this.listaDespesaRegistadas = despesaRegistada.componenteDespesaRegisto.filter(estadoDespesa => estadoDespesa.estado == 'R');
@@ -700,6 +699,8 @@ export class ComponenteDespesaComponent implements OnInit {
       else {
         this.valorDespesaListagem[1].valorOrcamentado = 0;
         this.valorDespesaListagem[1].valorExecutado = 0;
+        this.valorDespesaListagem[1].valorCabimentado = 0;
+        this.valorDespesaListagem[1].valorAutorizado = 0;
       }
 
 
