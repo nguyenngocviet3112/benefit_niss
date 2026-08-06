@@ -1,0 +1,29 @@
+<div class="contribShell">
+  <div class="contribTabsBar">
+    <div class="searchOtherCompany">
+      <mat-form-field appearance="outline" class="searchField">
+        <mat-label>{{'general.searchOtherCompany' | translate}}</mat-label>
+        <input matInput type="text" [(ngModel)]="nissRequest" name="nissRequest"
+               placeholder="{{'general.putNissNumber' | translate}}"
+               (keydown.enter)="searchOtherCompany()"/>
+        <mat-icon matSuffix class="searchIcon" (click)="searchOtherCompany()">search</mat-icon>
+      </mat-form-field>
+    </div>
+    <a class="routetitle" routerLink="/declaracaoRemuneracao" routerLinkActive="active" [skipLocationChange]="true">
+      <span>{{'general.declaracaoRemuneracao' | translate}}</span>
+    </a>
+    <a class="routetitle" routerLink="/contaCorrente" routerLinkActive="active" [skipLocationChange]="true">
+      <span>{{'general.contaCorrente' | translate}}</span>
+    </a>
+    <a class="routetitle" routerLink="/guiaPagamento" routerLinkActive="active" [skipLocationChange]="true">
+      <span>{{'general.guiasDePagamento' | translate}}</span>
+    </a>
+    <a class="routetitle" routerLink="/entidadeEmpregadora" routerLinkActive="active" [skipLocationChange]="true">
+      <span>{{'general.entidadeEmpregadora' | translate}}</span>
+    </a>
+    <a class="routetitle" routerLink="/trabalhadores" routerLinkActive="active" [skipLocationChange]="true">
+      <span>{{'general.trabalhadores' | translate}}</span>
+    </a>
+  </div>
+  <router-outlet></router-outlet>
+</div>

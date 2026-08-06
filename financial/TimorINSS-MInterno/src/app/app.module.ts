@@ -67,6 +67,7 @@ import { PopUpAdicionarEditarEntidadeComponent } from './moduloContribuicoes/pop
 import { EditarResponsavelLegalComponent } from './moduloContribuicoes/editar-responsavelLegal/editar-responsavelLegal.component';
 import { NovoResponsavelLegalComponent } from './moduloContribuicoes/novo-responsavelLegal/novo-responsavelLegal.component';
 import { DeclaracaoRemuneracaoComponent } from './moduloContribuicoes/declaracao-remuneracao/declaracao-remuneracao.component';
+import { ContribuicoesShellComponent } from './moduloContribuicoes/contribuicoes-shell/contribuicoes-shell.component';
 import { PopUpInfoLegalRemuneracaoComponent } from './moduloContribuicoes/pop-up-info-legal-remuneracao/pop-up-info-legal-remuneracao.component';
 import { PopUpResumoDeclaracaoComponent } from './moduloContribuicoes/pop-up-resumo-declaracao/pop-up-resumo-declaracao.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -187,6 +188,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     EditarResponsavelLegalComponent,
     NovoResponsavelLegalComponent,
     DeclaracaoRemuneracaoComponent,
+    ContribuicoesShellComponent,
     PopUpInfoLegalRemuneracaoComponent,
     PopUpResumoDeclaracaoComponent,
     ContaCorrenteComponent,

@@ -24,6 +24,7 @@ import { RegistoSuspensaoComponent } from './moduloContribuicoes/registoSuspensa
 import { NovoResponsavelLegalComponent } from './moduloContribuicoes/novo-responsavelLegal/novo-responsavelLegal.component';
 import { EditarResponsavelLegalComponent } from './moduloContribuicoes/editar-responsavelLegal/editar-responsavelLegal.component';
 import { DeclaracaoRemuneracaoComponent } from './moduloContribuicoes/declaracao-remuneracao/declaracao-remuneracao.component';
+import { ContribuicoesShellComponent } from './moduloContribuicoes/contribuicoes-shell/contribuicoes-shell.component';
 import { ContaCorrenteComponent } from './moduloContribuicoes/conta_corrente/conta_corrente.component';
 import { GuiaPagamentoComponent } from './moduloContribuicoes/guia-pagamento/guia-pagamento.component';
 import { TarefaComponent } from './moduloGestao/tarefa/tarefa.component';
@@ -83,8 +84,17 @@ const routes: Routes = [
   { path: 'contribHomePage', component: ContribHomeSearchComponent },
   { path: 'contribValidationHomePage', component: ContribValidationHomeSearchComponent },
   { path: 'configurarTarefas', component: ConfigurarTarefasComponent },
-  { path: 'entidadeEmpregadora', component: EntidadeEmpregadoraComponent},
-  { path: 'trabalhadores', component: TrabalhadoresComponent},
+  {
+    path: '',
+    component: ContribuicoesShellComponent,
+    children: [
+      { path: 'entidadeEmpregadora', component: EntidadeEmpregadoraComponent},
+      { path: 'trabalhadores', component: TrabalhadoresComponent},
+      { path: 'declaracaoRemuneracao', component: DeclaracaoRemuneracaoComponent},
+      { path: 'contaCorrente', component: ContaCorrenteComponent},
+      { path: 'guiaPagamento', component: GuiaPagamentoComponent},
+    ]
+  },
   { path: 'vincularTrabalhador', component: VincularTrabalhadorComponent},
   { path: 'novoTrabalhador', component: NovoTrabalhadorComponent},
   { path: 'novoTrabalhador/:id', component: NovoTrabalhadorComponent},
@@ -93,9 +103,6 @@ const routes: Routes = [
   { path: 'novoResponsavelLegal', component: NovoResponsavelLegalComponent},
   { path: 'novoResponsavelLegal/:id', component: NovoResponsavelLegalComponent},
   { path: 'editarResponsavelLegal/:id', component: EditarResponsavelLegalComponent},
-  { path: 'declaracaoRemuneracao', component: DeclaracaoRemuneracaoComponent},
-  { path: 'contaCorrente', component: ContaCorrenteComponent},
-  { path: 'guiaPagamento', component: GuiaPagamentoComponent},
   { path: 'tarefa', component: TarefaComponent },
   { path: 'processos', component: ConfigurarProcessosComponent},
   { path: 'novoConfigurarProcesso', component: NovoConfigurarProcessosComponent},

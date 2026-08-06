@@ -1,9 +1,6 @@
 <div class="paginaListagemTrabalhadores">
   <div class="subHeader">
     <div class="secondLineContainers datePicker">
-      <button class="returnButton" mat-fab color="green" aria-label="Search" (click)="return()">
-        <mat-icon matTooltip="Retornar" class="utilizadorSearchIcon">keyboard_return</mat-icon>
-      </button>
       <app-date-picker [(date)]="date" (dateSetEvent)="dateUpdated()"></app-date-picker>
     </div>
     <div class="sorter">

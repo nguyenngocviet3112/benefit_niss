@@ -1,8 +1,5 @@
 <div class="contaCorrente" *ngIf="isLoggedIn">
     <div class="subHeader">
-      <button class="returnButton" mat-fab color="green" aria-label="Search" (click)="return()">
-        <mat-icon matTooltip="Retornar" class="utilizadorSearchIcon">keyboard_return</mat-icon>
-      </button>
         <div class="secondLineContainers datePicker">
             <app-date-picker [(date)]="date" [clear]="false" (dateSetEvent)="dateUpdated()"></app-date-picker>
         </div>

@@ -1,0 +1,63 @@
+.contribShell {
+  position: relative;
+}
+
+.contribTabsBar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 46px;
+  background-color: #1a6aaf;
+}
+
+.routetitle {
+  flex: 1;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.routetitle:hover {
+  background: #145792;
+}
+
+.routetitle.active {
+  background-color: #1f90f1;
+  color: rgb(248, 177, 23);
+}
+
+.searchOtherCompany {
+  flex-shrink: 0;
+  width: 220px;
+  padding: 0 10px;
+}
+
+.searchField {
+  width: 100%;
+}
+
+.searchField ::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.searchField ::ng-deep .mat-form-field-label,
+.searchField ::ng-deep input,
+.searchField ::ng-deep .mat-form-field-outline {
+  color: white !important;
+}
+
+.searchField ::ng-deep .mat-form-field-outline {
+  opacity: 0.6;
+}
+
+.searchIcon {
+  color: white;
+  cursor: pointer;
+}
