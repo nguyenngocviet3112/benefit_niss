@@ -40,13 +40,26 @@ export class ContribuicoesShellComponent {
           this.tokenStorage.saveUser(user);
         }
         this.nissRequest = undefined;
-        window.location.reload();
+        this.spinner.hide();
+        this.reloadCurrentRoute();
       },
       err => {
         this.spinner.hide();
         err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
         this.showError();
       });
+  }
+
+  // Força o componente da rota atual a recriar-se (novo ngOnInit, relê idEntidade)
+  // inteiramente no lado do cliente -- nunca usar window.location.reload() aqui,
+  // pois esse pedido volta a passar pelo servidor e, em ambientes sem SPA fallback
+  // configurado para URLs profundos (ex.: RDP), pode cair na página inicial em vez
+  // de recarregar a rota atual.
+  private reloadCurrentRoute(): void {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 
   public showError(): void {

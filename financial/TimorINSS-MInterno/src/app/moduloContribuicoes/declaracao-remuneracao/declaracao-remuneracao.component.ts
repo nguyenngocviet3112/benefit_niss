@@ -55,6 +55,10 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
   public salarioMinimo: number = 115;
   public canOverWrite: boolean = false;
   public saving: boolean = false;
+  public totalRows: number = 0;
+  public pageSize = 10;
+  public pageIndex = 0;
+  public allDeclaracoes: DeclaracaoListagem[] = [];
   @ViewChild('declaracaoForm') myForm: NgForm | undefined;
 
   constructor(private tokenStorage: TokenStorageService,
@@ -179,8 +183,14 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
     //get the declarations for the selected date and check the guia status
     forkJoin([tableRequest,contasCorrentes])
     .subscribe( ([tableRequest,contasCorrentes]) => {
-      this.declaracoesOriginal = tableRequest.declaracoes;
-      this.declaracoes = JSON.parse(JSON.stringify(tableRequest.declaracoes));
+      this.declaracoesOriginal = JSON.parse(JSON.stringify(tableRequest.declaracoes));
+
+      this.allDeclaracoes = tableRequest.declaracoes;
+      this.totalRows = this.allDeclaracoes.length;
+
+      this.pageIndex = 0;
+      this.applyClientPagination();
+
       this.contas = contasCorrentes.contasState;
       let contaCurrente = this.contas.find(c => c.month == (moment(this.date).month() + 1));
       this.canOverWrite = contaCurrente?.state === "Sem Guia Gerada";
@@ -192,15 +202,32 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
     });
   }
 
+  public updateTable(event: any) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.applyClientPagination();
+  }
+
   public getTable() {
     let filter: FilterRequest;
     filter = {};
     filter.dateFilterBegin = this.date;
+
+    // Load hết data từ DB, phân trang phía client (giống bản Contribution external)
+    filter.index = 0;
+    filter.rows = 100000;
+
     let request = {
       IdEntidade: this.idEntidade,
       filter: filter,
     };
     return this.declaracaoService.getDeclaracaoByEntidadeAndFilter(request);
+  }
+
+  private applyClientPagination(): void {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.declaracoes = this.allDeclaracoes.slice(start, end);
   }
 
   public updateDateFormated() {
@@ -325,7 +352,7 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
           width: '90%',
           maxWidth: '90vw',
           height: '80%',
-          data: { declaracoes: this.declaracoes }
+          data: { declaracoes: this.allDeclaracoes }
         });
       }
   }
@@ -337,7 +364,7 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
     {
       this.showLoader();
       let requestSave  = {
-        declaracoes: this.declaracoes.map(x=>x.declaracao),
+        declaracoes: this.allDeclaracoes.map(x=>x.declaracao),
         data: this.date ?? getCurrentDateUTC(),
         entidadeId: this.entidade.idEntidadeEmpreg
       };

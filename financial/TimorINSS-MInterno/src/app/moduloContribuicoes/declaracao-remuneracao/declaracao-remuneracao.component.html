@@ -148,6 +148,9 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
+          <mat-paginator class="paginador" [length]="this.totalRows" [pageSize]="this.pageSize"
+                (page)="updateTable($event)" [pageIndex]="this.pageIndex" [pageSizeOptions]="[5,10,25,50,100,500,1000]"
+                showFirstLastButtons> </mat-paginator>
           <div class="buttons">
             <div class="secondLineContainers">
               <button class="resumoButton" type="button" mat-raised-button [disabled]="!declaracaoForm.valid" (click)="showResumo(declaracaoForm)">
