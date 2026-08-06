@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
 import { NgxSpinnerService } from "ngx-spinner";
 import { MatDialog } from "@angular/material/dialog";
 import { TranslateService } from '@ngx-translate/core';
@@ -1060,6 +1062,20 @@ export class ComponenteDespesaComponent implements OnInit {
       if (result)
       this.getAllDadosDropDown();
     });
+  }
+
+  public exportCompromissosToExcel() {
+    const dataRows = this.listaCompromissos.map((element: any) => ({
+      [this.translate.instant('componenteDespesa.despesaCabimentada')]: element.descricaoDespesa,
+      [this.translate.instant('general.compromisso')]: element.nomeCompromisso,
+      [this.translate.instant('componenteDespesa.valorCompromisso')]: element.valorCompromisso,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataRows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Compromissos');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    saveAs(new Blob([excelBuffer], { type: 'application/octet-stream' }), 'Compromissos.xlsx');
   }
 
   public editarDespesaCabimentada(despesaCabimentada: DespesaRegistada) {

@@ -1554,7 +1554,8 @@
     "utilizador-3": "User who fit",
     "utilizador-4": "User who authorized the commitment",
     "utilizador-5": "User who executed",
-    "registarCompromisso": "Register Commitment"
+    "registarCompromisso": "Register Commitment",
+    "exportarCompromissos": "Export to Excel"
   },
   "receitas": {
     "consultasReceitas": "Consultation - Revenues",

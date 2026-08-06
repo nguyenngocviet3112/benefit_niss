@@ -451,6 +451,11 @@
           <mat-label>{{'despesas.registarCompromisso' | translate}}</mat-label>
         </button>
 
+        <button class="excelUploadButton" type="button" (click)="exportCompromissosToExcel()" mat-raised-button>
+          <fa-icon class="excel" [icon]="faFileExcel"></fa-icon>
+          <mat-label>{{'despesas.exportarCompromissos' | translate}}</mat-label>
+        </button>
+
       <div class="containerLine">
         <table mat-table [dataSource]="listaCompromissos" class="mat-elevation-z8 tabelaValoresDespesa">
 

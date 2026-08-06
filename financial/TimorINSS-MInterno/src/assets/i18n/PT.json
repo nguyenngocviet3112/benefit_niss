@@ -1553,7 +1553,8 @@
     "utilizador-3": "Utilizador que autorizou o compromisso",
     "utilizador-4": "Utilizador que autorizou a obrigação",
     "utilizador-5": "Utilizador que executou",
-    "registarCompromisso": "Registar Compromisso"
+    "registarCompromisso": "Registar Compromisso",
+    "exportarCompromissos": "Exportar para Excel"
   },
   "receitas": {
     "consultasReceitas": "Consultas - Receitas",
