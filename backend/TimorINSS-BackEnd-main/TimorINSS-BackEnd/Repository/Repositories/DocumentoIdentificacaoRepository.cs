@@ -91,11 +91,13 @@ namespace TimorINSSBackEnd.Repository.Repositories
             if (request.filter.rows.HasValue)
                 rows = request.filter.rows.Value;
 
+            int decodedId = IdDecoder.DecodeId(request.IdStr);
+
             IQueryable<Documentoidentificacao> queryDocumentosConditional = _moduloContribuicoesContext.Documentoidentificacao;
             switch (request.filter.filterField)
             {
                 case "TRABALHADOR":
-                    queryDocumentosConditional = queryDocumentosConditional.Where(u => u.TrabalhadorDocumetoFk == request.Id && u.IndActivo);
+                    queryDocumentosConditional = queryDocumentosConditional.Where(u => u.TrabalhadorDocumetoFk == decodedId && u.IndActivo);
                     break;
 
                 default:

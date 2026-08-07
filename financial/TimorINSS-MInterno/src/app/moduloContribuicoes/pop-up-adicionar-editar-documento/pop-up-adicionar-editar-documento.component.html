@@ -62,7 +62,7 @@
           <div class="secondLineContainers">
             <mat-form-field appearance="outline">
               <mat-label *ngIf="data.documento.nomeDocumento && !fileControl.pristine">{{'general.document' | translate}}</mat-label>
-              <ngx-mat-file-input [placeholder]="documentPlaceholder | translate" [errorStateMatcher]="matcher" [required]="submittedTry || wrongFormat" [formControl]="fileControl" [accept]="accept" name="Documento">
+              <ngx-mat-file-input #fileInputWrapper (click)="openFileDialog($event)" [placeholder]="documentPlaceholder | translate" [errorStateMatcher]="matcher" [required]="submittedTry || wrongFormat" [formControl]="fileControl" [accept]="accept" name="Documento">
                 <mat-icon ngxMatFileInputIcon>upload</mat-icon>
               </ngx-mat-file-input>
               <mat-error>{{'general.documentRequiredLimitSize' | translate}} {{accept}}</mat-error>

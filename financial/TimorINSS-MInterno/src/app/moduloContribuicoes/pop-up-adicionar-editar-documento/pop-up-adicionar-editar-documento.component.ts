@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -39,6 +39,8 @@ export class PopUpAdicionarEditarDocumentoComponent {
   private maxSize: number = 52428800;
   public documentPlaceholder: string = "general.document";
   public wrongFormat = false;
+
+  @ViewChild('fileInputWrapper', { read: ElementRef }) fileInputWrapper?: ElementRef;
 
 
   constructor(
@@ -81,6 +83,14 @@ export class PopUpAdicionarEditarDocumentoComponent {
         }
     });
     this.updateIsPassaporte();
+  }
+
+  public openFileDialog(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.closest('.button-browse')) return;
+
+    const input: HTMLInputElement = this.fileInputWrapper?.nativeElement.querySelector('input[type=file]');
+    if (input) input.click();
   }
 
   public closePopUp(): void {

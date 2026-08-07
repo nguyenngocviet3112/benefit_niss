@@ -113,11 +113,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         {
             var response = new DocumentoResponse { RequestId = request.RequestId };
 
-            var b64 = request.idStr.ToString().Replace('-', '+').Replace('_', '/');
-            switch (b64.Length % 4) { case 2: b64 += "=="; break; case 3: b64 += "="; break; }
-            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(b64)).Trim();
-
-            int decodedId = int.Parse(decoded);
+            int decodedId = IdDecoder.DecodeId(request.idStr);
 
             Documentoidentificacao documento = _unitOfWork.DocumentoIdentificacaoRepository.Get(decodedId);
             string doc = Convert.ToBase64String(documento.Documento);
