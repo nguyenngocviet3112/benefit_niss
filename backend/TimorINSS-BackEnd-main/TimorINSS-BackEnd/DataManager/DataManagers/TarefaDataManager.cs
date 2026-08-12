@@ -1002,11 +1002,28 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 // estado Registado (não Autorizadas) -- sem este check ficavam "esquecidas" numa
                 // TarefaAtivo já fechada, sem nenhum ecrã que voltasse a mostrá-las para autorização
                 // (ver [[next-task-missing-ad-completeness-check]]).
+                //
+                // CORRIGIDO: só bloquear se a PRÓXIMA tarefa já não tiver também o componente
+                // "Despesa" -- ou seja, só quando esta transição for de facto a última oportunidade
+                // de autorizar/eliminar a despesa antes de ela deixar de ter algum ecrã que a mostre.
+                // A versão anterior bloqueava em QUALQUER tarefa de origem com "Despesa" (incluindo o
+                // próprio registo inicial RD01, que nunca tem botão de Autorizar), criando um beco sem
+                // saída: nunca era possível avançar de RD01 para RD02/RD03 (onde a autorização acontece)
+                // porque a despesa nunca deixa de estar "R" antes dessa transição existir. Confirmado ao
+                // vivo (ver [[next-task-missing-ad-completeness-check]]) com uma cadeia RD01→RD10
+                // correctamente configurada -- bloqueava logo no primeiro passo, tornando a despesa
+                // impossível de autorizar por qualquer via que não fosse apagá-la.
                 if (relComponentes.Where(x => x.descricao == "Despesa").Any())
                 {
-                    var despesaRegistadaListagem = _unitOfWork.ComponenteDespesaRegistoRepository.GetAllDespesaRegistadaByTarefaAtivoId(request.tarefaAtivoId);
-                    if (despesaRegistadaListagem != null && despesaRegistadaListagem.Any(d => d.estado == "R"))
-                        response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.DespesaPendenteImpedeAvancoTarefa).ToString(), ErrorMessage = ErrorsDataContract.DespesaPendenteImpedeAvancoTarefa.ToString() });
+                    var componentesTarefaSeguinte = _unitOfWork.RelTarefaComponenteRepository.GetRelTarefaComponenteByIdTarefa(request.data.nextTarefaNumber.Value);
+                    bool proximaTarefaTambemTemDespesa = componentesTarefaSeguinte.Where(x => x.descricao == "Despesa").Any();
+
+                    if (!proximaTarefaTambemTemDespesa)
+                    {
+                        var despesaRegistadaListagem = _unitOfWork.ComponenteDespesaRegistoRepository.GetAllDespesaRegistadaByTarefaAtivoId(request.tarefaAtivoId);
+                        if (despesaRegistadaListagem != null && despesaRegistadaListagem.Any(d => d.estado == "R"))
+                            response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.DespesaPendenteImpedeAvancoTarefa).ToString(), ErrorMessage = ErrorsDataContract.DespesaPendenteImpedeAvancoTarefa.ToString() });
+                    }
                 }
             }
 
