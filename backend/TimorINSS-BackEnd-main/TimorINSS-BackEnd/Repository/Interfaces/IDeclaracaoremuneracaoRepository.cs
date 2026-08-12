@@ -29,9 +29,5 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public bool ExistsDeclaracaoWithRegime(int idRegime);
 
         public RelatorioDeclaracaoRenumeracaoListagemResponse GetDeclaracoesRelatorios(RelatorioDeclaracaoRenumeracaoListagemRequest request);
-
-        public SituacaoContributivaEmpresasRelatorioResponse GetSituacaoContributivaEmpresasRelatorio(SituacaoContributivaEmpresasRelatorioRequest request);
-
-        public List<(DateTime mesAno, decimal valorPago, decimal valorDivida)> GetContribuicoesTrendsPorMes(DateTime? beginDate, DateTime? endDate);
     }
 }

@@ -31,9 +31,7 @@ import { TarefaComponent } from './moduloGestao/tarefa/tarefa.component';
 import { ConfigurarProcessosComponent } from './moduloGestao/configurar-processos/configurar-processos.component';
 import { NovoConfigurarProcessosComponent } from './moduloGestao/create-edit-configurar-processos/create-edit-configurar-processos.component';
 import { PreencherTarefaComponent } from './moduloGestao/preencher-tarefa/preencher-tarefa.component';
-import { AjusteOrcamentoComponent } from './moduloGestao/ajuste-orcamento/ajuste-orcamento.component';
 import { HomePageComponent } from './moduloGestao/home-page/home-page.component';
-import { ManagerViewComponent } from './moduloGestao/manager-view/manager-view.component';
 import { ProcessosArquivadosComponent } from './moduloGestao/processos-arquivados/processos-arquivados.component';
 import { ProcessoDetalheComponent } from './moduloGestao/processo-detalhe/processo-detalhe.component';
 import { ControloDeAcessoComponent } from './moduloGestao/controlo-de-acesso/controlo-de-acesso.component';
@@ -59,7 +57,6 @@ const routes: Routes = [
   { path: 'camposEditaveis', component: GerirCamposEditaveisComponent },
   { path: 'login', component: LoginComponent },
   { path: '', component: HomePageComponent },
-  { path: 'managerView', component: ManagerViewComponent },
   { path: 'relatoriosExecucaoOrcamental', component: RelatoriosExecucaoOrcamentalComponent },
   { path: 'relatoriosExecucaoPorPrograma', component: RelatoriosExecucaoPorProgramaComponent },
   { path: 'relatoriosClassificacaoEconomica', component: RelatoriosClassificacaoEconomicaComponent },
@@ -111,7 +108,6 @@ const routes: Routes = [
   { path: 'novoConfigurarProcesso', component: NovoConfigurarProcessosComponent},
   { path: 'novoConfigurarProcesso/:id', component: NovoConfigurarProcessosComponent},
   { path: 'preencherTarefa/:id', component: PreencherTarefaComponent},
-  { path: 'ajusteOrcamento', component: AjusteOrcamentoComponent},
   { path: 'controloDeAcesso', component: ControloDeAcessoComponent},
   { path: 'popupListarPagamentosPDF', component: PopUpListarPagamentosExecutadosComponent},
 ];

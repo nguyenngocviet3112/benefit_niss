@@ -254,7 +254,6 @@ namespace TimorINSSBackEnd.Extensions
             services.AddScoped<IRelTarefaComponenteDataManager, RelTarefaComponenteDataManager>();
             services.AddScoped<IComponenteOrcamentoRegistoDataManager, ComponenteOrcamentoRegistoDataManager>();
             services.AddScoped<IComponenteOrcamentoValorDataManager, ComponenteOrcamentoValorDataManager>();
-            services.AddScoped<IComponenteOrcamentoAjusteDataManager, ComponenteOrcamentoAjusteDataManager>();
             services.AddScoped<IAgrupamentoConfigDataManager, AgrupamentoConfigDataManager>();
             services.AddScoped<IComponenteDespesaRegistoDataManager, ComponenteDespesaRegistoDataManager>();
             services.AddScoped<IComponenteDespesaConfigDataManager, ComponenteDespesaConfigDataManager>();

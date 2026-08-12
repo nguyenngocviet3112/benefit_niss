@@ -141,13 +141,6 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .ToList();
         }
 
-        public Componenteorcamentovalor GetWithAgrupamento(int id)
-        {
-            return _moduloContribuicoesContext.Componenteorcamentovalor
-                .Include(c => c.AgrupamentoFkNavigation)
-                .SingleOrDefault(c => c.Id == id);
-        }
-
         public Componenteorcamentovalor GetComponenteOrcamentoValorSameForeignKeys(Componenteorcamentovalor componente)
         {
             return _moduloContribuicoesContext.Componenteorcamentovalor

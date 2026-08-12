@@ -31,9 +31,5 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
 
         public GetComponenteDespesaCabimentadaParaExecucaoReponse GetAllDespesaCompromissosParaExecucaoByTarefaAtivoId(GetAllDespesaRegistadaRequest request);
         public ResponseBaseDataContract UpdateDespesaCabimentada(UpdateDespesaCabimentadaRequest request);
-
-        public BudgetExecutionRelatorioResponse GetBudgetExecutionRelatorio(BudgetExecutionRelatorioRequest request);
-
-        public DespesaPipelineRelatorioResponse GetDespesaPipelineRelatorio(DespesaPipelineRelatorioRequest request);
     }
 }

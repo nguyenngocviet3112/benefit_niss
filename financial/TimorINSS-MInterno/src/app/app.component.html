@@ -44,10 +44,6 @@
         <mat-icon class="menuIcon">menu</mat-icon>
       </button>
       <app-menu-panel #panel [items]="menuItems"></app-menu-panel>
-      <button *ngIf="isLoggedIn" mat-button routerLink="/managerView">
-        <span style="color: white;">{{ 'general.managerView' | translate }}</span>
-        <mat-icon class="menuIcon">dashboard</mat-icon>
-      </button>
     </div>
 
   </div>

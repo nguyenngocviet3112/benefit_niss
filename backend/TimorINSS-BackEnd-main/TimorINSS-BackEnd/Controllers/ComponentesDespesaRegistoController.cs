@@ -348,45 +348,5 @@ namespace TimorINSSBackEnd.Controllers
             }
             return Ok(response);
         }
-
-        [HttpPost("GetBudgetExecutionRelatorio")]
-        public IActionResult GetBudgetExecutionRelatorio(BudgetExecutionRelatorioRequest request)
-        {
-            BudgetExecutionRelatorioResponse response = new BudgetExecutionRelatorioResponse();
-            try
-            {
-                request.GetHeaderInfo(Request.Headers);
-                response = _dataManager.GetBudgetExecutionRelatorio(request);
-            }
-            catch (Exception e)
-            {
-                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
-            }
-            if (response.ManageErrors("GetBudgetExecutionRelatorio", Log, request))
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
-        }
-
-        [HttpPost("GetDespesaPipelineRelatorio")]
-        public IActionResult GetDespesaPipelineRelatorio(DespesaPipelineRelatorioRequest request)
-        {
-            DespesaPipelineRelatorioResponse response = new DespesaPipelineRelatorioResponse();
-            try
-            {
-                request.GetHeaderInfo(Request.Headers);
-                response = _dataManager.GetDespesaPipelineRelatorio(request);
-            }
-            catch (Exception e)
-            {
-                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
-            }
-            if (response.ManageErrors("GetDespesaPipelineRelatorio", Log, request))
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
-        }
     }
 }

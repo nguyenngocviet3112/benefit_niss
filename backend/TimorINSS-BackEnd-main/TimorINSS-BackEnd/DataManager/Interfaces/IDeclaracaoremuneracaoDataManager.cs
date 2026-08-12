@@ -19,9 +19,5 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         public RelatorioDeclaracaoRenumeracaoListagemResponse GetDeclaracoesRelatorios(RelatorioDeclaracaoRenumeracaoListagemRequest request);
 
         public StringFileReponse ExtractToExcelRelatorios(RelatorioDeclaracaoRenumeracaoListagemRequest request);
-
-        public SituacaoContributivaEmpresasRelatorioResponse GetSituacaoContributivaEmpresasRelatorio(SituacaoContributivaEmpresasRelatorioRequest request);
-
-        public ContribuicoesTrendsRelatorioResponse GetContribuicoesTrendsRelatorio(ContribuicoesTrendsRelatorioRequest request);
     }
 }

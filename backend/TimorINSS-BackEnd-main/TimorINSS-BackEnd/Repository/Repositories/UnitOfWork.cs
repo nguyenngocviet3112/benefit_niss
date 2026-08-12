@@ -83,7 +83,6 @@ namespace TimorINSSBackEnd.Repository.Repositories
         private IComponenteDespesaRepository _componenteDespesaRepository;
         private IComponenteOrcamentoRegistoRepository _componenteOrcamentoRegistoRepository;
         private IComponenteOrcamentoValorRepository _componenteOrcamentoValorRepository;
-        private IComponenteOrcamentoAjusteRepository _componenteOrcamentoAjusteRepository;
         private IComponenteDespesaRegistoRepository _componenteDespesaRegistoRepository;
         private IComponenteTextoRegistoRepository _componenteTextoRegistoRepository;
         private IPagamentosExecutadosRepository _pagamentosExecutadosRepository;
@@ -253,9 +252,6 @@ namespace TimorINSSBackEnd.Repository.Repositories
         { get { return _componenteOrcamentoRegistoRepository ??= new ComponenteOrcamentoRegistoRepository(_moduloContribuicoesContext); } }
         public IComponenteOrcamentoValorRepository ComponenteOrcamentoValorRepository
         { get { return _componenteOrcamentoValorRepository ??= new ComponenteOrcamentoValorRepository(_moduloContribuicoesContext); } }
-
-        public IComponenteOrcamentoAjusteRepository ComponenteOrcamentoAjusteRepository
-        { get { return _componenteOrcamentoAjusteRepository ??= new ComponenteOrcamentoAjusteRepository(_moduloContribuicoesContext); } }
         public IComponenteDespesaRegistoRepository ComponenteDespesaRegistoRepository
         { get { return _componenteDespesaRegistoRepository ??= new ComponenteDespesaRegistoRepository(_moduloContribuicoesContext, _localizer); } }
         public IComponenteTextoRegistoRepository ComponenteTextoRegistoRepository

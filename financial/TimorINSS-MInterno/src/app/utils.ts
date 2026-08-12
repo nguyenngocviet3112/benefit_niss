@@ -200,16 +200,6 @@ export function CreateMenuPermissions(user: Utilizador | null) : MenuItem[]
             order: 3
           })
         }
-        // Mesma permissão que já dá acesso a Preencher Tarefa (Retificação de Orçamento incluída) --
-        // ver [[prod-dev]] Regras_Negocio_Ciclo_Despesa_New_Mode.md #7 para o porquê deste ecrã existir.
-        if(permission.idFuncionalidade == Funcionalidades.PreenchimentoTarefa){
-          response.find(x => x.name == gestaoTitle)?.children?.push({
-            name: 'general.ajusteOrcamento',
-            icon: 'sync_alt',
-            link: '/ajusteOrcamento',
-            order: 7
-          })
-        }
       }
       if (permission.module == Modules.CONTRIBUICOES)
       {
