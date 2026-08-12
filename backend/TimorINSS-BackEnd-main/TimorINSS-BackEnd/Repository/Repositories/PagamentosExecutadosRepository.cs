@@ -1429,6 +1429,85 @@ namespace TimorINSSBackEnd.Repository.Repositories
         }
         #endregion
 
+        #region Aviso de Obrigação duplicada (Salários)
+
+        // Verifica se um nó do AgrupamentoConfig resolve, pela raiz, para a classificação económica 501
+        // (Salários e Vencimentos) -- mesma lógica de resolução usada em GetExecucaoOrcamentalPorClassificacaoEconomica
+        // (esquema novo: código da raiz já é 501-506; esquema antigo: sobe a cadeia à procura do crosswalk),
+        // mas isolada aqui como método reutilizável e leve (sem carregar toda a árvore com Includes pesados).
+        public bool IsClassificacaoSalarios(int agrupamentoConfigId)
+        {
+            var nodes = _moduloContribuicoesContext.Agrupamentoconfig
+                .Where(a => a.IndActivo)
+                .Select(a => new { a.Id, a.Codigo, a.ParentFk })
+                .ToDictionary(a => a.Id);
+
+            if (!nodes.ContainsKey(agrupamentoConfigId)) return false;
+
+            bool IsRootSalarios(int nodeId)
+            {
+                var current = nodes[nodeId];
+                while (current.ParentFk.HasValue && nodes.ContainsKey(current.ParentFk.Value))
+                {
+                    current = nodes[current.ParentFk.Value];
+                }
+                // Staging usa códigos de raiz com 3 dígitos (501-506); este ambiente local usa 2 dígitos (51-56)
+                // para o mesmo esquema -- ver [[db-seed-reference-local]]. Aceita ambos.
+                return int.TryParse(current.Codigo, out int rootCode) && (rootCode == 501 || rootCode == 51);
+            }
+
+            // Esquema novo -- a raiz já é o código real (501-506), usa directamente
+            if (IsRootSalarios(agrupamentoConfigId))
+            {
+                return true;
+            }
+
+            // Esquema antigo -- sobe a cadeia de ancestrais (incluindo o próprio nó) à procura do crosswalk mais próximo
+            var crosswalk = _moduloContribuicoesContext.RelAgrupamentoConfigClassificacaoEconomica
+                .Where(c => c.IndActivo)
+                .ToDictionary(c => c.AgrupamentoConfigOrigemFk, c => c.AgrupamentoConfigCeFk);
+
+            var walk = nodes[agrupamentoConfigId];
+            while (walk != null)
+            {
+                if (crosswalk.TryGetValue(walk.Id, out int targetId) && nodes.ContainsKey(targetId))
+                {
+                    return IsRootSalarios(targetId);
+                }
+                walk = walk.ParentFk.HasValue && nodes.ContainsKey(walk.ParentFk.Value) ? nodes[walk.ParentFk.Value] : null;
+            }
+
+            return false;
+        }
+
+        public int? GetSalaryAgrupamentoConfigId(int compromissoFk)
+        {
+            var agrupamentoConfigId = _moduloContribuicoesContext.Compromisso
+                .Where(c => c.Id == compromissoFk)
+                .Select(c => (int?)c.ComponenteDespesaRegistoFkNavigation.AgrupamentoConfigFk)
+                .FirstOrDefault();
+
+            if (!agrupamentoConfigId.HasValue) return null;
+
+            return IsClassificacaoSalarios(agrupamentoConfigId.Value) ? agrupamentoConfigId : null;
+        }
+
+        public List<int> GetDestinatarioIdsWithActiveSalaryObrigacaoInMonth(int agrupamentoConfigId, int month, int year, List<int> destinatarioIds, int? excludePagamentoId)
+        {
+            return _moduloContribuicoesContext.Pagamentosexecutados
+                .Where(p => p.IndActivo
+                    && p.DataObrigacao.HasValue
+                    && p.DataObrigacao.Value.Month == month
+                    && p.DataObrigacao.Value.Year == year
+                    && destinatarioIds.Contains(p.DestinatarioFk)
+                    && p.CompromissoFkNavigation.ComponenteDespesaRegistoFkNavigation.AgrupamentoConfigFk == agrupamentoConfigId
+                    && (!excludePagamentoId.HasValue || p.Id != excludePagamentoId.Value))
+                .Select(p => p.DestinatarioFk)
+                .Distinct()
+                .ToList();
+        }
+
+        #endregion
 
     }
 }

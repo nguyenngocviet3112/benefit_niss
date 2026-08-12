@@ -203,27 +203,63 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
         importId: this.importerId,
       };
 
-      this.pagamentoExecutadoService.SavePagamentoExecutado(request).subscribe(x => {
-        this.destinatario = <Destinatario>{};
-        this.pagamento = <PagamentoExecutado>{};
-        this.submittedTry = false;
-        this.importerId = undefined;
-        this.selectedDests = undefined;
-        this.totalAmount = undefined;
-        this.getDespesaCabimentasdasParaExecucao();
-        this.getDestinatariosPagamento();
-        openSnackBar(this.translate.instant(`snackBar.${!!request.importId ? 'registoDestinatarios' : 'registoDestinatario'}`), this._snackBar);
-        this.hideLoader();
-
-      },
-        err => {
-
-          this.hideLoader();
-          err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
-          this.showError();
-        });
+      this.executeSavePagamento(request);
     }
 
+  }
+
+  private executeSavePagamento(request: SavePagamentoExecutadoRequest) {
+    this.pagamentoExecutadoService.SavePagamentoExecutado(request).subscribe(x => {
+      this.onAssociarDespesaSuccess(request);
+    },
+      err => {
+        this.hideLoader();
+
+        const errors = err.error?.errors;
+        const errorCode = errors && errors.length > 0 ? errors[0].errorCode : undefined;
+
+        if (errorCode === '-79' && !request.pagamento.confirmDuplicate) {
+          const confirmRequest = <SavePagamentoExecutadoRequest>{
+            ...request,
+            pagamento: { ...request.pagamento, confirmDuplicate: true }
+          };
+
+          const dialogRef = this.warningDialog.open(PopUpWarningComponent, {
+            id: 'confirmDuplicateObrigacao',
+            minHeight: '300px',
+            width: '40%',
+            height: '30%',
+            panelClass: 'warningModal',
+            data: {
+              function: this.pagamentoExecutadoService.SavePagamentoExecutado(confirmRequest),
+              msg: this.translate.instant('warnings.possivelObrigacaoDuplicada')
+            }
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              this.onAssociarDespesaSuccess(confirmRequest);
+            }
+          });
+        }
+        else {
+          errors ? errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+          this.showError();
+        }
+      });
+  }
+
+  private onAssociarDespesaSuccess(request: SavePagamentoExecutadoRequest) {
+    this.destinatario = <Destinatario>{};
+    this.pagamento = <PagamentoExecutado>{};
+    this.submittedTry = false;
+    this.importerId = undefined;
+    this.selectedDests = undefined;
+    this.totalAmount = undefined;
+    this.getDespesaCabimentasdasParaExecucao();
+    this.getDestinatariosPagamento();
+    openSnackBar(this.translate.instant(`snackBar.${!!request.importId ? 'registoDestinatarios' : 'registoDestinatario'}`), this._snackBar);
+    this.hideLoader();
   }
 
   public getDespesaCabimentasdasParaExecucao() {

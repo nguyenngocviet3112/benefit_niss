@@ -50,6 +50,9 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         [DataMember]
         public string? BankCode { get; set; }
 
+        [DataMember]
+        public bool ConfirmDuplicate { get; set; }
+
     }
 
     [DataContract]

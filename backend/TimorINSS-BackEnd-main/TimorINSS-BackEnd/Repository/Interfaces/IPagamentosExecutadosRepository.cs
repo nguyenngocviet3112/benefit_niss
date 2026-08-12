@@ -49,5 +49,13 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public List<Pagamentosexecutados> GetPagamentosexecutadosById(List<int> ids);
 
+        // Devolve o AgrupamentoConfigFk do Compromisso indicado, apenas se essa rubrica resolver
+        // para a classificação económica raiz 501 (Salários e Vencimentos); caso contrário null.
+        public int? GetSalaryAgrupamentoConfigId(int compromissoFk);
+
+        // Entre os destinatários indicados, devolve os que já têm um Pagamentosexecutados activo
+        // com a mesma rubrica (agrupamentoConfigId) e DataObrigacao no mesmo mês/ano.
+        public List<int> GetDestinatarioIdsWithActiveSalaryObrigacaoInMonth(int agrupamentoConfigId, int month, int year, List<int> destinatarioIds, int? excludePagamentoId);
+
     }
 }

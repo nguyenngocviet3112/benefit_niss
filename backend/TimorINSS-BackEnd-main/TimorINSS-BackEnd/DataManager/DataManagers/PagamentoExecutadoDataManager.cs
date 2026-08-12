@@ -51,13 +51,42 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             {
                 var importRows = _unitOfWork.DestinatarioRepository.GetImportRows(request.importId.Value);
 
+                // Aviso de possível Obrigação duplicada -- só para rubricas de Salários (CE 501), não bloqueia,
+                // só pede confirmação (request.pagamento.ConfirmDuplicate=true reenvia já confirmado).
+                // CompromissoFk/DataObrigacao são partilhados por toda a lista importada.
+                if (!request.pagamento.ConfirmDuplicate && request.pagamento.DataObrigacao.HasValue)
+                {
+                    var salaryAgrupamentoId = _unitOfWork.PagamentosExecutadosRepository.GetSalaryAgrupamentoConfigId(request.pagamento.CompromissoFk);
+
+                    if (salaryAgrupamentoId.HasValue)
+                    {
+                        // Mesmo destinatário repetido dentro da própria lista importada
+                        bool duplicadoNaLista = importRows.GroupBy(r => r.RelId).Any(g => g.Count() > 1);
+
+                        // Destinatários da lista que já têm Obrigação activa no mesmo mês/rubrica
+                        var destinatarioIds = importRows.Select(r => r.RelId).Distinct().ToList();
+                        var duplicadosNaBd = _unitOfWork.PagamentosExecutadosRepository.GetDestinatarioIdsWithActiveSalaryObrigacaoInMonth(
+                            salaryAgrupamentoId.Value,
+                            request.pagamento.DataObrigacao.Value.Month,
+                            request.pagamento.DataObrigacao.Value.Year,
+                            destinatarioIds,
+                            null);
+
+                        if (duplicadoNaLista || duplicadosNaBd.Any())
+                        {
+                            response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.PossivelObrigacaoDuplicada).ToString(), ErrorMessage = ErrorsDataContract.PossivelObrigacaoDuplicada.ToString() });
+                            return response;
+                        }
+                    }
+                }
+
                 foreach (var importRow in importRows)
                 {
                     Pagamentosexecutados pagamentoExecutado = BuildPagamentoExecutadoImportObject(importRow, request.pagamento);
 
                     _unitOfWork.PagamentosExecutadosRepository.Add(pagamentoExecutado);
                 }
-                
+
 
                 _unitOfWork.Commit();
             }
@@ -121,6 +150,29 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     {
                         _unitOfWork.DestinatarioRepository.Add(destinatario);
                         pagamentoExecutado.DestinatarioFkNavigation = destinatario;
+                    }
+                }
+
+                // Aviso de possível Obrigação duplicada -- só para rubricas de Salários (CE 501), não bloqueia,
+                // só pede confirmação (request.pagamento.ConfirmDuplicate=true reenvia já confirmado)
+                if (!request.pagamento.ConfirmDuplicate && pagamentoExecutado.DataObrigacao.HasValue && pagamentoExecutado.CompromissoFk.HasValue)
+                {
+                    var salaryAgrupamentoId = _unitOfWork.PagamentosExecutadosRepository.GetSalaryAgrupamentoConfigId(pagamentoExecutado.CompromissoFk.Value);
+
+                    if (salaryAgrupamentoId.HasValue)
+                    {
+                        var duplicados = _unitOfWork.PagamentosExecutadosRepository.GetDestinatarioIdsWithActiveSalaryObrigacaoInMonth(
+                            salaryAgrupamentoId.Value,
+                            pagamentoExecutado.DataObrigacao.Value.Month,
+                            pagamentoExecutado.DataObrigacao.Value.Year,
+                            new List<int> { pagamentoExecutado.DestinatarioFk },
+                            pagamentoExecutado.Id > 0 ? pagamentoExecutado.Id : (int?)null);
+
+                        if (duplicados.Any())
+                        {
+                            response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.PossivelObrigacaoDuplicada).ToString(), ErrorMessage = ErrorsDataContract.PossivelObrigacaoDuplicada.ToString() });
+                            return response;
+                        }
                     }
                 }
 

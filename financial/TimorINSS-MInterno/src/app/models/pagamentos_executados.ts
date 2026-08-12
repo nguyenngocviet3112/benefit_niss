@@ -16,6 +16,7 @@ export interface PagamentoExecutado
   codigoContaDebito?: number;
   codigoContaCredito?: number;
   dataObrigacao?: Date;
+  confirmDuplicate?: boolean;
 }
 
 
