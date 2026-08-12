@@ -17,6 +17,7 @@ export interface DeleteReceitaRequest{
 
 export interface ReceitasNaoConciliadasRelatorioRequest extends FilterRequest {
   contribuinte?: string;
+  bankCode?: string;
 }
 
 

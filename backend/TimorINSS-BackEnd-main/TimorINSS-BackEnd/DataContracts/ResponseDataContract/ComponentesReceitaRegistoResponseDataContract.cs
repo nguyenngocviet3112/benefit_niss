@@ -85,5 +85,8 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         [DataMember]
         public string Contribuinte { get; set; }
 
+        [DataMember]
+        public string BankCode { get; set; }
+
     }
 }

@@ -36,6 +36,8 @@ export class ConsultasReceitasNaoConciliadasComponent implements OnInit {
     orderDirection: OrderDirectionEnum.ascending
   };
   public tin?: string;
+  public bankCode?: string;
+  public bankOptions: { key: string; label: string }[] = [];
 
   public submittedTry: boolean = false;
   public resultsShown: boolean = false;
@@ -45,7 +47,7 @@ export class ConsultasReceitasNaoConciliadasComponent implements OnInit {
 
   //Region tarefa table
   public receitasList: ReceitaNaoConciliadaRelatorio[] = [];
-  public displayedColumns: string[] = ['descricao', 'numeroDocumento', 'valor', 'tin', 'data'];
+  public displayedColumns: string[] = ['descricao', 'numeroDocumento', 'valor', 'tin', 'data', 'bankCode'];
   public totalRowsTable: number = 0;
   public pageSizeTable = 20;
   public pageIndexTable = 0;
@@ -67,11 +69,24 @@ export class ConsultasReceitasNaoConciliadasComponent implements OnInit {
       this.router.navigate(['/login'], { skipLocationChange: true })
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
-
+      this.translate.get('guiaPagamentoListagem.lstBankCode').subscribe((res: any) => {
+        this.bankOptions = Object.keys(res).map((key) => ({
+          key,
+          label: res[key],
+        }));
+      });
     }
     else {
       showExpiredError(this.errorDialog, this.tokenStorage, this.translate);
     }
+  }
+
+  public onBancoSelected(event: any): void {
+    this.bankCode = event.value;
+  }
+
+  public clearFilterBanco(): void {
+    this.bankCode = undefined;
   }
 
   public showLoader() {
@@ -107,6 +122,7 @@ export class ConsultasReceitasNaoConciliadasComponent implements OnInit {
     const request: ReceitasNaoConciliadasRelatorioRequest = {
       filter: this.filter,
       contribuinte: this.tin,
+      bankCode: this.bankCode,
     };
 
     if (!this.resultsShown) this.resultsShown = true;
@@ -141,6 +157,7 @@ export class ConsultasReceitasNaoConciliadasComponent implements OnInit {
 
   public clearFilter() {
     this.tin = undefined;
+    this.bankCode = undefined;
     this.filter = {};
     this.beginDate = undefined;
     this.endDate = undefined;
@@ -169,6 +186,7 @@ export class ConsultasReceitasNaoConciliadasComponent implements OnInit {
     const request: ReceitasNaoConciliadasRelatorioRequest = {
       filter: this.filter,
       contribuinte: this.tin,
+      bankCode: this.bankCode,
     };
 
     this.componenteReceitaRegistoService.GetReceitasNaoConciliadasRelatorioExcel(request).subscribe((response) => {

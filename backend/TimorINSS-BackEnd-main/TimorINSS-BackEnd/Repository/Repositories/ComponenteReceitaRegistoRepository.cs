@@ -701,6 +701,10 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         beginDate.HasValue && !endDate.HasValue ? e.DataCriacao.Date == beginDate :
                         true)
                 )
+                .Where(e =>
+                    // Filtrar por Banco
+                    (request.BankCode == null || e.BankCode == request.BankCode)
+                )
                 .Select(e => new ReceitasNaoConciliadasRelatorios
                 {
                     Descricao = e.Descricao,
@@ -708,6 +712,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     Valor = e.Valor,
                     Contribuinte = Convert.ToString(e.GuiaEntidadeFkNavigation.Tin),
                     Data = e.DataCriacao,
+                    BankCode = e.BankCode,
                 });
 
             if (request.Contribuinte == null || request.Contribuinte == "")
@@ -723,7 +728,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         // Filtrar por datas
                         (beginDate.HasValue && endDate.HasValue ? e.DataCriacao.Date >= beginDate && e.DataCriacao.Date <= endDate :
                          beginDate.HasValue && !endDate.HasValue ? e.DataCriacao.Date == beginDate :
-                         true)
+                         true) &&
+                        // Movimento manual, không có Banco riêng — chỉ hiện khi không lọc theo Banco
+                        request.BankCode == null
                    )
                    .Select(e => new ReceitasNaoConciliadasRelatorios
                    {
@@ -731,7 +738,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                        NumeroDocumento = e.NumeroDocumento,
                        Valor = e.Valor,
                        Data = e.DataCriacao,
-                       Contribuinte = ""
+                       Contribuinte = "",
+                       BankCode = null,
                    })
                 );
                 listaReceitas = listaReceitas.Concat(
@@ -744,7 +752,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         // Filtrar por datas
                         (beginDate.HasValue && endDate.HasValue ? e.DataCriacao.Date >= beginDate && e.DataCriacao.Date <= endDate :
                             beginDate.HasValue && !endDate.HasValue ? e.DataCriacao.Date == beginDate :
-                            true)
+                            true) &&
+                        // Nota de crédito thừa kế Banco từ Guia gốc
+                        (request.BankCode == null || e.ReservaGuiaPagamentoFkNavigation.BankCode == request.BankCode)
                     )
                     .Select(e => new ReceitasNaoConciliadasRelatorios
                     {
@@ -752,7 +762,8 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         NumeroDocumento = e.ReservaGuiaPagamentoFkNavigation.NumDocumento,
                         Valor = e.Valor.Value,
                         Data = e.DataCriacao,
-                        Contribuinte = ""
+                        Contribuinte = "",
+                        BankCode = e.ReservaGuiaPagamentoFkNavigation.BankCode,
                     })
                 );
 
@@ -826,6 +837,14 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     DataTextStyleKey = "TableCellWrap",
                     Value = (data) => data.Data.ToString("dd/MM/yyyy"),
                     Width = 18,
+                },
+                new ColumnOption<ReceitasNaoConciliadasRelatorios>()
+                {
+                    Name = _localizer["banco"].Value,
+                    ColumnTextStyleKey = "HeaderWrap",
+                    DataTextStyleKey = "TableCellWrap",
+                    Value = (data) => data.BankCode,
+                    Width = 15,
                 },
             }, new TableOptions() { AutoFitColumns = false });
 

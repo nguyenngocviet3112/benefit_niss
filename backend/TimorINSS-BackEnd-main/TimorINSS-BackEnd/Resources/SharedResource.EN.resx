@@ -120,6 +120,9 @@
   <data name="autorizada" xml:space="preserve">
     <value>Authorized</value>
   </data>
+  <data name="banco" xml:space="preserve">
+    <value>Bank</value>
+  </data>
   <data name="cabimentada" xml:space="preserve">
     <value>Fitted</value>
   </data>
