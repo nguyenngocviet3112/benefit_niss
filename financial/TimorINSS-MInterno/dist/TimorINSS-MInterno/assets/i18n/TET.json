@@ -23,6 +23,8 @@
     "entidadeEmpregadora": "Entidade Empregadora",
     "entidadeEmpregadoraCaps": "ENTIDADE EMPREGADORA",
     "trabalhadores": "Trabalhadores",
+    "searchOtherCompany": "Buka Empreza Seluk",
+    "putNissNumber": "Hakerek numeru NISS",
     "nomeCompleto": "Nome Completo",
     "dataNasc": "Data de Nascimento",
     "sexo": "Sexo",
@@ -1537,7 +1539,8 @@
     "utilizador-3": "Utilizador que autorizou o compromisso",
     "utilizador-4": "Utilizador que autorizou a obrigação",
     "utilizador-5": "Utilizador que executou",
-    "registarCompromisso": "Registar Compromisso"
+    "registarCompromisso": "Registar Compromisso",
+    "exportarCompromissos": "Exporta ba Excel"
   },
   "receitas": {
     "consultasReceitas": "Consultas - Receitas",
@@ -1549,7 +1552,8 @@
     "valor": "Valor",
     "data": "Data",
     "numeroProcesso": "N.º processo",
-    "utilizador": "Utilizador"
+    "utilizador": "Utilizador",
+    "bankCodeInfo": "Se a Receita reunir movimentos de mais de um banco, é apresentado apenas o primeiro banco encontrado."
   },
   "receitasNaoConciliadas": {
     "consultasReceitasNaoConciliadas": "Consultas - Receitas não conciliadas",

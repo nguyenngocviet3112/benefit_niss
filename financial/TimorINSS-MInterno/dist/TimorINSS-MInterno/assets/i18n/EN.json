@@ -23,6 +23,8 @@
     "entidadeEmpregadora": "Employer",
     "entidadeEmpregadoraCaps": "EMPLOYER",
     "trabalhadores": "Workers",
+    "searchOtherCompany": "Search Other Company",
+    "putNissNumber": "Put NISS number",
     "nomeCompleto": "Complete Name",
     "dataNasc": "Birth Date",
     "sexo": "Gender",
@@ -1552,7 +1554,8 @@
     "utilizador-3": "User who fit",
     "utilizador-4": "User who authorized the commitment",
     "utilizador-5": "User who executed",
-    "registarCompromisso": "Register Commitment"
+    "registarCompromisso": "Register Commitment",
+    "exportarCompromissos": "Export to Excel"
   },
   "receitas": {
     "consultasReceitas": "Consultation - Revenues",
@@ -1564,7 +1567,8 @@
     "valor": "Amount",
     "data": "Date",
     "numeroProcesso": "Process number",
-    "utilizador": "User"
+    "utilizador": "User",
+    "bankCodeInfo": "If the Revenue combines transactions from more than one bank, only the first bank found is shown."
   },
   "receitasNaoConciliadas": {
     "consultasReceitasNaoConciliadas": "Consultation - Unreconciled revenues",

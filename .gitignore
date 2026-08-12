@@ -44,3 +44,4 @@ backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/obj/Debug/netcoreapp3.1/TimorIN
 backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/obj/Debug/netcoreapp3.1/TimorINSS-BackEnd.AssemblyInfo.cs
 backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug/netcoreapp3.1/TimorINSSBackEnd.exe
 backend/TimorINSS-BackEnd-main/TimorINSS-BackEnd/bin/Debug/netcoreapp3.1/TimorINSSBackEnd.dll
+*.DS_Store
