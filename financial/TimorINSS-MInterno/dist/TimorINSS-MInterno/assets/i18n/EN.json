@@ -7,6 +7,7 @@
     "menu": "Menu",
     "NConta": "Account Number",
     "ordemPagamento": "Payment Order",
+    "listaPagamentoSalario": "Salary Payment List",
     "descricao": "Description",
     "valor": "Amount",
     "total": "Total",
@@ -159,7 +160,7 @@
     "invoiceATCO": "Amount payable by TCO",
     "invoiceSSS": "Social Security Services",
     "invoiceSAS": "Signature and stamp",
-    "period":"Period"
+    "period": "Period"
   },
   "login_form": {
     "title": "Authentication",
@@ -310,7 +311,12 @@
     "-72": "Value cannot be lower than what was already committed",
     "-73": "Excel not valid or required columns are missing",
     "-74": "Attention: it is not possible to change the period end date of the cost center since this cost center already has budgeted values",
-    "-75": "Maximum expiry day is 28"
+    "-75": "Maximum expiry day is 28",
+    "-80": "The amount to commit ($ {1}) exceeds the available balance of the budget line (available: $ {0})",
+    "-81": "There is already an expense in progress (Registered or Authorized) for this budget line. Please wait until it is Committed before registering a new one",
+    "-82": "The amount entered ($ {1}) exceeds the available budget for this account line (available: $ {0}). Please reduce the amount, or request additional budget for this line before registering.",
+    "-83": "This account line has not been allocated any budget yet (available: $ 0.00). Please request budget allocation for this line before registering an expense against it.",
+    "-84": "This task cannot be advanced yet: there are still expenses in this process pending Authorization (Registered but not yet Authorized). Please authorize or remove them first."
   },
   "month": {
     "0": "JANUARY",
@@ -844,6 +850,7 @@
     "cabimentacaoDespesa": "This action will 'cabimentar' the selected Expense",
     "valorCabimentacaoNegativo": "The amount available for commitment does not even allow the Expense to be authorized. Please edit the amount or delete the expense",
     "valorAutorizacaoNegativo": "The amount available for authorization will be exceeded if you authorize the expense.",
+    "possivelObrigacaoDuplicada": "An Obligation for this recipient already exists in the same month, under the same Salary budget line. Are you sure you want to continue?",
     "deleteMovimentoWarningMsg": "This Action will delete this Movement",
     "concilate": "This action will conciliate these movements",
     "warningDeleteCompromisso": "This action will delete this Commitment.",
@@ -1405,6 +1412,8 @@
   "conciliacaoComponent": {
     "conta": "Bank Account",
     "caixa": "Account",
+    "bankCode": "Bank",
+    "allBanks": "All",
     "movimentoAConciliar": "Transactions to be Reconciled",
     "verConciliados": "See Reconciled",
     "verNaoConciliados": "See Non Reconciled",
@@ -1429,6 +1438,8 @@
     "centroCusto": "Cost Center",
     "iban": "IBAN",
     "ibanNacional": "Nacional IBAN",
+    "aprovaHusi": "Approved by",
+    "numeroSequencial": "No.",
     "relatoriosPagamentosEmitidos": "Reports - Payments issued cost center per month",
     "pagamentosExecutados": "Executed payments",
     "valorNaoSuperiorError": "The amount to be executed must not be greater than the amount to be executed of the selected expense"
@@ -1446,12 +1457,15 @@
     "internalUser": "Internal User"
   },
   "execucaoOrcamental": {
+    "instiutiton": "Institution",
     "contaOGE": "OGE Account",
-    "instiutiton": "Instiutiton",
     "centroCusto": "Cost Center",
     "rubricaClassificacao": "Economic Classification Rubric",
     "valorOrcamentoInicial": "Initial Budget Amount",
     "valorOrcamentado": "Budgeted Amount",
+    "cabimentos": "Commitments (Cabimento)",
+    "compromissos": "Commitments (Compromisso)",
+    "obrigacoes": "Obligations",
     "anoAnterior": "Last year execution",
     "janeiroADezembro": "January to december",
     "janeiro": "January",
@@ -1472,6 +1486,33 @@
     "variacaoExecucao": "Execution variation compared to the same period of the previous year (%)",
     "relatoriosExecucaoOrcamental": "Reports - Budget Execution",
     "tipoConta": "Account Type"
+  },
+  "classificacaoEconomica": {
+    "menuLabel": "CE_OSS_Global",
+    "titulo": "CE_OSS_Global - Total by Economic Classification",
+    "receitas": "REVENUE",
+    "despesas": "EXPENDITURE",
+    "codigo": "Code",
+    "designacao": "Description",
+    "ossInicial": "OSS Initial",
+    "ossCorrigido": "OSS Corrected",
+    "receitaLiquidada": "Revenue Recognized",
+    "saldoExecucao": "Execution Balance",
+    "saldoReceitaLiquidadaNaoCobrada": "Recognized Revenue Not Yet Collected (DEBT)",
+    "saldoDisponivel": "Available Balance (Execution+Commitment)",
+    "saldoNaoComprometido": "Uncommitted Balance",
+    "valorCabimentadoNaoComprometido": "Committed but Not Yet Obligated",
+    "valorComprometidoNaoLiquidado": "Obligated but Not Yet Recognized",
+    "valorLiquidadoNaoPago": "Recognized but Unpaid (DEBT)"
+  },
+  "execucaoPorPrograma": {
+    "menuLabel": "Execução por Programa",
+    "titulo": "Execução Orçamental por Programa (A04-A07)",
+    "legendaOrcamento": "Budget (initial/approved)",
+    "legendaCabimento": "Commitment (Cabimento)",
+    "legendaCompromisso": "Commitment (Compromisso)",
+    "legendaObrigacao": "Obligation",
+    "legendaExecucao": "Execution (payment made)"
   },
   "extratosbancarios": {
     "conta": "Bank account",
@@ -1494,7 +1535,8 @@
     "cabimentada": "Fitted",
     "compromisso": "Commitment",
     "obrigacao": "Obligation",
-    "executada": "Executed",
+    "ordemPagamentoEmitida": "Payment Order Issued",
+    "executada": "Paid (Reconciled)",
     "departamento": "INSS Departament",
     "centroCusto": "Cost Center",
     "tipoConta": "Account Type",

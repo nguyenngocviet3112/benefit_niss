@@ -7,6 +7,7 @@
     "menu": "Menu",
     "NConta": "Nº Conta",
     "ordemPagamento": "Ordem de Pagamento",
+    "listaPagamentoSalario": "Lista Pagamento Salário",
     "descricao": "Descrição",
     "valor": "Valor",
     "total": "Total",
@@ -159,7 +160,7 @@
     "invoiceATCO": "Valor a cargo do TCO",
     "invoiceSSS": "Os Serviços da Segurança Social",
     "invoiceSAS": "Assinatura e carimbo",
-    "period":"Period"
+    "period": "Period"
   },
   "login_form": {
     "title": "Autenticação",
@@ -310,7 +311,12 @@
     "-72": "Valor não pode ser inferior ao que já foi comprometido",
     "-73": "O excel não é válido ou faltam colunas obrigatórias",
     "-74": "Atenção: não é possivel alterar a data de fim do período do centro de custo dado que este centro de custo ja tem valores orçamentados",
-    "-75": "O dia de vencimento máximo é 28"
+    "-75": "O dia de vencimento máximo é 28",
+    "-80": "O valor a cabimentar ($ {1}) excede o saldo disponível da rubrica orçamental (disponível: $ {0})",
+    "-81": "Já existe uma despesa em curso (Registada ou Autorizada) para esta rubrica. Aguarde que seja Cabimentada antes de registar uma nova",
+    "-82": "O valor introduzido ($ {1}) excede o orçamento disponível para esta rubrica (disponível: $ {0}). Por favor reduza o valor, ou solicite orçamento adicional para esta rubrica antes de registar.",
+    "-83": "Esta rubrica ainda não tem qualquer orçamento atribuído (disponível: $ 0.00). Por favor solicite a atribuição de orçamento para esta rubrica antes de registar uma despesa.",
+    "-84": "Não é possível avançar esta tarefa: ainda existem despesas neste processo pendentes de Autorização (Registadas mas ainda não Autorizadas). Por favor autorize-as ou elimine-as primeiro."
   },
   "month": {
     "0": "JANEIRO",
@@ -884,6 +890,7 @@
     "cabimentacaoDespesa": "Esta acção irá Cabimentar a Despesa seleccionada",
     "valorCabimentacaoNegativo": "O valor disponível para cabimentação não permite sequer autorizar a despesa. Por favor edite o valor ou elimine a despesa",
     "valorAutorizacaoNegativo": "O valor disponível para autorização será excedido se autorizar a despesa.",
+    "possivelObrigacaoDuplicada": "Já existe uma Obrigação registada para este destinatário no mesmo mês, na mesma rubrica orçamental de Salários. Tem a certeza que deseja continuar?",
     "deleteMovimentoWarningMsg": "Esta acção irá eliminar este Movimento.",
     "concilate": "Esta acção irá conciliar estes movimentos.",
     "warningDeleteCompromisso": "Esta acção irá eliminar este compromisso.",
@@ -1388,6 +1395,8 @@
   "conciliacaoComponent": {
     "conta": "Conta Bancária",
     "caixa": "Caixa",
+    "bankCode": "Banco",
+    "allBanks": "Hotu-hotu",
     "movimentoAConciliar": "Movimentos a Conciliar",
     "verConciliados": "Ver Conciliados",
     "verNaoConciliados": "Ver Não Conciliados",
@@ -1412,6 +1421,8 @@
     "centroCusto": "Centro de Custo",
     "iban": "IBAN",
     "ibanNacional": "IBAN nacional",
+    "aprovaHusi": "Aprova husi",
+    "numeroSequencial": "Nº",
     "relatoriosPagamentosEmitidos": "Relatórios - Pagamentos emitidos centro de custo/mês",
     "pagamentosExecutados": "Pagamentos executados",
     "valorNaoSuperiorError": "O valor a executar não deve ser superior ao valor falta executar da despesa selecionada"
@@ -1429,12 +1440,15 @@
     "internalUser": "Internal User"
   },
   "execucaoOrcamental": {
+    "instiutiton": "Instituisaun",
     "contaOGE": "Conta OGE",
-    "instiutiton": "Instiutiton",
     "centroCusto": "Centro de Custo",
     "rubricaClassificacao": "Rúbrica de Classificação Económica",
     "valorOrcamentoInicial": "Valor Orçamento Inicial",
     "valorOrcamentado": "Valor Orçamentado",
+    "cabimentos": "Cabimentos",
+    "compromissos": "Compromissos",
+    "obrigacoes": "Obrigasaun",
     "anoAnterior": "Execução ano anterior",
     "janeiroADezembro": "Janeiro a dezembro",
     "janeiro": "Janeiro",
@@ -1455,6 +1469,33 @@
     "variacaoExecucao": "Variação Execução em relação ao período homólogo ano anterior (%)",
     "relatoriosExecucaoOrcamental": "Relatórios - Execução Orçamental",
     "tipoConta": "Tipo de Conta"
+  },
+  "classificacaoEconomica": {
+    "menuLabel": "CE_OSS_Global",
+    "titulo": "CE_OSS_Global - Totál por Klasifikasaun Ekonómika",
+    "receitas": "RESEITA",
+    "despesas": "DESPEZA",
+    "codigo": "Kódigu",
+    "designacao": "Deskrisaun",
+    "ossInicial": "OSS Inisiál",
+    "ossCorrigido": "OSS Korrejidu",
+    "receitaLiquidada": "Receita Liquidada",
+    "saldoExecucao": "Saldo Execução",
+    "saldoReceitaLiquidadaNaoCobrada": "Saldo Receita Liquidada e não cobrada (DÍVIDA)",
+    "saldoDisponivel": "Saldo disponível (Execução+Cabimentos)",
+    "saldoNaoComprometido": "Saldo não comprometido",
+    "valorCabimentadoNaoComprometido": "Valor Cabimentado e não comprometido",
+    "valorComprometidoNaoLiquidado": "Valor Comprometido e não liquidado",
+    "valorLiquidadoNaoPago": "Valor Liquidado e não pago (DÍVIDA)"
+  },
+  "execucaoPorPrograma": {
+    "menuLabel": "Execução por Programa",
+    "titulo": "Execução Orçamental por Programa (A04-A07)",
+    "legendaOrcamento": "Orçamento (inicial/aprovado)",
+    "legendaCabimento": "Cabimento",
+    "legendaCompromisso": "Compromisso",
+    "legendaObrigacao": "Obrigação",
+    "legendaExecucao": "Execução (pagamento realizado)"
   },
   "extratosbancarios": {
     "conta": "Conta bancária",
@@ -1477,7 +1518,8 @@
     "cabimentada": "Cabimentada",
     "compromisso": "Compromisso",
     "obrigacao": "Obrigação",
-    "executada": "Executada",
+    "ordemPagamentoEmitida": "Ordem Pagamentu Sai Ona",
+    "executada": "Selu Ona (Konsilia)",
     "departamento": "Departamento INSS",
     "centroCusto": "Centro de custo",
     "tipoConta": "Tipo de Conta",

@@ -7,6 +7,7 @@
     "menu": "Menu",
     "NConta": "Nº Conta",
     "ordemPagamento": "Ordem de Pagamento",
+    "listaPagamentoSalario": "Lista Pagamento Salário",
     "descricao": "Descrição",
     "valor": "Valor",
     "total": "Total",
@@ -159,7 +160,7 @@
     "invoiceATCO": "Amount payable by TCO",
     "invoiceSSS": "Social Security Services",
     "invoiceSAS": "Signature and stamp",
-    "period":"Period"
+    "period": "Period"
   },
   "login_form": {
     "title": "Autenticação",
@@ -217,17 +218,17 @@
     "TaxaEntidade": "Taxa Entidade",
     "TaxaTrabalhador": "Taxa Trabalhador",
     "DiaVencimento": "Dia de Vencimento",
-    "goToParent" : "Ir para ",
-    "Descricao" : "Descrição",
-    "TipoMovimento" : "Tipo de Movimento",
-    "CodigoTotal" : "Código Total",
-    "Agrupamento" : "Categoria",
-    "NConta" : "Número de Conta",
-    "IBAN" : "IBAN",
-    "EntidadeBancaria" : "Entidade Bancária",
-    "SWIFT" : "SWIFT",
-    "confirmDelete" : "Tem a certeza que deseja apagar o Campo?",
-    "DataValorInicial" : "Data de Valor Inicial",
+    "goToParent": "Ir para ",
+    "Descricao": "Descrição",
+    "TipoMovimento": "Tipo de Movimento",
+    "CodigoTotal": "Código Total",
+    "Agrupamento": "Categoria",
+    "NConta": "Número de Conta",
+    "IBAN": "IBAN",
+    "EntidadeBancaria": "Entidade Bancária",
+    "SWIFT": "SWIFT",
+    "confirmDelete": "Tem a certeza que deseja apagar o Campo?",
+    "DataValorInicial": "Data de Valor Inicial",
     "ValorInicial": "Valor Inicial"
   },
   "error": {
@@ -310,7 +311,12 @@
     "-72": "Valor não pode ser inferior ao que já foi comprometido",
     "-73": "O excel não é válido ou faltam colunas obrigatórias",
     "-74": "Atenção: não é possivel alterar a data de fim do período do centro de custo dado que este centro de custo ja tem valores orçamentados",
-    "-75": "O dia de vencimento máximo é 28"
+    "-75": "O dia de vencimento máximo é 28",
+    "-80": "O valor a cabimentar ($ {1}) excede o saldo disponível da rubrica orçamental (disponível: $ {0})",
+    "-81": "Já existe uma despesa em curso (Registada ou Autorizada) para esta rubrica. Aguarde que seja Cabimentada antes de registar uma nova",
+    "-82": "O valor introduzido ($ {1}) excede o orçamento disponível para esta rubrica (disponível: $ {0}). Por favor reduza o valor, ou solicite orçamento adicional para esta rubrica antes de registar.",
+    "-83": "Esta rubrica ainda não tem qualquer orçamento atribuído (disponível: $ 0.00). Por favor solicite a atribuição de orçamento para esta rubrica antes de registar uma despesa.",
+    "-84": "Não é possível avançar esta tarefa: ainda existem despesas neste processo pendentes de Autorização (Registadas mas ainda não Autorizadas). Por favor autorize-as ou elimine-as primeiro."
   },
   "month": {
     "0": "JANEIRO",
@@ -434,8 +440,8 @@
     "edicao": "Editável",
     "componenteDespesa": "Despesa",
     "registarDespesa": "Registar Despesa",
-    "visualizarDespesaRegistParaAutorizacao":"Visualizar Despesas Registadas para Autorização",
-    "visualizarDespesaAutorizadasParaCabimentacao":"Visualizar Despesas Autorizadas para Cabimentação",
+    "visualizarDespesaRegistParaAutorizacao": "Visualizar Despesas Registadas para Autorização",
+    "visualizarDespesaAutorizadasParaCabimentacao": "Visualizar Despesas Autorizadas para Cabimentação",
     "visualizarDespesaRegistada": "Visualizar Despesas Registadas",
     "visualiazarDespesaAutorizada": "Visualizar Despesas Autorizadas",
     "visualiazarDespesaCabimentada": "Visualizar Despesas Cabimentadas",
@@ -466,7 +472,7 @@
     "movimentoValor": "Valor",
     "movimentoTipoDocumento": "Tipo de Documento",
     "movimentoNumeroDocumento": "Número de Documento",
-    "componenteReceita":"Receita",
+    "componenteReceita": "Receita",
     "classificarMovSelecionados": "Classificar movimentos selecionados",
     "selecionarMovRecebidosParaRegisto": "Selecionar Valores Recebidos para Registo",
     "verificarExecucaoOrcamentoEditarSelecao": "Verificar a execução do orçamento e editar seleção",
@@ -480,7 +486,7 @@
     "comprovativoPagamento": "Comprovativo de Pagamento",
     "numeroPagamento_guia": "N.º Pagamento/Guia",
     "desfazerConciliacoes": "Desfazer Conciliações",
-    "emitirOrdemPagaamento":"Emitir Ordem Pagamento",
+    "emitirOrdemPagaamento": "Emitir Ordem Pagamento",
     "apenasMovimentosProcesso": "Apenas movimentos do processo",
     "visualizarDespesasCompromisso": "Visualizar Despesas com Compromisso"
   },
@@ -506,10 +512,10 @@
     "valorExecutado": "Valor Executado",
     "valorCabimentado": "Valor Cabimentado",
     "valorAutorizado": "Valor Autorizado",
-    "descricaoDespesaRegistada": "Despesa Registada" ,
+    "descricaoDespesaRegistada": "Despesa Registada",
     "codigoContabilistico": "Código Contabilistico",
     "codigoOSS": "Código OSS",
-    "valor":"Valor",
+    "valor": "Valor",
     "despesaAutorizada": "Despesa Autorizada",
     "despesaCabimentada": "Despesa Cabimentada",
     "buttonRegistarEditarDespesa": "Registar/Editar",
@@ -522,7 +528,7 @@
     "moradaDestinatario": "Morada",
     "ibanDestinatario": "IBAN",
     "pagamento": "Pagamento",
-    "executarPagamentos":"Executar Pagamentos",
+    "executarPagamentos": "Executar Pagamentos",
     "listaPagamentosExcel": "Lista dos Pagamentos(Excel)",
     "novoDestinatario": "Novo Destinatario",
     "associarDespesa": "Associar Despesa",
@@ -558,8 +564,6 @@
     "verificarExecucaoOrcamento": "Verificar Execução Orçamento",
     "naoExisteOrcamentoAprovado": "Não há Orçamento Aprovado para o período – Não é possível registar Receitas"
   },
-
-
   "responsavel_legal": {
     "title": "INSCRIÇÃO NOVO RESPONSÁVEL LEGAL",
     "editTitle": "EDIÇÃO RESPONSÁVEL LEGAL",
@@ -795,7 +799,7 @@
     "warningMsg2": ", deseja usar para pagar a sua dívida?",
     "comprovativo": "Comprovativo"
   },
-  "componenteOrcamento" : {
+  "componenteOrcamento": {
     "actidade": "Actidade",
     "economic": "Economic",
     "functional": "Funcional",
@@ -899,6 +903,7 @@
     "cabimentacaoDespesa": "Esta acção irá Cabimentar a Despesa seleccionada",
     "valorCabimentacaoNegativo": "O valor disponível para cabimentação não permite sequer autorizar a despesa. Por favor edite o valor ou elimine a despesa",
     "valorAutorizacaoNegativo": "O valor disponível para autorização será excedido se autorizar a despesa.",
+    "possivelObrigacaoDuplicada": "Já existe uma Obrigação registada para este destinatário no mesmo mês, na mesma rubrica orçamental de Salários. Tem a certeza que deseja continuar?",
     "deleteMovimentoWarningMsg": "Esta acção irá eliminar este Movimento.",
     "concilate": "Esta acção irá conciliar estes movimentos.",
     "warningDeleteCompromisso": "Esta acção irá eliminar este compromisso.",
@@ -1404,6 +1409,8 @@
   "conciliacaoComponent": {
     "conta": "Conta Bancária",
     "caixa": "Caixa",
+    "bankCode": "Banco",
+    "allBanks": "Todos",
     "movimentoAConciliar": "Movimentos a Conciliar",
     "verConciliados": "Ver Conciliados",
     "verNaoConciliados": "Ver Não Conciliados",
@@ -1415,7 +1422,6 @@
     "amountsSelectedInTransactions": "Valor de movimentos selecionados",
     "difference": "Diferença"
   },
-
   "pagamentosExecutados": {
     "tin_nome_niss": "TIN / Nome / NISS",
     "estado": "Estado",
@@ -1429,11 +1435,12 @@
     "centroCusto": "Centro de Custo",
     "iban": "IBAN",
     "ibanNacional": "IBAN nacional",
+    "aprovaHusi": "Aprovado por",
+    "numeroSequencial": "Nº",
     "relatoriosPagamentosEmitidos": "Relatórios - Pagamentos emitidos centro de custo/mês",
     "pagamentosExecutados": "Pagamentos executados",
     "valorNaoSuperiorError": "O valor a executar não deve ser superior ao valor falta executar da despesa selecionada"
   },
-
   "guiasPagamento": {
     "numeroGuia": "Nº de Guia",
     "niss": "NISS",
@@ -1446,14 +1453,16 @@
     "valorDivida": "Valor em Dívida",
     "internalUser": "Internal User"
   },
-
   "execucaoOrcamental": {
+    "instiutiton": "Instituição",
     "contaOGE": "Conta OGE",
-    "instiutiton": "Instiutiton",
     "centroCusto": "Centro de Custo",
     "rubricaClassificacao": "Rúbrica de Classificação Económica",
     "valorOrcamentoInicial": "Valor Orçamento Inicial",
     "valorOrcamentado": "Valor Orçamentado",
+    "cabimentos": "Cabimentos",
+    "compromissos": "Compromissos",
+    "obrigacoes": "Obrigações",
     "anoAnterior": "Execução ano anterior",
     "janeiroADezembro": "Janeiro a dezembro",
     "janeiro": "Janeiro",
@@ -1475,7 +1484,33 @@
     "relatoriosExecucaoOrcamental": "Relatórios - Execução Orçamental",
     "tipoConta": "Tipo de Conta"
   },
-
+  "classificacaoEconomica": {
+    "menuLabel": "CE_OSS_Global",
+    "titulo": "CE_OSS_Global - Total por Classificação Económica",
+    "receitas": "RECEITAS",
+    "despesas": "DESPESAS",
+    "codigo": "Código",
+    "designacao": "Designação",
+    "ossInicial": "OSS Inicial",
+    "ossCorrigido": "OSS Corrigido",
+    "receitaLiquidada": "Receita Liquidada",
+    "saldoExecucao": "Saldo Execução",
+    "saldoReceitaLiquidadaNaoCobrada": "Saldo Receita Liquidada e não cobrada (DÍVIDA)",
+    "saldoDisponivel": "Saldo disponível (Execução+Cabimentos)",
+    "saldoNaoComprometido": "Saldo não comprometido",
+    "valorCabimentadoNaoComprometido": "Valor Cabimentado e não comprometido",
+    "valorComprometidoNaoLiquidado": "Valor Comprometido e não liquidado",
+    "valorLiquidadoNaoPago": "Valor Liquidado e não pago (DÍVIDA)"
+  },
+  "execucaoPorPrograma": {
+    "menuLabel": "Execução por Programa",
+    "titulo": "Execução Orçamental por Programa (A04-A07)",
+    "legendaOrcamento": "Orçamento (inicial/aprovado)",
+    "legendaCabimento": "Cabimento",
+    "legendaCompromisso": "Compromisso",
+    "legendaObrigacao": "Obrigação",
+    "legendaExecucao": "Execução (pagamento realizado)"
+  },
   "extratosbancarios": {
     "conta": "Conta bancária",
     "consultasExtratos": "Consultas - Extratos Bancários",
@@ -1490,7 +1525,6 @@
     "numeroConta": "Número de conta",
     "ordenacaoData": "Ordenação de data"
   },
-
   "despesas": {
     "consultasDespesas": "Consultas - Despesas",
     "estado": "Estado de Despesa",
@@ -1498,7 +1532,8 @@
     "cabimentada": "Cabimentada",
     "compromisso": "Compromisso",
     "obrigacao": "Obrigação",
-    "executada": "Executada",
+    "ordemPagamentoEmitida": "Ordem de Pagamento Emitida",
+    "executada": "Paga (Conciliada)",
     "departamento": "Departamento INSS",
     "centroCusto": "Centro de custo",
     "tipoConta": "Tipo de Conta",
@@ -1518,7 +1553,6 @@
     "utilizador-5": "Utilizador que executou",
     "registarCompromisso": "Registar Compromisso"
   },
-
   "receitas": {
     "consultasReceitas": "Consultas - Receitas",
     "departamento": "Departamento INSS",
@@ -1531,7 +1565,6 @@
     "numeroProcesso": "N.º processo",
     "utilizador": "Utilizador"
   },
-
   "receitasNaoConciliadas": {
     "consultasReceitasNaoConciliadas": "Consultas - Receitas não conciliadas",
     "tin": "TIN",
@@ -1540,7 +1573,6 @@
     "valor": "Valor",
     "data": "Data"
   },
-
   "classificacaoContabilistica": {
     "consultasClassificacaoContabilistica": "Consultas - Classificação contabilística",
     "data": "Data",
@@ -1558,7 +1590,6 @@
     "execucao": "Execução",
     "fase": "Fase"
   },
-
   "fornecedores": {
     "consultasFornecedores": "Consultas - Fornecedores",
     "niss": "NISS",
@@ -1570,7 +1601,6 @@
     "data": "Data obrigação",
     "conciliado": "Conciliado"
   },
-
   "balanco": {
     "consultasBalanco": "Consultas - Balanço",
     "nivel": "Nível",
@@ -1581,7 +1611,6 @@
     "sim": "Sim",
     "nao": "Não"
   },
-
   "excelImports": {
     "downloadExcel": "Download de excel com colunas",
     "selectedDestinatarios": "Destinatários selecionados",
