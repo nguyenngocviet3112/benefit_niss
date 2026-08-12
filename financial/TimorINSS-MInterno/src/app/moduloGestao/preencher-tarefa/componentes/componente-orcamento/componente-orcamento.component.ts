@@ -146,7 +146,9 @@ export class ComponenteOrcamentoComponent implements OnInit {
         },
         err => {
           this.hideLoader();
-          err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+          // Array.isArray (não só truthy) -- err.error.errors nem sempre é array; .map() direto
+          // rebentava aqui e o ecrã ficava preso a carregar para sempre (ver bug 2026-08-11).
+          Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
           this.showError();
         }
       );
@@ -167,7 +169,7 @@ export class ComponenteOrcamentoComponent implements OnInit {
       err => {
 
         this.hideLoader();
-        err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
         this.showError();
       });
   }
@@ -185,7 +187,7 @@ export class ComponenteOrcamentoComponent implements OnInit {
       err => {
 
         this.hideLoader();
-        err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
         this.showError();
       });
   }
@@ -213,7 +215,7 @@ export class ComponenteOrcamentoComponent implements OnInit {
       },
       err => {
         this.hideLoader();
-        err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
         this.showError();
       }
     );
@@ -242,7 +244,9 @@ export class ComponenteOrcamentoComponent implements OnInit {
       },
         err => {
           this.hideLoader();
-          err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+          // Array.isArray (não só truthy) -- err.error.errors nem sempre é array; .map() direto
+          // rebentava aqui e o ecrã ficava preso a carregar para sempre (ver bug 2026-08-11).
+          Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
           this.hideLoader();
           if (this.errors[0].startsWith('-40ÿ')) {
             let splitted: string[] = this.errors[0].split('ÿ');
@@ -289,7 +293,9 @@ export class ComponenteOrcamentoComponent implements OnInit {
         },
         err => {
           this.hideLoader();
-          err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+          // Array.isArray (não só truthy) -- err.error.errors nem sempre é array; .map() direto
+          // rebentava aqui e o ecrã ficava preso a carregar para sempre (ver bug 2026-08-11).
+          Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
           this.showError();
         }
       );
@@ -372,7 +378,9 @@ export class ComponenteOrcamentoComponent implements OnInit {
             },
             err => {
               this.hideLoader();
-              err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+              // Array.isArray (não só truthy) -- err.error.errors nem sempre é array; .map() direto
+          // rebentava aqui e o ecrã ficava preso a carregar para sempre (ver bug 2026-08-11).
+          Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
               if (this.errors[0].startsWith('-45ÿ')) {
                 let splitted: string[] = this.errors[0].split('ÿ');
                 splitted.shift();
@@ -416,7 +424,7 @@ export class ComponenteOrcamentoComponent implements OnInit {
     },
       err => {
         this.hideLoader();
-        err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
         this.showError();
       });
   }
@@ -469,7 +477,9 @@ export class ComponenteOrcamentoComponent implements OnInit {
       },
         err => {
           this.hideLoader();
-          err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+          // Array.isArray (não só truthy) -- err.error.errors nem sempre é array; .map() direto
+          // rebentava aqui e o ecrã ficava preso a carregar para sempre (ver bug 2026-08-11).
+          Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
           this.showError();
         });
   }
@@ -529,7 +539,7 @@ export class ComponenteOrcamentoComponent implements OnInit {
       blobExcelSaveAs(response.excelExtraido, 'extraction_' + this.datePipe.transform(this.registoOrcamento.dataInicio, 'dd-MM-yyyy') + '_' + this.datePipe.transform(this.registoOrcamento.dataFim, 'dd-MM-yyyy'));
     },
       err => {
-        err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
         this.showError();
       });
   }
@@ -548,7 +558,7 @@ export class ComponenteOrcamentoComponent implements OnInit {
       blobToSaveAs(response.pdfExtraido, 'extraction_' + this.datePipe.transform(this.registoOrcamento.dataInicio, 'dd-MM-yyyy') + '_' + this.datePipe.transform(this.registoOrcamento.dataFim, 'dd-MM-yyyy'));
     },
       err => {
-        err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
         this.showError();
       });
   }
@@ -568,7 +578,9 @@ export class ComponenteOrcamentoComponent implements OnInit {
           this.updateTable();
         },
           err => {
-            err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+            // Array.isArray (não só truthy) -- err.error.errors nem sempre é array; .map() direto
+          // rebentava aqui e o ecrã ficava preso a carregar para sempre (ver bug 2026-08-11).
+          Array.isArray(err.error?.errors) ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
             this.showError();
           });
       }

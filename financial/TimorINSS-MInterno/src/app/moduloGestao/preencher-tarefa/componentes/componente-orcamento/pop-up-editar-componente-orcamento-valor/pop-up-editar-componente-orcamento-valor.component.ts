@@ -72,7 +72,14 @@ export class PopUpEditarComponenteOrcamentoValorComponent {
         this.dialogRef.close(true);
       },
       err => {
-        err.error?.errors ? err.error.errors.map((x : any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        // err.error.errors nem sempre é um array (ex: excepção não tratada no backend devolve
+        // outro formato) -- .map() direto rebentava aqui e, como showError()/hideLoader() nunca
+        // chegavam a correr, o ecrã ficava preso no "Please Wait" para sempre (ver bug 2026-08-11).
+        if (Array.isArray(err.error?.errors)) {
+          err.error.errors.map((x: any) => this.errors.push(x.errorCode));
+        } else {
+          this.errors.push('-1');
+        }
         this.showError();
       });
     }
