@@ -38,6 +38,19 @@
     height: 50px;
 }
 
+.select_box{
+    margin: 10px 10px 0px 10px;
+    width: 20%;
+    min-width: 160px;
+}
+
+.clearFilterButton{
+    background: green;
+    color: white;
+    margin-left: 10px;
+    vertical-align: -webkit-baseline-middle;
+}
+
 .painelListagemMovimentos {
     width: 80%;
     margin-right: 10%;

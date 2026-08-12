@@ -30,4 +30,5 @@ export interface MovimentosConciliados
     numeroDocumento:string;
     comprovativo: string;
     checked: boolean;
+    bankCode?: string;
 }

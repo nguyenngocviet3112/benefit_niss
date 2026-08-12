@@ -33,7 +33,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
 
         public ResponseBaseDataContract DesfazerConciliacao(DesfazerConciliacaoMovimentosRequest request);
 
-        public MovimentosPorConciliar GetMovimentosConciliados(SearchFilterRequest request);
+        public MovimentosPorConciliar GetMovimentosConciliados(GetMovimentosConciliadosRequest request);
 
         public Movimentosporconciliar GetByGuiaOrReserva(int id, bool isGuia);
     }

@@ -1552,7 +1552,8 @@
     "valor": "Valor",
     "data": "Data",
     "numeroProcesso": "N.º processo",
-    "utilizador": "Utilizador"
+    "utilizador": "Utilizador",
+    "bankCodeInfo": "Se a Receita reunir movimentos de mais de um banco, é apresentado apenas o primeiro banco encontrado."
   },
   "receitasNaoConciliadas": {
     "consultasReceitasNaoConciliadas": "Consultas - Receitas não conciliadas",

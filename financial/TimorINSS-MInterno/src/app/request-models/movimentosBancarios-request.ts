@@ -85,6 +85,7 @@ export interface DesfazerConciliacaoRequest {
 }
 export interface GetMovimentosConciliadosRequest {
   filter: FilterRequest;
+  bankCode?: string;
 }
 
 export interface ConciliarMovimentosRequest {

@@ -485,7 +485,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return result;
         }
 
-        public MovimentosPorConciliar GetMovimentosConciliados(SearchFilterRequest request, int estado)
+        public MovimentosPorConciliar GetMovimentosConciliados(GetMovimentosConciliadosRequest request, int estado)
         {
             MovimentosPorConciliar response = new MovimentosPorConciliar();
 
@@ -505,7 +505,9 @@ namespace TimorINSSBackEnd.Repository.Repositories
                            e.MovimentoPorConciliarFkNavigation.IsReceita &&
                            e.Estado == estado &&
                            // Filtrar por descrição
-                           (request.filter.filterBy == null || e.MovimentoPorConciliarFkNavigation.MovimentoBancarioFkNavigation.Descricao.Contains(request.filter.filterBy))
+                           (request.filter.filterBy == null || e.MovimentoPorConciliarFkNavigation.MovimentoBancarioFkNavigation.Descricao.Contains(request.filter.filterBy)) &&
+                           // Movimento manual, không có Bank riêng — chỉ hiện khi không lọc theo Bank
+                           request.BankCode == null
                 )
                .Select(e => new MovimentosPorConciliarListagem
                {
@@ -519,12 +521,15 @@ namespace TimorINSSBackEnd.Repository.Repositories
                    numeroDocumento = e.MovimentoPorConciliarFkNavigation.NumeroDocumento + " " + e.MovimentoPorConciliarFkNavigation.TipoDocumento,
                    valor = e.MovimentoPorConciliarFkNavigation.Valor,
                    type = MovimentosPorConciliarListagemType.MovimentoAConciliar,
+                   bankCode = null,
                })
                .Concat(
                     _moduloContribuicoesContext.RelMovimentosporconciliarMovimentos
                     .Include(e => e.GuiaPagamentoFkNavigation)
                     .Where(e => e.GuiaPagamentoFk != null && e.IndActivo == true && e.Estado == estado
-                    && (request.filter.filterBy == null || e.GuiaPagamentoFkNavigation.Descricao.Contains(request.filter.filterBy)))
+                    && (request.filter.filterBy == null || e.GuiaPagamentoFkNavigation.Descricao.Contains(request.filter.filterBy))
+                    // Filtrar por Bank
+                    && (request.BankCode == null || e.GuiaPagamentoFkNavigation.BankCode == request.BankCode))
                     .Select(e => new MovimentosPorConciliarListagem
                     {
                         id = e.Id,
@@ -537,6 +542,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         numeroDocumento = e.GuiaPagamentoFkNavigation.NumDocumento,
                         valor = e.GuiaPagamentoFkNavigation.ValorComprovPag.Value,
                         type = MovimentosPorConciliarListagemType.GuiaPagamento,
+                        bankCode = e.GuiaPagamentoFkNavigation.BankCode,
                     })
 
                 );

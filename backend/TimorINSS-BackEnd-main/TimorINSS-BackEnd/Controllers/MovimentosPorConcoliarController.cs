@@ -162,7 +162,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("GetMovimentosConciliados")]
-        public IActionResult GetMovimentosConciliados(SearchFilterRequest request)
+        public IActionResult GetMovimentosConciliados(GetMovimentosConciliadosRequest request)
         {
             MovimentosPorConciliar response = new MovimentosPorConciliar();
 

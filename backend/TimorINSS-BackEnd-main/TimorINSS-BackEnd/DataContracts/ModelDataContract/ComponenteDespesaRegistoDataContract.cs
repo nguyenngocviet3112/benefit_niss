@@ -186,6 +186,14 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         [DataMember]
         public string UtilizadorAlteracao { get; set; }
 
+        // Só populado no relatório de Receitas. Uma Receita pode reunir movimentos
+        // de mais de um banco (1 ComponentereceitaRegisto : N RelMovimentosporconciliarMovimentos);
+        // aqui mostramos apenas o PRIMEIRO banco encontrado (decisão de produto — ver
+        // ComponenteReceitaRegistoRepository.ReceitasRelatorios). Se no futuro for preciso
+        // mostrar todos os bancos, trocar o FirstOrDefault() por um string.Join(", ", ...).
+        [DataMember]
+        public string BankCode { get; set; }
+
 
     }
 

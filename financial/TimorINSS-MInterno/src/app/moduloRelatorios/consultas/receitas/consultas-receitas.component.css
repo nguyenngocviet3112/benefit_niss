@@ -85,6 +85,15 @@
   font-size: 1.5em;
 }
 
+.bankCodeInfoIcon {
+  font-size: 15px;
+  height: 15px;
+  width: 15px;
+  vertical-align: middle;
+  cursor: help;
+  opacity: 0.85;
+}
+
 .visibilityButton {
   color: #2fcc2a;
   position: relative;

@@ -33,5 +33,19 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     {
         [DataMember]
         public string? Contribuinte { get; set; }
+
+        // Filtrar por Banco (Guia de Pagamento/Nota de Crédito) — movimento manual não tem Banco próprio
+        [DataMember]
+        public string? BankCode { get; set; }
+    }
+
+    [DataContract]
+    public class ReceitasRelatoriosRequest : SearchFilterRequest
+    {
+        // Filtrar por Banco. Uma Receita pode reunir movimentos de mais de um banco —
+        // o filtro devolve a Receita se PELO MENOS UM dos seus movimentos for do banco
+        // pedido (ver ComponenteReceitaRegistoRepository.ReceitasRelatorios).
+        [DataMember]
+        public string? BankCode { get; set; }
     }
 }

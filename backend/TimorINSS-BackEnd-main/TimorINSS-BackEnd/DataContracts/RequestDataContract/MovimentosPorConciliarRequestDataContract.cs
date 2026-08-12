@@ -21,6 +21,14 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
     }
 
     [DataContract]
+    public class GetMovimentosConciliadosRequest : SearchFilterRequest
+    {
+        // Filtrar por Bank (Guia de Pagamento/Invoice) — movimento manual não tem Bank próprio
+        [DataMember(IsRequired = false)]
+        public string BankCode { get; set; }
+    }
+
+    [DataContract]
     public class MovimentosPorConciliarConciliacaoListagemRequest : SearchFilterRequest
     {
         [DataMember(IsRequired = true)]

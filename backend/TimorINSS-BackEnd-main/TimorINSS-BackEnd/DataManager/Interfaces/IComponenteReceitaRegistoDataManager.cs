@@ -17,8 +17,8 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
 
         public StringFileReponse GetExecucaoOrcamentalExcel(RelatorioExecucaoOrcamentalListagemRequest request);
 
-        public GetDespesasRelatoriosReponse ReceitasRelatorios(SearchFilterRequest request);
-        public StringFileReponse ReceitasRelatoriosExcel(SearchFilterRequest request);
+        public GetDespesasRelatoriosReponse ReceitasRelatorios(ReceitasRelatoriosRequest request);
+        public StringFileReponse ReceitasRelatoriosExcel(ReceitasRelatoriosRequest request);
 
         public GetReceitasNaoConciliadasRelatoriosReponse ReceitasNaoConciliadasRelatorios(ReceitasNaoConciliadasRelatoriosRequest request);
         public StringFileReponse ReceitasNaoConciliadasRelatoriosExcel(ReceitasNaoConciliadasRelatoriosRequest request);

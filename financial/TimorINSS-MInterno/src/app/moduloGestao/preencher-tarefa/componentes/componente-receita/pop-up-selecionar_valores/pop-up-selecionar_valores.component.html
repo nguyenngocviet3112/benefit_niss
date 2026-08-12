@@ -12,6 +12,20 @@
         (click)="clearPesquisarMovimentos()">
       </fa-icon>
     </mat-form-field>
+
+    <mat-form-field class="select_box" appearance="outline">
+      <mat-label>{{'conciliacaoComponent.bankCode' | translate}}</mat-label>
+      <mat-select [(ngModel)]="bankCode" (selectionChange)="onBancoSelected($event)">
+        <mat-option [value]="undefined">{{'conciliacaoComponent.allBanks' | translate}}</mat-option>
+        <mat-option *ngFor="let option of bankOptions" [value]="option.key">
+          {{option.label}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <a *ngIf="bankCode" (click)="clearFilterBanco()" class="clearFilterButton" type="button" mat-raised-button>
+      <mat-icon class="clearFilterIcon">clear</mat-icon>
+      <mat-label>{{'guiaPagamentoListagem.clearFilter' | translate}}</mat-label>
+    </a>
   </div>
 
   <div>
@@ -36,6 +50,12 @@
           <td mat-cell *matCellDef="let element">
             <fa-icon class="pdfIconTable" (click)="openPdf(element)" [icon]="faFilePdf"></fa-icon>
           </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="banco">
+          <th mat-header-cell *matHeaderCellDef> {{'conciliacaoComponent.bankCode' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.bankCode}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 

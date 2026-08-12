@@ -35,10 +35,14 @@ export class PopUpSelecionarValoresParaRegistoComponent {
     public faFilePdf = faFilePdf;
 
     public dataSourceMovimentos: MovimentosConciliados[] = [];
-    public displayedColumnsMovimentos: string[] = ['descricao', 'documentoAssociado', 'comprovativo', 'valor', 'selecao'];
+    public displayedColumnsMovimentos: string[] = ['descricao', 'documentoAssociado', 'comprovativo', 'banco', 'valor', 'selecao'];
     public totalRows: number = 0;
     public pageSize = 20;
     public pageIndex = 0;
+
+    // Filtro por Banco (mesmo padrão do componente-concilicacao)
+    public bankCode?: string;
+    public bankOptions: { key: string; label: string }[] = [];
 
     public selection = new SelectionModel<MovimentosConciliados>(true, []);
     public totalMovimentosSeleccionados: number = 0;
@@ -62,6 +66,13 @@ export class PopUpSelecionarValoresParaRegistoComponent {
             this.router.navigate([''])
         }
         else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
+
+            this.translate.get('guiaPagamentoListagem.lstBankCode').subscribe((res: any) => {
+                this.bankOptions = Object.keys(res).map((key) => ({
+                    key,
+                    label: res[key],
+                }));
+            });
 
             //obter movimentos conciliados
             this.getMovimentosConciliados();
@@ -87,7 +98,8 @@ export class PopUpSelecionarValoresParaRegistoComponent {
             filterRequest.filterBy = this.filterBy;
 
             let request = {
-                filter: filterRequest
+                filter: filterRequest,
+                bankCode: this.bankCode
             }
 
             this.movimentosService.GetMovimentosConciliados(request).subscribe(x => {
@@ -144,6 +156,18 @@ export class PopUpSelecionarValoresParaRegistoComponent {
 
     public clearPesquisarMovimentos() {
         this.filterBy = '';
+        this.getMovimentosConciliados();
+    }
+
+    public onBancoSelected(event: any) {
+        this.bankCode = event.value;
+        this.pageIndex = 0;
+        this.getMovimentosConciliados();
+    }
+
+    public clearFilterBanco() {
+        this.bankCode = undefined;
+        this.pageIndex = 0;
         this.getMovimentosConciliados();
     }
 

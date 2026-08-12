@@ -307,7 +307,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
-        public GetDespesasRelatoriosReponse ReceitasRelatorios(SearchFilterRequest request)
+        public GetDespesasRelatoriosReponse ReceitasRelatorios(ReceitasRelatoriosRequest request)
         {
             GetDespesasRelatoriosReponse response = new GetDespesasRelatoriosReponse();
 
@@ -333,7 +333,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
-        public StringFileReponse ReceitasRelatoriosExcel(SearchFilterRequest request)
+        public StringFileReponse ReceitasRelatoriosExcel(ReceitasRelatoriosRequest request)
         {
             StringFileReponse response = new StringFileReponse();
 

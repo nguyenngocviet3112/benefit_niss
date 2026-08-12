@@ -39,9 +39,13 @@ export class ConsultasReceitasComponent implements OnInit {
   public beginDate?: Moment;
   public endDate?: Moment;
 
+  // Filtro por Banco (mesmo padrão de consultas-receitas-nao-conc / componente-concilicacao)
+  public bankCode?: string;
+  public bankOptions: { key: string; label: string }[] = [];
+
   //Region tarefa table
   public receitasList: ReceitaRelatorio[] = [];
-  public displayedColumns: string[] = ['departamento', 'centroCusto', 'tipoConta', 'contaOSS', 'descricao', 'valor', 'data', 'numeroProcesso', 'utilizador'];
+  public displayedColumns: string[] = ['departamento', 'centroCusto', 'tipoConta', 'contaOSS', 'descricao', 'valor', 'data', 'numeroProcesso', 'utilizador', 'bankCode'];
   public totalRowsTable: number = 0;
   public pageSizeTable = 20;
   public pageIndexTable = 0;
@@ -64,10 +68,25 @@ export class ConsultasReceitasComponent implements OnInit {
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
 
+      this.translate.get('guiaPagamentoListagem.lstBankCode').subscribe((res: any) => {
+        this.bankOptions = Object.keys(res).map((key) => ({
+          key,
+          label: res[key],
+        }));
+      });
+
     }
     else {
       showExpiredError(this.errorDialog, this.tokenStorage, this.translate);
     }
+  }
+
+  public onBancoSelected(event: any): void {
+    this.bankCode = event.value;
+  }
+
+  public clearFilterBanco(): void {
+    this.bankCode = undefined;
   }
 
   public showLoader() {
@@ -102,6 +121,7 @@ export class ConsultasReceitasComponent implements OnInit {
 
     const request: FilterRequest = {
       filter: this.filter,
+      bankCode: this.bankCode,
     };
 
     if (!this.resultsShown) this.resultsShown = true;
@@ -139,6 +159,7 @@ export class ConsultasReceitasComponent implements OnInit {
     this.filter = {};
     this.beginDate = undefined;
     this.endDate = undefined;
+    this.bankCode = undefined;
     this.submittedTry = false;
   }
 
@@ -162,7 +183,8 @@ export class ConsultasReceitasComponent implements OnInit {
     this.showLoader();
 
     const request: FilterRequest = {
-      filter: this.filter
+      filter: this.filter,
+      bankCode: this.bankCode,
     };
 
     this.componenteReceitaRegistoService.GetReceitasRelatorioExcel(request).subscribe((response) => {

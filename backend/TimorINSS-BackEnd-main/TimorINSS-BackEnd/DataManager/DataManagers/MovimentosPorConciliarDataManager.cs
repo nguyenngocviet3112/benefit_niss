@@ -427,7 +427,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return _unitOfWork.MovimentosPorConciliarRepository.GetListagemConciliacao(request, _unitOfWork.DominioRepository.getIdDominio("ESTADOMOVIMENTO", 2));
         }
 
-        public MovimentosPorConciliar GetMovimentosConciliados(SearchFilterRequest request)
+        public MovimentosPorConciliar GetMovimentosConciliados(GetMovimentosConciliadosRequest request)
         {
             MovimentosPorConciliar response = new MovimentosPorConciliar();
 

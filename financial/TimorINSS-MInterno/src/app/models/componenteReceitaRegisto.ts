@@ -42,6 +42,10 @@ export interface ReceitaRelatorio
   data: Date;
   numeroProcesso: string;
   utilizadorAlteracao: string;
+  // Uma Receita pode reunir movimentos de mais de um banco — o backend devolve
+  // apenas o PRIMEIRO banco encontrado (ver DespesasRelatoriosDataContract.BankCode
+  // no backend). Tooltip da coluna no HTML avisa sobre isto.
+  bankCode?: string;
 }
 
 export interface ReceitaNaoConciliadaRelatorioResponse {
@@ -57,6 +61,7 @@ export interface ReceitaNaoConciliadaRelatorio
   valor: number;
   data: Date;
   contribuinte?: string;
+  bankCode?: string;
 }
 
 

@@ -499,7 +499,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return response;
         }
 
-        public GetDespesasRelatoriosReponse ReceitasRelatorios(SearchFilterRequest request)
+        public GetDespesasRelatoriosReponse ReceitasRelatorios(ReceitasRelatoriosRequest request)
         {
             GetDespesasRelatoriosReponse response = new GetDespesasRelatoriosReponse();
 
@@ -524,7 +524,14 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .ThenInclude(e => e.ParentFkNavigation)
                 .Where(u => u.IndActivo &&
                                 (beginDate.HasValue && !endDate.HasValue ? u.DataCriacao.Date == beginDate :
-                                 beginDate.HasValue && endDate.HasValue ? u.DataCriacao.Date >= beginDate && u.DataCriacao.Date <= endDate : true))
+                                 beginDate.HasValue && endDate.HasValue ? u.DataCriacao.Date >= beginDate && u.DataCriacao.Date <= endDate : true) &&
+                                // Filtrar por Banco — uma Receita (1) pode reunir vários movimentos conciliados (N),
+                                // cada um com o seu próprio Banco (via Guia de Pagamento); devolve a Receita se
+                                // PELO MENOS UM dos seus movimentos ativos for do banco pedido.
+                                (request.BankCode == null || u.ComponentereceitaRegistoMovimentos.Any(m =>
+                                    m.IndActivo == true &&
+                                    m.RelMovimentosPorConciliarMovimentos.GuiaPagamentoFkNavigation != null &&
+                                    m.RelMovimentosPorConciliarMovimentos.GuiaPagamentoFkNavigation.BankCode == request.BankCode)))
                 .Select(u => new DespesasRelatoriosDataContract
                 {
                     Id = u.Id,
@@ -537,6 +544,13 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     Data = u.DataAlteracao ?? u.DataCriacao,
                     NumeroProcesso = u.TarefaActivoFkNavigation.ProcessoAtivoFkNavigation.NumeroProcesso,
                     UtilizadorAlteracao = _moduloContribuicoesContext.Utilizador.First(e => e.IdUtilizador == u.UtilizadorCriacao).Username,
+                    // Uma Receita pode ter movimentos de bancos diferentes — mostramos apenas o
+                    // PRIMEIRO banco encontrado (movimento manual/sem Guia não tem Banco, fica de fora).
+                    // Ver nota completa em DespesasRelatoriosDataContract.BankCode.
+                    BankCode = u.ComponentereceitaRegistoMovimentos
+                        .Where(m => m.IndActivo == true && m.RelMovimentosPorConciliarMovimentos.GuiaPagamentoFkNavigation != null)
+                        .Select(m => m.RelMovimentosPorConciliarMovimentos.GuiaPagamentoFkNavigation.BankCode)
+                        .FirstOrDefault(),
                 });
 
 
@@ -553,7 +567,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
             return response;
         }
 
-        public string ReceitasRelatoriosExcel(SearchFilterRequest request, List<DespesasRelatoriosDataContract> lista)
+        public string ReceitasRelatoriosExcel(ReceitasRelatoriosRequest request, List<DespesasRelatoriosDataContract> lista)
         {
             // Inicialização do documento excel
             var excelDocument = new ExcelDocument(_localizer["receitas"].Value, new ExcelDocumentOptions()
@@ -638,6 +652,15 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     DataTextStyleKey = "TableCellWrap",
                     Value = (data) => data.UtilizadorAlteracao,
                     Width = 20
+                },
+                new ColumnOption<DespesasRelatoriosDataContract>()
+                {
+                    // Ver nota em DespesasRelatoriosDataContract.BankCode — mostra apenas o primeiro banco
+                    Name = _localizer["banco"].Value,
+                    ColumnTextStyleKey = "HeaderWrap",
+                    DataTextStyleKey = "TableCellWrap",
+                    Value = (data) => data.BankCode,
+                    Width = 15,
                 },
             }, new TableOptions() { AutoFitColumns = false });
 

@@ -164,7 +164,7 @@ namespace TimorINSSBackEnd.Controllers
 
 
         [HttpPost("ReceitasRelatorios")]
-        public IActionResult ReceitasRelatorios(SearchFilterRequest request)
+        public IActionResult ReceitasRelatorios(ReceitasRelatoriosRequest request)
         {
             GetDespesasRelatoriosReponse response = new GetDespesasRelatoriosReponse();
 
@@ -187,7 +187,7 @@ namespace TimorINSSBackEnd.Controllers
         }
 
         [HttpPost("ReceitasRelatoriosExcel")]
-        public IActionResult ReceitasRelatoriosExcel(SearchFilterRequest request)
+        public IActionResult ReceitasRelatoriosExcel(ReceitasRelatoriosRequest request)
         {
             StringFileReponse response = new StringFileReponse();
 

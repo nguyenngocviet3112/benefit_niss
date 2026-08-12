@@ -18,9 +18,9 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public List<ComponentereceitaRegisto> GetComponenteReceitaRegistoByIdOrcamento(int idOrcamentoRegisto, DateTime dataInicio, DateTime dataFim);
 
-        public GetDespesasRelatoriosReponse ReceitasRelatorios(SearchFilterRequest request);
+        public GetDespesasRelatoriosReponse ReceitasRelatorios(ReceitasRelatoriosRequest request);
 
-        public string ReceitasRelatoriosExcel(SearchFilterRequest request, List<DespesasRelatoriosDataContract> lista);
+        public string ReceitasRelatoriosExcel(ReceitasRelatoriosRequest request, List<DespesasRelatoriosDataContract> lista);
 
         public GetReceitasNaoConciliadasRelatoriosReponse ReceitasNaoConciliadasRelatorios(ReceitasNaoConciliadasRelatoriosRequest request);
 

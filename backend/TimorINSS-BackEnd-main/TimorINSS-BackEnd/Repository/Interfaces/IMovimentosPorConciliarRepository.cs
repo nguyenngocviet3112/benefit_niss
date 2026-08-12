@@ -19,7 +19,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public List<decimal> GetValores(List<MovimentosAConciliar> items);
 
-        public MovimentosPorConciliar GetMovimentosConciliados(SearchFilterRequest request, int estado);
+        public MovimentosPorConciliar GetMovimentosConciliados(GetMovimentosConciliadosRequest request, int estado);
 
         public List<MovimentosPorConciliarListagem> GetExtraDataByListIds(List<int> ids);
 
