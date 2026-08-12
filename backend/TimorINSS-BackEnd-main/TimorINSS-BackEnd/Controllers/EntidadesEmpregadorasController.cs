@@ -129,5 +129,26 @@ namespace TimorINSSBackEnd.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost("GetEntidadesRelatorio")]
+        public IActionResult GetEntidadesRelatorio(EntidadesRelatorioRequest request)
+        {
+            EntidadesRelatorioResponse response = new EntidadesRelatorioResponse();
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+
+                response = _dataManager.GetEntidadesRelatorio(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            if (response.ManageErrors("GetEntidadesRelatorio", Log, request))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }

@@ -266,5 +266,83 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Where(u => niss.Contains(u.Niss) || tin.Contains(u.Tin))
                 .ToList();
         }
+
+        public EntidadesRelatorioResponse GetEntidadesRelatorio(EntidadesRelatorioRequest request)
+        {
+            EntidadesRelatorioResponse response = new EntidadesRelatorioResponse();
+
+            int index = 0;
+            if (request.filter.index.HasValue)
+                index = request.filter.index.Value;
+
+            int rows = 20;
+            if (request.filter.rows.HasValue)
+                rows = request.filter.rows.Value;
+
+            IQueryable<Entidadeempregadora> query = _moduloContribuicoesContext.Entidadeempregadora;
+
+            var beginDate = request.filter.dateFilterBegin;
+            var endDate = request.filter.dateFilterEnd;
+
+            if (beginDate.HasValue && endDate.HasValue)
+                query = query.Where(e => e.DtInscricao >= beginDate && e.DtInscricao <= endDate);
+            else if (beginDate.HasValue)
+                query = query.Where(e => e.DtInscricao >= beginDate);
+            else if (endDate.HasValue)
+                query = query.Where(e => e.DtInscricao <= endDate);
+
+            if (request.Ativo.HasValue)
+                query = request.Ativo.Value
+                    ? query.Where(e => e.DataFimActiv == null)
+                    : query.Where(e => e.DataFimActiv != null);
+
+            if (!string.IsNullOrWhiteSpace(request.filter.filterBy))
+            {
+                var search = request.filter.filterBy;
+                query = query.Where(e => e.Nome.Contains(search) || e.Niss.Contains(search) || e.Tin.Contains(search));
+            }
+
+            var projected = query.Select(e => new EntidadeRelatorioDataContract
+            {
+                id = e.IdEntidadeEmpreg,
+                nome = e.Nome,
+                niss = e.Niss,
+                tin = e.Tin,
+                dtInscricao = e.DtInscricao,
+                ativo = e.DataFimActiv == null,
+                totalTrabalhadores = e.Relentidadetrabalhador.Count(r => r.DtIniFimTrabalhador == null),
+                totalMasculino = e.Relentidadetrabalhador.Count(r => r.DtIniFimTrabalhador == null && r.TrabalhadorFkNavigation.SexoTrabalhadorNavigation.Valor == 1),
+                totalFeminino = e.Relentidadetrabalhador.Count(r => r.DtIniFimTrabalhador == null && r.TrabalhadorFkNavigation.SexoTrabalhadorNavigation.Valor == 2)
+            });
+
+            var entidades = projected
+                .OrderBy(request.filter.orderBy, request.filter.orderDirection)
+                .Skip(index * rows)
+                .Take(rows)
+                .ToList();
+
+            response.rows = projected.Count();
+            response.entidades = entidades;
+            return response;
+        }
+
+        public List<(DateTime mesAno, int novosRegistos)> GetNovosRegistosPorMes(DateTime? beginDate, DateTime? endDate)
+        {
+            IQueryable<Entidadeempregadora> query = _moduloContribuicoesContext.Entidadeempregadora;
+
+            if (beginDate.HasValue && endDate.HasValue)
+                query = query.Where(e => e.DtInscricao >= beginDate && e.DtInscricao <= endDate);
+            else if (beginDate.HasValue)
+                query = query.Where(e => e.DtInscricao >= beginDate);
+            else if (endDate.HasValue)
+                query = query.Where(e => e.DtInscricao <= endDate);
+
+            return query
+                .Select(e => e.DtInscricao)
+                .ToList()
+                .GroupBy(d => new DateTime(d.Year, d.Month, 1))
+                .Select(g => (mesAno: g.Key, novosRegistos: g.Count()))
+                .ToList();
+        }
     }
 }

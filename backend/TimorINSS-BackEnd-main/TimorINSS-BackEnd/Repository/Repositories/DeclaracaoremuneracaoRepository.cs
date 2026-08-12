@@ -514,5 +514,102 @@ namespace TimorINSSBackEnd.Repository.Repositories
 
             return response;
         }
+
+        // Adaptado de GetDeclaracoesRelatorios: mesma fórmula de valorDivida (ValorTotal - Sum(ValorComprovPag)),
+        // mas sem exigir 1 empresa/isTrabalhador -- agrupado por empresa em vez de devolver 1 linha por declaração.
+        public SituacaoContributivaEmpresasRelatorioResponse GetSituacaoContributivaEmpresasRelatorio(SituacaoContributivaEmpresasRelatorioRequest request)
+        {
+            SituacaoContributivaEmpresasRelatorioResponse response = new SituacaoContributivaEmpresasRelatorioResponse();
+
+            int index = 0;
+            if (request.filter.index.HasValue)
+                index = request.filter.index.Value;
+
+            int rows = 20;
+            if (request.filter.rows.HasValue)
+                rows = request.filter.rows.Value;
+
+            var beginDate = request.filter.dateFilterBegin;
+            var endDate = request.filter.dateFilterEnd;
+
+            var query = _moduloContribuicoesContext.Declaracaoremuneracao
+               .Include(e => e.DeclaracaoRelEntidadeTrabalhadorFkNavigation)
+               .ThenInclude(e => e.EntidadeFkNavigation)
+               .Include(e => e.ContaCorrenteFkNavigation.Guiapagamento)
+               .Where(e => e.IndActivo &&
+                            (beginDate.HasValue && endDate.HasValue ? (e.MesAno >= beginDate && e.MesAno <= endDate) :
+                            beginDate.HasValue && !endDate.HasValue ? (e.MesAno == beginDate) :
+                            true));
+
+            if (!string.IsNullOrWhiteSpace(request.search))
+            {
+                var search = request.search;
+                query = query.Where(e => e.DeclaracaoRelEntidadeTrabalhadorFkNavigation.EntidadeFkNavigation.Nome.Contains(search)
+                    || e.DeclaracaoRelEntidadeTrabalhadorFkNavigation.EntidadeFkNavigation.Niss.Contains(search)
+                    || e.DeclaracaoRelEntidadeTrabalhadorFkNavigation.EntidadeFkNavigation.Tin.Contains(search));
+            }
+
+            var declaracoesRaw = query.Select(e => new
+            {
+                idEntidade = e.DeclaracaoRelEntidadeTrabalhadorFkNavigation.EntidadeFkNavigation.IdEntidadeEmpreg,
+                nomeEmpregador = e.DeclaracaoRelEntidadeTrabalhadorFkNavigation.EntidadeFkNavigation.Nome,
+                niss = e.DeclaracaoRelEntidadeTrabalhadorFkNavigation.EntidadeFkNavigation.Niss,
+                mesAno = e.MesAno,
+                valorDivida = e.ContaCorrenteFkNavigation.ValorTotal
+                    - (e.ContaCorrenteFkNavigation.Guiapagamento.Sum(gp => (decimal?)gp.ValorComprovPag) ?? 0m)
+            }).ToList();
+
+            var empresasAgrupadas = declaracoesRaw
+                .GroupBy(x => new { x.idEntidade, x.nomeEmpregador, x.niss })
+                .Select(g => new SituacaoContributivaEmpresaDataContract
+                {
+                    idEntidade = g.Key.idEntidade,
+                    nomeEmpregador = g.Key.nomeEmpregador,
+                    niss = g.Key.niss,
+                    ultimoMesPago = g.Where(x => x.valorDivida <= 0).Select(x => (DateTime?)x.mesAno).DefaultIfEmpty().Max(),
+                    mesesEmDivida = g.Where(x => x.valorDivida > 0).Select(x => x.mesAno).OrderBy(m => m).ToList(),
+                    totalDivida = g.Where(x => x.valorDivida > 0).Sum(x => x.valorDivida)
+                })
+                .AsQueryable();
+
+            if (request.apenasComDivida.HasValue)
+                empresasAgrupadas = request.apenasComDivida.Value
+                    ? empresasAgrupadas.Where(x => x.totalDivida > 0)
+                    : empresasAgrupadas.Where(x => x.totalDivida <= 0);
+
+            response.rows = empresasAgrupadas.Count();
+            response.empresas = empresasAgrupadas
+                .OrderBy(request.filter.orderBy, request.filter.orderDirection)
+                .Skip(index * rows)
+                .Take(rows)
+                .ToList();
+
+            return response;
+        }
+
+        // Mesma base de dados/valorDivida do GetSituacaoContributivaEmpresasRelatorio, agrupado por mês em vez de por empresa.
+        public List<(DateTime mesAno, decimal valorPago, decimal valorDivida)> GetContribuicoesTrendsPorMes(DateTime? beginDate, DateTime? endDate)
+        {
+            var query = _moduloContribuicoesContext.Declaracaoremuneracao
+               .Include(e => e.ContaCorrenteFkNavigation.Guiapagamento)
+               .Where(e => e.IndActivo &&
+                            (beginDate.HasValue && endDate.HasValue ? (e.MesAno >= beginDate && e.MesAno <= endDate) :
+                            beginDate.HasValue && !endDate.HasValue ? (e.MesAno == beginDate) :
+                            true));
+
+            var declaracoesRaw = query.Select(e => new
+            {
+                mesAno = e.MesAno,
+                valorPago = e.ContaCorrenteFkNavigation.Guiapagamento.Sum(gp => (decimal?)gp.ValorComprovPag) ?? 0m,
+                valorDivida = e.ContaCorrenteFkNavigation.ValorTotal
+                    - (e.ContaCorrenteFkNavigation.Guiapagamento.Sum(gp => (decimal?)gp.ValorComprovPag) ?? 0m)
+            }).ToList();
+
+            return declaracoesRaw
+                .GroupBy(x => new DateTime(x.mesAno.Year, x.mesAno.Month, 1))
+                .Select(g => (mesAno: g.Key, valorPago: g.Sum(x => x.valorPago), valorDivida: g.Where(x => x.valorDivida > 0).Sum(x => x.valorDivida)))
+                .OrderBy(x => x.mesAno)
+                .ToList();
+        }
     }
 }

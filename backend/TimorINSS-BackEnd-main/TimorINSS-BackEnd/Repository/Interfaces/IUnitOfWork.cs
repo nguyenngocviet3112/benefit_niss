@@ -71,6 +71,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         IComponenteDespesaRepository ComponenteDespesaRepository { get; }
         IComponenteOrcamentoRegistoRepository ComponenteOrcamentoRegistoRepository { get; }
         IComponenteOrcamentoValorRepository ComponenteOrcamentoValorRepository { get; }
+        IComponenteOrcamentoAjusteRepository ComponenteOrcamentoAjusteRepository { get; }
         IComponenteDespesaRegistoRepository ComponenteDespesaRegistoRepository { get; }
         IComponenteTextoRegistoRepository ComponenteTextoRegistoRepository { get; }
         IPagamentosExecutadosRepository PagamentosExecutadosRepository { get; }

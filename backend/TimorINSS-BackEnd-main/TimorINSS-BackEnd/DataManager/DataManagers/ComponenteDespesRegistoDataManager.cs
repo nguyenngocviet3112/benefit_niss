@@ -769,5 +769,157 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
             return response;
         }
+
+        // Reaproveita a mesma resolução de estado usada em GetDespesasRelatorio (ver switch acima) para
+        // garantir que a contagem/soma por estágio do Manager View bate certo com o relatório de Despesas já existente.
+        private (List<int> estadosDespesa, int? estadoPag) ResolveEstadoFilterForRelatorio(EstadoDespesaEnum tipo)
+        {
+            List<int> estadoValor = new List<int>();
+            int? estadoPagamento = null;
+
+            switch (tipo)
+            {
+                case EstadoDespesaEnum.Autorizado:
+                    estadoValor = new List<int>() { 2 };
+                    break;
+                case EstadoDespesaEnum.Cabimentado:
+                    estadoValor = new List<int>() { 3 };
+                    break;
+                case EstadoDespesaEnum.Compromisso:
+                    estadoPagamento = 1;
+                    break;
+                case EstadoDespesaEnum.OrdemPagamentoEmitida:
+                    estadoPagamento = 2;
+                    break;
+                default:
+                    break;
+            }
+            var estadosDespesa = estadoValor.Any() ? _unitOfWork.DominioRepository.getIdDominios("ESTADODESPESA", estadoValor) : estadoValor;
+            var estadoPag = estadoPagamento.HasValue ? _unitOfWork.DominioRepository.getIdDominio("ESTADOPAGAMENTO", estadoPagamento.Value) : (int?)null;
+            return (estadosDespesa, estadoPag);
+        }
+
+        private GetDespesasRelatoriosReponse GetDespesasParaEstagio(int userId, EstadoDespesaEnum tipo)
+        {
+            var request = new GetDespesasRelatorioRequest
+            {
+                UserId = userId,
+                filter = new SearchFilter { index = 0, rows = 999999 },
+                EstadoDespesa = tipo
+            };
+            var (estadosDespesa, estadoPag) = ResolveEstadoFilterForRelatorio(tipo);
+            return _unitOfWork.ComponenteDespesaRegistoRepository.GetDespesasRelatorio(request, estadosDespesa, estadoPag, tipo);
+        }
+
+        public BudgetExecutionRelatorioResponse GetBudgetExecutionRelatorio(BudgetExecutionRelatorioRequest request)
+        {
+            BudgetExecutionRelatorioResponse response = new BudgetExecutionRelatorioResponse();
+
+            bool permission = _utils.ValidatePermission((int)request.UserId, (int)ModuleRelatorios.Consultas, _unitOfWork);
+            if (!permission)
+            {
+                response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
+                return response;
+            }
+
+            try
+            {
+                var orcamentoValores = _unitOfWork.ComponenteOrcamentoValorRepository.GetAll()
+                    .Where(o => o.IndActivo)
+                    .ToList();
+
+                response.totalOrcado = orcamentoValores.Sum(o => o.Valor);
+
+                var cabimentado = GetDespesasParaEstagio(request.UserId, EstadoDespesaEnum.Cabimentado);
+                var compromissado = GetDespesasParaEstagio(request.UserId, EstadoDespesaEnum.Compromisso);
+                var pago = GetDespesasParaEstagio(request.UserId, EstadoDespesaEnum.OrdemPagamentoEmitida);
+
+                response.totalCabimentado = cabimentado.Despesas?.Sum(x => x.Valor) ?? 0m;
+                response.totalCompromissado = compromissado.Despesas?.Sum(x => x.Valor) ?? 0m;
+                response.totalPago = pago.Despesas?.Sum(x => x.Valor) ?? 0m;
+
+                var orcadoPorRubrica = orcamentoValores
+                    .Where(o => o.AgrupamentoFk.HasValue)
+                    .GroupBy(o => o.AgrupamentoFk.Value)
+                    .Select(g => new { agrupamentoConfigFk = g.Key, valorOrcado = g.Sum(x => x.Valor) })
+                    .ToList();
+
+                var despesasAtivas = _unitOfWork.ComponenteDespesaRegistoRepository.GetAll()
+                    .Where(d => d.IndActivo)
+                    .ToList();
+
+                var reservadoPorRubrica = despesasAtivas
+                    .GroupBy(d => d.AgrupamentoConfigFk)
+                    .ToDictionary(g => g.Key, g => g.Sum(x => x.Valor));
+
+                var rubricas = _unitOfWork.AgrupamentoConfigRepository.GetAll()
+                    .Where(a => a.IndActivo)
+                    .ToDictionary(a => a.Id, a => a);
+
+                response.rubricasEmRisco = orcadoPorRubrica
+                    .Where(o => o.valorOrcado > 0)
+                    .Select(o => new RubricaOrcamentoDataContract
+                    {
+                        agrupamentoConfigFk = o.agrupamentoConfigFk,
+                        descricao = rubricas.ContainsKey(o.agrupamentoConfigFk) ? rubricas[o.agrupamentoConfigFk].Designacao : "",
+                        departamento = "",
+                        valorOrcado = o.valorOrcado,
+                        valorReservado = reservadoPorRubrica.ContainsKey(o.agrupamentoConfigFk) ? reservadoPorRubrica[o.agrupamentoConfigFk] : 0m,
+                        saldoDisponivel = o.valorOrcado - (reservadoPorRubrica.ContainsKey(o.agrupamentoConfigFk) ? reservadoPorRubrica[o.agrupamentoConfigFk] : 0m)
+                    })
+                    .OrderBy(r => r.valorOrcado > 0 ? r.saldoDisponivel / r.valorOrcado : 0)
+                    .Take(20)
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            return response;
+        }
+
+        public DespesaPipelineRelatorioResponse GetDespesaPipelineRelatorio(DespesaPipelineRelatorioRequest request)
+        {
+            DespesaPipelineRelatorioResponse response = new DespesaPipelineRelatorioResponse();
+
+            bool permission = _utils.ValidatePermission((int)request.UserId, (int)ModuleRelatorios.Consultas, _unitOfWork);
+            if (!permission)
+            {
+                response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
+                return response;
+            }
+
+            try
+            {
+                var estagios = new List<(string nome, int ordem, EstadoDespesaEnum? tipo)>
+                {
+                    ("Autorizado", 1, EstadoDespesaEnum.Autorizado),
+                    ("Cabimentado", 2, EstadoDespesaEnum.Cabimentado),
+                    ("Compromissado", 3, EstadoDespesaEnum.Compromisso),
+                    ("Obrigado", 4, EstadoDespesaEnum.Obricacao),
+                    ("Pago", 5, EstadoDespesaEnum.OrdemPagamentoEmitida)
+                };
+
+                response.estagios = estagios.Select(e => new DespesaPipelineEstagioDataContract
+                {
+                    estagio = e.nome,
+                    ordem = e.ordem,
+                    total = GetDespesasParaEstagio(request.UserId, e.tipo.Value).rows
+                }).ToList();
+
+                int estadoRegistado = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 1);
+                int totalRegistado = _unitOfWork.ComponenteDespesaRegistoRepository.GetAll()
+                    .Count(d => d.IndActivo && d.Estado == estadoRegistado);
+
+                response.estagios.Insert(0, new DespesaPipelineEstagioDataContract { estagio = "Registado", ordem = 0, total = totalRegistado });
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            return response;
+        }
     }
 }

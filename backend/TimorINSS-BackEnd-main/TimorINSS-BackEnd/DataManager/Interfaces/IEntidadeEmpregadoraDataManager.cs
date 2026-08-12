@@ -29,5 +29,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         public EntidadeEmpregadoraDeclaracaoViewResponse GetEntidadeInfoForDeclaracao(EntidadeEmpregadoraIdRequest request);
 
         public EntidadeEmpregadoraConsultaResponse GetEntidadeByNiss(EntidadeEmpregadoraNissRequest request);
+
+        public EntidadesRelatorioResponse GetEntidadesRelatorio(EntidadesRelatorioRequest request);
     }
 }

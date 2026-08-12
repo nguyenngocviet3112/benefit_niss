@@ -288,5 +288,28 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             return response;
         }
+
+        public EntidadesRelatorioResponse GetEntidadesRelatorio(EntidadesRelatorioRequest request)
+        {
+            EntidadesRelatorioResponse response = new EntidadesRelatorioResponse();
+
+            bool permission = _utils.ValidatePermission((int)request.UserId, (int)ModuleRelatorios.Consultas, _unitOfWork);
+            if (!permission)
+            {
+                response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
+                return response;
+            }
+
+            try
+            {
+                response = _unitOfWork.EntidadeEmpregadoraRepository.GetEntidadesRelatorio(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            return response;
+        }
     }
 }

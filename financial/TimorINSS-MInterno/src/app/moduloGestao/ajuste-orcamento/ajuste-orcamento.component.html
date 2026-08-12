@@ -1,0 +1,130 @@
+<div class="page-container">
+  <h2>{{ 'ajusteOrcamento.titulo' | translate }}</h2>
+  <p class="subtitulo">{{ 'ajusteOrcamento.subtitulo' | translate }}</p>
+
+  <div class="warning-box" *ngIf="!componenteOrcamentoRegistoFk">
+    {{ 'error.-39' | translate }}
+  </div>
+
+  <form #ajusteForm="ngForm" *ngIf="componenteOrcamentoRegistoFk" (ngSubmit)="solicitar()">
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'ajusteOrcamento.rubricaOrigem' | translate }}</mat-label>
+        <mat-select name="rubricaOrigemFk" [(ngModel)]="rubricaOrigemFk">
+          <mat-option>
+            <ngx-mat-select-search noEntriesFoundLabel="{{'general.semResultados' | translate}}"
+              placeholderLabel="{{'ajusteOrcamento.pesquisarRubrica' | translate}}"
+              (ngModelChange)="filterRubricasOrigem($event)" [ngModelOptions]="{standalone: true}" ngModel>
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option [value]="''">{{ 'ajusteOrcamento.semOrigemBonificacao' | translate }}</mat-option>
+          <mat-option *ngFor="let rubrica of filteredRubricasOrigemSearch" [value]="rubrica.id" [disabled]="rubrica.id === rubricaDestinoFk">
+            {{ rubrica.descricao }} ({{ 'ajusteOrcamento.saldoDisponivel' | translate }}: $ {{ rubrica.saldoDisponivel | number:'1.2-2' }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'ajusteOrcamento.rubricaDestino' | translate }}</mat-label>
+        <mat-select name="rubricaDestinoFk" [(ngModel)]="rubricaDestinoFk" required #destino="ngModel" [errorStateMatcher]="matcher">
+          <mat-option>
+            <ngx-mat-select-search noEntriesFoundLabel="{{'general.semResultados' | translate}}"
+              placeholderLabel="{{'ajusteOrcamento.pesquisarRubrica' | translate}}"
+              (ngModelChange)="filterRubricasDestino($event)" [ngModelOptions]="{standalone: true}" ngModel>
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let rubrica of filteredRubricasDestinoSearch" [value]="rubrica.id" [disabled]="rubrica.id === rubricaOrigemFk">
+            {{ rubrica.descricao }} ($ {{ rubrica.valor | number:'1.2-2' }})
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="submitted && destino.invalid">{{ 'general.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'ajusteOrcamento.valor' | translate }}</mat-label>
+        <input matInput #valorInput autocomplete="off" max="999999999999999999.99" currencyMask [options]="currencyOptions"
+          name="valor" [(ngModel)]="valor" required #valorField="ngModel" [errorStateMatcher]="matcher" (blur)="onValorBlur()">
+        <mat-error *ngIf="submitted && valorField.invalid">{{ 'general.required' | translate }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="motivo-field">
+        <mat-label>{{ 'ajusteOrcamento.motivo' | translate }}</mat-label>
+        <input matInput name="motivo" [(ngModel)]="motivo" maxlength="500">
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit">{{ 'ajusteOrcamento.solicitar' | translate }}</button>
+  </form>
+
+  <h3>{{ 'ajusteOrcamento.pendentes' | translate }}</h3>
+  <table class="ajuste-table" *ngIf="pendentes.length > 0; else semPendentes">
+    <thead>
+      <tr>
+        <th>{{ 'ajusteOrcamento.rubricaOrigem' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.rubricaDestino' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.valor' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.impactoOrigem' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.impactoDestino' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.motivo' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.solicitadoEm' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.acao' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ajuste of pendentes">
+        <td>{{ rubricaDescricao(ajuste.rubricaOrigemFk) }}</td>
+        <td>{{ ajuste.rubricaDestinoDescricao }}</td>
+        <td>$ {{ ajuste.valor | number:'1.2-2' }}</td>
+        <td>
+          <ng-container *ngIf="ajuste.rubricaOrigemFk; else semImpactoOrigem">
+            $ {{ saldoOrigemAntes(ajuste) | number:'1.2-2' }} → $ {{ saldoOrigemDepois(ajuste) | number:'1.2-2' }}
+          </ng-container>
+          <ng-template #semImpactoOrigem>—</ng-template>
+        </td>
+        <td>$ {{ valorDestinoAntes(ajuste) | number:'1.2-2' }} → $ {{ valorDestinoDepois(ajuste) | number:'1.2-2' }}</td>
+        <td>{{ ajuste.motivo }}</td>
+        <td>{{ ajuste.dataSolicitacao | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td class="acoes-cell">
+          <button mat-raised-button color="primary" (click)="aprovar(ajuste)">{{ 'ajusteOrcamento.aprovar' | translate }}</button>
+          <input matInput class="motivo-rejeicao" placeholder="{{ 'ajusteOrcamento.motivoRejeicao' | translate }}"
+            [(ngModel)]="motivoRejeicaoPorId[ajuste.id]" [ngModelOptions]="{standalone: true}">
+          <button mat-raised-button color="warn" (click)="rejeitar(ajuste)">{{ 'ajusteOrcamento.rejeitar' | translate }}</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #semPendentes>
+    <p class="sem-dados">{{ 'ajusteOrcamento.semPendentes' | translate }}</p>
+  </ng-template>
+
+  <h3>{{ 'ajusteOrcamento.historico' | translate }}</h3>
+  <table class="ajuste-table" *ngIf="historico.length > 0; else semHistorico">
+    <thead>
+      <tr>
+        <th>{{ 'ajusteOrcamento.rubricaOrigem' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.rubricaDestino' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.valor' | translate }}</th>
+        <th>{{ 'general.status' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.motivo' | translate }}</th>
+        <th>{{ 'ajusteOrcamento.solicitadoEm' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ajuste of historico">
+        <td>{{ rubricaDescricao(ajuste.rubricaOrigemFk) }}</td>
+        <td>{{ ajuste.rubricaDestinoDescricao }}</td>
+        <td>$ {{ ajuste.valor | number:'1.2-2' }}</td>
+        <td [ngClass]="{'estado-aprovado': ajuste.estado === 'Aprovado', 'estado-rejeitado': ajuste.estado === 'Rejeitado'}">
+          {{ ajuste.estado }}
+        </td>
+        <td>{{ ajuste.motivo }}<span *ngIf="ajuste.motivoRejeicao"> — {{ ajuste.motivoRejeicao }}</span></td>
+        <td>{{ ajuste.dataSolicitacao | date:'dd/MM/yyyy HH:mm' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #semHistorico>
+    <p class="sem-dados">{{ 'ajusteOrcamento.semHistorico' | translate }}</p>
+  </ng-template>
+</div>

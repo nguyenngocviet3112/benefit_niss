@@ -80,8 +80,10 @@ import { ConfigurarProcessosComponent } from './moduloGestao/configurar-processo
 import { NovoConfigurarProcessosComponent } from './moduloGestao/create-edit-configurar-processos/create-edit-configurar-processos.component';
 import { PreencherTarefaComponent } from './moduloGestao/preencher-tarefa/preencher-tarefa.component';
 import { ComponenteOrcamentoComponent } from './moduloGestao/preencher-tarefa/componentes/componente-orcamento/componente-orcamento.component';
+import { AjusteOrcamentoComponent } from './moduloGestao/ajuste-orcamento/ajuste-orcamento.component';
 import { ComponenteTextoComponent } from './moduloGestao/preencher-tarefa/componentes/componente-texto/componente-texto.component';
 import { HomePageComponent } from './moduloGestao/home-page/home-page.component';
+import { ManagerViewComponent } from './moduloGestao/manager-view/manager-view.component';
 import { ProcessosArquivadosComponent } from './moduloGestao/processos-arquivados/processos-arquivados.component';
 import { ProcessoDetalheComponent } from './moduloGestao/processo-detalhe/processo-detalhe.component';
 import { PopUpIniciarProcessoComponent } from './moduloGestao/pop-up-iniciar-processo/pop-up-iniciar-processo.component';
@@ -199,8 +201,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     NovoConfigurarProcessosComponent,
     PreencherTarefaComponent,
     ComponenteOrcamentoComponent,
+    AjusteOrcamentoComponent,
     ComponenteTextoComponent,
     HomePageComponent,
+    ManagerViewComponent,
     ProcessosArquivadosComponent,
     ProcessoDetalheComponent,
     PopUpIniciarProcessoComponent,

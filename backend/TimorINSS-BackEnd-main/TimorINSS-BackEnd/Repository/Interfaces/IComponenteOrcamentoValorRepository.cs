@@ -13,6 +13,8 @@ namespace TimorINSSBackEnd.Repository.Interfaces
 
         public List<Componenteorcamentovalor> getAllComponentesOrcamentoValorByRegisto(int orcamentoRegistoID);
 
+        public List<Componenteorcamentovalor> getAllByRegistoId(int id);
+
         public List<Componenteorcamentovalor> getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(int agrupamentoId, int orcamentoRegistoID);
 
         public List<Componenteorcamentovalor> getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(int agrupamentoId, int orcamentoRegistoID,
@@ -24,5 +26,10 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public List<ExcTractOrcamentoValor> SearchComponenteOrcamentoValorExtraction(ComponenteOrcamentoValorSearch filter);
 
         public Componenteorcamentovalor getOrcamentoValorByAgrupamentoAndOrcamentoRegistoInactivo(int agrupamentoId, int orcamentoRegistoID);
+
+        // Get() normal desliga lazy loading e não faz Include -- esta variante traz
+        // AgrupamentoFkNavigation carregado, para ecrãs que precisam de mostrar a designação
+        // da rubrica (ex: lista de Ajustes de Orçamento pendentes/histórico).
+        public Componenteorcamentovalor GetWithAgrupamento(int id);
     }
 }

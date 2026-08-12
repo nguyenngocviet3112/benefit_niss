@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TimorINSSBackEnd.DataContracts.ModelDataContract;
 using TimorINSSBackEnd.DataContracts.RequestDataContract;
 using TimorINSSBackEnd.DataContracts.ResponseDataContract;
@@ -29,5 +30,9 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public void Update(EntidadeEmpregadoraUpsertRequest entity);
 
         public List<Entidadeempregadora> GetEntidadesByNissOrTin(List<string> niss, List<string> tin);
+
+        public EntidadesRelatorioResponse GetEntidadesRelatorio(EntidadesRelatorioRequest request);
+
+        public List<(DateTime mesAno, int novosRegistos)> GetNovosRegistosPorMes(DateTime? beginDate, DateTime? endDate);
     }
 }

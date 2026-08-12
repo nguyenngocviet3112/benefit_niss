@@ -42,6 +42,7 @@ namespace TimorINSSBackEnd.Models
         public virtual DbSet<Componenteorcamento> Componenteorcamento { get; set; }
         public virtual DbSet<ComponenteorcamentoRegisto> ComponenteorcamentoRegisto { get; set; }
         public virtual DbSet<Componenteorcamentovalor> Componenteorcamentovalor { get; set; }
+        public virtual DbSet<ComponenteOrcamentoAjuste> ComponenteOrcamentoAjuste { get; set; }
         public virtual DbSet<Componentereceita> Componentereceita { get; set; }
         public virtual DbSet<ComponentereceitaRegisto> ComponentereceitaRegisto { get; set; }
         public virtual DbSet<ComponentereceitaRegistoMovimentos> ComponentereceitaRegistoMovimentos { get; set; }
@@ -1202,6 +1203,54 @@ namespace TimorINSSBackEnd.Models
                     .WithMany(p => p.Componenteorcamentovalor)
                     .HasForeignKey(d => d.TipoContaFk)
                     .HasConstraintName("componenteOrcamento_tipoConta_fk");
+            });
+
+            // Ajuste de orçamento (bonificação/transferência entre rubricas) -- ver
+            // db-migrations/2026-08-11_componenteorcamentoajuste.sql. Sem HasOne/navegação
+            // declarada de propósito (FKs simples, sem tocar nas colecções inversas de outras
+            // entidades) -- as consultas fazem join manual via repository.
+            modelBuilder.Entity<ComponenteOrcamentoAjuste>(entity =>
+            {
+                entity.ToTable("COMPONENTEORCAMENTOAJUSTE");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ComponenteOrcamentoRegistoFk).HasColumnName("componenteOrcamentoRegisto_fk");
+
+                entity.Property(e => e.RubricaOrigemFk).HasColumnName("rubricaOrigem_fk");
+
+                entity.Property(e => e.RubricaDestinoFk).HasColumnName("rubricaDestino_fk");
+
+                entity.Property(e => e.Valor)
+                    .HasColumnType("decimal(20, 2)")
+                    .HasColumnName("valor");
+
+                entity.Property(e => e.Estado)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("estado");
+
+                entity.Property(e => e.Motivo)
+                    .HasMaxLength(500)
+                    .HasColumnName("motivo");
+
+                entity.Property(e => e.MotivoRejeicao)
+                    .HasMaxLength(500)
+                    .HasColumnName("motivoRejeicao");
+
+                entity.Property(e => e.UtilizadorSolicitacao).HasColumnName("utilizadorSolicitacao");
+
+                entity.Property(e => e.DataSolicitacao)
+                    .HasColumnType("datetime")
+                    .HasColumnName("dataSolicitacao");
+
+                entity.Property(e => e.UtilizadorAprovacao).HasColumnName("utilizadorAprovacao");
+
+                entity.Property(e => e.DataAprovacao)
+                    .HasColumnType("datetime")
+                    .HasColumnName("dataAprovacao");
+
+                entity.Property(e => e.IndActivo).HasColumnName("indActivo");
             });
 
             modelBuilder.Entity<Componentereceita>(entity =>

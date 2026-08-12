@@ -142,5 +142,45 @@ namespace TimorINSSBackEnd.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost("GetSituacaoContributivaEmpresasRelatorio")]
+        public IActionResult GetSituacaoContributivaEmpresasRelatorio(SituacaoContributivaEmpresasRelatorioRequest request)
+        {
+            SituacaoContributivaEmpresasRelatorioResponse response = new SituacaoContributivaEmpresasRelatorioResponse();
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.GetSituacaoContributivaEmpresasRelatorio(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            if (response.ManageErrors("GetSituacaoContributivaEmpresasRelatorio", Log, request))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpPost("GetContribuicoesTrendsRelatorio")]
+        public IActionResult GetContribuicoesTrendsRelatorio(ContribuicoesTrendsRelatorioRequest request)
+        {
+            ContribuicoesTrendsRelatorioResponse response = new ContribuicoesTrendsRelatorioResponse();
+            try
+            {
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.GetContribuicoesTrendsRelatorio(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+            if (response.ManageErrors("GetContribuicoesTrendsRelatorio", Log, request))
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }

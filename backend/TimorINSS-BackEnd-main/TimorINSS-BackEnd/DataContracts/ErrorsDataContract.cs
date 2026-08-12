@@ -85,7 +85,12 @@
         JaExisteDespesaEmCursoNaRubrica = -81,
         RegistoExcedeSaldoDisponivel = -82,
         RegistoSemOrcamentoAtribuido = -83,
-        DespesaPendenteImpedeAvancoTarefa = -84
+        DespesaPendenteImpedeAvancoTarefa = -84,
+        AjusteNotFound = -85,
+        AjusteRubricaOrigemSaldoInsuficiente = -86,
+        AjusteEstadoInvalido = -87,
+        AjusteRubricaOrigemIgualDestino = -88,
+        AjusteValorInvalido = -89
 
     }
 }
