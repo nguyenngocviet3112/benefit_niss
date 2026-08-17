@@ -13,7 +13,9 @@
         <mat-form-field *ngIf="!data.isReceita && !data.guiaOrReserva" appearance="outline" class="inputs-grid__cell">
           <mat-label>{{'componenteDespesa.departamentoINSS' | translate}}</mat-label>
           <mat-select [(ngModel)]="data.departamentoINSS" [(value)]="data.departamentoINSS" name="departamento" [required]="submittedTry">
-            <ng-container *ngIf="departamentoINSSListagem.length > 1">
+            <!-- [PT] Era "> 1": com uma única opção activa o campo ficava vazio e impossível de preencher.
+                 [VI] Trước là "> 1": khi chỉ còn một lựa chọn thì ô trống và không thể chọn được gì. -->
+            <ng-container *ngIf="departamentoINSSListagem.length > 0">
               <mat-option *ngFor="let departamento of departamentoINSSListagem" [value]="departamento.id"
                 matTooltip="{{departamento.nome}}">
                 {{departamento.nome}}

@@ -82,7 +82,11 @@
         ValidEletoraCard = -78,
         PossivelObrigacaoDuplicada = -79,
         CabimentoExcedeSaldoDisponivel = -80,
-        JaExisteDespesaEmCursoNaRubrica = -81,
+        // -81 (JaExisteDespesaEmCursoNaRubrica) foi retirado: o registo duplicado deixou de ser
+        // bloqueado e passou a ser um aviso de confirmação (ver AddEditComponenteDespesaRegisto).
+        // O código -81 continua traduzido nos ficheiros i18n para as versões ainda em Staging/RDP.
+        // [VI] -81 đã bỏ: đăng ký trùng không còn bị chặn mà chuyển thành cảnh báo xác nhận. Key
+        // -81 vẫn giữ trong file i18n để các bản còn chạy ở Staging/RDP hiển thị được thông báo.
         RegistoExcedeSaldoDisponivel = -82,
         RegistoSemOrcamentoAtribuido = -83,
         DespesaPendenteImpedeAvancoTarefa = -84

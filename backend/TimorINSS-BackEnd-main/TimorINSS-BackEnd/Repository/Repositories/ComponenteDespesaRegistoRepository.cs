@@ -98,16 +98,56 @@ namespace TimorINSSBackEnd.Repository.Repositories
                .ToList();
         }
 
+        // A despesa é identificada pelos 5 parâmetros que o cliente confirmou: Institution +
+        // Centro de Custo + Actividade + Funcional + rubrica. O Centro de Custo faltava aqui,
+        // pelo que despesas de centros de custo diferentes (ex: ADMINISTRAÇÃO INSS vs
+        // ADMINISTRAÇÃO FRSS) partilhavam o mesmo saldo e eram tratadas como duplicados.
+        // [VI] Despesa được nhận diện bằng đúng 5 tham số khách đã chốt: Institution + Centro de
+        // Custo + Actividade + Funcional + rubrica. Trước đây thiếu Centro de Custo nên despesa
+        // của 2 centro de custo khác nhau dùng chung số dư và bị coi là trùng nhau.
         public List<ComponentedespesaRegisto> GetAllDespesaRegistadaByAgrupamentoConfigFk(int agrupamentoConfigFk,
-            int institutionId, int actidadeId, int funcionalId)
+            int institutionId, int actidadeId, int funcionalId, int centroCustoId)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
             var componenteDespesaRegisto = _moduloContribuicoesContext.ComponentedespesaRegisto
                 .Where(u => u.AgrupamentoConfigFk == agrupamentoConfigFk && u.IndActivo && u.InstitutionId == institutionId && u.ActidadeFk == actidadeId
-                && u.FuncionalFk == funcionalId)
+                && u.FuncionalFk == funcionalId && u.CentroCustoFk == centroCustoId)
                 .ToList();
 
             return componenteDespesaRegisto;
+        }
+
+        // Despesas ainda em curso (Registada ou Autorizada, ou seja, ainda não Cabimentadas) para a
+        // mesma combinação de 5 parâmetros. Serve o aviso de confirmação mostrado ao registar: em vez
+        // de bloquear, mostra-se ao utilizador o que já existe -- incluindo o número do processo, para
+        // ele conseguir ir lá ver quem está a segurar a verba.
+        // [VI] Các despesa còn đang mở (Registada/Autorizada, tức chưa Cabimentado) cùng tổ hợp 5 tham
+        // số. Dùng cho cảnh báo xác nhận khi đăng ký: thay vì chặn, cho người dùng thấy cái đang tồn
+        // tại -- kèm số processo để lần ra ai đang giữ khoản đó.
+        public List<DespesaEmCursoDataContract> GetDespesasEmCursoByChave(int agrupamentoConfigFk, int institutionId,
+            int actidadeId, int funcionalId, int centroCustoId, List<int> estados, int idExcluir)
+        {
+            _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
+            return _moduloContribuicoesContext.ComponentedespesaRegisto
+                .Include(u => u.TarefaActivoFkNavigation)
+                    .ThenInclude(t => t.ProcessoAtivoFkNavigation)
+                .Include(u => u.EstadoNavigation)
+                .Where(u => u.IndActivo && u.Id != idExcluir
+                    && u.AgrupamentoConfigFk == agrupamentoConfigFk
+                    && u.InstitutionId == institutionId
+                    && u.ActidadeFk == actidadeId
+                    && u.FuncionalFk == funcionalId
+                    && u.CentroCustoFk == centroCustoId
+                    && estados.Contains(u.Estado))
+                .Select(u => new DespesaEmCursoDataContract
+                {
+                    Id = u.Id,
+                    NumeroProcesso = u.TarefaActivoFkNavigation.ProcessoAtivoFkNavigation.NumeroProcesso,
+                    Descricao = u.Descricao,
+                    Valor = u.Valor,
+                    EstadoValor = u.EstadoNavigation.Valor
+                })
+                .ToList();
         }
 
         public List<ComponentedespesaRegisto> GetAllDespesaRegistadaByAgrupamentoConfigFk(int agrupamentoConfigFk)

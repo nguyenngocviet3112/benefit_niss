@@ -5,7 +5,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
 {
     public interface IComponenteDespesaRegistoDataManager
     {
-        public ResponseBaseDataContract AddEditComponenteDespesaRegisto(RegistoDespesaRequest request);
+        public AddEditDespesaRegistoResponse AddEditComponenteDespesaRegisto(RegistoDespesaRequest request);
 
         public GetComponenteDespesaRegistoReponse GetAllDespesaRegistadaByTarefaAtivoId(GetAllDespesaRegistadaRequest request);
 

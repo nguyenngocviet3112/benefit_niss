@@ -21,6 +21,7 @@ import { AgrupamentoConfigService } from "src/app/services/agrupamentoConfig.ser
 import { GetAgrupamentoConfigRequest } from "src/app/request-models/agrupamentoConfig-request";
 import { MyErrorStateMatcher } from "src/app/matcher";
 import { GetAllDespesaRegistadaRequest, GetDespesasCompromissoRequest, GetValoresDespesaByIdCodigoOrcamentoRequest, RegistoDespesaRequest } from "src/app/request-models/componenteDespesaRegisto-request";
+import { DespesaEmCurso } from "src/app/response-models/componenteDespesaRegisto-response";
 import { Despesa, ValoresDespesaRegistada } from "src/app/models/despesa";
 import { ComponenteDespesaRegistoService } from "src/app/services/componenteDespesaRegisto.service";
 import { DespesaCompromisso, DespesaCabimentadasParaExecucao, DespesaRegistada } from "src/app/models/despesaRegistada";
@@ -339,6 +340,20 @@ export class ComponenteDespesaComponent implements OnInit {
       this.departamentoINSSListagem = departamentoInss.selects;
       this.institutionListagem = institutions.selects;
 
+      // [PT] Quando só existe uma opção activa (por ex. o INSS, depois de o FRSS ter sido desactivado),
+      // pré-selecciona-a: não há escolha a fazer e o utilizador precisa de VER qual está em uso, em vez
+      // de um campo em branco. Só preenche se ainda não houver valor, para não sobrepor a Instituição de
+      // uma despesa que esteja a ser editada.
+      // [VI] Khi chỉ còn một lựa chọn đang hoạt động (vd chỉ INSS sau khi tắt FRSS) thì chọn sẵn nó:
+      // không có gì để chọn, mà người dùng cần THẤY đang dùng cái nào thay vì ô trắng. Chỉ gán khi chưa
+      // có giá trị, để không ghi đè Institution của despesa đang được sửa.
+      if (this.institutionListagem != null && this.institutionListagem.length === 1 && this.institution.id == null) {
+        this.institution = this.institutionListagem[0];
+      }
+      if (this.departamentoINSSListagem != null && this.departamentoINSSListagem.length === 1 && this.departamentoINSS.id == null) {
+        this.departamentoINSS = this.departamentoINSSListagem[0];
+      }
+
       if (despesaRegistada.componenteDespesaRegisto != null && despesaRegistada.componenteDespesaRegisto.length > 0) {
         this.despesaRegistadaAutorizadaListagem = despesaRegistada.componenteDespesaRegisto.filter(estadoDespesa => estadoDespesa.estado == 'R');
 
@@ -479,7 +494,25 @@ export class ComponenteDespesaComponent implements OnInit {
       despesa: despesaRegisto
     };
 
+    this.gravarDespesa(request);
+  }
+
+  // [PT] Envia o registo. Se o servidor devolver despesas em curso para a mesma combinação dos 5
+  // parâmetros (Institution + Centro de Custo + Actividade + Funcional + rubrica), nada foi gravado:
+  // mostra-se ao utilizador o que já existe e só se grava se ele confirmar. Antes disto o registo era
+  // simplesmente bloqueado, sem sequer dizer que processo estava a causar o bloqueio.
+  // [VI] Gửi request đăng ký. Nếu server trả về danh sách despesa đang mở cùng tổ hợp 5 tham số
+  // (Institution + Centro de Custo + Actividade + Funcional + rubrica) thì CHƯA lưu gì: hiển thị cho
+  // người dùng thấy cái đang tồn tại, chỉ lưu khi họ xác nhận. Trước đây chỗ này chặn thẳng, thậm chí
+  // không cho biết processo nào đang gây chặn.
+  private gravarDespesa(request: RegistoDespesaRequest) {
     this.componenteDespesaService.addEditComponenteDespesaRegisto(request).subscribe(x => {
+      if (x != null && x.despesasEmCurso != null && x.despesasEmCurso.length > 0) {
+        this.hideLoader();
+        this.confirmarDespesasEmCurso(request, x.despesasEmCurso);
+        return;
+      }
+
       this.hideLoader();
       this.contabilidade = <CodigoConta>{};
       this.contaOSS = <AgrupamentosConfig>{};
@@ -502,7 +535,51 @@ export class ComponenteDespesaComponent implements OnInit {
         err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
         this.showError();
       });
+  }
 
+  // [PT] Traduz o código de estado ESTADODESPESA para uma etiqueta legível. A tabela DOMINIO guarda
+  // apenas a letra ("R", "A"), que não diz nada ao utilizador; só os estados que podem aparecer no
+  // aviso são tratados (as despesas já Cabimentadas não bloqueiam nem aparecem na lista).
+  // [VI] Dịch mã trạng thái ESTADODESPESA thành nhãn đọc được. Bảng DOMINIO chỉ lưu chữ cái ("R",
+  // "A") nên người dùng không hiểu; chỉ xử lý các trạng thái có thể xuất hiện trong cảnh báo
+  // (despesa đã Cabimentado thì không còn cảnh báo và không nằm trong danh sách).
+  private estadoDespesaLabel(estadoValor: number): string {
+    switch (estadoValor) {
+      case 1: return this.translate.instant('despesas.registada');
+      case 2: return this.translate.instant('despesas.autorizada');
+      case 3: return this.translate.instant('despesas.cabimentada');
+      default: return '';
+    }
+  }
+
+  // [PT] Aviso (não bloqueio): lista as despesas já em curso com número do processo, valor e estado,
+  // para o utilizador perceber o que está a duplicar antes de decidir. Se confirmar, reenvia-se o
+  // mesmo pedido com confirmarDespesasEmCurso = true.
+  // [VI] Cảnh báo (không phải chặn): liệt kê các despesa đang mở kèm số processo, giá trị, trạng thái
+  // để người dùng biết mình đang trùng cái gì trước khi quyết. Nếu xác nhận thì gửi lại chính request
+  // đó với confirmarDespesasEmCurso = true.
+  private confirmarDespesasEmCurso(request: RegistoDespesaRequest, despesasEmCurso: DespesaEmCurso[]) {
+    const linhas = despesasEmCurso
+      .map(d => `• ${this.translate.instant('processo.processo')} ${d.numeroProcesso ?? '-'} | ${d.descricao ?? ''} | ${this.formatarValor(d.valor)} | ${this.estadoDespesaLabel(d.estadoValor)}`)
+      .join('\n');
+
+    const msg = this.translate.instant('warnings.despesasEmCursoMsg') + '\n\n' + linhas + '\n\n'
+      + this.translate.instant('warnings.despesasEmCursoPergunta');
+
+    const dialogRef = this.warningDialog.open(PopUpWarningComponent, {
+      id: 'despesasEmCurso',
+      minHeight: '300px',
+      width: '50%',
+      panelClass: 'modalWithBorder',
+      data: { msg: msg, hideQuestion: true }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmou => {
+      if (confirmou) {
+        this.showLoader();
+        this.gravarDespesa({ ...request, confirmarDespesasEmCurso: true });
+      }
+    });
   }
 
   public updateFilteredAgrupamentos(editar: boolean) {
@@ -660,7 +737,12 @@ export class ComponenteDespesaComponent implements OnInit {
       orcamentoRegistoFk: this.idOrcamentoRegisto,
       institutionId: this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idInstitution,
       actidadeFk: this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idActidade,
-      funcionalFk: this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idFuncional
+      funcionalFk: this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idFuncional,
+      // [PT] 5.º parâmetro: sem ele os valores em baixo somavam o orçamento e o consumo de TODOS os
+      // centros de custo da mesma rubrica, e um centro de custo consumia a verba de outro.
+      // [VI] Tham số thứ 5: thiếu nó thì các giá trị bên dưới gộp ngân sách và mức đã dùng của TẤT CẢ
+      // centro de custo trên cùng rubrica, khiến centro de custo này tiêu vào tiền của centro kia.
+      centroCustoFk: this.despesaRegistadaAutorizadaListagem.filter((c: { id: number; }) => c.id === this.despesaRegistadaAutorizada.id)[0].idCentroCusto
     };
 
     this.showLoader();
@@ -836,19 +918,70 @@ export class ComponenteDespesaComponent implements OnInit {
   }
 
 
+  // [PT] Formata um valor monetário para as mensagens de aviso (mesmo formato da tabela de valores).
+  // [VI] Định dạng số tiền cho các thông báo cảnh báo (giống định dạng của bảng giá trị).
+  private formatarValor(valor: number | null | undefined): string {
+    return '$ ' + (valor ?? 0).toFixed(2);
+  }
+
+  // [PT] Constrói a mensagem de saldo insuficiente com os valores concretos em vez de um aviso
+  // genérico: o utilizador tem de saber QUANTO está disponível, QUANTO está a pedir e QUANTO falta.
+  // Distingue "a rubrica não tem orçamento nenhum para esta combinação" (tipicamente Institution /
+  // Actividade / Funcional da despesa não coincidem com nenhuma linha de orçamento aprovada) de
+  // "tem orçamento mas já está esgotado", porque a acção a tomar é diferente em cada caso.
+  // [VI] Tạo thông báo thiếu số dư kèm số liệu cụ thể thay vì cảnh báo chung chung: người dùng phải
+  // biết còn BAO NHIÊU, đang xin BAO NHIÊU và thiếu BAO NHIÊU. Phân biệt "rubrica không có ngân sách
+  // nào cho tổ hợp này" (thường do Institution/Actividade/Funcional của despesa không khớp dòng ngân
+  // sách nào đã duyệt) với "có ngân sách nhưng đã dùng hết", vì cách xử lý khác nhau.
+  private msgSaldoInsuficiente(chaveSemOrcamento: string, chaveExcede: string, saldoDisponivel: number): string {
+    const conta = this.despesaRegistadaAutorizada.descricaoOrcamento ?? '';
+    const valorPedido = this.despesaRegistadaAutorizada.valorRegistado ?? 0;
+    const valorOrcamentado = this.valorDespesaListagem[0] != null ? (this.valorDespesaListagem[0].valorOrcamentado ?? 0) : 0;
+
+    if (valorOrcamentado <= 0) {
+      return this.translate.instant(chaveSemOrcamento, {
+        conta: conta,
+        valor: this.formatarValor(valorPedido)
+      });
+    }
+
+    return this.translate.instant(chaveExcede, {
+      conta: conta,
+      disponivel: this.formatarValor(saldoDisponivel),
+      valor: this.formatarValor(valorPedido),
+      falta: this.formatarValor(valorPedido - saldoDisponivel)
+    });
+  }
+
   public autorizarDespesa() {
+    // [PT] Reposto a cada acção: este flag era um "latch" que ficava preso a true depois do primeiro
+    // caso negativo, impedindo o refresh da lista e o snackbar de TODAS as autorizações seguintes.
+    // [VI] Reset ở mỗi lần bấm: cờ này trước đây là "latch" bị kẹt ở true sau ca âm đầu tiên, làm
+    // MỌI lần duyệt thành công sau đó không refresh danh sách và không hiện snackbar.
+    this.isValueCabimentarDespesaNegative = false;
+
+    const saldoAposCabimentacao = this.valorDespesaListagem[3] != null ? this.valorDespesaListagem[3].valorCabimentado : null;
+    const saldoAposAutorizacao = this.valorDespesaListagem[4] != null ? this.valorDespesaListagem[4].valorAutorizado : null;
+    const saldoDisponivelCabimentacao = this.valorDespesaListagem[1] != null ? (this.valorDespesaListagem[1].valorCabimentado ?? 0) : 0;
+    const saldoDisponivelAutorizacao = this.valorDespesaListagem[1] != null ? (this.valorDespesaListagem[1].valorAutorizado ?? 0) : 0;
+
+    const updateDespesa = () => this.componenteDespesaService.UpdateDespesa({ id: this.despesaRegistadaAutorizada.id, estado: this.despesaRegistadaAutorizada.estado });
+
     const dialogRef = this.warningDialog.open(PopUpWarningComponent, {
       id: 'updateDespesa',
       minHeight: '300px',
       width: '40%',
       height: '30%',
       panelClass: 'warningModal',
-      data: this.valorDespesaListagem[3] != null && this.valorDespesaListagem[3].valorCabimentado != null && this.valorDespesaListagem[3].valorCabimentado < 0 ?
-        { function: this.autorizarDespesaValue(), msg: this.translate.instant('warnings.valorCabimentacaoNegativo'), noConfirmation: true } :
-        this.valorDespesaListagem[3] != null && this.valorDespesaListagem[3].valorCabimentado >= 0 &&
-          this.valorDespesaListagem[4].valorAutorizado != null && this.valorDespesaListagem[4].valorAutorizado < 0 ?
-          { function: this.componenteDespesaService.UpdateDespesa({ id: this.despesaRegistadaAutorizada.id, estado: this.despesaRegistadaAutorizada.estado }), msg: this.translate.instant('warnings.valorAutorizacaoNegativo') } :
-          { function: this.componenteDespesaService.UpdateDespesa({ id: this.despesaRegistadaAutorizada.id, estado: this.despesaRegistadaAutorizada.estado }), msg: this.translate.instant('warnings.autorizacaoDespesa') }
+      data: saldoAposCabimentacao != null && saldoAposCabimentacao < 0 ?
+        // Bloqueio: a despesa não pode ser autorizada. Mensagem com os valores concretos em vez do
+        // aviso genérico anterior, que não indicava quanto faltava nem o que fazer a seguir.
+        { function: this.autorizarDespesaValue(), msg: this.msgSaldoInsuficiente('warnings.semOrcamentoAutorizar', 'warnings.saldoInsuficienteAutorizar', saldoDisponivelCabimentacao), noConfirmation: true } :
+        saldoAposCabimentacao != null && saldoAposCabimentacao >= 0 &&
+          saldoAposAutorizacao != null && saldoAposAutorizacao < 0 ?
+          // Aviso (não bloqueia): ainda dá para cabimentar, mas o total autorizado passa a exceder o orçamento.
+          { function: updateDespesa(), msg: this.msgSaldoInsuficiente('warnings.semOrcamentoAutorizar', 'warnings.saldoAutorizacaoExcedidoDetalhe', saldoDisponivelAutorizacao) } :
+          { function: updateDespesa(), msg: this.translate.instant('warnings.autorizacaoDespesa') }
 
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -866,14 +999,20 @@ export class ComponenteDespesaComponent implements OnInit {
   }
 
   public cabimentarDespesa() {
+    // Mesmo reset do latch que em autorizarDespesa() -- ver comentário lá.
+    this.isValueCabimentarDespesaNegative = false;
+
+    const saldoAposCabimentacao = this.valorDespesaListagem[3] != null ? this.valorDespesaListagem[3].valorCabimentado : null;
+    const saldoDisponivelCabimentacao = this.valorDespesaListagem[1] != null ? (this.valorDespesaListagem[1].valorCabimentado ?? 0) : 0;
+
     const dialogRef = this.warningDialog.open(PopUpWarningComponent, {
       id: 'updateDespesa',
       minHeight: '300px',
       width: '40%',
       height: '30%',
       panelClass: 'warningModal',
-      data: this.valorDespesaListagem[3] != null && this.valorDespesaListagem[3].valorCabimentado != null && this.valorDespesaListagem[3].valorCabimentado < 0 ?
-        { function: this.cabimentarDespesaValue(), msg: this.translate.instant('warnings.valorCabimentacaoNegativo'), noConfirmation: true } :
+      data: saldoAposCabimentacao != null && saldoAposCabimentacao < 0 ?
+        { function: this.cabimentarDespesaValue(), msg: this.msgSaldoInsuficiente('warnings.semOrcamentoCabimentar', 'warnings.saldoInsuficienteCabimentar', saldoDisponivelCabimentacao), noConfirmation: true } :
         { function: this.componenteDespesaService.UpdateDespesa({ id: this.despesaRegistadaAutorizada.id, estado: this.despesaRegistadaAutorizada.estado }), msg: this.translate.instant('warnings.cabimentacaoDespesa') }
 
     });

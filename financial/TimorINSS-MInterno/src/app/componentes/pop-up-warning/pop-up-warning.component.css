@@ -83,6 +83,11 @@
     margin-bottom: 10px;
     width: 100%;
     text-align: center;
+    /* Mensagens com várias linhas (ex: lista de despesas em curso) têm de respeitar os \n;
+       as mensagens de uma linha não são afectadas por isto. */
+    /* [VI] Thông báo nhiều dòng (vd: danh sách despesa đang mở) phải giữ được ký tự xuống dòng;
+       các thông báo một dòng không bị ảnh hưởng. */
+    white-space: pre-line;
   }
 
   .static-msg{

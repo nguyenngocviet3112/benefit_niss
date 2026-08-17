@@ -163,7 +163,11 @@
                             [(value)]="componenteAccoesTarefa.idTarefa" name="tarefaASeguir"
                             (selectionChange)="updateApelidoTarefa()" [errorStateMatcher]="dependentMatcher"
                             [required]="componenteAccoesTarefaOpenState && dataSourceAccoesTarefa.length <= 0 ">
-                            <ng-container *ngIf="tarefaListagem.length > 1">
+                            <!-- [PT] Era "> 1": com uma única tarefa disponível não se renderizava opção
+                                 nenhuma e o campo ficava impossível de preencher.
+                                 [VI] Trước là "> 1": khi chỉ còn một tarefa thì không render option nào,
+                                 ô trở thành không thể chọn. -->
+                            <ng-container *ngIf="tarefaListagem.length > 0">
                                 <mat-option *ngFor="let tarefa of tarefaListagem" [value]="tarefa.id">
                                     {{tarefa.nome}}
                                 </mat-option>
@@ -238,7 +242,8 @@
                             [(value)]="componenteDocumentosTarefa.idDocumento" name="documento"
                             [errorStateMatcher]="dependentMatcher"
                             [required]="componenteDocumentoTarefaOpenState && dataSourceDocumentoTarefa.length <= 0">
-                            <ng-container *ngIf="documentoListagem.length > 1">
+                            <!-- Mesmo problema do campo Tarefa acima. / Cùng lỗi như ô Tarefa ở trên. -->
+                            <ng-container *ngIf="documentoListagem.length > 0">
                                 <mat-option *ngFor="let documento of documentoListagem" [value]="documento.id">
                                     {{documento.descricao}}
                                 </mat-option>

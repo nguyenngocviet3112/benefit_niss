@@ -16,7 +16,7 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public List<Componenteorcamentovalor> getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(int agrupamentoId, int orcamentoRegistoID);
 
         public List<Componenteorcamentovalor> getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(int agrupamentoId, int orcamentoRegistoID,
-            int institutionId, int actidadeId,  int funcionalId);
+            int institutionId, int actidadeId,  int funcionalId, int centroCustoId);
 
 
         public Componenteorcamentovalor GetComponenteOrcamentoValorSameForeignKeys(Componenteorcamentovalor componente);

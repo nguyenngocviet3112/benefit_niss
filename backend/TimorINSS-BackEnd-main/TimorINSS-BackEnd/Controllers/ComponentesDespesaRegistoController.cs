@@ -29,7 +29,7 @@ namespace TimorINSSBackEnd.Controllers
         [HttpPost("AddEditComponenteDespesaRegisto")]
         public IActionResult AddEditComponenteDespesaRegisto(RegistoDespesaRequest request)
         {
-            ResponseBaseDataContract response = new ResponseBaseDataContract();
+            AddEditDespesaRegistoResponse response = new AddEditDespesaRegistoResponse();
 
             try
             {

@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {CompromissoUpsertRequest, DeleteDespesaRequest, DeleteListaDespesaRequest, DeleteRequest, DespesasRelatorioRequest, GetAllDespesaRegistadaRequest, GetDespesasCompromissoRequest, GetValoresDespesaByIdCodigoOrcamentoRequest, RegistoDespesaRequest, UpdateDespesaCabimentadaRequest, UpdateDespesaRequest } from '../request-models/componenteDespesaRegisto-request';
-import { GetComponenteDespesaCabimentadaParaExecucaoReponse, GetComponenteDespesaRegistoReponse, GetDespesasCompromissoResponse, GetDespesasRelatorioReponse, GetValoresDespesaByIdCodigoOrcamentoResponse } from '../response-models/componenteDespesaRegisto-response';
+import { AddEditDespesaRegistoResponse, GetComponenteDespesaCabimentadaParaExecucaoReponse, GetComponenteDespesaRegistoReponse, GetDespesasCompromissoResponse, GetDespesasRelatorioReponse, GetValoresDespesaByIdCodigoOrcamentoResponse } from '../response-models/componenteDespesaRegisto-response';
 import { ApiHelperService } from './api-helper.service';
 
 @Injectable({
@@ -18,8 +18,8 @@ export class ComponenteDespesaRegistoService {
     private api: ApiHelperService
   ) { }
 
-  public addEditComponenteDespesaRegisto(entity: RegistoDespesaRequest) {
-    return this.api.post('componenteDespesaRegisto/AddEditComponenteDespesaRegisto', entity);
+  public addEditComponenteDespesaRegisto(entity: RegistoDespesaRequest): Observable<AddEditDespesaRegistoResponse> {
+    return this.api.post<AddEditDespesaRegistoResponse>('componenteDespesaRegisto/AddEditComponenteDespesaRegisto', entity);
   }
 
   public GetAllDespesaRegistadaByTarefaAtivoId(request: GetAllDespesaRegistadaRequest): Observable<GetComponenteDespesaRegistoReponse>

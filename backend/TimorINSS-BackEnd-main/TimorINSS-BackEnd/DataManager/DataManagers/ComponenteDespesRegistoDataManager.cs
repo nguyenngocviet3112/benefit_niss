@@ -22,9 +22,9 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             _utils = utils;
         }
 
-        public ResponseBaseDataContract AddEditComponenteDespesaRegisto(RegistoDespesaRequest request)
+        public AddEditDespesaRegistoResponse AddEditComponenteDespesaRegisto(RegistoDespesaRequest request)
         {
-            var response = new ResponseBaseDataContract { RequestId = request.RequestId };
+            var response = new AddEditDespesaRegistoResponse { RequestId = request.RequestId };
 
             // Validar se o utilizador tem as permissões necessárias
             bool permission = _utils.ValidatePermission((int)request.UserId, (int)ModuleGestao.PreenchimentoTarefa, _unitOfWork, CRUD.UPDATE);
@@ -37,26 +37,46 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             ComponentedespesaRegisto componenteDespesaRegisto = BuildComponenteDespesaRegistoObject(request.despesa);
 
-            // Só ao criar uma despesa nova (não ao editar uma já existente): impedir registar uma 2ª despesa
-            // para a mesma rubrica/AD enquanto já existe outra activa ainda não Cabimentada (Registada ou
-            // Autorizada) -- evita processos duplicados/esquecidos a disputar a mesma rubrica em simultâneo
-            // (ver [[despesa-processo-duplicate-and-cabimentar-gating]]). Uma vez Cabimentada, a despesa
-            // anterior já reservou o seu próprio saldo (protegido pelo check CabimentoExcedeSaldoDisponivel
-            // em UpdateDespesa), por isso deixa de bloquear novas despesas para a mesma rubrica.
-            if (componenteDespesaRegisto.Id == 0)
+            // Só ao criar uma despesa nova (não ao editar uma já existente): se já existirem outras despesas
+            // em curso (Registada ou Autorizada) para a MESMA combinação dos 5 parâmetros -- Institution +
+            // Centro de Custo + Actividade + Funcional + rubrica -- o registo NÃO é bloqueado. Devolve-se a
+            // lista dessas despesas para o utilizador ver o que já lá está (número do processo, valor, estado)
+            // e decidir; se confirmar, o pedido volta com ConfirmarDespesasEmCurso = true e grava.
+            //
+            // Antes disto havia um bloqueio duro (JaExisteDespesaEmCursoNaRubrica) que comparava apenas 4
+            // parâmetros, sem o Centro de Custo: duas despesas de centros de custo diferentes na mesma rubrica
+            // eram tratadas como duplicados e a 2ª ficava impossível de registar, sem sequer dizer qual
+            // processo estava a causar o bloqueio. O controlo de excesso de verba fica todo a cargo do saldo
+            // disponível, verificado logo a seguir e outra vez no Cabimento e no Compromisso.
+            //
+            // [VI] Chỉ khi tạo despesa mới (không áp dụng khi sửa): nếu đã có despesa khác đang mở (Registada
+            // hoặc Autorizada) cùng tổ hợp 5 tham số -- Institution + Centro de Custo + Actividade + Funcional
+            // + rubrica -- hệ thống KHÔNG chặn. Nó trả về danh sách các despesa đó để người dùng thấy cái đang
+            // tồn tại (số processo, giá trị, trạng thái) rồi tự quyết; nếu xác nhận, request gửi lại với
+            // ConfirmarDespesasEmCurso = true và tiến hành lưu.
+            //
+            // Trước đây chỗ này chặn cứng (JaExisteDespesaEmCursoNaRubrica) và chỉ so 4 tham số, thiếu Centro
+            // de Custo: hai despesa thuộc 2 centro de custo khác nhau trên cùng rubrica bị coi là trùng, cái
+            // thứ hai không đăng ký nổi, mà cũng không nói cho biết processo nào đang gây chặn. Việc kiểm soát
+            // tiêu vượt giao hết cho phần kiểm tra saldo disponível ngay bên dưới, và kiểm lại ở Cabimento
+            // cùng Compromisso.
+            if (componenteDespesaRegisto.Id == 0 && !request.ConfirmarDespesasEmCurso)
             {
-                int estadoRegistado = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 1);
-                int estadoAutorizado = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 2);
-                List<ComponentedespesaRegisto> despesasNaRubrica = _unitOfWork.ComponenteDespesaRegistoRepository
-                    .GetAllDespesaRegistadaByAgrupamentoConfigFk(componenteDespesaRegisto.AgrupamentoConfigFk,
-                        componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0, componenteDespesaRegisto.FuncionalFk ?? 0);
-
-                bool existeDespesaEmCursoNaRubrica = despesasNaRubrica != null
-                    && despesasNaRubrica.Any(d => d.Estado == estadoRegistado || d.Estado == estadoAutorizado);
-
-                if (existeDespesaEmCursoNaRubrica)
+                List<int> estadosEmCurso = new List<int>
                 {
-                    response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.JaExisteDespesaEmCursoNaRubrica).ToString(), ErrorMessage = ErrorsDataContract.JaExisteDespesaEmCursoNaRubrica.ToString() });
+                    _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 1),
+                    _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 2)
+                };
+
+                List<DespesaEmCursoDataContract> despesasEmCurso = _unitOfWork.ComponenteDespesaRegistoRepository
+                    .GetDespesasEmCursoByChave(componenteDespesaRegisto.AgrupamentoConfigFk,
+                        componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0,
+                        componenteDespesaRegisto.FuncionalFk ?? 0, componenteDespesaRegisto.CentroCustoFk,
+                        estadosEmCurso, componenteDespesaRegisto.Id);
+
+                if (despesasEmCurso != null && despesasEmCurso.Count > 0)
+                {
+                    response.DespesasEmCurso = despesasEmCurso;
                     return response;
                 }
             }
@@ -69,14 +89,16 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             // "excede o disponível" para a mensagem ficar clara sobre o que fazer em cada caso.
             List<Componenteorcamentovalor> listaOrcamentoValorRegisto = _unitOfWork.ComponenteOrcamentoValorRepository
                 .getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(componenteDespesaRegisto.AgrupamentoConfigFk, componenteDespesaRegisto.ComponenteOrcamentoRegistoFk,
-                    componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0, componenteDespesaRegisto.FuncionalFk ?? 0);
+                    componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0, componenteDespesaRegisto.FuncionalFk ?? 0,
+                    componenteDespesaRegisto.CentroCustoFk);
             decimal valorOrcamentadoRegisto = listaOrcamentoValorRegisto != null ? listaOrcamentoValorRegisto.Sum(x => x.Valor) : 0;
 
             int estadoRegistadoRegisto = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 1);
             int estadoAutorizadoRegisto = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 2);
             int estadoCabimentadoRegisto = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 3);
             List<ComponentedespesaRegisto> outrasDespesasNaRubricaRegisto = _unitOfWork.ComponenteDespesaRegistoRepository
-                .GetAllDespesaRegistadaByAgrupamentoConfigFk(componenteDespesaRegisto.AgrupamentoConfigFk, componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0, componenteDespesaRegisto.FuncionalFk ?? 0);
+                .GetAllDespesaRegistadaByAgrupamentoConfigFk(componenteDespesaRegisto.AgrupamentoConfigFk, componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0, componenteDespesaRegisto.FuncionalFk ?? 0,
+                    componenteDespesaRegisto.CentroCustoFk);
             decimal valorJaReservado = outrasDespesasNaRubricaRegisto != null
                 ? outrasDespesasNaRubricaRegisto.Where(d => d.Id != componenteDespesaRegisto.Id
                     && (d.Estado == estadoRegistadoRegisto || d.Estado == estadoAutorizadoRegisto || d.Estado == estadoCabimentadoRegisto))
@@ -226,7 +248,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             //obter os valores do Orçamento Aprovado
             List<Componenteorcamentovalor> listaOrcamentoValor = _unitOfWork.ComponenteOrcamentoValorRepository.getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk
-                (request.AgrupamentoFk, request.OrcamentoRegistoFk, request.InstitutionId, request.ActidadeFk,                request.FuncionalFk);
+                (request.AgrupamentoFk, request.OrcamentoRegistoFk, request.InstitutionId, request.ActidadeFk,                request.FuncionalFk, request.CentroCustoFk);
             ValoresDespesaRegistadaDataContract valorDespesaRegisto = new ValoresDespesaRegistadaDataContract();
             decimal sumValorOrcamento = 0;
 
@@ -240,7 +262,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
 
             //obter somatório valor despesa Cabimentada, executada, autorizada
-            List<ComponentedespesaRegisto> listaComponentedespesaRegisto = _unitOfWork.ComponenteDespesaRegistoRepository.GetAllDespesaRegistadaByAgrupamentoConfigFk(request.AgrupamentoFk                , request.InstitutionId, request.ActidadeFk,               request.FuncionalFk);
+            List<ComponentedespesaRegisto> listaComponentedespesaRegisto = _unitOfWork.ComponenteDespesaRegistoRepository.GetAllDespesaRegistadaByAgrupamentoConfigFk(request.AgrupamentoFk                , request.InstitutionId, request.ActidadeFk,               request.FuncionalFk, request.CentroCustoFk);
             decimal sumValorAutorizado = 0;
             decimal sumValorCabimentado = 0;
             decimal sumValorExecutado = 0;
@@ -358,12 +380,12 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     // abaixo, Compromisso vs Cabimentado, em UpsertCompromisso).
                     List<Componenteorcamentovalor> listaOrcamentoValor = _unitOfWork.ComponenteOrcamentoValorRepository
                         .getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(despesa.AgrupamentoConfigFk, despesa.ComponenteOrcamentoRegistoFk,
-                            despesa.InstitutionId ?? 0, despesa.ActidadeFk ?? 0, despesa.FuncionalFk ?? 0);
+                            despesa.InstitutionId ?? 0, despesa.ActidadeFk ?? 0, despesa.FuncionalFk ?? 0, despesa.CentroCustoFk);
                     decimal valorOrcamentado = listaOrcamentoValor != null ? listaOrcamentoValor.Sum(x => x.Valor) : 0;
 
                     int estadoCabimentado = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 3);
                     List<ComponentedespesaRegisto> outrasDespesasNaRubrica = _unitOfWork.ComponenteDespesaRegistoRepository
-                        .GetAllDespesaRegistadaByAgrupamentoConfigFk(despesa.AgrupamentoConfigFk, despesa.InstitutionId ?? 0, despesa.ActidadeFk ?? 0, despesa.FuncionalFk ?? 0);
+                        .GetAllDespesaRegistadaByAgrupamentoConfigFk(despesa.AgrupamentoConfigFk, despesa.InstitutionId ?? 0, despesa.ActidadeFk ?? 0, despesa.FuncionalFk ?? 0, despesa.CentroCustoFk);
                     decimal valorJaCabimentado = outrasDespesasNaRubrica != null
                         ? outrasDespesasNaRubrica.Where(d => d.Id != despesa.Id && d.Estado == estadoCabimentado).Sum(d => d.Valor)
                         : 0;

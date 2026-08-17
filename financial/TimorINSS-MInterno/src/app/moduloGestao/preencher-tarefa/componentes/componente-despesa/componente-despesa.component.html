@@ -24,7 +24,13 @@
             <mat-form-field class="componenteDespesa" appearance="outline">
             <mat-label>{{'componenteDespesa.institution' | translate}}</mat-label>
             <mat-select [(ngModel)]="institution.id" [(value)]="institution.id" name="institution">
-              <ng-container *ngIf="institutionListagem.length > 1">
+              <!-- [PT] Era "> 1": com uma única Instituição activa (por ex. só o INSS, depois de o FRSS
+                   ser desactivado) não se renderizava opção nenhuma, o campo ficava vazio e o utilizador
+                   não conseguia sequer ver qual a Instituição em uso. Agora mostra sempre a lista.
+                   [VI] Trước là "> 1": khi chỉ còn một Institution đang hoạt động (vd chỉ INSS sau khi
+                   tắt FRSS) thì không render option nào, ô trống và người dùng không thấy được đang
+                   dùng Institution nào. Giờ luôn hiển thị danh sách. -->
+              <ng-container *ngIf="institutionListagem.length > 0">
                 <mat-option *ngFor="let institution of institutionListagem" [value]="institution.id"
                   matTooltip="{{institution.nome}}">
                   {{institution.nome}}
@@ -36,7 +42,8 @@
           <mat-form-field class="componenteDespesa" appearance="outline">
             <mat-label>{{'componenteDespesa.departamentoINSS' | translate}}</mat-label>
             <mat-select [(ngModel)]="departamentoINSS.id" [(value)]="departamentoINSS.id" name="departamento">
-              <ng-container *ngIf="departamentoINSSListagem.length > 1">
+              <!-- Mesmo problema do campo Institution acima. / Cùng lỗi như ô Institution ở trên. -->
+              <ng-container *ngIf="departamentoINSSListagem.length > 0">
                 <mat-option *ngFor="let departamento of departamentoINSSListagem" [value]="departamento.id"
                   matTooltip="{{departamento.nome}}">
                   {{departamento.nome}}

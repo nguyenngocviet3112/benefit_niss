@@ -38,7 +38,11 @@
                             <mat-label>{{'componenteDespesa.departamentoINSS' | translate}}</mat-label>
                             <mat-select [(ngModel)]="departamentoINSS.id" [(value)]="departamentoINSS.id"
                                 name="departamento">
-                                <ng-container *ngIf="departamentoINSSListagem.length > 1">
+                                <!-- [PT] Era "> 1": com uma única opção activa não se renderizava opção
+                                     nenhuma e o campo ficava vazio, impossível de preencher.
+                                     [VI] Trước là "> 1": khi chỉ còn một lựa chọn thì không render option
+                                     nào, ô trống và không thể chọn được gì. -->
+                                <ng-container *ngIf="departamentoINSSListagem.length > 0">
                                     <mat-option *ngFor="let departamento of departamentoINSSListagem"
                                     matTooltip="{{departamento.nome}}"
                                         [value]="departamento.id">

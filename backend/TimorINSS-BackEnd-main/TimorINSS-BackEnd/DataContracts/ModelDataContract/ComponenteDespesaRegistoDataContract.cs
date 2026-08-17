@@ -102,6 +102,36 @@ namespace TimorINSSBackEnd.DataContracts.ModelDataContract
         public int? idFuncional { get; set; }
     }
 
+    // Uma despesa já existente para a mesma combinação de 5 parâmetros, mostrada ao utilizador
+    // no aviso de confirmação. Inclui o número do processo para ele conseguir ir lá ver -- era
+    // precisamente isso que faltava quando o registo era simplesmente bloqueado.
+    // [VI] Một despesa đã tồn tại cùng tổ hợp 5 tham số, hiển thị trong cảnh báo xác nhận. Có kèm
+    // số processo để người dùng lần ra được -- đúng thứ còn thiếu khi trước đây chỉ chặn cứng.
+    [DataContract]
+    public class DespesaEmCursoDataContract
+    {
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public string NumeroProcesso { get; set; }
+
+        [DataMember]
+        public string Descricao { get; set; }
+
+        [DataMember]
+        public decimal Valor { get; set; }
+
+        // Código do estado (ESTADODESPESA: 1 = Registada, 2 = Autorizada) e não a descrição da
+        // tabela DOMINIO, que nesta base de dados é só a letra "R"/"A" e não diz nada ao utilizador.
+        // A etiqueta legível é resolvida no frontend, para sair traduzida em PT/EN/TET.
+        // [VI] Trả về mã trạng thái (ESTADODESPESA: 1 = Registada, 2 = Autorizada) thay vì descricao
+        // của bảng DOMINIO — trên DB này descricao chỉ là chữ "R"/"A", người dùng đọc không hiểu.
+        // Nhãn đọc được do frontend dịch, để ra đúng PT/EN/TET.
+        [DataMember]
+        public int EstadoValor { get; set; }
+    }
+
     [DataContract]
     public class ValoresDespesaRegistadaDataContract
     {

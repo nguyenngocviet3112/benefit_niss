@@ -131,13 +131,18 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .ToList();
         }
 
+        // O orçamento aprovado é registado por Centro de Custo (ver GetComponenteOrcamentoValorSameForeignKeys),
+        // por isso o saldo tem de ser lido pelo mesmo Centro de Custo da despesa -- caso contrário um centro de
+        // custo consome silenciosamente o orçamento de outro na mesma rubrica.
+        // [VI] Ngân sách duyệt được lập riêng theo Centro de Custo, nên số dư phải đọc theo đúng Centro de Custo
+        // của despesa -- nếu không, một centro de custo sẽ âm thầm tiêu ngân sách của centro de custo khác.
         public List<Componenteorcamentovalor> getOrcamentoValorByAgrupamentoFkOrcamentoRegistoFk(int agrupamentoId, int orcamentoRegistoID,
-            int institutionId, int actidadeId,  int funcionalId)
+            int institutionId, int actidadeId,  int funcionalId, int centroCustoId)
         {
             return _moduloContribuicoesContext.Componenteorcamentovalor
                 .Where(c => c.IndActivo && c.AgrupamentoFk == agrupamentoId && c.ComponenteOrcamentoRegistoFk == orcamentoRegistoID
                 && c.InstitutionId == institutionId && c.ActidadeFk == actidadeId
-                && c.FuncionalFk == funcionalId)
+                && c.FuncionalFk == funcionalId && c.CentroCustoFk == centroCustoId)
                 .ToList();
         }
 

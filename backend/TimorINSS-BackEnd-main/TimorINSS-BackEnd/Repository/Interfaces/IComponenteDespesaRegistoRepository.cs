@@ -13,7 +13,9 @@ namespace TimorINSSBackEnd.Repository.Interfaces
         public List<DespesaRegistadaDataContract> GetAllDespesaRegistadaByTarefaAtivoId(int tarefaAtivo);
 
         public List<ComponentedespesaRegisto> GetAllDespesaRegistadaByAgrupamentoConfigFk(int agrupamentoConfigFk);
-        public List<ComponentedespesaRegisto> GetAllDespesaRegistadaByAgrupamentoConfigFk(int agrupamentoConfigFk, int institutionId, int actidadeId,  int funcionalId);
+        public List<ComponentedespesaRegisto> GetAllDespesaRegistadaByAgrupamentoConfigFk(int agrupamentoConfigFk, int institutionId, int actidadeId,  int funcionalId, int centroCustoId);
+
+        public List<DespesaEmCursoDataContract> GetDespesasEmCursoByChave(int agrupamentoConfigFk, int institutionId, int actidadeId, int funcionalId, int centroCustoId, List<int> estados, int idExcluir);
 
         public List<DespesaCabimentadasParaExecucaoDataContract> GetAllDespesaCabimentadasParaExecucaoByTarefaAtivoId(int processoId, int estado);
 

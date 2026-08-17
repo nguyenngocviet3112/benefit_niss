@@ -5,6 +5,11 @@ import { FilterRequest } from "./utils-request";
 
 export interface RegistoDespesaRequest {
   despesa: Despesa;
+  // [PT] true = o utilizador já viu a lista de despesas em curso para os mesmos 5 parâmetros e
+  // confirmou que quer mesmo registar. Na 1ª tentativa vai sempre por confirmar (false/undefined).
+  // [VI] true = người dùng đã xem danh sách despesa đang mở cùng 5 tham số và xác nhận vẫn muốn
+  // đăng ký. Lần gửi đầu tiên luôn để chưa xác nhận (false/undefined).
+  confirmarDespesasEmCurso?: boolean;
 }
 
 export interface GetAllDespesaRegistadaRequest{
@@ -28,6 +33,9 @@ export interface GetValoresDespesaByIdCodigoOrcamentoRequest{
   institutionId: number;
   actidadeFk: number;
   funcionalFk: number;
+  // [PT] 5.º parâmetro: sem ele os valores mostrados somavam todos os centros de custo da rubrica.
+  // [VI] Tham số thứ 5: thiếu nó thì các giá trị hiển thị gộp mọi centro de custo của rubrica.
+  centroCustoFk: number;
 }
 
 export interface DeleteListaDespesaRequest{
