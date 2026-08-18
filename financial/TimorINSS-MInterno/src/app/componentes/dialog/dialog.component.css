@@ -15,3 +15,12 @@
   position: relative;
   height: 100%;
 }
+
+/* Mensagens longas (ex.: saldo insuficiente) trazem quebras de linha para separar
+   Rubrica / Centro de Custo / Actividade / Funcional / Disponivel. Sem isto a
+   interpolacao do Angular mostra tudo num unico paragrafo corrido.
+   [VI] Thong bao dai (VD: thieu ngan sach) co ky tu xuong dong de tach cac thanh
+   phan cua khoa. Khong co dong nay thi Angular hien thi don thanh mot doan lien. */
+.error {
+  white-space: pre-line;
+}

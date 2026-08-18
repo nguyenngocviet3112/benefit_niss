@@ -316,8 +316,8 @@
     "-75": "O dia de vencimento máximo é 28",
     "-80": "O valor a cabimentar ($ {1}) excede o saldo disponível da rubrica orçamental (disponível: $ {0})",
     "-81": "Já existe uma despesa em curso (Registada ou Autorizada) para esta rubrica. Aguarde que seja Cabimentada antes de registar uma nova",
-    "-82": "O valor introduzido ($ {1}) excede o orçamento disponível para esta rubrica na Actividade \"{2}\" / Centro de Custo \"{3}\" (disponível: $ {0}). Cada Actividade tem orçamento próprio para a mesma rubrica -- confirme a Actividade seleccionada, reduza o valor, ou solicite orçamento adicional.",
-    "-83": "Esta rubrica não tem orçamento atribuído na Actividade \"{0}\" / Centro de Custo \"{1}\" (disponível: $ 0.00). A mesma rubrica pode ter orçamento noutra Actividade -- confirme a sua selecção, ou solicite a atribuição para esta combinação.",
+    "-82": "O valor introduzido ($ {1}) excede o orçamento disponível para esta combinação.\n\nRubrica: {2}\nCentro de Custo: {3}\nActividade: {4}\nFuncional: {5}\nDisponível: $ {0}\n\nO orçamento é atribuído por Centro de Custo + Actividade + Funcional + Rubrica, por isso cada Actividade tem orçamento próprio para a mesma rubrica. Confirme a selecção acima, reduza o valor, ou solicite orçamento adicional para esta combinação.",
+    "-83": "Não há orçamento atribuído para esta combinação (disponível: $ 0.00).\n\nRubrica: {0}\nCentro de Custo: {1}\nActividade: {2}\nFuncional: {3}\n\nO orçamento é atribuído por Centro de Custo + Actividade + Funcional + Rubrica, por isso a mesma rubrica pode ter orçamento noutra Actividade, Centro de Custo ou Funcional. Confirme a selecção acima, ou solicite a atribuição para esta combinação.",
     "-84": "Não é possível avançar esta tarefa: ainda existem despesas neste processo pendentes de Autorização (Registadas mas ainda não Autorizadas). Por favor autorize-as ou elimine-as primeiro."
   },
   "month": {

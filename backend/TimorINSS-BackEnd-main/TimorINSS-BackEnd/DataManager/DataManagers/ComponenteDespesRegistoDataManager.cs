@@ -121,26 +121,20 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 // designação de todos os antepassados e daria uma linha enorme dentro da mensagem de erro).
                 // [VI] Mã đầy đủ + tên của chính node (không dùng GetFullDesignacao vì hàm đó ghép tên của
                 // toàn bộ tổ tiên, nhét vào thông báo lỗi sẽ dài lê thê).
-                string actividadeLabel = "-";
-                if (componenteDespesaRegisto.ActidadeFk.HasValue)
-                {
-                    Agrupamentoconfig actividade = _unitOfWork.AgrupamentoConfigRepository.Get(componenteDespesaRegisto.ActidadeFk.Value);
-                    if (actividade != null)
-                    {
-                        actividadeLabel = $"{_unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(componenteDespesaRegisto.ActidadeFk.Value)} - {actividade.Designacao}";
-                    }
-                }
+                string rubricaLabel = BuildAgrupamentoLabel(componenteDespesaRegisto.AgrupamentoConfigFk);
+                string actividadeLabel = BuildAgrupamentoLabel(componenteDespesaRegisto.ActidadeFk);
+                string funcionalLabel = BuildAgrupamentoLabel(componenteDespesaRegisto.FuncionalFk);
                 Centrocusto centroCusto = _unitOfWork.CentroCustoRepository.Get(componenteDespesaRegisto.CentroCustoFk);
                 string centroCustoLabel = centroCusto != null ? centroCusto.Descricao : "-";
 
                 if (valorOrcamentadoRegisto <= 0)
                 {
-                    string errorCodeSemOrcamento = $"{(int)ErrorsDataContract.RegistoSemOrcamentoAtribuido}ÿ{actividadeLabel}ÿ{centroCustoLabel}";
+                    string errorCodeSemOrcamento = $"{(int)ErrorsDataContract.RegistoSemOrcamentoAtribuido}ÿ{rubricaLabel}ÿ{centroCustoLabel}ÿ{actividadeLabel}ÿ{funcionalLabel}";
                     response.Errors.Add(new Error { ErrorCode = errorCodeSemOrcamento, ErrorMessage = ErrorsDataContract.RegistoSemOrcamentoAtribuido.ToString() });
                 }
                 else
                 {
-                    string errorCode = $"{(int)ErrorsDataContract.RegistoExcedeSaldoDisponivel}ÿ{saldoDisponivelRegisto:0.00}ÿ{componenteDespesaRegisto.Valor:0.00}ÿ{actividadeLabel}ÿ{centroCustoLabel}";
+                    string errorCode = $"{(int)ErrorsDataContract.RegistoExcedeSaldoDisponivel}ÿ{saldoDisponivelRegisto:0.00}ÿ{componenteDespesaRegisto.Valor:0.00}ÿ{rubricaLabel}ÿ{centroCustoLabel}ÿ{actividadeLabel}ÿ{funcionalLabel}";
                     response.Errors.Add(new Error { ErrorCode = errorCode, ErrorMessage = ErrorsDataContract.RegistoExcedeSaldoDisponivel.ToString() });
                 }
                 return response;
@@ -816,5 +810,30 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
             return response;
         }
+
+        // Etiqueta legível de um nó da árvore (rubrica/Actividade/Funcional): código completo +
+        // designação do próprio nó -- o mesmo formato usado nas dropdowns do ecrã (ver
+        // AgrupamentoConfigRepository.GetActidadesAgrupamentoConfigByOrcamentoConfig), para o
+        // utilizador poder comparar directamente com o que seleccionou. Não usar GetFullDesignacao:
+        // concatena a designação de todos os antepassados e daria uma linha enorme na mensagem.
+        // [VI] Nhãn dễ đọc của một node (rubrica/Actividade/Funcional): mã đầy đủ + tên của chính
+        // node -- đúng format dropdown trên màn hình, để người dùng đối chiếu thẳng với thứ họ chọn.
+        // Không dùng GetFullDesignacao vì hàm đó ghép tên cả tổ tiên, nhét vào thông báo sẽ quá dài.
+        private string BuildAgrupamentoLabel(int? agrupamentoId)
+        {
+            if (!agrupamentoId.HasValue || agrupamentoId.Value <= 0)
+            {
+                return "-";
+            }
+
+            Agrupamentoconfig agrupamento = _unitOfWork.AgrupamentoConfigRepository.Get(agrupamentoId.Value);
+            if (agrupamento == null)
+            {
+                return "-";
+            }
+
+            return $"{_unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(agrupamentoId.Value)} - {agrupamento.Designacao}";
+        }
+
     }
 }
