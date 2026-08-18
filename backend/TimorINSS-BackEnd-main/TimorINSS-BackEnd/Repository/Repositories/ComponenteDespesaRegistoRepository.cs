@@ -105,13 +105,20 @@ namespace TimorINSSBackEnd.Repository.Repositories
         // [VI] Despesa được nhận diện bằng đúng 5 tham số khách đã chốt: Institution + Centro de
         // Custo + Actividade + Funcional + rubrica. Trước đây thiếu Centro de Custo nên despesa
         // của 2 centro de custo khác nhau dùng chung số dư và bị coi là trùng nhau.
+        // O saldo tem de ser lido dentro do MESMO período orçamental: o lado do orçamento já filtra por
+        // componenteOrcamentoRegisto_fk, portanto o lado das despesas já reservadas tem de filtrar também.
+        // Sem isto, as despesas de um ano anterior continuam a ser subtraídas ao saldo do ano corrente.
+        // [VI] Số dư phải được đọc trong CÙNG kỳ ngân sách: phía ngân sách đã lọc theo
+        // componenteOrcamentoRegisto_fk nên phía despesa đã đặt trước cũng phải lọc theo. Nếu không,
+        // despesa của năm trước vẫn bị trừ vào số dư năm hiện tại.
         public List<ComponentedespesaRegisto> GetAllDespesaRegistadaByAgrupamentoConfigFk(int agrupamentoConfigFk,
-            int institutionId, int actidadeId, int funcionalId, int centroCustoId)
+            int institutionId, int actidadeId, int funcionalId, int centroCustoId, int componenteOrcamentoRegistoFk)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
             var componenteDespesaRegisto = _moduloContribuicoesContext.ComponentedespesaRegisto
                 .Where(u => u.AgrupamentoConfigFk == agrupamentoConfigFk && u.IndActivo && u.InstitutionId == institutionId && u.ActidadeFk == actidadeId
-                && u.FuncionalFk == funcionalId && u.CentroCustoFk == centroCustoId)
+                && u.FuncionalFk == funcionalId && u.CentroCustoFk == centroCustoId
+                && u.ComponenteOrcamentoRegistoFk == componenteOrcamentoRegistoFk)
                 .ToList();
 
             return componenteDespesaRegisto;
@@ -125,7 +132,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
         // số. Dùng cho cảnh báo xác nhận khi đăng ký: thay vì chặn, cho người dùng thấy cái đang tồn
         // tại -- kèm số processo để lần ra ai đang giữ khoản đó.
         public List<DespesaEmCursoDataContract> GetDespesasEmCursoByChave(int agrupamentoConfigFk, int institutionId,
-            int actidadeId, int funcionalId, int centroCustoId, List<int> estados, int idExcluir)
+            int actidadeId, int funcionalId, int centroCustoId, int componenteOrcamentoRegistoFk, List<int> estados, int idExcluir)
         {
             _moduloContribuicoesContext.ChangeTracker.LazyLoadingEnabled = false;
             return _moduloContribuicoesContext.ComponentedespesaRegisto
@@ -138,6 +145,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                     && u.ActidadeFk == actidadeId
                     && u.FuncionalFk == funcionalId
                     && u.CentroCustoFk == centroCustoId
+                    && u.ComponenteOrcamentoRegistoFk == componenteOrcamentoRegistoFk
                     && estados.Contains(u.Estado))
                 .Select(u => new DespesaEmCursoDataContract
                 {

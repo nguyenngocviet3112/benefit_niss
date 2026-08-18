@@ -72,6 +72,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                     .GetDespesasEmCursoByChave(componenteDespesaRegisto.AgrupamentoConfigFk,
                         componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0,
                         componenteDespesaRegisto.FuncionalFk ?? 0, componenteDespesaRegisto.CentroCustoFk,
+                        componenteDespesaRegisto.ComponenteOrcamentoRegistoFk,
                         estadosEmCurso, componenteDespesaRegisto.Id);
 
                 if (despesasEmCurso != null && despesasEmCurso.Count > 0)
@@ -98,7 +99,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             int estadoCabimentadoRegisto = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 3);
             List<ComponentedespesaRegisto> outrasDespesasNaRubricaRegisto = _unitOfWork.ComponenteDespesaRegistoRepository
                 .GetAllDespesaRegistadaByAgrupamentoConfigFk(componenteDespesaRegisto.AgrupamentoConfigFk, componenteDespesaRegisto.InstitutionId ?? 0, componenteDespesaRegisto.ActidadeFk ?? 0, componenteDespesaRegisto.FuncionalFk ?? 0,
-                    componenteDespesaRegisto.CentroCustoFk);
+                    componenteDespesaRegisto.CentroCustoFk, componenteDespesaRegisto.ComponenteOrcamentoRegistoFk);
             decimal valorJaReservado = outrasDespesasNaRubricaRegisto != null
                 ? outrasDespesasNaRubricaRegisto.Where(d => d.Id != componenteDespesaRegisto.Id
                     && (d.Estado == estadoRegistadoRegisto || d.Estado == estadoAutorizadoRegisto || d.Estado == estadoCabimentadoRegisto))
@@ -109,13 +110,37 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
             if (componenteDespesaRegisto.Valor > saldoDisponivelRegisto)
             {
+                // O saldo é calculado para uma combinação exacta de Actividade + Centro de Custo; sem os
+                // nomear, a mensagem parece dizer que a rubrica inteira só tem aquele valor. Foi
+                // exactamente isso que levou o cliente a suspeitar que a Actividade não estava a ser
+                // considerada, quando na verdade tinha seleccionado outra Actividade.
+                // [VI] Số dư được tính cho đúng 1 tổ hợp Actividade + Centro de Custo; không nêu tên ra
+                // thì thông báo trông như thể cả rubrica chỉ có ngần ấy tiền. Chính điều này khiến khách
+                // nghi hệ thống không xét Actividade, trong khi thực ra họ chọn nhầm Actividade khác.
+                // Código completo + designação do próprio nó (não GetFullDesignacao, que concatena a
+                // designação de todos os antepassados e daria uma linha enorme dentro da mensagem de erro).
+                // [VI] Mã đầy đủ + tên của chính node (không dùng GetFullDesignacao vì hàm đó ghép tên của
+                // toàn bộ tổ tiên, nhét vào thông báo lỗi sẽ dài lê thê).
+                string actividadeLabel = "-";
+                if (componenteDespesaRegisto.ActidadeFk.HasValue)
+                {
+                    Agrupamentoconfig actividade = _unitOfWork.AgrupamentoConfigRepository.Get(componenteDespesaRegisto.ActidadeFk.Value);
+                    if (actividade != null)
+                    {
+                        actividadeLabel = $"{_unitOfWork.AgrupamentoConfigRepository.GetFullCodigo(componenteDespesaRegisto.ActidadeFk.Value)} - {actividade.Designacao}";
+                    }
+                }
+                Centrocusto centroCusto = _unitOfWork.CentroCustoRepository.Get(componenteDespesaRegisto.CentroCustoFk);
+                string centroCustoLabel = centroCusto != null ? centroCusto.Descricao : "-";
+
                 if (valorOrcamentadoRegisto <= 0)
                 {
-                    response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.RegistoSemOrcamentoAtribuido).ToString(), ErrorMessage = ErrorsDataContract.RegistoSemOrcamentoAtribuido.ToString() });
+                    string errorCodeSemOrcamento = $"{(int)ErrorsDataContract.RegistoSemOrcamentoAtribuido}ÿ{actividadeLabel}ÿ{centroCustoLabel}";
+                    response.Errors.Add(new Error { ErrorCode = errorCodeSemOrcamento, ErrorMessage = ErrorsDataContract.RegistoSemOrcamentoAtribuido.ToString() });
                 }
                 else
                 {
-                    string errorCode = $"{(int)ErrorsDataContract.RegistoExcedeSaldoDisponivel}ÿ{saldoDisponivelRegisto:0.00}ÿ{componenteDespesaRegisto.Valor:0.00}";
+                    string errorCode = $"{(int)ErrorsDataContract.RegistoExcedeSaldoDisponivel}ÿ{saldoDisponivelRegisto:0.00}ÿ{componenteDespesaRegisto.Valor:0.00}ÿ{actividadeLabel}ÿ{centroCustoLabel}";
                     response.Errors.Add(new Error { ErrorCode = errorCode, ErrorMessage = ErrorsDataContract.RegistoExcedeSaldoDisponivel.ToString() });
                 }
                 return response;
@@ -262,7 +287,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             }
 
             //obter somatório valor despesa Cabimentada, executada, autorizada
-            List<ComponentedespesaRegisto> listaComponentedespesaRegisto = _unitOfWork.ComponenteDespesaRegistoRepository.GetAllDespesaRegistadaByAgrupamentoConfigFk(request.AgrupamentoFk                , request.InstitutionId, request.ActidadeFk,               request.FuncionalFk, request.CentroCustoFk);
+            List<ComponentedespesaRegisto> listaComponentedespesaRegisto = _unitOfWork.ComponenteDespesaRegistoRepository.GetAllDespesaRegistadaByAgrupamentoConfigFk(request.AgrupamentoFk                , request.InstitutionId, request.ActidadeFk,               request.FuncionalFk, request.CentroCustoFk, request.OrcamentoRegistoFk);
             decimal sumValorAutorizado = 0;
             decimal sumValorCabimentado = 0;
             decimal sumValorExecutado = 0;
@@ -385,7 +410,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
 
                     int estadoCabimentado = _unitOfWork.DominioRepository.getIdDominio("ESTADODESPESA", 3);
                     List<ComponentedespesaRegisto> outrasDespesasNaRubrica = _unitOfWork.ComponenteDespesaRegistoRepository
-                        .GetAllDespesaRegistadaByAgrupamentoConfigFk(despesa.AgrupamentoConfigFk, despesa.InstitutionId ?? 0, despesa.ActidadeFk ?? 0, despesa.FuncionalFk ?? 0, despesa.CentroCustoFk);
+                        .GetAllDespesaRegistadaByAgrupamentoConfigFk(despesa.AgrupamentoConfigFk, despesa.InstitutionId ?? 0, despesa.ActidadeFk ?? 0, despesa.FuncionalFk ?? 0, despesa.CentroCustoFk, despesa.ComponenteOrcamentoRegistoFk);
                     decimal valorJaCabimentado = outrasDespesasNaRubrica != null
                         ? outrasDespesasNaRubrica.Where(d => d.Id != despesa.Id && d.Estado == estadoCabimentado).Sum(d => d.Valor)
                         : 0;
