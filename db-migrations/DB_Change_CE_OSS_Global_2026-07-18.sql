@@ -13,6 +13,10 @@
 --     prints "DONE -- all checks passed" when everything is genuinely there.
 --   * All console output is English only -- the SQL Server console mangles the
 --     accented Vietnamese text that earlier copies printed.
+--   * The clean-up of duplicate Programa roots now only fires when the row it would
+--     deactivate is genuinely a duplicate of an existing 'A04'/'A05'/'A06' row. Earlier
+--     copies deactivated ANY root coded '04'/'05'/'06', which on a database that codes
+--     its Programa roots that way legitimately would switch off live master data.
 --
 -- Safe to run on a database where an earlier copy was already run: it only
 -- creates what is missing (see the idempotency note below).
@@ -125,16 +129,33 @@ SET NOCOUNT ON;
 -- Programa gốc rác (kèm subprograma/atividade con) nằm cạnh dòng thật. Bước này
 -- tìm và vô hiệu hoá đúng số rác đó -- an toàn, không làm gì nếu chưa từng xảy ra.
 -- ============================================================================
+-- [EN] IMPORTANT: a row with codigo '04'/'05'/'06' is only junk when the REAL row it
+-- duplicates ('A04'/'A05'/'A06') also exists. On an environment that legitimately codes
+-- its Programa roots as '04'/'05'/'06' (some dev/test databases do) there is no duplicate,
+-- and deactivating them would switch off live master data. The EXISTS check below makes
+-- this step a no-op on those environments.
+-- [VI] QUAN TRỌNG: dòng codigo '04'/'05'/'06' chỉ là rác khi dòng THẬT mà nó nhân bản
+-- ('A04'/'A05'/'A06') cũng tồn tại. Trên môi trường vốn đánh mã Programa gốc là
+-- '04'/'05'/'06' (một số DB dev/test dùng kiểu này) thì không có bản trùng, và việc tắt
+-- chúng sẽ vô hiệu hoá dữ liệu gốc đang dùng thật. Điều kiện EXISTS bên dưới khiến bước
+-- này không làm gì trên các môi trường đó.
 DECLARE @junkRoots TABLE (id INT);
 INSERT INTO @junkRoots (id)
-SELECT id FROM AGRUPAMENTOCONFIG
-WHERE codigo IN ('04','05','06')
-  AND parent_fk IS NULL
-  AND indActivo = 1
-  AND reltipoDeContaOrcamentoConfig_fk IN (
+SELECT j.id FROM AGRUPAMENTOCONFIG j
+WHERE j.codigo IN ('04','05','06')
+  AND j.parent_fk IS NULL
+  AND j.indActivo = 1
+  AND j.reltipoDeContaOrcamentoConfig_fk IN (
       SELECT r.id FROM RELTIPODECONTAORCAMENTOCONFIG r
       JOIN DOMINIO d ON r.tipoConta_fk = d.idDominio
       WHERE d.descricao = 'Actidade'
+  )
+  AND EXISTS (
+      SELECT 1 FROM AGRUPAMENTOCONFIG real_
+      WHERE real_.codigo = 'A' + j.codigo
+        AND real_.parent_fk IS NULL
+        AND real_.indActivo = 1
+        AND real_.reltipoDeContaOrcamentoConfig_fk = j.reltipoDeContaOrcamentoConfig_fk
   );
 
 DECLARE @junkCount INT = (SELECT COUNT(*) FROM @junkRoots);
