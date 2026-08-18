@@ -114,7 +114,7 @@ DECLARE @junkCount INT = (SELECT COUNT(*) FROM @junkRoots);
 
 IF @junkCount > 0
 BEGIN
-    PRINT CONCAT('Found ', @junkCount, ' duplicate junk Programa root(s) from an older run of this script (codigo 04/05/06) -- deactivating them and their children now. / Tìm thấy ', @junkCount, ' dòng Programa gốc rác (codigo 04/05/06) do chạy bản script cũ trước đây -- đang vô hiệu hoá chúng và các dòng con.');
+    PRINT CONCAT('Found ', @junkCount, ' duplicate junk Programa root(s) from an older run of this script (codigo 04/05/06) -- deactivating them and their children now.');
 
     UPDATE AGRUPAMENTOCONFIG SET indActivo = 0
     WHERE indActivo = 1 AND (
@@ -123,10 +123,10 @@ BEGIN
         OR parent_fk IN (SELECT id FROM AGRUPAMENTOCONFIG WHERE parent_fk IN (SELECT id FROM @junkRoots))
     );
 
-    PRINT CONCAT(@@ROWCOUNT, ' junk row(s) deactivated (indActivo=0). / Đã vô hiệu hoá ', @@ROWCOUNT, ' dòng rác (indActivo=0).');
+    PRINT CONCAT(@@ROWCOUNT, ' junk row(s) deactivated (indActivo=0).');
 END
 ELSE
-    PRINT 'No junk Programa entries found from an older script run -- nothing to clean up. / Không tìm thấy dòng Programa rác nào từ lần chạy script cũ -- không cần dọn.';
+    PRINT 'No junk Programa entries found from an older script run -- nothing to clean up.';
 
 -- ============================================================================
 -- STEP 0 / BƯỚC 0 — Prerequisite check (from a previous session, MUST already exist)
@@ -144,7 +144,7 @@ BEGIN
     RETURN;
 END
 
-PRINT 'Prerequisites OK -- continuing. / Điều kiện tiên quyết OK -- tiếp tục.';
+PRINT 'Prerequisites OK -- continuing.';
 
 -- ============================================================================
 -- PART 1 / PHẦN 1 — New table: crosswalk from old Conta OGE code -> real
@@ -162,10 +162,10 @@ BEGIN
         utilizadorCriacao INT NOT NULL,
         dataCriacao DATETIME NOT NULL
     );
-    PRINT 'Table RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA created. / Đã tạo bảng RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA.';
+    PRINT 'Table RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA created.';
 END
 ELSE
-    PRINT 'Table RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA already exists, skipping. / Bảng RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA đã tồn tại, bỏ qua.';
+    PRINT 'Table RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA already exists, skipping.';
 
 -- ============================================================================
 -- PART 2 / PHẦN 2 — Real Programa/Subprograma/Atividade tree (A04-A07)
@@ -217,7 +217,7 @@ BEGIN
     RETURN;
 END
 
-PRINT CONCAT('Using Actidade bucket reltipo_id = ', @reltipoActidade, ' (currently-active budget period, auto-detected by date -- not ID-dependent). / Dùng bucket Actidade reltipo_id = ', @reltipoActidade, ' (kỳ ngân sách đang indActivo=1, xác định tự động qua ngày -- không phụ thuộc ID).');
+PRINT CONCAT('Using Actidade bucket reltipo_id = ', @reltipoActidade, ' (currently-active budget period, auto-detected by date -- not ID-dependent).');
 
 -- [EN] *** REVISED 2026-07-19 after reviewing the client's real production data export
 -- (Extract_Config_Dev_vs_Prod_2026-07-17 -> extract_result.xlsx, sheet config_dev_vs_prod) ***
@@ -241,13 +241,29 @@ PRINT CONCAT('Using Actidade bucket reltipo_id = ', @reltipoActidade, ' (current
 DECLARE @nextId INT;
 DECLARE @a07 INT, @a0701 INT;
 
--- [EN] AGRUPAMENTOCONFIG.id is an IDENTITY column on this environment -- must
--- allow explicit id values while inserting the 3 new A07 rows below, then turn
--- it back off right after (best practice -- don't leave it on longer than needed).
--- [VI] Cột id của AGRUPAMENTOCONFIG là IDENTITY trên môi trường này -- phải cho
--- phép chèn id tường minh khi tạo 3 dòng A07 mới bên dưới, rồi tắt lại ngay sau
--- đó (best practice -- không để bật lâu hơn mức cần thiết).
-SET IDENTITY_INSERT dbo.AGRUPAMENTOCONFIG ON;
+-- [EN] AGRUPAMENTOCONFIG.id is an IDENTITY column on the production environment
+-- (but NOT on every environment), so explicit id values must be allowed while
+-- inserting the 3 new A07 rows below, then turned back off right after. The check
+-- below detects it at runtime: SET IDENTITY_INSERT ON errors out on a table with
+-- no identity column, so it must NOT be issued unconditionally.
+-- [VI] Cột id của AGRUPAMENTOCONFIG là IDENTITY trên môi trường production (nhưng
+-- KHÔNG phải mọi môi trường), nên phải cho phép chèn id tường minh khi tạo 3 dòng
+-- A07 bên dưới, rồi tắt lại ngay sau đó. Đoạn kiểm tra dưới đây tự phát hiện lúc
+-- chạy: SET IDENTITY_INSERT ON sẽ lỗi trên bảng không có cột identity, nên KHÔNG
+-- được chạy vô điều kiện.
+DECLARE @acIdentity BIT =
+    CONVERT(BIT, ISNULL(COLUMNPROPERTY(OBJECT_ID('dbo.AGRUPAMENTOCONFIG'), 'id', 'IsIdentity'), 0));
+
+-- [EN] NOTE: this must NOT be wrapped in EXEC()/dynamic SQL -- SET IDENTITY_INSERT
+-- is reverted when the dynamic-SQL scope ends, so the INSERTs below would still
+-- fail with Msg 544. A plain IF is fine: the statement is only executed when the
+-- column really is an identity column.
+-- [VI] LƯU Ý: không được bọc trong EXEC()/dynamic SQL -- SET IDENTITY_INSERT bị
+-- trả lại trạng thái cũ khi kết thúc scope dynamic SQL, nên các lệnh INSERT bên
+-- dưới vẫn lỗi Msg 544. Dùng IF thường là đúng: lệnh chỉ chạy khi cột thật sự là
+-- identity.
+IF @acIdentity = 1
+    SET IDENTITY_INSERT dbo.AGRUPAMENTOCONFIG ON;
 
 SELECT @a07 = id FROM AGRUPAMENTOCONFIG WHERE reltipoDeContaOrcamentoConfig_fk=@reltipoActidade AND codigo='A07' AND parent_fk IS NULL AND indActivo=1;
 IF @a07 IS NULL
@@ -276,9 +292,30 @@ IF NOT EXISTS (SELECT 1 FROM AGRUPAMENTOCONFIG WHERE parent_fk=@a0701 AND codigo
     INSERT INTO AGRUPAMENTOCONFIG (id, codigo, designacao, reltipoDeContaOrcamentoConfig_fk, parent_fk, indActivo, utilizadorCriacao, dataCriacao)
     VALUES ((SELECT ISNULL(MAX(id),0)+1 FROM AGRUPAMENTOCONFIG), '01', 'Gestão do património do FRSS', @reltipoActidade, @a0701, 1, 1, GETDATE());
 
-SET IDENTITY_INSERT dbo.AGRUPAMENTOCONFIG OFF;
+IF @acIdentity = 1
+    SET IDENTITY_INSERT dbo.AGRUPAMENTOCONFIG OFF;
 
-PRINT 'A07 Programa/Subprograma/Atividade (only branch actually missing on production): OK. / Nhánh A07 (nhánh duy nhất thật sự thiếu trên production): OK.';
+-- [EN] Verify the 3 A07 rows are REALLY there -- do not just print "OK". An earlier
+-- version of this script printed a hardcoded OK here, which reported success even
+-- when all 3 INSERTs had failed (Msg 544, IDENTITY_INSERT off) -- the errors scrolled
+-- past and the run looked fine. This block re-reads the tree and tells the truth.
+-- [VI] Kiểm tra 3 dòng A07 có THẬT SỰ tồn tại không -- không in "OK" cứng. Bản script
+-- trước in sẵn chữ OK ở đây, nên vẫn báo thành công dù cả 3 lệnh INSERT đã lỗi (Msg 544,
+-- IDENTITY_INSERT đang tắt) -- lỗi trôi qua và lần chạy trông như bình thường. Đoạn này
+-- đọc lại cây và báo đúng sự thật.
+DECLARE @chkA07 INT, @chkA0701 INT, @chkA070101 INT;
+
+SELECT @chkA07 = id FROM AGRUPAMENTOCONFIG
+ WHERE reltipoDeContaOrcamentoConfig_fk = @reltipoActidade AND codigo = 'A07' AND parent_fk IS NULL AND indActivo = 1;
+SELECT @chkA0701 = id FROM AGRUPAMENTOCONFIG WHERE parent_fk = @chkA07 AND codigo = '01' AND indActivo = 1;
+SELECT @chkA070101 = id FROM AGRUPAMENTOCONFIG WHERE parent_fk = @chkA0701 AND codigo = '01' AND indActivo = 1;
+
+IF @chkA07 IS NOT NULL AND @chkA0701 IS NOT NULL AND @chkA070101 IS NOT NULL
+    PRINT 'A07 Programa/Subprograma/Atividade: OK -- all 3 rows verified present in the database.';
+ELSE
+BEGIN
+    PRINT '*** A07 Programa/Subprograma/Atividade: NOT CREATED -- see the errors above (typically Msg 544 on AGRUPAMENTOCONFIG). Nothing else in this script depends on it, but the A07 / FRSS branch will be missing from Programa dropdowns and from reports until this part succeeds. ***';
+END
 
 -- ============================================================================
 -- PART 3 / PHẦN 3 — CE crosswalk table -- DYNAMIC lookup by code/tree position
@@ -379,10 +416,10 @@ BEGIN
         origemId, alvoId, confianca, 1, 1, GETDATE()
     FROM Combinado;
 
-    PRINT CONCAT('CE crosswalk table: ', @@ROWCOUNT, ' rows added (up to 33 possible -- on dev, expect close to 33; on production/staging, 0 or near-0 is EXPECTED since production''s tree is already coded directly by real CE, see note below/header). / Bảng đối chiếu CE: đã thêm ', @@ROWCOUNT, ' dòng (tối đa 33 -- trên dev thì kỳ vọng gần 33; trên production/staging thì 0 hoặc gần 0 là BÌNH THƯỜNG vì cây production đã đánh mã CE thật trực tiếp, xem ghi chú/header).');
+    PRINT CONCAT('CE crosswalk table: ', @@ROWCOUNT, ' row(s) added (up to 33 possible -- on dev, expect close to 33; on production/staging, 0 or near-0 is EXPECTED because the production tree is already coded directly with the real CE codes, see the note below).');
 END
 ELSE
-    PRINT 'CE crosswalk table: data already present (id=1 exists), skipping to avoid duplication. / Bảng đối chiếu CE: đã có dữ liệu (id=1 tồn tại), bỏ qua để tránh trùng.';
+    PRINT 'CE crosswalk table: data already present (id=1 exists), skipping to avoid duplication.';
 
 -- [EN] Note: this crosswalk maps an OLD/legacy Conta OGE numbering (root codes '01'-'16')
 -- to real CE codes -- confirmed (2026-07-19, via the client's production data export) that
@@ -403,4 +440,23 @@ ELSE
 --   JOIN DOMINIO d ON r.tipoConta_fk = d.idDominio
 --   WHERE d.descricao IN ('Despesa','Receita') AND a.parent_fk IS NULL AND a.indActivo = 1;
 
-PRINT 'DONE. / HOÀN TẤT.';
+-- ============================================================================
+-- FINAL VERIFICATION / KIỂM TRA CUỐI
+-- ----------------------------------------------------------------------------
+-- [EN] Re-reads the database and reports what is actually there, so "DONE" can
+-- never be mistaken for success when an individual statement failed above.
+-- [VI] Đọc lại database và báo cáo thực tế đang có gì, để chữ "DONE" không bao
+-- giờ bị hiểu nhầm là thành công khi có lệnh nào đó ở trên đã lỗi.
+-- ============================================================================
+DECLARE @okTable BIT = CASE WHEN EXISTS (SELECT 1 FROM sys.tables WHERE name = 'RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA') THEN 1 ELSE 0 END;
+DECLARE @okA07   BIT = CASE WHEN @chkA07 IS NOT NULL AND @chkA0701 IS NOT NULL AND @chkA070101 IS NOT NULL THEN 1 ELSE 0 END;
+
+PRINT '--------------------------------------------------------------------';
+PRINT CONCAT('  1. Table RELAGRUPAMENTOCONFIGCLASSIFICACAOECONOMICA : ', CASE WHEN @okTable = 1 THEN 'PRESENT' ELSE 'MISSING' END);
+PRINT CONCAT('  2. A07 Programa/Subprograma/Atividade (3 rows)      : ', CASE WHEN @okA07 = 1 THEN 'PRESENT' ELSE 'MISSING' END);
+PRINT '--------------------------------------------------------------------';
+
+IF @okTable = 1 AND @okA07 = 1
+    PRINT 'DONE -- all checks passed.';
+ELSE
+    PRINT '*** FINISHED WITH PROBLEMS -- one or more items above are MISSING. Scroll up for the error messages, fix the cause, then simply run this script again (it is safe to re-run: it only creates what is missing). ***';
