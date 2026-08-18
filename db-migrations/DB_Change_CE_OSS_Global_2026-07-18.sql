@@ -1,5 +1,32 @@
 -- ============================================================================
 -- DB Migration: CE_OSS_Global (Classificação Económica report) — 2026-07-18
+-- REVISION 2026-08-18 -- replaces every earlier copy of this file
+-- ============================================================================
+-- [EN] What changed in this revision (the migration itself does the same work
+-- as before -- nothing new is created, nothing is removed):
+--   * The A07 step now VERIFIES the rows against the database instead of
+--     printing a hardcoded "OK". An earlier copy printed success even when all
+--     3 INSERTs had failed with "Msg 544 ... IDENTITY_INSERT is set to OFF".
+--   * SET IDENTITY_INSERT is issued only when the id column really is an
+--     identity column, so the 3 A07 rows insert correctly.
+--   * A summary at the end lists each item as PRESENT or MISSING, and only
+--     prints "DONE -- all checks passed" when everything is genuinely there.
+--   * All console output is English only -- the SQL Server console mangles the
+--     accented Vietnamese text that earlier copies printed.
+--
+-- Safe to run on a database where an earlier copy was already run: it only
+-- creates what is missing (see the idempotency note below).
+--
+-- [VI] Thay đổi ở bản này (nội dung migration vẫn y như cũ -- không tạo thêm
+-- gì mới, không xoá gì):
+--   * Bước A07 giờ KIỂM TRA thật trong database thay vì in "OK" cứng. Bản trước
+--     vẫn in thành công dù cả 3 lệnh INSERT đã lỗi "Msg 544 ... IDENTITY_INSERT
+--     is set to OFF".
+--   * Chỉ chạy SET IDENTITY_INSERT khi cột id thật sự là identity, nhờ đó 3 dòng
+--     A07 chèn được.
+--   * Có bảng tổng kết cuối script liệt kê PRESENT/MISSING từng mục, chỉ in
+--     "DONE -- all checks passed" khi thật sự đủ.
+--   * Toàn bộ output là tiếng Anh -- console SQL Server làm vỡ dấu tiếng Việt.
 -- ============================================================================
 -- [EN] Scope: ONLY the DB changes belonging to the CE_OSS_Global feature that
 -- must run on production for the feature to work. Does NOT include:
