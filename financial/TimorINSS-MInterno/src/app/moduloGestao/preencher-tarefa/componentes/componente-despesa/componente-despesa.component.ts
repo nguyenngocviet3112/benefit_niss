@@ -471,9 +471,26 @@ export class ComponenteDespesaComponent implements OnInit {
     this.submittedTry = true;
   }
 
+  // [PT] Rede de segurança: qualquer erro inesperado ao montar o pedido tem de terminar com o
+  // spinner desligado e uma mensagem visível. Sem isto, uma excepção entre o showLoader() e o
+  // hideLoader() deixa o ecrã eternamente "a processar", sem dizer nada ao utilizador -- foi
+  // exactamente o que aconteceu ao editar uma despesa com campos por repor.
+  // [VI] Lưới an toàn: mọi lỗi bất ngờ khi dựng request đều phải kết thúc bằng việc tắt spinner và
+  // hiện thông báo. Không có nó, một exception rơi vào giữa showLoader() và hideLoader() sẽ khiến
+  // màn hình quay mãi mà không báo gì -- đúng những gì đã xảy ra khi sửa despesa thiếu dữ liệu.
   public registarEditarDespesa() {
     this.showLoader();
 
+    try {
+      this.montarEGravarDespesa();
+    } catch (e) {
+      this.hideLoader();
+      this.errors.push('-1');
+      this.showError();
+    }
+  }
+
+  private montarEGravarDespesa() {
     let despesaRegisto: Despesa = {
       id: this.editar ? this.idDespesa : 0,
       idOrcamentoRegistoAprovado: this.idOrcamentoRegisto,
@@ -482,10 +499,14 @@ export class ComponenteDespesaComponent implements OnInit {
       centroCustoFk: this.centroCusto.id,
       tipoContaFk: this.tipoConta.id,
       codigoContaFk: this.contabilidade.id,
-      agrupamentoConfigFk: this.contaOSS.id,
-      institutionId: this.institution.id,
-      actidadeFk: this.etidade.id,
-      funcionalFk: this.funcional.id,
+      // Acesso defensivo (?.): um campo em falta passa a ser recusado pelo servidor com uma mensagem,
+      // em vez de rebentar aqui entre o showLoader() e o hideLoader() e deixar o ecrã a rodar para sempre.
+      // [VI] Truy cập phòng thủ (?.): field thiếu sẽ bị server từ chối kèm thông báo, thay vì ném lỗi
+      // ngay giữa showLoader() và hideLoader() khiến màn hình quay mãi không dừng.
+      agrupamentoConfigFk: this.contaOSS?.id,
+      institutionId: this.institution?.id,
+      actidadeFk: this.etidade?.id,
+      funcionalFk: this.funcional?.id,
       descricao: this.descricaoDespesa,
       valor: this.valorDespesa
     };
@@ -600,7 +621,7 @@ export class ComponenteDespesaComponent implements OnInit {
         }
 
         if (editar) {
-          this.contaOSS = this.filtersContaOSSFiltered.filter((c: { id: number; }) => c.id === this.idContaOssEdit)[0];
+          this.contaOSS = this.filtersContaOSSFiltered.filter((c: { id: number; }) => c.id === this.idContaOssEdit)[0] ?? <AgrupamentosConfig>{};
         }
         this.hideLoader();
       },
@@ -633,7 +654,7 @@ export class ComponenteDespesaComponent implements OnInit {
         }
         
         if (editar) {
-          this.etidade = this.filtersEtidadeFiltered.filter((c: { id: number; }) => c.id === this.idEtidadeEdit)[0];
+          this.etidade = this.filtersEtidadeFiltered.filter((c: { id: number; }) => c.id === this.idEtidadeEdit)[0] ?? <AgrupamentosConfig>{};
         }
         this.hideLoader();
       },
@@ -697,7 +718,7 @@ export class ComponenteDespesaComponent implements OnInit {
         }
 
         if (editar) {
-          this.funcional = this.filtersFuncionalFiltered.filter((c: { id: number; }) => c.id === this.idFuncionalEdit)[0];
+          this.funcional = this.filtersFuncionalFiltered.filter((c: { id: number; }) => c.id === this.idFuncionalEdit)[0] ?? <AgrupamentosConfig>{};
         }
         this.hideLoader();
       },
@@ -865,12 +886,25 @@ export class ComponenteDespesaComponent implements OnInit {
 
   }
 
+  // [PT] Ao editar, TODOS os campos da chave têm de ser repostos no formulário: Institution,
+  // Actividade, Funcional e Conta OSS além dos restantes. Faltavam os três primeiros -- os campos
+  // apareciam vazios e, pior, updateFilteredEtidades/Funcional procuravam o id 0, o filter devolvia
+  // undefined e this.etidade/this.funcional ficavam undefined; ao gravar, o acesso a .id rebentava
+  // depois do showLoader(), pelo que o hideLoader() nunca chegava a correr e o ecrã ficava eternamente
+  // "a processar".
+  // [VI] Khi sửa, PHẢI nạp lại đủ mọi thành phần của khóa vào form: Institution, Actividade, Funcional
+  // và Conta OSS. Trước đây thiếu 3 cái đầu -- ô hiện trống, và tệ hơn: updateFilteredEtidades/Funcional
+  // đi tìm id 0, filter trả undefined nên this.etidade/this.funcional = undefined; lúc bấm lưu, việc
+  // đọc .id ném lỗi ngay sau showLoader() nên hideLoader() không bao giờ chạy và màn hình quay mãi.
   public editarComponente(componenteDespesa: DespesaRegistada) {
     this.departamentoINSS.id = componenteDespesa.idDepartamento ?? <number>{};
     this.centroCusto.id = componenteDespesa.idCentroCusto;
     this.tipoConta = this.tipoContaFiltered.filter((c: { id: number; }) => c.id === componenteDespesa.idTipoConta)[0];
     this.contabilidade.id = componenteDespesa.idContabilidade;
+    this.institution.id = componenteDespesa.idInstitution;
     this.idContaOssEdit = componenteDespesa.idOrcamento;
+    this.idEtidadeEdit = componenteDespesa.idActidade;
+    this.idFuncionalEdit = componenteDespesa.idFuncional;
     this.updateFilteredAgrupamentos(true);
     this.updateFilteredEtidades(true);
     // this.updateFilteredEconomic(true);
