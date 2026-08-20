@@ -32,7 +32,7 @@ export class ComponenteListDocumentosComponent implements OnInit {
   public faFilePdf = faFilePdf;
 
   public documentos: TarefaDocumentoListagem[] = [];
-  public displayedColumnsDocumento: string[] = ['tipo', 'dataInsert', 'tarefa', 'user', 'pdf'];
+  public displayedColumnsDocumento: string[] = ['seq', 'tipo', 'nomeFicheiro', 'dataInsert', 'tarefa', 'user', 'pdf'];
   public pageSizeDocumentosTable: number = 20;
   public totalRowsDocumentosTable: number = 0;
   public pageIndexDocumentosTable: number = 0;
@@ -91,6 +91,12 @@ export class ComponenteListDocumentosComponent implements OnInit {
     request = { "id": this.tarefaActivoId || this.processoId, "filter": filter };
     // alert(this.tarefaActivoId);
     return this.tarefaActivoId ? this.documentoService.getDocumentosByIdTarefaAtivo(request) : this.documentoService.getDocumentosByIdProcessoAtivo(request);
+  }
+
+  // Número de ordem contínuo entre páginas (1, 2, 3...), não reiniciado a cada página.
+  // [VI] Số thứ tự chạy liên tục qua các trang (1, 2, 3...), không reset lại ở mỗi trang.
+  public numeroSequencial(index: number): number {
+    return (this.pageIndexDocumentosTable * this.pageSizeDocumentosTable) + index + 1;
   }
 
   public updateDocumentosTable(event: any) {

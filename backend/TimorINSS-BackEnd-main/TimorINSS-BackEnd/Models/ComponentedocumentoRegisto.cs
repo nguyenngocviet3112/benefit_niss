@@ -18,6 +18,7 @@ namespace TimorINSSBackEnd.Models
         public DateTime? DataAlteracao { get; set; }
         public string Ipv6 { get; set; }
         public string Numero { get; set; }
+        public string NomeDocumento { get; set; }
 
         public virtual Dominio DocumentoFkNavigation { get; set; }
         public virtual Tarefaativo TarefaAtivoFkNavigation { get; set; }

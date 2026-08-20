@@ -78,6 +78,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 .Select(doc => new DocumentosTarefaListagem
                 {
                     IdDocumento = doc.Id,
+                    NomeDocumento = doc.NomeDocumento,
                     TpDocIdentificacao = doc.DocumentoFkNavigation.Descricao,
                     Numero = doc.Numero,
                     DataCriacao = doc.DataCriacao,

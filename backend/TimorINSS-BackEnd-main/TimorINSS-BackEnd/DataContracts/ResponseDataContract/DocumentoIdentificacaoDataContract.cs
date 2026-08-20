@@ -58,6 +58,9 @@ namespace TimorINSSBackEnd.DataContracts.ResponseDataContract
         public int IdDocumento { get; set; }
 
         [DataMember]
+        public string NomeDocumento { get; set; }
+
+        [DataMember]
         public string TpDocIdentificacao { get; set; }
 
         [DataMember]

@@ -406,6 +406,7 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 TarefaAtivoFk = request.tarefaAtivoId,
                 Documento = doc,
                 Numero = previousDocTypePerTarefaCount > 0 ? previousDocTypePerTarefaCount.ToString() : "",
+                NomeDocumento = request.nomeDocumento,
                 IndActivo = true
             };
 

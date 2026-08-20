@@ -24,6 +24,7 @@ export interface DocumentosTarefaListagemResponse {
 
 export interface TarefaDocumentoListagem {
   idDocumento: number;
+  nomeDocumento?: string;
   numero: string;
   dataCriacao?: Date;
   tpDocIdentificacao: string;

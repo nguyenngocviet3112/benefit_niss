@@ -18,22 +18,43 @@
           <mat-error>{{'general.required' | translate}}</mat-error>
         </mat-form-field>
       </div>
+        <!-- [PT] Selecção do ficheiro com <input type="file"> nativo. O ngx-mat-file-input que estava
+             aqui não abria a janela de selecção: o campo aparecia mas clicar nele não fazia nada.
+             [VI] Chọn file bằng <input type="file"> gốc. ngx-mat-file-input trước đây không mở được
+             cửa sổ chọn file -- ô vẫn hiện nhưng bấm vào không có gì xảy ra. -->
         <div class="secondLineContainers" *ngIf='documento.tpDocIdentificacao'>
-            <mat-form-field appearance="outline">
+            <input type="file" #fileInput hidden [accept]="accept" (change)="onFileSelected($event)" />
+
+            <button mat-raised-button type="button" class="uploadButton" (click)="fileInput.click()">
+              <mat-icon class="icon">cloud_upload</mat-icon>
               <mat-label>{{'general.document' | translate}}</mat-label>
-              <ngx-mat-file-input [errorStateMatcher]="matcher" [required]="wrongFormat"
-                [formControl]="fileControlDocumento"
-                [accept]="accept" name="Documento">
-                <mat-icon ngxMatFileInputIcon>upload</mat-icon>
-              </ngx-mat-file-input>
-              <mat-error>{{'general.documentLimitSize' | translate}} {{accept}}</mat-error>
-            </mat-form-field>
+            </button>
+
+            <span class="nomeDocumentoSelecionado" *ngIf="documento.nomeDocumento">
+              {{documento.nomeDocumento}}
+              <fa-icon aria-label="Clear" [icon]="faTimesCircle"
+                (click)="clearDocumento(); fileInput.value = ''"></fa-icon>
+            </span>
+
+            <div class="erroDocumento" *ngIf="wrongFormat">
+              {{'general.documentLimitSize' | translate}} {{accept}}
+            </div>
         </div>
         <div class="secondLineContainers" style="vertical-align: super;" *ngIf="documento.documento" >
           <button class="gravarButton" mat-raised-button type="submit" (click)="SaveDocument()">
             <mat-icon class="icon">check</mat-icon>
             <mat-label>{{'general.inputFile' | translate}}</mat-label>
           </button>
+        </div>
+        <!-- [PT] Lista do que já foi inserido neste ecrã: o snackbar desaparece, isto fica.
+             [VI] Danh sách những gì đã chèn ở màn này: snackbar tắt đi, phần này ở lại. -->
+        <div class="documentosInseridos" *ngIf="documentosInseridos.length > 0">
+          <div class="documentoInserido" *ngFor="let inserido of documentosInseridos">
+            <mat-icon class="iconInserido">check_circle</mat-icon>
+            <span class="nomeInserido">{{inserido.nome}}</span>
+            <span class="tipoInserido" *ngIf="inserido.tipo">({{inserido.tipo}})</span>
+            <span class="estadoInserido">{{'general.inserted' | translate}}</span>
+          </div>
         </div>
     </div>
 </mat-expansion-panel>

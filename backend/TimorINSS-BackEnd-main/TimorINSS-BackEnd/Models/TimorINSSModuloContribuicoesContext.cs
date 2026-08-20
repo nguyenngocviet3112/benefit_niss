@@ -990,6 +990,15 @@ namespace TimorINSSBackEnd.Models
                     .HasColumnType("datetime")
                     .HasColumnName("dataCriacao");
 
+                // [PT] Nome do ficheiro carregado. Até 2026-08-19 o nome vinha no pedido mas era
+                // descartado: a listagem só conseguia mostrar o TIPO de documento, pelo que dois
+                // ficheiros diferentes do mesmo tipo eram indistinguíveis.
+                // [VI] Tên file được tải lên. Trước 19/08/2026 tên file có trong request nhưng bị bỏ đi:
+                // bảng danh sách chỉ hiện được LOẠI tài liệu nên hai file khác nhau cùng loại nhìn y hệt.
+                entity.Property(e => e.NomeDocumento)
+                    .HasMaxLength(255)
+                    .HasColumnName("nomeDocumento");
+
                 entity.Property(e => e.Documento)
                     .IsRequired()
                     .HasColumnName("documento");
