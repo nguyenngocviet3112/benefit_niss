@@ -910,7 +910,8 @@
     "warningDeleteCompromisso": "Esta acção irá eliminar este compromisso.",
     "gerarGuia": "Esta acção irá gerar uma Guia de Pagamento para o Mês Selecionado",
     "deleteResponsavel": "Esta acção irá eliminar este responsável legal.",
-    "deletePagamento": "Esta acção irá eliminar este Pagamento"
+    "deletePagamento": "Esta acção irá eliminar este Pagamento",
+    "contaNaoCorrespondeIbanMsg": "Número konta ne'ebé hakerek ({{conta}}) la hanesan ho número konta iha IBAN laran ({{contaIban}}). Favor ida verifika molok kontinua -- número konta sala háruka osan ba ema sala."
   },
   "dropdownDominio": {
     "TIPODOCUMENTO": {

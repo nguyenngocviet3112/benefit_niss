@@ -923,7 +923,8 @@
     "warningDeleteCompromisso": "Esta acção irá eliminar este compromisso.",
     "gerarGuia": "Esta acção irá gerar uma Guia de Pagamento para o Mês Selecionado",
     "deleteResponsavel": "Esta acção irá eliminar este responsável legal.",
-    "deletePagamento": "Esta acção irá eliminar este Pagamento"
+    "deletePagamento": "Esta acção irá eliminar este Pagamento",
+    "contaNaoCorrespondeIbanMsg": "O número de conta introduzido ({{conta}}) não corresponde ao número de conta contido no IBAN ({{contaIban}}). Verifique antes de continuar -- um número de conta errado envia o dinheiro para a pessoa errada."
   },
   "dropdownDominio": {
     "TIPODOCUMENTO": {

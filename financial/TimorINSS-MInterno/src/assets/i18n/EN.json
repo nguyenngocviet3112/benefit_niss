@@ -870,7 +870,8 @@
     "warningDeleteCompromisso": "This action will delete this Commitment.",
     "gerarGuia": "This action will generate an Invoice for the Selected Month",
     "deleteResponsavel": "This action will delete the legal responsible.",
-    "deletePagamento": "This action will delete this payment"
+    "deletePagamento": "This action will delete this payment",
+    "contaNaoCorrespondeIbanMsg": "The account number entered ({{conta}}) does not match the account number contained in the IBAN ({{contaIban}}). Please check it before continuing -- a wrong account number sends the money to the wrong person."
   },
   "dropdownDominio": {
     "TIPODOCUMENTO": {

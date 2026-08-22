@@ -203,9 +203,74 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
         importId: this.importerId,
       };
 
+      // [PT] Um IBAN nacional contem o proprio numero de conta (TL38 + 3 do banco + 14 da conta
+      // + 2 de controlo), por isso os dois campos podem ser confrontados um com o outro. Apareceram
+      // na Ordem de Pagamento contas que eram na verdade o NISS do funcionario: o dinheiro sai para
+      // o sitio errado e o documento nao tem como o detectar sozinho. Avisa-se e deixa-se decidir --
+      // nao se bloqueia, para nao travar um pagamento legitimo por causa de um IBAN estrangeiro ou
+      // de um formato que ainda nao conhecemos.
+      // [VI] IBAN noi dia chua san so tai khoan (TL38 + 3 so ngan hang + 14 so tai khoan + 2 so kiem
+      // tra), nen doi chieu duoc hai o voi nhau. Da xuat hien tren Ordem de Pagamento nhung so tai
+      // khoan thuc chat la NISS cua nhan vien: tien di sai cho ma ban than tai lieu khong tu phat
+      // hien duoc. Chi canh bao roi de nguoi dung quyet -- khong chan, de khong lam ket mot khoan chi
+      // hop le chi vi IBAN nuoc ngoai hoac mot dinh dang ta chua biet.
+      const contaNoIban = this.contaDentroDoIban();
+      if (contaNoIban !== null) {
+        this.confirmarContaDiferenteDoIban(request, contaNoIban);
+        return;
+      }
+
       this.executeSavePagamento(request);
     }
 
+  }
+
+
+  // [PT] Devolve o numero de conta que vem dentro do IBAN quando ele NAO corresponde ao numero
+  // de conta introduzido; devolve null quando corresponde, ou quando nao ha nada seguro a
+  // comparar (importacao por Excel, IBAN estrangeiro, campos por preencher).
+  // [VI] Tra ve so tai khoan nam trong IBAN khi no KHONG khop voi so tai khoan da nhap; tra ve
+  // null khi khop, hoac khi khong co gi de so sanh mot cach chac chan (nhap tu Excel, IBAN nuoc
+  // ngoai, o con trong).
+  private contaDentroDoIban(): string | null {
+    if (!!this.importerId) { return null; }
+
+    const conta = (this.pagamento.numeroConta || '').trim();
+    const iban = (this.pagamento.iban || '').trim().toUpperCase();
+    if (!conta || !iban) { return null; }
+
+    // So o IBAN nacional tem uma estrutura conhecida. [VI] Chi IBAN noi dia moi co cau truc da biet.
+    if (!new RegExp('^' + this.availableRegex.IBANPattern + '$').test(iban)) { return null; }
+
+    const contaNoIban = iban.substring(7, 21);          // TL38 + 3 do banco = 7 caracteres
+    const contaNormalizada = ('00000000000000' + conta).slice(-14);
+
+    return contaNoIban === contaNormalizada ? null : contaNoIban.replace(/^0+/, '');
+  }
+
+  private confirmarContaDiferenteDoIban(request: SavePagamentoExecutadoRequest, contaNoIban: string): void {
+    this.hideLoader();
+    const dialogRef = this.warningDialog.open(PopUpWarningComponent, {
+      id: 'contaNaoCorrespondeIban',
+      minHeight: '300px',
+      width: '40%',
+      height: '30%',
+      panelClass: 'warningModal',
+      data: {
+        function: undefined,
+        msg: this.translate.instant('warnings.contaNaoCorrespondeIbanMsg', {
+          conta: (this.pagamento.numeroConta || '').trim(),
+          contaIban: contaNoIban
+        })
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmou => {
+      if (confirmou) {
+        this.showLoader();
+        this.executeSavePagamento(request);
+      }
+    });
   }
 
   private executeSavePagamento(request: SavePagamentoExecutadoRequest) {
