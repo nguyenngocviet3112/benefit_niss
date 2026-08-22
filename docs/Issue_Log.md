@@ -803,9 +803,33 @@ cost of leaving it is stated so the decision can be revisited rather than redisc
 | D-15 | **Status shown as a raw letter** ("R", "A") in the in-progress expenses dialog | Cosmetic, noticed at handover | The dialog asks the user to make a decision using a code only developers read |
 | D-16 | **Economic-classification crosswalk mapped at root level only** — the remaining ~150 leaf nodes were verified correct at root level but not mapped to an exact sub-level target | The report aggregates at root level today, so it changes nothing | Needed before the report can break down below root level |
 
+### Two different kinds of debt
+
+They are not all ours to absorb, and separating them is what makes this list usable.
+
+**Worth proposing as future work** — these add capability the system does not have today, and
+each answers a need the client has already expressed:
+
+> D-01 carry the closing balance forward · D-02 two-step accrual booking · D-09 bulk entry for
+> Cabimento and Compromisso · D-10 a single audit-log viewer · D-12 create login credentials with
+> the user · D-13 commitment numbering · D-14 show who approved · D-16 sub-level breakdown in the
+> economic-classification report
+
+**Ours to clean up** — these are defects or half-finished fixes, not new capability, and should
+not be presented as an upgrade:
+
+> D-03 duplicate account codes · D-04 inactive junk rows · D-05 the error handler swept properly
+> · D-06 the remaining single-option dropdowns · D-07 searching accounts by name · D-08 the
+> stuck-expense dead end · D-11 the disagreeing upload limits · D-15 the raw status letter
+
 **When rebuilding:** items D-03 to D-07 are all the same shape — a fix applied where it was
 reported rather than where it lives. If the rebuild inherits any of this code, these are the
 places to start, because each one is already known to be wrong.
+
+**Keep adding to this list.** Anything raised in conversation that turns out to be needed but is
+not done belongs here the moment it is identified, with the same two columns: why not now, and
+what it costs to wait. That is what makes it possible to go back to the client later with a
+considered proposal instead of a memory.
 
 ## Patterns worth carrying into any rebuild
 
