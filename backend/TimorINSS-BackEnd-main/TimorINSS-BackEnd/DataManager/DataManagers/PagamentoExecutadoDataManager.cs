@@ -691,18 +691,26 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 Nome = request.Nome,
                 IndActivo = true,
             };
+            // [PT] Antes, quando o destinatario era um trabalhador (ou uma entidade), o objecto
+            // acabado de construir era deitado fora e reconstruido so com a FK -- o Nome, o NISS,
+            // o TIN e a Morada que o utilizador tinha acabado de obter pela pesquisa do NISS
+            // desapareciam. O registo era gravado (ou pior: um registo existente era actualizado)
+            // sem nome, e a Ordem de Pagamento saia com as colunas NISS e Naran Funsionariu em
+            // branco. Mantem-se agora os dados descritivos; garante-se apenas que as duas FKs nao
+            // ficam preenchidas ao mesmo tempo, que era a unica intencao defensavel do codigo anterior.
+            // [VI] Truoc day, khi nguoi nhan la mot trabalhador (hoac mot entidade), object vua dung
+            // xong bi vut di va dung lai chi voi moi FK -- Nome, NISS, TIN, Morada vua lay duoc tu
+            // buoc tra NISS deu mat sach. Ban ghi duoc luu (hoac te hon: mot ban ghi dang co ten bi
+            // ghi de) thanh khong ten, va Ordem de Pagamento in ra trang hai cot NISS va Naran
+            // Funsionariu. Nay giu lai cac truong mo ta; chi dam bao hai FK khong cung co gia tri,
+            // von la y dinh duy nhat co ly cua doan code cu.
             if (destinatario.EntidadeFk != null && destinatario.EntidadeFk > 0)
             {
-                destinatario = new Destinatario();
-                destinatario.EntidadeFk = request.EntidadeFk;
-                destinatario.IndActivo = true;
+                destinatario.TrabalhadorFk = null;
             }
-
-            if (destinatario.TrabalhadorFk != null && destinatario.TrabalhadorFk > 0)
+            else if (destinatario.TrabalhadorFk != null && destinatario.TrabalhadorFk > 0)
             {
-                destinatario = new Destinatario();
-                destinatario.TrabalhadorFk = request.TrabalhadorFk;
-                destinatario.IndActivo = true;
+                destinatario.EntidadeFk = null;
             }
 
             if (destinatario.Id > 0)
