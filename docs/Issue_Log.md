@@ -32,9 +32,9 @@ Every entry is one of two types, marked in the index:
 | Type | Count | Meaning |
 |---|---:|---|
 | **FIX** | 26 | Something was wrong and was corrected. Carries a tag and an origin, below. |
-| **FEATURE** | 8 | Something new was built, or an existing behaviour deliberately changed on request. No origin — nothing was broken. |
-| **BACKLOG** | 16 | Identified during other work and too involved to deliver in the same pass. Listed in *Backlog* below, to be scheduled. |
-| **Total** | **50** | |
+| **FEATURE** | 9 | Something new was built, or an existing behaviour deliberately changed on request. No origin — nothing was broken. |
+| **BACKLOG** | 17 | Identified during other work and too involved to deliver in the same pass. Listed in *Backlog* below, to be scheduled. |
+| **Total** | **52** | |
 
 Features are recorded here for the same reason as fixes: the decisions behind them are the part
 that is expensive to recover. A rebuild can read the code, but not the reason a rule was written
@@ -55,7 +55,7 @@ first next time, and who has to act.
 
 | Tag | Count | Meaning | Who fixes it |
 |---|---:|---|---|
-| **CODE** | 19 | Defect in the application source | Development |
+| **CODE** | 20 | Defect in the application source | Development |
 | **DATA** | 2 | The code is right; the stored data is wrong or missing | Script or data entry |
 | **CONFIG** | 2 | Per-task or per-environment configuration, which does **not** travel with a code deployment | Applied per environment |
 | **INFRA** | 2 | Server, container, OS or reverse proxy | Client IT |
@@ -89,7 +89,7 @@ place*, which is what decides whether it can be prevented. Every entry therefore
 
 ## Summary
 
-**50 entries, 2026-07-12 to 2026-08-22** — 26 fixes, 8 features and 16 items in the backlog. The counts per tag and per
+**52 entries, 2026-07-12 to 2026-08-22** — 26 fixes, 9 features and 17 items in the backlog. The counts per tag and per
 origin are in the two tables above; update them when adding an entry.
 
 **LEGACY and GAP together are 15 of the 26 fixes.** More than half of everything reported had
@@ -147,6 +147,7 @@ list of fixes, it is the list of things not to do again.
 | [INSS-032](#inss-032) | 2026-08-17 | FEATURE | Expense uniqueness on five keys, confirmation not block |
 | [INSS-033](#inss-033) | 2026-08-20 | FEATURE | Document attachments: file name, picker, duplicate warning |
 | [INSS-034](#inss-034) | 2026-08-22 | FEATURE | Warning when the account number disagrees with the IBAN |
+| [INSS-035](#inss-035) | 2026-08-22 | FEATURE | Name and account number left-aligned on the payment order |
 
 ---
 
@@ -554,7 +555,7 @@ decide explicitly whether a null means "clear this" or "leave it alone".
 ---
 
 ## INSS-022
-**Every Excel export failed on the Linux servers** · 2026-08-22 · `LIBRARY` `INFRA`
+**Every Excel export failed on the Linux servers** · 2026-08-22 · `LIBRARY` `INFRA` `CODE`
 **Origin:** `ENV` — a component Windows ships with the operating system and Linux does not.
 
 **Seen:** the Excel buttons returned an error. The same buttons worked on Dev.
@@ -563,12 +564,25 @@ decide explicitly whether a null means "clear this" or "leave it alone".
 of the operating system and Linux does not. The container image did not have it installed, so the
 first call into it failed.
 
-**Fix:** the library is installed in the backend image. Dev needs nothing — it runs on Windows.
+**Fix:** two parts, and both are wanted.
+
+- *Code.* The graphics component was only ever needed to size the columns to their content. The
+  export component now attempts that sizing and, if the component is unavailable, produces the file
+  without it and records a warning, instead of failing the request. The spreadsheet is correct
+  either way; only the column widths differ. One change, in the shared export component, covers all
+  fourteen exports.
+- *Server.* The library is installed in the backend image, so the columns are sized as intended.
+  Dev needs nothing — it runs on Windows.
+
+Verified end to end on a Linux container without the library: the file downloads, and the log
+records the warning where it previously recorded the failure.
 
 **When rebuilding:** Dev is Windows, Staging and Production are Linux containers. Anything
 touching graphics, fonts, file paths or case-sensitive filenames can work on Dev and fail in
 production. Note also that this affected **every** Excel export in the application, not only the
-screen that was reported, because they share one export component.
+screen that was reported, because they share one export component. The wider lesson is the code
+one: a cosmetic step must not be able to fail the request that contains it. Column widths are not
+worth an error dialog.
 
 ---
 
@@ -778,6 +792,25 @@ the point of entry. This class of error is invisible in every downstream documen
 
 ---
 
+## INSS-035
+**Name and account number left-aligned on the payment order** · 2026-08-22 · `FEATURE`
+
+**Asked for:** on the payment order PDF, the employee name and the bank account number were
+centred in their columns. Names vary in length and accounts vary in digit count, so every row
+started at a different horizontal position and the columns could not be scanned down.
+
+**Built:** both columns are now left-aligned in the body of the table. The column headers stay
+centred, matching every other header; the amount column keeps its right alignment. Applied to all
+three places that produce this document — issuing the payment order, listing executed payments and
+the reconciliation screen — which share the design but not the code.
+
+**When rebuilding:** identifiers and names are read by scanning a column downwards, so they belong
+left-aligned; amounts belong right-aligned so the decimal points line up. Centring is for headers.
+Note also that this one document is generated from three separate copies of the same code — a
+change to its appearance has to be made three times, and is easy to make in only one.
+
+---
+
 ---
 
 ## Backlog
@@ -803,6 +836,7 @@ would take and what it costs to wait, so it can be scheduled on evidence instead
 | D-13 | **Commitment numbering gap** found during the January import review | Flagged as blocking; superseded at the time by the report INSS confirmed as first priority | Numbering is relied on by the ledger |
 | D-14 | **"Who approved this" is not displayed** anywhere, though it is stored | Reported alongside D-13 and carried with it | An approval chain that cannot be read is hard to audit |
 | D-15 | **Status shown as a raw letter** ("R", "A") in the in-progress expenses dialog | Needs the status codes mapped to readable labels wherever they are shown | The dialog asks the user to make a decision using a code only developers read |
+| D-17 | **The next payment-order number is derived from a single character** — `GetOrcamentoAprovadoDespesaByIdTarefaActivo` reads the sequence as the *first character* of the previous payment number, and takes "previous" as the last row of an unordered query | Correcting it changes how payment numbers are generated, and needs a decision on what to do with any process that has already passed its ninth payment order | From the tenth payment order in a process onward, the number generated repeats one already in use, silently — `10/08146/2026` is read as `1`, so the next is offered as `2`. Separately, a payment number that does not start with a digit makes the whole expenditure screen fail to load |
 | D-16 | **Economic-classification crosswalk mapped at root level only** — the remaining ~150 leaf nodes were verified correct at root level but not mapped to an exact sub-level target | The report aggregates at root level today; the mapping is only needed once it breaks down further | Needed before the report can break down below root level |
 
 ### A. New capability — to propose and schedule with INSS
@@ -835,6 +869,7 @@ than section A, and each one removes a specific irritation or risk that is prese
 | D-08 | Give an expense authorised against an unfunded line a way out | Removes a dead end that currently needs database access to escape |
 | D-11 | Align the upload limits across the screen, the proxy and the application server | One predictable maximum instead of three that disagree |
 | D-15 | Show statuses as readable labels wherever the raw code still appears | Users decide on words rather than on single letters |
+| D-17 | Derive the next payment-order number from the whole number rather than its first character, and from the highest number in use rather than an arbitrary row | Numbering stays correct past the ninth payment order in a process, and an unexpected number no longer blanks the expenditure screen |
 
 **When rebuilding:** D-03 to D-07 share one shape — a correction applied where the problem was
 reported rather than everywhere it exists. If the rebuild inherits any of this code, these are the
