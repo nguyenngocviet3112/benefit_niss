@@ -805,28 +805,40 @@ would take and what it costs to wait, so it can be scheduled on evidence instead
 | D-15 | **Status shown as a raw letter** ("R", "A") in the in-progress expenses dialog | Needs the status codes mapped to readable labels wherever they are shown | The dialog asks the user to make a decision using a code only developers read |
 | D-16 | **Economic-classification crosswalk mapped at root level only** — the remaining ~150 leaf nodes were verified correct at root level but not mapped to an exact sub-level target | The report aggregates at root level today; the mapping is only needed once it breaks down further | Needed before the report can break down below root level |
 
-### Two kinds of backlog item
+### A. New capability — to propose and schedule with INSS
 
-Separating them is what makes this list usable when planning.
+These add something the system does not do today, and each answers a need already expressed.
 
-**New capability, to be proposed and scheduled with INSS** — these add something the system does
-not do today, and each answers a need already expressed:
+| # | Proposal |
+|---|---|
+| D-01 | Carry the closing balance forward into the next year's opening balances |
+| D-02 | Two-step accrual booking — record the obligation when the guide is issued, not only when it is collected |
+| D-09 | Bulk entry for Cabimento and Compromisso, as the payment stage already has |
+| D-10 | A single audit-log viewer answering "who changed this, and when" |
+| D-12 | Create the login credentials together with the user account |
+| D-13 | Commitment numbering |
+| D-14 | Show who approved each step |
+| D-16 | Break the economic-classification report down below root level |
 
-> D-01 carry the closing balance forward · D-02 two-step accrual booking · D-09 bulk entry for
-> Cabimento and Compromisso · D-10 a single audit-log viewer · D-12 create login credentials with
-> the user · D-13 commitment numbering · D-14 show who approved · D-16 sub-level breakdown in the
-> economic-classification report
+### B. Further improvements suggested
 
-**Ours to complete** — these are follow-through on work already done rather than new capability,
-and are not presented as an upgrade:
+Refinements to what already exists — data quality, robustness and day-to-day usability. Smaller
+than section A, and each one removes a specific irritation or risk that is present today.
 
-> D-03 duplicate account codes · D-04 inactive junk rows · D-05 the error handler swept properly
-> · D-06 the remaining single-option dropdowns · D-07 searching accounts by name · D-08 the
-> stuck-expense dead end · D-11 the disagreeing upload limits · D-15 the raw status letter
+| # | Suggestion | What it gives |
+|---|---|---|
+| D-03 | Resolve the duplicate account codes across the chart of accounts | Removes the risk of a screen picking the wrong one of two identical codes |
+| D-04 | Decide what to do with the inactive rows left over from earlier imports | A chart of accounts where every row means something |
+| D-05 | Apply the error-handling fix from INSS-012 across the remaining screens | Prevents the same frozen-screen symptom appearing elsewhere |
+| D-06 | Apply the single-option dropdown fix from INSS-014 across the remaining screens | Prevents a field going blank the day its list drops to one entry |
+| D-07 | Let the account search match the description, not only the numeric code | Users can find an account by name instead of memorising codes |
+| D-08 | Give an expense authorised against an unfunded line a way out | Removes a dead end that currently needs database access to escape |
+| D-11 | Align the upload limits across the screen, the proxy and the application server | One predictable maximum instead of three that disagree |
+| D-15 | Show statuses as readable labels wherever the raw code still appears | Users decide on words rather than on single letters |
 
-**When rebuilding:** items D-03 to D-07 are all the same shape — a fix applied where it was
-reported rather than where it lives. If the rebuild inherits any of this code, these are the
-places to start, because each one is already known to be wrong.
+**When rebuilding:** D-03 to D-07 share one shape — a correction applied where the problem was
+reported rather than everywhere it exists. If the rebuild inherits any of this code, these are the
+places to start, because each one is already known and located.
 
 **Keep adding to this list.** Anything raised that turns out to be needed belongs here the moment
 it is identified, with the same two columns: what it would take, and what it costs to wait. That
