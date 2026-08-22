@@ -571,6 +571,18 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
         showFoot: 'lastPage',
         theme: 'grid',
         columnStyles: { 5: { halign: 'right' } },
+        // [PT] O nome do funcionario e o numero de conta sao alinhados a esquerda apenas nas
+        // celulas de dados -- o cabecalho fica centrado como o das restantes colunas. Nao da
+        // para usar columnStyles aqui: essa opcao tem prioridade sobre headStyles e arrastaria
+        // tambem o cabecalho para a esquerda.
+        // [VI] Ten nhan vien va so tai khoan chi can trai o phan du lieu -- tieu de van can
+        // giua nhu cac cot khac. Khong dung columnStyles duoc: no uu tien hon headStyles nen
+        // se keo ca tieu de sang trai.
+        didParseCell: (data: any) => {
+          if (data.section === 'body' && (data.column.index === 2 || data.column.index === 3)) {
+            data.cell.styles.halign = 'left';
+          }
+        },
         headStyles: {
           fillColor: [42, 129, 204],
           textColor: [0, 0, 0],
