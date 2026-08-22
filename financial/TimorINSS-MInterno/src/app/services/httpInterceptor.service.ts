@@ -8,6 +8,7 @@ import { Observable, of, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { v4 as guid } from "uuid";
 import { TokenStorageService } from '../services/token-storage.service';
+import { ApiErrorContextService } from '../services/api-error-context.service';
 import { openErrorsDialog, showExpiredError } from "../utils";
 
 @Injectable()
@@ -20,7 +21,8 @@ export class HttpInterceptorService implements HttpInterceptor {
         public translate: TranslateService,
         public errorDialog: MatDialog,
         private spinner: NgxSpinnerService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private apiErrorContext: ApiErrorContextService
       ) { }
 
       public encodePath(rawPath: string): string {
@@ -46,6 +48,11 @@ export class HttpInterceptorService implements HttpInterceptor {
         return next.handle(modifiedReq).pipe(
                   catchError((err: any) => {
                       if(err instanceof HttpErrorResponse) {
+                        // [PT] Guardar o detalhe tecnico antes de propagar: e a unica altura
+                        // em que ainda temos o status e o corpo da resposta.
+                        // [VI] Luu chi tiet ky thuat truoc khi day loi di tiep: day la luc duy
+                        // nhat con giu duoc status va body cua response.
+                        this.apiErrorContext.registar(err);
                         if (err.status == 401){
                           this.spinner.hide();
                           showExpiredError(this.errorDialog, this.tokenStorage, this.translate);

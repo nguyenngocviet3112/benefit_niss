@@ -6,6 +6,7 @@
     <li *ngFor="let error of data.errors">
       <span class="error">{{error}}</span>
     </li>
+    <p class="detalheTecnico" *ngIf="detalheTecnico">{{detalheTecnico}}</p>
   </div>
   <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]="">Ok</button>

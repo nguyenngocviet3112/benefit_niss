@@ -24,3 +24,17 @@
 .error {
   white-space: pre-line;
 }
+
+/* [PT] Detalhe tecnico do erro: presente mas discreto -- serve para quem tira o screenshot,
+   nao para quem esta a trabalhar. [VI] Chi tiet ky thuat cua loi: co mat nhung kin dao --
+   phuc vu nguoi chup man hinh gui di, khong phai nguoi dang thao tac. */
+.detalheTecnico {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #e0e0e0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #7a7a7a;
+  word-break: break-word;
+}
