@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using log4net;
+using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
@@ -91,6 +92,7 @@ namespace TimorINSSBackEnd.ExcelDocumentService
 
     public class ExcelDocumentPage
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ExcelDocumentPage));
 
         private ExcelWorksheet ExcelWorkSheet { get; set; }
 
@@ -221,7 +223,25 @@ namespace TimorINSSBackEnd.ExcelDocumentService
             options ??= new TableOptions();
 
             if (options.Filter) ExcelWorkSheet.Cells[startPosition.Y + maxRowSpan, startPosition.X, startPosition.Y + maxRowSpan, startPosition.X + columnOptions.Count - 1].AutoFilter = true;
-            if (options.AutoFitColumns) ExcelWorkSheet.Cells[ExcelWorkSheet.Dimension.Address].AutoFitColumns();
+            // [PT] O auto-fit do EPPlus 4 mede o texto atraves do System.Drawing (GDI+). Em Linux
+            // isso exige a libgdiplus instalada; sem ela o .NET lanca TypeInitializationException
+            // em 'Gdip' e o pedido inteiro rebentava com HTTP 400 -- por causa de largura de
+            // colunas, que e so estetica. Aqui o ficheiro sai na mesma, apenas sem auto-fit.
+            // [VI] Auto-fit cua EPPlus 4 do be rong chu bang System.Drawing (GDI+). Tren Linux
+            // can co libgdiplus; thieu no thi .NET nem TypeInitializationException o 'Gdip' va
+            // ca request chet voi HTTP 400 -- chi vi do rong cot, thuan tuy tham my. O day file
+            // Excel van xuat binh thuong, chi khong duoc auto-fit.
+            if (options.AutoFitColumns)
+            {
+                try
+                {
+                    ExcelWorkSheet.Cells[ExcelWorkSheet.Dimension.Address].AutoFitColumns();
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("AutoFitColumns indisponivel (GDI+/libgdiplus em falta); a gerar o Excel sem auto-fit de colunas.", ex);
+                }
+            }
         }
     }
 }
