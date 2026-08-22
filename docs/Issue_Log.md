@@ -20,7 +20,8 @@ feature is not rediscovered from scratch.
   lesson is usually in the second one.
 - Screenshots go in `issue_log_images/`, named with the issue ID. Never store real citizen data
   — crop it, or reproduce the screen with test data first.
-- Update the counts in **Summary** below. They are the part of this document people read first.
+- Update the counts in the three tables above and the total in **Summary**. They are the part
+  of this document people read first, and a stale count discredits the rest of it.
 
 ---
 
@@ -28,14 +29,21 @@ feature is not rediscovered from scratch.
 
 Every entry is one of two types, marked in the index:
 
-| Type | Meaning |
-|---|---|
-| **FIX** | Something was wrong and was corrected. Carries a tag and an origin, below. |
-| **FEATURE** | Something new was built, or an existing behaviour deliberately changed on request. No origin — nothing was broken. |
+| Type | Count | Meaning |
+|---|---:|---|
+| **FIX** | 26 | Something was wrong and was corrected. Carries a tag and an origin, below. |
+| **FEATURE** | 8 | Something new was built, or an existing behaviour deliberately changed on request. No origin — nothing was broken. |
+| **DEFERRED** | 16 | Raised, understood, and deliberately not done. Listed in *Deferred and known debt* below. |
+| **Total** | **50** | |
 
 Features are recorded here for the same reason as fixes: the decisions behind them are the part
 that is expensive to recover. A rebuild can read the code, but not the reason a rule was written
 the way it was, or which option the client rejected.
+
+Deferred items are recorded for a harder reason: they are invisible. A defect gets reported
+again; something deliberately left undone is only remembered by the person who left it. Every one
+of them below was understood at the time and consciously postponed — that decision is worth as
+much as the work itself, and it is the first thing lost when people change.
 
 ---
 
@@ -44,15 +52,17 @@ the way it was, or which option the client rejected.
 Knowing the *kind* of cause matters more than the individual bug: it tells you where to look
 first next time, and who has to act.
 
-| Tag | Meaning | Who fixes it |
-|---|---|---|
-| **CODE** | Defect in the application source | Development |
-| **DATA** | The code is right; the stored data is wrong or missing | Script or data entry |
-| **CONFIG** | Per-task or per-environment configuration, which does **not** travel with a code deployment | Applied per environment |
-| **INFRA** | Server, container, OS or reverse proxy | Client IT |
-| **LIBRARY** | A third-party library's default behaviour, or a platform dependency it needs | Development or IT |
-| **DEPLOY** | The code is right but what is running is not: missing rebuild, stale asset, wrong script version | Deployment process |
-| **NOT-A-BUG** | Reported as a defect, turned out to be correct behaviour misread | Explanation only |
+| Tag | Count | Meaning | Who fixes it |
+|---|---:|---|---|
+| **CODE** | 19 | Defect in the application source | Development |
+| **DATA** | 2 | The code is right; the stored data is wrong or missing | Script or data entry |
+| **CONFIG** | 2 | Per-task or per-environment configuration, which does **not** travel with a code deployment | Applied per environment |
+| **INFRA** | 2 | Server, container, OS or reverse proxy | Client IT |
+| **LIBRARY** | 2 | A third-party library's default behaviour, or a platform dependency it needs | Development or IT |
+| **DEPLOY** | 2 | The code is right but what is running is not: missing rebuild, stale asset, wrong script version | Deployment process |
+| **NOT-A-BUG** | 1 | Reported as a defect, turned out to be correct behaviour misread | Explanation only |
+
+*Totals exceed 26 because an issue can carry more than one tag.*
 
 A single report often has more than one tag. Where that happens both are listed, because the
 lesson usually lives in the second one.
@@ -63,54 +73,26 @@ The tag above says *what* is broken. It does not say *why the problem existed in
 place*, which is what decides whether it can be prevented. Every entry therefore also carries an
 **Origin**:
 
-| Origin | Meaning | What prevents it |
-|---|---|---|
-| **LEGACY** | Already present in the inherited system; it never worked correctly | Only found by use or by review — assume nothing is safe because it is old |
-| **GAP** | Never built. A rule or a step that has no implementation at all | Check the requirement against the code, not the code against itself |
-| **OURS** | Introduced by our own work — a design flaw, or a regression | Fix the cause in one shared place, not in the screen that reported it |
-| **SIDE-EFFECT** | A change made for one purpose broke something unrelated | Ask who else consumes what you changed: shared table, shared endpoint, shared lookup |
-| **ENV** | The environment differs or changed — OS, proxy, cache, a restored database | Compare environments before reading code |
-| **DEFAULT** | A third-party default nobody overrode | Read the defaults of anything whose output the user sees |
-| **MISREAD** | Nothing was broken | Reproduce with a correct query before accepting the diagnosis in the report |
+| Origin | Count | Meaning | What prevents it |
+|---|---:|---|---|
+| **LEGACY** | 10 | Already present in the inherited system; it never worked correctly | Only found by use or by review — assume nothing is safe because it is old |
+| **GAP** | 5 | Never built. A rule or a step that has no implementation at all | Check the requirement against the code, not the code against itself |
+| **SIDE-EFFECT** | 3 | A change made for one purpose broke something unrelated | Ask who else consumes what you changed: shared table, shared endpoint, shared lookup |
+| **OURS** | 3 | Introduced by our own work — a design flaw, or a regression | Fix the cause in one shared place, not in the screen that reported it |
+| **ENV** | 3 | The environment differs or changed — OS, proxy, cache, a restored database | Compare environments before reading code |
+| **MISREAD** | 1 | Nothing was broken | Reproduce with a correct query before accepting the diagnosis in the report |
+| **DEFAULT** | 1 | A third-party default nobody overrode | Read the defaults of anything whose output the user sees |
+| **Total** | **26** | | |
 
 ---
 
 ## Summary
 
-**34 entries recorded, 2026-07-12 to 2026-08-22** — 26 fixes and 8 features. Update these
-counts when adding an entry.
+**50 entries, 2026-07-12 to 2026-08-22** — 26 fixes, 8 features and 16 items deliberately deferred. The counts per tag and per
+origin are in the two tables above; update them when adding an entry.
 
-### What was broken
-
-| Tag | Count |
-|---|---:|
-| CODE | 19 |
-| LIBRARY | 2 |
-| INFRA | 2 |
-| DEPLOY | 2 |
-| DATA | 2 |
-| CONFIG | 2 |
-| NOT-A-BUG | 1 |
-
-*Counts cover the 26 fixes and exceed 26 because an issue can carry more than one tag.
-The 8 features carry no tag — nothing was broken.*
-
-### Why it existed
-
-| Origin | Count | |
-|---|---:|---|
-| **LEGACY** | 10 | Already broken in the inherited system |
-| **GAP** | 5 | Never built at all |
-| **SIDE-EFFECT** | 3 | Broken by a change made elsewhere |
-| **OURS** | 3 | Introduced by our own work |
-| **ENV** | 3 | Environment differed or changed |
-| **MISREAD** | 1 | Nothing was broken |
-| **DEFAULT** | 1 | A library default nobody overrode |
-
-### What the numbers say
-
-**LEGACY and GAP together are 15 of 26.** More than half of everything reported had **never
-worked**, rather than having recently broken. Only 3 issues were introduced by our own work.
+**LEGACY and GAP together are 15 of the 26 fixes.** More than half of everything reported had
+**never worked**, rather than having recently broken. Only 3 were introduced by our own work.
 
 Two consequences worth acting on:
 
@@ -794,6 +776,36 @@ entirely for the Excel import path, which has no single account field.
 the point of entry. This class of error is invisible in every downstream document.
 
 ---
+
+---
+
+## Deferred and known debt
+
+Raised, understood, and deliberately not done. Each was a reasonable decision at the time; the
+cost of leaving it is stated so the decision can be revisited rather than rediscovered.
+
+| # | What | Why it was not done | What it costs to leave |
+|---|---|---|---|
+| D-01 | **Carry the closing balance forward into the next year's opening balances** — a button that computes the prior year's real closing balance, pre-fills the table and lets the user adjust before confirming | Designed in detail but never built on the current system. Year 1 has nothing to carry from, so manual entry was enough to start | Every subsequent year is entered by hand, against a figure the system already holds. The real ledger has a literal "SALDO TRANSITADO ANO ANTERIOR" line, so the concept is expected |
+| D-02 | **Two-step accrual booking** — book receivable/revenue when the payment guide is issued, and bank/receivable when it is collected | The system books only at collection, and that was enough for the reports in scope | The books do not show money owed but not yet received, which is what an accrual system is for |
+| D-03 | **~97 duplicate account codes** across the chart of accounts, from two parallel imports | Only the ~9 codes needed for the payment work were corrected; the rest needs a cross-reference against every table that uses them | Any new screen over the account tree can pick the wrong duplicate. One of the two batches is corrupted at every level |
+| D-04 | **119 inactive account rows with no audit trail** — leftover seed data | Made visible with a status badge instead of hidden, which solved the reported symptom | They are still there, and still meaningless to whoever reads the tree |
+| D-05 | **The error-handler pattern that can throw** (INSS-012) was fixed in 2 files, not swept | Scoped deliberately to keep the change reviewable | The same frozen-screen symptom can still appear anywhere else the pattern exists |
+| D-06 | **Dropdowns that render no options when the list has exactly one** (INSS-014) — the same guard exists on 4 other screens | Out of scope of the report being fixed | Each of them breaks the day its list drops to a single entry |
+| D-07 | **Account-code search matches only the code, not the description** — typing "Água" returns nothing | Annoying but not blocking | Users must know the numeric code to find anything |
+| D-08 | **An expense authorised against an unfunded budget line becomes permanently stuck** — it cannot be committed, and the delete action only exists while it is still registered | Needs a decision on what the recovery path should be | The only way out is a database intervention, which the client cannot do themselves |
+| D-09 | **No bulk entry for Cabimento or Compromisso** — only the payment stage accepts an Excel import | Never requested | Every line is entered one at a time, for processes that routinely have dozens |
+| D-10 | **No single audit-log viewer** — there are three separate mechanisms (a log file, per-record columns, and text history) | Never requested as one feature | "Who changed this, and when" cannot be answered from the application |
+| D-11 | **Upload limits disagree across the stack** — the screen accepts 50 MB, the application server stops at 30 MB | Only surfaced while fixing INSS-019, and the proxy limit was the binding one | A file between the two limits is accepted by the screen and rejected by the server |
+| D-12 | **Creating a user does not create login credentials** | The screen predates this engagement | New accounts need a second, manual step that is not visible anywhere |
+| D-13 | **Commitment numbering gap** found during the January import review | Flagged as blocking, superseded by higher-priority work | Numbering is relied on by the ledger |
+| D-14 | **"Who approved this" is not displayed** anywhere, though it is stored | Reported alongside D-13 and deprioritised with it | An approval chain that cannot be read is hard to audit |
+| D-15 | **Status shown as a raw letter** ("R", "A") in the in-progress expenses dialog | Cosmetic, noticed at handover | The dialog asks the user to make a decision using a code only developers read |
+| D-16 | **Economic-classification crosswalk mapped at root level only** — the remaining ~150 leaf nodes were verified correct at root level but not mapped to an exact sub-level target | The report aggregates at root level today, so it changes nothing | Needed before the report can break down below root level |
+
+**When rebuilding:** items D-03 to D-07 are all the same shape — a fix applied where it was
+reported rather than where it lives. If the rebuild inherits any of this code, these are the
+places to start, because each one is already known to be wrong.
 
 ## Patterns worth carrying into any rebuild
 
