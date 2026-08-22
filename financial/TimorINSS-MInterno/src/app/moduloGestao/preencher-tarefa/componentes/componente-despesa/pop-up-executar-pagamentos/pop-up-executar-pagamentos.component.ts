@@ -453,7 +453,11 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
       isFirstPage = false;
 
       const [bankCode, monthIndex, year] = key.split('_');
-      const bankLabel = this.bankOptions.find(b => b.key === bankCode)?.label ?? bankCode ?? '';
+      // [PT] Banco obrigatorio hoje, mas os pagamentos antigos podem nao ter bankCode:
+      // nesse caso o cabecalho saia com um espaco duplo onde devia estar o nome do banco.
+      // [VI] Nay bank la bat buoc, nhung cac lenh chi cu co the khong co bankCode: khi do
+      // dong tieu de bi hai dau cach lien nhau o cho le ra la ten ngan hang.
+      const bankLabel = this.bankOptions.find(b => b.key === bankCode)?.label || bankCode || 'Banku la iha';
       const monthLabel = monthKeysPT[Number(monthIndex)];
 
       // INSS logo
@@ -491,6 +495,15 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
         head: [['No', 'NISS', 'Naran Funsionáriu', 'No. Konta Bankária', 'No. IBAN', 'Total Paga']],
         body: rows,
         foot: [['', '', '', '', 'Total Pagamentu', '$' + totalPagamentu.toFixed(2)]],
+        // [PT] O total sai uma unica vez, no fim da lista deste banco. Por omissao o
+        // jspdf-autotable usa showFoot 'everyPage', pelo que uma lista que ocupasse
+        // varias paginas repetia 'Total Pagamentu' no fundo de cada uma -- e sempre com
+        // o total INTEIRO do grupo, o que se lia como se cada pagina tivesse fechado contas.
+        // [VI] Dong tong chi in mot lan, o cuoi danh sach cua ngan hang nay. Mac dinh
+        // jspdf-autotable la showFoot 'everyPage', nen danh sach dai qua nhieu trang se
+        // lap lai 'Total Pagamentu' o cuoi tung trang -- va luon la tong CA nhom, doc len
+        // cu tuong moi trang da chot so rieng.
+        showFoot: 'lastPage',
         theme: 'grid',
         columnStyles: { 5: { halign: 'right' } },
         headStyles: {
