@@ -33,17 +33,18 @@ Every entry is one of two types, marked in the index:
 |---|---:|---|
 | **FIX** | 26 | Something was wrong and was corrected. Carries a tag and an origin, below. |
 | **FEATURE** | 8 | Something new was built, or an existing behaviour deliberately changed on request. No origin — nothing was broken. |
-| **DEFERRED** | 16 | Raised, understood, and deliberately not done. Listed in *Deferred and known debt* below. |
+| **BACKLOG** | 16 | Identified during other work and too involved to deliver in the same pass. Listed in *Backlog* below, to be scheduled. |
 | **Total** | **50** | |
 
 Features are recorded here for the same reason as fixes: the decisions behind them are the part
 that is expensive to recover. A rebuild can read the code, but not the reason a rule was written
 the way it was, or which option the client rejected.
 
-Deferred items are recorded for a harder reason: they are invisible. A defect gets reported
-again; something deliberately left undone is only remembered by the person who left it. Every one
-of them below was understood at the time and consciously postponed — that decision is worth as
-much as the work itself, and it is the first thing lost when people change.
+Backlog items are recorded for a harder reason: they are invisible. A defect gets reported again;
+something identified but not yet built is only remembered by the person who found it. Each one
+below was analysed at the time it surfaced and judged too involved to fold into the change that
+revealed it — that analysis is worth as much as the work itself, and it is the first thing lost
+when people change.
 
 ---
 
@@ -88,7 +89,7 @@ place*, which is what decides whether it can be prevented. Every entry therefore
 
 ## Summary
 
-**50 entries, 2026-07-12 to 2026-08-22** — 26 fixes, 8 features and 16 items deliberately deferred. The counts per tag and per
+**50 entries, 2026-07-12 to 2026-08-22** — 26 fixes, 8 features and 16 items in the backlog. The counts per tag and per
 origin are in the two tables above; update them when adding an entry.
 
 **LEGACY and GAP together are 15 of the 26 fixes.** More than half of everything reported had
@@ -779,44 +780,45 @@ the point of entry. This class of error is invisible in every downstream documen
 
 ---
 
-## Deferred and known debt
+## Backlog
 
-Raised, understood, and deliberately not done. Each was a reasonable decision at the time; the
-cost of leaving it is stated so the decision can be revisited rather than rediscovered.
+Identified while working on something else, analysed, and set aside to be implemented as its own
+piece of work rather than squeezed into the change that revealed it. Each row states what it
+would take and what it costs to wait, so it can be scheduled on evidence instead of memory.
 
-| # | What | Why it was not done | What it costs to leave |
+| # | What | Why it needs its own pass | What it costs to wait |
 |---|---|---|---|
-| D-01 | **Carry the closing balance forward into the next year's opening balances** — a button that computes the prior year's real closing balance, pre-fills the table and lets the user adjust before confirming | Designed in detail but never built on the current system. Year 1 has nothing to carry from, so manual entry was enough to start | Every subsequent year is entered by hand, against a figure the system already holds. The real ledger has a literal "SALDO TRANSITADO ANO ANTERIOR" line, so the concept is expected |
-| D-02 | **Two-step accrual booking** — book receivable/revenue when the payment guide is issued, and bank/receivable when it is collected | The system books only at collection, and that was enough for the reports in scope | The books do not show money owed but not yet received, which is what an accrual system is for |
-| D-03 | **~97 duplicate account codes** across the chart of accounts, from two parallel imports | Only the ~9 codes needed for the payment work were corrected; the rest needs a cross-reference against every table that uses them | Any new screen over the account tree can pick the wrong duplicate. One of the two batches is corrupted at every level |
-| D-04 | **119 inactive account rows with no audit trail** — leftover seed data | Made visible with a status badge instead of hidden, which solved the reported symptom | They are still there, and still meaningless to whoever reads the tree |
-| D-05 | **The error-handler pattern that can throw** (INSS-012) was fixed in 2 files, not swept | Scoped deliberately to keep the change reviewable | The same frozen-screen symptom can still appear anywhere else the pattern exists |
-| D-06 | **Dropdowns that render no options when the list has exactly one** (INSS-014) — the same guard exists on 4 other screens | Out of scope of the report being fixed | Each of them breaks the day its list drops to a single entry |
-| D-07 | **Account-code search matches only the code, not the description** — typing "Água" returns nothing | Annoying but not blocking | Users must know the numeric code to find anything |
-| D-08 | **An expense authorised against an unfunded budget line becomes permanently stuck** — it cannot be committed, and the delete action only exists while it is still registered | Needs a decision on what the recovery path should be | The only way out is a database intervention, which the client cannot do themselves |
-| D-09 | **No bulk entry for Cabimento or Compromisso** — only the payment stage accepts an Excel import | Never requested | Every line is entered one at a time, for processes that routinely have dozens |
-| D-10 | **No single audit-log viewer** — there are three separate mechanisms (a log file, per-record columns, and text history) | Never requested as one feature | "Who changed this, and when" cannot be answered from the application |
-| D-11 | **Upload limits disagree across the stack** — the screen accepts 50 MB, the application server stops at 30 MB | Only surfaced while fixing INSS-019, and the proxy limit was the binding one | A file between the two limits is accepted by the screen and rejected by the server |
-| D-12 | **Creating a user does not create login credentials** | The screen predates this engagement | New accounts need a second, manual step that is not visible anywhere |
-| D-13 | **Commitment numbering gap** found during the January import review | Flagged as blocking, superseded by higher-priority work | Numbering is relied on by the ledger |
-| D-14 | **"Who approved this" is not displayed** anywhere, though it is stored | Reported alongside D-13 and deprioritised with it | An approval chain that cannot be read is hard to audit |
-| D-15 | **Status shown as a raw letter** ("R", "A") in the in-progress expenses dialog | Cosmetic, noticed at handover | The dialog asks the user to make a decision using a code only developers read |
-| D-16 | **Economic-classification crosswalk mapped at root level only** — the remaining ~150 leaf nodes were verified correct at root level but not mapped to an exact sub-level target | The report aggregates at root level today, so it changes nothing | Needed before the report can break down below root level |
+| D-01 | **Carry the closing balance forward into the next year's opening balances** — a button that computes the prior year's real closing balance, pre-fills the table and lets the user adjust before confirming | Designed in detail; needs the prior year's full transaction history to compute against, so it is a piece of work in its own right. Year 1 has nothing to carry from, so manual entry was enough to start | Every subsequent year is entered by hand, against a figure the system already holds. The real ledger has a literal "SALDO TRANSITADO ANO ANTERIOR" line, so the concept is expected |
+| D-02 | **Two-step accrual booking** — book receivable/revenue when the payment guide is issued, and bank/receivable when it is collected | Changes when entries are written, not just what they contain — it touches the guide, the collection and the reports together | The books do not show money owed but not yet received, which is what an accrual system is for |
+| D-03 | **~97 duplicate account codes** across the chart of accounts, from two parallel imports | The ~9 codes needed for the payment work were corrected. The rest cannot be touched safely without cross-referencing every table that uses them first | Any new screen over the account tree can pick the wrong duplicate. One of the two batches is corrupted at every level |
+| D-04 | **119 inactive account rows with no audit trail** — leftover seed data | Made visible with a status badge, which solved the reported symptom; deciding what to do with each row needs the client | They are still there, and still meaningless to whoever reads the tree |
+| D-05 | **The error-handler pattern that can throw** (INSS-012) was fixed in 2 files, not swept | Scoped to the two files involved to keep that change reviewable; the sweep is a separate pass with its own testing | The same frozen-screen symptom can still appear anywhere else the pattern exists |
+| D-06 | **Dropdowns that render no options when the list has exactly one** (INSS-014) — the same guard exists on 4 other screens | Outside the screen being fixed; each needs its own check | Each of them breaks the day its list drops to a single entry |
+| D-07 | **Account-code search matches only the code, not the description** — typing "Água" returns nothing | Needs the search to index the description as well as the code | Users must know the numeric code to find anything |
+| D-08 | **An expense authorised against an unfunded budget line becomes permanently stuck** — it cannot be committed, and the delete action only exists while it is still registered | Needs a decision from INSS on what the recovery path should be | The only way out is a database intervention, which the client cannot do themselves |
+| D-09 | **No bulk entry for Cabimento or Compromisso** — only the payment stage accepts an Excel import | Not requested so far | Every line is entered one at a time, for processes that routinely have dozens |
+| D-10 | **No single audit-log viewer** — there are three separate mechanisms (a log file, per-record columns, and text history) | Not requested so far as one feature | "Who changed this, and when" cannot be answered from the application |
+| D-11 | **Upload limits disagree across the stack** — the screen accepts 50 MB, the application server stops at 30 MB | Surfaced while fixing INSS-019, where the proxy limit was the binding one; aligning the three limits needs a decision on the real maximum | A file between the two limits is accepted by the screen and rejected by the server |
+| D-12 | **Creating a user does not create login credentials** | The screen predates this engagement and the legacy login path it has to satisfy | New accounts need a second, manual step that is not visible anywhere |
+| D-13 | **Commitment numbering gap** found during the January import review | Flagged as blocking; superseded at the time by the report INSS confirmed as first priority | Numbering is relied on by the ledger |
+| D-14 | **"Who approved this" is not displayed** anywhere, though it is stored | Reported alongside D-13 and carried with it | An approval chain that cannot be read is hard to audit |
+| D-15 | **Status shown as a raw letter** ("R", "A") in the in-progress expenses dialog | Needs the status codes mapped to readable labels wherever they are shown | The dialog asks the user to make a decision using a code only developers read |
+| D-16 | **Economic-classification crosswalk mapped at root level only** — the remaining ~150 leaf nodes were verified correct at root level but not mapped to an exact sub-level target | The report aggregates at root level today; the mapping is only needed once it breaks down further | Needed before the report can break down below root level |
 
-### Two different kinds of debt
+### Two kinds of backlog item
 
-They are not all ours to absorb, and separating them is what makes this list usable.
+Separating them is what makes this list usable when planning.
 
-**Worth proposing as future work** — these add capability the system does not have today, and
-each answers a need the client has already expressed:
+**New capability, to be proposed and scheduled with INSS** — these add something the system does
+not do today, and each answers a need already expressed:
 
 > D-01 carry the closing balance forward · D-02 two-step accrual booking · D-09 bulk entry for
 > Cabimento and Compromisso · D-10 a single audit-log viewer · D-12 create login credentials with
 > the user · D-13 commitment numbering · D-14 show who approved · D-16 sub-level breakdown in the
 > economic-classification report
 
-**Ours to clean up** — these are defects or half-finished fixes, not new capability, and should
-not be presented as an upgrade:
+**Ours to complete** — these are follow-through on work already done rather than new capability,
+and are not presented as an upgrade:
 
 > D-03 duplicate account codes · D-04 inactive junk rows · D-05 the error handler swept properly
 > · D-06 the remaining single-option dropdowns · D-07 searching accounts by name · D-08 the
@@ -826,10 +828,9 @@ not be presented as an upgrade:
 reported rather than where it lives. If the rebuild inherits any of this code, these are the
 places to start, because each one is already known to be wrong.
 
-**Keep adding to this list.** Anything raised in conversation that turns out to be needed but is
-not done belongs here the moment it is identified, with the same two columns: why not now, and
-what it costs to wait. That is what makes it possible to go back to the client later with a
-considered proposal instead of a memory.
+**Keep adding to this list.** Anything raised that turns out to be needed belongs here the moment
+it is identified, with the same two columns: what it would take, and what it costs to wait. That
+is what makes it possible to come back with a considered proposal instead of a recollection.
 
 ## Patterns worth carrying into any rebuild
 
