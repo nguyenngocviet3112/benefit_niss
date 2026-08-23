@@ -211,13 +211,28 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 userList = userList.Where(x => x.Locked == isLocked);
             }
 
+            // [PT] O nome do utilizador pode vir de duas origens: a ficha de trabalhador, para as
+            // contas do pessoal do INSS, ou a entidade empregadora, para as contas de empresa do
+            // modulo de Contribuicoes. So a primeira era lida, pelo que toda a conta de empresa
+            // saia sem nome -- nao por falta de dados, mas porque nunca se olhava para onde o nome
+            // esta guardado. Testa-se a chave estrangeira e nao a propriedade de navegacao, que
+            // traduz para SQL mais simples.
+            // [VI] Ten nguoi dung nam o hai noi: ho so trabalhador (nguoi lao dong) voi tai khoan
+            // nhan vien INSS, va entidadeempregadora (don vi su dung lao dong) voi tai khoan doanh
+            // nghiep cua module Contribuicoes. Code chi doc noi thu nhat nen moi tai khoan doanh
+            // nghiep deu trong ten -- khong phai thieu du lieu, ma la chua bao gio doc toi cho
+            // chua ten. Kiem tra khoa ngoai thay vi navigation property de SQL dich ra gon hon.
             var listaUtilizador = userList
                .Where(u => u.IndActivo &&
-               (u.TrabalhadorFkNavigation.Nome.Contains(request.filter.filterBy) || u.Username.Contains(request.filter.filterBy)))
+               (u.TrabalhadorFkNavigation.Nome.Contains(request.filter.filterBy)
+                || u.UtilizadorEntidadeFkNavigation.Nome.Contains(request.filter.filterBy)
+                || u.Username.Contains(request.filter.filterBy)))
                .Select(u => new UtilizadoresAcessoListagem
                {
                    id = u.IdUtilizador,
-                   nome = u.TrabalhadorFkNavigation.Nome,
+                   nome = u.TrabalhadorFk != null
+                        ? u.TrabalhadorFkNavigation.Nome
+                        : (u.UtilizadorEntidadeFk != null ? u.UtilizadorEntidadeFkNavigation.Nome : null),
                    utilizador = u.Username,
                    interno = u.Interno.GetValueOrDefault(),
                    locked = u.Locked

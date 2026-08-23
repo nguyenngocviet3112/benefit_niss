@@ -31,10 +31,10 @@ Every entry is one of two types, marked in the index:
 
 | Type | Count | Meaning |
 |---|---:|---|
-| **FIX** | 26 | Something was wrong and was corrected. Carries a tag and an origin, below. |
+| **FIX** | 27 | Something was wrong and was corrected. Carries a tag and an origin, below. |
 | **FEATURE** | 9 | Something new was built, or an existing behaviour deliberately changed on request. No origin — nothing was broken. |
 | **BACKLOG** | 17 | Identified during other work and too involved to deliver in the same pass. Listed in *Backlog* below, to be scheduled. |
-| **Total** | **52** | |
+| **Total** | **53** | |
 
 Features are recorded here for the same reason as fixes: the decisions behind them are the part
 that is expensive to recover. A rebuild can read the code, but not the reason a rule was written
@@ -55,7 +55,7 @@ first next time, and who has to act.
 
 | Tag | Count | Meaning | Who fixes it |
 |---|---:|---|---|
-| **CODE** | 20 | Defect in the application source | Development |
+| **CODE** | 21 | Defect in the application source | Development |
 | **DATA** | 2 | The code is right; the stored data is wrong or missing | Script or data entry |
 | **CONFIG** | 2 | Per-task or per-environment configuration, which does **not** travel with a code deployment | Applied per environment |
 | **INFRA** | 2 | Server, container, OS or reverse proxy | Client IT |
@@ -63,7 +63,7 @@ first next time, and who has to act.
 | **DEPLOY** | 2 | The code is right but what is running is not: missing rebuild, stale asset, wrong script version | Deployment process |
 | **NOT-A-BUG** | 1 | Reported as a defect, turned out to be correct behaviour misread | Explanation only |
 
-*Totals exceed 26 because an issue can carry more than one tag.*
+*Totals exceed 27 because an issue can carry more than one tag.*
 
 A single report often has more than one tag. Where that happens both are listed, because the
 lesson usually lives in the second one.
@@ -76,7 +76,7 @@ place*, which is what decides whether it can be prevented. Every entry therefore
 
 | Origin | Count | Meaning | What prevents it |
 |---|---:|---|---|
-| **LEGACY** | 10 | Already present in the inherited system; it never worked correctly | Only found by use or by review — assume nothing is safe because it is old |
+| **LEGACY** | 11 | Already present in the inherited system; it never worked correctly | Only found by use or by review — assume nothing is safe because it is old |
 | **GAP** | 5 | Never built. A rule or a step that has no implementation at all | Check the requirement against the code, not the code against itself |
 | **SIDE-EFFECT** | 3 | A change made for one purpose broke something unrelated | Ask who else consumes what you changed: shared table, shared endpoint, shared lookup |
 | **OURS** | 3 | Introduced by our own work — a design flaw, or a regression | Fix the cause in one shared place, not in the screen that reported it |
@@ -89,10 +89,10 @@ place*, which is what decides whether it can be prevented. Every entry therefore
 
 ## Summary
 
-**52 entries, 2026-07-12 to 2026-08-22** — 26 fixes, 9 features and 17 items in the backlog. The counts per tag and per
+**53 entries, 2026-07-12 to 2026-08-23** — 27 fixes, 9 features and 17 items in the backlog. The counts per tag and per
 origin are in the two tables above; update them when adding an entry.
 
-**LEGACY and GAP together are 15 of the 26 fixes.** More than half of everything reported had
+**LEGACY and GAP together are 16 of the 27 fixes.** More than half of everything reported had
 **never worked**, rather than having recently broken. Only 3 were introduced by our own work.
 
 Two consequences worth acting on:
@@ -139,6 +139,7 @@ list of fixes, it is the list of things not to do again.
 | [INSS-021](#inss-021) | 2026-08-22 | CODE | Recipient name and NISS were blank on the payment order |
 | [INSS-022](#inss-022) | 2026-08-22 | LIBRARY / INFRA | Every Excel export failed on the Linux servers |
 | [INSS-023](#inss-023) | 2026-08-22 | CODE | "Something went wrong" said nothing at all |
+| [INSS-036](#inss-036) | 2026-08-23 | CODE | Company accounts had no name on Users Access Control |
 | [INSS-027](#inss-027) | 2026-07-17 | FEATURE | Payment order grouped by bank, month and year |
 | [INSS-028](#inss-028) | 2026-07-13 | FEATURE | Reconciliation: view the uploaded proof, filter by date |
 | [INSS-029](#inss-029) | 2026-08-01 | FEATURE | Remaining balance shown on the expenditure screens |
@@ -810,6 +811,39 @@ Note also that this one document is generated from three separate copies of the 
 change to its appearance has to be made three times, and is easy to make in only one.
 
 ---
+
+---
+
+## INSS-036
+**Company accounts had no name on Users Access Control** · 2026-08-23 · `CODE`
+**Origin:** `LEGACY` — the screen was written for one kind of account and the other kind was never considered.
+
+**Seen:** on *Users Access Control*, the **Username** column was empty on every row. Reported as
+missing data, alongside the *Actions* buttons not appearing.
+
+**Cause:** a login belongs to one of two different kinds of subject. Staff logins point at a
+worker record (`trabalhador_fk`); the company logins used by the Contributions module point at an
+employer record (`utilizador_entidade_fk`). The query read the worker name and nothing else, so a
+company account could never show a name — not for want of data. The company names were in the
+database the whole time.
+
+The blanks looked total on the client's environment only because the accounts they were looking at
+happened to be company ones.
+
+**Fix:** the name falls back to the employer's name when there is no worker. The search box
+matches the employer name too — without that, the screen would show a name that the search could
+not find, which reads as a second defect. The `admin` account stays blank: it belongs to neither
+subject, and there is nothing to fall back to.
+
+**Not part of this:** the missing *Actions* buttons reported in the same message were not a defect.
+Those are gated on UPDATE rights for this screen, and the profile in use did not have them. Note
+for support: rights are read from the token issued at login, so granting them requires the user to
+log out and back in before the buttons appear.
+
+**When rebuilding:** where a foreign key is one of several that answer the same question — *who is
+this record about?* — reading only one of them fails silently for the rest. It shows as absent
+data, so it gets reported as a data-entry problem and looked for in the wrong place. Whenever a
+displayed field is derived from an optional relationship, ask what the other kinds of row show.
 
 ---
 

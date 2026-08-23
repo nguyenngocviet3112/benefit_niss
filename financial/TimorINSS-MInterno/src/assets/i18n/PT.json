@@ -792,7 +792,8 @@
       "1": "Recibo inválido",
       "2": "Incompatibilidade de valor",
       "3": "Envio duplicado"
-    }
+    },
+    "addUser": "Adicionar utilizador"
   },
   "comprovativoPagamento": {
     "titleInsert": "Inserir Comprovativo de Pagamento",

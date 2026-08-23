@@ -784,7 +784,8 @@
       "1": "Receitu la válidu",
       "2": "Valor la hanesan",
       "3": "Submisaun repetidu"
-    }
+    },
+    "addUser": "Adicionar utilizador"
   },
   "comprovativoPagamento": {
     "titleInsert": "Inserir Comprovativo de Pagamento",
