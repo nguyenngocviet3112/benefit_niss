@@ -32,6 +32,7 @@ namespace TimorINSSBackEnd.Models
         public DateTime? DataAlteracao { get; set; }
         public string Ipv6 { get; set; }
         public int? UtilizadorResponsavel { get; set; }
+        public string TituloListaPagamento { get; set; }
 
         public virtual Processoativo ProcessoAtivoFkNavigation { get; set; }
         public virtual Tarefa TarefaconfigFkNavigation { get; set; }
