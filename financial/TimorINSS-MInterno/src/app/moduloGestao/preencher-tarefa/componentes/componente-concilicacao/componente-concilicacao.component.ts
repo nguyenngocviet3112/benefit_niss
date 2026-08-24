@@ -80,6 +80,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   public movimentosBancariospageSizeTable = 20;
   public movimentosBancariospageIndexTable = 0;
   public disabledSearchBank = true;
+  public tituloListaPagamento: string = 'Lista Pagamentu Saláriu Funcionáriu INSS';
   public movimentosBancariosFilter: FilterRequest = {};
   public movimentosBancariosfilterBy = '';
   public movimentosBancariosSelection = new SelectionModel<number>(true, []);
@@ -982,7 +983,10 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       // INSS logo
       pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
 
-      JsPdf_centerText(pdf, 'Lista Pagamentu Saláriu Funcionáriu INSS', 35);
+      // title: use custom title if available, fallback to default "Salariu"
+      const defaultTitle = 'Lista Pagamentu Saláriu Funcionáriu INSS';
+      const titulo = this.tituloListaPagamento || defaultTitle;
+      JsPdf_centerText(pdf, titulo, 35);
       pdf.setFontSize(12);
       pdf.setTextColor(99);
 
