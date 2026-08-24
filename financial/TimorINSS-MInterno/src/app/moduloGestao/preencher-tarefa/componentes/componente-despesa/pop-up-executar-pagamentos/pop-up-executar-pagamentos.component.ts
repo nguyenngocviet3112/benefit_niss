@@ -47,6 +47,7 @@ export interface PopUpExecutarPagamentosData {
   totalValorDestinatarioExecutado: number;
   componenteDespesaConfig: ComponenteDespesaConfig;
   despesaCabimentada: DespesaRegistada[];
+  tituloListaPagamento?: string;
 }
 
 @Component({
@@ -528,8 +529,10 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
       // INSS logo
       pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
 
-      //title (mantido em Tetun, documento oficial fixo)
-      JsPdf_centerText(pdf, 'Lista Pagamentu Saláriu Funcionáriu INSS', 35);
+      //title: use custom title if provided, fallback to default "Salariu"
+      const defaultTitle = 'Lista Pagamentu Saláriu Funcionáriu INSS';
+      const titulo = this.data.tituloListaPagamento || defaultTitle;
+      JsPdf_centerText(pdf, titulo, 35);
       pdf.setFontSize(12);
       pdf.setTextColor(99);
 
