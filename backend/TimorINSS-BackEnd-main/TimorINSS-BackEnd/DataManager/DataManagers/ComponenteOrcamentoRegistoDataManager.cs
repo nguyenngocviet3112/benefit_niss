@@ -1239,14 +1239,25 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 var table = new Table { Borders = { Width = 0.5 } };
 
                 // Kích thước cột
-                table.AddColumn(Unit.FromCentimeter(3));   // Tipo de Conta
-                table.AddColumn(Unit.FromCentimeter(5));   // Departamento
-                table.AddColumn(Unit.FromCentimeter(5));   // Centro de Custo
-                table.AddColumn(Unit.FromCentimeter(1.5)); // Agrupamento
-                table.AddColumn(Unit.FromCentimeter(1.5)); // SubAgrupamento
-                table.AddColumn(Unit.FromCentimeter(1.5)); // Rubrica
-                table.AddColumn(Unit.FromCentimeter(1.5)); // Alinea
-                table.AddColumn(Unit.FromCentimeter(1.5)); // SubAlinea
+                // [PT/VI] A4 Landscape usable width eh 28.7cm (29.7cm - 0.5-0.5 margin).
+                // Coluna de codigos (Agrupamento, SubAgrupamento, etc.) foram ajustadas
+                // de 1.5cm para 1.2cm cada uma, economizando 1.2cm no total. Coluna
+                // Tipo de Conta, Departamento, Centro de Custo tambem reduzidas em 0.5cm,
+                // 0.5cm, 0.5cm respectivamente. Total width agora ~27.3cm = fits na page
+                // sem cortar Designacao e Valor que estavam sumindo no PDF anterior.
+                // [VI] A4 Landscape khong gian co the dung la 28.7cm (29.7-0.5-0.5 khong
+                // gian canh). Cot ma hoa duoc chinh tu 1.5cm xuong 1.2cm moi cot, tiet
+                // kiem tong cong 1.2cm. Ty de Conta, Departamento, Centro de Custo giam
+                // 0.5cm, 0.5cm, 0.5cm. Tong rong nay ~27.3cm = vua vao trang khong
+                // cat Designacao va Valor.
+                table.AddColumn(Unit.FromCentimeter(2.5)); // Tipo de Conta
+                table.AddColumn(Unit.FromCentimeter(4.5)); // Departamento
+                table.AddColumn(Unit.FromCentimeter(4.5)); // Centro de Custo
+                table.AddColumn(Unit.FromCentimeter(1.2)); // Agrupamento
+                table.AddColumn(Unit.FromCentimeter(1.2)); // SubAgrupamento
+                table.AddColumn(Unit.FromCentimeter(1.2)); // Rubrica
+                table.AddColumn(Unit.FromCentimeter(1.2)); // Alinea
+                table.AddColumn(Unit.FromCentimeter(1.2)); // SubAlinea
                 table.AddColumn(Unit.FromCentimeter(5));   // Designacao
                 table.AddColumn(Unit.FromCentimeter(3));   // Valor
 
