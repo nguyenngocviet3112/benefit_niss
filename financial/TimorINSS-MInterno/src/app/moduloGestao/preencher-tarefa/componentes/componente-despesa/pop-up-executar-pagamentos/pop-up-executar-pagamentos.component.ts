@@ -30,6 +30,7 @@ import { GetComponenteOrcamentoRegistoAprovadoRequest } from "src/app/request-mo
 import { componenteOrcamentoRegistoService } from "src/app/services/componenteOrcamentoRegisto.service";
 import { Router } from "@angular/router";
 import { ExcelImporterPopupDestinatarioComponent } from "src/app/componentes/excel-importer/excel-importer-popups/excel-importer-popup-destinatarios/excel-importer-popup-destinatarios.component";
+import { TarefaService } from "src/app/services/tarefa.service";
 
 
 
@@ -78,7 +79,9 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
   public listaPagamentosExecutadosDestinatario: PagamentoExecutadoDestinatario[] = [];
   public totalPagamentoDestinatario: number = 0;
   public bankOptions: { key: string; label: string }[] = [];
-
+  public bankFilter?: string;
+  public filteredListaPagamentosDestinatario: PagamentoExecutadoDestinatario[] = [];
+  public tituloListaPagamento: string = 'Lista Pagamentu Saláriu Funcionáriu INSS';
 
   public displayedColumnsDespesasAExecutar: string[] = ['descricao', 'valor', 'valorExecutado', 'faltaExecutar'];
   public displayedColumnsDestinatarios: string[] = ['destinatario', 'banco', 'valorExecutado', 'accoes', 'exportToExcel'];
@@ -106,6 +109,7 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
     public componenteDespesaService: ComponenteDespesaRegistoService,
     private orcamentoService: componenteOrcamentoRegistoService,
     private router: Router,
+    private tarefaService: TarefaService,
     @Inject(MAT_DIALOG_DATA) public data: PopUpExecutarPagamentosData
   ) {
   }
@@ -123,6 +127,20 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
           label: res[key],
         }));
       });
+
+      // Load payment list title from API
+      this.tarefaService.GetTituloListaPagamento(this.data.tarefaActivoId).subscribe(
+        (response: any) => {
+          if (response?.titulo) {
+            this.tituloListaPagamento = response.titulo;
+            this.data.tituloListaPagamento = response.titulo;
+          }
+        },
+        (err) => {
+          console.error('Error loading payment list title:', err);
+          // Keep default title
+        }
+      );
 
       //obter configuração codigos
       this.getOrcamentoAprovado(this.data.tarefaActivoId);
@@ -371,6 +389,8 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
           this.data.totalValorDestinatarioExecutado = Math.round((this.data.totalValorDestinatarioExecutado + element.valorExecutado) * 100) / 100;
         });
       }
+      // Apply bank filter to display data
+      this.applyBankFilter();
       this.hideLoader();
 
     },
@@ -463,6 +483,8 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
     this.pagamentoExecutadoService.EditPagamentoExecutado(request).subscribe(x => {
       openSnackBar(this.translate.instant('snackBar.emitirOrdemPagamento'), this._snackBar);
 
+      // Wire the title to dialog data before PDF export
+      this.data.tituloListaPagamento = this.tituloListaPagamento;
       this.gerarPDF(this.data.listaPagamentosDestinatario);
       this.closePopUp();
       this.hideLoader();
@@ -721,4 +743,25 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
   //     this.pagamento.swift = undefined;
   //   }
   // }
+
+  // Bank filter methods for payment list
+  public onBancoSelected(event: any): void {
+    this.bankFilter = event.value;
+    this.applyBankFilter();
+  }
+
+  public clearFilterBanco(): void {
+    this.bankFilter = undefined;
+    this.applyBankFilter();
+  }
+
+  private applyBankFilter(): void {
+    if (!this.bankFilter) {
+      this.filteredListaPagamentosDestinatario = this.data.listaPagamentosDestinatario;
+    } else {
+      this.filteredListaPagamentosDestinatario = this.data.listaPagamentosDestinatario.filter(
+        p => p.bankCode === this.bankFilter
+      );
+    }
+  }
 }

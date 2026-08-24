@@ -40,6 +40,7 @@ import { PopUpListarPagamentosExecutadosComponent } from "./pop-up-listar-pagame
 import { Compromisso } from "src/app/models/compromisso";
 import { PopUpCompromissosComponent } from './pop-up-compromissos/pop-up-compromissos.component';
 import { PopUpEditDespesaCabimentadaComponent } from "./pop-up-edit-despesa-cabimentada/pop-up-edit-despesa-cabimentada.component";
+import { TarefaService } from "src/app/services/tarefa.service";
 
 
 
@@ -206,6 +207,7 @@ export class ComponenteDespesaComponent implements OnInit {
     public destinatarioService: DestinatarioService,
     public executarPagamentosDialog: MatDialog,
     public pagamentoExecutadoService: PagamentoExecutadoService,
+    private tarefaService: TarefaService,
   ) {
   }
 
@@ -1141,19 +1143,44 @@ export class ComponenteDespesaComponent implements OnInit {
   }
 
   public listarPagamentosPDF(){
-    const dialogRef = this.executarPagamentosDialog.open(PopUpListarPagamentosExecutadosComponent, {
-      id: 'executarPagamentos',
-      minHeight: '500px',
-      width: '80%',
-      height: '70%',
-      panelClass: 'modalWithBorder',
-      data: {
-        processoAtivoId: this.processoId
-      }
-    });
+    // Load payment list title from API
+    this.tarefaService.GetTituloListaPagamento(this.tarefaActivoId).subscribe(
+      (response: any) => {
+        const titulo = response?.titulo || 'Lista Pagamentu Saláriu Funcionáriu INSS';
+        const dialogRef = this.executarPagamentosDialog.open(PopUpListarPagamentosExecutadosComponent, {
+          id: 'executarPagamentos',
+          minHeight: '500px',
+          width: '80%',
+          height: '70%',
+          panelClass: 'modalWithBorder',
+          data: {
+            processoAtivoId: this.processoId,
+            tituloListaPagamento: titulo
+          }
+        });
 
-    dialogRef.afterClosed().subscribe(result => {
-    });
+        dialogRef.afterClosed().subscribe(result => {
+        });
+      },
+      (err) => {
+        console.error('Error loading payment list title:', err);
+        // Open dialog with default title on error
+        const dialogRef = this.executarPagamentosDialog.open(PopUpListarPagamentosExecutadosComponent, {
+          id: 'executarPagamentos',
+          minHeight: '500px',
+          width: '80%',
+          height: '70%',
+          panelClass: 'modalWithBorder',
+          data: {
+            processoAtivoId: this.processoId,
+            tituloListaPagamento: 'Lista Pagamentu Saláriu Funcionáriu INSS'
+          }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+        });
+      }
+    );
   }
 
   public showLoader() {

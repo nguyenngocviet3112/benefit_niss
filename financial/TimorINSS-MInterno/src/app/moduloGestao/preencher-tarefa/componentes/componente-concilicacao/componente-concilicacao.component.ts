@@ -36,6 +36,7 @@ import { PopUpClassificacaoContabilisticaComponent } from './pop-up-classificaca
 import { ExcelImporterPopupMovimentosComponent } from "src/app/componentes/excel-importer/excel-importer-popups/excel-importer-popup-movimentos/excel-importer-popup-movimentos.component";
 import { catchError } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
+import { TarefaService } from 'src/app/services/tarefa.service';
 
 
 @Component({
@@ -148,6 +149,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
     public classificarContabilisticaDialog: MatDialog,
     public guiaPagamentoService: GuiaPagamentoService,
     public pagamentosService: PagamentoExecutadoService,
+    private tarefaService: TarefaService,
   ) { }
 
   ngOnInit(): void {
@@ -195,8 +197,14 @@ export class ComponenteConcilicacaoComponent implements OnInit {
             console.error("Lỗi ListPermissions", err);
             return of(null);
           })
+        ),
+        tituloListaPagamento: this.tarefaService.GetTituloListaPagamento(this.tarefaActivoId).pipe(
+          catchError(err => {
+            console.error("Lỗi GetTituloListaPagamento", err);
+            return of(null);
+          })
         )
-      }).subscribe(({ dominioCaixas, contasBancarias, dominioMovimentosTypes, permissions }) => {
+      }).subscribe(({ dominioCaixas, contasBancarias, dominioMovimentosTypes, permissions, tituloListaPagamento }) => {
 
         // ✅ Gán chỉ khi có dữ liệu
         if (dominioCaixas?.dominios) {
@@ -214,6 +222,10 @@ export class ComponenteConcilicacaoComponent implements OnInit {
 
         if (permissions) {
           this.buildPermissions(permissions);
+        }
+
+        if ((tituloListaPagamento as any)?.titulo) {
+          this.tituloListaPagamento = (tituloListaPagamento as any).titulo;
         }
 
         this.spinner.hide();

@@ -153,6 +153,13 @@
             <input matInput disabled maxlength="100" type="text" [(ngModel)]="data.numPagamento" name="pagamento" />
           </mat-form-field>
 
+          <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>Título da Lista de Pagamento / Payment List Title</mat-label>
+            <input matInput maxlength="255" type="text" [(ngModel)]="tituloListaPagamento" name="tituloListaPagamento"
+              placeholder="e.g., Salariu, Diária Local, Bônus" />
+            <mat-hint>Custom title for payment list PDF export (optional)</mat-hint>
+          </mat-form-field>
+
           <mat-form-field *ngIf="isIban && !ibanIsNacional" class="despesaAExecutar" appearance="outline">
             <mat-label>{{'gerirCampos.SWIFT' | translate}}</mat-label>
             <input [disabled]="!!this.importerId" matInput maxlength="11" type="text" [(ngModel)]="pagamento.swift"
@@ -289,8 +296,20 @@
         <div class="tabelaTituloText">
           {{'componenteDespesa.destinatarioAssociadosAoPagamento' | translate}}
         </div>
+        <mat-form-field class="bankFilterField" appearance="outline">
+          <mat-label>{{'conciliacaoComponent.bankCode' | translate}}</mat-label>
+          <mat-select [(ngModel)]="bankFilter" (selectionChange)="onBancoSelected($event)" name="bankFilter">
+            <mat-option value="">{{ 'general.todos' | translate }}</mat-option>
+            <mat-option *ngFor="let bank of bankOptions" [value]="bank.key">
+              {{ bank.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <a *ngIf="bankFilter" (click)="clearFilterBanco()" class="clearFilterButton" type="button" mat-raised-button>
+          {{ 'general.limpar' | translate }}
+        </a>
       </div>
-      <table mat-table [dataSource]="data.listaPagamentosDestinatario" class="mat-elevation-z8 tabelaDespesa">
+      <table mat-table [dataSource]="filteredListaPagamentosDestinatario" class="mat-elevation-z8 tabelaDespesa">
         <ng-container matColumnDef="destinatario">
           <th mat-header-cell *matHeaderCellDef>{{'componenteDespesa.destinatario' | translate}} </th>
           <td mat-cell *matCellDef="let element"> {{element.destinatario.nome}} </td>

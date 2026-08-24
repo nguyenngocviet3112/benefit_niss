@@ -31,6 +31,9 @@
     "nacionalidade": "Nationality",
     "naturalidade": "Place of Birth",
     "document": "Document",
+    "fileName": "File Name",
+    "documentName": "Document Name",
+    "seq": "Seq",
     "foreign": "Foreigner",
     "companyRole": "Company Role",
     "upload": "File Upload",
@@ -40,6 +43,7 @@
     "select_suspended": "Suspended",
     "wrongFormat": "The field isn't in the correct format",
     "inputFile": "Insert File",
+    "inserted": "Inserted",
     "regime": "Regime",
     "niss": "NISS",
     "numInscricaoProvisorio": "Provisional Registration Number",
@@ -834,6 +838,7 @@
   },
   "warnings": {
     "warningDeleteDocument": "This action will delete this document.",
+    "documentoDuplicadoMsg": "This task already has a document of type \"{{tipo}}\". Do you want to add another one?",
     "warningDeleteContato": "This action will delete this contact.",
     "warningDeleteMorada": "This action will delete this address.",
     "warningDeleteSuspensao": "This action will delete this suspention.",
@@ -865,7 +870,8 @@
     "warningDeleteCompromisso": "This action will delete this Commitment.",
     "gerarGuia": "This action will generate an Invoice for the Selected Month",
     "deleteResponsavel": "This action will delete the legal responsible.",
-    "deletePagamento": "This action will delete this payment"
+    "deletePagamento": "This action will delete this payment",
+    "contaNaoCorrespondeIbanMsg": "The account number entered ({{conta}}) does not match the account number contained in the IBAN ({{contaIban}}). Please check it before continuing -- a wrong account number sends the money to the wrong person."
   },
   "dropdownDominio": {
     "TIPODOCUMENTO": {

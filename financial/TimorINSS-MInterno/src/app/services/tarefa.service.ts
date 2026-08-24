@@ -85,4 +85,8 @@ export class TarefaService {
   public ArquivarTarefa(entity: TarefaDataRequest) {
     return this.api.post('tarefa/ArquivarTarefa', entity);
   }
+
+  public GetTituloListaPagamento(tarefaActivoId: number) {
+    return this.api.get(`tarefa/GetTituloListaPagamento/${tarefaActivoId}`);
+  }
 }

@@ -31,6 +31,9 @@
     "nacionalidade": "Nacionalidade",
     "naturalidade": "Naturalidade",
     "document": "Documento",
+    "fileName": "Nome do Ficheiro",
+    "documentName": "Nome do Documento",
+    "seq": "N.º",
     "foreign": "Estrangeiro",
     "companyRole": "Função na Empresa",
     "upload": "Upload do Ficheiro",
@@ -40,6 +43,7 @@
     "select_suspended": "Suspenso",
     "wrongFormat": "O campo está no formato errado",
     "inputFile": "Inserir Ficheiro",
+    "inserted": "Inserido",
     "regime": "Regime",
     "niss": "NISS",
     "numInscricaoProvisorio": "Número de Inscrição Provisório",
@@ -780,7 +784,8 @@
       "1": "Receitu la válidu",
       "2": "Valor la hanesan",
       "3": "Submisaun repetidu"
-    }
+    },
+    "addUser": "Adicionar utilizador"
   },
   "comprovativoPagamento": {
     "titleInsert": "Inserir Comprovativo de Pagamento",
@@ -874,6 +879,7 @@
   },
   "warnings": {
     "perfilWarningMsgInativar": "Esta acção irá inactivar este perfil.",
+    "documentoDuplicadoMsg": "Esta tarefa já tem um documento do tipo \"{{tipo}}\". Deseja inserir mais um?",
     "perfilWarningMsgAtivar": "Esta acção irá ativar este perfil.",
     "warningDeleteDocument": "Esta acção irá eliminar este documento.",
     "warningDeleteContato": "Esta acção irá eliminar este contato.",
@@ -905,7 +911,8 @@
     "warningDeleteCompromisso": "Esta acção irá eliminar este compromisso.",
     "gerarGuia": "Esta acção irá gerar uma Guia de Pagamento para o Mês Selecionado",
     "deleteResponsavel": "Esta acção irá eliminar este responsável legal.",
-    "deletePagamento": "Esta acção irá eliminar este Pagamento"
+    "deletePagamento": "Esta acção irá eliminar este Pagamento",
+    "contaNaoCorrespondeIbanMsg": "Número konta ne'ebé hakerek ({{conta}}) la hanesan ho número konta iha IBAN laran ({{contaIban}}). Favor ida verifika molok kontinua -- número konta sala háruka osan ba ema sala."
   },
   "dropdownDominio": {
     "TIPODOCUMENTO": {
