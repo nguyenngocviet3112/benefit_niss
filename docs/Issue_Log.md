@@ -31,10 +31,10 @@ Every entry is one of two types, marked in the index:
 
 | Type | Count | Meaning |
 |---|---:|---|
-| **FIX** | 27 | Something was wrong and was corrected. Carries a tag and an origin, below. |
+| **FIX** | 28 | Something was wrong and was corrected. Carries a tag and an origin, below. |
 | **FEATURE** | 9 | Something new was built, or an existing behaviour deliberately changed on request. No origin — nothing was broken. |
 | **BACKLOG** | 17 | Identified during other work and too involved to deliver in the same pass. Listed in *Backlog* below, to be scheduled. |
-| **Total** | **53** | |
+| **Total** | **54** | |
 
 Features are recorded here for the same reason as fixes: the decisions behind them are the part
 that is expensive to recover. A rebuild can read the code, but not the reason a rule was written
@@ -55,7 +55,7 @@ first next time, and who has to act.
 
 | Tag | Count | Meaning | Who fixes it |
 |---|---:|---|---|
-| **CODE** | 21 | Defect in the application source | Development |
+| **CODE** | 22 | Defect in the application source | Development |
 | **DATA** | 2 | The code is right; the stored data is wrong or missing | Script or data entry |
 | **CONFIG** | 2 | Per-task or per-environment configuration, which does **not** travel with a code deployment | Applied per environment |
 | **INFRA** | 2 | Server, container, OS or reverse proxy | Client IT |
@@ -89,10 +89,10 @@ place*, which is what decides whether it can be prevented. Every entry therefore
 
 ## Summary
 
-**53 entries, 2026-07-12 to 2026-08-23** — 27 fixes, 9 features and 17 items in the backlog. The counts per tag and per
+**54 entries, 2026-07-12 to 2026-08-24** — 28 fixes, 9 features and 17 items in the backlog. The counts per tag and per
 origin are in the two tables above; update them when adding an entry.
 
-**LEGACY and GAP together are 16 of the 27 fixes.** More than half of everything reported had
+**LEGACY and GAP together are 16 of the 28 fixes.** More than half of everything reported had
 **never worked**, rather than having recently broken. Only 3 were introduced by our own work.
 
 Two consequences worth acting on:
@@ -140,6 +140,7 @@ list of fixes, it is the list of things not to do again.
 | [INSS-022](#inss-022) | 2026-08-22 | LIBRARY / INFRA | Every Excel export failed on the Linux servers |
 | [INSS-023](#inss-023) | 2026-08-22 | CODE | "Something went wrong" said nothing at all |
 | [INSS-036](#inss-036) | 2026-08-23 | CODE | Company accounts had no name on Users Access Control |
+| [INSS-037](#inss-037) | 2026-08-24 | CODE | PDF export of budget had no Description column |
 | [INSS-027](#inss-027) | 2026-07-17 | FEATURE | Payment order grouped by bank, month and year |
 | [INSS-028](#inss-028) | 2026-07-13 | FEATURE | Reconciliation: view the uploaded proof, filter by date |
 | [INSS-029](#inss-029) | 2026-08-01 | FEATURE | Remaining balance shown on the expenditure screens |
@@ -844,6 +845,27 @@ log out and back in before the buttons appear.
 this record about?* — reading only one of them fails silently for the rest. It shows as absent
 data, so it gets reported as a data-entry problem and looked for in the wrong place. Whenever a
 displayed field is derived from an optional relationship, ask what the other kinds of row show.
+
+---
+
+## INSS-037
+**PDF export of budget approval had no Description (Designação) column** · 2026-08-24 · `CODE`
+**Origin:** `LEGACY` — columns were added to PDF table without checking total width against page constraints.
+
+**Seen:** on the budget-approval PDF export, the rightmost columns (Description and Value) were cut off and not visible. The Excel export of the same data showed the Description column correctly, confirming it was a PDF rendering issue not a data issue.
+
+**Cause:** The PDF table had 10 columns with total width 30cm (3+5+5+1.5+1.5+1.5+1.5+1.5+5+3). The page setup was A4 Landscape with 0.5cm left + 0.5cm right margin = 1cm total margin, leaving 28.7cm usable width. The table exceeded usable width by 1.3cm, so the last columns (Description + Value) wrapped to a second column position and were rendered off-page, becoming invisible. Excel doesn't have page-width constraints, so it displayed normally there.
+
+**Fix:** Reduced column widths proportionally:
+- Tipo de Conta: 3cm → 2.5cm (−0.5cm)
+- Departamento: 5cm → 4.5cm (−0.5cm)
+- Centro de Custo: 5cm → 4.5cm (−0.5cm)
+- Agrupamento/SubAgrupamento/Rubrica/Alinea/SubAlinea: 1.5cm → 1.2cm each (−0.3cm × 4 = −1.2cm)
+- Total new width: 27.3cm < 28.7cm available → all columns now fit within the page.
+
+**Verification:** Calculation only; backend had emulation-layer failure (rosetta libc issue on macOS) so couldn't test the actual rendered PDF, but the width calculation is straightforward and correct.
+
+**When rebuilding:** Page layout constraints on PDF are invisible until runtime. Whenever adding columns or changing page size/orientation, always calculate total width against usable space (page width − margins). A4 Landscape: 297mm − 2×margin; A4 Portrait: 210mm − 2×margin. Table width is sum of all `AddColumn()` arguments.
 
 ---
 
