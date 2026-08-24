@@ -1295,5 +1295,18 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
         }
 
         #endregion SaveTarefa and ArchiveTarefa private methods
+
+        public string GetTituloListaPagamento(int tarefaActivoId)
+        {
+            try
+            {
+                var tarefa = _unitOfWork.TarefaAtivoRepository.Get(tarefaActivoId);
+                return tarefa?.TituloListaPagamento ?? "Lista Pagamentu Saláriu Funcionáriu INSS";
+            }
+            catch
+            {
+                return "Lista Pagamentu Saláriu Funcionáriu INSS";
+            }
+        }
     }
 }

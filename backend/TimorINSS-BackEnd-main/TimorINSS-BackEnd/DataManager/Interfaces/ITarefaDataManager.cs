@@ -31,5 +31,7 @@ namespace TimorINSSBackEnd.DataManager.Interfaces
         public ResponseBaseDataContract SaveTarefaData(SaveTarefaDataRequest request);
 
         public ResponseBaseDataContract ArquivarTarefa(SaveTarefaDataRequest request);
+
+        public string GetTituloListaPagamento(int tarefaActivoId);
     }
 }

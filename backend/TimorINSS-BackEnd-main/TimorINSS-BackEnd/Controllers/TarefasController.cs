@@ -332,5 +332,20 @@ namespace TimorINSSBackEnd.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("GetTituloListaPagamento/{tarefaActivoId}")]
+        public IActionResult GetTituloListaPagamento(int tarefaActivoId)
+        {
+            try
+            {
+                string titulo = _dataManager.GetTituloListaPagamento(tarefaActivoId);
+                return Ok(new { titulo });
+            }
+            catch (Exception e)
+            {
+                Log.Error($"GetTituloListaPagamento error: {e.Message}");
+                return BadRequest(new { error = e.Message });
+            }
+        }
     }
 }
