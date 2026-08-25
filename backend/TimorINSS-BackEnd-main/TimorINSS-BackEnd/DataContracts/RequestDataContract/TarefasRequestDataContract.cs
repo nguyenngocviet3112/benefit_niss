@@ -241,4 +241,14 @@ namespace TimorINSSBackEnd.DataContracts.RequestDataContract
         [DataMember(IsRequired = true)]
         public PreencherTarefa data { get; set; }
     }
+
+    [DataContract]
+    public class SaveTituloListaPagamentoRequest : RequestBaseDataContract
+    {
+        [DataMember(IsRequired = true)]
+        public int tarefaAtivoId { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public string titulo { get; set; }
+    }
 }

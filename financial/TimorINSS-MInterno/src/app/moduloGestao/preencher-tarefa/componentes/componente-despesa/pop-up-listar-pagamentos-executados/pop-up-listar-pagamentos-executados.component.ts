@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from "@ngx-translate/core";
 import { TokenStorageService } from "src/app/services/token-storage.service";
-import { blobExcelSaveAs, customCurrencyMaskConfig, formatDatePT, JsPdf_centerText, openErrorsDialog, openSnackBar, showExpiredError } from "src/app/utils";
+import { blobExcelSaveAs, customCurrencyMaskConfig, formatDatePT, JsPdf_centerText, openErrorsDialog, openSnackBar, showExpiredError, TITULO_LISTA_PAGAMENTO_OMISSAO, formatarValorMonetario } from "src/app/utils";
 import { PagamentoExecutadoService } from "src/app/services/pagamentoExecutado.service";
 import jsPDF from "jspdf";
 import { environment } from "src/environments/environment";
@@ -140,7 +140,7 @@ export class PopUpListarPagamentosExecutadosComponent implements OnInit {
       pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
 
       //title: use custom title if provided, fallback to default "Salariu"
-      const defaultTitle = 'Lista Pagamentu Saláriu Funcionáriu INSS';
+      const defaultTitle = TITULO_LISTA_PAGAMENTO_OMISSAO;
       const titulo = this.data.tituloListaPagamento || defaultTitle;
       JsPdf_centerText(pdf, titulo, 35);
       pdf.setFontSize(12);
@@ -164,7 +164,7 @@ export class PopUpListarPagamentosExecutadosComponent implements OnInit {
       var stt = 1;
       var totalPagamentu = 0;
       byDestinatario.forEach(entry => {
-        rows.push([String(stt++), entry.niss, entry.nome, entry.numeroConta, entry.iban, '$' + entry.total.toFixed(2)]);
+        rows.push([String(stt++), entry.niss, entry.nome, entry.numeroConta, entry.iban, formatarValorMonetario(entry.total)]);
         totalPagamentu = Math.round((totalPagamentu + entry.total) * 100) / 100;
       });
 
@@ -172,7 +172,7 @@ export class PopUpListarPagamentosExecutadosComponent implements OnInit {
         startY: 53,
         head: [['No', 'NISS', 'Naran Funsionáriu', 'No. Konta Bankária', 'No. IBAN', 'Total Paga']],
         body: rows,
-        foot: [['', '', '', '', 'Total Pagamentu', '$' + totalPagamentu.toFixed(2)]],
+        foot: [['', '', '', '', 'Total Pagamentu', formatarValorMonetario(totalPagamentu)]],
         // [PT] O total sai uma unica vez, no fim da lista deste banco. Por omissao o
         // jspdf-autotable usa showFoot 'everyPage', pelo que uma lista que ocupasse
         // varias paginas repetia 'Total Pagamentu' no fundo de cada uma -- e sempre com

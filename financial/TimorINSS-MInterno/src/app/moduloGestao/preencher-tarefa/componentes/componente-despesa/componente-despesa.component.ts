@@ -6,7 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { MatDialog } from "@angular/material/dialog";
 import { TranslateService } from '@ngx-translate/core';
 import { DominioDescricaoString } from 'src/app/response-models/dominios-response';
-import { blobExcelSaveAs, customCurrencyMaskConfig, openErrorsDialog, openSnackBar, showExpiredError } from "src/app/utils";
+import { blobExcelSaveAs, customCurrencyMaskConfig, openErrorsDialog, openSnackBar, showExpiredError, TITULO_LISTA_PAGAMENTO_OMISSAO, formatarValorMonetario } from "src/app/utils";
 import { TokenStorageService } from "src/app/services/token-storage.service";
 import { SelectDescription } from "src/app/models/utils";
 import { faFileExcel, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
@@ -957,7 +957,7 @@ export class ComponenteDespesaComponent implements OnInit {
   // [PT] Formata um valor monetário para as mensagens de aviso (mesmo formato da tabela de valores).
   // [VI] Định dạng số tiền cho các thông báo cảnh báo (giống định dạng của bảng giá trị).
   private formatarValor(valor: number | null | undefined): string {
-    return '$ ' + (valor ?? 0).toFixed(2);
+    return formatarValorMonetario(valor);
   }
 
   // [PT] Constrói a mensagem de saldo insuficiente com os valores concretos em vez de um aviso
@@ -1143,44 +1143,31 @@ export class ComponenteDespesaComponent implements OnInit {
   }
 
   public listarPagamentosPDF(){
-    // Load payment list title from API
+    // [PT] O titulo vem da tarefa; se a chamada falhar abre-se na mesma com o titulo por omissao,
+    // porque nao ter titulo proprio nao e motivo para impedir o utilizador de ver a listagem.
+    // [VI] Tieu de lay tu tac vu; neu goi that bai van mo binh thuong voi tieu de mac dinh, vi
+    // thieu tieu de rieng khong phai ly do chan nguoi dung xem danh sach.
     this.tarefaService.GetTituloListaPagamento(this.tarefaActivoId).subscribe(
-      (response: any) => {
-        const titulo = response?.titulo || 'Lista Pagamentu Saláriu Funcionáriu INSS';
-        const dialogRef = this.executarPagamentosDialog.open(PopUpListarPagamentosExecutadosComponent, {
-          id: 'executarPagamentos',
-          minHeight: '500px',
-          width: '80%',
-          height: '70%',
-          panelClass: 'modalWithBorder',
-          data: {
-            processoAtivoId: this.processoId,
-            tituloListaPagamento: titulo
-          }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-        });
-      },
+      (response: any) => this.abrirListagemPagamentos(response?.titulo || TITULO_LISTA_PAGAMENTO_OMISSAO),
       (err) => {
         console.error('Error loading payment list title:', err);
-        // Open dialog with default title on error
-        const dialogRef = this.executarPagamentosDialog.open(PopUpListarPagamentosExecutadosComponent, {
-          id: 'executarPagamentos',
-          minHeight: '500px',
-          width: '80%',
-          height: '70%',
-          panelClass: 'modalWithBorder',
-          data: {
-            processoAtivoId: this.processoId,
-            tituloListaPagamento: 'Lista Pagamentu Saláriu Funcionáriu INSS'
-          }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-        });
+        this.abrirListagemPagamentos(TITULO_LISTA_PAGAMENTO_OMISSAO);
       }
     );
+  }
+
+  private abrirListagemPagamentos(tituloListaPagamento: string) {
+    this.executarPagamentosDialog.open(PopUpListarPagamentosExecutadosComponent, {
+      id: 'executarPagamentos',
+      minHeight: '500px',
+      width: '80%',
+      height: '70%',
+      panelClass: 'modalWithBorder',
+      data: {
+        processoAtivoId: this.processoId,
+        tituloListaPagamento: tituloListaPagamento
+      }
+    });
   }
 
   public showLoader() {

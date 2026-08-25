@@ -89,4 +89,8 @@ export class TarefaService {
   public GetTituloListaPagamento(tarefaActivoId: number) {
     return this.api.get(`tarefa/GetTituloListaPagamento/${tarefaActivoId}`);
   }
+
+  public SaveTituloListaPagamento(tarefaAtivoId: number, titulo: string) {
+    return this.api.post('tarefa/SaveTituloListaPagamento', { tarefaAtivoId, titulo });
+  }
 }

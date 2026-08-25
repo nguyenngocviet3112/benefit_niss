@@ -1301,12 +1301,84 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             try
             {
                 var tarefa = _unitOfWork.TarefaAtivoRepository.Get(tarefaActivoId);
-                return tarefa?.TituloListaPagamento ?? "Lista Pagamentu Saláriu Funcionáriu INSS";
+                return string.IsNullOrWhiteSpace(tarefa?.TituloListaPagamento)
+                    ? TituloListaPagamentoPorOmissao
+                    : tarefa.TituloListaPagamento;
             }
             catch
             {
-                return "Lista Pagamentu Saláriu Funcionáriu INSS";
+                return TituloListaPagamentoPorOmissao;
             }
+        }
+
+        // [PT] O titulo por omissao vive aqui e no frontend. Se mudar, tem de mudar nos dois --
+        // o backend responde-o quando a tarefa ainda nao tem titulo proprio, e o frontend usa-o
+        // quando a chamada falha.
+        // [VI] Tieu de mac dinh nam o day va o frontend. Doi thi phai doi ca hai -- backend tra
+        // ve khi tac vu chua co tieu de rieng, frontend dung khi goi API that bai.
+        private const string TituloListaPagamentoPorOmissao = "Lista Pagamentu Saláriu Funcionáriu INSS";
+
+        public ResponseBaseDataContract SaveTituloListaPagamento(SaveTituloListaPagamentoRequest request)
+        {
+            var response = new ResponseBaseDataContract { RequestId = request.RequestId };
+
+            // Validar se o utilizador tem as permissões necessárias
+            bool permission = _utils.ValidatePermission((int)request.UserId, (int)ModuleGestao.PreenchimentoTarefa, _unitOfWork, CRUD.UPDATE);
+            if (!permission)
+            {
+                response.Errors.Add(new Error { ErrorCode = ((int)ErrorsDataContract.InvalidPermission).ToString(), ErrorMessage = ErrorsDataContract.InvalidPermission.ToString() });
+                return response;
+            }
+
+            try
+            {
+                var tarefa = _unitOfWork.TarefaAtivoRepository.Get(request.tarefaAtivoId);
+                if (tarefa == null || tarefa.Id <= 0)
+                {
+                    response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = "Tarefa ativa não encontrada" });
+                    return response;
+                }
+
+                var titulo = (request.titulo ?? string.Empty).Trim();
+
+                // [PT] A coluna aceita 255 caracteres. O ecra ja limita, mas um pedido feito fora
+                // do ecra nao limita nada -- sem este corte a gravacao rebentava na base de dados.
+                // [VI] Cot chi chua 255 ky tu. Man hinh da chan, nhung mot request goi thang khong
+                // qua man hinh thi khong bi chan -- khong cat o day thi loi ngay tai database.
+                if (titulo.Length > 255)
+                {
+                    titulo = titulo.Substring(0, 255);
+                }
+
+                // [PT] Titulo vazio volta a significar "usa o titulo por omissao", em vez de
+                // gravar uma string vazia que sairia como um cabecalho em branco no PDF.
+                // [VI] De trong nghia la "dung tieu de mac dinh", thay vi luu chuoi rong khien
+                // PDF in ra tieu de trang.
+                tarefa.TituloListaPagamento = string.IsNullOrWhiteSpace(titulo) ? null : titulo;
+
+                tarefa = _utils.UpdateDetailsToEntity(tarefa);
+                _unitOfWork.TarefaAtivoRepository.Update(tarefa);
+                _unitOfWork.Commit();
+            }
+            catch (Exception e)
+            {
+                // [PT] DbUpdateException diz sempre "ver a inner exception" -- sozinha nao serve
+                // para nada em producao, onde so temos o log. Desenrola-se a cadeia para o motivo
+                // real (violacao de constraint, truncamento) ficar escrito no log.
+                // [VI] DbUpdateException luon chi noi "xem inner exception" -- rieng no vo dung
+                // tren production, noi ta chi co log. Duyet het chuoi de nguyen nhan that (vi pham
+                // rang buoc, tran do dai) duoc ghi vao log.
+                var mensagem = e.Message;
+                for (var inner = e.InnerException; inner != null; inner = inner.InnerException)
+                {
+                    mensagem += " | " + inner.Message;
+                }
+
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = mensagem });
+                _unitOfWork.Rollback();
+            }
+
+            return response;
         }
     }
 }

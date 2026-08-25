@@ -347,5 +347,30 @@ namespace TimorINSSBackEnd.Controllers
                 return BadRequest(new { error = e.Message });
             }
         }
+
+        [HttpPost("SaveTituloListaPagamento")]
+        public IActionResult SaveTituloListaPagamento(SaveTituloListaPagamentoRequest request)
+        {
+            ResponseBaseDataContract response = new ResponseBaseDataContract();
+
+            try
+            {
+                // Parse dos valores do header para o request
+                request.GetHeaderInfo(Request.Headers);
+                response = _dataManager.SaveTituloListaPagamento(request);
+            }
+            catch (Exception e)
+            {
+                response.Errors.Add(new Error { ErrorCode = "-1", ErrorMessage = e.Message });
+            }
+
+            // Guardar log do erro no ficheiro de logs
+            if (response.ManageErrors("SaveTituloListaPagamento", Log, request))
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
     }
 }

@@ -12,20 +12,20 @@
     </ng-container>
     <ng-container matColumnDef="valor">
       <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valor' | translate}} </th>
-      <td mat-cell *matCellDef="let element">$ {{element.valorCabimentado}} </td>
-      <td mat-footer-cell *matFooterCellDef>$ {{data.totalValorCabimentado}}</td>
+      <td mat-cell *matCellDef="let element">$ {{element.valorCabimentado | number:'1.2-2'}} </td>
+      <td mat-footer-cell *matFooterCellDef>$ {{data.totalValorCabimentado | number:'1.2-2'}}</td>
     </ng-container>
 
     <ng-container matColumnDef="valorExecutado">
       <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valorExecutado' | translate}} </th>
       <td mat-cell *matCellDef="let element">$ {{element.valorExecutado | number:'1.2-2'}} </td>
-      <td mat-footer-cell *matFooterCellDef>$ {{data.totalValorExecutado}}</td>
+      <td mat-footer-cell *matFooterCellDef>$ {{data.totalValorExecutado | number:'1.2-2'}}</td>
     </ng-container>
 
     <ng-container matColumnDef="faltaExecutar">
       <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.faltaExecutar' | translate}} </th>
-      <td mat-cell *matCellDef="let element">$ {{element.faltaExecutar}} </td>
-      <td mat-footer-cell *matFooterCellDef>$ {{data.totalValorFaltaExecutar}}</td>
+      <td mat-cell *matCellDef="let element">$ {{element.faltaExecutar | number:'1.2-2'}} </td>
+      <td mat-footer-cell *matFooterCellDef>$ {{data.totalValorFaltaExecutar | number:'1.2-2'}}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumnsDespesasAExecutar"></tr>
@@ -153,13 +153,6 @@
             <input matInput disabled maxlength="100" type="text" [(ngModel)]="data.numPagamento" name="pagamento" />
           </mat-form-field>
 
-          <mat-form-field class="despesaAExecutar" appearance="outline">
-            <mat-label>Título da Lista de Pagamento / Payment List Title</mat-label>
-            <input matInput maxlength="255" type="text" [(ngModel)]="tituloListaPagamento" name="tituloListaPagamento"
-              placeholder="e.g., Salariu, Diária Local, Bônus" />
-            <mat-hint>Custom title for payment list PDF export (optional)</mat-hint>
-          </mat-form-field>
-
           <mat-form-field *ngIf="isIban && !ibanIsNacional" class="despesaAExecutar" appearance="outline">
             <mat-label>{{'gerirCampos.SWIFT' | translate}}</mat-label>
             <input [disabled]="!!this.importerId" matInput maxlength="11" type="text" [(ngModel)]="pagamento.swift"
@@ -167,6 +160,21 @@
               [required]="submittedTry" />
             <mat-error *ngIf="!pagamento.swift">{{'general.required' | translate}}</mat-error>
             <mat-error *ngIf="!!pagamento.swift">{{'general.wrongFormat' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- [PT] O titulo pertence a lista de pagamento inteira, nao ao destinatario que se esta
+             a introduzir. Fica em linha propria: dentro da linha dos campos do destinatario
+             separava o IBAN do SWIFT e empurrava a caixa "IBAN nacional" para junto dele.
+             [VI] Tieu de thuoc ve ca danh sach chi, khong thuoc nguoi nhan dang nhap. De rieng
+             mot hang: neu nam trong hang cac truong cua nguoi nhan thi no tach IBAN khoi SWIFT
+             va day o tick "IBAN nacional" sang canh no. -->
+        <div class="containerLine">
+          <mat-form-field class="tituloListaPagamentoField" appearance="outline">
+            <mat-label>{{ 'pagamentosExecutados.tituloListaPagamento' | translate }}</mat-label>
+            <input matInput maxlength="255" type="text" [(ngModel)]="tituloListaPagamento" name="tituloListaPagamento"
+              (blur)="guardarTituloListaPagamento()" />
+            <mat-hint>{{ 'pagamentosExecutados.tituloListaPagamentoHint' | translate }}</mat-hint>
           </mat-form-field>
         </div>
 
@@ -296,18 +304,21 @@
         <div class="tabelaTituloText">
           {{'componenteDespesa.destinatarioAssociadosAoPagamento' | translate}}
         </div>
-        <mat-form-field class="bankFilterField" appearance="outline">
-          <mat-label>{{'conciliacaoComponent.bankCode' | translate}}</mat-label>
-          <mat-select [(ngModel)]="bankFilter" (selectionChange)="onBancoSelected($event)" name="bankFilter">
-            <mat-option value="">{{ 'general.todos' | translate }}</mat-option>
-            <mat-option *ngFor="let bank of bankOptions" [value]="bank.key">
-              {{ bank.label }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <a *ngIf="bankFilter" (click)="clearFilterBanco()" class="clearFilterButton" type="button" mat-raised-button>
-          {{ 'general.limpar' | translate }}
-        </a>
+        <div class="bankFilterGroup">
+          <mat-form-field class="bankFilterField" appearance="outline">
+            <mat-label>{{'conciliacaoComponent.bankCode' | translate}}</mat-label>
+            <mat-select [(ngModel)]="bankFilter" (selectionChange)="onBancoSelected($event)" name="bankFilter">
+              <mat-option value="">{{ 'conciliacaoComponent.allBanks' | translate }}</mat-option>
+              <mat-option *ngFor="let bank of bankOptions" [value]="bank.key">
+                {{ bank.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button *ngIf="bankFilter" (click)="clearFilterBanco()" class="clearFilterButton" type="button"
+            mat-raised-button>
+            {{ 'general.clearFilter' | translate }}
+          </button>
+        </div>
       </div>
       <table mat-table [dataSource]="filteredListaPagamentosDestinatario" class="mat-elevation-z8 tabelaDespesa">
         <ng-container matColumnDef="destinatario">
@@ -322,8 +333,14 @@
         </ng-container>
         <ng-container matColumnDef="valorExecutado">
           <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valorExecutado' | translate}} </th>
-          <td mat-cell *matCellDef="let element">$ {{element.valorExecutado}} </td>
-          <td mat-footer-cell *matFooterCellDef>$ {{data.totalValorDestinatarioExecutado}}</td>
+          <td mat-cell *matCellDef="let element">$ {{element.valorExecutado | number:'1.2-2'}} </td>
+          <!-- [PT] O total acompanha o filtro por banco. Com o total fixo de todos os
+               destinatarios, filtrar por um banco deixava duas linhas visiveis e um total
+               que era o das quatro -- lia-se como se fosse a soma do que esta no ecra.
+               [VI] Tong so di theo bo loc ngan hang. Neu de tong co dinh cua tat ca nguoi
+               nhan, loc mot ngan hang se con hai dong nhung tong van la cua bon dong --
+               doc len tuong la tong cua phan dang hien. -->
+          <td mat-footer-cell *matFooterCellDef>$ {{totalDestinatarioFiltrado | number:'1.2-2'}}</td>
         </ng-container>
         <ng-container matColumnDef="accoes">
           <th mat-header-cell *matHeaderCellDef> {{'general.Editar' | translate}} </th>

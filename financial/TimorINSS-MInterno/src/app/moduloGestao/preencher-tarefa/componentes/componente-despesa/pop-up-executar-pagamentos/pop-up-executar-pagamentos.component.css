@@ -137,11 +137,44 @@ background-color: rgb(211, 211, 211);
   font-weight: bold;
   color: #2A81CC;
   display: flex;
+  align-items: center;
+  gap: 24px;
   padding-top: 10px;
 }
 
 .tabelaTituloText {
   padding-top: 10px;
+}
+
+/* [PT] O filtro por banco vive dentro do cabecalho da tabela, que e a negrito, 1.2em e azul.
+   Sem repor tamanho/peso/cor aqui o campo herda tudo isso e sai enorme, colado ao titulo.
+   [VI] Bo loc ngan hang nam trong tieu de bang -- von in dam, 1.2em, mau xanh. Neu khong dat
+   lai co chu/do dam/mau o day thi o loc thua ke het, tro nen qua to va dinh sat tieu de. */
+.bankFilterGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bankFilterField {
+  width: 170px;
+  font-size: 0.75em;
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+/* Tira o espaco que o mat-form-field reserva por baixo para mensagens de erro: aqui nao ha
+   validacao, e sem isto o filtro empurra a tabela para baixo. */
+.bankFilterField ::ng-deep .mat-form-field-wrapper {
+  margin-bottom: -1.25em;
+}
+
+.clearFilterButton {
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  font-size: 0.7em;
+  font-weight: normal;
+  line-height: 30px;
 }
 
 .terminarButton {
@@ -215,4 +248,19 @@ tr.mat-footer-row {
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+/* [PT] Os campos do destinatario usam `top: 20px`, que os desloca para baixo sem lhes aumentar
+   a altura -- a linha seguinte sobe por baixo deles e fica sobreposta. O titulo esta na sua
+   propria linha, por isso precisa da margem que compense esse deslocamento; sem ela aterrava
+   em cima da caixa "IBAN nacional". A largura tem de ser declarada: sem ela o campo encolhe
+   e corta o texto.
+   [VI] Cac o cua nguoi nhan dung `top: 20px`, day chung xuong ma khong tang chieu cao -- hang
+   ke tiep tran len duoi va bi de. Tieu de nam o hang rieng nen can margin bu lai do lech do;
+   thieu no thi no dap thang vao o tick "IBAN nacional". Phai khai bao chieu rong: khong co
+   thi o bi co lai va cat mat chu. */
+.tituloListaPagamentoField {
+  margin-left: 10px;
+  margin-top: 30px;
+  width: 82%;
 }

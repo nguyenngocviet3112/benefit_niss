@@ -1239,25 +1239,26 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
                 var table = new Table { Borders = { Width = 0.5 } };
 
                 // Kích thước cột
-                // [PT/VI] A4 Landscape usable width eh 28.7cm (29.7cm - 0.5-0.5 margin).
-                // Coluna de codigos (Agrupamento, SubAgrupamento, etc.) foram ajustadas
-                // de 1.5cm para 1.2cm cada uma, economizando 1.2cm no total. Coluna
-                // Tipo de Conta, Departamento, Centro de Custo tambem reduzidas em 0.5cm,
-                // 0.5cm, 0.5cm respectivamente. Total width agora ~27.3cm = fits na page
-                // sem cortar Designacao e Valor que estavam sumindo no PDF anterior.
-                // [VI] A4 Landscape khong gian co the dung la 28.7cm (29.7-0.5-0.5 khong
-                // gian canh). Cot ma hoa duoc chinh tu 1.5cm xuong 1.2cm moi cot, tiet
-                // kiem tong cong 1.2cm. Ty de Conta, Departamento, Centro de Custo giam
-                // 0.5cm, 0.5cm, 0.5cm. Tong rong nay ~27.3cm = vua vao trang khong
-                // cat Designacao va Valor.
-                table.AddColumn(Unit.FromCentimeter(2.5)); // Tipo de Conta
-                table.AddColumn(Unit.FromCentimeter(4.5)); // Departamento
-                table.AddColumn(Unit.FromCentimeter(4.5)); // Centro de Custo
-                table.AddColumn(Unit.FromCentimeter(1.2)); // Agrupamento
-                table.AddColumn(Unit.FromCentimeter(1.2)); // SubAgrupamento
-                table.AddColumn(Unit.FromCentimeter(1.2)); // Rubrica
-                table.AddColumn(Unit.FromCentimeter(1.2)); // Alinea
-                table.AddColumn(Unit.FromCentimeter(1.2)); // SubAlinea
+                // [PT] Soma 28.5cm contra 28.7cm de largura util (A4 landscape 29.7cm menos
+                // 0.5cm de cada margem). Cabe, com 0.2cm de folga. Estas larguras chegaram a
+                // ser estreitadas para 25.5cm a 2026-08-24 por se ter julgado que a tabela
+                // transbordava e cortava a coluna Designacao; nao era esse o problema -- era a
+                // cor do cabecalho (ver Hex() no fim deste ficheiro) -- e por isso voltaram ao
+                // que eram. Ao acrescentar colunas, somar antes: passar de 28.7cm parte mesmo
+                // a tabela.
+                // [VI] Tong 28.5cm so voi 28.7cm be rong dung duoc (A4 ngang 29.7cm tru 0.5cm
+                // moi le). Vua, con du 0.2cm. Cac gia tri nay tung bi thu hep con 25.5cm ngay
+                // 24/08/2026 vi tuong bang tran trang lam mat cot Designacao; khong phai vay --
+                // nguyen nhan la mau hang tieu de (xem Hex() cuoi file) -- nen da tra lai nhu cu.
+                // Khi them cot moi thi cong lai truoc: vuot 28.7cm la bang vo that.
+                table.AddColumn(Unit.FromCentimeter(3));   // Tipo de Conta
+                table.AddColumn(Unit.FromCentimeter(5));   // Departamento
+                table.AddColumn(Unit.FromCentimeter(5));   // Centro de Custo
+                table.AddColumn(Unit.FromCentimeter(1.5)); // Agrupamento
+                table.AddColumn(Unit.FromCentimeter(1.5)); // SubAgrupamento
+                table.AddColumn(Unit.FromCentimeter(1.5)); // Rubrica
+                table.AddColumn(Unit.FromCentimeter(1.5)); // Alinea
+                table.AddColumn(Unit.FromCentimeter(1.5)); // SubAlinea
                 table.AddColumn(Unit.FromCentimeter(5));   // Designacao
                 table.AddColumn(Unit.FromCentimeter(3));   // Valor
 
@@ -1339,6 +1340,34 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             return response;
         }
 
+        // [PT] Devolve a cor tal como esta escrita no hexadecimal, em RGB.
+        //
+        // Antes esta funcao convertia o RGB para CMYK e devolvia Color.FromCmyk(...), mas o
+        // documento nunca liga UseCmykColor. Numa cor CMYK lida por um documento em RGB, o
+        // azul do cabecalho #2A81CC saia como (251,253,253) -- praticamente branco. Como a
+        // linha de cabecalho e escrita a branco sobre esse fundo, ficava branco sobre branco:
+        // os titulos das colunas desapareciam por completo do PDF, incluindo "Designacao".
+        // Foi isso que o cliente reportou como "o PDF nao tem a coluna Designacao" -- os dados
+        // da coluna sempre sairam; o que faltava era a linha de titulos.
+        //
+        // Nao se resolve ligando UseCmykColor: a conversao para CMYK nao traz nada a este
+        // relatorio e o caminho RGB e o que a restante aplicacao usa. Verificado a 2026-08-24
+        // gerando o mesmo documento pelos dois caminhos: RGB da (42,129,204), CMYK da
+        // (251,253,253).
+        //
+        // [VI] Tra ve dung mau ghi trong chuoi hex, theo he RGB.
+        //
+        // Truoc day ham nay doi RGB sang CMYK roi tra Color.FromCmyk(...), nhung tai lieu
+        // khong he bat UseCmykColor. Mau CMYK khi duoc doc boi tai lieu he RGB thi mau xanh
+        // tieu de #2A81CC ra thanh (251,253,253) -- gan nhu trang. Ma hang tieu de viet chu
+        // mau trang tren nen do, nen thanh chu trang tren nen trang: toan bo ten cot bien mat
+        // khoi PDF, ke ca "Designacao". Day chinh la thu khach bao "PDF khong co cot
+        // Designacao" -- du lieu cua cot van luon in ra; thu thieu la hang tieu de.
+        //
+        // Khong sua bang cach bat UseCmykColor: viec doi sang CMYK khong mang lai gi cho bao
+        // cao nay, va phan con lai cua ung dung deu di duong RGB. Da kiem chung 24/08/2026
+        // bang cach sinh cung mot tai lieu theo ca hai duong: RGB cho (42,129,204), CMYK cho
+        // (251,253,253).
         static Color Hex(string hex)
         {
             if (string.IsNullOrWhiteSpace(hex))
@@ -1347,17 +1376,10 @@ namespace TimorINSSBackEnd.DataManager.DataManagers
             if (hex.StartsWith("#"))
                 hex = hex.Substring(1);
 
-            var r = Convert.ToByte(hex.Substring(0, 2), 16) / 255.0;
-            var g = Convert.ToByte(hex.Substring(2, 2), 16) / 255.0;
-            var b = Convert.ToByte(hex.Substring(4, 2), 16) / 255.0;
-
-            // Chuyển RGB sang CMYK tạm (đơn giản)
-            double k = 1 - Math.Max(r, Math.Max(g, b));
-            double c = (1 - r - k) / (1 - k + 1e-8);
-            double m = (1 - g - k) / (1 - k + 1e-8);
-            double y = (1 - b - k) / (1 - k + 1e-8);
-
-            return Color.FromCmyk(c, m, y, k);
+            return new Color(
+                Convert.ToByte(hex.Substring(0, 2), 16),
+                Convert.ToByte(hex.Substring(2, 2), 16),
+                Convert.ToByte(hex.Substring(4, 2), 16));
         }
 
 

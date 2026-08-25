@@ -93,6 +93,31 @@ export enum RegexPatterns {
   swiftPattern = "[a-zA-Z0-9]{8,11}"
 }
 
+// [PT] Titulo usado no PDF da lista de pagamentos quando a tarefa nao tem um titulo proprio
+// gravado. Vive aqui porque quatro ecras diferentes o imprimem -- em copias separadas, uma
+// alteracao acabava aplicada nuns e esquecida noutros. O backend tem a sua propria copia
+// (TarefaDataManager), que responde a leitura; esta serve quando a chamada falha.
+// [VI] Tieu de dung cho PDF danh sach chi khi tac vu chua co tieu de rieng. De o day vi co bon
+// man hinh cung in no -- neu de ban sao rieng le, sua mot cho se quen cac cho con lai. Backend
+// giu ban sao rieng (TarefaDataManager) tra ve khi doc; ban nay dung khi goi API that bai.
+export const TITULO_LISTA_PAGAMENTO_OMISSAO = 'Lista Pagamentu Saláriu Funcionáriu INSS';
+
+// [PT] Formata um valor como o resto da aplicacao o mostra: ponto a separar os milhares e
+// virgula nos decimais ($ 95.000,00). Os PDF construiam o texto com toFixed(2), que da
+// "$95000.00" -- o mesmo montante aparecia de duas maneiras no ecra e no papel, e num
+// documento que se assina e se confere contra o extrato isso da discussao. Nao se usa aqui o
+// pipe `number` do Angular porque estes textos vao para dentro do jsPDF, nao para o template.
+// [VI] Dinh dang so tien giong phan con lai cua ung dung: dau cham ngan nghin, dau phay thap
+// phan ($ 95.000,00). Cac PDF dung toFixed(2) nen ra "$95000.00" -- cung mot so tien hien hai
+// kieu giua man hinh va giay, ma day la chung tu duoc ky va doi chieu voi sao ke nen de gay
+// tranh cai. Khong dung pipe `number` cua Angular vi chuoi nay di thang vao jsPDF.
+export function formatarValorMonetario(valor?: number | null): string {
+  const numero = valor ?? 0;
+  const [inteiro, decimais] = Math.abs(numero).toFixed(2).split('.');
+  const comMilhares = inteiro.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return (numero < 0 ? '-$ ' : '$ ') + comMilhares + ',' + decimais;
+}
+
 export const customCurrencyMaskConfig = { prefix: '$', thousands: '.', decimal: ',' };
 export const customPositiveCurrencyMaskConfig = { prefix: '$', thousands: '.', decimal: ',', allowNegative: false };
 export const customNegativeCurrencyMaskConfig = { prefix: '-$', thousands: '.', decimal: ',', allowNegative: false };

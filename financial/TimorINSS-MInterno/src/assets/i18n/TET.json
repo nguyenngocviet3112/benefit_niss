@@ -1441,7 +1441,9 @@
     "numeroSequencial": "Nº",
     "relatoriosPagamentosEmitidos": "Relatórios - Pagamentos emitidos centro de custo/mês",
     "pagamentosExecutados": "Pagamentos executados",
-    "valorNaoSuperiorError": "O valor a executar não deve ser superior ao valor falta executar da despesa selecionada"
+    "valorNaoSuperiorError": "O valor a executar não deve ser superior ao valor falta executar da despesa selecionada",
+    "tituloListaPagamento": "Título da Lista de Pagamento",
+    "tituloListaPagamentoHint": "Título usado no PDF da lista de pagamentos. Se ficar vazio usa o título por omissão."
   },
   "guiasPagamento": {
     "numeroGuia": "Nº de Guia",

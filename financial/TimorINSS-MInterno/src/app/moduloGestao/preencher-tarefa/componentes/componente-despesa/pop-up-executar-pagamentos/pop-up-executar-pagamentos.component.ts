@@ -6,7 +6,7 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from "@ngx-translate/core";
 import { MyErrorStateMatcher } from "src/app/matcher";
 import { TokenStorageService } from "src/app/services/token-storage.service";
-import { blobExcelSaveAs, customCurrencyMaskConfig, formatDatePT, JsPdf_centerText, openErrorsDialog, openSnackBar, RegexPatterns, showExpiredError } from "src/app/utils";
+import { blobExcelSaveAs, customCurrencyMaskConfig, formatDatePT, JsPdf_centerText, openErrorsDialog, openSnackBar, RegexPatterns, showExpiredError, TITULO_LISTA_PAGAMENTO_OMISSAO, formatarValorMonetario } from "src/app/utils";
 import { DespesaCabimentadasParaExecucao, DespesaRegistada } from "src/app/models/despesaRegistada";
 import { Destinatario } from "src/app/models/destinatario";
 import { PagamentoExecutado, PagamentoExecutadoDestinatario } from "src/app/models/pagamentos_executados";
@@ -81,7 +81,10 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
   public bankOptions: { key: string; label: string }[] = [];
   public bankFilter?: string;
   public filteredListaPagamentosDestinatario: PagamentoExecutadoDestinatario[] = [];
-  public tituloListaPagamento: string = 'Lista Pagamentu Saláriu Funcionáriu INSS';
+  public tituloListaPagamento: string = TITULO_LISTA_PAGAMENTO_OMISSAO;
+  // [PT] O que esta gravado na base de dados, para so gravar quando o utilizador muda mesmo o titulo.
+  // [VI] Gia tri dang nam trong database, de chi luu khi nguoi dung that su doi tieu de.
+  private tituloListaPagamentoGravado: string = TITULO_LISTA_PAGAMENTO_OMISSAO;
 
   public displayedColumnsDespesasAExecutar: string[] = ['descricao', 'valor', 'valorExecutado', 'faltaExecutar'];
   public displayedColumnsDestinatarios: string[] = ['destinatario', 'banco', 'valorExecutado', 'accoes', 'exportToExcel'];
@@ -133,6 +136,7 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
         (response: any) => {
           if (response?.titulo) {
             this.tituloListaPagamento = response.titulo;
+            this.tituloListaPagamentoGravado = response.titulo;
             this.data.tituloListaPagamento = response.titulo;
           }
         },
@@ -141,6 +145,14 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
           // Keep default title
         }
       );
+
+      // [PT] A tabela de destinatarios passou a ler de filteredListaPagamentosDestinatario por
+      // causa do filtro por banco. Essa lista so era preenchida em getDestinatariosPagamento(),
+      // que nao corre na abertura -- a tabela abria vazia mesmo com pagamentos ja registados.
+      // [VI] Bang nguoi nhan gio doc tu filteredListaPagamentosDestinatario de phuc vu bo loc
+      // ngan hang. Danh sach nay chi duoc gan trong getDestinatariosPagamento(), ma ham do khong
+      // chay luc mo dialog -- nen bang hien trong du da co lenh chi.
+      this.applyBankFilter();
 
       //obter configuração codigos
       this.getOrcamentoAprovado(this.data.tarefaActivoId);
@@ -552,7 +564,7 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
       pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
 
       //title: use custom title if provided, fallback to default "Salariu"
-      const defaultTitle = 'Lista Pagamentu Saláriu Funcionáriu INSS';
+      const defaultTitle = TITULO_LISTA_PAGAMENTO_OMISSAO;
       const titulo = this.data.tituloListaPagamento || defaultTitle;
       JsPdf_centerText(pdf, titulo, 35);
       pdf.setFontSize(12);
@@ -576,7 +588,7 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
       var stt = 1;
       var totalPagamentu = 0;
       byDestinatario.forEach(entry => {
-        rows.push([String(stt++), entry.niss, entry.nome, entry.numeroConta, entry.iban, '$' + entry.total.toFixed(2)]);
+        rows.push([String(stt++), entry.niss, entry.nome, entry.numeroConta, entry.iban, formatarValorMonetario(entry.total)]);
         totalPagamentu = Math.round((totalPagamentu + entry.total) * 100) / 100;
       });
 
@@ -584,7 +596,7 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
         startY: 53,
         head: [['No', 'NISS', 'Naran Funsionáriu', 'No. Konta Bankária', 'No. IBAN', 'Total Paga']],
         body: rows,
-        foot: [['', '', '', '', 'Total Pagamentu', '$' + totalPagamentu.toFixed(2)]],
+        foot: [['', '', '', '', 'Total Pagamentu', formatarValorMonetario(totalPagamentu)]],
         // [PT] O total sai uma unica vez, no fim da lista deste banco. Por omissao o
         // jspdf-autotable usa showFoot 'everyPage', pelo que uma lista que ocupasse
         // varias paginas repetia 'Total Pagamentu' no fundo de cada uma -- e sempre com
@@ -744,6 +756,43 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
   //   }
   // }
 
+  // [PT] Grava o titulo da lista de pagamento assim que o utilizador sai do campo, e so se ele
+  // mudou mesmo -- sem isto o titulo escrito servia apenas o PDF gerado nessa mesma janela e
+  // perdia-se ao fechar, deixando a Conciliacao e a Listagem sempre com o titulo por omissao.
+  // [VI] Luu tieu de danh sach chi ngay khi nguoi dung roi khoi o nhap, va chi khi that su co
+  // thay doi -- neu khong, tieu de vua go chi dung cho PDF sinh ra trong chinh cua so do va mat
+  // khi dong lai, khien man Doi chieu va Danh sach luon in tieu de mac dinh.
+  public guardarTituloListaPagamento(): void {
+    const titulo = (this.tituloListaPagamento || '').trim();
+
+    if (titulo === (this.tituloListaPagamentoGravado || '').trim()) {
+      return;
+    }
+
+    this.tarefaService.SaveTituloListaPagamento(this.data.tarefaActivoId, titulo).subscribe(
+      () => {
+        this.tituloListaPagamentoGravado = titulo;
+        this.data.tituloListaPagamento = titulo;
+      },
+      err => {
+        // [PT] O titulo nao ficou gravado: se ficassemos calados o utilizador so descobria
+        // quando o PDF saisse com o titulo antigo.
+        // [VI] Tieu de chua luoc luu: neu im lang thi nguoi dung chi phat hien khi PDF in ra
+        // voi tieu de cu.
+        err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
+        this.showError();
+      });
+  }
+
+  // [PT] Total das linhas que estao mesmo a ser mostradas. Sem filtro coincide com o total
+  // de todos os destinatarios; com filtro passa a somar so o banco escolhido.
+  // [VI] Tong cua dung nhung dong dang hien. Khong loc thi bang tong tat ca nguoi nhan; co
+  // loc thi chi cong ngan hang da chon.
+  public get totalDestinatarioFiltrado(): number {
+    const lista = this.filteredListaPagamentosDestinatario ?? [];
+    return lista.reduce((soma, p) => Math.round((soma + p.valorExecutado) * 100) / 100, 0);
+  }
+
   // Bank filter methods for payment list
   public onBancoSelected(event: any): void {
     this.bankFilter = event.value;
@@ -756,10 +805,16 @@ export class PopUpExecutarPagamentosComponent implements OnInit {
   }
 
   private applyBankFilter(): void {
+    // [PT] A lista pode ainda nao existir quando o dialogo abre; nesse caso a tabela fica vazia
+    // em vez de rebentar com um erro de .filter() sobre undefined.
+    // [VI] Danh sach co the chua co luc mo dialog; khi do de bang rong thay vi loi .filter()
+    // tren undefined.
+    const lista = this.data.listaPagamentosDestinatario ?? [];
+
     if (!this.bankFilter) {
-      this.filteredListaPagamentosDestinatario = this.data.listaPagamentosDestinatario;
+      this.filteredListaPagamentosDestinatario = lista;
     } else {
-      this.filteredListaPagamentosDestinatario = this.data.listaPagamentosDestinatario.filter(
+      this.filteredListaPagamentosDestinatario = lista.filter(
         p => p.bankCode === this.bankFilter
       );
     }

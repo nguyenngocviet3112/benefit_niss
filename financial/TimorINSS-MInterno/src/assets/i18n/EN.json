@@ -1457,7 +1457,9 @@
     "numeroSequencial": "No.",
     "relatoriosPagamentosEmitidos": "Reports - Payments issued cost center per month",
     "pagamentosExecutados": "Executed payments",
-    "valorNaoSuperiorError": "The amount to be executed must not be greater than the amount to be executed of the selected expense"
+    "valorNaoSuperiorError": "The amount to be executed must not be greater than the amount to be executed of the selected expense",
+    "tituloListaPagamento": "Payment List Title",
+    "tituloListaPagamentoHint": "Title used on the payment list PDF. Leave empty to use the default title."
   },
   "guiasPagamento": {
     "numeroGuia": "Invoice Number",
