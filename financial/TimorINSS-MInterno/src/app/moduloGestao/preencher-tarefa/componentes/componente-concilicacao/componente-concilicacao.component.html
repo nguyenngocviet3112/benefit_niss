@@ -209,7 +209,14 @@
                         <mat-label>{{'gerirCampos.Descricao' | translate}}</mat-label>
                         <input matInput maxlength="100" type="text" [(ngModel)]="movimentosfilterBy" (keydown.enter)="searchMovimentosAConciliar()" name="stringFilterInput" />
                     </mat-form-field>
-                    <mat-form-field class="select_box" appearance="outline" *ngIf="isReceitaSelected">
+                    <!-- [PT] O filtro por banco servia so a Receita. O INSS pediu o mesmo do lado
+                         da Despesa: conciliar o extrato de um banco de cada vez. O pagamento
+                         executado ja regista o banco por onde o dinheiro sai, por isso deixou de
+                         haver razao para esconder o filtro consoante o tipo de movimento.
+                         [VI] Bo loc ngan hang truoc chi phuc vu Receita. INSS yeu cau ben Despesa
+                         cung co: doi chieu sao ke tung ngan hang mot. Lenh chi da ghi san tien ra
+                         tu ngan hang nao, nen khong con ly do an bo loc theo loai giao dich. -->
+                    <mat-form-field class="select_box" appearance="outline">
                         <mat-label>{{'conciliacaoComponent.bankCode' | translate}}</mat-label>
                         <mat-select [(ngModel)]="bankCode" (selectionChange)="onBancoSelected($event)">
                             <mat-option [value]="undefined">{{'conciliacaoComponent.allBanks' | translate}}</mat-option>
@@ -218,7 +225,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <a *ngIf="isReceitaSelected" (click)="clearFilterBanco()" class="clearFilterButton" type="button" mat-raised-button>
+                    <a *ngIf="bankCode" (click)="clearFilterBanco()" class="clearFilterButton" type="button" mat-raised-button>
                         <mat-icon class="clearFilterIcon">clear</mat-icon>
                         <mat-label>{{'guiaPagamentoListagem.clearFilter' | translate}}</mat-label>
                     </a>

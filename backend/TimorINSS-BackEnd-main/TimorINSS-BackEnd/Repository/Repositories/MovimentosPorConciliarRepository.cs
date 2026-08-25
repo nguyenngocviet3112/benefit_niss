@@ -250,7 +250,18 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         // Filtrar por datas
                         (beginDate.HasValue && endDate.HasValue ? e.DataCriacao >= beginDate && e.DataCriacao <= endDate :
                          beginDate.HasValue && !endDate.HasValue ? e.DataCriacao == beginDate :
-                         true)
+                         true) &&
+                        // Filtrar por Bank — o banco vem do próprio pagamento executado.
+                        // [PT] O lado Receita ja filtrava por banco; o lado Despesa nao, apesar
+                        // de PAGAMENTOSEXECUTADOS ter a coluna bankCode desde que a Ordem de
+                        // Pagamento passou a registar por que banco o dinheiro sai. Pedido pelo
+                        // INSS: conciliar um extrato de um banco de cada vez, como ja se fazia
+                        // do lado da Receita.
+                        // [VI] Ben Receita da loc theo ngan hang tu truoc; ben Despesa thi chua,
+                        // du PAGAMENTOSEXECUTADOS da co cot bankCode ke tu khi Lenh chi ghi lai
+                        // tien ra tu ngan hang nao. INSS yeu cau: doi chieu sao ke tung ngan
+                        // hang mot, giong nhu phia Receita.
+                        (request.BankCode == null || e.BankCode == request.BankCode)
                     )
                     .ToList()
                     .Select(e => new MovimentosPorConciliarListagem
@@ -268,7 +279,7 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         type = MovimentosPorConciliarListagemType.PagamentoExecutado,
                         editavel = false,
                         isClassificada = e.CodigoContaCreditoFk != null,
-                        bankCode = null,
+                        bankCode = e.BankCode,
                     });
 
                 var todosMovimentos = movimentosManuais.Concat(movimentosDespesa).AsQueryable();

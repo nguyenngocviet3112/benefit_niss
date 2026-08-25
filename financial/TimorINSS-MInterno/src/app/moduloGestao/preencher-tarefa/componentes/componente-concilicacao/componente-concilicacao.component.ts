@@ -18,7 +18,7 @@ import { ConciliarMovimentosPermissionsListResponse, SaldoMovimentosResponse } f
 import { DominiosService } from 'src/app/services/dominios.service';
 import { movimentosBancariosService } from 'src/app/services/movimentosBancarios.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
-import { base64ToArrayBuffer, formatDatePT, openErrorsDialog, openSnackBar, JsPdf_centerText } from 'src/app/utils';
+import { base64ToArrayBuffer, formatDatePT, openErrorsDialog, openSnackBar, JsPdf_centerText, TITULO_LISTA_PAGAMENTO_OMISSAO, formatarValorMonetario } from 'src/app/utils';
 import { gerarInvoicePDF } from 'src/app/utils-invoice';
 import { GuiaPagamentoService } from 'src/app/services/guiaPagamento.service';
 import { PagamentoExecutadoService } from 'src/app/services/pagamentoExecutado.service';
@@ -81,7 +81,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   public movimentosBancariospageSizeTable = 20;
   public movimentosBancariospageIndexTable = 0;
   public disabledSearchBank = true;
-  public tituloListaPagamento: string = 'Lista Pagamentu Saláriu Funcionáriu INSS';
+  public tituloListaPagamento: string = TITULO_LISTA_PAGAMENTO_OMISSAO;
   public movimentosBancariosFilter: FilterRequest = {};
   public movimentosBancariosfilterBy = '';
   public movimentosBancariosSelection = new SelectionModel<number>(true, []);
@@ -110,11 +110,15 @@ export class ComponenteConcilicacaoComponent implements OnInit {
   public bankOptions: { key: string; label: string }[] = [];
 
   public get movimentosdisplayedColumns(): string[] {
-    const base = ['descricao', 'comprovativo', 'documento', 'numPagamentoGuia'];
-    // Bank só có ý nghĩa ở phía Receita (dữ liệu đến từ Guia Pagamento/Invoice)
-    return this.isReceitaSelected
-      ? [...base, 'bankCode', 'valor', 'acoes', 'select']
-      : [...base, 'valor', 'acoes', 'select'];
+    // [PT] O banco aparece dos dois lados: na Receita vem da Guia de Pagamento, na Despesa vem
+    // do proprio pagamento executado. Antes a coluna so era mostrada na Receita, porque do lado
+    // da Despesa o banco nao era ainda registado; hoje e, e o INSS precisa dele para conciliar
+    // um extrato de cada vez.
+    // [VI] Ngan hang xuat hien o ca hai phia: ben Receita lay tu Guia de Pagamento, ben Despesa
+    // lay tu chinh lenh chi. Truoc day cot nay chi hien o Receita vi ben Despesa chua ghi ngan
+    // hang; nay da ghi, va INSS can no de doi chieu tung sao ke mot.
+    return ['descricao', 'comprovativo', 'documento', 'numPagamentoGuia',
+            'bankCode', 'valor', 'acoes', 'select'];
   }
   public movimentosTotalRowsTable: number = 0;
   public movimentosPageSizeTable = 20;
@@ -381,7 +385,8 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       tarefaAtivoId: this.apenasMovimentosProcesso ? this.tarefaActivoId : undefined,
       filtroConciliado: filterByConciliados ? FiltroConciliado.Conciliados : FiltroConciliado.NaoConciliados,
       isReceita: this.isReceita,
-      bankCode: this.isReceitaSelected ? this.bankCode : undefined,
+      // O banco é enviado nos dois sentidos — Receita e Despesa filtram por ele.
+      bankCode: this.bankCode,
       filter: this.movimentosFilter
     };
 
@@ -996,7 +1001,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       pdf.addImage(environment.ssIcon, 'JPEG', 90, 5, 25, 20);
 
       // title: use custom title if available, fallback to default "Salariu"
-      const defaultTitle = 'Lista Pagamentu Saláriu Funcionáriu INSS';
+      const defaultTitle = TITULO_LISTA_PAGAMENTO_OMISSAO;
       const titulo = this.tituloListaPagamento || defaultTitle;
       JsPdf_centerText(pdf, titulo, 35);
       pdf.setFontSize(12);
@@ -1019,7 +1024,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
       var stt = 1;
       var totalPagamentu = 0;
       byDestinatario.forEach(entry => {
-        rows.push([String(stt++), entry.niss, entry.nome, entry.numeroConta, entry.iban, '$' + entry.total.toFixed(2)]);
+        rows.push([String(stt++), entry.niss, entry.nome, entry.numeroConta, entry.iban, formatarValorMonetario(entry.total)]);
         totalPagamentu = Math.round((totalPagamentu + entry.total) * 100) / 100;
       });
 
@@ -1027,7 +1032,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
         startY: 53,
         head: [['No', 'NISS', 'Naran Funsionáriu', 'No. Konta Bankária', 'No. IBAN', 'Total Paga']],
         body: rows,
-        foot: [['', '', '', '', 'Total Pagamentu', '$' + totalPagamentu.toFixed(2)]],
+        foot: [['', '', '', '', 'Total Pagamentu', formatarValorMonetario(totalPagamentu)]],
         // [PT] O total sai uma unica vez, no fim da lista deste banco. Por omissao o
         // jspdf-autotable usa showFoot 'everyPage', pelo que uma lista que ocupasse
         // varias paginas repetia 'Total Pagamentu' no fundo de cada uma -- e sempre com
