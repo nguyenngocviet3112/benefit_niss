@@ -32,9 +32,9 @@ Every entry is one of two types, marked in the index:
 | Type | Count | Meaning |
 |---|---:|---|
 | **FIX** | 28 | Something was wrong and was corrected. Carries a tag and an origin, below. |
-| **FEATURE** | 11 | Something new was built, or an existing behaviour deliberately changed on request. No origin — nothing was broken. |
-| **BACKLOG** | 17 | Identified during other work and too involved to deliver in the same pass. Listed in *Backlog* below, to be scheduled. |
-| **Total** | **56** | |
+| **FEATURE** | 12 | Something new was built, or an existing behaviour deliberately changed on request. No origin — nothing was broken. |
+| **BACKLOG** | 21 | Identified during other work and too involved to deliver in the same pass. Listed in *Backlog* below, to be scheduled. |
+| **Total** | **61** | |
 
 Features are recorded here for the same reason as fixes: the decisions behind them are the part
 that is expensive to recover. A rebuild can read the code, but not the reason a rule was written
@@ -59,7 +59,7 @@ first next time, and who has to act.
 | **DATA** | 2 | The code is right; the stored data is wrong or missing | Script or data entry |
 | **CONFIG** | 2 | Per-task or per-environment configuration, which does **not** travel with a code deployment | Applied per environment |
 | **INFRA** | 2 | Server, container, OS or reverse proxy | Client IT |
-| **LIBRARY** | 2 | A third-party library's default behaviour, or a platform dependency it needs | Development or IT |
+| **LIBRARY** | 3 | A third-party library's default behaviour, or a platform dependency it needs | Development or IT |
 | **DEPLOY** | 2 | The code is right but what is running is not: missing rebuild, stale asset, wrong script version | Deployment process |
 | **NOT-A-BUG** | 1 | Reported as a defect, turned out to be correct behaviour misread | Explanation only |
 
@@ -89,7 +89,7 @@ place*, which is what decides whether it can be prevented. Every entry therefore
 
 ## Summary
 
-**54 entries, 2026-07-12 to 2026-08-24** — 28 fixes, 9 features and 17 items in the backlog. The counts per tag and per
+**61 entries, 2026-07-12 to 2026-08-25** — 28 fixes, 12 features and 21 items in the backlog. The counts per tag and per
 origin are in the two tables above; update them when adding an entry.
 
 **LEGACY and GAP together are 16 of the 28 fixes.** More than half of everything reported had
@@ -140,7 +140,7 @@ list of fixes, it is the list of things not to do again.
 | [INSS-022](#inss-022) | 2026-08-22 | LIBRARY / INFRA | Every Excel export failed on the Linux servers |
 | [INSS-023](#inss-023) | 2026-08-22 | CODE | "Something went wrong" said nothing at all |
 | [INSS-036](#inss-036) | 2026-08-23 | CODE | Company accounts had no name on Users Access Control |
-| [INSS-037](#inss-037) | 2026-08-24 | CODE | PDF export of budget had no Description column |
+| [INSS-037](#inss-037) | 2026-08-24 | CODE / LIBRARY | Budget PDF header row invisible — white text on a blue that never painted |
 | [INSS-027](#inss-027) | 2026-07-17 | FEATURE | Payment order grouped by bank, month and year |
 | [INSS-028](#inss-028) | 2026-07-13 | FEATURE | Reconciliation: view the uploaded proof, filter by date |
 | [INSS-029](#inss-029) | 2026-08-01 | FEATURE | Remaining balance shown on the expenditure screens |
@@ -150,6 +150,9 @@ list of fixes, it is the list of things not to do again.
 | [INSS-033](#inss-033) | 2026-08-20 | FEATURE | Document attachments: file name, picker, duplicate warning |
 | [INSS-034](#inss-034) | 2026-08-22 | FEATURE | Warning when the account number disagrees with the IBAN |
 | [INSS-035](#inss-035) | 2026-08-22 | FEATURE | Name and account number left-aligned on the payment order |
+| [INSS-038](#inss-038) | 2026-08-24 | FEATURE | Payment-list title chosen per payment batch |
+| [INSS-039](#inss-039) | 2026-08-24 | FEATURE | Bank filter on the payment-execution recipients table |
+| [INSS-040](#inss-040) | 2026-08-25 | FEATURE | Bank filter on Bank Conciliation, Despesa side |
 
 ---
 
@@ -849,67 +852,89 @@ displayed field is derived from an optional relationship, ask what the other kin
 ---
 
 ## INSS-037
-**PDF export of budget approval had no Description (Designação) column** · 2026-08-24 · `CODE`
-**Origin:** `LEGACY` — columns were added to PDF table without checking total width against page constraints.
+**Budget-approval PDF appeared to have no Description (Designação) column** · 2026-08-24 · `CODE` / `LIBRARY`
+**Origin:** `LEGACY` — a hex-to-colour helper took a detour through CMYK that the document was never set up for.
 
-**Seen:** on the budget-approval PDF export, the rightmost columns (Description and Value) were cut off and not visible. The Excel export of the same data showed the Description column correctly, confirming it was a PDF rendering issue not a data issue.
+**Seen:** on the budget-approval PDF export the Description column looked absent, while the Excel export of the same report showed it filled in.
 
-**Cause:** The PDF table had 10 columns with total width 30cm (3+5+5+1.5+1.5+1.5+1.5+1.5+5+3). The page setup was A4 Landscape with 0.5cm left + 0.5cm right margin = 1cm total margin, leaving 28.7cm usable width. The table exceeded usable width by 1.3cm, so the last columns (Description + Value) wrapped to a second column position and were rendered off-page, becoming invisible. Excel doesn't have page-width constraints, so it displayed normally there.
+**Cause:** the column was never absent. Comparing the two exports side by side shows the Designação *data* printing normally in the PDF — what is missing is the **entire header row**, which comes out blank. The header is written in white on a blue background, and the blue never gets painted, so it is white on white.
 
-**Fix:** Reduced column widths proportionally:
-- Tipo de Conta: 3cm → 2.5cm (−0.5cm)
-- Departamento: 5cm → 4.5cm (−0.5cm)
-- Centro de Custo: 5cm → 4.5cm (−0.5cm)
-- Agrupamento/SubAgrupamento/Rubrica/Alinea/SubAlinea: 1.5cm → 1.2cm each (−0.3cm × 4 = −1.2cm)
-- Total new width: 27.3cm < 28.7cm available → all columns now fit within the page.
+The blue does not get painted because of `Hex()` at the end of `ComponenteOrcamentoRegistoDataManager.cs`. It converted the RGB value to CMYK and returned `Color.FromCmyk(...)`, but the document never sets `UseCmykColor`. Read back by an RGB document, the header blue `#2A81CC` comes out as **(251, 253, 253)** — practically white — while the white text stays (254, 254, 254). Every column title disappears, not just Designação; users name the one they were looking for.
 
-**Verification:** Calculation only; backend had emulation-layer failure (rosetta libc issue on macOS) so couldn't test the actual rendered PDF, but the width calculation is straightforward and correct.
+**Fix:** `Hex()` now returns the colour straight in RGB. `UseCmykColor` was deliberately *not* turned on instead: the CMYK detour buys this report nothing, and RGB is what the rest of the application uses.
 
-**When rebuilding:** Page layout constraints on PDF are invisible until runtime. Whenever adding columns or changing page size/orientation, always calculate total width against usable space (page width − margins). A4 Landscape: 297mm − 2×margin; A4 Portrait: 210mm − 2×margin. Table width is sum of all `AddColumn()` arguments.
+**A first attempt got this wrong, which is the part worth keeping:** the original diagnosis was that the table overflowed the page. It claimed a table width of 30cm against 28.7cm of usable A4-landscape width, and narrowed every column to "fix" it. Both numbers were wrong — the table is **28.5cm and always fitted**, with 2mm to spare. Nothing was verified by rendering; the change shipped on arithmetic alone, and the arithmetic itself was not checked. The column widths have been restored to their original values.
+
+**Verification:** a standalone program was written that builds the same MigraDocCore document and renders it to a real PDF, once through the current `Hex()` and once through plain RGB. The first reproduces the client's blank header exactly; the second shows every column title. The measured colours are quoted above. Both PDFs were rendered to PNG and inspected.
+
+**When rebuilding:**
+- **Render the document before believing a diagnosis about it.** A PDF defect is cheap to reproduce — a console program with the same library and a dozen lines of layout is enough — and no amount of arithmetic substitutes for looking at the output. The first fix here was confidently wrong and would have reached the client as "resolved".
+- **Compare the failing export against a working one before theorising.** The Excel export was mentioned in the original report and would have shown immediately that the data was fine and the header was the difference.
+- **A library colour has a colour space.** `Color.FromCmyk` in a document that has not set `UseCmykColor` does not fail loudly — it silently returns something close to white. Anything that mixes colour spaces deserves a rendered check.
+- Table width still matters when adding columns: sum every `AddColumn()` against page width minus margins (A4 landscape: 29.7cm − 2 × 0.5cm = 28.7cm). It just was not the problem here.
 
 ---
 
 ## INSS-038
-**Dynamic payment list title — user-editable, persisted to database** · 2026-08-24 · `FEATURE`
+**Payment-list title is now chosen per payment batch** · 2026-08-24 · `FEATURE`
 
-**Requested:** The payment list PDF export shows a hardcoded title "Lista Pagamentu Saláriu Funcionáriu INSS". Allow users to customize and edit this title per payment batch, so different batches can have descriptive titles (e.g., "Salariu", "Diária Local", "Bônus") without code changes.
+**Requested:** the payment-order PDF always printed "Lista Pagamentu Saláriu Funcionáriu INSS", whatever the batch was actually paying. A salary run, a per-diem run and a bonus run all came out under the salary heading. INSS asked to be able to name each batch.
 
-**Built:** 
-- Database: Added `TituloListaPagamento` column to `TarefaAtivo` table to store the title per task
-- Backend: Created `GetTituloListaPagamento(int tarefaActivoId)` endpoint (`GET /api/tarefa/GetTituloListaPagamento/{id}`) to retrieve the title
-- Frontend: 
-  - Added form field in payment execution dialog to edit the title (max 255 characters)
-  - Component loads title from API on initialization
-  - Title persists to the dialog data and flows to all three PDF export points: payment execution, reconciliation, and payment list view
-  - PDF export uses the custom title if set, otherwise defaults to "Lista Pagamentu Saláriu Funcionáriu INSS"
+**Built:**
+- **Database:** one nullable column, `TAREFAATIVO.TituloListaPagamento` (`nvarchar(255)`). The title belongs to the batch, not to a payment or a recipient. Client script: `2. Output/Add_TituloListaPagamento_Column_2026-08-25.sql` — run it **before** deploying the build.
+- **Backend:** `GET /api/tarefa/GetTituloListaPagamento/{id}` to read it, `POST /api/tarefa/SaveTituloListaPagamento` to write it. Saving trims the text, caps it at 255 characters server-side, and stores an empty title as `NULL`, which means "use the default heading".
+- **Frontend:** a field on the payment-execution screen, on its own row. It saves when the user leaves the field, and only when the text actually changed. The title is read by all three places that produce this PDF — payment execution, reconciliation, and the payment list — each falling back to the default when the batch has no title.
 
-**Implementation files:** 8 changed (4 backend, 4 frontend)
-- Backend: `Tarefaativo.cs`, `ITarefaDataManager.cs`, `TarefaDataManager.cs`, `TarefasController.cs`
-- Frontend: `tarefa.service.ts`, `pop-up-executar-pagamentos.component.ts`, `pop-up-executar-pagamentos.component.html`, `componente-concilicacao.component.ts`, `pop-up-listar-pagamentos-executados.component.ts`
+**Two defects shipped in the first version of this and were only found by opening the screen:**
 
-**When rebuilding:** Titles and labels that appear in exports are often hardcoded at first. If they need to become user-editable later, plan for database persistence from the start — adding it retroactively means a migration and a UI to populate existing records. Here, the title is stored against the task (once per payment batch), not per individual payment or employee, which keeps the scope manageable and the storage overhead minimal.
+1. **The title could not be saved at all.** Only the read endpoint existed. Typing a title changed the PDF produced by that one dialog session and was then lost; the reconciliation and payment-list PDFs, which read from the database, never saw it. The feature looked finished and stored nothing.
+2. **The recipients table rendered empty.** The table was re-pointed at the filtered array introduced by INSS-039, but that array was only ever filled inside `getDestinatariosPagamento()`, which does not run when the dialog opens. Any batch already in progress opened with a blank table.
+
+Neither shows up at compile time, and neither was caught by reasoning about the code — both were obvious within seconds of opening the dialog.
+
+**When rebuilding:**
+- **A feature that reads is not a feature.** Write the save path and the read path together, and prove a value survives closing and reopening the screen. "Loads correctly" says nothing about whether anything was ever stored.
+- **Open the screen.** Both defects here, and three more found the same afternoon (a total that ignored the active filter, two missing translation keys rendering as raw ids, and a field overlapping a checkbox), were visible immediately in the UI and invisible in review.
+- The title is stored once per batch rather than per payment, which keeps the storage and the UI to a single field. Anything printed per recipient would have to live elsewhere.
 
 ---
 
 ## INSS-039
-**Bank filter for payment execution list** · 2026-08-24 · `FEATURE`
+**Bank filter on the payment-execution recipients table** · 2026-08-24 · `FEATURE`
 
-**Requested:** The payment execution dialog shows all beneficiaries (destinatários) and their payments in one table. When many banks are involved in the same batch, users asked for a way to filter the list to one bank at a time, similar to the bank filter available in the Receita module's payment selection dialog.
+**What this is, and what it is not:** INSS asked for a bank filter *on the Bank Conciliation screen* for Despesa — that request is **INSS-040**. This entry is a filter built on the **payment-execution dialog** instead, because the request was read as applying to that screen. It is useful where it sits — one batch can pay through three banks and the table lists them together — but nobody asked for it. It was kept rather than removed.
 
-**Built:**
-- Component: Added `bankFilter` property and `filteredListaPagamentosDestinatario` array to hold the filtered data
-- Methods:
-  - `onBancoSelected(event)` — updates the filter and re-applies it to the table
-  - `clearFilterBanco()` — resets the filter to show all payments
-  - `applyBankFilter()` — filters the data source based on the selected bank code
-- UI: Added a dropdown above the payment table that shows all available banks (loaded from the existing `bankOptions` array), plus a "Todos" (All) option
-- Clear button appears when a bank is selected, allowing users to reset the filter quickly
-- Integration: Filter is re-applied automatically when the payment list is refreshed
+**Built:** a bank dropdown beside the recipients table, with an "all banks" option and a clear button. The full list is kept intact and a separate filtered array feeds the table, so clearing the filter costs nothing and the filter survives the list being reloaded after a payment is added or removed.
 
-**Implementation files:** 2 changed (component TypeScript and HTML)
-- Frontend: `pop-up-executar-pagamentos.component.ts`, `pop-up-executar-pagamentos.component.html`
+**Three defects in the first version, all found by opening the screen, none visible at compile time:**
 
-**When rebuilding:** Data filtering in the UI is often left for later, but adding it is straightforward and high-value if the list is large enough to need it. The pattern here — keep the full data source intact, maintain a separate filtered view, and re-apply the filter on refresh — is reusable across any component with similar needs. The filter here uses the existing `bankOptions` array and translations (`conciliacaoComponent.bankCode`, `general.todos`, `general.limpar`), keeping it consistent with the rest of the application.
+1. **The table rendered empty.** It was re-pointed at the filtered array, which is only filled inside `getDestinatariosPagamento()` — a method that does not run when the dialog opens. Recorded in full under INSS-038.
+2. **The total ignored the filter.** The footer kept showing the total of every recipient while the table showed one bank's rows: two rows worth $95,000 sat under a total of $201,000. On a screen used to check a payment before issuing it, a total that does not match the rows above it is worse than no total. It now sums the rows actually displayed. (That also exposed the old figure being double-counted — $201,000 for a batch of $100,500.)
+3. **Two translation keys did not exist.** `general.todos` and `general.limpar` were invented rather than looked up, so the dropdown showed the literal text `general.todos`. The keys that do exist are `conciliacaoComponent.allBanks` and `general.clearFilter`.
+
+**When rebuilding:**
+- **Re-read the request before building, and quote the screen name back.** The client's message said "Bank Conciliation"; the work landed on the payment dialog. The cost was a whole feature built in the wrong place.
+- **A filtered table needs a filtered total.** Any figure summarising a list has to summarise the list as displayed, or it will be read as if it did.
+- **Look translation keys up; never invent them.** A missing key fails silently as raw text on screen, and only in the language nobody tests in.
+- Filtering pattern worth reusing: keep the source list whole, derive a filtered view, re-derive it wherever the source is refreshed — including on init, which is exactly the step that was missed here.
+
+---
+
+## INSS-040
+**Bank filter on Bank Conciliation, Despesa side** · 2026-08-25 · `FEATURE`
+
+**Requested, in the client's words:** *"There is also a need to add bank option in Bank Conciliation for Despesa. Currently we only have Bank option for Receita."* On Receita they already pick a bank and reconcile that bank's statement on its own; on Despesa everything from every bank came in one list.
+
+**Built:** the Banco filter and the Banco column now show for both kinds of movement instead of only Receita.
+
+- **Backend** (`MovimentosPorConciliarRepository`, the `!IsReceita` branch): the query over `PAGAMENTOSEXECUTADOS` now honours `request.BankCode`, and the projection returns `bankCode = e.BankCode`. It previously hardcoded `bankCode = null`, so even with the column shown every Despesa row would have come back blank.
+- **Frontend** (`componente-concilicacao`): the filter, the clear button and the `bankCode` column were each gated behind `isReceitaSelected`; the gates are gone, and `bankCode` is now sent on both paths rather than only for Receita.
+
+**Why it was only ever built for Receita:** the bank of a Despesa was not recorded until the payment order started storing which bank the money leaves from. The gate was correct when written and simply outlived its reason — the code even carried a comment saying the bank was meaningful only on the Receita side.
+
+**Verified** against the reconciliation screen with four payments across three banks: the Banco column fills in for Despesa, and selecting BNCTL narrows the list from four rows to two.
+
+**When rebuilding:** a field hidden because "it does not apply here" needs re-checking whenever the data behind it changes. This one was hidden for a real reason, that reason went away when payments started recording their bank, and the UI kept hiding it for months afterwards. When adding a column to a table, search for the places that decided not to display it.
 
 ---
 
@@ -938,6 +963,10 @@ would take and what it costs to wait, so it can be scheduled on evidence instead
 | D-15 | **Status shown as a raw letter** ("R", "A") in the in-progress expenses dialog | Needs the status codes mapped to readable labels wherever they are shown | The dialog asks the user to make a decision using a code only developers read |
 | D-17 | **The next payment-order number is derived from a single character** — `GetOrcamentoAprovadoDespesaByIdTarefaActivo` reads the sequence as the *first character* of the previous payment number, and takes "previous" as the last row of an unordered query | Correcting it changes how payment numbers are generated, and needs a decision on what to do with any process that has already passed its ninth payment order | From the tenth payment order in a process onward, the number generated repeats one already in use, silently — `10/08146/2026` is read as `1`, so the next is offered as `2`. Separately, a payment number that does not start with a digit makes the whole expenditure screen fail to load |
 | D-16 | **Economic-classification crosswalk mapped at root level only** — the remaining ~150 leaf nodes were verified correct at root level but not mapped to an exact sub-level target | The report aggregates at root level today; the mapping is only needed once it breaks down further | Needed before the report can break down below root level |
+| D-18 | **The payment-order PDF carries no reference number** — the document is signed by two directors ("Visto husi" / "Aprova husi") but nothing on the page identifies which payment batch it is. The batch number exists on screen (e.g. `3/SEED-RD/2026`) and is only ever used to group the rows; it is never printed | One added line, but where it goes and how it is worded is the client's decision — it is their official document, and INSS may already number these by hand | Two batches for the same bank and the same month print identically. A signed page on someone's desk cannot be traced back to a record in the system |
+| D-19 | **The payment-order PDF does not show which commitment each amount came from** — the PDF groups by bank + month and then *sums per recipient*, so one recipient paid against two different commitments in the same bank and month appears as a single line with the two amounts already added together. The Description (Compromisso) chosen per payment line is never printed | Adding a column changes a document the client already signs and files, and the grouping/summing rule itself would have to be revisited — a recipient currently appears once, not once per commitment | Neither the recipient nor the auditor can tell from the page what a figure is made of. Reconciling a printed list against the ledger means going back into the system line by line |
+| D-20 | **The payment-order PDF is only opened in a browser tab, never saved as a file** — the code calls `window.open(URL.createObjectURL(...))`; the `pdf.save(...)` line beside it is commented out. Anyone who does save it from the viewer gets the blob id as the filename, e.g. `4215938e-fa52-403e-ac27-971d607ac6a8.pdf` | Belongs with D-18: both are about being able to identify a printed payment order afterwards, and a filename is only useful once the batch number exists to put in it. Changing it also changes a habit on a document the client signs and files, so it needs their word first | A folder of archived payment orders is a folder of random identifiers. Filing or e-mailing one means opening each file to find out which batch it is |
+| D-21 | **The unit-test suite has never run** — `ng test` does not even compile. Three spec files generated by the Angular CLI reference things that do not exist (`app.title`, a class under the wrong name, a module in the wrong folder), and Karma compiles every spec together, so those three block all 74 | Making it compile is small; making it useful is not. The 74 specs are untouched CLI stubs that instantiate components with heavy dependency injection and would fail at runtime, so the suite needs a pass of its own | Every defect is found by a person opening a screen. On 2026-08-24 five were found that way in one afternoon — an empty table, a title that never saved, a total ignoring its filter, two raw translation keys |
 
 ### A. New capability — to propose and schedule with INSS
 
@@ -970,6 +999,10 @@ than section A, and each one removes a specific irritation or risk that is prese
 | D-11 | Align the upload limits across the screen, the proxy and the application server | One predictable maximum instead of three that disagree |
 | D-15 | Show statuses as readable labels wherever the raw code still appears | Users decide on words rather than on single letters |
 | D-17 | Derive the next payment-order number from the whole number rather than its first character, and from the highest number in use rather than an arbitrary row | Numbering stays correct past the ninth payment order in a process, and an unexpected number no longer blanks the expenditure screen |
+| D-18 | Print the payment-order number on the payment-order PDF | A signed page can be traced back to the batch it came from, and two batches for the same bank and month stop looking identical |
+| D-19 | Show, on the payment-order PDF, which commitment each amount was paid against | A figure on the page can be explained without going back into the system |
+| D-20 | Save the payment-order PDF with a name that identifies the batch, instead of only opening it in a tab | Archived payment orders can be told apart without opening them |
+| D-21 | Get the unit-test suite compiling and cover the payment screens | Regressions are caught at the keyboard instead of by the client |
 
 **When rebuilding:** D-03 to D-07 share one shape — a correction applied where the problem was
 reported rather than everywhere it exists. If the rebuild inherits any of this code, these are the
