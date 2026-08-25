@@ -406,12 +406,22 @@ namespace TimorINSSBackEnd.Repository.Repositories
             {
                 StringBuilder nome = new StringBuilder();
                 nome.Append(agrupamento.Codigo);
-                while (agrupamento.ParentFkNavigation != null)
+
+                // Aqui cada volta faz uma consulta a base de dados, por isso um ciclo nao ocupa
+                // so um core: martela tambem o SQL Server. Ver a nota em GetFullCodigoTransactionless.
+                HashSet<int> visitados = new HashSet<int> { agrupamento.Id };
+                while (agrupamento.ParentFkNavigation != null && agrupamento.ParentFk.HasValue)
                 {
+                    if (JaVisitado(visitados, agrupamento.ParentFk.Value))
+                        break;
+
                     nome.Insert(0, agrupamento.ParentFkNavigation.Codigo);
                     agrupamento = _moduloContribuicoesContext.Agrupamentoconfig
                         .Include(a => a.ParentFkNavigation)
                         .Where(a => a.Id == agrupamento.ParentFk).FirstOrDefault();
+
+                    if (agrupamento == null)
+                        break;
                 }
                 return nome.ToString();
             }
@@ -431,46 +441,107 @@ namespace TimorINSSBackEnd.Repository.Repositories
                 nome.Append("-");
                 nome.Append(agrupamento.Designacao);
                 nome.Append(" ");
-                while (agrupamento.ParentFkNavigation != null)
+
+                // Mesma protecção: sem ela um ciclo na arvore consome um core e consulta a base
+                // de dados em ciclo. Ver a nota em GetFullCodigoTransactionless.
+                HashSet<int> visitados = new HashSet<int> { agrupamento.Id };
+                while (agrupamento.ParentFkNavigation != null && agrupamento.ParentFk.HasValue)
                 {
+                    if (JaVisitado(visitados, agrupamento.ParentFk.Value))
+                        break;
+
                     nome.Insert(0, agrupamento.ParentFkNavigation.Codigo + "-" + agrupamento.ParentFkNavigation.Designacao + " ");
                     agrupamento = _moduloContribuicoesContext.Agrupamentoconfig
                         .Include(a => a.ParentFkNavigation)
                         .Where(a => a.Id == agrupamento.ParentFk).FirstOrDefault();
+
+                    if (agrupamento == null)
+                        break;
                 }
                 return nome.ToString();
             }
             else
                 return "";
+        }
+
+        // [PT] Um agrupamento que seja pai de si proprio -- ou dois que sejam pai um do outro --
+        // punha os tres metodos abaixo a subir a arvore para sempre. O ciclo nao rebenta: cada
+        // volta acrescenta ao StringBuilder e o pedido nunca responde, deixando um core do
+        // servidor a 100% ate a aplicacao ser reiniciada. Dois pedidos assim ocupavam dois cores.
+        // Observado a 2026-08-25 com a linha AGRUPAMENTOCONFIG id=715, parent_fk=715.
+        //
+        // Guardar os ids ja visitados e o que trava isto. Ao encontrar um repetido para-se e
+        // devolve-se o que ja foi construido: a linha com dados maus fica com um codigo curto,
+        // visivel, e o resto do ecra continua a funcionar -- ao contrario de lancar excepcao,
+        // que mata a listagem inteira por causa de uma linha.
+        //
+        // [VI] Mot agrupamento tu lam cha chinh no -- hoac hai cai lam cha lan nhau -- khien ba
+        // ham duoi day leo cay len mai khong dung. Vong lap khong he bao loi: moi vong lai noi
+        // them vao StringBuilder va request khong bao gio tra ve, giu nguyen mot loi CPU o 100%
+        // cho den khi restart ung dung. Hai request nhu vay chiem hai loi.
+        // Ghi nhan 25/08/2026 voi dong AGRUPAMENTOCONFIG id=715, parent_fk=715.
+        //
+        // Cach chan la nho lai cac id da di qua. Gap id lap lai thi dung va tra ve phan da dung
+        // duoc: dong du lieu hong se co ma ngan, nhin ra ngay, con phan con lai cua man hinh van
+        // chay -- khac voi nem exception, mot dong hong se giet ca danh sach.
+        private static bool JaVisitado(HashSet<int> visitados, int id)
+        {
+            return !visitados.Add(id);
         }
 
         public string GetFullCodigoTransactionless(int id, Dictionary<int, Agrupamentoconfig> agrupamentos)
         {
-            Agrupamentoconfig agrupamento = agrupamentos[id];
-            if (agrupamento != null)
-            {
-                StringBuilder nome = new StringBuilder();
-                nome.Append(agrupamento.Codigo);
-                while (agrupamento.ParentFkNavigation != null)
-                {
-                    nome.Insert(0, agrupamento.ParentFkNavigation.Codigo);
-                    agrupamento = agrupamentos[agrupamento.ParentFk.Value];
-                }
-                return nome.ToString();
-            }
-            else
+            // TryGetValue em vez de indexador: um pai que nao esteja no dicionario lançava
+            // KeyNotFoundException e derrubava a listagem toda.
+            if (!agrupamentos.TryGetValue(id, out Agrupamentoconfig agrupamento) || agrupamento == null)
                 return "";
+
+            StringBuilder nome = new StringBuilder();
+            nome.Append(agrupamento.Codigo);
+
+            HashSet<int> visitados = new HashSet<int> { agrupamento.Id };
+            while (agrupamento.ParentFkNavigation != null && agrupamento.ParentFk.HasValue)
+            {
+                if (JaVisitado(visitados, agrupamento.ParentFk.Value))
+                    break;
+
+                nome.Insert(0, agrupamento.ParentFkNavigation.Codigo);
+
+                if (!agrupamentos.TryGetValue(agrupamento.ParentFk.Value, out agrupamento) || agrupamento == null)
+                    break;
+            }
+
+            return nome.ToString();
         }
 
+        // [PT] ATENCAO: este metodo devolve sempre true. O ciclo desce a arvore a recolher
+        // descendentes e deita fora o resultado, portanto a validacao que o nome promete nao
+        // existe -- apagar e sempre permitido, mesmo com filhos. Nao se alterou esse
+        // comportamento aqui: mudar quando um agrupamento pode ser apagado e uma decisao de
+        // negocio, nao uma correccao. Fica registado no backlog.
+        // O que se corrigiu foi o ciclo poder nao terminar: com uma linha que seja pai de si
+        // propria, `Contains(a.ParentFk.Value)` volta a encontra-la a cada volta e o metodo
+        // consulta a base de dados indefinidamente.
+        //
+        // [VI] LUU Y: ham nay luon tra ve true. Vong lap di xuong cay gom cac node con roi vut
+        // ket qua di, nen phep kiem tra ma ten ham hua hen thuc te khong ton tai -- van xoa duoc
+        // du con node con. Khong doi hanh vi do o day: quyet dinh khi nao duoc xoa mot agrupamento
+        // la quyet dinh nghiep vu, khong phai sua loi. Da ghi vao backlog.
+        // Thu da sua la vong lap co the khong bao gio dung: voi dong tu lam cha chinh no,
+        // `Contains(a.ParentFk.Value)` lai tim thay no o moi vong va ham truy van database mai.
         public bool IsAgrupamentoDeleteValid(Agrupamentoconfig agrupamento)
         {
             List<int> agrupamentosIte = new List<int> { agrupamento.Id };
+            HashSet<int> visitados = new HashSet<int> { agrupamento.Id };
+
             while (agrupamentosIte.Count > 0)
             {
-                
-                    agrupamentosIte = _moduloContribuicoesContext.Agrupamentoconfig
-                        .Where(a => a.IndActivo && a.ParentFk.HasValue && agrupamentosIte.Contains(a.ParentFk.Value))
-                        .Select(a => a.Id).ToList();
+                agrupamentosIte = _moduloContribuicoesContext.Agrupamentoconfig
+                    .Where(a => a.IndActivo && a.ParentFk.HasValue && agrupamentosIte.Contains(a.ParentFk.Value))
+                    .Select(a => a.Id).ToList();
+
+                // So se desce para ids ainda nao vistos; um ciclo para aqui em vez de repetir.
+                agrupamentosIte = agrupamentosIte.Where(id => visitados.Add(id)).ToList();
             }
 
             return true;
