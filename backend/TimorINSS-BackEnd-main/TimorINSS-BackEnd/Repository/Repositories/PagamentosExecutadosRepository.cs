@@ -1231,8 +1231,54 @@ namespace TimorINSSBackEnd.Repository.Repositories
                         id = e.Id,
                         parentId = e.ParentFk,
                         nome = e.Designacao,
-                        credito = e.PagamentosexecutadosCodigoContaCreditoFkNavigation.Where(e => e.DataObrigacao >= beginDate.Value.Date && e.DataObrigacao <= endDate.Value.Date).Select(e => e.ValorExecutado).Sum(),
-                        debito = e.PagamentosexecutadosCodigoContaDebitoFkNavigation.Where(e => e.DataObrigacao >= beginDate.Value.Date && e.DataObrigacao <= endDate.Value.Date).Select(e => e.ValorExecutado).Sum(),
+                        // [PT] `IndActivo` faltava aqui. Apagar um pagamento nao o remove da
+                        // tabela -- poe IndActivo a false -- e todas as outras consultas deste
+                        // ficheiro filtram por ele. Esta nao filtrava, por isso um pagamento
+                        // apagado desaparecia dos ecras e continuava a somar no balanco.
+                        // Medido a 2026-08-25: apagar um pagamento de 80.000 deixou o total em
+                        // 211.000, exactamente o mesmo de antes.
+                        // Quem o apaga fa-lo tipicamente por se ter enganado no destinatario,
+                        // antes de emitir a ordem; volta a lancar a linha correcta e o valor
+                        // passa a estar contado duas vezes no balanco, sem nada que o denuncie.
+                        //
+                        // Faltava tambem o estado. Antes entrava tudo, incluindo um lote ainda a
+                        // ser escrito que ninguem tinha autorizado. Um pagamento passa a contar
+                        // a partir do momento em que a ordem de pagamento e emitida
+                        // (ESTADOPAGAMENTO valor 2), que e quando a despesa fica aprovada e
+                        // assinada.
+                        //
+                        // `>= 2` e nao `== 2`: os estados sao sequenciais (1 Em Execucao ->
+                        // 2 Ordem emitida -> 3 Conciliado). Com igualdade, um pagamento
+                        // desapareceria do balanco no momento em que fosse conciliado com o
+                        // extrato -- ou seja, exactamente quando o dinheiro saiu mesmo da conta.
+                        //
+                        // Contar so a partir da conciliacao (valor 3) chegou a ser considerado e
+                        // foi posto de lado: faria o balanco descer muito face ao que o ecra
+                        // mostra hoje, e essa diferenca lida como avaria por quem o consulta.
+                        //
+                        // [VI] Thieu `IndActivo` o day. Xoa mot khoan chi khong xoa khoi bang --
+                        // no dat IndActivo = false -- va moi truy van khac trong file nay deu loc
+                        // theo no. Rieng cho nay khong loc, nen khoan da xoa bien mat khoi man
+                        // hinh nhung van cong vao bang can doi.
+                        // Do ngay 25/08/2026: xoa mot khoan 80.000 ma tai khoan van giu nguyen 84.500.
+                        // Nguoi ta xoa thuong vi nhap nham nguoi nhan, truoc khi phat hanh lenh chi;
+                        // nhap lai dong dung thi so tien bi dem hai lan trong bang can doi, khong co
+                        // dau hieu gi de nhan ra.
+                        //
+                        // Thieu ca dieu kien trang thai. Truoc day tinh tuot, ke ca lo dang go do
+                        // ma chua ai duyet. Mot khoan chi bat dau duoc tinh tu luc PHAT HANH LENH
+                        // CHI (ESTADOPAGAMENTO valor 2) -- luc khoan chi da duoc duyet va ky.
+                        //
+                        // Dung `>= 2` chu khong phai `== 2`: ba trang thai la tuan tu (1 Em Execucao
+                        // -> 2 Ordem emitida -> 3 Conciliado). Neu dung dau bang, khoan chi se BIEN
+                        // MAT khoi bang can doi ngay khi duoc doi chieu voi sao ke -- tuc dung luc
+                        // tien that su roi khoi tai khoan.
+                        //
+                        // Da can nhac phuong an chi tinh tu khi doi chieu (valor 3) roi bo: no lam
+                        // so lieu bang can doi tut manh so voi thu man hinh dang hien, va nguoi xem
+                        // se hieu nham la he thong hong.
+                        credito = e.PagamentosexecutadosCodigoContaCreditoFkNavigation.Where(e => e.IndActivo && e.EstadoNavigation.Dominio1 == TiposDominio.ESTADOPAGAMENTO.ToString() && e.EstadoNavigation.Valor >= 2 && e.DataObrigacao >= beginDate.Value.Date && e.DataObrigacao <= endDate.Value.Date).Select(e => e.ValorExecutado).Sum(),
+                        debito = e.PagamentosexecutadosCodigoContaDebitoFkNavigation.Where(e => e.IndActivo && e.EstadoNavigation.Dominio1 == TiposDominio.ESTADOPAGAMENTO.ToString() && e.EstadoNavigation.Valor >= 2 && e.DataObrigacao >= beginDate.Value.Date && e.DataObrigacao <= endDate.Value.Date).Select(e => e.ValorExecutado).Sum(),
                         codigo = e.Codigo,
                     })
                     .ToList();
